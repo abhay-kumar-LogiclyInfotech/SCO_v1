@@ -1,3 +1,7 @@
 {
-"helloWorld": "مرحبا بالعالم"
+"emailAddress": "عنوان البريد الإلكتروني",
+"login":"تسجيل الدخول",
+  "or": "أو",
+  "signInWithUaePass": "قم بتسجيل الدخول باستخدام UAE PASS"
+
 }

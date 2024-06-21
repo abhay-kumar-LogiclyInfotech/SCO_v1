@@ -18,7 +18,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.helloWorld),
+        title: Text(AppLocalizations.of(context)!.emailAddress),
         actions: [
           Consumer<LanguageChangeViewModel>(builder: (context, provider, _) {
             return PopupMenuButton(

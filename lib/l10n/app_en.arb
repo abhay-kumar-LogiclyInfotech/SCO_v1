@@ -1,3 +1,6 @@
 {
-  "helloWorld": "Hello World"
+  "emailAddress": "Email Address",
+  "login":"Login",
+  "or": "or",
+  "signInWithUaePass": "Sign in with UAE PASS"
 }

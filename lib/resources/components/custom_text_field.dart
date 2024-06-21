@@ -15,6 +15,7 @@ class CustomTextField extends StatefulWidget {
   bool? filled;
   bool? readOnly;
   TextInputType? textInputType;
+  final TextDirection textDirection;
   final void Function(String? value) onChanged;
 
   CustomTextField(
@@ -28,6 +29,7 @@ class CustomTextField extends StatefulWidget {
         required this.hintText,
         this.textCapitalization,
         required this.isNumber,
+        required this.textDirection,
         this.icon,
         this.maxLines,
         this.filled,
@@ -41,40 +43,43 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      readOnly: widget.readOnly ?? false,
-      focusNode: widget.currentFocusNode,
-      controller: widget.controller,
-      autofocus: widget.autofocus ?? false,
-      maxLines: widget.maxLines,
-      textCapitalization: widget.textCapitalization == true
-          ? TextCapitalization.sentences
-          : TextCapitalization.none,
-      decoration: InputDecoration(
-        errorStyle: TextStyle(color: Colors.white.withOpacity(1)),
-        contentPadding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.02,
-            vertical: MediaQuery.of(context).size.width * 0.01),
-        suffix: widget.icon,
-        alignLabelWithHint: true,
-        hintText: widget.hintText,
-        hintFadeDuration: const Duration(milliseconds: 500),
-        hintStyle:
-        const TextStyle(color: AppColors.darkGrey, fontSize: 15),
-        border: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        errorBorder: InputBorder.none,
-        enabledBorder: InputBorder.none,
-        focusedErrorBorder: InputBorder.none,
+    return Directionality(
+      textDirection: widget.textDirection,
+      child: TextField(
+        readOnly: widget.readOnly ?? false,
+        focusNode: widget.currentFocusNode,
+        controller: widget.controller,
+        autofocus: widget.autofocus ?? false,
+        maxLines: widget.maxLines,
+        textCapitalization: widget.textCapitalization == true
+            ? TextCapitalization.sentences
+            : TextCapitalization.none,
+        decoration: InputDecoration(
+          errorStyle: TextStyle(color: Colors.white.withOpacity(1)),
+          contentPadding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.02,
+              vertical: MediaQuery.of(context).size.width * 0.01),
+          suffix: widget.icon,
+          alignLabelWithHint: true,
+          hintText: widget.hintText,
+          hintFadeDuration: const Duration(milliseconds: 500),
+          hintStyle:
+          const TextStyle(color: AppColors.darkGrey, fontSize: 15),
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedErrorBorder: InputBorder.none,
+        ),
+        cursorColor: AppColors.darkGrey,
+        style: const TextStyle(color: AppColors.darkGrey),
+        keyboardType: widget.textInputType ?? TextInputType.text,
+        onSubmitted: (_) {
+          widget.nextFocusNode != null
+              ? FocusScope.of(context).requestFocus(widget.nextFocusNode)
+              : FocusScope.of(context).unfocus();
+        },
       ),
-      cursorColor: AppColors.darkGrey,
-      style: const TextStyle(color: AppColors.darkGrey),
-      keyboardType: widget.textInputType ?? TextInputType.text,
-      onSubmitted: (_) {
-        widget.nextFocusNode != null
-            ? FocusScope.of(context).requestFocus(widget.nextFocusNode)
-            : FocusScope.of(context).unfocus();
-      },
     );
   }
 }

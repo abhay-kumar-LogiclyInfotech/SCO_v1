@@ -11,6 +11,7 @@ class CustomButton extends StatefulWidget {
   Color? borderColor;
   Color? textColor;
   dynamic leadingIcon;
+ final TextDirection textDirection;
   final void Function() onTap;
 
   CustomButton(
@@ -25,6 +26,7 @@ class CustomButton extends StatefulWidget {
         this.textColor,
         this.leadingIcon,
         this.borderColor,
+        required this.textDirection,
       required this.onTap});
 
   @override
@@ -58,19 +60,22 @@ class _CustomButtonState extends State<CustomButton> {
                 child: widget.leadingIcon,
               ),
              const SizedBox(width: 2,),
-              Center(
-                  child: widget.isLoading
-                      ? const CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2.0,
-                  )
-                      : Text(
-                    widget.buttonName,
-                    style: TextStyle(
-                        color: widget.textColor ?? Colors.white,
-                        fontSize: widget.fontSize ?? 22,
-                        fontWeight: FontWeight.w600),
-                  )),
+              Directionality(
+                textDirection: widget.textDirection,
+                child: Center(
+                    child: widget.isLoading
+                        ? const CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2.0,
+                    )
+                        : Text(
+                      widget.buttonName,
+                      style: TextStyle(
+                          color: widget.textColor ?? Colors.white,
+                          fontSize: widget.fontSize ?? 22,
+                          fontWeight: FontWeight.w600),
+                    )),
+              ),
             ],
           )
 
