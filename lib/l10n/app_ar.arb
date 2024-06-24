@@ -2,6 +2,9 @@
 "emailAddress": "عنوان البريد الإلكتروني",
 "login":"تسجيل الدخول",
   "or": "أو",
-  "signInWithUaePass": "قم بتسجيل الدخول باستخدام UAE PASS"
-
+  "signInWithUaePass": "قم بتسجيل الدخول باستخدام UAE PASS",
+"readMore":"اقرأ أكثر",
+  "scholarships": "المنح الدراسية",
+  "scholarshipsInTheUAE": "المنح الدراسية في دولة الإمارات العربية المتحدة",
+  "scholarshipOffice": "مكتب المنح الدراسية"
 }

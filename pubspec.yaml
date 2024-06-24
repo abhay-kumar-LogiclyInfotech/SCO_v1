@@ -58,6 +58,9 @@ dependencies:
   razorpay_flutter:
   table_calendar:
   dart_format:
+  font_awesome_flutter:
+  carousel_slider:
+
   flutter_localizations:
     sdk: flutter
 

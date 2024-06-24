@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../view/home_view.dart';
+import '../../view/main_view.dart';
 import '../../view/splash_view/splash_view.dart';
 import '../../view/authentication/login_view.dart';
 
@@ -19,6 +21,10 @@ class NavigationServices {
   final Map<String, Widget Function(BuildContext context)> _routes = {
     "/splashView" : (context)=> const SplashView(),
     "/loginView" : (context)=> const LoginView(),
+    "/mainView": (context)=> const MainView(),
+
+
+
   };
 
   //Creating getter to the routes of the application:
