@@ -1,10 +1,31 @@
 {
-"emailAddress": "عنوان البريد الإلكتروني",
-"login":"تسجيل الدخول",
+  "emailAddress": "عنوان البريد الإلكتروني",
+  "login": "تسجيل الدخول",
   "or": "أو",
   "signInWithUaePass": "قم بتسجيل الدخول باستخدام UAE PASS",
-"readMore":"اقرأ أكثر",
+  "readMore": "اقرأ أكثر",
   "scholarships": "المنح الدراسية",
   "scholarshipsInTheUAE": "المنح الدراسية في دولة الإمارات العربية المتحدة",
-  "scholarshipOffice": "مكتب المنح الدراسية"
+  "scholarshipOffice": "مكتب المنح الدراسية",
+  "aboutTheOrganization": "عن المنظمة",
+  "aboutSco": "حول منظمة شنغهاي للتعاون",
+  "scholarship": "منحة دراسية",
+  "certificates": "الشهادات",
+  "faqs":"الأسئلة الشائعة",
+  "visionAndMission": "الرؤية والرسالة",
+  "newsAndEvents":"الأخبار و الأحداث",
+  "personalInformation":"معلومات شخصية",
+  "userName": "اسم المستخدم",
+  "location": "موقع",
+  "contactNumber": "رقم الاتصال",
+  "emailId":"عنوان الايميل",
+  "password": "كلمة المرور",
+  "generalInformation":"كلمة المرور",
+  "scholarship": "منحة دراسية",
+  "country": "دولة",
+  "state": "ولاية",
+  "address": "Address"
+
+
+
 }

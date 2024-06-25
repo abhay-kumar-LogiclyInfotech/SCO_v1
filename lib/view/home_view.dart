@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 
 import '../viewModel/language_change_ViewModel.dart';
@@ -20,29 +21,30 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(AppLocalizations.of(context)!.emailAddress),
-      //   actions: [
-      //     Consumer<LanguageChangeViewModel>(builder: (context, provider, _) {
-      //       return PopupMenuButton(
-      //           onSelected: (Language item) {
-      //             if (Language.english.name == item.name) {
-      //               provider.changeLanguage(const Locale('en'));
-      //             } else {
-      //               debugPrint('Arabic');
-      //               provider.changeLanguage(const Locale('ar'));
-      //             }
-      //           },
-      //           itemBuilder: (BuildContext context) =>
-      //               <PopupMenuEntry<Language>>[
-      //                 const PopupMenuItem(
-      //                     value: Language.english, child: Text("English")),
-      //                 const PopupMenuItem(
-      //                     value: Language.spanish, child: Text("Arabic"))
-      //               ]);
-      //     })
-      //   ],
-      // ),
+
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.emailAddress),
+        actions: [
+          Consumer<LanguageChangeViewModel>(builder: (context, provider, _) {
+            return PopupMenuButton(
+                onSelected: (Language item) {
+                  if (Language.english.name == item.name) {
+                    provider.changeLanguage(const Locale('en'));
+                  } else {
+                    debugPrint('Arabic');
+                    provider.changeLanguage(const Locale('ar'));
+                  }
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<Language>>[
+                      const PopupMenuItem(
+                          value: Language.english, child: Text("English")),
+                      const PopupMenuItem(
+                          value: Language.spanish, child: Text("Arabic"))
+                    ]);
+          })
+        ],
+      ),
       body: _buildUI(),
     );
   }
@@ -50,22 +52,23 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildUI() {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: MediaQuery.sizeOf(context).width * 0.04),
+        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).width * 0.04),
         child: SingleChildScrollView(
           child: Column(
             children: [
               //top bar:
               _topAppBar(),
 
-              const SizedBox(
-                height: 20,
-              ), //CarouselSlider:
-              _carouselSlider(),
-              const SizedBox(
-                height: 10
-              ),
-              _amountContainer(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      //CarouselSlider:
+                      _carouselSlider(),
+                      const SizedBox(height: 10),
+                      _amountContainer(),
+                      _aboutOrganization(),
+
+
             ],
           ),
         ),
@@ -278,114 +281,414 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _amountContainer() {
-    return Consumer(
-
-      builder: (context,provider,_){
+    return Consumer<LanguageChangeViewModel>(
+      builder: (context, provider, _) {
         return Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
           child: Material(
             elevation: 2,
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             child: Container(
-              padding:  const EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               child: Column(
                 children: [
-                  //Scholarship office:
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                       Text(
-                        AppLocalizations.of(context)!.scholarshipOffice,
-                        style: const TextStyle(
-                            color: Color(0xff093B59),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Image.asset(
-                        "assets/scholarship_office.png",
-                        height: 30,
-                        width: 30,
-                      )
-                    ],
-                  ), //information:
+                  // Scholarship Office Header
+                  _buildScholarshipOfficeHeader(context),
 
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                  // Amount and Read More Button
+                  _buildAmountAndButton(context, provider),
 
+                  const SizedBox(height: 10),
 
-                      const Expanded(
-                        child:  Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text("300",style: TextStyle(fontSize: 40,fontWeight: FontWeight.w700,color:  Color(0xff0B9967))),
-                                SizedBox(width: 4),
-                                Text("AED",style: TextStyle(fontSize: 14,color:  Color(0xff0B9967),fontWeight: FontWeight.w400),)
-                              ],
-                            ),
-                            Text("02/09/2023",style: TextStyle(color: Color(0xff9AA6B2),fontSize: 12,fontWeight: FontWeight.w400),)
-                          ],
-                        ),
-                      )
-                      ,
-                      GestureDetector(
-                        //Implement read more here:
-                        onTap:(){},
-                        child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.35,
-                            child: CustomButton(
-                              buttonName: AppLocalizations.of(context)!.readMore,
-                              isLoading: false,
-                              textDirection: TextDirection.ltr,
-                              onTap: () {},
-                              textColor: const  Color(0xffAD8138),
-                              borderColor: const Color(0xffAD8138),
-                              buttonColor: Colors.white,
-                              fontSize: 14,
-                              height: 40,
-                            )),
-                      ),
-                    ],
-                  ),
+                  const Divider(color: Color(0xffDFDFDF)),
 
-                  const SizedBox(height: 15,),
+                  const SizedBox(height: 10),
 
-                  const Divider(color:  Color(0xffDFDFDF
-                  ),),
-                  const SizedBox(height: 10,),
-
-                  const  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Icon(Icons.calendar_month_outlined,color:Color(0xffA7B0C1)),
-                      SizedBox(width: 5,),
-                      Text("01/09/2023 - 01/09/2024",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700,color: Color(0xff8591A7)),),
-                      SizedBox(width: 5,),
-                      Text("(12 mon)",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400,color: Color(0xff8591A7)),),
-
-                    ],
-                  )
+                  // Date Information
+                  _buildDateInfo(),
                 ],
               ),
             ),
           ),
         );
       },
+    );
+  }
 
+  Widget _buildScholarshipOfficeHeader(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.scholarshipOffice,
+          style: const TextStyle(
+            color: Color(0xff093B59),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Image.asset(
+          "assets/scholarship_office.png",
+          height: 30,
+          width: 30,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAmountAndButton(
+      BuildContext context, LanguageChangeViewModel provider) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Amount Information
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    "300",
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xff0B9967),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    "AED",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xff0B9967),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              const Text(
+                "02/09/2023",
+                style: TextStyle(
+                  color: Color(0xff9AA6B2),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Read More Button
+        GestureDetector(
+          onTap: () {
+            // Implement read more functionality here
+          },
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.35,
+            child: CustomButton(
+              buttonName: AppLocalizations.of(context)!.readMore,
+              isLoading: false,
+              onTap: () {},
+              textDirection: provider.appLocale == const Locale('en') ||
+                      provider.appLocale == null
+                  ? TextDirection.ltr
+                  : TextDirection.rtl,
+              textColor: const Color(0xffAD8138),
+              borderColor: const Color(0xffAD8138),
+              buttonColor: Colors.white,
+              fontSize: 14,
+              height: 40,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDateInfo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: const [
+        Icon(Icons.calendar_month_outlined, color: Color(0xffA7B0C1)),
+        SizedBox(width: 5),
+        Text(
+          "01/09/2023 - 01/09/2024",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: Color(0xff8591A7),
+          ),
+        ),
+        SizedBox(width: 5),
+        Text(
+          "(12 mon)",
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: Color(0xff8591A7),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Widget _aboutOrganization() {
+  //   return Consumer(
+  //     builder: (context, provider, _) {
+  //       return Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+  //         child: Material(
+  //           elevation: 2,
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.circular(20),
+  //           child: Container(
+  //             padding: const EdgeInsets.all(25),
+  //             child: Column(
+  //               children: [
+  //                 //About organization:
+  //                 Row(
+  //                   mainAxisSize: MainAxisSize.max,
+  //                   mainAxisAlignment: MainAxisAlignment.end,
+  //                   crossAxisAlignment: CrossAxisAlignment.center,
+  //                   children: [
+  //                     Text(
+  //                       AppLocalizations.of(context)!.aboutTheOrganization,
+  //                       style: const TextStyle(
+  //                           color: Color(0xff093B59),
+  //                           fontSize: 14,
+  //                           fontWeight: FontWeight.w600),
+  //                     ),
+  //                     const SizedBox(
+  //                       width: 10,
+  //                     ),
+  //                     SvgPicture.asset(
+  //                       "assets/aboutTheOrganization.svg",
+  //                       height: 20,
+  //                       width: 20,
+  //                     )
+  //                   ],
+  //                 ),
+  //                 //information:
+  //
+  //                 const SizedBox(
+  //                   height: 15,
+  //                 ),
+  //
+  //                 const Divider(
+  //                   color: Color(0xffDFDFDF),
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 10,
+  //                 ),
+  //
+  //                 Row(
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     Expanded(
+  //                       child: CustomAboutOrganizationContainers(
+  //                         assetName: "assets/aboutSco.svg",
+  //                         name: "About Sco",
+  //                         onTap: () {},
+  //                       ),
+  //                     ),
+  //                     Expanded(
+  //                       child: CustomAboutOrganizationContainers(
+  //                         assetName: "assets/scholarships.svg",
+  //                         name: "Scholarships",
+  //                         onTap: () {},
+  //                       ),
+  //                     ),
+  //                     Expanded(
+  //                       child: CustomAboutOrganizationContainers(
+  //                         assetName: "assets/certificates.svg",
+  //                         name: "Certificates",
+  //                         onTap: () {},
+  //                       ),
+  //                     )
+  //                   ],
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 30,
+  //                 ),
+  //                 Row(
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     Expanded(
+  //                       child: CustomAboutOrganizationContainers(
+  //                         assetName: "assets/faqs.svg",
+  //                         name: "FAQ's",
+  //                         onTap: () {},
+  //                       ),
+  //                     ),
+  //                     Expanded(
+  //                       child: CustomAboutOrganizationContainers(
+  //                         assetName: "assets/vision_and_mission.svg",
+  //                         name: "Vision & Mission",
+  //                         onTap: () {},
+  //                       ),
+  //                     ),
+  //                     Expanded(
+  //                       child: CustomAboutOrganizationContainers(
+  //                         assetName: "assets/news_and_events.svg",
+  //                         name: "News & Events",
+  //                         onTap: () {},
+  //                       ),
+  //                     )
+  //                   ],
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  Widget _aboutOrganization() {
+    return Consumer<LanguageChangeViewModel>(
+      builder: (context, provider, _) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+          child: Material(
+            elevation: 2,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  _buildTitleRow(context),
+                  const SizedBox(height: 15),
+                  const Divider(color: Color(0xffDFDFDF)),
+                  const SizedBox(height: 10),
+                  _buildInfoRow1(),
+                  const SizedBox(height: 10),
+                  _buildInfoRow2(),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildTitleRow(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.aboutTheOrganization,
+          style: const TextStyle(
+            color: Color(0xff093B59),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(width: 10),
+        SvgPicture.asset(
+          "assets/aboutTheOrganization.svg",
+          height: 20,
+          width: 20,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow1() {
+    return Consumer<LanguageChangeViewModel>(
+      builder: (context, provider, _) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: CustomAboutOrganizationContainers(
+                assetName: "assets/aboutSco.svg",
+                name: AppLocalizations.of(context)!.aboutSco,
+                onTap: () {},
+                textDirection: provider.appLocale == const Locale('en') ||
+                        provider.appLocale == null
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+              ),
+            ),
+            Expanded(
+              child: CustomAboutOrganizationContainers(
+                assetName: "assets/scholarships.svg",
+                name: AppLocalizations.of(context)!.scholarship,
+                onTap: () {},
+                textDirection: provider.appLocale == const Locale('en') ||
+                        provider.appLocale == null
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+              ),
+            ),
+            Expanded(
+              child: CustomAboutOrganizationContainers(
+                assetName: "assets/certificates.svg",
+                name: AppLocalizations.of(context)!.certificates,
+                onTap: () {},
+                textDirection: provider.appLocale == const Locale('en') ||
+                        provider.appLocale == null
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildInfoRow2() {
+    return Consumer<LanguageChangeViewModel>(
+      builder: (context, provider, _) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: CustomAboutOrganizationContainers(
+                assetName: "assets/faqs.svg",
+                name: AppLocalizations.of(context)!.faqs,
+                textDirection: provider.appLocale == const Locale('en') ||
+                        provider.appLocale == null
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+                onTap: () {},
+              ),
+            ),
+            Expanded(
+              child: CustomAboutOrganizationContainers(
+                assetName: "assets/vision_and_mission.svg",
+                name: AppLocalizations.of(context)!.visionAndMission,
+                textDirection: provider.appLocale == const Locale('en') ||
+                        provider.appLocale == null
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+                onTap: () {},
+              ),
+            ),
+            Expanded(
+              child: CustomAboutOrganizationContainers(
+                assetName: "assets/news_and_events.svg",
+                name: AppLocalizations.of(context)!.newsAndEvents,
+                textDirection: provider.appLocale == const Locale('en') ||
+                        provider.appLocale == null
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+                onTap: () {},
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

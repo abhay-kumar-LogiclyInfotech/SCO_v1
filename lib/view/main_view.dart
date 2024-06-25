@@ -30,128 +30,168 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildUI(),
-      bottomNavigationBar: Container(
-        height: 90,
-        // padding: EdgeInsets.zero,
+      bottomNavigationBar: Material(
         color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        elevation: 2,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  home = false;
-                  information = false;
-                  message = false;
-                  account = true;
-                });
-              },
-              child: Container(
-                color: Colors.transparent,
-                width: MediaQuery.sizeOf(context).width * .25,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        height: 30,
-                        child: SvgPicture.asset(message ? "assets/account.svg" : "assets/account.svg",)),
-
-                    Text(
-                      "Account",
-                      style: TextStyle(
-                          color: account ? Colors.black : const Color(0xfff9AA6B2),
-                          fontSize: 12,fontWeight: account ? FontWeight.w900 : FontWeight.w900),
+            Padding(
+              padding: const EdgeInsets.only(top: 5.0,bottom: 5.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        home = false;
+                        information = false;
+                        message = false;
+                        account = true;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      width: MediaQuery.sizeOf(context).width * .25,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 30,
+                              child: SvgPicture.asset(
+                                message
+                                    ? "assets/account.svg"
+                                    : "assets/account.svg",
+                              )),
+                          Text(
+                            "Account",
+                            style: TextStyle(
+                                color: account
+                                    ? Colors.black
+                                    : const Color(0xfff9AA6B2),
+                                fontSize: 12,
+                                fontWeight:
+                                    account ? FontWeight.w900 : FontWeight.w900),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  home = false;
-                  information = false;
-                  message = true;
-                  account = false;
-                });
-              },
-              child: Container(
-                width: MediaQuery.sizeOf(context).width * .25,
-                color: Colors.transparent,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        height: 30,
-                        child: SvgPicture.asset(message ? "assets/message.svg" : "assets/message.svg",)),
-                    Text(
-                      "Message",
-                     style:  TextStyle(
-                          color: message ? Colors.black : const Color(0xfff9AA6B2),
-                          fontSize: 12,fontWeight: message ? FontWeight.w900 : FontWeight.w900),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        home = false;
+                        information = false;
+                        message = true;
+                        account = false;
+                      });
+                    },
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width * .25,
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 30,
+                              child: SvgPicture.asset(
+                                message
+                                    ? "assets/message.svg"
+                                    : "assets/message.svg",
+                              )),
+                          Text(
+                            "Message",
+                            style: TextStyle(
+                                color: message
+                                    ? Colors.black
+                                    : const Color(0xfff9AA6B2),
+                                fontSize: 12,
+                                fontWeight:
+                                    message ? FontWeight.w900 : FontWeight.w900),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  home = false;
-                  information = true;
-                  message = false;
-                  account = false;
-                });
-              },
-              child: Container(
-                color: Colors.transparent,
-                width: MediaQuery.sizeOf(context).width * .25,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 30,child: SvgPicture.asset(message ? "assets/information.svg" : "assets/information.svg",)),
-
-                    Text(
-                      "Information",
-                      style: TextStyle(
-                          color: information ? Colors.black : const Color(0xfff9AA6B2),
-                          fontSize: 12,fontWeight: information ? FontWeight.w900 : FontWeight.w900),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        home = false;
+                        information = true;
+                        message = false;
+                        account = false;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      width: MediaQuery.sizeOf(context).width * .25,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 30,
+                              child: SvgPicture.asset(
+                                message
+                                    ? "assets/information.svg"
+                                    : "assets/information.svg",
+                              )),
+                          Text(
+                            "Information",
+                            style: TextStyle(
+                                color: information
+                                    ? Colors.black
+                                    : const Color(0xfff9AA6B2),
+                                fontSize: 12,
+                                fontWeight: information
+                                    ? FontWeight.w900
+                                    : FontWeight.w900),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  home = true;
-                  information = false;
-                  message = false;
-                  account = false;
-                });
-              },
-              child: Container(
-                color: Colors.transparent,
-                width: MediaQuery.sizeOf(context).width * .25,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                        child: SvgPicture.asset(home ? "assets/home_selected.svg" : "assets/home_selected.svg",)),
-
-                    Text(
-                      "Home",
-                      style: TextStyle(
-                          color: home ? Colors.black : const Color(0xfff9AA6B2),
-                          fontSize: 12,fontWeight: home ? FontWeight.w900 : FontWeight.w900),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        home = true;
+                        information = false;
+                        message = false;
+                        account = false;
+                      });
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      width: MediaQuery.sizeOf(context).width * .25,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 30,
+                              child: SvgPicture.asset(
+                                home
+                                    ? "assets/home_selected.svg"
+                                    : "assets/home_selected.svg",
+                              )),
+                          Text(
+                            "Home",
+                            style: TextStyle(
+                                color: home
+                                    ? Colors.black
+                                    : const Color(0xfff9AA6B2),
+                                fontSize: 12,
+                                fontWeight:
+                                    home ? FontWeight.w900 : FontWeight.w900),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

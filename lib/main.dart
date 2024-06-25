@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';

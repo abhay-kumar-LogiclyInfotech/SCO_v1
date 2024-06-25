@@ -1,12 +1,32 @@
 {
   "emailAddress": "Email Address",
-  "login":"Login",
+  "login": "Login",
   "or": "or",
   "signInWithUaePass": "Sign in with UAE PASS",
   "readMore": "Read More",
   "scholarships": "Scholarships",
   "scholarshipsInTheUAE": "Scholarships in the United Arab Emirates",
-  "scholarshipOffice": "Scholarship Office"
+  "scholarshipOffice": "Scholarship Office",
+  "aboutTheOrganization": "About the Organization",
+  "aboutSco": "About SCO",
+  "scholarship": "Scholarship",
+  "certificates": "Certificates",
+  "faqs": "FAQ's",
+  "visionAndMission":"Vision & Mission",
+  "newsAndEvents":"News & Events",
+  "personalInformation":"Personal Information",
+  "userName": "User Name",
+  "location":"Location",
+  "contactNumber":"Contact Number",
+  "emailId": "Email ID",
+  "password":"Password",
+  "generalInformation":"General Information",
+  "scholarship":"Scholarship",
+  "country": "Country",
+  "state": "State",
+  "address": "Address"
+
+
 
 
 }
