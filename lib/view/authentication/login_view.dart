@@ -27,6 +27,14 @@ class _LoginViewState extends State<LoginView> {
     super.initState();
   }
 
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _emailFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,3 +190,4 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
+

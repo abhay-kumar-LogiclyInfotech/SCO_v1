@@ -5,6 +5,8 @@ import 'package:sco_v1/resources/components/user_info_container.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'home_view.dart';
+
 
 class AccountView extends StatefulWidget {
   const AccountView({super.key});
@@ -17,6 +19,30 @@ class _AccountViewState extends State<AccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.emailAddress),
+        actions: [
+          Consumer<LanguageChangeViewModel>(builder: (context, provider, _) {
+            return PopupMenuButton(
+                onSelected: (Language item) {
+                  if (Language.english.name == item.name) {
+                    provider.changeLanguage(const Locale('en'));
+                  } else {
+                    debugPrint('Arabic');
+                    provider.changeLanguage(const Locale('ar'));
+                  }
+                },
+                itemBuilder: (BuildContext context) =>
+                <PopupMenuEntry<Language>>[
+                  const PopupMenuItem(
+                      value: Language.english, child: Text("English")),
+                  const PopupMenuItem(
+                      value: Language.spanish, child: Text("Arabic"))
+                ]);
+          })
+        ],
+      ),
+
       body: _buildUI(),
     );
   }
@@ -30,8 +56,6 @@ class _AccountViewState extends State<AccountView> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //top bar:
-              _topAppBar(),
 
               //personal Information:
               _personalInformation(),
@@ -45,61 +69,6 @@ class _AccountViewState extends State<AccountView> {
     );
   }
 
-  //Top Bar:
-  Widget _topAppBar() {
-    return Container(
-      color: Colors.transparent,
-      height: 40,
-      width: double.infinity,
-      alignment: Alignment.center,
-      child: Stack(
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                  height: 35,
-                  width: 80,
-                  child: Image.asset('assets/company_logo.png')),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.sizeOf(context).width * 0.05),
-            height: 40,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    "assets/notification_bell.svg",
-                    height: 20,
-                    width: 20,
-                  ),
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    "assets/search.svg",
-                    height: 20,
-                    width: 20,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
 
   //personal Information:
   Widget _personalInformation() {

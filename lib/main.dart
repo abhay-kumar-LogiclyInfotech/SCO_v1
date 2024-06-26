@@ -41,7 +41,6 @@ final GetIt getIt = GetIt.instance;
 class MyApp extends StatelessWidget {
   final String locale;
   MyApp({super.key, required this.locale}) {
-
     _navigationServices = getIt.get<NavigationServices>();
   }
 
@@ -84,7 +83,6 @@ class MyApp extends StatelessWidget {
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
               initialRoute: "/mainView",
-
 
               // home: HomeView(),
             );

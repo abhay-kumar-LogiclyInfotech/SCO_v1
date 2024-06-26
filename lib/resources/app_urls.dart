@@ -1,3 +1,1 @@
-class AppUrls{
-
-}
+class AppUrls {}

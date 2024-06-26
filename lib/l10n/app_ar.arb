@@ -24,7 +24,11 @@
   "scholarship": "منحة دراسية",
   "country": "دولة",
   "state": "ولاية",
-  "address": "Address"
+  "address": "عنوان",
+  "account": "حساب",
+  "message": "رسالة",
+  "information": "معلومة","home": "بيت"
+
 
 
 

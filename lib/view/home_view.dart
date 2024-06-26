@@ -22,29 +22,6 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.emailAddress),
-        actions: [
-          Consumer<LanguageChangeViewModel>(builder: (context, provider, _) {
-            return PopupMenuButton(
-                onSelected: (Language item) {
-                  if (Language.english.name == item.name) {
-                    provider.changeLanguage(const Locale('en'));
-                  } else {
-                    debugPrint('Arabic');
-                    provider.changeLanguage(const Locale('ar'));
-                  }
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<Language>>[
-                      const PopupMenuItem(
-                          value: Language.english, child: Text("English")),
-                      const PopupMenuItem(
-                          value: Language.spanish, child: Text("Arabic"))
-                    ]);
-          })
-        ],
-      ),
       body: _buildUI(),
     );
   }
@@ -56,18 +33,11 @@ class _HomeViewState extends State<HomeView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              //top bar:
-              _topAppBar(),
-
-                      const SizedBox(
-                        height: 20,
-                      ),
                       //CarouselSlider:
                       _carouselSlider(),
                       const SizedBox(height: 10),
                       _amountContainer(),
                       _aboutOrganization(),
-
 
             ],
           ),
@@ -75,6 +45,8 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+
+
 
   Widget _topAppBar() {
     return Container(
@@ -692,3 +664,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
+
+
+
+

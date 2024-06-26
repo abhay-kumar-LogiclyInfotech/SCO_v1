@@ -5,13 +5,6 @@ class AppColors {
   static const Color lightGrey = Color(0xffDFDFDF);
   static const Color buttonColor = Color(0xff093B59);
 
-
-
-
-
-
-
-
   static const LinearGradient yellowLinearGradient = LinearGradient(colors: [
     Color(0xffFDD900),
     Color(0xffFD9800),
@@ -21,5 +14,4 @@ class AppColors {
     Color(0xff077B1D),
     Color(0xff00A820),
   ], begin: Alignment.topCenter, end: Alignment.bottomCenter);
-
 }

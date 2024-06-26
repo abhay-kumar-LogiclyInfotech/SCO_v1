@@ -24,7 +24,12 @@
   "scholarship":"Scholarship",
   "country": "Country",
   "state": "State",
-  "address": "Address"
+  "address": "Address",
+  "account": "Account",
+"message":"Message",
+  "information":"Information",
+  "home": "Home"
+
 
 
 
