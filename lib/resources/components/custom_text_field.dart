@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sco_v1/resources/app_colors.dart';
+import 'package:sco_v1/utils/utils.dart';
 
 class CustomTextField extends StatefulWidget {
   final FocusNode currentFocusNode;
@@ -40,7 +41,7 @@ class CustomTextField extends StatefulWidget {
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
-class _CustomTextFieldState extends State<CustomTextField> {
+class _CustomTextFieldState extends State<CustomTextField> with MediaQueryMixin<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -57,8 +58,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
           errorStyle: TextStyle(color: Colors.white.withOpacity(1)),
           contentPadding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.02,
-              vertical: MediaQuery.of(context).size.width * 0.01),
+              horizontal: screenWidth * 0.02,
+              vertical: screenWidth * 0.01),
           suffix: widget.icon,
           alignLabelWithHint: true,
           hintText: widget.hintText,

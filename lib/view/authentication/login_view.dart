@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,7 +19,7 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   late TextEditingController _emailController;
   late FocusNode _emailFocusNode;
 
@@ -40,9 +43,11 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
+        alignment: Alignment.topLeft,
         children: [
           SizedBox(
-            width: double.infinity,
+            width:  double.infinity,
+            // height: screenHeight,
             child: Image.asset(
               'assets/login_bg.png',
               fit: BoxFit.fill,
@@ -52,11 +57,13 @@ class _LoginViewState extends State<LoginView> {
             width: double.infinity,
             height: double.infinity,
             margin: EdgeInsets.only(
-              top: MediaQuery.sizeOf(context).height / 2.5,
+              top: orientation == Orientation.portrait ? screenHeight / 2.5 : screenHeight /3,
             ),
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.sizeOf(context).width * 0.08,
-              vertical: MediaQuery.sizeOf(context).width * 0.08,
+            padding: EdgeInsets.only(
+              left: orientation == Orientation.portrait ? screenWidth * 0.08 : screenWidth/100,
+              right: orientation == Orientation.portrait ? screenWidth * 0.08 : screenWidth/100,
+              top: orientation == Orientation.portrait ?  screenWidth * 0.05 : screenWidth/100 *5,
+              bottom: orientation == Orientation.portrait ?  screenWidth/100 *1 : screenWidth/100 *1,
             ),
             decoration: const BoxDecoration(
                 color: Colors.white,
@@ -70,8 +77,10 @@ class _LoginViewState extends State<LoginView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        "assets/company_logo.png",
+                      SizedBox(
+                        child: Image.asset(
+                          "assets/company_logo.png",
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -79,7 +88,7 @@ class _LoginViewState extends State<LoginView> {
                       Container(
                         padding: EdgeInsets.symmetric(
                             horizontal:
-                                MediaQuery.sizeOf(context).width * 0.01),
+                                screenWidth * 0.01),
                         decoration: const BoxDecoration(
                             border:
                                 Border(bottom: BorderSide(color: Colors.grey))),

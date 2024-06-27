@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/user_info_container.dart';
+import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,7 +15,7 @@ class AccountView extends StatefulWidget {
   State<AccountView> createState() => _AccountViewState();
 }
 
-class _AccountViewState extends State<AccountView> {
+class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +50,7 @@ class _AccountViewState extends State<AccountView> {
   Widget _buildUI() {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).width * 0.04),
+        padding: EdgeInsets.only(top: screenWidth * 0.04),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -91,7 +91,7 @@ class _AccountViewState extends State<AccountView> {
                         : TextDirection.rtl,
                     child: Text(
                       AppLocalizations.of(context)!.personalInformation,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Color(0xff8591A9),
                           fontSize: 14,
                           fontWeight: FontWeight.w600),
@@ -110,7 +110,7 @@ class _AccountViewState extends State<AccountView> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 child: Padding(
-                  padding: EdgeInsets.all(25.0),
+                  padding: const EdgeInsets.all(25.0),
                   child: Column(
                     children: [
                       UserInfoContainer(
@@ -122,7 +122,7 @@ class _AccountViewState extends State<AccountView> {
                                 ? TextDirection.ltr
                                 : TextDirection.rtl,
                       ),
-                      Divider(
+                      const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
@@ -135,7 +135,7 @@ class _AccountViewState extends State<AccountView> {
                                 ? TextDirection.ltr
                                 : TextDirection.rtl,
                       ),
-                      Divider(
+                     const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
@@ -147,7 +147,7 @@ class _AccountViewState extends State<AccountView> {
                           title:                       AppLocalizations.of(context)!.contactNumber,
 
                           displayTitle: "Abhay Kumar"),
-                      Divider(
+                      const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
@@ -159,7 +159,7 @@ class _AccountViewState extends State<AccountView> {
                           title:                       AppLocalizations.of(context)!.emailId,
 
                           displayTitle: "Abhay Kumar"),
-                      Divider(
+                     const  Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
@@ -202,7 +202,7 @@ class _AccountViewState extends State<AccountView> {
                     child: Text(
                       AppLocalizations.of(context)!.generalInformation,
 
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Color(0xff8591A9),
                           fontSize: 14,
                           fontWeight: FontWeight.w600),
@@ -220,7 +220,7 @@ class _AccountViewState extends State<AccountView> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 child: Padding(
-                  padding: EdgeInsets.all(25.0),
+                  padding: const  EdgeInsets.all(25.0),
                   child: Column(
                     children: [
                       UserInfoContainer(
@@ -232,7 +232,7 @@ class _AccountViewState extends State<AccountView> {
                           title:                       AppLocalizations.of(context)!.scholarship,
 
                           displayTitle: "Abhay Kumar"),
-                      Divider(
+                     const  Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
@@ -244,7 +244,7 @@ class _AccountViewState extends State<AccountView> {
                           title:                       AppLocalizations.of(context)!.country,
 
                           displayTitle: "Abhay Kumar"),
-                      Divider(
+                     const  Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
@@ -256,7 +256,7 @@ class _AccountViewState extends State<AccountView> {
                           title:                       AppLocalizations.of(context)!.state,
 
                           displayTitle: "Abhay Kumar"),
-                      Divider(
+                     const  Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(

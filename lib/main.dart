@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -16,10 +15,10 @@ Future<void> main() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   final String languageCode =
       sharedPreferences.getString('language_code') ?? '';
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
   await setup();
   runApp(MyApp(locale: languageCode));
 }
@@ -82,9 +81,9 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              initialRoute: "/mainView",
+              initialRoute: "/loginView",
 
-              // home: HomeView(),
+              // home: Test(),
             );
           },
         ));

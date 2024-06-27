@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/utils/utils.dart';
 
 import '../viewModel/language_change_ViewModel.dart';
 
@@ -17,7 +18,7 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +30,7 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildUI() {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).width * 0.04),
+        padding: EdgeInsets.only(top:  screenWidth* 0.04),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -69,7 +70,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           Container(
             padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.sizeOf(context).width * 0.05),
+                horizontal: screenWidth * 0.05),
             height: 40,
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -107,7 +108,7 @@ class _HomeViewState extends State<HomeView> {
     return SizedBox(
       child: CarouselSlider(
           options: CarouselOptions(
-            height: 190.0,
+            height: orientation == Orientation.portrait ? 190.0 : 210,
             aspectRatio: 16 / 9,
             viewportFraction: 0.85,
             initialPage: 0,
@@ -311,8 +312,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildAmountAndButton(
-      BuildContext context, LanguageChangeViewModel provider) {
+  Widget _buildAmountAndButton(BuildContext context, LanguageChangeViewModel provider) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -361,7 +361,7 @@ class _HomeViewState extends State<HomeView> {
             // Implement read more functionality here
           },
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.35,
+            width: screenWidth * 0.35,
             child: CustomButton(
               buttonName: AppLocalizations.of(context)!.readMore,
               isLoading: false,
@@ -410,118 +410,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  // Widget _aboutOrganization() {
-  //   return Consumer(
-  //     builder: (context, provider, _) {
-  //       return Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
-  //         child: Material(
-  //           elevation: 2,
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.circular(20),
-  //           child: Container(
-  //             padding: const EdgeInsets.all(25),
-  //             child: Column(
-  //               children: [
-  //                 //About organization:
-  //                 Row(
-  //                   mainAxisSize: MainAxisSize.max,
-  //                   mainAxisAlignment: MainAxisAlignment.end,
-  //                   crossAxisAlignment: CrossAxisAlignment.center,
-  //                   children: [
-  //                     Text(
-  //                       AppLocalizations.of(context)!.aboutTheOrganization,
-  //                       style: const TextStyle(
-  //                           color: Color(0xff093B59),
-  //                           fontSize: 14,
-  //                           fontWeight: FontWeight.w600),
-  //                     ),
-  //                     const SizedBox(
-  //                       width: 10,
-  //                     ),
-  //                     SvgPicture.asset(
-  //                       "assets/aboutTheOrganization.svg",
-  //                       height: 20,
-  //                       width: 20,
-  //                     )
-  //                   ],
-  //                 ),
-  //                 //information:
-  //
-  //                 const SizedBox(
-  //                   height: 15,
-  //                 ),
-  //
-  //                 const Divider(
-  //                   color: Color(0xffDFDFDF),
-  //                 ),
-  //                 const SizedBox(
-  //                   height: 10,
-  //                 ),
-  //
-  //                 Row(
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   children: [
-  //                     Expanded(
-  //                       child: CustomAboutOrganizationContainers(
-  //                         assetName: "assets/aboutSco.svg",
-  //                         name: "About Sco",
-  //                         onTap: () {},
-  //                       ),
-  //                     ),
-  //                     Expanded(
-  //                       child: CustomAboutOrganizationContainers(
-  //                         assetName: "assets/scholarships.svg",
-  //                         name: "Scholarships",
-  //                         onTap: () {},
-  //                       ),
-  //                     ),
-  //                     Expanded(
-  //                       child: CustomAboutOrganizationContainers(
-  //                         assetName: "assets/certificates.svg",
-  //                         name: "Certificates",
-  //                         onTap: () {},
-  //                       ),
-  //                     )
-  //                   ],
-  //                 ),
-  //                 const SizedBox(
-  //                   height: 30,
-  //                 ),
-  //                 Row(
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   children: [
-  //                     Expanded(
-  //                       child: CustomAboutOrganizationContainers(
-  //                         assetName: "assets/faqs.svg",
-  //                         name: "FAQ's",
-  //                         onTap: () {},
-  //                       ),
-  //                     ),
-  //                     Expanded(
-  //                       child: CustomAboutOrganizationContainers(
-  //                         assetName: "assets/vision_and_mission.svg",
-  //                         name: "Vision & Mission",
-  //                         onTap: () {},
-  //                       ),
-  //                     ),
-  //                     Expanded(
-  //                       child: CustomAboutOrganizationContainers(
-  //                         assetName: "assets/news_and_events.svg",
-  //                         name: "News & Events",
-  //                         onTap: () {},
-  //                       ),
-  //                     )
-  //                   ],
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
   Widget _aboutOrganization() {
     return Consumer<LanguageChangeViewModel>(
       builder: (context, provider, _) {

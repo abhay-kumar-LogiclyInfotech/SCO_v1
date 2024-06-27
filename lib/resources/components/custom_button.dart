@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sco_v1/utils/utils.dart';
 
 class CustomButton extends StatefulWidget {
   final String buttonName;
@@ -33,7 +34,7 @@ class CustomButton extends StatefulWidget {
   State<CustomButton> createState() => _CustomButtonState();
 }
 
-class _CustomButtonState extends State<CustomButton> {
+class _CustomButtonState extends State<CustomButton>  with MediaQueryMixin<CustomButton>{
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -44,8 +45,12 @@ class _CustomButtonState extends State<CustomButton> {
         elevation: widget.elevation ?? 0,
         borderRadius: BorderRadius.circular(180),
         child: Container(
-          height: widget.height ?? MediaQuery.of(context).size.height * 0.06,
-          width: double.infinity,
+          // height: widget.height ?? (orientation == Orientation.portrait ? screenHeight * 0.06 : screenHeight * 0.1),
+          // width: double.infinity,
+          padding: EdgeInsets.only(
+            top: screenWidth * 0.02,
+            bottom: screenWidth * 0.02
+          ),
           decoration: BoxDecoration(
               color: widget.buttonColor ?? Colors.black,
               border: Border.all(color: widget.borderColor ?? Colors.black),

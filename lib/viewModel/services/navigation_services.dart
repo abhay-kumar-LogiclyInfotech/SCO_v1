@@ -22,9 +22,6 @@ class NavigationServices {
     "/splashView" : (context)=> const SplashView(),
     "/loginView" : (context)=> const LoginView(),
     "/mainView": (context)=> const MainView(),
-
-
-
   };
 
   //Creating getter to the routes of the application:
