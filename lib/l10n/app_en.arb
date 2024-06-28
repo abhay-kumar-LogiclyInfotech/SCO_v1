@@ -1,6 +1,7 @@
 {
   "emailAddress": "Email Address",
-  "login": "Login",
+  "idEmailOrMobile": "ID Number, Email or Mobile Number",
+  "login": "LOGIN",
   "or": "or",
   "signInWithUaePass": "Sign in with UAE PASS",
   "readMore": "Read More",
@@ -28,7 +29,18 @@
   "account": "Account",
 "message":"Message",
   "information":"Information",
-  "home": "Home"
+  "home": "Home",
+  "arabic": "Arabic",
+  "signUp": "SIGN UP",
+  "forgotPassword": "Forgot Password?",
+  "dontHaveAccount": "Don't have account?",
+  "resetNewPassword": "Reset New Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password",
+  "submit":"SUBMIT",
+  "alreadyHaveAccount": "Already have account?",
+  "signIn": "SIGN IN"
+
 
 
 

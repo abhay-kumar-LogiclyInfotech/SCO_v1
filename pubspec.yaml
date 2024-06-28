@@ -60,6 +60,8 @@ dependencies:
   dart_format:
   font_awesome_flutter:
   carousel_slider:
+  flutter_switch:
+  flutter_advanced_switch: ^3.1.0
 
   flutter_localizations:
     sdk: flutter

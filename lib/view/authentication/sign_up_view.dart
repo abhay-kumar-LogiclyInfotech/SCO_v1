@@ -4,93 +4,132 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
-import 'package:sco_v1/resources/components/custom_advanced_switch.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import '../../resources/components/custom_text_field.dart';
 import '../../viewModel/services/navigation_services.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class SignUpView extends StatefulWidget {
+  const SignUpView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
+class _SignUpViewState extends State<SignUpView>
+    with MediaQueryMixin<SignUpView> {
   late NavigationServices _navigationServices;
 
+  late TextEditingController _firstNameController;
+  late TextEditingController _secondNameController;
+  late TextEditingController _thirdFourthNameController;
+  late TextEditingController _familyNameController;
+  late TextEditingController _dobController;
+  late TextEditingController _genderController;
   late TextEditingController _emailController;
+  late TextEditingController _confirmEmailController;
   late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
+  late TextEditingController _countryController;
+  late TextEditingController _emiratesIdController;
+  late TextEditingController _mobileNumberController;
 
+  late FocusNode _firstNameFocusNode;
+  late FocusNode _secondNameFocusNode;
+  late FocusNode _thirdFourthNameFocusNode;
+  late FocusNode _familyNameFocusNode;
+  late FocusNode _dobFocusNode;
+  late FocusNode _genderFocusNode;
   late FocusNode _emailFocusNode;
+  late FocusNode _confirmEmailFocusNode;
   late FocusNode _passwordFocusNode;
+  late FocusNode _confirmPasswordFocusNode;
+  late FocusNode _countryFocusNode;
+  late FocusNode _emiratesIdFocusNode;
+  late FocusNode _mobileNumberFocusNode;
 
-  bool _isArabic = false;
-  final _languageController = ValueNotifier<bool>(false);
-  bool _isLoading = true; // State to track loading
+  final ValueNotifier<bool> _passwordVisibility = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _confirmPasswordVisibility = ValueNotifier<bool>(true);
 
-  final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
-
-  Future<void> getInitialLanguage() async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final String? language = preferences.getString('language_code');
-    debugPrint(language);
-
-    if (language != null && language == 'ar') {
-      _isArabic = true;
-      _languageController.value = true;
-    } else {
-      _isArabic = false;
-      _languageController.value = false;
-    }
-
-    setState(() {
-      _isLoading = false; // Set loading to false after initialization
-    });
-  }
 
   @override
   void initState() {
+
+
+
+
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
 
+    _firstNameController = TextEditingController();
+    _secondNameController = TextEditingController();
+    _thirdFourthNameController = TextEditingController();
+    _familyNameController = TextEditingController();
+    _dobController = TextEditingController();
+    _genderController = TextEditingController();
     _emailController = TextEditingController();
+    _confirmEmailController = TextEditingController();
     _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+    _countryController = TextEditingController();
+    _emiratesIdController = TextEditingController();
+    _mobileNumberController = TextEditingController();
 
+    _firstNameFocusNode = FocusNode();
+    _secondNameFocusNode = FocusNode();
+    _thirdFourthNameFocusNode = FocusNode();
+    _familyNameFocusNode = FocusNode();
+    _dobFocusNode = FocusNode();
+    _genderFocusNode = FocusNode();
     _emailFocusNode = FocusNode();
+    _confirmEmailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
+    _confirmPasswordFocusNode = FocusNode();
+    _countryFocusNode = FocusNode();
+    _emiratesIdFocusNode = FocusNode();
+    _mobileNumberFocusNode = FocusNode();
 
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getInitialLanguage();
-    });
   }
 
   @override
   void dispose() {
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
+    _firstNameController.dispose();
+    _secondNameController.dispose();
+    _thirdFourthNameController.dispose();
+    _familyNameController.dispose();
+    _dobController.dispose();
+    _genderController.dispose();
     _emailController.dispose();
+    _confirmEmailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _countryController.dispose();
+    _emiratesIdController.dispose();
+    _mobileNumberController.dispose();
+
+    _firstNameFocusNode.dispose();
+    _secondNameFocusNode.dispose();
+    _thirdFourthNameFocusNode.dispose();
+    _familyNameFocusNode.dispose();
+    _dobFocusNode.dispose();
+    _genderFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _confirmEmailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    _countryFocusNode.dispose();
+    _emiratesIdFocusNode.dispose();
+    _mobileNumberFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: CircularProgressIndicator(color: AppColors.scoThemeColor),
-        ),
-      );
-    }
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
@@ -151,23 +190,12 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                       _passwordField(provider),
                       const SizedBox(height: 10),
 
-                      //forgot password field:
-                      _forgotPasswordLink(provider),
-                      const SizedBox(height: 40),
-                      //Login Button:
-                      _loginButton(provider),
+                      //Sign Up Button:
+                      _signUpButton(provider),
                       const SizedBox(height: 20),
-                      //giving or option:
-                      _or(),
-                      const SizedBox(height: 20),
-                      //sign in with Uae Pass button:
-                      _signInWithUaePassButton(provider),
-                      const SizedBox(height: 16),
-                      //sign up link:
-                      _signUpLink(provider),
-                      const SizedBox(height: 23),
-                      //Change Language:
-                      _selectLanguage(),
+
+                      //Already have account sign in link:
+                      _signInLink(provider),
                     ],
                   ),
                 );
@@ -203,7 +231,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   Widget _passwordField(LanguageChangeViewModel provider) {
     return ValueListenableBuilder(
-        valueListenable: _obscurePassword,
+        valueListenable: _passwordVisibility,
         builder: (context, obscurePassword, child) {
           return CustomTextField(
             textDirection: provider.appLocale == const Locale('en') ||
@@ -223,7 +251,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             obscureText: obscurePassword,
             trailing: GestureDetector(
                 onTap: () {
-                  _obscurePassword.value = !_obscurePassword.value;
+                  _passwordVisibility.value = !_passwordVisibility.value;
                 },
                 child: obscurePassword
                     ? const Icon(
@@ -239,40 +267,13 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
         });
   }
 
-  Widget _forgotPasswordLink(LanguageChangeViewModel provider) {
-    return Directionality(
-      textDirection:
-      provider.appLocale == const Locale('en') || provider.appLocale == null
-          ? TextDirection.ltr
-          : TextDirection.rtl,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GestureDetector(
-              onTap: () {
-                //Implement Forgot Password link here:
-              },
-              child: Text(
-                AppLocalizations.of(context)!.forgotPassword,
-                style: const TextStyle(
-                  color: AppColors.scoButtonColor,
-                  fontSize: 14,
-                ),
-              ))
-        ],
-      ),
-    );
-  }
-
-  Widget _loginButton(LanguageChangeViewModel provider) {
+  Widget _signUpButton(LanguageChangeViewModel provider) {
     return CustomButton(
       textDirection:
           provider.appLocale == const Locale('en') || provider.appLocale == null
               ? TextDirection.ltr
               : TextDirection.rtl,
-      buttonName: AppLocalizations.of(context)!.login,
+      buttonName: AppLocalizations.of(context)!.signUp,
       isLoading: false,
       onTap: () {},
       fontSize: 20,
@@ -281,86 +282,35 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     );
   }
 
-  Widget _or() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          child: Container(
-            height: 1,
-            color: AppColors.darkGrey,
-          ),
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-        Text(
-          AppLocalizations.of(context)!.or,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: AppColors.darkGrey,
-          ),
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-        Expanded(
-          child: Container(
-            height: 1,
-            color: AppColors.darkGrey,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _signInWithUaePassButton(LanguageChangeViewModel provider) {
-    return CustomButton(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
-      buttonName: "Sign in with UAE PASS",
-      isLoading: false,
-      onTap: () {},
-      fontSize: 15,
-      buttonColor: Colors.white,
-      borderColor: Colors.black,
-      textColor: Colors.black,
-      elevation: 1,
-      leadingIcon: const Icon(Icons.fingerprint),
-    );
-  }
-
-  Widget _signUpLink(LanguageChangeViewModel provider) {
+  Widget _signInLink(LanguageChangeViewModel provider) {
     return Directionality(
-      textDirection:
-      provider.appLocale == const Locale('en') || provider.appLocale == null
-          ? TextDirection.ltr
-          : TextDirection.rtl,
+    textDirection: provider.appLocale == const Locale('en') ||
+        provider.appLocale == null
+        ? TextDirection.ltr
+        : TextDirection.rtl,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
            Text(
-           AppLocalizations.of(context)!.dontHaveAccount ,
+            AppLocalizations.of(context)!.alreadyHaveAccount,
             style: const TextStyle(
                 color: AppColors.scoButtonColor,
                 fontSize: 16,
                 fontWeight: FontWeight.bold),
-                   ),
+          ),
           const SizedBox(
             width: 5,
           ),
           GestureDetector(
-            //Implement signup link here:
+            //Implement sign in link here:
             onTap: () {
-              _navigationServices.pushNamed('/signUpView');
+              _navigationServices.goBack();
             },
             child:  Text(
-              AppLocalizations.of(context)!.signUp,
+    AppLocalizations.of(context)!.signIn
+    ,
               style: const TextStyle(
                   color: AppColors.scoThemeColor,
                   fontSize: 16,
@@ -369,41 +319,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _selectLanguage() {
-    debugPrint("Called selectLanguage");
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text("English"),
-        const SizedBox(
-          width: 10,
-        ),
-        CustomAdvancedSwitch(
-          controller: _languageController,
-          activeColor: AppColors.scoThemeColor,
-          inactiveColor: Colors.grey,
-          initialValue: _isArabic,
-          onChanged: (value) {
-            if (value) {
-              Provider.of<LanguageChangeViewModel>(context, listen: false)
-                  .changeLanguage(const Locale('ar'));
-            } else {
-              Provider.of<LanguageChangeViewModel>(context, listen: false)
-                  .changeLanguage(const Locale('en'));
-            }
-          },
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        const Directionality(
-            textDirection: TextDirection.rtl, child: Text("عربي")),
-      ],
     );
   }
 }

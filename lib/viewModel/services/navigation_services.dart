@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../view/authentication/reset_password_view.dart';
+import '../../view/authentication/sign_up_view.dart';
 import '../../view/home_view.dart';
 import '../../view/main_view.dart';
 import '../../view/splash_view/splash_view.dart';
@@ -21,6 +23,9 @@ class NavigationServices {
   final Map<String, Widget Function(BuildContext context)> _routes = {
     "/splashView" : (context)=> const SplashView(),
     "/loginView" : (context)=> const LoginView(),
+    "/signUpView" : (context)=> const SignUpView(),
+    "/resetPasswordView" : (context)=> const ResetPasswordView(),
+
     "/mainView": (context)=> const MainView(),
   };
 

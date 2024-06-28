@@ -66,8 +66,8 @@ class _MainViewState extends State<MainView> {
                             SizedBox(
                                 height: 30,
                                 child: SvgPicture.asset(
-                                  message
-                                      ? "assets/account.svg"
+                                  account
+                                      ? "assets/account_selected.svg"
                                       : "assets/account.svg",
                                 )),
                             Text(
@@ -104,7 +104,7 @@ class _MainViewState extends State<MainView> {
                                 height: 30,
                                 child: SvgPicture.asset(
                                   message
-                                      ? "assets/message.svg"
+                                      ? "assets/message_selected.svg"
                                       : "assets/message.svg",
                                 )),
                             Text(
@@ -141,7 +141,7 @@ class _MainViewState extends State<MainView> {
                                 height: 30,
                                 child: SvgPicture.asset(
                                   information
-                                      ? "assets/information.svg"
+                                      ? "assets/information_selected.svg"
                                       : "assets/information.svg",
                                 )),
                             Text(
@@ -180,7 +180,7 @@ class _MainViewState extends State<MainView> {
                                 child: SvgPicture.asset(
                                   home
                                       ? "assets/home_selected.svg"
-                                      : "assets/home_selected.svg",
+                                      : "assets/home.svg",
                                 )),
                             Text(
                               AppLocalizations.of(context)!.home,

@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              initialRoute: "/loginView",
+              initialRoute: "/mainView",
 
               // home: Test(),
             );

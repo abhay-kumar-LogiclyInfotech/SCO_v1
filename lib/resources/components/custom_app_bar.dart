@@ -16,6 +16,7 @@ class CustomTopAppBar extends StatelessWidget implements PreferredSizeWidget {
         width: double.infinity,
         alignment: Alignment.center,
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Row(
               mainAxisSize: MainAxisSize.max,
@@ -25,7 +26,7 @@ class CustomTopAppBar extends StatelessWidget implements PreferredSizeWidget {
                 SizedBox(
                   height: 35,
                   width: 80,
-                  child: Image.asset('assets/company_logo.png'),
+                  child: Image.asset('assets/company_logo_main_view.png'),
                 ),
               ],
             ),
@@ -36,28 +37,44 @@ class CustomTopAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: height,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
                     onTap: () {},
                     child: SvgPicture.asset(
-                      "assets/notification_bell.svg",
-                      height: 20,
-                      width: 20,
+                      "assets/hamburger.svg",
+                      fit: BoxFit.contain,
+                      // height: 20,
+                      // width: 20,
                     ),
                   ),
-                  const SizedBox(
-                    width: 30,
+
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {},
+                        child: SvgPicture.asset(
+                          "assets/notification_bell.svg",
+                          height: 20,
+                          width: 20,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: SvgPicture.asset(
+                          "assets/search.svg",
+                          height: 20,
+                          width: 20,
+                        ),
+                      )
+                    ],
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: SvgPicture.asset(
-                      "assets/search.svg",
-                      height: 20,
-                      width: 20,
-                    ),
-                  )
                 ],
               ),
             )

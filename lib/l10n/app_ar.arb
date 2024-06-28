@@ -1,5 +1,6 @@
 {
   "emailAddress": "عنوان البريد الإلكتروني",
+  "idEmailOrMobile": "رقم الهوية أو البريد الإلكتروني أو رقم الجوال",
   "login": "تسجيل الدخول",
   "or": "أو",
   "signInWithUaePass": "قم بتسجيل الدخول باستخدام UAE PASS",
@@ -27,7 +28,17 @@
   "address": "عنوان",
   "account": "حساب",
   "message": "رسالة",
-  "information": "معلومة","home": "بيت"
+  "information": "معلومة","home": "بيت","arabic": "عربي",
+  "signUp": "اشتراك",
+  "forgotPassword": "هل نسيت كلمة السر؟",
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "resetNewPassword": "إعادة تعيين كلمة المرور الجديدة",
+  "newPassword": "كلمة المرور الجديدة",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "submit": "يُقدِّم",
+  "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+  "signIn": "تسجيل الدخول"
+
 
 
 
