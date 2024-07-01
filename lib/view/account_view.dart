@@ -27,6 +27,7 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountV
                 onSelected: (Language item) {
                   if (Language.english.name == item.name) {
                     provider.changeLanguage(const Locale('en'));
+
                   } else {
                     debugPrint('Arabic');
                     provider.changeLanguage(const Locale('ar'));

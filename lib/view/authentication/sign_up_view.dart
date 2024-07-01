@@ -7,9 +7,8 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
+import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
 import '../../viewModel/services/navigation_services.dart';
 
@@ -36,7 +35,7 @@ class _SignUpViewState extends State<SignUpView>
   late TextEditingController _confirmPasswordController;
   late TextEditingController _countryController;
   late TextEditingController _emiratesIdController;
-  late TextEditingController _mobileNumberController;
+  late TextEditingController _studentPhoneNumberController;
 
   late FocusNode _firstNameFocusNode;
   late FocusNode _secondNameFocusNode;
@@ -50,18 +49,15 @@ class _SignUpViewState extends State<SignUpView>
   late FocusNode _confirmPasswordFocusNode;
   late FocusNode _countryFocusNode;
   late FocusNode _emiratesIdFocusNode;
-  late FocusNode _mobileNumberFocusNode;
+  late FocusNode _studentPhoneNumberFocusNode;
 
   final ValueNotifier<bool> _passwordVisibility = ValueNotifier<bool>(true);
-  final ValueNotifier<bool> _confirmPasswordVisibility = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _confirmPasswordVisibility =
+      ValueNotifier<bool>(true);
 
-
+  List<String> gender = [];
   @override
   void initState() {
-
-
-
-
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
 
@@ -77,7 +73,7 @@ class _SignUpViewState extends State<SignUpView>
     _confirmPasswordController = TextEditingController();
     _countryController = TextEditingController();
     _emiratesIdController = TextEditingController();
-    _mobileNumberController = TextEditingController();
+    _studentPhoneNumberController = TextEditingController();
 
     _firstNameFocusNode = FocusNode();
     _secondNameFocusNode = FocusNode();
@@ -91,7 +87,7 @@ class _SignUpViewState extends State<SignUpView>
     _confirmPasswordFocusNode = FocusNode();
     _countryFocusNode = FocusNode();
     _emiratesIdFocusNode = FocusNode();
-    _mobileNumberFocusNode = FocusNode();
+    _studentPhoneNumberFocusNode = FocusNode();
 
     super.initState();
   }
@@ -110,7 +106,7 @@ class _SignUpViewState extends State<SignUpView>
     _confirmPasswordController.dispose();
     _countryController.dispose();
     _emiratesIdController.dispose();
-    _mobileNumberController.dispose();
+    _studentPhoneNumberController.dispose();
 
     _firstNameFocusNode.dispose();
     _secondNameFocusNode.dispose();
@@ -124,12 +120,28 @@ class _SignUpViewState extends State<SignUpView>
     _confirmPasswordFocusNode.dispose();
     _countryFocusNode.dispose();
     _emiratesIdFocusNode.dispose();
-    _mobileNumberFocusNode.dispose();
+    _studentPhoneNumberFocusNode.dispose();
     super.dispose();
   }
 
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   gender = [
+  //     AppLocalizations.of(context)!.male,
+  //     AppLocalizations.of(context)!.female,
+  //     AppLocalizations.of(context)!.transgender,
+  //   ];
+  // }
+
   @override
   Widget build(BuildContext context) {
+    gender = [
+      AppLocalizations.of(context)!.male,
+      AppLocalizations.of(context)!.female,
+      AppLocalizations.of(context)!.transgender,
+    ];
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
@@ -182,17 +194,56 @@ class _SignUpViewState extends State<SignUpView>
                           "assets/company_logo.png",
                         ),
                       ),
-                      const SizedBox(height: 40),
-                      //email Address Field;
-                      _emailAddressField(provider),
+                      const SizedBox(height: 30),
+                      //sign Up with UAE Pass;
+                      _signUpWithUaePassButton(provider),
                       const SizedBox(height: 20),
-                      //_passwordField
-                      _passwordField(provider),
+                      //or
+                      _or(),
                       const SizedBox(height: 10),
+
+                      _firstName(provider),
+                      const SizedBox(height: 10),
+
+                      _secondName(provider),
+                      const SizedBox(height: 10),
+
+                      _thirdFourthName(provider),
+                      const SizedBox(height: 10),
+
+                      _familyName(provider),
+                      const SizedBox(height: 10),
+
+                      _dateOfBirth(provider),
+                      const SizedBox(height: 10),
+
+                      _gender(provider),
+                      const SizedBox(height: 10),
+
+                      _emailAddress(provider),
+                      const SizedBox(height: 10),
+
+                      _confirmEmailAddress(provider),
+                      const SizedBox(height: 10),
+
+                      _password(provider),
+                      const SizedBox(height: 10),
+
+                      _confirmPassword(provider),
+                      const SizedBox(height: 10),
+
+                      _country(provider),
+                      const SizedBox(height: 10),
+
+                      _emiratesId(provider),
+                      const SizedBox(height: 10),
+
+                      _studentPhoneNumber(provider),
+                      const SizedBox(height: 30),
 
                       //Sign Up Button:
                       _signUpButton(provider),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 15),
 
                       //Already have account sign in link:
                       _signInLink(provider),
@@ -207,18 +258,206 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-  Widget _emailAddressField(LanguageChangeViewModel provider) {
+  Widget _signUpWithUaePassButton(LanguageChangeViewModel provider) {
+    return CustomButton(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      buttonName: "Sign up with UAE PASS",
+      isLoading: false,
+      onTap: () {},
+      fontSize: 15,
+      buttonColor: Colors.white,
+      borderColor: Colors.black,
+      textColor: Colors.black,
+      elevation: 1,
+      leadingIcon: const Icon(Icons.fingerprint),
+    );
+  }
+
+  Widget _or() {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Expanded(
+          child: Container(
+            height: 1,
+            color: AppColors.darkGrey,
+          ),
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          AppLocalizations.of(context)!.or,
+          style: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            color: AppColors.darkGrey,
+          ),
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Expanded(
+          child: Container(
+            height: 1,
+            color: AppColors.darkGrey,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _firstName(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _firstNameFocusNode,
+      nextFocusNode: _secondNameFocusNode,
+      controller: _firstNameController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.firstName,
+      textInputType: TextInputType.text,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/name.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
+  Widget _secondName(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _secondNameFocusNode,
+      nextFocusNode: _thirdFourthNameFocusNode,
+      controller: _secondNameController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.secondName,
+      textInputType: TextInputType.text,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/name.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
+  Widget _thirdFourthName(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _thirdFourthNameFocusNode,
+      nextFocusNode: _familyNameFocusNode,
+      controller: _thirdFourthNameController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.thirdFourthName,
+      textInputType: TextInputType.text,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/name.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
+  Widget _familyName(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _familyNameFocusNode,
+      nextFocusNode: _dobFocusNode,
+      controller: _familyNameController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.familyName,
+      textInputType: TextInputType.text,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/familyName.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
+  Widget _dateOfBirth(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _dobFocusNode,
+      nextFocusNode: _genderFocusNode,
+      controller: _dobController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.dob,
+      textInputType: TextInputType.datetime,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/calendar.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
+  //Gender DropDown:
+  Widget _gender(LanguageChangeViewModel provider) {
+    return CustomDropdown(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      gender: gender,
+      onChanged: (value) {
+        _genderController.text = value!;
+
+        //This thing is creating error: don't know how to fix it:
+        FocusScope.of(context).requestFocus(_emailFocusNode);
+      },
+      currentFocusNode: _genderFocusNode,
+      hintText: AppLocalizations.of(context)!.gender,
+    );
+
+  }
+
+  Widget _emailAddress(LanguageChangeViewModel provider) {
     return CustomTextField(
       textDirection:
           provider.appLocale == const Locale('en') || provider.appLocale == null
               ? TextDirection.ltr
               : TextDirection.rtl,
       currentFocusNode: _emailFocusNode,
-      nextFocusNode: _passwordFocusNode,
+      nextFocusNode: _confirmEmailFocusNode,
       controller: _emailController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.idEmailOrMobile,
-      textInputType: TextInputType.emailAddress,
+      hintText: AppLocalizations.of(context)!.emailAddress,
+      textInputType: TextInputType.datetime,
+      textCapitalization: true,
       isNumber: false,
       leading: SvgPicture.asset(
         "assets/email.svg",
@@ -229,7 +468,30 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-  Widget _passwordField(LanguageChangeViewModel provider) {
+  Widget _confirmEmailAddress(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _confirmEmailFocusNode,
+      nextFocusNode: _passwordFocusNode,
+      controller: _confirmEmailController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.confirmEmailAddress,
+      textInputType: TextInputType.datetime,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/email.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
+  Widget _password(LanguageChangeViewModel provider) {
     return ValueListenableBuilder(
         valueListenable: _passwordVisibility,
         builder: (context, obscurePassword, child) {
@@ -239,6 +501,7 @@ class _SignUpViewState extends State<SignUpView>
                 ? TextDirection.ltr
                 : TextDirection.rtl,
             currentFocusNode: _passwordFocusNode,
+            nextFocusNode: _confirmPasswordFocusNode,
             controller: _passwordController,
             hintText: AppLocalizations.of(context)!.password,
             textInputType: TextInputType.text,
@@ -267,6 +530,114 @@ class _SignUpViewState extends State<SignUpView>
         });
   }
 
+  Widget _confirmPassword(LanguageChangeViewModel provider) {
+    return ValueListenableBuilder(
+        valueListenable: _confirmPasswordVisibility,
+        builder: (context, obscurePassword, child) {
+          return CustomTextField(
+            textDirection: provider.appLocale == const Locale('en') ||
+                    provider.appLocale == null
+                ? TextDirection.ltr
+                : TextDirection.rtl,
+            currentFocusNode: _confirmPasswordFocusNode,
+            nextFocusNode: _countryFocusNode,
+            controller: _confirmPasswordController,
+            hintText: AppLocalizations.of(context)!.confirmPassword,
+            textInputType: TextInputType.text,
+            isNumber: false,
+            leading: SvgPicture.asset(
+              "assets/lock.svg",
+              // height: 18,
+              // width: 18,
+            ),
+            obscureText: obscurePassword,
+            trailing: GestureDetector(
+                onTap: () {
+                  _confirmPasswordVisibility.value =
+                      !_confirmPasswordVisibility.value;
+                },
+                child: obscurePassword
+                    ? const Icon(
+                        Icons.visibility_off_rounded,
+                        color: AppColors.darkGrey,
+                      )
+                    : const Icon(
+                        Icons.visibility_rounded,
+                        color: AppColors.darkGrey,
+                      )),
+            onChanged: (value) {},
+          );
+        });
+  }
+
+  Widget _country(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _countryFocusNode,
+      nextFocusNode: _emiratesIdFocusNode,
+      controller: _countryController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.country,
+      textInputType: TextInputType.datetime,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/country.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
+  Widget _emiratesId(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _emiratesIdFocusNode,
+      nextFocusNode: _studentPhoneNumberFocusNode,
+      controller: _emiratesIdController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.emiratesId,
+      textInputType: TextInputType.datetime,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/emiratesId.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
+  Widget _studentPhoneNumber(LanguageChangeViewModel provider) {
+    return CustomTextField(
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
+      currentFocusNode: _studentPhoneNumberFocusNode,
+      controller: _studentPhoneNumberController,
+      obscureText: false,
+      hintText: AppLocalizations.of(context)!.studentMobileNumber,
+      textInputType: TextInputType.datetime,
+      textCapitalization: true,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/phoneNumber.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      onChanged: (value) {},
+    );
+  }
+
   Widget _signUpButton(LanguageChangeViewModel provider) {
     return CustomButton(
       textDirection:
@@ -284,16 +655,16 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _signInLink(LanguageChangeViewModel provider) {
     return Directionality(
-    textDirection: provider.appLocale == const Locale('en') ||
-        provider.appLocale == null
-        ? TextDirection.ltr
-        : TextDirection.rtl,
+      textDirection:
+          provider.appLocale == const Locale('en') || provider.appLocale == null
+              ? TextDirection.ltr
+              : TextDirection.rtl,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-           Text(
+          Text(
             AppLocalizations.of(context)!.alreadyHaveAccount,
             style: const TextStyle(
                 color: AppColors.scoButtonColor,
@@ -308,9 +679,8 @@ class _SignUpViewState extends State<SignUpView>
             onTap: () {
               _navigationServices.goBack();
             },
-            child:  Text(
-    AppLocalizations.of(context)!.signIn
-    ,
+            child: Text(
+              AppLocalizations.of(context)!.signIn,
               style: const TextStyle(
                   color: AppColors.scoThemeColor,
                   fontSize: 16,

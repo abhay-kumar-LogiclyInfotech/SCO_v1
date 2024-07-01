@@ -7,6 +7,8 @@ class AppColors {
   static const Color scoThemeColor = Color(0xff9A6F32);
 
 
+
+
   static const LinearGradient yellowLinearGradient = LinearGradient(colors: [
     Color(0xffFDD900),
     Color(0xffFD9800),

@@ -4,8 +4,14 @@ import 'package:flutter_svg/svg.dart';
 
 class CustomTopAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
+  final void Function() onTap;
 
-  const CustomTopAppBar({Key? key, this.height = 40.0}) : super(key: key);
+
+
+
+   const  CustomTopAppBar({Key? key, this.height = 40.0,required this.onTap}) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,7 @@ class CustomTopAppBar extends StatelessWidget implements PreferredSizeWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: onTap,
                     child: SvgPicture.asset(
                       "assets/hamburger.svg",
                       fit: BoxFit.contain,

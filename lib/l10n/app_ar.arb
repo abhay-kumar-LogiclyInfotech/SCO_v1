@@ -37,7 +37,20 @@
   "confirmPassword": "تأكيد كلمة المرور",
   "submit": "يُقدِّم",
   "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
-  "signIn": "تسجيل الدخول"
+  "signIn": "تسجيل الدخول",
+  "firstName": "الاسم الأول",
+  "secondName": "الاسم الثاني",
+  "thirdFourthName": "الاسم الثالث/الرابع",
+  "familyName": "اسم العائلة",
+  "dob": "تاريخ الميلاد",
+  "gender": "جنس",
+  "male": "ذكر",
+  "female": "أنثى",
+  "transgender": "المتحولين جنسيا",
+  "confirmEmailAddress": "أكد عنوانك الإلكتروني",
+  "emiratesId": "هويه الإمارات",
+  "studentMobileNumber": "رقم جوال الطالب"
+
 
 
 

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/view/account_view.dart';
+import 'package:sco_v1/view/drawer/custom_drawer.dart';
 import 'package:sco_v1/view/home_view.dart';
 import 'package:sco_v1/view/information_view.dart';
 import 'package:sco_v1/view/message_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/components/custom_app_bar.dart';
 
@@ -29,10 +32,32 @@ class _MainViewState extends State<MainView> {
   ];
 
   int currentIndex = 0;
+
+  final GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final languageCheck =
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
     return Scaffold(
-      appBar: CustomTopAppBar(),
+      key: scaffoldState,
+      appBar: CustomTopAppBar(
+        onTap: () {
+          languageCheck.appLocale == const Locale('en')
+              ? scaffoldState.currentState!.openDrawer()
+              : scaffoldState.currentState!.openEndDrawer();
+        },
+      ),
+      drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture:
+          languageCheck.appLocale == const Locale('en') ? true : false,
+      endDrawer: CustomDrawer(),
+      endDrawerEnableOpenDragGesture: languageCheck.appLocale == const Locale('ar') ? true : false,
       body: _buildUI(),
       bottomNavigationBar: SafeArea(
         child: Material(
@@ -42,7 +67,7 @@ class _MainViewState extends State<MainView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 20.0,bottom: 5.0),
+                padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -77,8 +102,9 @@ class _MainViewState extends State<MainView> {
                                       ? Colors.black
                                       : const Color(0xfff9AA6B2),
                                   fontSize: 12,
-                                  fontWeight:
-                                      account ? FontWeight.w900 : FontWeight.w900),
+                                  fontWeight: account
+                                      ? FontWeight.w900
+                                      : FontWeight.w900),
                             ),
                           ],
                         ),
@@ -114,8 +140,9 @@ class _MainViewState extends State<MainView> {
                                       ? Colors.black
                                       : const Color(0xfff9aa6b2),
                                   fontSize: 12,
-                                  fontWeight:
-                                      message ? FontWeight.w900 : FontWeight.w900),
+                                  fontWeight: message
+                                      ? FontWeight.w900
+                                      : FontWeight.w900),
                             ),
                           ],
                         ),

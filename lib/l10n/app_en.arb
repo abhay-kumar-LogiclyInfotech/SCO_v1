@@ -39,7 +39,28 @@
   "confirmPassword": "Confirm Password",
   "submit":"SUBMIT",
   "alreadyHaveAccount": "Already have account?",
-  "signIn": "SIGN IN"
+  "signIn": "SIGN IN",
+  "firstName":"First Name",
+  "secondName":"Second Name",
+  "thirdFourthName": "Third/Fourth Name",
+  "familyName":"Family Name",
+  "dob": "Date Of Birth",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "transgender": "Transgender",
+  "confirmEmailAddress": "Confirm Email Address",
+  "emiratesId": "Emirates ID",
+  "studentMobileNumber": "Student Mobile Number"
+
+
+
+
+
+
+
+
+
 
 
 
