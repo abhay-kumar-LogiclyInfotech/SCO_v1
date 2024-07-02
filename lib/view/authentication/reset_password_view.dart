@@ -136,10 +136,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
 
   Widget _heading(LanguageChangeViewModel provider){
     return                       Directionality(
-      textDirection: provider.appLocale == const Locale('en') ||
-          provider.appLocale == null
-          ? TextDirection.ltr
-          : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       child: const Text(
         "Reset New Password",
         style: TextStyle(
@@ -157,10 +154,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
         valueListenable: _newPasswordValueNotifier,
         builder: (context, newPasswordValueNotifier, child) {
           return CustomTextField(
-            textDirection: provider.appLocale == const Locale('en') ||
-                    provider.appLocale == null
-                ? TextDirection.ltr
-                : TextDirection.rtl,
+            textDirection: getTextDirection(provider),
             currentFocusNode: _newPasswordFocusNode,
             nextFocusNode: _confirmPasswordFocusNode,
             controller: _newPasswordController,
@@ -197,10 +191,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
         valueListenable: _confirmPasswordValueNotifier,
         builder: (context, confirmPasswordValueNotifier, child) {
           return CustomTextField(
-            textDirection: provider.appLocale == const Locale('en') ||
-                    provider.appLocale == null
-                ? TextDirection.ltr
-                : TextDirection.rtl,
+            textDirection: getTextDirection(provider),
             currentFocusNode: _confirmPasswordFocusNode,
             controller: _confirmPasswordController,
             hintText: AppLocalizations.of(context)!.confirmPassword,
@@ -233,10 +224,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
 
   Widget _submitButton(LanguageChangeViewModel provider) {
     return CustomButton(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       buttonName: AppLocalizations.of(context)!.submit,
       isLoading: false,
       onTap: () {},

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../resources/app_colors.dart';
+
 class MessageView extends StatefulWidget {
   const MessageView({super.key});
 
@@ -11,6 +13,7 @@ class _MessageViewState extends State<MessageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.scoBgColor,
 
       appBar: AppBar(title: Text("Message view"),),
 

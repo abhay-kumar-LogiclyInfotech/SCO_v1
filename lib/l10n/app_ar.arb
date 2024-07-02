@@ -12,23 +12,23 @@
   "aboutSco": "حول منظمة شنغهاي للتعاون",
   "scholarship": "منحة دراسية",
   "certificates": "الشهادات",
-  "faqs":"الأسئلة الشائعة",
+  "faqs": "الأسئلة الشائعة",
   "visionAndMission": "الرؤية والرسالة",
-  "newsAndEvents":"الأخبار و الأحداث",
-  "personalInformation":"معلومات شخصية",
-  "userName": "اسم المستخدم",
+  "newsAndEvents": "الأخبار و الأحداث",
+  "personalInformation": "معلومات شخصية",
   "location": "موقع",
   "contactNumber": "رقم الاتصال",
-  "emailId":"عنوان الايميل",
+  "emailId": "عنوان الايميل",
   "password": "كلمة المرور",
-  "generalInformation":"كلمة المرور",
-  "scholarship": "منحة دراسية",
+  "generalInformation": "كلمة المرور",
   "country": "دولة",
   "state": "ولاية",
   "address": "عنوان",
   "account": "حساب",
   "message": "رسالة",
-  "information": "معلومة","home": "بيت","arabic": "عربي",
+  "information": "معلومة",
+  "home": "بيت",
+  "arabic": "عربي",
   "signUp": "اشتراك",
   "forgotPassword": "هل نسيت كلمة السر؟",
   "dontHaveAccount": "ليس لديك حساب؟",
@@ -49,11 +49,15 @@
   "transgender": "المتحولين جنسيا",
   "confirmEmailAddress": "أكد عنوانك الإلكتروني",
   "emiratesId": "هويه الإمارات",
-  "studentMobileNumber": "رقم جوال الطالب"
-
-
-
-
-
-
+  "studentMobileNumber": "رقم جوال الطالب",
+  "userName": "اسم المستخدم",
+  "userType": "نوع المستخدم",
+  "aboutUs": "معلومات عنا",
+  "aBriefAboutSCO": "نبذة مختصرة عن منظمة شنغهاي للتعاون",
+  "visionMission": "الرؤية والرسالة والقيمة والهدف",
+  "faq": "التعليمات",
+  "scoPrograms": "برامج منظمة شنغهاي للتعاون",
+  "news": "أخبار",
+  "contact": "اتصال",
+  "language": "لغة"
 }

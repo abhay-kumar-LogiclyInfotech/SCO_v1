@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import '../../resources/app_colors.dart';
+import '../../resources/components/custom_advanced_switch.dart';
+import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/navigation_services.dart';
 
 class CustomDrawer extends StatefulWidget {
   final String? userName;
   final String? userEmail;
   final String? userProfileImageLink;
+  final TextDirection? textDirection;
+  dynamic scaffoldState;
 
-  const CustomDrawer({
+  CustomDrawer({
     super.key,
     this.userName,
     this.userEmail,
     this.userProfileImageLink,
+    this.textDirection,
+    this.scaffoldState,
   });
 
   @override
@@ -23,12 +33,39 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   late NavigationServices _navigationServices;
+
+  bool _isArabic = false;
+  bool _isLoading = true; // State to track loading
+
+  final _languageController = ValueNotifier<bool>(false);
+
+  Future<void> getInitialLanguage() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final String? language = preferences.getString('language_code');
+    debugPrint(language);
+
+    if (language != null && language == 'ar') {
+      _isArabic = true;
+      _languageController.value = true;
+    } else {
+      _isArabic = false;
+      _languageController.value = false;
+    }
+
+    setState(() {
+      _isLoading = false; // Set loading to false after initialization
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    final GetIt _getIt = GetIt.instance;
+    final GetIt getIt = GetIt.instance;
+    _navigationServices = getIt.get<NavigationServices>();
 
-    _navigationServices = _getIt.get<NavigationServices>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getInitialLanguage();
+    });
   }
 
   @override
@@ -41,282 +78,356 @@ class _CustomDrawerState extends State<CustomDrawer> {
       width: MediaQuery.sizeOf(context).width * 0.75,
 
       child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: MediaQuery.sizeOf(context)
-                      .width, // height: MediaQuery.sizeOf(context).height / 5.8,
-                  // decoration: const BoxDecoration(
-                  //     color: Color(0xff4F545A),
-                  //     borderRadius: BorderRadius.only(
-                  //         bottomLeft: Radius.circular(0),
-                  //         bottomRight: Radius.circular(0),)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Image.network(
-                            // "images/images_user_sidebar/Ellipse 28.png",
-                            widget.userProfileImageLink ??
-                                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                            fit: BoxFit.cover,
-                            height: MediaQuery.sizeOf(context).width / 7,
-                            width: MediaQuery.sizeOf(context).width / 7,
-                            errorBuilder: (context, object, _) {
-                              return SvgPicture.asset(
-                                "images/images_user_sidebar/profile.svg",
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 1.5,
+                  strokeAlign: BorderSide.strokeAlignCenter,
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(
+                    left: 25, right: 25, top: 20, bottom: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Directionality(
+                      textDirection: widget.textDirection ?? TextDirection.ltr,
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Image.network(
+                                // "images/images_user_sidebar/Ellipse 28.png",
+                                widget.userProfileImageLink ??
+                                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
                                 fit: BoxFit.cover,
-                                height: MediaQuery.sizeOf(context).width / 7,
-                                width: MediaQuery.sizeOf(context).width / 7,
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width / 28,
-                        ),
-                        SizedBox(
-                          height: MediaQuery.sizeOf(context).width * 0.12,
-                          width: MediaQuery.sizeOf(context).width * 0.5,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    widget.userName ?? "User Name",
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white),
+                                height: MediaQuery.sizeOf(context).width / 8,
+                                width: MediaQuery.sizeOf(context).width / 8,
+                                errorBuilder: (context, object, _) {
+                                  return SvgPicture.asset(
+                                    "images/images_user_sidebar/profile.svg",
+                                    fit: BoxFit.cover,
+                                    height:
+                                        MediaQuery.sizeOf(context).width / 7,
+                                    width: MediaQuery.sizeOf(context).width / 7,
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width / 24,
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: SizedBox(
+                                height: MediaQuery.sizeOf(context).width * 0.12,
+                                width: MediaQuery.sizeOf(context).width * 0.5,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          widget.userName ?? AppLocalizations.of(context)!.userName,
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: SelectableText(
+                                          widget.userEmail ?? AppLocalizations.of(context)!.userType,
+                                          style: TextStyle(
+                                              color: Colors.white
+                                                  .withOpacity(0.65)),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                                Expanded(
-                                  child: SelectableText(
-                                    widget.userEmail ?? "User Email",
-                                    style: TextStyle(
-                                        color: Colors.white.withOpacity(0.65)),
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Column(
+                          // mainAxisSize: MainAxisSize.max,
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
+                              title:  Text(
+                                AppLocalizations.of(context)!.login,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                              leading:
+                                  SvgPicture.asset("assets/sidemenu/login.svg"),
+                              dense: true,
+                              horizontalTitleGap: 5,
+                              onTap: () {
+                                _navigationServices.goBack();
+                              },
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
+                              title:  Text(
+                                AppLocalizations.of(context)!.home,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                              leading:
+                                  SvgPicture.asset("assets/sidemenu/home.svg"),
+                              dense: true,
+                              horizontalTitleGap: 5,
+                              onTap: () {
+                                _navigationServices.goBack();
+                              },
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                            ),
+                            ExpansionTile(
+                              dense: true,
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                              collapsedShape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                              tilePadding: EdgeInsets.zero,
+                              leading: SvgPicture.asset(
+                                  "assets/sidemenu/aboutUs.svg"),
+                              title:  Text(
+                                AppLocalizations.of(context)!.aboutUs,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                              iconColor: Colors.white,
+                              collapsedIconColor: Colors.white,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+
+                                     _navigationServices.pushNamed("/aBriefAboutScoView");
+                                  },
+                                  child: Container(
+                                      color: Colors.transparent,
+                                      padding: const EdgeInsets.all(8),
+                                      // width: MediaQuery.sizeOf(context).width * 0.3,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: SvgPicture.asset(
+                                                "assets/sidemenu/briefAboutSco.svg"),
+                                          ),
+                                           Expanded(
+                                            flex: 2,
+                                            child: Text(
+                                              AppLocalizations.of(context)!.aBriefAboutSCO,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14),
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _navigationServices.goBack();
+                                  },
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    padding: const EdgeInsets.all(8),
+                                    // width: MediaQuery.sizeOf(context).width * 0.3,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: SvgPicture.asset(
+                                              "assets/sidemenu/visionMission.svg"),
+                                        ),
+                                         Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            AppLocalizations.of(context)!.visionMission,
+
+                                            style:const  TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                )
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _navigationServices.goBack();
+                                  },
+                                  child: Container(
+                                      color: Colors.transparent,
+                                      padding: const EdgeInsets.all(8),
+                                      // width: MediaQuery.sizeOf(context).width * 0.3,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: SvgPicture.asset(
+                                                "assets/sidemenu/faq.svg"),
+                                          ),
+                                           Expanded(
+                                            flex: 2,
+                                            child: Text(
+                                              AppLocalizations.of(context)!.faq,
+
+                                              style:const  TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14),
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                ),
                               ],
                             ),
-                          ),
-                        )
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title:  Text(
+                                  AppLocalizations.of(context)!.scoPrograms
+                                  ,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                              leading: SvgPicture.asset(
+                                  "assets/sidemenu/scoProgram.svg"),
+                              dense: true,
+                              horizontalTitleGap: 5,
+                              onTap: () {
+
+                                _navigationServices.pushNamed("/scoPrograms");
+                              },
+                              shape: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.25),
+                                ),
+                              ),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
+                              title:  Text(
+                                  AppLocalizations.of(context)!.news,
+
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                              leading:
+                                  SvgPicture.asset("assets/sidemenu/news.svg"),
+                              dense: true,
+                              horizontalTitleGap: 5,
+                              onTap: () {
+                                _navigationServices.goBack();
+                              },
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
+                              title:  Text(
+                                AppLocalizations.of(context)!.contact,
+
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                              leading: SvgPicture.asset(
+                                  "assets/sidemenu/contactUs.svg"),
+                              dense: true,
+                              horizontalTitleGap: 5,
+                              onTap: () {
+                                _navigationServices.goBack();
+                              },
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                            ),
+                          ],
+                        ),
+                      ]),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset("assets/sidemenu/language.svg"),
+                         Text(
+                           AppLocalizations.of(context)!.language,
+
+                           style: const TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                        const Text(
+                          "English",
+                          style: TextStyle(color: AppColors.scoLightThemeColor),
+                        ),
+                        CustomAdvancedSwitch(
+                          controller: _languageController,
+                          activeColor: AppColors.scoThemeColor,
+                          inactiveColor: Colors.grey,
+                          initialValue: _isArabic,
+                          onChanged: (value) {
+                            if (value) {
+                              Provider.of<LanguageChangeViewModel>(context,
+                                      listen: false)
+                                  .changeLanguage(const Locale('ar'));
+                              _navigationServices.goBack();
+                              widget.scaffoldState.currentState!
+                                  .openEndDrawer();
+                            } else {
+                              Provider.of<LanguageChangeViewModel>(context,
+                                      listen: false)
+                                  .changeLanguage(const Locale('en'));
+                              _navigationServices.goBack();
+                              widget.scaffoldState.currentState!.openDrawer();
+                            }
+                          },
+                        ),
+                        const Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Text(
+                              "عربي",
+                              style: TextStyle(
+                                  color: AppColors.scoLightThemeColor),
+                            )),
                       ],
                     ),
-                  ),
-                ),
-                Column(
-                  // mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                        title: const Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                        leading: SvgPicture.asset("assets/name.svg"),
-                        dense: true,
-                        horizontalTitleGap: 5,
-                        onTap: () {
-                          _navigationServices.goBack();
-                        },
-                        shape: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.white.withOpacity(0.25))),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                        title: const Text(
-                          "Home",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                        leading: SvgPicture.asset("assets/name.svg"),
-                        dense: true,
-                        horizontalTitleGap: 5,
-                        onTap: () {
-                          _navigationServices.goBack();
-                        },
-                        shape: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.white.withOpacity(0.25))),
-                      ),
-                    ),
-
-
-                    // Will be used in Phase 2
-                    Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: ExpansionTile(
-                        dense: true,
-                        shape: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.white.withOpacity(0.25))),
-                        collapsedShape: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.white.withOpacity(0.25))),
-                        tilePadding: EdgeInsets.zero,
-                        leading: SvgPicture.asset("assets/name.svg"),
-                        title: const Text(
-                          "About Us",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                        iconColor: Colors.white,
-                        collapsedIconColor: Colors.white,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              _navigationServices.goBack();
-                              _navigationServices
-                                  .pushNamed('/createTicketView');
-                            },
-                            child: Container(
-                                color: Colors.transparent,
-                                padding: const EdgeInsets.all(8),
-                                // width: MediaQuery.sizeOf(context).width * 0.3,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
-                                    ),
-                                    SvgPicture.asset(
-                                        "images/images_sponser_sidebar/deposit_dropdown.svg"),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    const Text(
-                                      "Create Ticket",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 14),
-                                    )
-                                  ],
-                                )),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              _navigationServices.goBack();
-                              _navigationServices.pushNamed('/myTicketView');
-                            },
-                            child: Container(
-                                color: Colors.transparent,
-                                padding: const EdgeInsets.all(8),
-                                // width: MediaQuery.sizeOf(context).width * 0.3,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
-                                    ),
-                                    SvgPicture.asset(
-                                        "images/images_sponser_sidebar/deposit_dropdown.svg"),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    const Text(
-                                      "My Tickets",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 14),
-                                    )
-                                  ],
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                        title: const Text(
-                          "SCO Programs",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                        leading: SvgPicture.asset("assets/name.svg"),
-                        dense: true,
-                        horizontalTitleGap: 5,
-                        onTap: () {
-                          _navigationServices.goBack();
-                        },
-                        shape: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.white.withOpacity(0.25))),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                        title: const Text(
-                          "News",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                        leading: SvgPicture.asset("assets/name.svg"),
-                        dense: true,
-                        horizontalTitleGap: 5,
-                        onTap: () {
-                          _navigationServices.goBack();
-                        },
-                        shape: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.white.withOpacity(0.25))),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                        title: const Text(
-                          "Contact",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                        leading: SvgPicture.asset("assets/name.svg"),
-                        dense: true,
-                        horizontalTitleGap: 5,
-                        onTap: () {
-                          _navigationServices.goBack();
-                        },
-                        shape: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.white.withOpacity(0.25))),
-                      ),
-                    ),
-
                   ],
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
       ),
     );
   }

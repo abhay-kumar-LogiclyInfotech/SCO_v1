@@ -181,10 +181,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   Widget _emailAddressField(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _emailFocusNode,
       nextFocusNode: _passwordFocusNode,
       controller: _emailController,
@@ -206,10 +203,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
         valueListenable: _obscurePassword,
         builder: (context, obscurePassword, child) {
           return CustomTextField(
-            textDirection: provider.appLocale == const Locale('en') ||
-                    provider.appLocale == null
-                ? TextDirection.ltr
-                : TextDirection.rtl,
+            textDirection: getTextDirection(provider),
             currentFocusNode: _passwordFocusNode,
             controller: _passwordController,
             hintText: AppLocalizations.of(context)!.password,
@@ -241,10 +235,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   Widget _forgotPasswordLink(LanguageChangeViewModel provider) {
     return Directionality(
-      textDirection:
-      provider.appLocale == const Locale('en') || provider.appLocale == null
-          ? TextDirection.ltr
-          : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -268,10 +259,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   Widget _loginButton(LanguageChangeViewModel provider) {
     return CustomButton(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       buttonName: AppLocalizations.of(context)!.login,
       isLoading: false,
       onTap: () {},
@@ -317,10 +305,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   Widget _signInWithUaePassButton(LanguageChangeViewModel provider) {
     return CustomButton(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       buttonName: "Sign in with UAE PASS",
       isLoading: false,
       onTap: () {},
@@ -335,10 +320,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   Widget _signUpLink(LanguageChangeViewModel provider) {
     return Directionality(
-      textDirection:
-      provider.appLocale == const Locale('en') || provider.appLocale == null
-          ? TextDirection.ltr
-          : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -373,7 +355,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   }
 
   Widget _selectLanguage() {
-    debugPrint("Called selectLanguage");
+    debugPrint("Called selectLanguage Switch");
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,

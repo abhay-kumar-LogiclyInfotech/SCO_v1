@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/account_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer.dart';
 import 'package:sco_v1/view/home_view.dart';
@@ -9,6 +10,7 @@ import 'package:sco_v1/view/information_view.dart';
 import 'package:sco_v1/view/message_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
+import '../resources/app_colors.dart';
 import '../resources/components/custom_app_bar.dart';
 
 class MainView extends StatefulWidget {
@@ -42,22 +44,31 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    final languageCheck =
+    final provider_1 =
         Provider.of<LanguageChangeViewModel>(context, listen: false);
     return Scaffold(
       key: scaffoldState,
       appBar: CustomTopAppBar(
+        textDirection: getTextDirection(provider_1),
         onTap: () {
-          languageCheck.appLocale == const Locale('en')
+          provider_1.appLocale == const Locale('en')
               ? scaffoldState.currentState!.openDrawer()
               : scaffoldState.currentState!.openEndDrawer();
         },
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(
+        textDirection: getTextDirection(provider_1),
+        scaffoldState: scaffoldState,
+      ),
       drawerEnableOpenDragGesture:
-          languageCheck.appLocale == const Locale('en') ? true : false,
-      endDrawer: CustomDrawer(),
-      endDrawerEnableOpenDragGesture: languageCheck.appLocale == const Locale('ar') ? true : false,
+          provider_1.appLocale == const Locale('en') ? true : false,
+      endDrawer: CustomDrawer(
+        textDirection: getTextDirection(provider_1),
+        scaffoldState: scaffoldState,
+
+      ),
+      endDrawerEnableOpenDragGesture:
+          provider_1.appLocale == const Locale('ar') ? true : false,
       body: _buildUI(),
       bottomNavigationBar: SafeArea(
         child: Material(

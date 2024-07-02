@@ -10,25 +10,23 @@
   "scholarshipOffice": "Scholarship Office",
   "aboutTheOrganization": "About the Organization",
   "aboutSco": "About SCO",
-  "scholarship": "Scholarship",
   "certificates": "Certificates",
   "faqs": "FAQ's",
-  "visionAndMission":"Vision & Mission",
-  "newsAndEvents":"News & Events",
-  "personalInformation":"Personal Information",
-  "userName": "User Name",
-  "location":"Location",
-  "contactNumber":"Contact Number",
+  "visionAndMission": "Vision & Mission",
+  "newsAndEvents": "News & Events",
+  "personalInformation": "Personal Information",
+  "location": "Location",
+  "contactNumber": "Contact Number",
   "emailId": "Email ID",
-  "password":"Password",
-  "generalInformation":"General Information",
-  "scholarship":"Scholarship",
+  "password": "Password",
+  "generalInformation": "General Information",
+  "scholarship": "Scholarship",
   "country": "Country",
   "state": "State",
   "address": "Address",
   "account": "Account",
-"message":"Message",
-  "information":"Information",
+  "message": "Message",
+  "information": "Information",
   "home": "Home",
   "arabic": "Arabic",
   "signUp": "SIGN UP",
@@ -37,13 +35,13 @@
   "resetNewPassword": "Reset New Password",
   "newPassword": "New Password",
   "confirmPassword": "Confirm Password",
-  "submit":"SUBMIT",
+  "submit": "SUBMIT",
   "alreadyHaveAccount": "Already have account?",
   "signIn": "SIGN IN",
-  "firstName":"First Name",
-  "secondName":"Second Name",
+  "firstName": "First Name",
+  "secondName": "Second Name",
   "thirdFourthName": "Third/Fourth Name",
-  "familyName":"Family Name",
+  "familyName": "Family Name",
   "dob": "Date Of Birth",
   "gender": "Gender",
   "male": "Male",
@@ -51,20 +49,15 @@
   "transgender": "Transgender",
   "confirmEmailAddress": "Confirm Email Address",
   "emiratesId": "Emirates ID",
-  "studentMobileNumber": "Student Mobile Number"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  "studentMobileNumber": "Student Mobile Number",
+  "userName": "User Name",
+  "userType": "User Type",
+  "aboutUs": "About Us",
+  "aBriefAboutSCO": "A Brief About SCO",
+  "visionMission": "Vision, Mission, Value and Goal",
+  "faq": "FAQ",
+  "scoPrograms": "SCO Programs",
+  "news": "News",
+  "contact": "Contact",
+  "language": "Language"
 }

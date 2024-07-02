@@ -7,6 +7,7 @@ import 'package:sco_v1/resources/components/custom_about_organization_containers
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 
+import '../resources/app_colors.dart';
 import '../viewModel/language_change_ViewModel.dart';
 
 enum Language { english, spanish }
@@ -18,11 +19,11 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
+class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      backgroundColor: AppColors.scoBgColor,
       body: _buildUI(),
     );
   }
@@ -30,24 +31,21 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
   Widget _buildUI() {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(top:  screenWidth* 0.04),
+        padding: EdgeInsets.only(top: screenWidth * 0.04),
         child: SingleChildScrollView(
           child: Column(
             children: [
-                      //CarouselSlider:
-                      _carouselSlider(),
-                      const SizedBox(height: 10),
-                      _amountContainer(),
-                      _aboutOrganization(),
-
+              //CarouselSlider:
+              _carouselSlider(),
+              const SizedBox(height: 10),
+              _amountContainer(),
+              _aboutOrganization(),
             ],
           ),
         ),
       ),
     );
   }
-
-
 
   Widget _topAppBar() {
     return Container(
@@ -69,8 +67,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
             ],
           ),
           Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
             height: 40,
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -131,18 +128,14 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
       builder: (context, provider, _) {
         return Stack(
           children: [
-            Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      "assets/carousel_demo_image.png",
-                      fit: BoxFit.cover,
-                    ))),
+            ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  "assets/sidemenu/aBriefAboutSco.jpg",
+                  fit: BoxFit.fill,
+                  height: double.infinity,
+                  width: double.infinity,
+                )),
 
             //Gradient:
             Container(
@@ -184,11 +177,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
                               width: 2,
                             ),
                             Directionality(
-                              textDirection:
-                                  provider.appLocale == const Locale('en') ||
-                                          provider.appLocale == null
-                                      ? TextDirection.ltr
-                                      : TextDirection.rtl,
+                              textDirection: getTextDirection(provider),
                               child: Text(
                                 AppLocalizations.of(context)!.readMore,
                                 style: const TextStyle(
@@ -215,11 +204,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Directionality(
-                                textDirection:
-                                    provider.appLocale == const Locale('en') ||
-                                            provider.appLocale == null
-                                        ? TextDirection.ltr
-                                        : TextDirection.rtl,
+                                textDirection: getTextDirection(provider),
                                 child: Text(
                                   AppLocalizations.of(context)!.scholarships,
                                   style: const TextStyle(
@@ -312,7 +297,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
     );
   }
 
-  Widget _buildAmountAndButton(BuildContext context, LanguageChangeViewModel provider) {
+  Widget _buildAmountAndButton(
+      BuildContext context, LanguageChangeViewModel provider) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -366,10 +352,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
               buttonName: AppLocalizations.of(context)!.readMore,
               isLoading: false,
               onTap: () {},
-              textDirection: provider.appLocale == const Locale('en') ||
-                      provider.appLocale == null
-                  ? TextDirection.ltr
-                  : TextDirection.rtl,
+              textDirection: getTextDirection(provider),
               textColor: const Color(0xffAD8138),
               borderColor: const Color(0xffAD8138),
               buttonColor: Colors.white,
@@ -473,10 +456,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
                 assetName: "assets/aboutSco.svg",
                 name: AppLocalizations.of(context)!.aboutSco,
                 onTap: () {},
-                textDirection: provider.appLocale == const Locale('en') ||
-                        provider.appLocale == null
-                    ? TextDirection.ltr
-                    : TextDirection.rtl,
+                textDirection: getTextDirection(provider),
               ),
             ),
             Expanded(
@@ -484,10 +464,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
                 assetName: "assets/scholarships.svg",
                 name: AppLocalizations.of(context)!.scholarship,
                 onTap: () {},
-                textDirection: provider.appLocale == const Locale('en') ||
-                        provider.appLocale == null
-                    ? TextDirection.ltr
-                    : TextDirection.rtl,
+                textDirection: getTextDirection(provider),
               ),
             ),
             Expanded(
@@ -495,10 +472,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
                 assetName: "assets/certificates.svg",
                 name: AppLocalizations.of(context)!.certificates,
                 onTap: () {},
-                textDirection: provider.appLocale == const Locale('en') ||
-                        provider.appLocale == null
-                    ? TextDirection.ltr
-                    : TextDirection.rtl,
+                textDirection: getTextDirection(provider),
               ),
             ),
           ],
@@ -517,10 +491,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/faqs.svg",
                 name: AppLocalizations.of(context)!.faqs,
-                textDirection: provider.appLocale == const Locale('en') ||
-                        provider.appLocale == null
-                    ? TextDirection.ltr
-                    : TextDirection.rtl,
+                textDirection: getTextDirection(provider),
                 onTap: () {},
               ),
             ),
@@ -528,10 +499,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/vision_and_mission.svg",
                 name: AppLocalizations.of(context)!.visionAndMission,
-                textDirection: provider.appLocale == const Locale('en') ||
-                        provider.appLocale == null
-                    ? TextDirection.ltr
-                    : TextDirection.rtl,
+                textDirection: getTextDirection(provider),
                 onTap: () {},
               ),
             ),
@@ -539,10 +507,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/news_and_events.svg",
                 name: AppLocalizations.of(context)!.newsAndEvents,
-                textDirection: provider.appLocale == const Locale('en') ||
-                        provider.appLocale == null
-                    ? TextDirection.ltr
-                    : TextDirection.rtl,
+                textDirection: getTextDirection(provider),
                 onTap: () {},
               ),
             ),
@@ -552,7 +517,3 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView>{
     );
   }
 }
-
-
-
-

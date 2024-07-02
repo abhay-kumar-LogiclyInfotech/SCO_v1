@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../view/authentication/reset_password_view.dart';
 import '../../view/authentication/sign_up_view.dart';
+import '../../view/drawer/custom_drawer_view/aBriefAboutSco_view.dart';
+import '../../view/drawer/custom_drawer_view/sco_programs.dart';
 import '../../view/home_view.dart';
 import '../../view/main_view.dart';
 import '../../view/splash_view/splash_view.dart';
@@ -25,6 +27,11 @@ class NavigationServices {
     "/loginView" : (context)=> const LoginView(),
     "/signUpView" : (context)=> const SignUpView(),
     "/resetPasswordView" : (context)=> const ResetPasswordView(),
+    "/aBriefAboutScoView" : (context)=> const ABriefAboutScoView(),
+    "/scoPrograms" : (context)=> const ScoPrograms(),
+
+
+
 
     "/mainView": (context)=> const MainView(),
   };

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/user_info_container.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../resources/app_colors.dart';
 import 'home_view.dart';
-
 
 class AccountView extends StatefulWidget {
   const AccountView({super.key});
@@ -15,10 +15,12 @@ class AccountView extends StatefulWidget {
   State<AccountView> createState() => _AccountViewState();
 }
 
-class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountView> {
+class _AccountViewState extends State<AccountView>
+    with MediaQueryMixin<AccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.scoBgColor,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.emailAddress),
         actions: [
@@ -27,23 +29,21 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountV
                 onSelected: (Language item) {
                   if (Language.english.name == item.name) {
                     provider.changeLanguage(const Locale('en'));
-
                   } else {
                     debugPrint('Arabic');
                     provider.changeLanguage(const Locale('ar'));
                   }
                 },
                 itemBuilder: (BuildContext context) =>
-                <PopupMenuEntry<Language>>[
-                  const PopupMenuItem(
-                      value: Language.english, child: Text("English")),
-                  const PopupMenuItem(
-                      value: Language.spanish, child: Text("Arabic"))
-                ]);
+                    <PopupMenuEntry<Language>>[
+                      const PopupMenuItem(
+                          value: Language.english, child: Text("English")),
+                      const PopupMenuItem(
+                          value: Language.spanish, child: Text("Arabic"))
+                    ]);
           })
         ],
       ),
-
       body: _buildUI(),
     );
   }
@@ -57,7 +57,6 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountV
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               //personal Information:
               _personalInformation(),
 
@@ -69,7 +68,6 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountV
       ),
     );
   }
-
 
   //personal Information:
   Widget _personalInformation() {
@@ -86,10 +84,7 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountV
               children: [
                 Expanded(
                   child: Directionality(
-                    textDirection: provider.appLocale == const Locale('en') ||
-                            provider.appLocale == null
-                        ? TextDirection.ltr
-                        : TextDirection.rtl,
+                    textDirection: getTextDirection(provider),
                     child: Text(
                       AppLocalizations.of(context)!.personalInformation,
                       style: const TextStyle(
@@ -115,62 +110,38 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountV
                   child: Column(
                     children: [
                       UserInfoContainer(
-                       title:  AppLocalizations.of(context)!.userName,
+                        title: AppLocalizations.of(context)!.userName,
                         displayTitle: "Abhay Kumar",
-                        textDirection:
-                            provider.appLocale == const Locale('en') ||
-                                    provider.appLocale == null
-                                ? TextDirection.ltr
-                                : TextDirection.rtl,
+                        textDirection: getTextDirection(provider),
                       ),
                       const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
-                        title:                       AppLocalizations.of(context)!.location,
-
+                        title: AppLocalizations.of(context)!.location,
                         displayTitle: "Abhay Kumar",
-                        textDirection:
-                            provider.appLocale == const Locale('en') ||
-                                    provider.appLocale == null
-                                ? TextDirection.ltr
-                                : TextDirection.rtl,
+                        textDirection: getTextDirection(provider),
                       ),
-                     const Divider(
+                      const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
-                          textDirection:
-                              provider.appLocale == const Locale('en') ||
-                                      provider.appLocale == null
-                                  ? TextDirection.ltr
-                                  : TextDirection.rtl,
-                          title:                       AppLocalizations.of(context)!.contactNumber,
-
+                          textDirection: getTextDirection(provider),
+                          title: AppLocalizations.of(context)!.contactNumber,
                           displayTitle: "Abhay Kumar"),
                       const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
-                          textDirection:
-                              provider.appLocale == const Locale('en') ||
-                                      provider.appLocale == null
-                                  ? TextDirection.ltr
-                                  : TextDirection.rtl,
-                          title:                       AppLocalizations.of(context)!.emailId,
-
+                          textDirection: getTextDirection(provider),
+                          title: AppLocalizations.of(context)!.emailId,
                           displayTitle: "Abhay Kumar"),
-                     const  Divider(
+                      const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
-                          textDirection:
-                              provider.appLocale == const Locale('en') ||
-                                      provider.appLocale == null
-                                  ? TextDirection.ltr
-                                  : TextDirection.rtl,
-                          title:                       AppLocalizations.of(context)!.password,
-
+                          textDirection: getTextDirection(provider),
+                          title: AppLocalizations.of(context)!.password,
                           displayTitle: "Abhay Kumar"),
                     ],
                   ),
@@ -196,13 +167,9 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountV
               children: [
                 Expanded(
                   child: Directionality(
-                    textDirection: provider.appLocale == const Locale('en') ||
-                            provider.appLocale == null
-                        ? TextDirection.ltr
-                        : TextDirection.rtl,
+                    textDirection: getTextDirection(provider),
                     child: Text(
                       AppLocalizations.of(context)!.generalInformation,
-
                       style: const TextStyle(
                           color: Color(0xff8591A9),
                           fontSize: 14,
@@ -221,52 +188,33 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin<AccountV
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 child: Padding(
-                  padding: const  EdgeInsets.all(25.0),
+                  padding: const EdgeInsets.all(25.0),
                   child: Column(
                     children: [
                       UserInfoContainer(
-                          textDirection:
-                              provider.appLocale == const Locale('en') ||
-                                      provider.appLocale == null
-                                  ? TextDirection.ltr
-                                  : TextDirection.rtl,
-                          title:                       AppLocalizations.of(context)!.scholarship,
-
+                          textDirection: getTextDirection(provider),
+                          title: AppLocalizations.of(context)!.scholarship,
                           displayTitle: "Abhay Kumar"),
-                     const  Divider(
+                      const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
-                          textDirection:
-                              provider.appLocale == const Locale('en') ||
-                                      provider.appLocale == null
-                                  ? TextDirection.ltr
-                                  : TextDirection.rtl,
-                          title:                       AppLocalizations.of(context)!.country,
-
+                          textDirection: getTextDirection(provider),
+                          title: AppLocalizations.of(context)!.country,
                           displayTitle: "Abhay Kumar"),
-                     const  Divider(
+                      const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
-                          textDirection:
-                              provider.appLocale == const Locale('en') ||
-                                      provider.appLocale == null
-                                  ? TextDirection.ltr
-                                  : TextDirection.rtl,
-                          title:                       AppLocalizations.of(context)!.state,
-
+                          textDirection: getTextDirection(provider),
+                          title: AppLocalizations.of(context)!.state,
                           displayTitle: "Abhay Kumar"),
-                     const  Divider(
+                      const Divider(
                         color: Color(0xffDFDFDF),
                       ),
                       UserInfoContainer(
-                          textDirection:
-                              provider.appLocale == const Locale('en') ||
-                                      provider.appLocale == null
-                                  ? TextDirection.ltr
-                                  : TextDirection.rtl,
-                          title:                       AppLocalizations.of(context)!.address,
+                          textDirection: getTextDirection(provider),
+                          title: AppLocalizations.of(context)!.address,
                           displayTitle: "Abhay Kumar"),
                     ],
                   ),

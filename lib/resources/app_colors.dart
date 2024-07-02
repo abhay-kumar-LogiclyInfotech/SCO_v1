@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 class AppColors {
   static const Color darkGrey = Color(0xffB7BFCC);
   static const Color lightGrey = Color(0xffDFDFDF);
+  static const Color scoBgColor = Color(0xffF5F5F5);
   static const Color scoButtonColor = Color(0xff093B59);
   static const Color scoThemeColor = Color(0xff9A6F32);
+  static const Color scoLightThemeColor = Color(0xffCDB383);
+
 
 
 

@@ -260,10 +260,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _signUpWithUaePassButton(LanguageChangeViewModel provider) {
     return CustomButton(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       buttonName: "Sign up with UAE PASS",
       isLoading: false,
       onTap: () {},
@@ -312,10 +309,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _firstName(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _firstNameFocusNode,
       nextFocusNode: _secondNameFocusNode,
       controller: _firstNameController,
@@ -335,10 +329,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _secondName(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _secondNameFocusNode,
       nextFocusNode: _thirdFourthNameFocusNode,
       controller: _secondNameController,
@@ -358,10 +349,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _thirdFourthName(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _thirdFourthNameFocusNode,
       nextFocusNode: _familyNameFocusNode,
       controller: _thirdFourthNameController,
@@ -381,10 +369,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _familyName(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _familyNameFocusNode,
       nextFocusNode: _dobFocusNode,
       controller: _familyNameController,
@@ -404,10 +389,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _dateOfBirth(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _dobFocusNode,
       nextFocusNode: _genderFocusNode,
       controller: _dobController,
@@ -428,10 +410,7 @@ class _SignUpViewState extends State<SignUpView>
   //Gender DropDown:
   Widget _gender(LanguageChangeViewModel provider) {
     return CustomDropdown(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       gender: gender,
       onChanged: (value) {
         _genderController.text = value!;
@@ -442,15 +421,11 @@ class _SignUpViewState extends State<SignUpView>
       currentFocusNode: _genderFocusNode,
       hintText: AppLocalizations.of(context)!.gender,
     );
-
   }
 
   Widget _emailAddress(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _emailFocusNode,
       nextFocusNode: _confirmEmailFocusNode,
       controller: _emailController,
@@ -470,10 +445,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _confirmEmailAddress(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _confirmEmailFocusNode,
       nextFocusNode: _passwordFocusNode,
       controller: _confirmEmailController,
@@ -496,10 +468,7 @@ class _SignUpViewState extends State<SignUpView>
         valueListenable: _passwordVisibility,
         builder: (context, obscurePassword, child) {
           return CustomTextField(
-            textDirection: provider.appLocale == const Locale('en') ||
-                    provider.appLocale == null
-                ? TextDirection.ltr
-                : TextDirection.rtl,
+            textDirection: getTextDirection(provider),
             currentFocusNode: _passwordFocusNode,
             nextFocusNode: _confirmPasswordFocusNode,
             controller: _passwordController,
@@ -535,10 +504,7 @@ class _SignUpViewState extends State<SignUpView>
         valueListenable: _confirmPasswordVisibility,
         builder: (context, obscurePassword, child) {
           return CustomTextField(
-            textDirection: provider.appLocale == const Locale('en') ||
-                    provider.appLocale == null
-                ? TextDirection.ltr
-                : TextDirection.rtl,
+            textDirection: getTextDirection(provider),
             currentFocusNode: _confirmPasswordFocusNode,
             nextFocusNode: _countryFocusNode,
             controller: _confirmPasswordController,
@@ -572,10 +538,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _country(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _countryFocusNode,
       nextFocusNode: _emiratesIdFocusNode,
       controller: _countryController,
@@ -595,10 +558,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _emiratesId(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _emiratesIdFocusNode,
       nextFocusNode: _studentPhoneNumberFocusNode,
       controller: _emiratesIdController,
@@ -618,10 +578,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _studentPhoneNumber(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       currentFocusNode: _studentPhoneNumberFocusNode,
       controller: _studentPhoneNumberController,
       obscureText: false,
@@ -640,10 +597,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _signUpButton(LanguageChangeViewModel provider) {
     return CustomButton(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       buttonName: AppLocalizations.of(context)!.signUp,
       isLoading: false,
       onTap: () {},
@@ -655,10 +609,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _signInLink(LanguageChangeViewModel provider) {
     return Directionality(
-      textDirection:
-          provider.appLocale == const Locale('en') || provider.appLocale == null
-              ? TextDirection.ltr
-              : TextDirection.rtl,
+      textDirection: getTextDirection(provider),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
