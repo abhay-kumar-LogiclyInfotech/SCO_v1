@@ -7,13 +7,15 @@ import '../app_text_styles.dart';
 
 class CustomTile extends StatefulWidget {
 
+  final TextDirection textDirection;
   final String imagePath;
   final String title;
   final String subTitle;
   final void Function() onTap;
 
   const CustomTile({super.key,
-  required this.imagePath,
+    required this.textDirection,
+    required this.imagePath,
     required this.title,
     required this.subTitle,
     required this.onTap
@@ -26,28 +28,31 @@ class CustomTile extends StatefulWidget {
 class _CustomTileState extends State<CustomTile> with MediaQueryMixin<CustomTile> {
   @override
   Widget build(BuildContext context) {
-    return   GestureDetector(
-      onTap: widget.onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Material(
-          elevation: 1,
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(flex:4,child: _imageSection()),
-                Expanded(flex:10,child: _titleSection()),
-                Expanded(flex:1,child: _endSection())
-              ],
+    return   Directionality(
+      textDirection: widget.textDirection,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Material(
+            elevation: 1,
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(flex:4,child: _imageSection()),
+                  Expanded(flex:10,child: _titleSection()),
+                  Expanded(flex:1,child: _endSection())
+                ],
+              ),
             ),
           ),
         ),
@@ -80,8 +85,8 @@ class _CustomTileState extends State<CustomTile> with MediaQueryMixin<CustomTile
           ),
         ),
         Container(
-            height: 20,
-            width: 23,
+            height: 17,
+            width: 19,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -131,7 +136,7 @@ class _CustomTileState extends State<CustomTile> with MediaQueryMixin<CustomTile
           ),
           Text(
             widget.subTitle,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.justify,
             style: AppTextStyles.subTitleTextStyle(),
           ),
         ],

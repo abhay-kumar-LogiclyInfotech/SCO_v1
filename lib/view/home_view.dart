@@ -63,7 +63,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               SizedBox(
                   height: 35,
                   width: 80,
-                  child: Image.asset('assets/company_logo.png')),
+                  child: Image.asset('assets/company_logo.jpg')),
             ],
           ),
           Container(
@@ -289,7 +289,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         ),
         const SizedBox(width: 10),
         Image.asset(
-          "assets/scholarship_office.png",
+          "assets/scholarship_office.jpg",
           height: 30,
           width: 30,
         ),

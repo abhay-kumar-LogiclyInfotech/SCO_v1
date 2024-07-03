@@ -191,7 +191,7 @@ class _SignUpViewState extends State<SignUpView>
                     children: [
                       SizedBox(
                         child: Image.asset(
-                          "assets/company_logo.png",
+                          "assets/company_logo.jpg",
                         ),
                       ),
                       const SizedBox(height: 30),

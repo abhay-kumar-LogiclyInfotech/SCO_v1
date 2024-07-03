@@ -44,7 +44,7 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
                   SizedBox(
                     height: 35,
                     width: 80,
-                    child: Image.asset('assets/company_logo_main_view.png'),
+                    child: Image.asset('assets/company_logo.jpg'),
                   ),
                 ],
               ),

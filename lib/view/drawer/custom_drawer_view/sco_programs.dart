@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../resources/app_colors.dart';
 import '../../../viewModel/services/navigation_services.dart';
@@ -57,38 +59,21 @@ class _ScoProgramsState extends State<ScoPrograms>
   }
 
   Widget _buildUI() {
+    final provider = Provider.of<LanguageChangeViewModel>(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            CustomTile(
-              imagePath: "assets/sidemenu/scholarships_uae.jpg",
-              title: "Scholarships In UAE",
+      child: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return CustomTile(
+            textDirection: getTextDirection(provider),
+              imagePath: "assets/sidemenu/distinguished_doctors.jpg",
+              title: "Scholarships in Abroad",
               subTitle:
-                  "The office, which was established in 1999 under the direct..",
-              onTap: () {},
-            ),
-
-            CustomTile(
-              imagePath: "assets/sidemenu/scholarships_uae.jpg",
-              title: "Scholarships In UAE",
-              subTitle:
-              "The office, which was established in 1999 under the direct..",
-              onTap: () {},
-            ),
-
-
-            CustomTile(
-              imagePath: "assets/sidemenu/scholarships_uae.jpg",
-              title: "Scholarships In UAE",
-              subTitle:
-              "The office, which was established in 1999 under the direct..",
-              onTap: () {},
-            ),
-          ],
-        ),
+                  "The office, which was establishe in 1999 under the direct..",
+              onTap: () {});
+        },
       ),
     );
   }

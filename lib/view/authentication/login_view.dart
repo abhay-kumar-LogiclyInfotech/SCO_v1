@@ -140,7 +140,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                     children: [
                       SizedBox(
                         child: Image.asset(
-                          "assets/company_logo.png",
+                          "assets/company_logo.jpg",
                         ),
                       ),
                       const SizedBox(height: 40),
