@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sco_v1/view/authentication/forgot_password_view.dart';
 
 import '../../view/authentication/reset_password_view.dart';
 import '../../view/authentication/sign_up_view.dart';
@@ -27,8 +28,10 @@ class NavigationServices {
     "/loginView" : (context)=> const LoginView(),
     "/signUpView" : (context)=> const SignUpView(),
     "/resetPasswordView" : (context)=> const ResetPasswordView(),
+    "/forgotPasswordView" : (context)=> const ForgotPasswordView(),
     "/aBriefAboutScoView" : (context)=> const ABriefAboutScoView(),
     "/scoPrograms" : (context)=> const ScoPrograms(),
+
 
 
 

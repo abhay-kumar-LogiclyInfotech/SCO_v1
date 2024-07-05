@@ -83,7 +83,7 @@ class _CustomTextFieldState extends State<CustomTextField>
                     hintText: widget.hintText,
                     hintFadeDuration: const Duration(milliseconds: 500),
                     hintStyle:
-                        const TextStyle(color: AppColors.darkGrey, fontSize: 15),
+                        const TextStyle(color: AppColors.darkGrey, fontSize: 14),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     errorBorder: InputBorder.none,

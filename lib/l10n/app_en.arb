@@ -59,5 +59,7 @@
   "scoPrograms": "SCO Programs",
   "news": "News",
   "contact": "Contact",
-  "language": "Language"
+  "language": "Language",
+  "pleaseEnterYourEmailAddress!": "Please enter your Email Address!",
+  "forgotPasswordTitle": "Forgot Password"
 }

@@ -49,6 +49,10 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
 
   @override
   void dispose() {
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
+    _newPasswordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
     super.dispose();
   }
 
@@ -93,39 +97,45 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
               borderRadius:
                   BorderRadius.vertical(top: Radius.elliptical(60, 60)),
             ),
-            child: Consumer<LanguageChangeViewModel>(
-              builder: (context, provider, _) {
-                return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        child: Image.asset(
-                          "assets/company_logo.png",
+            child: Column(
+              children: [
+                SizedBox(
+                    child: SvgPicture.asset(
+                  "assets/sco_logo.svg",
+                  fit: BoxFit.fill,
+                  height: 55,
+                  width: 110,
+                )),
+                Expanded(
+                  child: Consumer<LanguageChangeViewModel>(
+                    builder: (context, provider, _) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 33),
+
+                            //heading:
+                            _heading(provider), const SizedBox(height: 40),
+
+                            //_passwordField
+                            _newPasswordField(provider),
+                            const SizedBox(height: 15),
+
+                            _confirmPasswordField(provider),
+                            const SizedBox(height: 60),
+
+                            //Login Button:
+                            _submitButton(provider),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 33),
-
-
-                      //heading:
-                      _heading(provider),
-                      const SizedBox(height: 40),
-
-                      //_passwordField
-                      _newPasswordField(provider),
-                      const SizedBox(height: 15),
-
-                      _confirmPasswordField(provider),
-                      const SizedBox(height: 60),
-
-                      //Login Button:
-                      _submitButton(provider),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
         ],
@@ -133,20 +143,18 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
     );
   }
 
-
-  Widget _heading(LanguageChangeViewModel provider){
-    return                       Directionality(
+  Widget _heading(LanguageChangeViewModel provider) {
+    return Directionality(
       textDirection: getTextDirection(provider),
-      child: const Text(
-        "Reset New Password",
-        style: TextStyle(
+      child: Text(
+        AppLocalizations.of(context)!.resetNewPassword,
+        style: const TextStyle(
           color: AppColors.scoButtonColor,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
       ),
     );
-
   }
 
   Widget _newPasswordField(LanguageChangeViewModel provider) {
@@ -228,7 +236,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
       buttonName: AppLocalizations.of(context)!.submit,
       isLoading: false,
       onTap: () {},
-      fontSize: 20,
+      fontSize: 16,
       buttonColor: AppColors.scoButtonColor,
       elevation: 1,
     );

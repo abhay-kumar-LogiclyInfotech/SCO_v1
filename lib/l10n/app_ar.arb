@@ -59,5 +59,7 @@
   "scoPrograms": "برامج منظمة شنغهاي للتعاون",
   "news": "أخبار",
   "contact": "اتصال",
-  "language": "لغة"
+  "language": "لغة",
+  "pleaseEnterYourEmailAddress!": "الرجاء إدخال عنوان البريد الإلكتروني الخاص بك!",
+  "forgotPasswordTitle": "هل نسيت كلمة السر"
 }

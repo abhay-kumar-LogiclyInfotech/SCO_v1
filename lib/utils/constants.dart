@@ -1,4 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
+
 class Constants {
+  static PinTheme defaultPinTheme = PinTheme(
+      width: 44,
+      height: 44,
+      textStyle: const TextStyle(fontSize: 18, color: Colors.black),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.transparent),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: -1,
+              blurRadius: 4,
+              offset: const Offset(0, 2), // changes position of shadow
+            ),
+          ]));
+
   static const String longText = '''
   I love my India. This statement is not just an expression of my emotions, but a profound reflection of the deep-seated affection and pride I feel for my homeland. India, a nation of unparalleled diversity, rich history, and vibrant culture, holds a special place in my heart. Every aspect of this vast land, from its picturesque landscapes to its bustling cities, from its ancient traditions to its modern advancements, evokes a sense of belonging and pride.
 

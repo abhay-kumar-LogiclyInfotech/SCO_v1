@@ -139,7 +139,6 @@ class _SignUpViewState extends State<SignUpView>
     gender = [
       AppLocalizations.of(context)!.male,
       AppLocalizations.of(context)!.female,
-      AppLocalizations.of(context)!.transgender,
     ];
 
     return Scaffold(
@@ -181,76 +180,75 @@ class _SignUpViewState extends State<SignUpView>
               borderRadius:
                   BorderRadius.vertical(top: Radius.elliptical(60, 60)),
             ),
-            child: Consumer<LanguageChangeViewModel>(
-              builder: (context, provider, _) {
-                return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        child: Image.asset(
-                          "assets/company_logo.jpg",
+            child: Column(
+              children: [
+                SizedBox(
+                    child: SvgPicture.asset(
+                  "assets/sco_logo.svg",
+                  fit: BoxFit.fill,
+                  height: 55,
+                  width: 110,
+                )),
+                Expanded(
+                  child: Consumer<LanguageChangeViewModel>(
+                    builder: (context, provider, _) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 30), //sign Up with UAE Pass;
+                            _signUpWithUaePassButton(provider),
+                            const SizedBox(height: 20), //or
+                            _or(), const SizedBox(height: 10),
+
+                            _firstName(provider), const SizedBox(height: 10),
+
+                            _secondName(provider), const SizedBox(height: 10),
+
+                            _thirdFourthName(provider),
+                            const SizedBox(height: 10),
+
+                            _familyName(provider), const SizedBox(height: 10),
+
+                            _dateOfBirth(provider), const SizedBox(height: 10),
+
+                            _gender(provider), const SizedBox(height: 10),
+
+                            _emailAddress(provider), const SizedBox(height: 10),
+
+                            _confirmEmailAddress(provider),
+                            const SizedBox(height: 10),
+
+                            _password(provider), const SizedBox(height: 10),
+
+                            _confirmPassword(provider),
+                            const SizedBox(height: 10),
+
+                            _country(provider), const SizedBox(height: 10),
+
+                            _emiratesId(provider), const SizedBox(height: 10),
+
+                            _studentPhoneNumber(provider),
+                            const SizedBox(height: 30),
+
+                            //Sign Up Button:
+                            _signUpButton(provider), const SizedBox(height: 15),
+
+                            //Already have account sign in link:
+                            _signInLink(provider),
+
+                            const SizedBox(
+                              height: 5,
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 30),
-                      //sign Up with UAE Pass;
-                      _signUpWithUaePassButton(provider),
-                      const SizedBox(height: 20),
-                      //or
-                      _or(),
-                      const SizedBox(height: 10),
-
-                      _firstName(provider),
-                      const SizedBox(height: 10),
-
-                      _secondName(provider),
-                      const SizedBox(height: 10),
-
-                      _thirdFourthName(provider),
-                      const SizedBox(height: 10),
-
-                      _familyName(provider),
-                      const SizedBox(height: 10),
-
-                      _dateOfBirth(provider),
-                      const SizedBox(height: 10),
-
-                      _gender(provider),
-                      const SizedBox(height: 10),
-
-                      _emailAddress(provider),
-                      const SizedBox(height: 10),
-
-                      _confirmEmailAddress(provider),
-                      const SizedBox(height: 10),
-
-                      _password(provider),
-                      const SizedBox(height: 10),
-
-                      _confirmPassword(provider),
-                      const SizedBox(height: 10),
-
-                      _country(provider),
-                      const SizedBox(height: 10),
-
-                      _emiratesId(provider),
-                      const SizedBox(height: 10),
-
-                      _studentPhoneNumber(provider),
-                      const SizedBox(height: 30),
-
-                      //Sign Up Button:
-                      _signUpButton(provider),
-                      const SizedBox(height: 15),
-
-                      //Already have account sign in link:
-                      _signInLink(provider),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
         ],
@@ -411,7 +409,7 @@ class _SignUpViewState extends State<SignUpView>
   Widget _gender(LanguageChangeViewModel provider) {
     return CustomDropdown(
       textDirection: getTextDirection(provider),
-      gender: gender,
+      genderList: gender,
       onChanged: (value) {
         _genderController.text = value!;
 
@@ -601,7 +599,7 @@ class _SignUpViewState extends State<SignUpView>
       buttonName: AppLocalizations.of(context)!.signUp,
       isLoading: false,
       onTap: () {},
-      fontSize: 20,
+      fontSize: 16,
       buttonColor: AppColors.scoButtonColor,
       elevation: 1,
     );
@@ -629,6 +627,7 @@ class _SignUpViewState extends State<SignUpView>
             //Implement sign in link here:
             onTap: () {
               _navigationServices.goBack();
+              _navigationServices.pushNamed("/loginView");
             },
             child: Text(
               AppLocalizations.of(context)!.signIn,

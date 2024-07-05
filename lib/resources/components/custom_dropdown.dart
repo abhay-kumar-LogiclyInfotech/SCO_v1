@@ -5,7 +5,7 @@ import 'package:sco_v1/utils/utils.dart';
 import '../app_colors.dart';
 
 class CustomDropdown extends StatefulWidget {
-  final List<String> gender;
+  final List<String> genderList;
   final void Function(String? value) onChanged;
   final FocusNode currentFocusNode;
   final TextDirection textDirection;
@@ -15,7 +15,7 @@ class CustomDropdown extends StatefulWidget {
   CustomDropdown({
     super.key,
     required this.textDirection,
-    required this.gender,
+    required this.genderList,
     required this.onChanged,
     required this.currentFocusNode,
     this.hintText,
@@ -49,7 +49,7 @@ class _CustomDropdownState extends State<CustomDropdown>
             Expanded(
                 child: DropdownButtonFormField(
               dropdownColor: AppColors.scoButtonColor,
-              items: widget.gender.map((String item) {
+              items: widget.genderList.map((String item) {
                 return DropdownMenuItem(
                   value: item.toString(),
                   child: Text(
