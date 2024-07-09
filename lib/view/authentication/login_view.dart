@@ -8,6 +8,7 @@ import 'package:sco_v1/resources/components/custom_advanced_switch.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../resources/components/custom_text_field.dart';
@@ -134,11 +135,11 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
               children: [
                 SizedBox(
                     child: SvgPicture.asset(
-                      "assets/sco_logo.svg",
-                      fit: BoxFit.fill,
-                      height: 55,
-                      width: 110,
-                    )),
+                  "assets/sco_logo.svg",
+                  fit: BoxFit.fill,
+                  height: 55,
+                  width: 110,
+                )),
                 Expanded(
                   child: Consumer<LanguageChangeViewModel>(
                     builder: (context, provider, _) {
@@ -148,7 +149,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-
                             const SizedBox(height: 40),
                             //email Address Field;
                             _emailAddressField(provider),
@@ -253,7 +253,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           GestureDetector(
               onTap: () {
                 //Implement Forgot Password link here:
-_navigationServices.pushNamed('/forgotPasswordView');
+                _navigationServices.pushNamed('/forgotPasswordView');
               },
               child: Text(
                 AppLocalizations.of(context)!.forgotPassword,
@@ -268,15 +268,36 @@ _navigationServices.pushNamed('/forgotPasswordView');
   }
 
   Widget _loginButton(LanguageChangeViewModel provider) {
-    return CustomButton(
-      textDirection: getTextDirection(provider),
-      buttonName: AppLocalizations.of(context)!.login,
-      isLoading: false,
-      onTap: () {},
-      fontSize: 16,
-      buttonColor: AppColors.scoButtonColor,
-      elevation: 1,
-    );
+    return ChangeNotifierProvider(
+        create: (context) => CommonDataViewModel(),
+        child:
+            Consumer<CommonDataViewModel>(builder: (context, lovCodeViewModel, _) {
+          return CustomButton(
+            textDirection: getTextDirection(provider),
+            buttonName: AppLocalizations.of(context)!.login,
+            isLoading: false,
+            onTap: () async {
+              lovCodeViewModel.fetchCommonData();
+            },
+            fontSize: 16,
+            buttonColor: AppColors.scoButtonColor,
+            elevation: 1,
+          );
+
+          // return Consumer<LovCodeViewModel>(builder: (context,lovCodeViewModel,_){
+          //    return CustomButton(
+          //      textDirection: getTextDirection(provider),
+          //      buttonName: AppLocalizations.of(context)!.login,
+          //      isLoading: false,
+          //      onTap: () async{
+          //        lovCodeViewModel.fetchData();
+          //      },
+          //      fontSize: 16,
+          //      buttonColor: AppColors.scoButtonColor,
+          //      elevation: 1,
+          //    );
+          //  },);
+        }));
   }
 
   Widget _or() {
@@ -336,13 +357,13 @@ _navigationServices.pushNamed('/forgotPasswordView');
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-           Text(
-           AppLocalizations.of(context)!.dontHaveAccount ,
+          Text(
+            AppLocalizations.of(context)!.dontHaveAccount,
             style: const TextStyle(
                 color: AppColors.scoButtonColor,
                 fontSize: 16,
                 fontWeight: FontWeight.bold),
-                   ),
+          ),
           const SizedBox(
             width: 5,
           ),
@@ -351,7 +372,7 @@ _navigationServices.pushNamed('/forgotPasswordView');
             onTap: () {
               _navigationServices.pushNamed('/signUpView');
             },
-            child:  Text(
+            child: Text(
               AppLocalizations.of(context)!.signUp,
               style: const TextStyle(
                   color: AppColors.scoThemeColor,

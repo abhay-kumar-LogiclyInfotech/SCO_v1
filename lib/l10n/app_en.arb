@@ -60,6 +60,6 @@
   "news": "News",
   "contact": "Contact",
   "language": "Language",
-  "pleaseEnterYourEmailAddress!": "Please enter your Email Address!",
-  "forgotPasswordTitle": "Forgot Password"
+  "forgotPasswordTitle": "Forgot Password",
+  "pleaseEnterYourEmailAddress": "Please enter your Email Address!"
 }

@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons:
   provider:
   shared_preferences:
-  intl:
+  intl: ^0.19.0
   http:
   get_it:
   pinput:

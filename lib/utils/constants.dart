@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'package:sco_v1/models/splash/commonData_model.dart';
 
 class Constants {
+
+  static const String username = "liferay_access@sco.ae";
+  static const String password = "India@1234";
+
+
+  static Map<String, Response> lovCodeMap = {};
+
+
+
   static PinTheme defaultPinTheme = PinTheme(
       width: 44,
       height: 44,

@@ -60,6 +60,6 @@
   "news": "أخبار",
   "contact": "اتصال",
   "language": "لغة",
-  "pleaseEnterYourEmailAddress!": "الرجاء إدخال عنوان البريد الإلكتروني الخاص بك!",
-  "forgotPasswordTitle": "هل نسيت كلمة السر"
+  "forgotPasswordTitle": "هل نسيت كلمة السر",
+  "pleaseEnterYourEmailAddress": "الرجاء إدخال عنوان البريد الإلكتروني الخاص بك!"
 }

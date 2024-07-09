@@ -28,7 +28,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   late FocusNode _emailFocusNode;
   late FocusNode _passwordFocusNode;
 
-
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
@@ -150,9 +149,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   Widget _heading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child: const  Text(
-        "Forgot Password",
-        style:  TextStyle(
+      child: Text(
+        AppLocalizations.of(context)!.forgotPasswordTitle,
+        style: const TextStyle(
           color: AppColors.scoButtonColor,
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -164,9 +163,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   Widget _subHeading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child: const Text(
-          "Please enter your Email Address!",
-          style: TextStyle(
+      child: Text(AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 12,
           ),
