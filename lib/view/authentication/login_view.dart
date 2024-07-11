@@ -284,19 +284,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             elevation: 1,
           );
 
-          // return Consumer<LovCodeViewModel>(builder: (context,lovCodeViewModel,_){
-          //    return CustomButton(
-          //      textDirection: getTextDirection(provider),
-          //      buttonName: AppLocalizations.of(context)!.login,
-          //      isLoading: false,
-          //      onTap: () async{
-          //        lovCodeViewModel.fetchData();
-          //      },
-          //      fontSize: 16,
-          //      buttonColor: AppColors.scoButtonColor,
-          //      elevation: 1,
-          //    );
-          //  },);
         }));
   }
 

@@ -17,7 +17,7 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     GetIt getIt = GetIt.instance;
     _splashServices = getIt.get<SplashServices>();
-    _splashServices.checkUserAuthentication();
+    _splashServices.checkUserAuthentication(context);
     super.initState();
   }
 
@@ -27,16 +27,21 @@ class _SplashViewState extends State<SplashView> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-           Container(
+           SizedBox(
             height: double.infinity,
             width: double.infinity,
             child: Image.asset("assets/splash_bg.png",fit: BoxFit.cover,),
           ),
-          Container(
+          SizedBox(
             height: double.infinity,
             width: double.infinity,
             child: Center(
-              child: Image.asset("assets/company_logo.jpg",fit: BoxFit.cover),
+              child: SvgPicture.asset(
+                "assets/sco_logo.svg",
+                fit: BoxFit.fill,
+                height: 55,
+                width: 110,
+              ),
             ),
           )
         ],

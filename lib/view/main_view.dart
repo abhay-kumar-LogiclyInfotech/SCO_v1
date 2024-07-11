@@ -11,7 +11,7 @@ import 'package:sco_v1/view/message_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/app_colors.dart';
-import '../resources/components/custom_app_bar.dart';
+import '../resources/components/custom_main_view_app_bar.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});

@@ -9,13 +9,18 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/view/authentication/forgot_password_view.dart';
 import 'package:sco_v1/view/authentication/login_view.dart';
 import 'package:sco_v1/view/authentication/otp_verification_view.dart';
+import 'package:sco_v1/view/authentication/update_security_question_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
+import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'hive/hive_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await HiveManager.init();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   final String languageCode =
       sharedPreferences.getString('language_code') ?? '';
@@ -52,6 +57,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+
+          ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
           ChangeNotifierProvider(create: (_) => LanguageChangeViewModel())
         ],
         child: Consumer<LanguageChangeViewModel>(
@@ -86,9 +93,9 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              initialRoute: "/loginView",
+              // initialRoute: "/splashView",
 
-              // home: ForgotPasswordView(),
+              home: UpdateSecurityQuestionView(),
             );
           },
         ));

@@ -313,25 +313,28 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 ),
                               ],
                             ),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title:  Text(
-                                  AppLocalizations.of(context)!.scoPrograms
-                                  ,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              ),
-                              leading: SvgPicture.asset(
-                                  "assets/sidemenu/scoProgram.svg"),
-                              dense: true,
-                              horizontalTitleGap: 5,
-                              onTap: () {
+                            Visibility(
+                              visible: true,
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title:  Text(
+                                    AppLocalizations.of(context)!.scoPrograms
+                                    ,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                ),
+                                leading: SvgPicture.asset(
+                                    "assets/sidemenu/scoProgram.svg"),
+                                dense: true,
+                                horizontalTitleGap: 5,
+                                onTap: () {
 
-                                _navigationServices.pushNamed("/scoPrograms");
-                              },
-                              shape: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.white.withOpacity(0.25),
+                                  _navigationServices.pushNamed("/scoPrograms");
+                                },
+                                shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white.withOpacity(0.25),
+                                  ),
                                 ),
                               ),
                             ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sco_v1/utils/utils.dart';
@@ -5,20 +6,28 @@ import 'package:sco_v1/utils/utils.dart';
 import '../app_colors.dart';
 
 class CustomDropdown extends StatefulWidget {
+  final dynamic leading;
   final List<String> genderList;
   final void Function(String? value) onChanged;
   final FocusNode currentFocusNode;
   final TextDirection textDirection;
-
+  Color? fillColor;
+  Border? border;
+  BorderRadiusGeometry? borderRadius;
   String? hintText;
+
 
   CustomDropdown({
     super.key,
+    required this.leading,
     required this.textDirection,
     required this.genderList,
     required this.onChanged,
     required this.currentFocusNode,
+    this.fillColor,
     this.hintText,
+    this.border,
+    this.borderRadius,
   });
 
   @override
@@ -29,14 +38,14 @@ class _CustomDropdownState extends State<CustomDropdown>
     with MediaQueryMixin<CustomDropdown> {
   @override
   Widget build(BuildContext context) {
-    return
-
-      Directionality(
+    return Directionality(
       textDirection: widget.textDirection,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey)),
+        decoration:  BoxDecoration(
+          color: widget.fillColor ?? Colors.transparent,
+          border: widget.border ?? const Border(bottom: BorderSide(color: Colors.grey)),
+          borderRadius:  widget.borderRadius,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -44,7 +53,7 @@ class _CustomDropdownState extends State<CustomDropdown>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              child: SvgPicture.asset("assets/gender.svg"),
+              child: widget.leading
             ),
             Expanded(
                 child: DropdownButtonFormField(
@@ -80,7 +89,7 @@ class _CustomDropdownState extends State<CustomDropdown>
               style: const TextStyle(color: AppColors.darkGrey),
               padding: EdgeInsets.zero,
               hint: Text(
-                widget.hintText ?? "Gender",
+               widget.hintText ?? widget.genderList[0],
                 style: const TextStyle(
                     color: AppColors.darkGrey,
                     fontSize: 15,
@@ -90,6 +99,7 @@ class _CustomDropdownState extends State<CustomDropdown>
                 Icons.keyboard_arrow_down_sharp,
                 color: AppColors.darkGrey,
               ),
+
               // keyboardType: widget.textInputType ?? TextInputType.text,
             )),
             // Container(child: widget.trailing)
@@ -97,6 +107,5 @@ class _CustomDropdownState extends State<CustomDropdown>
         ),
       ),
     );
-
   }
 }

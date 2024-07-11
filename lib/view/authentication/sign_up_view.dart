@@ -143,116 +143,132 @@ class _SignUpViewState extends State<SignUpView>
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Stack(
-        alignment: Alignment.topLeft,
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: Image.asset(
-              'assets/login_bg.png',
-              fit: BoxFit.fill,
-            ),
+      body: _buildUI(),
+    );
+  }
+
+  Widget _buildUI() {
+    return Stack(
+      alignment: Alignment.topLeft,
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: Image.asset(
+            'assets/login_bg.png',
+            fit: BoxFit.fill,
           ),
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            margin: EdgeInsets.only(
-              top: orientation == Orientation.portrait
-                  ? screenHeight / 3
-                  : screenHeight / 3,
-            ),
-            padding: EdgeInsets.only(
-              left: orientation == Orientation.portrait
-                  ? screenWidth * 0.08
-                  : screenWidth / 100,
-              right: orientation == Orientation.portrait
-                  ? screenWidth * 0.08
-                  : screenWidth / 100,
-              top: orientation == Orientation.portrait
-                  ? screenWidth * 0.05
-                  : screenWidth / 100 * 5,
-              bottom: orientation == Orientation.portrait
-                  ? screenWidth / 100 * 1
-                  : screenWidth / 100 * 1,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius:
-                  BorderRadius.vertical(top: Radius.elliptical(60, 60)),
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                    child: SvgPicture.asset(
-                  "assets/sco_logo.svg",
-                  fit: BoxFit.fill,
-                  height: 55,
-                  width: 110,
-                )),
-                Expanded(
-                  child: Consumer<LanguageChangeViewModel>(
-                    builder: (context, provider, _) {
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 30), //sign Up with UAE Pass;
-                            _signUpWithUaePassButton(provider),
-                            const SizedBox(height: 20), //or
-                            _or(), const SizedBox(height: 10),
+        ),
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          margin: EdgeInsets.only(
+            top: orientation == Orientation.portrait
+                ? screenHeight / 3
+                : screenHeight / 3,
+          ),
+          padding: EdgeInsets.only(
+            left: orientation == Orientation.portrait
+                ? screenWidth * 0.08
+                : screenWidth / 100,
+            right: orientation == Orientation.portrait
+                ? screenWidth * 0.08
+                : screenWidth / 100,
+            top: orientation == Orientation.portrait
+                ? screenWidth * 0.05
+                : screenWidth / 100 * 5,
+            bottom: orientation == Orientation.portrait
+                ? screenWidth / 100 * 1
+                : screenWidth / 100 * 1,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.elliptical(60, 60)),
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                  child: SvgPicture.asset(
+                "assets/sco_logo.svg",
+                fit: BoxFit.fill,
+                height: 55,
+                width: 110,
+              )),
+              Expanded(
+                child: Consumer<LanguageChangeViewModel>(
+                  builder: (context, provider, _) {
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 30),
+                          //sign Up with UAE Pass;
+                          _signUpWithUaePassButton(provider),
+                          const SizedBox(height: 20),
+                          //or
+                          _or(),
+                          const SizedBox(height: 10),
 
-                            _firstName(provider), const SizedBox(height: 10),
+                          _firstName(provider),
+                          const SizedBox(height: 10),
 
-                            _secondName(provider), const SizedBox(height: 10),
+                          _secondName(provider),
+                          const SizedBox(height: 10),
 
-                            _thirdFourthName(provider),
-                            const SizedBox(height: 10),
+                          _thirdFourthName(provider),
+                          const SizedBox(height: 10),
 
-                            _familyName(provider), const SizedBox(height: 10),
+                          _familyName(provider),
+                          const SizedBox(height: 10),
 
-                            _dateOfBirth(provider), const SizedBox(height: 10),
+                          _dateOfBirth(provider),
+                          const SizedBox(height: 10),
 
-                            _gender(provider), const SizedBox(height: 10),
+                          _gender(provider),
+                          const SizedBox(height: 10),
 
-                            _emailAddress(provider), const SizedBox(height: 10),
+                          _emailAddress(provider),
+                          const SizedBox(height: 10),
 
-                            _confirmEmailAddress(provider),
-                            const SizedBox(height: 10),
+                          _confirmEmailAddress(provider),
+                          const SizedBox(height: 10),
 
-                            _password(provider), const SizedBox(height: 10),
+                          _password(provider),
+                          const SizedBox(height: 10),
 
-                            _confirmPassword(provider),
-                            const SizedBox(height: 10),
+                          _confirmPassword(provider),
+                          const SizedBox(height: 10),
 
-                            _country(provider), const SizedBox(height: 10),
+                          _country(provider),
+                          const SizedBox(height: 10),
 
-                            _emiratesId(provider), const SizedBox(height: 10),
+                          _emiratesId(provider),
+                          const SizedBox(height: 10),
 
-                            _studentPhoneNumber(provider),
-                            const SizedBox(height: 30),
+                          _studentPhoneNumber(provider),
+                          const SizedBox(height: 30),
 
-                            //Sign Up Button:
-                            _signUpButton(provider), const SizedBox(height: 15),
+                          //Sign Up Button:
+                          _signUpButton(provider),
+                          const SizedBox(height: 15),
 
-                            //Already have account sign in link:
-                            _signInLink(provider),
+                          //Already have account sign in link:
+                          _signInLink(provider),
 
-                            const SizedBox(
-                              height: 5,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -408,6 +424,7 @@ class _SignUpViewState extends State<SignUpView>
   //Gender DropDown:
   Widget _gender(LanguageChangeViewModel provider) {
     return CustomDropdown(
+    leading: SvgPicture.asset("assets/gender.svg"),
       textDirection: getTextDirection(provider),
       genderList: gender,
       onChanged: (value) {
