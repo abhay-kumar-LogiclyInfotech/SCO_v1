@@ -56,7 +56,7 @@ class _SignUpViewState extends State<SignUpView>
   final ValueNotifier<bool> _confirmPasswordVisibility =
       ValueNotifier<bool>(true);
 
-  List<DropdownMenuItem> _populateGenderDropdown({
+  List<DropdownMenuItem> _populateDropdown({
     required List menuItemsList,
     required LanguageChangeViewModel provider,
   }) {
@@ -79,26 +79,6 @@ class _SignUpViewState extends State<SignUpView>
     }).toList();
   }
 
-  List<DropdownMenuItem> _populateCountryDropdown(
-      {required List menuItemsList,
-      required LanguageChangeViewModel provider}) {
-    final textDirection = getTextDirection(provider);
-    return menuItemsList
-        .where((element) => element.hide == false)
-        .map((element) {
-      return DropdownMenuItem(
-          value: element.code.toString(),
-          child: Text(
-            textDirection == TextDirection.ltr
-                ? element.value
-                : element.valueArabic.toString(),
-            style: const TextStyle(
-              color: AppColors.darkGrey,
-              fontSize: 14,
-            ),
-          ));
-    }).toList();
-  }
 
   List _genderMenuItemsList = [];
   List _countryMenuItemsList = [];
@@ -483,13 +463,12 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-
   //Gender DropDown:
   Widget _gender(LanguageChangeViewModel provider) {
     return CustomDropdown(
       leading: SvgPicture.asset("assets/gender.svg"),
       textDirection: getTextDirection(provider),
-      menuItemsList: _populateGenderDropdown(
+      menuItemsList: _populateDropdown(
           menuItemsList: _genderMenuItemsList, provider: provider),
       onChanged: (value) {
         debugPrint(value.toString());
@@ -620,7 +599,7 @@ class _SignUpViewState extends State<SignUpView>
     return CustomDropdown(
       leading: SvgPicture.asset("assets/country.svg"),
       textDirection: getTextDirection(provider),
-      menuItemsList: _populateGenderDropdown(
+      menuItemsList: _populateDropdown(
           menuItemsList: _countryMenuItemsList, provider: provider),
       onChanged: (value) {
         debugPrint(value.toString());
@@ -633,8 +612,6 @@ class _SignUpViewState extends State<SignUpView>
       hintText: AppLocalizations.of(context)!.country,
     );
   }
-
-
 
   Widget _emiratesId(LanguageChangeViewModel provider) {
     return CustomTextField(
