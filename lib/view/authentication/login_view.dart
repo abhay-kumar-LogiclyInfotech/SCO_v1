@@ -375,7 +375,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   }
 
   Widget _selectLanguage() {
-    debugPrint("Called selectLanguage Switch");
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,

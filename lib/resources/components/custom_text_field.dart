@@ -19,6 +19,7 @@ class CustomTextField extends StatefulWidget {
   dynamic leading;
   dynamic trailing;
   final void Function(String? value) onChanged;
+  void Function()? onTap;
 
   CustomTextField(
       {super.key,
@@ -37,7 +38,8 @@ class CustomTextField extends StatefulWidget {
       this.textInputType,
       this.leading,
       this.trailing,
-      required this.onChanged});
+      required this.onChanged,
+      this.onTap});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -65,6 +67,7 @@ class _CustomTextFieldState extends State<CustomTextField>
             Expanded(
                 child: TextField(
 
+                  onTap: widget.onTap,
                   readOnly: widget.readOnly ?? false,
                   focusNode: widget.currentFocusNode,
                   controller: widget.controller,

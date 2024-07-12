@@ -8,6 +8,8 @@ class CustomDropdown extends StatefulWidget {
 
   // final List<String> genderList;
   final List<DropdownMenuItem> menuItemsList;
+
+  // final List<dynamic> menuList;
   final void Function(dynamic value) onChanged;
   final FocusNode currentFocusNode;
   final TextDirection textDirection;
@@ -20,7 +22,7 @@ class CustomDropdown extends StatefulWidget {
     super.key,
     required this.leading,
     required this.textDirection,
-    required this.menuItemsList,
+    required this.menuItemsList, // required this.menuList,
     required this.onChanged,
     required this.currentFocusNode,
     this.fillColor,
@@ -59,19 +61,6 @@ class _CustomDropdownState extends State<CustomDropdown>
               items: widget.menuItemsList,
 
               onChanged: widget.onChanged,
-              // items: widget.genderList.map((String item) {
-              //   return DropdownMenuItem(
-              //     value: item.toString(),
-              //     child: Text(
-              //       item.toString(),
-              //       style: const TextStyle(
-              //         color: AppColors.darkGrey,
-              //         fontSize: 14,
-              //       ),
-              //     ),
-              //   );
-              // }).toList(),
-              // onChanged: widget.onChanged,
               focusNode: widget.currentFocusNode,
               decoration: InputDecoration(
                 errorStyle: TextStyle(color: Colors.white.withOpacity(1)),

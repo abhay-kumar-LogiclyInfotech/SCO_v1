@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
@@ -79,9 +80,8 @@ class _SignUpViewState extends State<SignUpView>
     }).toList();
   }
 
-
-  List _genderMenuItemsList = [];
-  List _countryMenuItemsList = [];
+  List<DropdownMenuItem> _genderMenuItemsList = [];
+  List<DropdownMenuItem> _countryMenuItemsList = [];
 
   @override
   void initState() {
@@ -116,10 +116,16 @@ class _SignUpViewState extends State<SignUpView>
     _emiratesIdFocusNode = FocusNode();
     _studentPhoneNumberFocusNode = FocusNode();
 
-    //initializing gender dropdown items:
-    _genderMenuItemsList = Constants.lovCodeMap['GENDER']!.values!;
-    _countryMenuItemsList = Constants.lovCodeMap['COUNTRY']!.values!;
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider =
+          Provider.of<LanguageChangeViewModel>(context, listen: false);
+      _genderMenuItemsList = _populateDropdown(
+          menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
+          provider: provider);
+      _countryMenuItemsList = _populateDropdown(
+          menuItemsList: Constants.lovCodeMap['COUNTRY']!.values!,
+          provider: provider);
+    });
     super.initState();
   }
 
@@ -444,6 +450,7 @@ class _SignUpViewState extends State<SignUpView>
   Widget _dateOfBirth(LanguageChangeViewModel provider) {
     return CustomTextField(
       textDirection: getTextDirection(provider),
+      readOnly: true,
       currentFocusNode: _dobFocusNode,
       nextFocusNode: _genderFocusNode,
       controller: _dobController,
@@ -457,8 +464,17 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {
-        _dobController.text = value!;
+      onChanged: (value) async {},
+      onTap: () async {
+        DateTime? dob = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1960),
+            lastDate: DateTime.now().add(const Duration(days: 365)));
+        if (dob != null) {
+          _dobController.text =
+              intl.DateFormat('dd-MM-yyyy').format(dob).toString();
+        }
       },
     );
   }
@@ -468,8 +484,7 @@ class _SignUpViewState extends State<SignUpView>
     return CustomDropdown(
       leading: SvgPicture.asset("assets/gender.svg"),
       textDirection: getTextDirection(provider),
-      menuItemsList: _populateDropdown(
-          menuItemsList: _genderMenuItemsList, provider: provider),
+      menuItemsList: _genderMenuItemsList,
       onChanged: (value) {
         debugPrint(value.toString());
         _genderController.text = value!;
@@ -490,7 +505,7 @@ class _SignUpViewState extends State<SignUpView>
       controller: _emailController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.emailAddress,
-      textInputType: TextInputType.datetime,
+      textInputType: TextInputType.emailAddress,
       textCapitalization: true,
       isNumber: false,
       leading: SvgPicture.asset(
@@ -498,7 +513,9 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _emailController.text = value!;
+      },
     );
   }
 
@@ -510,7 +527,7 @@ class _SignUpViewState extends State<SignUpView>
       controller: _confirmEmailController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.confirmEmailAddress,
-      textInputType: TextInputType.datetime,
+      textInputType: TextInputType.emailAddress,
       textCapitalization: true,
       isNumber: false,
       leading: SvgPicture.asset(
@@ -518,7 +535,9 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _confirmEmailController.text = value!;
+      },
     );
   }
 
@@ -532,7 +551,7 @@ class _SignUpViewState extends State<SignUpView>
             nextFocusNode: _confirmPasswordFocusNode,
             controller: _passwordController,
             hintText: AppLocalizations.of(context)!.password,
-            textInputType: TextInputType.text,
+            textInputType: TextInputType.visiblePassword,
             isNumber: false,
             leading: SvgPicture.asset(
               "assets/lock.svg",
@@ -553,7 +572,9 @@ class _SignUpViewState extends State<SignUpView>
                         Icons.visibility_rounded,
                         color: AppColors.darkGrey,
                       )),
-            onChanged: (value) {},
+            onChanged: (value) {
+              _passwordController.text = value!;
+            },
           );
         });
   }
@@ -590,7 +611,9 @@ class _SignUpViewState extends State<SignUpView>
                         Icons.visibility_rounded,
                         color: AppColors.darkGrey,
                       )),
-            onChanged: (value) {},
+            onChanged: (value) {
+              _confirmPasswordController.text = value!;
+            },
           );
         });
   }
@@ -599,12 +622,9 @@ class _SignUpViewState extends State<SignUpView>
     return CustomDropdown(
       leading: SvgPicture.asset("assets/country.svg"),
       textDirection: getTextDirection(provider),
-      menuItemsList: _populateDropdown(
-          menuItemsList: _countryMenuItemsList, provider: provider),
+      menuItemsList: _countryMenuItemsList,
       onChanged: (value) {
-        debugPrint(value.toString());
         _countryController.text = value!;
-
         //This thing is creating error: don't know how to fix it:
         FocusScope.of(context).requestFocus(_emiratesIdFocusNode);
       },
@@ -629,7 +649,9 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _emiratesIdController.text = value!;
+      },
     );
   }
 
@@ -648,7 +670,9 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _studentPhoneNumberController.text = value!;
+      },
     );
   }
 

@@ -50,7 +50,6 @@ dependencies:
   path:
   http_parser:
   snippet_coder_utils:
-  appinio_video_player:
   flutter_secure_storage:
   fluttertoast:
   another_flushbar:

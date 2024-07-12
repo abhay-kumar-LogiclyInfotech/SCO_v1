@@ -16,7 +16,7 @@ class NetworkApiServices extends BaseApiServices {
       debugPrint("--------------------------------Inside Get Request....");
       final response = await http
           .get(Uri.parse(url), headers: headers)
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 300));
       debugPrint("--------------------------------Inside Get Request....");
 
       responseJson = returnResponse(response);

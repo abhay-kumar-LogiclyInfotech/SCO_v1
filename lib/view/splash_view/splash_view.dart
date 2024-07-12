@@ -43,7 +43,7 @@ class _SplashViewState extends State<SplashView> {
                 width: 110,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
