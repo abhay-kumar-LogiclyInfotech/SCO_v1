@@ -10,6 +10,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
+import '../../utils/constants.dart';
 import '../../viewModel/services/navigation_services.dart';
 
 class SignUpView extends StatefulWidget {
@@ -55,7 +56,53 @@ class _SignUpViewState extends State<SignUpView>
   final ValueNotifier<bool> _confirmPasswordVisibility =
       ValueNotifier<bool>(true);
 
-  List<String> gender = [];
+  List<DropdownMenuItem> _populateGenderDropdown({
+    required List menuItemsList,
+    required LanguageChangeViewModel provider,
+  }) {
+    final textDirection = getTextDirection(provider);
+    return menuItemsList
+        .where((element) => element.hide == false) // filter out hidden elements
+        .map((element) {
+      return DropdownMenuItem(
+        value: element.code.toString(),
+        child: Text(
+          textDirection == TextDirection.ltr
+              ? element.value
+              : element.valueArabic.toString(),
+          style: const TextStyle(
+            color: AppColors.darkGrey,
+            fontSize: 14,
+          ),
+        ),
+      );
+    }).toList();
+  }
+
+  List<DropdownMenuItem> _populateCountryDropdown(
+      {required List menuItemsList,
+      required LanguageChangeViewModel provider}) {
+    final textDirection = getTextDirection(provider);
+    return menuItemsList
+        .where((element) => element.hide == false)
+        .map((element) {
+      return DropdownMenuItem(
+          value: element.code.toString(),
+          child: Text(
+            textDirection == TextDirection.ltr
+                ? element.value
+                : element.valueArabic.toString(),
+            style: const TextStyle(
+              color: AppColors.darkGrey,
+              fontSize: 14,
+            ),
+          ));
+    }).toList();
+  }
+
+  List _genderMenuItemsList = [];
+  List _countryMenuItemsList = [];
+
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
@@ -88,6 +135,10 @@ class _SignUpViewState extends State<SignUpView>
     _countryFocusNode = FocusNode();
     _emiratesIdFocusNode = FocusNode();
     _studentPhoneNumberFocusNode = FocusNode();
+
+    //initializing gender dropdown items:
+    _genderMenuItemsList = Constants.lovCodeMap['GENDER']!.values!;
+    _countryMenuItemsList = Constants.lovCodeMap['COUNTRY']!.values!;
 
     super.initState();
   }
@@ -136,10 +187,11 @@ class _SignUpViewState extends State<SignUpView>
 
   @override
   Widget build(BuildContext context) {
-    gender = [
-      AppLocalizations.of(context)!.male,
-      AppLocalizations.of(context)!.female,
-    ];
+    debugPrint("build");
+    // gender = [
+    //   AppLocalizations.of(context)!.male,
+    //   AppLocalizations.of(context)!.female,
+    // ];
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -337,7 +389,9 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _firstNameController.text = value!;
+      },
     );
   }
 
@@ -357,7 +411,9 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _secondNameController.text = value!;
+      },
     );
   }
 
@@ -377,7 +433,9 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _thirdFourthNameController.text = value!;
+      },
     );
   }
 
@@ -397,7 +455,9 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _familyNameController.text = value!;
+      },
     );
   }
 
@@ -417,17 +477,22 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        _dobController.text = value!;
+      },
     );
   }
+
 
   //Gender DropDown:
   Widget _gender(LanguageChangeViewModel provider) {
     return CustomDropdown(
-    leading: SvgPicture.asset("assets/gender.svg"),
+      leading: SvgPicture.asset("assets/gender.svg"),
       textDirection: getTextDirection(provider),
-      genderList: gender,
+      menuItemsList: _populateGenderDropdown(
+          menuItemsList: _genderMenuItemsList, provider: provider),
       onChanged: (value) {
+        debugPrint(value.toString());
         _genderController.text = value!;
 
         //This thing is creating error: don't know how to fix it:
@@ -552,24 +617,24 @@ class _SignUpViewState extends State<SignUpView>
   }
 
   Widget _country(LanguageChangeViewModel provider) {
-    return CustomTextField(
+    return CustomDropdown(
+      leading: SvgPicture.asset("assets/country.svg"),
       textDirection: getTextDirection(provider),
+      menuItemsList: _populateGenderDropdown(
+          menuItemsList: _countryMenuItemsList, provider: provider),
+      onChanged: (value) {
+        debugPrint(value.toString());
+        _countryController.text = value!;
+
+        //This thing is creating error: don't know how to fix it:
+        FocusScope.of(context).requestFocus(_emiratesIdFocusNode);
+      },
       currentFocusNode: _countryFocusNode,
-      nextFocusNode: _emiratesIdFocusNode,
-      controller: _countryController,
-      obscureText: false,
       hintText: AppLocalizations.of(context)!.country,
-      textInputType: TextInputType.datetime,
-      textCapitalization: true,
-      isNumber: false,
-      leading: SvgPicture.asset(
-        "assets/country.svg",
-        // height: 18,
-        // width: 18,
-      ),
-      onChanged: (value) {},
     );
   }
+
+
 
   Widget _emiratesId(LanguageChangeViewModel provider) {
     return CustomTextField(

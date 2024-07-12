@@ -8,7 +8,8 @@ import '../../resources/app_urls.dart';
 class SplashRepository {
   final BaseApiServices _apiServices = NetworkApiServices();
 
-  Future<CommonDataModel> fetchCommonData({required Map<String, String> headers}) async {
+  Future<CommonDataModel> fetchCommonData(
+      {required Map<String, String> headers}) async {
     try {
       dynamic response = await _apiServices.getGetApiServices(
         url: AppUrls.commonData,

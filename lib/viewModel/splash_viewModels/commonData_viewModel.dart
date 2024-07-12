@@ -22,9 +22,13 @@ class CommonDataViewModel with ChangeNotifier {
     try {
       final String basicAuth =
           'Basic ${base64Encode(utf8.encode('${Constants.username}:${Constants.password}'))}';
-      final headers = <String, String>{'authorization': basicAuth};
+      final headers = <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'authorization': basicAuth
+      };
 
       final response = await _myRepo.fetchCommonData(headers: headers);
+
 
       // Clear existing data in Hive and store new data
       HiveManager.clearData();
@@ -35,9 +39,9 @@ class CommonDataViewModel with ChangeNotifier {
       //   for (var response in response.data!.response!)
       //     response.lovCode!: response
       // };
-
-      // Debug print or further processing
-      // debugPrint(Constants.lovCodeMap["GENDER"]!.values.toString());
+      //
+      // // Debug print or further processing
+      // debugPrint(Constants.lovCodeMap["MARITAL_STATUS"]!.values![0].valueArabic.toString());
 
       // Update API response state
       apiResponse = ApiResponse.completed(response);

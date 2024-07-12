@@ -12,7 +12,7 @@ class LanguageChangeViewModel with ChangeNotifier {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     _appLocale = type;
 
-    if (type ==  Locale('en')) {
+    if (type == const Locale('en')) {
       await sharedPreferences.setString('language_code', 'en');
     } else {
       await sharedPreferences.setString('language_code', 'ar');

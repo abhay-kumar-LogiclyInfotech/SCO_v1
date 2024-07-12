@@ -5,6 +5,7 @@ import 'package:sco_v1/view/authentication/forgot_password_view.dart';
 
 import '../../view/authentication/reset_password_view.dart';
 import '../../view/authentication/sign_up_view.dart';
+import '../../view/authentication/update_security_question_view.dart';
 import '../../view/drawer/custom_drawer_view/aBriefAboutSco_view.dart';
 import '../../view/drawer/custom_drawer_view/sco_programs.dart';
 import '../../view/home_view.dart';
@@ -31,6 +32,10 @@ class NavigationServices {
     "/forgotPasswordView" : (context)=> const ForgotPasswordView(),
     "/aBriefAboutScoView" : (context)=> const ABriefAboutScoView(),
     "/scoPrograms" : (context)=> const ScoPrograms(),
+    "/updateSecurityQuestionView" : (context)=> const UpdateSecurityQuestionView(),
+
+
+
 
 
 

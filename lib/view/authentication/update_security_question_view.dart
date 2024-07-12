@@ -9,6 +9,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../resources/app_colors.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import '../../utils/constants.dart';
 
 class UpdateSecurityQuestionView extends StatefulWidget {
   const UpdateSecurityQuestionView({super.key});
@@ -22,10 +23,14 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     with MediaQueryMixin<UpdateSecurityQuestionView> {
   late NavigationServices _navigationService;
 
+
+
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
     _navigationService = getIt.get<NavigationServices>();
+
+
 
     super.initState();
   }
@@ -95,17 +100,17 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text("Security Question*"),
-        CustomDropdown(
-          leading: null,
-          textDirection: TextDirection.rtl,
-          genderList: const ["male", "Female"],
-          onChanged: (value) {},
-          currentFocusNode: FocusNode(),
-          // hintText: "Security Question",
-          border: Border.all(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(10),
-          fillColor: Colors.grey.shade200,
-        ),
+        // CustomDropdown(
+        //   leading: null,
+        //   textDirection: TextDirection.rtl,
+        //   genderList: const ["male", "Female"],
+        //   onChanged: (value) {},
+        //   currentFocusNode: FocusNode(),
+        //   // hintText: "Security Question",
+        //   border: Border.all(color: Colors.transparent),
+        //   borderRadius: BorderRadius.circular(10),
+        //   fillColor: Colors.grey.shade200,
+        // ),
       ],
     );
   }

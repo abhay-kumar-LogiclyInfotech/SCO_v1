@@ -1,14 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:sco_v1/utils/utils.dart';
 
 import '../app_colors.dart';
 
 class CustomDropdown extends StatefulWidget {
   final dynamic leading;
-  final List<String> genderList;
-  final void Function(String? value) onChanged;
+
+  // final List<String> genderList;
+  final List<DropdownMenuItem> menuItemsList;
+  final void Function(dynamic value) onChanged;
   final FocusNode currentFocusNode;
   final TextDirection textDirection;
   Color? fillColor;
@@ -16,12 +16,11 @@ class CustomDropdown extends StatefulWidget {
   BorderRadiusGeometry? borderRadius;
   String? hintText;
 
-
   CustomDropdown({
     super.key,
     required this.leading,
     required this.textDirection,
-    required this.genderList,
+    required this.menuItemsList,
     required this.onChanged,
     required this.currentFocusNode,
     this.fillColor,
@@ -42,35 +41,37 @@ class _CustomDropdownState extends State<CustomDropdown>
       textDirection: widget.textDirection,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           color: widget.fillColor ?? Colors.transparent,
-          border: widget.border ?? const Border(bottom: BorderSide(color: Colors.grey)),
-          borderRadius:  widget.borderRadius,
+          border: widget.border ??
+              const Border(bottom: BorderSide(color: Colors.grey)),
+          borderRadius: widget.borderRadius,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              child: widget.leading
-            ),
+            SizedBox(child: widget.leading),
             Expanded(
                 child: DropdownButtonFormField(
               dropdownColor: AppColors.scoButtonColor,
-              items: widget.genderList.map((String item) {
-                return DropdownMenuItem(
-                  value: item.toString(),
-                  child: Text(
-                    item.toString(),
-                    style: const TextStyle(
-                      color: AppColors.darkGrey,
-                      fontSize: 14,
-                    ),
-                  ),
-                );
-              }).toList(),
+              items: widget.menuItemsList,
+
               onChanged: widget.onChanged,
+              // items: widget.genderList.map((String item) {
+              //   return DropdownMenuItem(
+              //     value: item.toString(),
+              //     child: Text(
+              //       item.toString(),
+              //       style: const TextStyle(
+              //         color: AppColors.darkGrey,
+              //         fontSize: 14,
+              //       ),
+              //     ),
+              //   );
+              // }).toList(),
+              // onChanged: widget.onChanged,
               focusNode: widget.currentFocusNode,
               decoration: InputDecoration(
                 errorStyle: TextStyle(color: Colors.white.withOpacity(1)),
@@ -89,7 +90,7 @@ class _CustomDropdownState extends State<CustomDropdown>
               style: const TextStyle(color: AppColors.darkGrey),
               padding: EdgeInsets.zero,
               hint: Text(
-               widget.hintText ?? widget.genderList[0],
+                widget.hintText ?? widget.menuItemsList[0].value.toString(),
                 style: const TextStyle(
                     color: AppColors.darkGrey,
                     fontSize: 15,

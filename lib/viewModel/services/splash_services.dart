@@ -21,7 +21,14 @@ class SplashServices {
     final bool isLoggedInKey = await _authService.isLoggedIn();
     final int counter = await _authService.getCounter();
 
-    final provider = Provider.of<CommonDataViewModel>(context, listen: false);
+    final provider = Provider.of<CommonDataViewModel>(context,listen: false);
+
+
+
+
+
+
+
     bool isDataStored = HiveManager.isDataStored();
     debugPrint("Common Data Already Stored: ${isDataStored.toString()}");
     if (isLoggedInKey && isDataStored) {

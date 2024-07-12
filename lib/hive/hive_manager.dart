@@ -1,16 +1,12 @@
-
-
-
 import 'package:flutter/cupertino.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/splash/commonData_model.dart';
+import '../utils/constants.dart';
 import 'boxes.dart';
 
 class HiveManager {
-
   static Future<void> init() async {
     await Hive.initFlutter();
     WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +19,6 @@ class HiveManager {
     await Hive.openBox<CommonDataModel>('commonDataModelBox');
   }
 
-
-
-
   static bool isDataStored() {
     return Boxes.getCommonDataBox().containsKey('commonData');
   }
@@ -37,9 +30,17 @@ class HiveManager {
     return null;
   }
 
-  static void storeData(CommonDataModel data) async {
+  static Future<void> storeData(CommonDataModel data) async {
     await Boxes.getCommonDataBox().put('commonData', data);
-    debugPrint('Data stored');
+    final response = getStoredData();
+
+    if (response?.data?.response != null) {
+      Map<String, Response> tempMap = {
+        for (var res in response!.data!.response!) res.lovCode!: res
+      };
+      Constants.lovCodeMap = tempMap;
+      debugPrint('Data stored');
+    }
   }
 
   static void clearData() {

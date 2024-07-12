@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/view/authentication/forgot_password_view.dart';
 import 'package:sco_v1/view/authentication/login_view.dart';
 import 'package:sco_v1/view/authentication/otp_verification_view.dart';
+import 'package:sco_v1/view/authentication/sign_up_view.dart';
 import 'package:sco_v1/view/authentication/update_security_question_view.dart';
+import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
@@ -59,7 +61,7 @@ class MyApp extends StatelessWidget {
         providers: [
 
           ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
-          ChangeNotifierProvider(create: (_) => LanguageChangeViewModel())
+          ChangeNotifierProvider(create: (_) => LanguageChangeViewModel()),
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
@@ -93,9 +95,9 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              // initialRoute: "/splashView",
+              initialRoute: "/splashView",
 
-              home: UpdateSecurityQuestionView(),
+              // home: SignUpView(),
             );
           },
         ));

@@ -277,7 +277,9 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             buttonName: AppLocalizations.of(context)!.login,
             isLoading: false,
             onTap: () async {
-              lovCodeViewModel.fetchCommonData();
+              // lovCodeViewModel.fetchCommonData();
+
+              _navigationServices.pushNamed("/updateSecurityQuestionView");
             },
             fontSize: 16,
             buttonColor: AppColors.scoButtonColor,
