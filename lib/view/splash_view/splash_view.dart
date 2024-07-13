@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sco_v1/resources/app_colors.dart';
 
 import '../../viewModel/services/splash_services.dart';
 
@@ -27,10 +29,13 @@ class _SplashViewState extends State<SplashView> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-           SizedBox(
+          SizedBox(
             height: double.infinity,
             width: double.infinity,
-            child: Image.asset("assets/splash_bg.png",fit: BoxFit.cover,),
+            child: Image.asset(
+              "assets/splash_bg.png",
+              fit: BoxFit.cover,
+            ),
           ),
           SizedBox(
             height: double.infinity,
@@ -44,6 +49,24 @@ class _SplashViewState extends State<SplashView> {
               ),
             ),
           ),
+          const SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                 Padding(
+                   padding: EdgeInsets.all(20.0),
+                   child: SpinKitSpinningLines(
+                    color: AppColors.scoThemeColor,
+                    size: 50.0,
+                                   ),
+                 ),
+              ],
+            ),
+          )
         ],
       ),
     );

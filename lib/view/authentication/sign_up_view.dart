@@ -116,16 +116,15 @@ class _SignUpViewState extends State<SignUpView>
     _emiratesIdFocusNode = FocusNode();
     _studentPhoneNumberFocusNode = FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider =
-          Provider.of<LanguageChangeViewModel>(context, listen: false);
-      _genderMenuItemsList = _populateDropdown(
-          menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
-          provider: provider);
-      _countryMenuItemsList = _populateDropdown(
-          menuItemsList: Constants.lovCodeMap['COUNTRY']!.values!,
-          provider: provider);
-    });
+    final provider =
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    _genderMenuItemsList = _populateDropdown(
+        menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
+        provider: provider);
+    _countryMenuItemsList = _populateDropdown(
+        menuItemsList: Constants.lovCodeMap['COUNTRY']!.values!,
+        provider: provider);
+
     super.initState();
   }
 
