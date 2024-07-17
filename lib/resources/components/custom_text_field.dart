@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/utils/utils.dart';
 
@@ -20,6 +21,9 @@ class CustomTextField extends StatefulWidget {
   dynamic trailing;
   final void Function(String? value) onChanged;
   void Function()? onTap;
+  String? errorText;
+  List<TextInputFormatter>? inputFormat;
+
 
   CustomTextField(
       {super.key,
@@ -39,7 +43,9 @@ class CustomTextField extends StatefulWidget {
       this.leading,
       this.trailing,
       required this.onChanged,
-      this.onTap});
+      this.onTap,
+      this.errorText,
+      this.inputFormat});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -66,7 +72,6 @@ class _CustomTextFieldState extends State<CustomTextField>
             ),
             Expanded(
                 child: TextField(
-
                   onTap: widget.onTap,
                   readOnly: widget.readOnly ?? false,
                   focusNode: widget.currentFocusNode,
@@ -77,7 +82,6 @@ class _CustomTextFieldState extends State<CustomTextField>
                       ? TextCapitalization.sentences
                       : TextCapitalization.none,
                   decoration: InputDecoration(
-                    errorStyle: TextStyle(color: Colors.white.withOpacity(1)),
                     contentPadding: EdgeInsets.symmetric(
                         horizontal: screenWidth * 0.02,
                         vertical: screenWidth * 0.01),
@@ -93,6 +97,7 @@ class _CustomTextFieldState extends State<CustomTextField>
                     enabledBorder: InputBorder.none,
                     focusedErrorBorder: InputBorder.none,
                   ),
+                  inputFormatters: widget.inputFormat,
                   cursorColor: AppColors.darkGrey,
                   style: const TextStyle(color: AppColors.darkGrey),
                   keyboardType: widget.textInputType ?? TextInputType.text,

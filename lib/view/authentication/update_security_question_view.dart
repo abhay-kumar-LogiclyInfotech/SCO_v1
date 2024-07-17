@@ -47,9 +47,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
     final provider =
         Provider.of<LanguageChangeViewModel>(context, listen: false);
-    _securityQuestionItemsList = populateDropdown(
-        menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
-        provider: provider);
+
     super.initState();
   }
 

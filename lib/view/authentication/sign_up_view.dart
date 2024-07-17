@@ -10,6 +10,8 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
+import 'package:flutter/services.dart';
+
 
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
@@ -350,6 +352,21 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
+  String? get _errorText {
+    // at any time, we can get the text from _controller.value.text
+    final text = _firstNameController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Too short';
+    }
+    // return null if the text is valid
+    return null;
+  }
+
   Widget _firstName(LanguageChangeViewModel provider) {
     return CustomTextField(
       textDirection: getTextDirection(provider),
@@ -366,6 +383,7 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
+      errorText: _errorText,
       onChanged: (value) {
         _firstNameController.text = value!;
       },
@@ -641,6 +659,7 @@ class _SignUpViewState extends State<SignUpView>
       obscureText: false,
       hintText: AppLocalizations.of(context)!.emiratesId,
       textInputType: TextInputType.datetime,
+      // inputFormat: [EmiratesIDInputFormatter()],
       textCapitalization: true,
       isNumber: false,
       leading: SvgPicture.asset(
@@ -903,3 +922,27 @@ class _SignUpViewState extends State<SignUpView>
     return true;
   }
 }
+
+
+
+class EmiratesIDInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final text = newValue.text.replaceAll('-', '');
+    final buffer = StringBuffer();
+
+    for (int i = 0; i < text.length; i++) {
+      buffer.write(text[i]);
+      if (i == 2 || i == 6 || i == 13) {
+        buffer.write('-');
+      }
+    }
+
+    return newValue.copyWith(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: buffer.length),
+    );
+  }
+}
+
+
