@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
@@ -24,12 +26,16 @@ class SignUpView extends StatefulWidget {
 class _SignUpViewState extends State<SignUpView>
     with MediaQueryMixin<SignUpView> {
   late NavigationServices _navigationServices;
+  late AlertServices _alertServices;
 
   late TextEditingController _firstNameController;
   late TextEditingController _secondNameController;
   late TextEditingController _thirdFourthNameController;
   late TextEditingController _familyNameController;
   late TextEditingController _dobController;
+  late TextEditingController _dobDayController;
+  late TextEditingController _dobMonthController;
+  late TextEditingController _dobYearController;
   late TextEditingController _genderController;
   late TextEditingController _emailController;
   late TextEditingController _confirmEmailController;
@@ -57,28 +63,7 @@ class _SignUpViewState extends State<SignUpView>
   final ValueNotifier<bool> _confirmPasswordVisibility =
       ValueNotifier<bool>(true);
 
-  List<DropdownMenuItem> _populateDropdown({
-    required List menuItemsList,
-    required LanguageChangeViewModel provider,
-  }) {
-    final textDirection = getTextDirection(provider);
-    return menuItemsList
-        .where((element) => element.hide == false) // filter out hidden elements
-        .map((element) {
-      return DropdownMenuItem(
-        value: element.code.toString(),
-        child: Text(
-          textDirection == TextDirection.ltr
-              ? element.value
-              : element.valueArabic.toString(),
-          style: const TextStyle(
-            color: AppColors.darkGrey,
-            fontSize: 14,
-          ),
-        ),
-      );
-    }).toList();
-  }
+
 
   List<DropdownMenuItem> _genderMenuItemsList = [];
   List<DropdownMenuItem> _countryMenuItemsList = [];
@@ -87,12 +72,16 @@ class _SignUpViewState extends State<SignUpView>
   void initState() {
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    _alertServices = getIt.get<AlertServices>();
 
     _firstNameController = TextEditingController();
     _secondNameController = TextEditingController();
     _thirdFourthNameController = TextEditingController();
     _familyNameController = TextEditingController();
     _dobController = TextEditingController();
+    _dobDayController = TextEditingController();
+    _dobMonthController = TextEditingController();
+    _dobYearController = TextEditingController();
     _genderController = TextEditingController();
     _emailController = TextEditingController();
     _confirmEmailController = TextEditingController();
@@ -118,10 +107,10 @@ class _SignUpViewState extends State<SignUpView>
 
     final provider =
         Provider.of<LanguageChangeViewModel>(context, listen: false);
-    _genderMenuItemsList = _populateDropdown(
+    _genderMenuItemsList = populateDropdown(
         menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
         provider: provider);
-    _countryMenuItemsList = _populateDropdown(
+    _countryMenuItemsList = populateDropdown(
         menuItemsList: Constants.lovCodeMap['COUNTRY']!.values!,
         provider: provider);
 
@@ -135,6 +124,9 @@ class _SignUpViewState extends State<SignUpView>
     _thirdFourthNameController.dispose();
     _familyNameController.dispose();
     _dobController.dispose();
+    _dobDayController.dispose();
+    _dobMonthController.dispose();
+    _dobYearController.dispose();
     _genderController.dispose();
     _emailController.dispose();
     _confirmEmailController.dispose();
@@ -473,6 +465,14 @@ class _SignUpViewState extends State<SignUpView>
         if (dob != null) {
           _dobController.text =
               intl.DateFormat('dd-MM-yyyy').format(dob).toString();
+          _dobDayController.text = intl.DateFormat('dd').format(dob).toString();
+          _dobMonthController.text =
+              intl.DateFormat('MM').format(dob).toString();
+          _dobYearController.text =
+              intl.DateFormat('yyyy').format(dob).toString();
+          debugPrint(_dobDayController.text);
+          debugPrint(_dobMonthController.text);
+          debugPrint(_dobYearController.text);
         }
       },
     );
@@ -680,7 +680,16 @@ class _SignUpViewState extends State<SignUpView>
       textDirection: getTextDirection(provider),
       buttonName: AppLocalizations.of(context)!.signUp,
       isLoading: false,
-      onTap: () {},
+      onTap: () {
+        final signupProvider =
+            Provider.of<SignupViewModel>(context, listen: false);
+
+        bool result =
+            validateForm(langProvider: provider, signup: signupProvider);
+        if (result) {
+          signupProvider.signup(context: context, langProvider: provider);
+        }
+      },
       fontSize: 16,
       buttonColor: AppColors.scoButtonColor,
       elevation: 1,
@@ -722,5 +731,175 @@ class _SignUpViewState extends State<SignUpView>
         ],
       ),
     );
+  }
+
+  bool validateForm(
+      {required LanguageChangeViewModel langProvider,
+      required SignupViewModel signup}) {
+    if (_firstNameController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter your first name",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setFirstName(_firstNameController.text);
+    }
+
+    // if (_secondNameController.text.isEmpty) {
+    //   _alertServices.flushBarErrorMessages(message: "Enter your second name", context: context, provider: langProvider);
+    //   return false;
+    // } else {
+    signup.setMiddleName(_secondNameController.text);
+    // }
+
+    // if (_thirdFourthNameController.text.isEmpty) {
+    //   _alertServices.flushBarErrorMessages(message: "Enter your third/fourth name", context: context, provider: langProvider);
+    //   return false;
+    // } else {
+    signup.setMiddleName2(_thirdFourthNameController.text);
+    // }
+
+    if (_familyNameController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter your family name or last name",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setLastName(_familyNameController.text);
+    }
+
+    if (_dobController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter your date of birth",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      // signup.setDob(_dobController.text);
+    }
+
+    if (_dobDayController.text.isEmpty ||
+        int.tryParse(_dobDayController.text) == null ||
+        int.parse(_dobDayController.text) < 1 ||
+        int.parse(_dobDayController.text) > 31) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter a valid day",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setDay(_dobDayController.text);
+    }
+
+    if (_dobMonthController.text.isEmpty ||
+        int.tryParse(_dobMonthController.text) == null ||
+        int.parse(_dobMonthController.text) < 1 ||
+        int.parse(_dobMonthController.text) > 12) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter a valid month",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setMonth(_dobMonthController.text);
+    }
+
+    if (_dobYearController.text.isEmpty ||
+        int.tryParse(_dobYearController.text) == null) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter a valid year",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setYear(_dobYearController.text);
+    }
+
+    if (_genderController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter your gender",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setIsMale(_genderController.text);
+    }
+
+    if (_emailController.text.isEmpty || !_emailController.text.contains('@')) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter a valid email",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setEmailAddress(_emailController.text);
+    }
+
+    if (_confirmEmailController.text.isEmpty ||
+        _confirmEmailController.text != _emailController.text) {
+      _alertServices.flushBarErrorMessages(
+          message: "Emails do not match",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setConfirmEmailAddress(_confirmEmailController.text);
+    }
+
+    if (_countryController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter your country",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setCountry(_countryController.text);
+    }
+
+    if (_emiratesIdController.text.isEmpty ) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter valid Emirates ID",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setEmirateId(_emiratesIdController.text);
+    }
+
+    if (_studentPhoneNumberController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter a valid phone number",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setPhoneNo(_studentPhoneNumberController.text);
+    }
+
+    if (_passwordController.text.isEmpty ||
+        _passwordController.text.length < 8) {
+      _alertServices.flushBarErrorMessages(
+          message: "Enter a valid password (at least 8 characters)",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setPassword(_passwordController.text);
+    }
+
+    if (_confirmPasswordController.text.isEmpty ||
+        _confirmPasswordController.text != _passwordController.text) {
+      _alertServices.flushBarErrorMessages(
+          message: "Passwords do not match",
+          context: context,
+          provider: langProvider);
+      return false;
+    } else {
+      signup.setConfirmPassword(_confirmPasswordController.text);
+    }
+
+    return true;
   }
 }

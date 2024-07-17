@@ -8,7 +8,7 @@ import '../../view/authentication/sign_up_view.dart';
 import '../../view/authentication/update_security_question_view.dart';
 import '../../view/drawer/custom_drawer_view/aBriefAboutSco_view.dart';
 import '../../view/drawer/custom_drawer_view/sco_programs.dart';
-import '../../view/home_view.dart';
+import '../../view/main_view/home_view.dart';
 import '../../view/main_view.dart';
 import '../../view/splash_view/splash_view.dart';
 import '../../view/authentication/login_view.dart';

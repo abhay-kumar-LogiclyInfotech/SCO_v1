@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../resources/app_colors.dart';
+import '../../resources/app_colors.dart';
 
 class MessageView extends StatefulWidget {
   const MessageView({super.key});

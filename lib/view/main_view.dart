@@ -3,11 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/account_view.dart';
+import 'package:sco_v1/view/main_view/account_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer.dart';
-import 'package:sco_v1/view/home_view.dart';
-import 'package:sco_v1/view/information_view.dart';
-import 'package:sco_v1/view/message_view.dart';
+import 'package:sco_v1/view/main_view/home_view.dart';
+import 'package:sco_v1/view/main_view/information_view.dart';
+import 'package:sco_v1/view/main_view/message_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/app_colors.dart';

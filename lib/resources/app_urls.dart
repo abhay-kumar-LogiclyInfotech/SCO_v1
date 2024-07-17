@@ -4,4 +4,9 @@ class AppUrls {
 
   // Static getter for common data endpoint
   static String get commonData => "${_baseUrl}common-data/list-of-values-data";
+
+  //signup endpoint
+  static String get signup => "${_baseUrl}users/register";
+
 }
+

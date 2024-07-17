@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sco_v1/models/splash/commonData_model.dart';
+import 'package:sco_v1/utils/utils.dart';
+
+import '../resources/app_colors.dart';
+import '../viewModel/language_change_ViewModel.dart';
 
 class Constants {
 
@@ -9,6 +13,13 @@ class Constants {
 
 
   static Map<String, Response> lovCodeMap = {};
+
+
+
+  static RegExp get emiratesIdRegex => RegExp(r'\b784-[0-9]{4}-[0-9]{7}-[0-9]{1}\b');
+
+
+
 
 
 

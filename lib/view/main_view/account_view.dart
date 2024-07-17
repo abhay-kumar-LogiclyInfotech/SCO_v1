@@ -5,7 +5,7 @@ import 'package:sco_v1/resources/components/user_info_container.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../resources/app_colors.dart';
+import '../../resources/app_colors.dart';
 import 'home_view.dart';
 
 class AccountView extends StatefulWidget {

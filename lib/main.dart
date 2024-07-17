@@ -12,6 +12,7 @@ import 'package:sco_v1/view/authentication/login_view.dart';
 import 'package:sco_v1/view/authentication/otp_verification_view.dart';
 import 'package:sco_v1/view/authentication/sign_up_view.dart';
 import 'package:sco_v1/view/authentication/update_security_question_view.dart';
+import 'package:sco_v1/view/test.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
@@ -19,6 +20,7 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Test.dart';
 import 'hive/hive_manager.dart';
 
 Future<void> main() async {
@@ -64,6 +66,7 @@ class MyApp extends StatelessWidget {
 
           ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
           ChangeNotifierProvider(create: (_) => LanguageChangeViewModel()),
+          ChangeNotifierProvider(create: (_) => SignupViewModel()),
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
@@ -99,7 +102,7 @@ class MyApp extends StatelessWidget {
               routes: _navigationServices.routes,
               initialRoute: "/splashView",
 
-              // home: SignUpView(),
+              // home: Test(),
             );
           },
         ));

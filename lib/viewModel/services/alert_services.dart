@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import 'navigation_services.dart';
 
@@ -52,19 +54,26 @@ class AlertServices {
         msg: message, backgroundColor: Colors.black, fontSize: 15);
   }
 
-  void flushBarErrorMessages(String message, BuildContext context) {
+  void flushBarErrorMessages({required String message,required BuildContext context,required LanguageChangeViewModel provider}) {
+
+
     showFlushbar(
         context: context,
         flushbar: Flushbar(
+          backgroundColor: Colors.white,
+            textDirection: TextDirection.rtl,
+            messageColor: Colors.black,
+            // showProgressIndicator: true,
+            // progressIndicatorBackgroundColor: Colors.transparent,
             message: message,
-            forwardAnimationCurve: Curves.decelerate,
-            reverseAnimationCurve: Curves.easeInOut,
+            forwardAnimationCurve: Curves.bounceInOut,
+            reverseAnimationCurve: Curves.easeInOutBack,
             duration: const Duration(seconds: 5),
             borderRadius: BorderRadius.circular(15),
             icon: const Icon(
               Icons.notifications_active_outlined,
               size: 28,
-              color: Colors.white,
+              color: Colors.black,
             ),
             flushbarPosition: FlushbarPosition.TOP,
             margin: const EdgeInsets.symmetric(

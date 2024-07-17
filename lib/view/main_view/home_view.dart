@@ -7,8 +7,8 @@ import 'package:sco_v1/resources/components/custom_about_organization_containers
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 
-import '../resources/app_colors.dart';
-import '../viewModel/language_change_ViewModel.dart';
+import '../../resources/app_colors.dart';
+import '../../viewModel/language_change_ViewModel.dart';
 
 enum Language { english, spanish }
 

@@ -15,6 +15,8 @@ class NetworkApiServices extends BaseApiServices {
       final response = await http
           .get(Uri.parse(url), headers: headers)
           .timeout(const Duration(minutes: 2));
+
+      print(response.statusCode);
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -22,7 +24,7 @@ class NetworkApiServices extends BaseApiServices {
   }
 
   @override
-  Future<dynamic> getPostApiHeadersBodyServices(
+  Future<dynamic> getPostApiServices(
       {required dynamic url,
       required dynamic headers,
       required dynamic body}) async {
@@ -92,7 +94,7 @@ class NetworkApiServices extends BaseApiServices {
     } else if (error is FormatException) {
       return FormatException('Response format error: $error');
     } else {
-      return AppExceptions("Unexpected Error:", "$error");
+      return AppExceptions(" Unexpected Error", "$error");
     }
   }
 
@@ -100,7 +102,7 @@ class NetworkApiServices extends BaseApiServices {
     try {
       return jsonDecode(response.body)['message'];
     } catch (e) {
-      return 'Unknown error occurred ';
+      return ' Unknown error occurred with status code: ${response.statusCode}';
     }
   }
 }
