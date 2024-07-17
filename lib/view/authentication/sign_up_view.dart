@@ -286,7 +286,7 @@ class _SignUpViewState extends State<SignUpView>
                           _signInLink(provider),
 
                           const SizedBox(
-                            height: 5,
+                            height: 20,
                           ),
                         ],
                       ),

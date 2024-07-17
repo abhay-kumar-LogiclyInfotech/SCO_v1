@@ -7,6 +7,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../models/authentication/signup_model.dart';
+import '../../utils/constants.dart';
 
 class SignupViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -112,11 +113,10 @@ class SignupViewModel with ChangeNotifier {
       required LanguageChangeViewModel langProvider}) async {
     try {
       //*-----Create Headers Start-----*
-      const String basicAuth =
-          'Basic bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=';
+
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': basicAuth
+        'authorization': Constants.basicAuth
       };
       //*-----Create Headers End-----*
 

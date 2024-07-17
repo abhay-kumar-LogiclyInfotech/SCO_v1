@@ -100,9 +100,9 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              initialRoute: "/splashView",
+              // initialRoute: "/splashView",
 
-              // home: Test(),
+              home: UpdateSecurityQuestionView(),
             );
           },
         ));

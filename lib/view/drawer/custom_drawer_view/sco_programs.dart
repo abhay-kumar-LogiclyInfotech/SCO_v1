@@ -33,12 +33,14 @@ class _ScoProgramsState extends State<ScoPrograms>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scoBgColor,
-      appBar: const CustomSimpleAppBar(title: "SCO Programs"),
+      appBar: CustomSimpleAppBar(
+          title: Text(
+        "SCO Programs",
+        style: AppTextStyles.appBarTitleStyle(),
+      )),
       body: _buildUI(),
     );
   }
-
-
 
   Widget _buildUI() {
     final provider = Provider.of<LanguageChangeViewModel>(context);
@@ -49,7 +51,7 @@ class _ScoProgramsState extends State<ScoPrograms>
         itemCount: 10,
         itemBuilder: (context, index) {
           return CustomTile(
-            textDirection: getTextDirection(provider),
+              textDirection: getTextDirection(provider),
               imagePath: "assets/sidemenu/distinguished_doctors.jpg",
               title: "Scholarships in Abroad",
               subTitle:

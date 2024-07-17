@@ -5,17 +5,14 @@ import '../app_colors.dart';
 import '../app_text_styles.dart';
 
 class CustomSimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final Widget title;
   const CustomSimpleAppBar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
-      title: Text(
-        title,
-        style: AppTextStyles.appBarTitleStyle(),
-      ),
+      title: title,
       automaticallyImplyLeading: false,
       leading: IconButton(
         icon: const Icon(

@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 
+import '../../models/splash/commonData_model.dart';
+import '../../utils/constants.dart';
 import 'auth_services.dart';
 import 'navigation_services.dart';
 
@@ -33,6 +35,15 @@ class SplashServices {
     debugPrint("Common Data Already Stored: ${isDataStored.toString()}");
     if (isLoggedInKey && isDataStored) {
       if (counter < 20) {
+        final response = HiveManager.getStoredData();
+
+        if (response?.data?.response != null) {
+          Map<String, Response> tempMap = {
+            for (var res in response!.data!.response!) res.lovCode!: res
+          };
+          Constants.lovCodeMap = tempMap;
+          debugPrint('Data stored');
+        }
         await _authService.incrementCounter();
         _navigationServices.pushReplacementNamed('/mainView');
       } else {
