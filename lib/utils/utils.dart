@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sco_v1/view/main_view/home_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/app_colors.dart';
-
-
 
 mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
   double get screenWidth => MediaQuery.of(context).size.width;
@@ -22,7 +21,37 @@ TextDirection getTextDirection(LanguageChangeViewModel provider) {
       : TextDirection.rtl;
 }
 
-List<DropdownMenuItem> populateDropdown({
+fieldHeading({required String title, required bool important,required LanguageChangeViewModel langProvider}) {
+  return Directionality(
+    textDirection: getTextDirection(langProvider),
+    child: Padding(
+      padding: const EdgeInsets.only(bottom: 4.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          RichText(
+              text: TextSpan(
+                  style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff093B59)),
+                  children: <TextSpan>[
+                TextSpan(
+                  text: title,
+                ),
+                important
+                    ? const TextSpan(
+                        text: " *", style: TextStyle(color: Colors.red))
+                    : const TextSpan()
+              ])),
+        ],
+      ),
+    ),
+  );
+}
+
+List<DropdownMenuItem> populateCommonDataDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
 }) {
@@ -39,7 +68,30 @@ List<DropdownMenuItem> populateDropdown({
         style: const TextStyle(
           color: AppColors.darkGrey,
           fontSize: 14,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }).toList();
+}
+
+List<DropdownMenuItem> populateNormalDropdown({
+  required List menuItemsList,
+  required LanguageChangeViewModel provider,
+}) {
+  final textDirection = getTextDirection(provider);
+  return menuItemsList
+      .map((element) {
+    return DropdownMenuItem(
+      value: element.toString(),
+      child: Text(
+        textDirection == TextDirection.ltr
+            ? element.toString()
+            : element.toString(),
+        style: const TextStyle(
+          color: AppColors.darkGrey,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

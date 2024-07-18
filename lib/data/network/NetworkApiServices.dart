@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import '../app_exceptions.dart';
@@ -31,12 +32,30 @@ class NetworkApiServices extends BaseApiServices {
     try {
       final response = await http
           .post(Uri.parse(url), body: body, headers: headers)
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(minutes: 2));
+      debugPrint(response.statusCode.toString());
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
     }
   }
+
+  @override
+  Future<dynamic> getPutApiServices(
+      {required dynamic url,
+        required dynamic headers,
+        required dynamic body}) async {
+    try {
+      final response = await http
+          .put(Uri.parse(url), body: body, headers: headers)
+          .timeout(const Duration(minutes: 2));
+      debugPrint(response.statusCode.toString());
+      return _handleResponse(response);
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
 
   @override
   Future<dynamic> getMultipartApiServices({

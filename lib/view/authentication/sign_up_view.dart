@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -6,12 +7,11 @@ import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
-import 'package:flutter/services.dart';
-
 
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
@@ -65,10 +65,18 @@ class _SignUpViewState extends State<SignUpView>
   final ValueNotifier<bool> _confirmPasswordVisibility =
       ValueNotifier<bool>(true);
 
-
-
   List<DropdownMenuItem> _genderMenuItemsList = [];
   List<DropdownMenuItem> _countryMenuItemsList = [];
+
+  // Validations error Texts:
+  String? _firstNameError;
+  String? _familyNameError;
+  String? _emailError;
+  String? _confirmEmailError;
+  String? _passwordError;
+  String? _confirmPasswordError;
+  String? _emiratesError;
+  String? _studentPhoneNumberError;
 
   @override
   void initState() {
@@ -109,14 +117,24 @@ class _SignUpViewState extends State<SignUpView>
 
     final provider =
         Provider.of<LanguageChangeViewModel>(context, listen: false);
-    _genderMenuItemsList = populateDropdown(
+    _genderMenuItemsList = populateCommonDataDropdown(
         menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
         provider: provider);
-    _countryMenuItemsList = populateDropdown(
+    _countryMenuItemsList = populateCommonDataDropdown(
         menuItemsList: Constants.lovCodeMap['COUNTRY']!.values!,
         provider: provider);
 
     super.initState();
+
+    // Initialize error to null or empty string to prevent immediate validation
+    _firstNameError = null; // or _familyNameError = '';
+    _familyNameError = null; // or _familyNameError = '';
+    _emailError = null; // or _emailError = '';
+    _confirmEmailError = null; // or _confirmEmailError = '';
+    _passwordError = null; // or _passwordError = '';
+    _confirmPasswordError = null; // or _confirmPasswordError = '';
+    _emiratesError = null; // or _emiratesError = '';
+    _studentPhoneNumberError = null; // or _studentPhoneNumberError = '';
   }
 
   @override
@@ -166,12 +184,6 @@ class _SignUpViewState extends State<SignUpView>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("build");
-    // gender = [
-    //   AppLocalizations.of(context)!.male,
-    //   AppLocalizations.of(context)!.female,
-    // ];
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: _buildUI(),
@@ -352,21 +364,6 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-  String? get _errorText {
-    // at any time, we can get the text from _controller.value.text
-    final text = _firstNameController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Can\'t be empty';
-    }
-    if (text.length < 4) {
-      return 'Too short';
-    }
-    // return null if the text is valid
-    return null;
-  }
-
   Widget _firstName(LanguageChangeViewModel provider) {
     return CustomTextField(
       textDirection: getTextDirection(provider),
@@ -383,9 +380,14 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
-      errorText: _errorText,
+      errorText: _firstNameError,
       onChanged: (value) {
-        _firstNameController.text = value!;
+        if (_firstNameFocusNode.hasFocus) {
+          setState(() {
+            _firstNameError =
+                ErrorText.getNameError(name: value!, context: context);
+          });
+        }
       },
     );
   }
@@ -450,8 +452,15 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
+      errorText: _familyNameError,
       onChanged: (value) {
-        _familyNameController.text = value!;
+        // Validate only when user interacts with the field
+        if (_familyNameFocusNode.hasFocus) {
+          setState(() {
+            _familyNameError =
+                ErrorText.getNameError(name: value!, context: context);
+          });
+        }
       },
     );
   }
@@ -530,32 +539,45 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
+      errorText: _emailError,
       onChanged: (value) {
-        _emailController.text = value!;
+        // Validate only when user interacts with the field
+        if (_emailFocusNode.hasFocus) {
+          setState(() {
+            _emailError =
+                ErrorText.getEmailError(email: value!, context: context);
+          });
+        }
       },
     );
   }
 
   Widget _confirmEmailAddress(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
-      currentFocusNode: _confirmEmailFocusNode,
-      nextFocusNode: _passwordFocusNode,
-      controller: _confirmEmailController,
-      obscureText: false,
-      hintText: AppLocalizations.of(context)!.confirmEmailAddress,
-      textInputType: TextInputType.emailAddress,
-      textCapitalization: true,
-      isNumber: false,
-      leading: SvgPicture.asset(
-        "assets/email.svg",
-        // height: 18,
-        // width: 18,
-      ),
-      onChanged: (value) {
-        _confirmEmailController.text = value!;
-      },
-    );
+        textDirection: getTextDirection(provider),
+        currentFocusNode: _confirmEmailFocusNode,
+        nextFocusNode: _passwordFocusNode,
+        controller: _confirmEmailController,
+        obscureText: false,
+        hintText: AppLocalizations.of(context)!.confirmEmailAddress,
+        textInputType: TextInputType.emailAddress,
+        textCapitalization: true,
+        isNumber: false,
+        leading: SvgPicture.asset(
+          "assets/email.svg",
+          // height: 18,
+          // width: 18,
+        ),
+        errorText: _confirmEmailError,
+        onChanged: (value) {
+          // Validate only when user interacts with the field
+          if (_confirmEmailFocusNode.hasFocus) {
+            setState(() {
+              _confirmEmailError =
+                  ErrorText.getEmailError(email: value!, context: context);
+            });
+          }
+        });
   }
 
   Widget _password(LanguageChangeViewModel provider) {
@@ -563,36 +585,42 @@ class _SignUpViewState extends State<SignUpView>
         valueListenable: _passwordVisibility,
         builder: (context, obscurePassword, child) {
           return CustomTextField(
-            textDirection: getTextDirection(provider),
-            currentFocusNode: _passwordFocusNode,
-            nextFocusNode: _confirmPasswordFocusNode,
-            controller: _passwordController,
-            hintText: AppLocalizations.of(context)!.password,
-            textInputType: TextInputType.visiblePassword,
-            isNumber: false,
-            leading: SvgPicture.asset(
-              "assets/lock.svg",
-              // height: 18,
-              // width: 18,
-            ),
-            obscureText: obscurePassword,
-            trailing: GestureDetector(
-                onTap: () {
-                  _passwordVisibility.value = !_passwordVisibility.value;
-                },
-                child: obscurePassword
-                    ? const Icon(
-                        Icons.visibility_off_rounded,
-                        color: AppColors.darkGrey,
-                      )
-                    : const Icon(
-                        Icons.visibility_rounded,
-                        color: AppColors.darkGrey,
-                      )),
-            onChanged: (value) {
-              _passwordController.text = value!;
-            },
-          );
+              textDirection: getTextDirection(provider),
+              currentFocusNode: _passwordFocusNode,
+              nextFocusNode: _confirmPasswordFocusNode,
+              controller: _passwordController,
+              hintText: AppLocalizations.of(context)!.password,
+              textInputType: TextInputType.visiblePassword,
+              isNumber: false,
+              leading: SvgPicture.asset(
+                "assets/lock.svg",
+                // height: 18,
+                // width: 18,
+              ),
+              obscureText: obscurePassword,
+              trailing: GestureDetector(
+                  onTap: () {
+                    _passwordVisibility.value = !_passwordVisibility.value;
+                  },
+                  child: obscurePassword
+                      ? const Icon(
+                          Icons.visibility_off_rounded,
+                          color: AppColors.darkGrey,
+                        )
+                      : const Icon(
+                          Icons.visibility_rounded,
+                          color: AppColors.darkGrey,
+                        )),
+              errorText: _passwordError,
+              onChanged: (value) {
+                // Validate only when user interacts with the field
+                if (_passwordFocusNode.hasFocus) {
+                  setState(() {
+                    _passwordError = ErrorText.getPasswordError(
+                        password: value!, context: context);
+                  });
+                }
+              });
         });
   }
 
@@ -628,8 +656,15 @@ class _SignUpViewState extends State<SignUpView>
                         Icons.visibility_rounded,
                         color: AppColors.darkGrey,
                       )),
+            errorText: _confirmPasswordError,
             onChanged: (value) {
-              _confirmPasswordController.text = value!;
+              // Validate only when user interacts with the field
+              if (_confirmPasswordFocusNode.hasFocus) {
+                setState(() {
+                  _confirmPasswordError = ErrorText.getPasswordError(
+                      password: value!, context: context);
+                });
+              }
             },
           );
         });
@@ -659,7 +694,7 @@ class _SignUpViewState extends State<SignUpView>
       obscureText: false,
       hintText: AppLocalizations.of(context)!.emiratesId,
       textInputType: TextInputType.datetime,
-      // inputFormat: [EmiratesIDInputFormatter()],
+      inputFormat: [EmiratesIDFormatter()],
       textCapitalization: true,
       isNumber: false,
       leading: SvgPicture.asset(
@@ -667,8 +702,15 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
+      errorText: _emiratesError,
       onChanged: (value) {
-        _emiratesIdController.text = value!;
+        // Validate only when user interacts with the field
+        if (_emiratesIdFocusNode.hasFocus) {
+          setState(() {
+            _emiratesError = ErrorText.getEmirateIdError(
+                emirateId: value!, context: context);
+          });
+        }
       },
     );
   }
@@ -680,7 +722,7 @@ class _SignUpViewState extends State<SignUpView>
       controller: _studentPhoneNumberController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.studentMobileNumber,
-      textInputType: TextInputType.datetime,
+      textInputType: TextInputType.phone,
       textCapitalization: true,
       isNumber: false,
       leading: SvgPicture.asset(
@@ -688,8 +730,14 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
+      errorText: _studentPhoneNumberError,
       onChanged: (value) {
-        _studentPhoneNumberController.text = value!;
+        if (_studentPhoneNumberFocusNode.hasFocus) {
+          setState(() {
+            _studentPhoneNumberError = ErrorText.getPhoneNumberError(
+                phoneNumber: value!, context: context);
+          });
+        }
       },
     );
   }
@@ -757,7 +805,7 @@ class _SignUpViewState extends State<SignUpView>
       required SignupViewModel signup}) {
     if (_firstNameController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter your first name",
+          message: AppLocalizations.of(context)!.enterFirstName,
           context: context,
           provider: langProvider);
       return false;
@@ -766,14 +814,14 @@ class _SignUpViewState extends State<SignUpView>
     }
 
     // if (_secondNameController.text.isEmpty) {
-    //   _alertServices.flushBarErrorMessages(message: "Enter your second name", context: context, provider: langProvider);
+    //   _alertServices.flushBarErrorMessages(message: AppLocalizations.of(context)!.enterSecondName, context: context, provider: langProvider);
     //   return false;
     // } else {
     signup.setMiddleName(_secondNameController.text);
     // }
 
     // if (_thirdFourthNameController.text.isEmpty) {
-    //   _alertServices.flushBarErrorMessages(message: "Enter your third/fourth name", context: context, provider: langProvider);
+    //   _alertServices.flushBarErrorMessages(message: AppLocalizations.of(context)!.enterThirdFourthName, context: context, provider: langProvider);
     //   return false;
     // } else {
     signup.setMiddleName2(_thirdFourthNameController.text);
@@ -781,7 +829,7 @@ class _SignUpViewState extends State<SignUpView>
 
     if (_familyNameController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter your family name or last name",
+          message: AppLocalizations.of(context)!.enterFamilyName,
           context: context,
           provider: langProvider);
       return false;
@@ -791,7 +839,7 @@ class _SignUpViewState extends State<SignUpView>
 
     if (_dobController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter your date of birth",
+          message: AppLocalizations.of(context)!.enterDateOfBirth,
           context: context,
           provider: langProvider);
       return false;
@@ -804,7 +852,7 @@ class _SignUpViewState extends State<SignUpView>
         int.parse(_dobDayController.text) < 1 ||
         int.parse(_dobDayController.text) > 31) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter a valid day",
+          message: AppLocalizations.of(context)!.enterValidDay,
           context: context,
           provider: langProvider);
       return false;
@@ -817,7 +865,7 @@ class _SignUpViewState extends State<SignUpView>
         int.parse(_dobMonthController.text) < 1 ||
         int.parse(_dobMonthController.text) > 12) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter a valid month",
+          message: AppLocalizations.of(context)!.enterValidMonth,
           context: context,
           provider: langProvider);
       return false;
@@ -828,7 +876,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_dobYearController.text.isEmpty ||
         int.tryParse(_dobYearController.text) == null) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter a valid year",
+          message: AppLocalizations.of(context)!.enterValidYear,
           context: context,
           provider: langProvider);
       return false;
@@ -838,7 +886,7 @@ class _SignUpViewState extends State<SignUpView>
 
     if (_genderController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter your gender",
+          message: AppLocalizations.of(context)!.enterGender,
           context: context,
           provider: langProvider);
       return false;
@@ -848,7 +896,7 @@ class _SignUpViewState extends State<SignUpView>
 
     if (_emailController.text.isEmpty || !_emailController.text.contains('@')) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter a valid email",
+          message: AppLocalizations.of(context)!.enterValidEmail,
           context: context,
           provider: langProvider);
       return false;
@@ -859,7 +907,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_confirmEmailController.text.isEmpty ||
         _confirmEmailController.text != _emailController.text) {
       _alertServices.flushBarErrorMessages(
-          message: "Emails do not match",
+          message: AppLocalizations.of(context)!.emailsDoNotMatch,
           context: context,
           provider: langProvider);
       return false;
@@ -869,7 +917,7 @@ class _SignUpViewState extends State<SignUpView>
 
     if (_countryController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter your country",
+          message: AppLocalizations.of(context)!.enterCountry,
           context: context,
           provider: langProvider);
       return false;
@@ -877,9 +925,9 @@ class _SignUpViewState extends State<SignUpView>
       signup.setCountry(_countryController.text);
     }
 
-    if (_emiratesIdController.text.isEmpty ) {
+    if (_emiratesIdController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter valid Emirates ID",
+          message: AppLocalizations.of(context)!.enterValidEmiratesId,
           context: context,
           provider: langProvider);
       return false;
@@ -889,7 +937,7 @@ class _SignUpViewState extends State<SignUpView>
 
     if (_studentPhoneNumberController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter a valid phone number",
+          message: AppLocalizations.of(context)!.enterValidPhoneNumber,
           context: context,
           provider: langProvider);
       return false;
@@ -900,7 +948,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_passwordController.text.isEmpty ||
         _passwordController.text.length < 8) {
       _alertServices.flushBarErrorMessages(
-          message: "Enter a valid password (at least 8 characters)",
+          message: AppLocalizations.of(context)!.enterValidPassword,
           context: context,
           provider: langProvider);
       return false;
@@ -911,7 +959,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_confirmPasswordController.text.isEmpty ||
         _confirmPasswordController.text != _passwordController.text) {
       _alertServices.flushBarErrorMessages(
-          message: "Passwords do not match",
+          message: AppLocalizations.of(context)!.passwordsDoNotMatch,
           context: context,
           provider: langProvider);
       return false;
@@ -923,26 +971,29 @@ class _SignUpViewState extends State<SignUpView>
   }
 }
 
-
-
-class EmiratesIDInputFormatter extends TextInputFormatter {
+class EmiratesIDFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final text = newValue.text.replaceAll('-', '');
-    final buffer = StringBuffer();
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String text = newValue.text.replaceAll('-', '');
 
+    // Limit to 15 characters
+    if (text.length > 15) {
+      text = text.substring(0, 15);
+    }
+
+    // Add dashes at specific positions
+    final buffer = StringBuffer();
     for (int i = 0; i < text.length; i++) {
       buffer.write(text[i]);
-      if (i == 2 || i == 6 || i == 13) {
+      if ((i == 2 || i == 6 || i == 13) && i != text.length - 1) {
         buffer.write('-');
       }
     }
 
-    return newValue.copyWith(
+    return TextEditingValue(
       text: buffer.toString(),
       selection: TextSelection.collapsed(offset: buffer.length),
     );
   }
 }
-
-

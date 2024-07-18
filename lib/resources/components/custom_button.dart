@@ -12,7 +12,7 @@ class CustomButton extends StatefulWidget {
   Color? borderColor;
   Color? textColor;
   dynamic leadingIcon;
- final TextDirection textDirection;
+  final TextDirection textDirection;
   final void Function() onTap;
 
   CustomButton(
@@ -24,17 +24,18 @@ class CustomButton extends StatefulWidget {
       this.fontSize,
       this.elevation,
       this.buttonColor,
-        this.textColor,
-        this.leadingIcon,
-        this.borderColor,
-        required this.textDirection,
+      this.textColor,
+      this.leadingIcon,
+      this.borderColor,
+      required this.textDirection,
       required this.onTap});
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
 }
 
-class _CustomButtonState extends State<CustomButton>  with MediaQueryMixin<CustomButton>{
+class _CustomButtonState extends State<CustomButton>
+    with MediaQueryMixin<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -45,47 +46,48 @@ class _CustomButtonState extends State<CustomButton>  with MediaQueryMixin<Custo
         elevation: widget.elevation ?? 0,
         borderRadius: BorderRadius.circular(180),
         child: Container(
-          // height: widget.height ?? (orientation == Orientation.portrait ? screenHeight * 0.06 : screenHeight * 0.1),
-          // width: double.infinity,
-          padding: EdgeInsets.only(
-            top: screenWidth * 0.02,
-            bottom: screenWidth * 0.02
-          ),
-          decoration: BoxDecoration(
-              color: widget.buttonColor ?? Colors.black,
-              border: Border.all(color: widget.borderColor ?? Colors.black),
-              gradient: widget.gradient,
-              borderRadius: BorderRadius.circular(180)),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                child: widget.leadingIcon,
-              ),
-             const SizedBox(width: 2,),
-              Directionality(
-                textDirection: widget.textDirection,
-                child: Center(
-                    child: widget.isLoading
-                        ? const CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2.0,
-                    )
-                        : Text(
-                      widget.buttonName,
-                      style: TextStyle(
-                          color: widget.textColor ?? Colors.white,
-                          fontSize: widget.fontSize ?? 22,
-                          fontWeight: FontWeight.w600),
-                    )),
-              ),
-            ],
-          )
-
-
-        ),
+            // height: widget.height ?? (orientation == Orientation.portrait ? screenHeight * 0.06 : screenHeight * 0.1),
+            // width: double.infinity,
+            padding: EdgeInsets.only(
+                top: screenWidth * 0.02, bottom: screenWidth * 0.02),
+            decoration: BoxDecoration(
+                color: widget.buttonColor ?? Colors.black,
+                border: Border.all(color: widget.borderColor ?? Colors.black),
+                gradient: widget.gradient,
+                borderRadius: BorderRadius.circular(180)),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  child: widget.leadingIcon,
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+                Directionality(
+                  textDirection: widget.textDirection,
+                  child: Center(
+                      child: widget.isLoading
+                          ? const SizedBox(
+                              height: 23,
+                              width: 23,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 1.5,
+                              ),
+                            )
+                          : Text(
+                              widget.buttonName,
+                              style: TextStyle(
+                                  color: widget.textColor ?? Colors.white,
+                                  fontSize: widget.fontSize ?? 22,
+                                  fontWeight: FontWeight.w600),
+                            )),
+                ),
+              ],
+            )),
       ),
     );
   }

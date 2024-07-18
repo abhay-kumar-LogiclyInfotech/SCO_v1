@@ -9,6 +9,7 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../resources/components/custom_text_field.dart';
+import '../../resources/validations_and_errorText.dart';
 import '../../viewModel/services/navigation_services.dart';
 
 class ForgotPasswordView extends StatefulWidget {
@@ -28,6 +29,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   late FocusNode _emailFocusNode;
   late FocusNode _passwordFocusNode;
 
+  String? _emailError;
+
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
@@ -40,6 +43,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     _passwordFocusNode = FocusNode();
 
     super.initState();
+    _emailError = null;
   }
 
   @override
@@ -187,7 +191,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
         // height: 18,
         // width: 18,
       ),
-      onChanged: (value) {},
+      errorText: _emailError,
+      onChanged: (value) {
+        if(_emailFocusNode.hasFocus){
+          setState(() {
+            _emailError = ErrorText.getEmailError(email: value!, context: context);
+          });
+        }
+      },
     );
   }
 

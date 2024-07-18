@@ -3,7 +3,6 @@ import 'package:another_flushbar/flushbar_route.dart';
 import 'package:delightful_toast/delight_toast.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:delightful_toast/toast/utils/enums.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
@@ -45,7 +44,8 @@ class AlertServices {
             );
           }).show(_navigationServices.navigationStateKey.currentState!.context);
     } catch (error) {
-      debugPrint("--------------->>>>>>>Something went wrong when showing the toast");
+      debugPrint(
+          "--------------->>>>>>>Something went wrong when showing the toast");
     }
   }
 
@@ -54,14 +54,15 @@ class AlertServices {
         msg: message, backgroundColor: Colors.black, fontSize: 15);
   }
 
-  void flushBarErrorMessages({required String message,required BuildContext context,required LanguageChangeViewModel provider}) {
-
-
+  void flushBarErrorMessages(
+      {required String message,
+      required BuildContext context,
+      required LanguageChangeViewModel provider}) {
     showFlushbar(
         context: context,
         flushbar: Flushbar(
-          backgroundColor: Colors.white,
-            textDirection: TextDirection.rtl,
+            backgroundColor: Colors.white,
+            textDirection: getTextDirection(provider),
             messageColor: Colors.black,
             // showProgressIndicator: true,
             // progressIndicatorBackgroundColor: Colors.transparent,
@@ -77,8 +78,8 @@ class AlertServices {
             ),
             flushbarPosition: FlushbarPosition.TOP,
             margin: const EdgeInsets.symmetric(
-              // vertical: MediaQuery.sizeOf(context).width * 0.02,
-              // horizontal: MediaQuery.sizeOf(context).width * 0.04),
+                // vertical: MediaQuery.sizeOf(context).width * 0.02,
+                // horizontal: MediaQuery.sizeOf(context).width * 0.04),
                 vertical: 5,
                 horizontal: 5))
           ..show(context));

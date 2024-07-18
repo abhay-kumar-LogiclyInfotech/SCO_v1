@@ -1,20 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/main_view/home_view.dart';
+import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../../resources/app_colors.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import '../../data/response/status.dart';
+import '../../resources/components/custom_button.dart';
 import '../../resources/components/custom_dropdown.dart';
-import '../../utils/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import '../../resources/components/custom_text_field.dart';
+import '../../resources/validations_and_errorText.dart';
 
 class UpdateSecurityQuestionView extends StatefulWidget {
   const UpdateSecurityQuestionView({super.key});
@@ -27,8 +29,7 @@ class UpdateSecurityQuestionView extends StatefulWidget {
 class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     with MediaQueryMixin<UpdateSecurityQuestionView> {
   late NavigationServices _navigationService;
-
-
+  late AlertServices _alertServices;
 
   final TextEditingController _questionController = TextEditingController();
   final TextEditingController _answerController = TextEditingController();
@@ -36,19 +37,41 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   final FocusNode _questionFocusNode = FocusNode();
   final FocusNode _answerFocusNode = FocusNode();
 
-
-
   List<DropdownMenuItem> _securityQuestionItemsList = [];
+
+  String? _answerError;
+
+  Future<void> _initializeData(
+      {required LanguageChangeViewModel langProvider}) async {
+    final provider =
+        Provider.of<SecurityQuestionViewModel>(context, listen: false);
+    await provider.getSecurityQuestions(
+        context: context, langProvider: langProvider, userId: "961015");
+
+    if (provider.getSecurityQuestionResponse.status == Status.COMPLETED) {
+      _securityQuestionItemsList = populateNormalDropdown(
+          menuItemsList: provider
+                  .getSecurityQuestionResponse.data?.data?.securityQuestions ??
+              [],
+          provider: langProvider);
+      setState(() {});
+    }
+  }
 
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
     _navigationService = getIt.get<NavigationServices>();
+    _alertServices = getIt.get<AlertServices>();
 
-    final provider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+      _initializeData(
+          langProvider:
+              Provider.of<LanguageChangeViewModel>(context, listen: false));
+    });
 
     super.initState();
+    _answerError = null;
   }
 
   @override
@@ -67,7 +90,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   }
 
   Widget _buildUI({required BuildContext context}) {
-    final provider = Provider.of<LanguageChangeViewModel>(context);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Stack(
       children: [
         Container(
@@ -110,19 +133,54 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
             children: [
               _title(),
               Expanded(
-                child: Consumer<LanguageChangeViewModel>(
+                child: Consumer<SecurityQuestionViewModel>(
                   builder: (context, provider, _) {
-                    return SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 40),
-                          _formField(langProvider: provider)
-                        ],
-                      ),
-                    );
+                    switch (provider.getSecurityQuestionResponse.status) {
+                      case Status.LOADING:
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                            strokeWidth: 1.5,
+                          ),
+                        );
+                      case Status.ERROR:
+                        return Text(
+                          AppLocalizations.of(context)!.somethingWentWrong,
+                          style: const TextStyle(fontSize: 18),
+                        );
+                      case Status.COMPLETED:
+                        return SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 40),
+                              fieldHeading(
+                                title: AppLocalizations.of(context)!
+                                    .securityQuestion,
+                                important: true,
+                                langProvider: langProvider,
+                              ),
+                              _questionField(langProvider: langProvider),
+                              const SizedBox(height: 20),
+                              fieldHeading(
+                                title: AppLocalizations.of(context)!
+                                    .securityAnswer,
+                                important: true,
+                                langProvider: langProvider,
+                              ),
+                              _answerField(langProvider: langProvider),
+                              const SizedBox(height: 30),
+                              _submitButton(
+                                  langProvider: langProvider,
+                                  provider: provider)
+                            ],
+                          ),
+                        );
+                      default:
+                        return const SizedBox.shrink();
+                    }
                   },
                 ),
               ),
@@ -147,30 +205,97 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   //title:
   Widget _title() {
     return Text(
-      "Security Question Setup",
+      AppLocalizations.of(context)!.securityQuestionSetup,
       style: AppTextStyles.appBarTitleStyle(),
     );
   }
 
-  Widget _formField({required LanguageChangeViewModel langProvider}) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomDropdown(
-          leading: SvgPicture.asset("assets/country.svg"),
-          textDirection: getTextDirection(langProvider),
-          menuItemsList: _securityQuestionItemsList,
-          onChanged: (value) {
-            _questionController.text = value!;
-            //This thing is creating error: don't know how to fix it:
-            FocusScope.of(context).requestFocus(_answerFocusNode);
-          },
-          currentFocusNode: _questionFocusNode,
-          hintText: AppLocalizations.of(context)!.country,
-        )
-      ],
+  //security question field:
+  Widget _questionField({required LanguageChangeViewModel langProvider}) {
+    return CustomDropdown(
+      textDirection: getTextDirection(langProvider),
+      menuItemsList: _securityQuestionItemsList,
+      onChanged: (value) {
+        setState(() {
+          _questionController.text = value!;
+          FocusScope.of(context).requestFocus(_answerFocusNode);
+        });
+      },
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: const BorderSide(color: AppColors.darkGrey)),
+      currentFocusNode: _questionFocusNode,
+      hintText: AppLocalizations.of(context)!.selectSecurityQuestion,
     );
+  }
+
+  //security answer field:
+  Widget _answerField({required LanguageChangeViewModel langProvider}) {
+    return CustomTextField(
+        textDirection: getTextDirection(langProvider),
+        currentFocusNode: _answerFocusNode,
+        controller: _answerController,
+        obscureText: false,
+        hintText: AppLocalizations.of(context)!.writeAnswer,
+        textInputType: TextInputType.emailAddress,
+        textCapitalization: true,
+        isNumber: false,
+        maxLines: 3,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(color: AppColors.darkGrey)),
+        errorText: _answerError,
+        onChanged: (value) {
+          // Validate only when user interacts with the field
+          if (_answerFocusNode.hasFocus) {
+            setState(() {
+              _answerError = ErrorText.getSecurityAnswerError(
+                  answer: value!, context: context);
+            });
+          }
+        });
+  }
+
+//Security Answer submit field
+  Widget _submitButton(
+      {required LanguageChangeViewModel langProvider,
+      required SecurityQuestionViewModel provider}) {
+    return CustomButton(
+      textDirection: getTextDirection(langProvider),
+      buttonName: AppLocalizations.of(context)!.submit,
+      isLoading: provider.updateSecurityQuestionResponse.status == Status.LOADING ? true : false,
+      onTap: () async {
+        bool result = validateForm(langProvider: langProvider);
+
+        if (result) {
+          provider.setSecurityQuestion(_questionController.text);
+          provider.setSecurityAnswer(_answerController.text);
+          await provider.updateSecurityQuestion(
+              context: context, langProvider: langProvider, userId: "961015");
+        }
+      },
+      fontSize: 16,
+      buttonColor: AppColors.scoButtonColor,
+      elevation: 1,
+    );
+  }
+
+  bool validateForm({required LanguageChangeViewModel langProvider}) {
+    if (_questionController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: AppLocalizations.of(context)!.selectSecurityQuestion,
+          context: context,
+          provider: langProvider);
+      return false;
+    }
+    if (_answerController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: AppLocalizations.of(context)!.writeSecurityAnswer,
+          context: context,
+          provider: langProvider);
+      return false;
+    }
+
+    return true;
   }
 }
