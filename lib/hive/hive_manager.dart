@@ -17,8 +17,10 @@ class HiveManager {
     Hive.registerAdapter(ResponseAdapter());
     Hive.registerAdapter(ValuesAdapter());
     await Hive.openBox<CommonDataModel>('commonDataModelBox');
+    await Hive.openBox("userDataBox");
   }
 
+//*--------Common Data Start-------*
   static bool isDataStored() {
     return Boxes.getCommonDataBox().containsKey('commonData');
   }
@@ -43,8 +45,37 @@ class HiveManager {
     }
   }
 
+  //when we logout clear Data:
   static void clearData() {
     Boxes.getCommonDataBox().delete('commonData');
     debugPrint('Data cleared');
   }
+
+//*--------Common Data End-------*
+
+
+
+  //*-------storing the UserID Start--------*
+  static Future<void> storeUserId(String userId) async {
+    await Boxes.getUserDataBox().put("userID", userId);
+  }
+
+  static bool isUserIdStored() {
+    return Boxes.getUserDataBox().containsKey('userID');
+  }
+
+  static String? getUserId() {
+    if (isUserIdStored()) {
+      return Boxes.getUserDataBox().get("userID");
+    }
+    return null;
+  }
+
+  //when we logout clear Data:
+  static void clearUserId() {
+    Boxes.getUserDataBox().delete('userID');
+    debugPrint('Data cleared');
+  }
+//*-------storing the UserID End--------*
+
 }

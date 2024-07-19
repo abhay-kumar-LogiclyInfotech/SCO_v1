@@ -6,8 +6,8 @@ import 'package:sco_v1/view/authentication/forgot_password_view.dart';
 import '../../view/authentication/reset_password_view.dart';
 import '../../view/authentication/sign_up_view.dart';
 import '../../view/authentication/update_security_question_view.dart';
-import '../../view/drawer/custom_drawer_view/aBriefAboutSco_view.dart';
-import '../../view/drawer/custom_drawer_view/sco_programs.dart';
+import '../../view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
+import '../../view/drawer/custom_drawer_views/sco_programs.dart';
 import '../../view/main_view/home_view.dart';
 import '../../view/main_view.dart';
 import '../../view/splash_view/splash_view.dart';
@@ -49,6 +49,11 @@ class NavigationServices {
   Map<String, Widget Function(BuildContext context)> get routes => _routes;
 
   void push(MaterialPageRoute route) {
+    _navigationStateKey.currentState!.push(route);
+  }
+
+  //Page route with animation:
+  void pushCupertino(CupertinoPageRoute route) {
     _navigationStateKey.currentState!.push(route);
   }
 

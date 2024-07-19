@@ -97,3 +97,35 @@ List<DropdownMenuItem> populateNormalDropdown({
     );
   }).toList();
 }
+
+
+Widget bulletText({required String text}){
+  return Row(
+    children: [
+      Container(
+        margin: const EdgeInsets.only(right: 8.0),
+        height: 8.0,
+        width: 8.0,
+        decoration: const BoxDecoration(
+          color: AppColors.scoButtonColor,
+          shape: BoxShape.circle,
+        ),
+      ),
+      RichText(
+        text: TextSpan(
+          children: [
+
+            TextSpan(
+              text: text,
+              style: const TextStyle(
+                height: 1.4,
+                fontSize: 14.0,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}

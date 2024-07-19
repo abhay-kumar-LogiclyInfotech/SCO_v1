@@ -11,14 +11,14 @@ import '../../resources/components/custom_advanced_switch.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/navigation_services.dart';
 
-class CustomDrawer extends StatefulWidget {
+class CustomDrawerView extends StatefulWidget {
   final String? userName;
   final String? userEmail;
   final String? userProfileImageLink;
   final TextDirection? textDirection;
   dynamic scaffoldState;
 
-  CustomDrawer({
+  CustomDrawerView({
     super.key,
     this.userName,
     this.userEmail,
@@ -28,10 +28,10 @@ class CustomDrawer extends StatefulWidget {
   });
 
   @override
-  State<CustomDrawer> createState() => _CustomDrawerState();
+  State<CustomDrawerView> createState() => _CustomDrawerViewState();
 }
 
-class _CustomDrawerState extends State<CustomDrawer> {
+class _CustomDrawerViewState extends State<CustomDrawerView> {
   late NavigationServices _navigationServices;
 
   bool _isArabic = false;

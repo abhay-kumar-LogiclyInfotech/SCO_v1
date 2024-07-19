@@ -6,6 +6,8 @@ import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/custom_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import '../../../resources/app_colors.dart';
 import '../../../viewModel/services/navigation_services.dart';
@@ -35,7 +37,7 @@ class _ScoProgramsState extends State<ScoPrograms>
       backgroundColor: AppColors.scoBgColor,
       appBar: CustomSimpleAppBar(
           title: Text(
-        "SCO Programs",
+        AppLocalizations.of(context)!.scoPrograms,
         style: AppTextStyles.appBarTitleStyle(),
       )),
       body: _buildUI(),

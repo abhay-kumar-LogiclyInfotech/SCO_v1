@@ -34,7 +34,9 @@ class SplashServices {
     bool isDataStored = HiveManager.isDataStored();
     debugPrint("Common Data Already Stored: ${isDataStored.toString()}");
     if (isLoggedInKey && isDataStored) {
-      if (counter < 20) {
+    //   if (isDataStored) {
+
+        if (counter < 20) {
         final response = HiveManager.getStoredData();
 
         if (response?.data?.response != null) {

@@ -100,7 +100,16 @@
   "writeAnswer": "Write an answer",
   "selectSecurityQuestion": "Select Security Question",
   "somethingWentWrong": "Something went wrong",
-  "writeSecurityAnswer": "Write Security Answer"
+  "writeSecurityAnswer": "Write Security Answer",
+  "termsAndConditions": "Terms and Conditions",
+  "otp_verification": "OTP Verification",
+  "otp_verification_message": "We sent a verification code to your email.\nEnter the OTP code here!",
+  "time_limit": "Time Limit 5 Minutes",
+  "resend_code": "Resend Code",
+  "error_complete_profile": "Something went wrong. Please complete your profile through www.sco.ae"
+
+
+
 
 
 

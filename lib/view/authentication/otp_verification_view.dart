@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/resources/app_colors.dart';
+import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
@@ -23,7 +25,10 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     with MediaQueryMixin<OtpVerificationView> {
   late NavigationServices _navigationServices;
 
+  //verification code:
   late TextEditingController _verificationCodeController;
+  //userId:
+  String? userId;
 
   @override
   void initState() {
@@ -33,6 +38,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     _verificationCodeController = TextEditingController();
 
     super.initState();
+    userId = HiveManager.getUserId();
   }
 
   @override
@@ -113,7 +119,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
                             _pinPutField(provider),
                             const SizedBox(height: 35),
 
-                            _timeLimit(),
+                            _timeLimit(provider),
                             const SizedBox(height: 13),
 
                             //Login Button:
@@ -142,13 +148,9 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
   Widget _heading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child: const Text(
-        "Code Verification",
-        style: TextStyle(
-          color: AppColors.scoButtonColor,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
+      child:  Text(
+        AppLocalizations.of(context)!.otp_verification,
+        style: AppTextStyles.titleBoldTextStyle()
       ),
     );
   }
@@ -156,9 +158,9 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
   Widget _subHeading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child: const Text(
-          "We send a verification code to your email.\nEnter Verification code here!",
-          style: TextStyle(
+      child:  Text(
+          AppLocalizations.of(context)!.otp_verification_message,
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 12,
           ),
@@ -170,7 +172,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     return Directionality(
       textDirection: getTextDirection(provider),
       child: Pinput(
-        length: 6,
+        length: 7,
         // obscureText: true,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         defaultPinTheme: Constants.defaultPinTheme,
@@ -186,13 +188,19 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     );
   }
 
-  Widget _timeLimit() {
-    return const Text(
-      "Time Limit 5 Minutes",
-      style: TextStyle(fontSize: 12, color: Colors.red),
+
+  //Time limit text:
+  Widget _timeLimit(LanguageChangeViewModel provider) {
+    return  Directionality(
+      textDirection: getTextDirection(provider),
+      child: Text(
+        AppLocalizations.of(context)!.time_limit,
+        style: const TextStyle(fontSize: 12, color: Colors.red),
+      ),
     );
   }
 
+  // or separator:
   Widget _or() {
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -239,11 +247,11 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     );
   }
 
-  Widget _resendVerificationCodeButton(LanguageChangeViewModel provider) {
+  Widget _resendVerificationCodeButton(LanguageChangeViewModel langProvider) {
     return CustomButton(
-      buttonName: "Resend Code",
+      buttonName: AppLocalizations.of(context)!.resend_code,
       isLoading: false,
-      textDirection: getTextDirection(provider),
+      textDirection: getTextDirection(langProvider),
       onTap: () {},
       buttonColor: Colors.white,
       textColor: AppColors.scoButtonColor,

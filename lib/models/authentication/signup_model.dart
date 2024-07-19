@@ -1,19 +1,17 @@
-/// messageCode : "0000"
-/// message : "Operation Completed Successfully"
-/// data : {"roles":null,"verificationCode":null,"redirectUrl":null,"user":{"userId":961251,"firstName":"Amit","lastName":"Gaikwad","middleName":null,"middleName2":null,"emailAddress":"kumar12@gmail.com","lockout":false,"companyId":20099,"username":"7841964074262681","role":null,"birthDate":null,"gender":null,"phoneNumber":null,"nationality":null,"emirateId":null,"uaePassUuid":null}}
-/// error : false
+
 
 class SignupModel {
   SignupModel({
-      String? messageCode, 
-      String? message, 
-      Data? data, 
-      bool? error,}){
+    String? messageCode,
+    String? message,
+    Data? data,
+    bool? error,
+  }) {
     _messageCode = messageCode;
     _message = message;
     _data = data;
     _error = error;
-}
+  }
 
   SignupModel.fromJson(dynamic json) {
     _messageCode = json['messageCode'];
@@ -21,19 +19,24 @@ class SignupModel {
     _data = json['data'] != null ? Data.fromJson(json['data']) : null;
     _error = json['error'];
   }
+
   String? _messageCode;
+
   String? _message;
   Data? _data;
   bool? _error;
-SignupModel copyWith({  String? messageCode,
-  String? message,
-  Data? data,
-  bool? error,
-}) => SignupModel(  messageCode: messageCode ?? _messageCode,
-  message: message ?? _message,
-  data: data ?? _data,
-  error: error ?? _error,
-);
+  SignupModel copyWith({
+    String? messageCode,
+    String? message,
+    Data? data,
+    bool? error,
+  }) =>
+      SignupModel(
+        messageCode: messageCode ?? _messageCode,
+        message: message ?? _message,
+        data: data ?? _data,
+        error: error ?? _error,
+      );
   String? get messageCode => _messageCode;
   String? get message => _message;
   Data? get data => _data;
@@ -49,7 +52,6 @@ SignupModel copyWith({  String? messageCode,
     map['error'] = _error;
     return map;
   }
-
 }
 
 /// roles : null
@@ -59,15 +61,16 @@ SignupModel copyWith({  String? messageCode,
 
 class Data {
   Data({
-      dynamic roles, 
-      dynamic verificationCode, 
-      dynamic redirectUrl, 
-      User? user,}){
+    dynamic roles,
+    dynamic verificationCode,
+    dynamic redirectUrl,
+    User? user,
+  }) {
     _roles = roles;
     _verificationCode = verificationCode;
     _redirectUrl = redirectUrl;
     _user = user;
-}
+  }
 
   Data.fromJson(dynamic json) {
     _roles = json['roles'];
@@ -75,19 +78,23 @@ class Data {
     _redirectUrl = json['redirectUrl'];
     _user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
+
   dynamic _roles;
   dynamic _verificationCode;
   dynamic _redirectUrl;
   User? _user;
-Data copyWith({  dynamic roles,
-  dynamic verificationCode,
-  dynamic redirectUrl,
-  User? user,
-}) => Data(  roles: roles ?? _roles,
-  verificationCode: verificationCode ?? _verificationCode,
-  redirectUrl: redirectUrl ?? _redirectUrl,
-  user: user ?? _user,
-);
+  Data copyWith({
+    dynamic roles,
+    dynamic verificationCode,
+    dynamic redirectUrl,
+    User? user,
+  }) =>
+      Data(
+        roles: roles ?? _roles,
+        verificationCode: verificationCode ?? _verificationCode,
+        redirectUrl: redirectUrl ?? _redirectUrl,
+        user: user ?? _user,
+      );
   dynamic get roles => _roles;
   dynamic get verificationCode => _verificationCode;
   dynamic get redirectUrl => _redirectUrl;
@@ -103,7 +110,6 @@ Data copyWith({  dynamic roles,
     }
     return map;
   }
-
 }
 
 /// userId : 961251
@@ -125,22 +131,23 @@ Data copyWith({  dynamic roles,
 
 class User {
   User({
-      num? userId, 
-      String? firstName, 
-      String? lastName, 
-      dynamic middleName, 
-      dynamic middleName2, 
-      String? emailAddress, 
-      bool? lockout, 
-      num? companyId, 
-      String? username, 
-      dynamic role, 
-      dynamic birthDate, 
-      dynamic gender, 
-      dynamic phoneNumber, 
-      dynamic nationality, 
-      dynamic emirateId, 
-      dynamic uaePassUuid,}){
+    num? userId,
+    String? firstName,
+    String? lastName,
+    dynamic middleName,
+    dynamic middleName2,
+    String? emailAddress,
+    bool? lockout,
+    num? companyId,
+    String? username,
+    dynamic role,
+    dynamic birthDate,
+    dynamic gender,
+    dynamic phoneNumber,
+    dynamic nationality,
+    dynamic emirateId,
+    dynamic uaePassUuid,
+  }) {
     _userId = userId;
     _firstName = firstName;
     _lastName = lastName;
@@ -157,7 +164,7 @@ class User {
     _nationality = nationality;
     _emirateId = emirateId;
     _uaePassUuid = uaePassUuid;
-}
+  }
 
   User.fromJson(dynamic json) {
     _userId = json['userId'];
@@ -177,6 +184,7 @@ class User {
     _emirateId = json['emirateId'];
     _uaePassUuid = json['uaePassUuid'];
   }
+
   num? _userId;
   String? _firstName;
   String? _lastName;
@@ -193,39 +201,42 @@ class User {
   dynamic _nationality;
   dynamic _emirateId;
   dynamic _uaePassUuid;
-User copyWith({  num? userId,
-  String? firstName,
-  String? lastName,
-  dynamic middleName,
-  dynamic middleName2,
-  String? emailAddress,
-  bool? lockout,
-  num? companyId,
-  String? username,
-  dynamic role,
-  dynamic birthDate,
-  dynamic gender,
-  dynamic phoneNumber,
-  dynamic nationality,
-  dynamic emirateId,
-  dynamic uaePassUuid,
-}) => User(  userId: userId ?? _userId,
-  firstName: firstName ?? _firstName,
-  lastName: lastName ?? _lastName,
-  middleName: middleName ?? _middleName,
-  middleName2: middleName2 ?? _middleName2,
-  emailAddress: emailAddress ?? _emailAddress,
-  lockout: lockout ?? _lockout,
-  companyId: companyId ?? _companyId,
-  username: username ?? _username,
-  role: role ?? _role,
-  birthDate: birthDate ?? _birthDate,
-  gender: gender ?? _gender,
-  phoneNumber: phoneNumber ?? _phoneNumber,
-  nationality: nationality ?? _nationality,
-  emirateId: emirateId ?? _emirateId,
-  uaePassUuid: uaePassUuid ?? _uaePassUuid,
-);
+  User copyWith({
+    num? userId,
+    String? firstName,
+    String? lastName,
+    dynamic middleName,
+    dynamic middleName2,
+    String? emailAddress,
+    bool? lockout,
+    num? companyId,
+    String? username,
+    dynamic role,
+    dynamic birthDate,
+    dynamic gender,
+    dynamic phoneNumber,
+    dynamic nationality,
+    dynamic emirateId,
+    dynamic uaePassUuid,
+  }) =>
+      User(
+        userId: userId ?? _userId,
+        firstName: firstName ?? _firstName,
+        lastName: lastName ?? _lastName,
+        middleName: middleName ?? _middleName,
+        middleName2: middleName2 ?? _middleName2,
+        emailAddress: emailAddress ?? _emailAddress,
+        lockout: lockout ?? _lockout,
+        companyId: companyId ?? _companyId,
+        username: username ?? _username,
+        role: role ?? _role,
+        birthDate: birthDate ?? _birthDate,
+        gender: gender ?? _gender,
+        phoneNumber: phoneNumber ?? _phoneNumber,
+        nationality: nationality ?? _nationality,
+        emirateId: emirateId ?? _emirateId,
+        uaePassUuid: uaePassUuid ?? _uaePassUuid,
+      );
   num? get userId => _userId;
   String? get firstName => _firstName;
   String? get lastName => _lastName;
@@ -263,5 +274,4 @@ User copyWith({  num? userId,
     map['uaePassUuid'] = _uaePassUuid;
     return map;
   }
-
 }

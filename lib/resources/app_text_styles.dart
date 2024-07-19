@@ -26,6 +26,14 @@ class AppTextStyles {
     );
   }
 
+  static TextStyle titleBoldTextStyle() {
+    return const TextStyle(
+      color: AppColors.scoButtonColor,
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    );
+  }
+
 
 
 

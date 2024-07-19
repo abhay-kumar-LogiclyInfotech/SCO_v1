@@ -1,6 +1,7 @@
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/NetworkApiServices.dart';
 import 'package:sco_v1/models/authentication/get_security_questions_model.dart';
+import 'package:sco_v1/models/authentication/otp_verification_model.dart';
 import 'package:sco_v1/models/authentication/update_security_question_model.dart';
 import 'package:sco_v1/resources/app_urls.dart';
 
@@ -17,6 +18,16 @@ class AuthenticationRepository {
         url: AppUrls.signup, headers: headers, body: body);
     return SignupModel.fromJson(response);
   }
+
+
+  //*-----Otp verification method-----*
+  Future<OtpVerificationModel> verifyOtp(
+      {required dynamic headers, required dynamic body,required dynamic userId, required dynamic otp}) async {
+    dynamic response = await _apiServices.getPostApiServices(
+        url: '${AppUrls.baseUrl}users/$userId/verifyMobile/$otp', headers: headers, body: body);
+    return OtpVerificationModel.fromJson(response);
+  }
+
 
   //*-----Security Question Setup Start-----*
 

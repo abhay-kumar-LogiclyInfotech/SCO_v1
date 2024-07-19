@@ -17,6 +17,7 @@ import '../../resources/components/custom_button.dart';
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
 import '../../resources/validations_and_errorText.dart';
+import '../../viewModel/authentication/update_security_question_viewModel.dart';
 
 class UpdateSecurityQuestionView extends StatefulWidget {
   const UpdateSecurityQuestionView({super.key});
@@ -173,8 +174,8 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
                               _answerField(langProvider: langProvider),
                               const SizedBox(height: 30),
                               _submitButton(
-                                  langProvider: langProvider,
-                                  provider: provider)
+                                langProvider: langProvider,
+                              )
                             ],
                           ),
                         );
@@ -257,29 +258,44 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   }
 
 //Security Answer submit field
-  Widget _submitButton(
-      {required LanguageChangeViewModel langProvider,
-      required SecurityQuestionViewModel provider}) {
-    return CustomButton(
-      textDirection: getTextDirection(langProvider),
-      buttonName: AppLocalizations.of(context)!.submit,
-      isLoading: provider.updateSecurityQuestionResponse.status == Status.LOADING ? true : false,
-      onTap: () async {
-        bool result = validateForm(langProvider: langProvider);
+  Widget _submitButton({required LanguageChangeViewModel langProvider}) {
 
-        if (result) {
-          provider.setSecurityQuestion(_questionController.text);
-          provider.setSecurityAnswer(_answerController.text);
-          await provider.updateSecurityQuestion(
-              context: context, langProvider: langProvider, userId: "961015");
-        }
-      },
-      fontSize: 16,
-      buttonColor: AppColors.scoButtonColor,
-      elevation: 1,
+    //Creating single Provider instance i.e. not putting in the top of the widget tree.
+    return ChangeNotifierProvider(
+      create: (context) => UpdateSecurityQuestionViewModel(),
+      child: Consumer<UpdateSecurityQuestionViewModel>(
+        builder: (context, provider, _) {
+          return CustomButton(
+            textDirection: getTextDirection(langProvider),
+            buttonName: AppLocalizations.of(context)!.submit,
+            isLoading:
+                provider.updateSecurityQuestionResponse.status == Status.LOADING
+                    ? true
+                    : false,
+            onTap: () async {
+              bool result = validateForm(langProvider: langProvider);
+
+              if (result) {
+                provider.setSecurityQuestion(_questionController.text);
+                provider.setSecurityAnswer(_answerController.text);
+                await provider.updateSecurityQuestion(
+                    context: context,
+                    langProvider: langProvider,
+                    userId: "961015");
+              }
+            },
+            fontSize: 16,
+            buttonColor: AppColors.scoButtonColor,
+            elevation: 1,
+          );
+        },
+      ),
     );
   }
 
+
+
+  //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {
     if (_questionController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(

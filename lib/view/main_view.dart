@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/main_view/account_view.dart';
-import 'package:sco_v1/view/drawer/custom_drawer.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_view.dart';
 import 'package:sco_v1/view/main_view/home_view.dart';
 import 'package:sco_v1/view/main_view/information_view.dart';
 import 'package:sco_v1/view/main_view/message_view.dart';
@@ -56,13 +56,13 @@ class _MainViewState extends State<MainView> {
               : scaffoldState.currentState!.openEndDrawer();
         },
       ),
-      drawer: CustomDrawer(
+      drawer: CustomDrawerView(
         textDirection: getTextDirection(provider_1),
         scaffoldState: scaffoldState,
       ),
       drawerEnableOpenDragGesture:
           provider_1.appLocale == const Locale('en') ? true : false,
-      endDrawer: CustomDrawer(
+      endDrawer: CustomDrawerView(
         textDirection: getTextDirection(provider_1),
         scaffoldState: scaffoldState,
 

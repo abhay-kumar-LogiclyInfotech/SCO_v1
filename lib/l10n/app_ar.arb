@@ -100,7 +100,15 @@
   "writeAnswer": "اكتب إجابة",
   "selectSecurityQuestion": "اختر سؤال الأمان",
   "somethingWentWrong": "حدث خطأ ما",
-  "writeSecurityAnswer": "اكتب إجابة الأمان"
+  "writeSecurityAnswer": "اكتب إجابة الأمان",
+  "termsAndConditions": "الشروط والأحكام",
+  "otp_verification": "التحقق من OTP",
+  "otp_verification_message": "لقد أرسلنا رمز التحقق إلى بريدك الإلكتروني.\nأدخل رمز OTP هنا!",
+  "time_limit": "الحد الزمني 5 دقائق",
+  "resend_code": "إعادة إرسال الرمز",
+  "error_complete_profile": "حدث خطأ ما. يرجى إكمال ملفك الشخصي عبر www.sco.ae"
+
+
 
 
 

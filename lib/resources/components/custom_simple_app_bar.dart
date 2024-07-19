@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../app_colors.dart';
 import '../app_text_styles.dart';
@@ -10,20 +13,26 @@ class CustomSimpleAppBar extends StatelessWidget implements PreferredSizeWidget 
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: title,
-      automaticallyImplyLeading: false,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios_new_rounded,
-          color: AppColors.scoButtonColor,
+    final provider = Provider.of<LanguageChangeViewModel>(context);
+    return SafeArea(
+      child: Directionality(
+        textDirection: getTextDirection(provider),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          title: title,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: AppColors.scoButtonColor,
+            ),
+            onPressed: () {
+             Navigator.of(context).pop();
+            },
+          ),
+          centerTitle: true,
         ),
-        onPressed: () {
-         Navigator.of(context).pop();
-        },
       ),
-      centerTitle: true,
     );
   }
 

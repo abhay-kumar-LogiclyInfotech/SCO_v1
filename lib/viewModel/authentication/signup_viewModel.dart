@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/data/response/ApiResponse.dart';
+import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/repositories/auth_repo/auth_repository.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
@@ -98,12 +99,12 @@ class SignupViewModel with ChangeNotifier {
   final AuthenticationRepository _authenticationRepository =
       AuthenticationRepository();
 
-  ApiResponse<SignupModel> _signupModel = ApiResponse.loading();
+  ApiResponse<SignupModel> _apiResponse = ApiResponse.none();
 
-  ApiResponse<SignupModel> get signupModel => _signupModel;
+  ApiResponse<SignupModel> get apiResponse => _apiResponse;
 
   set setResponse(ApiResponse<SignupModel> response) {
-    _signupModel = response;
+    _apiResponse = response;
     notifyListeners();
   }
 
@@ -112,6 +113,8 @@ class SignupViewModel with ChangeNotifier {
       {required BuildContext context,
       required LanguageChangeViewModel langProvider}) async {
     try {
+      setResponse = ApiResponse.loading();
+
       //*-----Create Headers Start-----*
 
       final headers = {
@@ -119,6 +122,23 @@ class SignupViewModel with ChangeNotifier {
         'authorization': Constants.basicAuth
       };
       //*-----Create Headers End-----*
+
+      debugPrint(_firstName.toString());
+      debugPrint(_middleName.toString());
+      debugPrint(_middleName2
+          .toString()); // Should be null in this case as we are not passing it.
+      debugPrint(_lastName.toString());
+      debugPrint(_emailAddress.toString());
+      debugPrint(_confirmEmailAddress.toString());
+      debugPrint(_password.toString());
+      debugPrint(_confirmPassword.toString());
+      debugPrint(_day.toString());
+      debugPrint(_month.toString());
+      debugPrint(_year.toString());
+      debugPrint(_emirateId.toString());
+      debugPrint(_isMale.toString());
+      debugPrint(_country.toString());
+      debugPrint(_phoneNo.toString());
 
       //*-----Create Body Start----*
       final body = {
@@ -148,6 +168,14 @@ class SignupViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
 
       setResponse = ApiResponse.completed(response);
+      HiveManager.storeUserId(response.data!.user!.userId.toString());
+
+      debugPrint(
+          "*--------------------->>>>>>>>>>>>>>Printing the user id from the database:${HiveManager.getUserId()}");
+      _alertServices.flushBarErrorMessages(
+          message: response.message.toString(),
+          context: context,
+          provider: langProvider);
 
       return true;
     } catch (error) {

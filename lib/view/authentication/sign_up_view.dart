@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,10 +10,12 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/authentication/otp_verification_view.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
+import '../../data/response/status.dart';
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
 import '../../utils/constants.dart';
@@ -742,25 +745,29 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-  Widget _signUpButton(LanguageChangeViewModel provider) {
-    return CustomButton(
-      textDirection: getTextDirection(provider),
-      buttonName: AppLocalizations.of(context)!.signUp,
-      isLoading: false,
-      onTap: () {
-        final signupProvider =
-            Provider.of<SignupViewModel>(context, listen: false);
-
-        bool result =
-            validateForm(langProvider: provider, signup: signupProvider);
-        if (result) {
-          signupProvider.signup(context: context, langProvider: provider);
-        }
-      },
-      fontSize: 16,
-      buttonColor: AppColors.scoButtonColor,
-      elevation: 1,
-    );
+  Widget _signUpButton(LanguageChangeViewModel langProvider) {
+    return ChangeNotifierProvider(
+        create: (context) => SignupViewModel(),
+        child: Consumer<SignupViewModel>(builder: (context, provider, _) {
+          return CustomButton(
+            textDirection: getTextDirection(langProvider),
+            buttonName: AppLocalizations.of(context)!.signUp,
+            isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
+            onTap: ()async {
+              bool result =
+                  validateForm(langProvider: langProvider, signup: provider);
+              if (result) {
+              bool signUpResult = await provider.signup(context: context, langProvider: langProvider);
+              if(signUpResult){
+                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const OtpVerificationView()));
+              }
+              }
+            },
+            fontSize: 16,
+            buttonColor: AppColors.scoButtonColor,
+            elevation: 1,
+          );
+        }));
   }
 
   Widget _signInLink(LanguageChangeViewModel provider) {
@@ -800,9 +807,12 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
+
+  //form extra validations:
   bool validateForm(
       {required LanguageChangeViewModel langProvider,
-      required SignupViewModel signup}) {
+      required SignupViewModel signup})
+  {
     if (_firstNameController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterFirstName,
@@ -810,21 +820,21 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setFirstName(_firstNameController.text);
+      signup.setFirstName(_firstNameController.text.trim());
     }
 
     // if (_secondNameController.text.isEmpty) {
     //   _alertServices.flushBarErrorMessages(message: AppLocalizations.of(context)!.enterSecondName, context: context, provider: langProvider);
     //   return false;
     // } else {
-    signup.setMiddleName(_secondNameController.text);
+    signup.setMiddleName(_secondNameController.text.trim());
     // }
 
     // if (_thirdFourthNameController.text.isEmpty) {
     //   _alertServices.flushBarErrorMessages(message: AppLocalizations.of(context)!.enterThirdFourthName, context: context, provider: langProvider);
     //   return false;
     // } else {
-    signup.setMiddleName2(_thirdFourthNameController.text);
+    signup.setMiddleName2(_thirdFourthNameController.text.trim());
     // }
 
     if (_familyNameController.text.isEmpty) {
@@ -834,7 +844,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setLastName(_familyNameController.text);
+      signup.setLastName(_familyNameController.text.trim());
     }
 
     if (_dobController.text.isEmpty) {
@@ -857,7 +867,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setDay(_dobDayController.text);
+      signup.setDay(_dobDayController.text.trim());
     }
 
     if (_dobMonthController.text.isEmpty ||
@@ -870,7 +880,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setMonth(_dobMonthController.text);
+      signup.setMonth(_dobMonthController.text.trim());
     }
 
     if (_dobYearController.text.isEmpty ||
@@ -881,7 +891,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setYear(_dobYearController.text);
+      signup.setYear(_dobYearController.text.trim());
     }
 
     if (_genderController.text.isEmpty) {
@@ -891,7 +901,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setIsMale(_genderController.text);
+      signup.setIsMale(_genderController.text.trim());
     }
 
     if (_emailController.text.isEmpty || !_emailController.text.contains('@')) {
@@ -901,7 +911,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setEmailAddress(_emailController.text);
+      signup.setEmailAddress(_emailController.text.trim().toLowerCase());
     }
 
     if (_confirmEmailController.text.isEmpty ||
@@ -912,7 +922,8 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setConfirmEmailAddress(_confirmEmailController.text);
+      signup.setConfirmEmailAddress(
+          _confirmEmailController.text.trim().toLowerCase());
     }
 
     if (_countryController.text.isEmpty) {
@@ -922,7 +933,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setCountry(_countryController.text);
+      signup.setCountry(_countryController.text.trim());
     }
 
     if (_emiratesIdController.text.isEmpty) {
@@ -932,7 +943,8 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setEmirateId(_emiratesIdController.text);
+      signup.setEmirateId(
+          _emiratesIdController.text.replaceAll("-", '').trim().toString());
     }
 
     if (_studentPhoneNumberController.text.isEmpty) {
@@ -942,7 +954,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setPhoneNo(_studentPhoneNumberController.text);
+      signup.setPhoneNo(_studentPhoneNumberController.text.trim());
     }
 
     if (_passwordController.text.isEmpty ||
@@ -953,7 +965,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setPassword(_passwordController.text);
+      signup.setPassword(_passwordController.text.trim());
     }
 
     if (_confirmPasswordController.text.isEmpty ||
@@ -964,7 +976,7 @@ class _SignUpViewState extends State<SignUpView>
           provider: langProvider);
       return false;
     } else {
-      signup.setConfirmPassword(_confirmPasswordController.text);
+      signup.setConfirmPassword(_confirmPasswordController.text.trim());
     }
 
     return true;
