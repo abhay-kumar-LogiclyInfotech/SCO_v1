@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
@@ -58,7 +60,7 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier{
       //*-----Create Headers Start-----*
 
       final headers = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'authorization': Constants.basicAuth
       };
       //*-----Create Headers End-----*
@@ -73,8 +75,8 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier{
         return false;
       }
       final body = {
-        "securityQuestion": _securityQuestion,
-        "securityAnswer": _securityAnswer,
+        "securityQuestion": "'$_securityQuestion'",
+        "securityAnswer": "'$_securityAnswer'",
       };
       //*-----Create Body End-----*
 
@@ -107,5 +109,7 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier{
       return false;
     }
   }
+
+
 //*----------Update Security Question End--------*
 }

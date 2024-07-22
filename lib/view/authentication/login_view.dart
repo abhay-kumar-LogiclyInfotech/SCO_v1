@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,7 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_advanced_switch.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/authentication/forgot_password_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,6 +87,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: Center(
           child: CircularProgressIndicator(color: AppColors.scoThemeColor),
@@ -110,7 +113,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             margin: EdgeInsets.only(
               top: orientation == Orientation.portrait
                   ? screenHeight / 3
-                  : screenHeight / 3,
+                  : screenHeight/3,
             ),
             padding: EdgeInsets.only(
               left: orientation == Orientation.portrait
@@ -253,7 +256,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           GestureDetector(
               onTap: () {
                 //Implement Forgot Password link here:
-                _navigationServices.pushNamed('/forgotPasswordView');
+                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ForgotPasswordView()) );
               },
               child: Text(
                 AppLocalizations.of(context)!.forgotPassword,

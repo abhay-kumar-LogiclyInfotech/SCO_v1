@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:sco_v1/view/main_view/home_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/app_colors.dart';
 
 mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
   double get screenWidth => MediaQuery.of(context).size.width;
+
   double get screenHeight => MediaQuery.of(context).size.height;
+
   Orientation get orientation => MediaQuery.of(context).orientation;
+
   EdgeInsets get padding => MediaQuery.of(context).padding;
+
   EdgeInsets get viewInsets => MediaQuery.of(context).viewInsets;
 
   double get horizontalPadding => MediaQuery.of(context).padding.horizontal;
+
   double get verticalPadding => MediaQuery.of(context).padding.vertical;
 }
 
@@ -21,7 +25,10 @@ TextDirection getTextDirection(LanguageChangeViewModel provider) {
       : TextDirection.rtl;
 }
 
-fieldHeading({required String title, required bool important,required LanguageChangeViewModel langProvider}) {
+fieldHeading(
+    {required String title,
+    required bool important,
+    required LanguageChangeViewModel langProvider}) {
   return Directionality(
     textDirection: getTextDirection(langProvider),
     child: Padding(
@@ -80,8 +87,7 @@ List<DropdownMenuItem> populateNormalDropdown({
   required LanguageChangeViewModel provider,
 }) {
   final textDirection = getTextDirection(provider);
-  return menuItemsList
-      .map((element) {
+  return menuItemsList.map((element) {
     return DropdownMenuItem(
       value: element.toString(),
       child: Text(
@@ -98,34 +104,50 @@ List<DropdownMenuItem> populateNormalDropdown({
   }).toList();
 }
 
-
-Widget bulletText({required String text}){
-  return Row(
-    children: [
-      Container(
-        margin: const EdgeInsets.only(right: 8.0),
-        height: 8.0,
-        width: 8.0,
-        decoration: const BoxDecoration(
-          color: AppColors.scoButtonColor,
-          shape: BoxShape.circle,
+Widget bulletTermsText({required String text, Color? textColor}) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 3.0, left: 10, right: 10),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(right: 8.0, top: 7.0, left: 8.0),
+          height: 7.0,
+          width: 7.0,
+          decoration: BoxDecoration(
+            color: textColor ?? AppColors.scoButtonColor,
+            shape: BoxShape.circle,
+          ),
         ),
-      ),
-      RichText(
-        text: TextSpan(
-          children: [
-
-            TextSpan(
-              text: text,
-              style: const TextStyle(
-                height: 1.4,
-                fontSize: 14.0,
-                color: Colors.black,
-              ),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              // height: 1.4,
+              fontSize: 14.0,
+              color: textColor ?? AppColors.scoButtonColor,
             ),
-          ],
+            textAlign: TextAlign.justify,
+          ),
         ),
+      ],
+    ),
+  );
+}
+
+Widget normalTermsText({required String text}) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 3.0),
+    child: Text(
+      text,
+      style: const TextStyle(
+        height: 1.4,
+        fontSize: 14.0,
+        color: Colors.black,
       ),
-    ],
+      textAlign: TextAlign.justify,
+    ),
   );
 }

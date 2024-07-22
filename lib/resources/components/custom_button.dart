@@ -70,11 +70,11 @@ class _CustomButtonState extends State<CustomButton>
                   textDirection: widget.textDirection,
                   child: Center(
                       child: widget.isLoading
-                          ? const SizedBox(
+                          ?  SizedBox(
                               height: 23,
                               width: 23,
                               child: CircularProgressIndicator(
-                                color: Colors.white,
+                                color: widget.textColor ?? Colors.white,
                                 strokeWidth: 1.5,
                               ),
                             )

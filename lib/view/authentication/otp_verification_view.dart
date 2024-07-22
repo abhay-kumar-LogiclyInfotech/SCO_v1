@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,8 +10,11 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/authentication/terms_and_conditions_view.dart';
+import 'package:sco_v1/viewModel/authentication/otp_verification_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
+import '../../data/response/status.dart';
 import '../../utils/constants.dart';
 import '../../viewModel/services/navigation_services.dart';
 
@@ -27,8 +31,12 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
 
   //verification code:
   late TextEditingController _verificationCodeController;
+
   //userId:
-  String? userId;
+  String? _userId;
+
+  //Loading button:
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -38,7 +46,8 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     _verificationCodeController = TextEditingController();
 
     super.initState();
-    userId = HiveManager.getUserId();
+    debugPrint(HiveManager.getUserId());
+    _userId = HiveManager.getUserId();
   }
 
   @override
@@ -148,18 +157,15 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
   Widget _heading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child:  Text(
-        AppLocalizations.of(context)!.otp_verification,
-        style: AppTextStyles.titleBoldTextStyle()
-      ),
+      child: Text(AppLocalizations.of(context)!.otp_verification,
+          style: AppTextStyles.titleBoldTextStyle()),
     );
   }
 
   Widget _subHeading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child:  Text(
-          AppLocalizations.of(context)!.otp_verification_message,
+      child: Text(AppLocalizations.of(context)!.otp_verification_message,
           style: const TextStyle(
             color: Colors.black,
             fontSize: 12,
@@ -168,30 +174,62 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     );
   }
 
-  Widget _pinPutField(LanguageChangeViewModel provider) {
-    return Directionality(
-      textDirection: getTextDirection(provider),
-      child: Pinput(
-        length: 7,
-        // obscureText: true,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        defaultPinTheme: Constants.defaultPinTheme,
-        focusedPinTheme: Constants.defaultPinTheme.copyWith(
-            decoration: Constants.defaultPinTheme.decoration!
-                .copyWith(border: Border.all(color: Colors.green))),
-        onCompleted: (pin) => debugPrint(pin),
-        // onCompleted: (pin) {
-        //   //When password is filled completely perform operations and then move to the reset password Screen:
-        //   // if we are at signup page verification then need to go to the login Screen
-        // },
-      ),
-    );
-  }
+  Widget _pinPutField(LanguageChangeViewModel langProvider) {
+    return ChangeNotifierProvider(
+        create: (context) => OtpVerificationViewModel(),
+        child: Consumer<OtpVerificationViewModel>(
+          builder: (context, provider, _) {
+            return Directionality(
+              textDirection: getTextDirection(langProvider),
+              child: Pinput(
+                length: 7,
+                // obscureText: true,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                defaultPinTheme: Constants.defaultPinTheme,
+                focusedPinTheme: Constants.defaultPinTheme.copyWith(
+                    decoration: Constants.defaultPinTheme.decoration!
+                        .copyWith(border: Border.all(color: Colors.green))),
+                onCompleted: (pin) async {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  //*------setting values in the controller------*
+                  _verificationCodeController.text = pin.toString();
 
+                  //*------calling the verifyOtp method in the ViewModel------*
+                  if (pin.isNotEmpty) {
+                    bool result = await provider.verifyOtp(
+                      context: context,
+                      langProvider: langProvider,
+                      userId: _userId,
+                      otp: pin.toString(),
+                    );
+
+                    if (result) {
+                      _navigationServices.pushReplacementCupertino(
+                          CupertinoPageRoute(
+                              builder: (context) =>
+                                  const TermsAndConditionsView()));
+                    }
+
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  }
+
+                  setState(() {
+                    _isLoading = false;
+                  });
+                },
+              ),
+            );
+          },
+        ));
+  }
 
   //Time limit text:
   Widget _timeLimit(LanguageChangeViewModel provider) {
-    return  Directionality(
+    return Directionality(
       textDirection: getTextDirection(provider),
       child: Text(
         AppLocalizations.of(context)!.time_limit,
@@ -235,28 +273,68 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     );
   }
 
-  Widget _submitButton(LanguageChangeViewModel provider) {
-    return CustomButton(
-      textDirection: getTextDirection(provider),
-      buttonName: AppLocalizations.of(context)!.submit,
-      isLoading: false,
-      onTap: () {},
-      fontSize: 16,
-      buttonColor: AppColors.scoButtonColor,
-      elevation: 1,
-    );
+  Widget _submitButton(LanguageChangeViewModel langProvider) {
+    return ChangeNotifierProvider(
+        create: (context) => OtpVerificationViewModel(),
+        child: Consumer<OtpVerificationViewModel>(
+          builder: (context, provider, _) {
+            return CustomButton(
+              textDirection: getTextDirection(langProvider),
+              buttonName: AppLocalizations.of(context)!.submit,
+              isLoading:
+                  (provider.otpVerificationResponse.status == Status.LOADING ||
+                          _isLoading)
+                      ? true
+                      : false,
+              onTap: () async {
+                //*------calling the verifyOtp method in the ViewModel------*
+                if (_verificationCodeController.text.isNotEmpty) {
+                  bool result = await provider.verifyOtp(
+                    context: context,
+                    langProvider: langProvider,
+                    userId: _userId,
+                    otp: _verificationCodeController.text,
+                  );
+
+                  if (result) {
+                    _navigationServices.pushReplacementCupertino(
+                        CupertinoPageRoute(
+                            builder: (context) =>
+                                const TermsAndConditionsView()));
+                  }
+                }
+              },
+              fontSize: 16,
+              buttonColor: AppColors.scoButtonColor,
+              elevation: 1,
+            );
+          },
+        ));
   }
 
   Widget _resendVerificationCodeButton(LanguageChangeViewModel langProvider) {
-    return CustomButton(
-      buttonName: AppLocalizations.of(context)!.resend_code,
-      isLoading: false,
-      textDirection: getTextDirection(langProvider),
-      onTap: () {},
-      buttonColor: Colors.white,
-      textColor: AppColors.scoButtonColor,
-      borderColor: AppColors.scoButtonColor,
-      fontSize: 16,
-    );
+    return ChangeNotifierProvider(
+        create: (context) => OtpVerificationViewModel(),
+        child:
+            Consumer<OtpVerificationViewModel>(builder: (context, provider, _) {
+          return CustomButton(
+            buttonName: AppLocalizations.of(context)!.resend_code,
+            isLoading: provider.resendOtpResponse.status == Status.LOADING
+                ? true
+                : false,
+            // isLoading: true,
+            textDirection: getTextDirection(langProvider),
+            buttonColor: Colors.white,
+            textColor: AppColors.scoButtonColor,
+            borderColor: AppColors.scoButtonColor,
+            fontSize: 16,
+            onTap: () async {
+              provider.resendOtp(
+                  context: context,
+                  langProvider: langProvider,
+                  userId: _userId);
+            },
+          );
+        }));
   }
 }

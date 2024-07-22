@@ -1,21 +1,24 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/data/response/ApiResponse.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/repositories/auth_repo/auth_repository.dart';
+import 'package:sco_v1/view/authentication/otp_verification_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../models/authentication/signup_model.dart';
 import '../../utils/constants.dart';
+import '../services/navigation_services.dart';
 
 class SignupViewModel with ChangeNotifier {
   late AlertServices _alertServices;
+  late NavigationServices _navigationServices;
 
   SignupViewModel() {
     final GetIt getIt = GetIt.instance;
     _alertServices = getIt.get<AlertServices>();
+    _navigationServices = getIt.get<NavigationServices>();
   }
 
   String? _firstName;
@@ -177,6 +180,7 @@ class SignupViewModel with ChangeNotifier {
           context: context,
           provider: langProvider);
 
+      //*---------Navigating to Otp Verification View---------*
       return true;
     } catch (error) {
       debugPrint('Printing Error: $error');

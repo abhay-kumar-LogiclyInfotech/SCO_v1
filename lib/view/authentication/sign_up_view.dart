@@ -759,7 +759,7 @@ class _SignUpViewState extends State<SignUpView>
               if (result) {
               bool signUpResult = await provider.signup(context: context, langProvider: langProvider);
               if(signUpResult){
-                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const OtpVerificationView()));
+                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const OtpVerificationView()) );
               }
               }
             },

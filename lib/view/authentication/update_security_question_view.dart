@@ -13,6 +13,7 @@ import 'package:sco_v1/viewModel/services/alert_services.dart';
 import '../../../resources/app_colors.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../data/response/status.dart';
+import '../../hive/hive_manager.dart';
 import '../../resources/components/custom_button.dart';
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
@@ -41,13 +42,17 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   List<DropdownMenuItem> _securityQuestionItemsList = [];
 
   String? _answerError;
+  String? _userId;
+
+
+
 
   Future<void> _initializeData(
       {required LanguageChangeViewModel langProvider}) async {
     final provider =
         Provider.of<SecurityQuestionViewModel>(context, listen: false);
     await provider.getSecurityQuestions(
-        context: context, langProvider: langProvider, userId: "961015");
+        context: context, langProvider: langProvider, userId: _userId!);
 
     if (provider.getSecurityQuestionResponse.status == Status.COMPLETED) {
       _securityQuestionItemsList = populateNormalDropdown(
@@ -64,6 +69,10 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     final GetIt getIt = GetIt.instance;
     _navigationService = getIt.get<NavigationServices>();
     _alertServices = getIt.get<AlertServices>();
+
+
+    //initialize the userId:
+    _userId = HiveManager.getUserId();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       _initializeData(
@@ -281,7 +290,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
                 await provider.updateSecurityQuestion(
                     context: context,
                     langProvider: langProvider,
-                    userId: "961015");
+                    userId: _userId!);
               }
             },
             fontSize: 16,

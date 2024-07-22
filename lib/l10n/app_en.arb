@@ -106,11 +106,56 @@
   "otp_verification_message": "We sent a verification code to your email.\nEnter the OTP code here!",
   "time_limit": "Time Limit 5 Minutes",
   "resend_code": "Resend Code",
-  "error_complete_profile": "Something went wrong. Please complete your profile through www.sco.ae"
-
-
-
-
-
-
+  "error_complete_profile": "Something went wrong. Please complete your profile through www.sco.ae",
+  "acceptance_of_terms_through_use_heading": "Acceptance of Terms Through Use",
+  "acceptance_of_terms_through_use_points_p1": "The use of this site is considered acceptance of the terms and conditions contained therein.",
+  "acceptance_of_terms_through_use_points_p2": "The Office of Study Missions reserves the right to amend the conditions of use mentioned at any time.",
+  "acceptance_of_terms_through_use_points_p3": "Any amendments to these conditions will be announced on the site.",
+  "acceptance_of_terms_through_use_points_p4": "The responsibility for knowing the modifications rests with the user.",
+  "acceptance_of_terms_through_use_points_p5": "Continued use of the site after amendments is considered implicit acceptance of these changes.",
+  "copyright_heading": "Copyright",
+  "copyright_points_p1": "All copyrights on the website of the Office of Study Missions are subject to legal protection.",
+  "copyright_points_p2": "These rights are owned or licensed by the Office of Study Missions.",
+  "intellectual_property_rights_heading": "Intellectual Property Rights",
+  "intellectual_property_rights_points_p1": "All site contents are protected under intellectual property legislation, including copyrights, trademarks, service marks, and other rights.",
+  "intellectual_property_rights_points_p2": "The user agrees not to broadcast, display, execute, publish, amend, edit, or create derivative works from the site’s content without explicit permission.",
+  "intellectual_property_rights_points_p3": "The user may print or download a single copy of the site’s contents for personal, non-commercial use.",
+  "intellectual_property_rights_points_p4": "Retrieval of contents to create a database or directory without written permission is prohibited.",
+  "intellectual_property_rights_points_p5": "Use of site contents for any purpose not expressly permitted is also prohibited.",
+  "severability_of_provisions_heading": "Independence of Texts",
+  "severability_of_provisions_points_p1": "If any condition is nullified for any reason, the nullity will apply only to that provision.",
+  "severability_of_provisions_points_p2": "Other conditions on the site will remain in effect.",
+  "severability_of_provisions_points_p3": "In case of conflict, special texts will override general texts.",
+  "applicable_law_heading": "Applicable Law",
+  "applicable_law_points_p1": "The conditions are governed by the laws of the United Arab Emirates.",
+  "applicable_law_points_p2": "In case of a breach, the Office of Study Missions reserves the right to seek legal recourse.",
+  "applicable_law_points_p3": "Abu Dhabi courts have jurisdiction over any disputes.",
+  "governing_law_and_jurisdiction_heading": "Governing Law and Jurisdiction",
+  "governing_law_and_jurisdiction_points_p1": "The legislation of the United Arab Emirates applies to the use of the site and any disputes.",
+  "governing_law_and_jurisdiction_points_p2": "The courts of Abu Dhabi are responsible for resolving disputes related to the site.",
+  "disclaimer_heading": "Disclaimer",
+  "disclaimer_description": "The user acknowledges that the Scholarship Office does not bear any liability arising from direct or indirect damage, in accordance with the rules of contractual or tort liability, whether the damage is caused by the use of the site or the inability to use it.",
+  "privacy_policy_heading": "Privacy Policy",
+  "privacy_policy_heading_consent_to_use_of_information": "Consent to Use of Information",
+  "privacy_policy_description_consent_to_use_of_information": "By using the Scholarship Office's website, each user (browser) agrees to this Privacy Policy upon accessing the site and consents to the Scholarship Office collecting, using, or processing the information available to it.",
+  "privacy_policy_heading_information_collection_and_disclosure_policies": "Information Collection and Disclosure Policies",
+  "privacy_policy_description_information_collection_and_disclosure_policies": "The Scholarship Office collects personal information such as name, address, and email when provided voluntarily by the user. The office may also collect additional information such as address, date of birth, and other personal details when users create an account or request services online. Additionally, the Scholarship Office's web service programs automatically collect statistical information about user visits, such as pages visited and browsers used, without linking this information to individual users (see information on 'cookies' – the pages visited by the user).",
+  "privacy_policy_heading_information_usage_and_disclosure_policies": "Information Usage and Disclosure Policies",
+  "privacy_policy_description_information_usage_and_disclosure_policies": "The Scholarship Office may use or disclose user information and other personal data collected from the office and its affiliates for functions such as user account services, report preparation, and other user activities.",
+  "privacy_policy_heading_cookies": "Cookies",
+  "privacy_policy_description_cookies": "A small data string written by the Scholarship Office's provider on the user's hard drive. This technology allows the office to enhance the website for more efficient use.",
+  "privacy_policy_heading_links": "Links",
+  "privacy_policy_description_links": "This website contains links to other sites, and the Scholarship Office is not responsible for those links. Users are advised to review the privacy policies of those sites.",
+  "privacy_policy_heading_surveys": "Surveys",
+  "privacy_policy_description_surveys": "The Scholarship Office may occasionally obtain information from users through surveys conducted by the office. Participation in these surveys is voluntary, and users can choose whether or not to disclose this information. Requested information may include contact details used for notifying results and may be used for monitoring or improving the site’s usage.",
+  "privacy_policy_heading_security": "Security",
+  "privacy_policy_description_security": "The Scholarship Office takes necessary precautions to protect user information collected from the website. This information is protected whether online or offline, using encryption for sensitive online information and ensuring confidentiality in all cases.",
+  "privacy_policy_heading_notification_of_changes": "Notification of Changes",
+  "privacy_policy_description_notification_of_changes": "If we decide to change our Privacy Policy, we will post those changes on our main page, ensuring users are always aware of the information we collect, how we use it, and under what circumstances.",
+  "privacy_policy_heading_updates_to_privacy_policy": "Updates to Privacy Policy",
+  "privacy_policy_description_updates_to_privacy_policy": "If the Scholarship Office updates the Privacy Policy, the updates will be made available on the main page of the Scholarship Office website for users to review."
 }
+
+
+
+
