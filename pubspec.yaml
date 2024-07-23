@@ -70,6 +70,7 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
+  device_info_plus: ^9.1.2
 
 
 dev_dependencies:

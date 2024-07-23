@@ -11,9 +11,10 @@ abstract class BaseApiServices {
       {required dynamic url, required dynamic headers, required dynamic body});
 
   Future<dynamic> getMultipartApiServices({
+    required String method,
     required String url,
-    required Map<String, String> field,
-    required List<http.MultipartFile> file,
-    required Map<String, String> header,
+    required Map<String, String> fields,
+    required List<http.MultipartFile> files,
+    required Map<String, String> headers,
   });
 }

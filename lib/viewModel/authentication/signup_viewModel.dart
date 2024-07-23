@@ -126,22 +126,6 @@ class SignupViewModel with ChangeNotifier {
       };
       //*-----Create Headers End-----*
 
-      debugPrint(_firstName.toString());
-      debugPrint(_middleName.toString());
-      debugPrint(_middleName2
-          .toString()); // Should be null in this case as we are not passing it.
-      debugPrint(_lastName.toString());
-      debugPrint(_emailAddress.toString());
-      debugPrint(_confirmEmailAddress.toString());
-      debugPrint(_password.toString());
-      debugPrint(_confirmPassword.toString());
-      debugPrint(_day.toString());
-      debugPrint(_month.toString());
-      debugPrint(_year.toString());
-      debugPrint(_emirateId.toString());
-      debugPrint(_isMale.toString());
-      debugPrint(_country.toString());
-      debugPrint(_phoneNo.toString());
 
       //*-----Create Body Start----*
       final body = {
@@ -173,8 +157,6 @@ class SignupViewModel with ChangeNotifier {
       setResponse = ApiResponse.completed(response);
       HiveManager.storeUserId(response.data!.user!.userId.toString());
 
-      debugPrint(
-          "*--------------------->>>>>>>>>>>>>>Printing the user id from the database:${HiveManager.getUserId()}");
       _alertServices.flushBarErrorMessages(
           message: response.message.toString(),
           context: context,
@@ -183,7 +165,6 @@ class SignupViewModel with ChangeNotifier {
       //*---------Navigating to Otp Verification View---------*
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
       setResponse = ApiResponse.error(error.toString());
       _alertServices.flushBarErrorMessages(
           message: error.toString(), context: context, provider: langProvider);

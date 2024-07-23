@@ -1,15 +1,19 @@
+import 'dart:math' show Random, pi;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
+import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../resources/components/custom_text_field.dart';
 import '../../resources/validations_and_errorText.dart';
+import '../../viewModel/services/alert_services.dart';
 import '../../viewModel/services/navigation_services.dart';
 
 class ForgotPasswordView extends StatefulWidget {
@@ -22,36 +26,62 @@ class ForgotPasswordView extends StatefulWidget {
 class _ForgotPasswordViewState extends State<ForgotPasswordView>
     with MediaQueryMixin<ForgotPasswordView> {
   late NavigationServices _navigationServices;
+  late AlertServices _alertServices;
 
   late TextEditingController _emailController;
-  late TextEditingController _passwordController;
+  late TextEditingController _captchaController;
 
   late FocusNode _emailFocusNode;
-  late FocusNode _passwordFocusNode;
+  late FocusNode _captchaFocusNode;
 
   String? _emailError;
+
+  double _angle = 0;
+  String? _captchaText;
+
+  void _generateRandomCaptcha() {
+    setState(() {
+      // Generate a random number between 1000 and 9999
+      int randomNumber = Random().nextInt(100000);
+      _captchaText = '$randomNumber';
+    });
+  }
+
+  void _rotate() {
+    setState(() {
+      _generateRandomCaptcha();
+      // Increment the angle by 360 degrees
+      _angle += 180.0;
+      // Ensure the angle stays within 0 to 360 degrees
+      // Optional: Normalize the angle within 0 to 360 degrees
+      // _angle %= 360.0;
+    });
+  }
 
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    _alertServices = getIt.get<AlertServices>();
 
     _emailController = TextEditingController();
-    _passwordController = TextEditingController();
+    _captchaController = TextEditingController();
 
     _emailFocusNode = FocusNode();
-    _passwordFocusNode = FocusNode();
+    _captchaFocusNode = FocusNode();
 
     super.initState();
     _emailError = null;
+
+    _rotate();
   }
 
   @override
   void dispose() {
     _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
+    _captchaController.dispose();
     _emailController.dispose();
-    _passwordController.dispose();
+    _captchaFocusNode.dispose();
     super.dispose();
   }
 
@@ -124,6 +154,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
                             const SizedBox(height: 25),
                             //email Address Field;
                             _emailAddressField(provider),
+                            const SizedBox(height: 10),
+                            _createCaptcha(),
+
+                            _captchaField(provider),
+
                             const SizedBox(height: 35),
 
                             //Submit Button:
@@ -180,7 +215,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     return CustomTextField(
       textDirection: getTextDirection(provider),
       currentFocusNode: _emailFocusNode,
-      nextFocusNode: _passwordFocusNode,
+      nextFocusNode: _captchaFocusNode,
       controller: _emailController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.emailAddress,
@@ -193,21 +228,78 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       ),
       errorText: _emailError,
       onChanged: (value) {
-        if(_emailFocusNode.hasFocus){
+        if (_emailFocusNode.hasFocus) {
           setState(() {
-            _emailError = ErrorText.getEmailError(email: value!, context: context);
+            _emailError =
+                ErrorText.getEmailError(email: value!, context: context);
           });
         }
       },
     );
   }
 
-  Widget _submitButton(LanguageChangeViewModel provider) {
-    return CustomButton(
+  Widget _createCaptcha() {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          decoration: BoxDecoration(
+              border: Border.all(color: AppColors.darkGrey),
+              borderRadius: BorderRadius.circular(10)),
+          child: Text(
+            _captchaText ?? '',
+            style: AppTextStyles.titleTextStyle(),
+          ),
+        ),
+        Transform.rotate(
+            angle: _angle * 3.1415927 / 180, // Convert degrees to radians
+            child: IconButton(
+                onPressed: _rotate,
+                icon: const Icon(
+                  Icons.rotate_right,
+                  size: 30,
+                )))
+      ],
+    );
+  }
+
+  Widget _captchaField(LanguageChangeViewModel provider) {
+    return CustomTextField(
       textDirection: getTextDirection(provider),
+      currentFocusNode: _captchaFocusNode,
+      controller: _captchaController,
+      obscureText: false,
+      hintText: "Enter captcha",
+      textInputType: TextInputType.emailAddress,
+      isNumber: false,
+      leading: SvgPicture.asset(
+        "assets/email.svg",
+        // height: 18,
+        // width: 18,
+      ),
+      errorText: _emailError,
+      onChanged: (value) {
+        if (_emailFocusNode.hasFocus) {
+          setState(() {
+            _emailError =
+                ErrorText.getEmailError(email: value!, context: context);
+          });
+        }
+      },
+    );
+  }
+
+  Widget _submitButton(LanguageChangeViewModel langProvider) {
+    return CustomButton(
+      textDirection: getTextDirection(langProvider),
       buttonName: AppLocalizations.of(context)!.submit,
       isLoading: false,
-      onTap: () {},
+      onTap: () async{
+        bool validateResult = _validateForm(langProvider:langProvider );
+
+      },
       fontSize: 16,
       buttonColor: AppColors.scoButtonColor,
       elevation: 1,
@@ -284,5 +376,32 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
         ],
       ),
     );
+  }
+
+  bool _validateForm({required LanguageChangeViewModel langProvider}) {
+    if (_emailController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
+          context: context,
+          provider: langProvider);
+      return false;
+    }
+    if(_captchaController.text.isEmpty){
+      _alertServices.flushBarErrorMessages(
+          message: "Please Enter Captcha",
+          context: context,
+          provider: langProvider);
+      return false;
+    }
+    if(_captchaText != _captchaController.text ){
+      _rotate();
+      _alertServices.flushBarErrorMessages(
+          message: "Incorrect Captcha",
+          context: context,
+          provider: langProvider);
+      return false;
+    }
+
+    return true;
   }
 }

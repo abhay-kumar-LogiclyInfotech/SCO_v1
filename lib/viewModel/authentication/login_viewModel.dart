@@ -1,0 +1,127 @@
+import 'package:flutter/widgets.dart';
+import 'package:get_it/get_it.dart';
+import 'package:sco_v1/models/authentication/login_model.dart';
+
+import '../../data/response/ApiResponse.dart';
+import '../../hive/hive_manager.dart';
+import '../../repositories/auth_repo/auth_repository.dart';
+import '../../utils/constants.dart';
+import '../language_change_ViewModel.dart';
+import '../services/alert_services.dart';
+import '../services/auth_services.dart';
+import '../services/navigation_services.dart';
+
+class LoginViewModel with ChangeNotifier {
+  late AlertServices _alertServices;
+  late NavigationServices _navigationServices;
+  late AuthService _authService;
+
+  LoginViewModel() {
+    final GetIt getIt = GetIt.instance;
+    _alertServices = getIt.get<AlertServices>();
+    _navigationServices = getIt.get<NavigationServices>();
+    _authService = getIt.get<AuthService>();
+
+  }
+
+  // Private fields
+  String _username = '';
+  String _password = '';
+  String _deviceId = '';
+
+  // Getter for username
+  String get username => _username;
+
+  // Setter for username
+  set username(String value) {
+    if (_username != value) {
+      _username = value;
+      notifyListeners(); // Notify listeners about the change
+    }
+  }
+
+  // Getter for password
+  String get password => _password;
+
+  // Setter for password
+  set password(String value) {
+    if (_password != value) {
+      _password = value;
+      notifyListeners(); // Notify listeners about the change
+    }
+  }
+
+  // Getter for deviceId
+  String get deviceId => _deviceId;
+
+  // Setter for deviceId
+  set deviceId(String value) {
+    if (_deviceId != value) {
+      _deviceId = value;
+      notifyListeners(); // Notify listeners about the change
+    }
+  }
+
+  //*------Accessing Api Services------*
+  final AuthenticationRepository _authenticationRepository =
+      AuthenticationRepository();
+
+  ApiResponse<LoginModel> _loginResponse = ApiResponse.none();
+
+  ApiResponse<LoginModel> get apiResponse => _loginResponse;
+
+  set _setResponse(ApiResponse<LoginModel> response) {
+    _loginResponse = response;
+    notifyListeners();
+  }
+
+  //*------Login Method------*
+  Future<bool> login(
+      {required BuildContext context,
+      required LanguageChangeViewModel langProvider}) async {
+    try {
+      _setResponse = ApiResponse.loading();
+
+      if(_username.isEmpty || _password.isEmpty){
+        return false;
+      }
+
+      //*-----Create Headers Start-----*
+
+      final headers = {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'authorization': Constants.basicAuth
+      };
+      //*-----Create Headers End-----*
+
+      //*-----Create Body Start----*
+      final body = {
+        "username": _username,
+        "password": _password,
+        "deviceId": _deviceId,
+      };
+      // *-----Create Body End-----*
+
+      //*-----Calling Api Start-----*
+      final response = await _authenticationRepository.login(
+        headers: headers,
+        body: body,
+      );
+      //*-----Calling Api End-----*
+
+      _setResponse = ApiResponse.completed(response);
+
+     await  HiveManager.storeUserId(response.data!.user!.userId.toString());
+     await  _authService.saveAuthState(true);
+
+     _alertServices.toastMessage(response.message.toString(),);
+
+      return true;
+    } catch (error) {
+      _setResponse = ApiResponse.error(error.toString());
+      _alertServices.flushBarErrorMessages(
+          message: error.toString(), context: context, provider: langProvider);
+      return false;
+    }
+  }
+}

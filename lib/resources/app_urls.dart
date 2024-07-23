@@ -11,5 +11,8 @@ class AppUrls {
   //signup endpoint
   static String get signup => "${_baseUrl}users/register";
 
+  //login endpoint
+  static String get login => "${_baseUrl}users/login";
+
 }
 

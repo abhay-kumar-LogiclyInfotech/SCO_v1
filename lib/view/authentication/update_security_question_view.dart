@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/authentication/login_view.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
@@ -44,9 +46,6 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   String? _answerError;
   String? _userId;
 
-
-
-
   Future<void> _initializeData(
       {required LanguageChangeViewModel langProvider}) async {
     final provider =
@@ -69,7 +68,6 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     final GetIt getIt = GetIt.instance;
     _navigationService = getIt.get<NavigationServices>();
     _alertServices = getIt.get<AlertServices>();
-
 
     //initialize the userId:
     _userId = HiveManager.getUserId();
@@ -268,7 +266,6 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
 //Security Answer submit field
   Widget _submitButton({required LanguageChangeViewModel langProvider}) {
-
     //Creating single Provider instance i.e. not putting in the top of the widget tree.
     return ChangeNotifierProvider(
       create: (context) => UpdateSecurityQuestionViewModel(),
@@ -287,10 +284,15 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
               if (result) {
                 provider.setSecurityQuestion(_questionController.text);
                 provider.setSecurityAnswer(_answerController.text);
-                await provider.updateSecurityQuestion(
-                    context: context,
-                    langProvider: langProvider,
-                    userId: _userId!);
+               bool updateResult =  await provider.updateSecurityQuestion(
+                  context: context,
+                  langProvider: langProvider,
+                  userId: _userId!,
+                  // userId: "962229",
+                );
+               if(updateResult){
+                 _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+               }
               }
             },
             fontSize: 16,
@@ -301,8 +303,6 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
       ),
     );
   }
-
-
 
   //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {

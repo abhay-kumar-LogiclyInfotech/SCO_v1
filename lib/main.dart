@@ -77,17 +77,18 @@ class MyApp extends StatelessWidget {
             }
             return MaterialApp(
               title: 'SCO',
-              locale: locale == ''
-                  ? const Locale('en')
-                  : provider.appLocale == null
-                      ? Locale(locale)
-                      : Provider.of<LanguageChangeViewModel>(context).appLocale,
+              // locale: locale == ''
+              //     ? const Locale('en')
+              //     : provider.appLocale == null
+              //         ? Locale(locale)
+              //         : Provider.of<LanguageChangeViewModel>(context).appLocale,
+              locale: provider.appLocale,
 
               //when enters the app;
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
+                // GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
               supportedLocales: const [Locale('en'), Locale('ar')],
@@ -100,9 +101,10 @@ class MyApp extends StatelessWidget {
               routes: _navigationServices.routes,
               initialRoute: "/splashView",
 
-              // home: const TermsAndConditionsView(),
+              // home: const UpdateSecurityQuestionView(),
             );
           },
         ));
   }
 }
+

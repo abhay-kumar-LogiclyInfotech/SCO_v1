@@ -153,7 +153,9 @@
   "privacy_policy_heading_notification_of_changes": "Notification of Changes",
   "privacy_policy_description_notification_of_changes": "If we decide to change our Privacy Policy, we will post those changes on our main page, ensuring users are always aware of the information we collect, how we use it, and under what circumstances.",
   "privacy_policy_heading_updates_to_privacy_policy": "Updates to Privacy Policy",
-  "privacy_policy_description_updates_to_privacy_policy": "If the Scholarship Office updates the Privacy Policy, the updates will be made available on the main page of the Scholarship Office website for users to review."
+  "privacy_policy_description_updates_to_privacy_policy": "If the Scholarship Office updates the Privacy Policy, the updates will be made available on the main page of the Scholarship Office website for users to review.",
+  "logout": "Logout",
+  "logout_success": "Logout success"
 }
 
 

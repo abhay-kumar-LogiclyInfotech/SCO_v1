@@ -31,16 +31,13 @@ class AlertServices {
                 size: 28,
                 color: Colors.white,
               ),
-              // title: Container(
-              //     padding: EdgeInsets.zero,
-              //     margin: EdgeInsets.zero,
-              //     alignment: Alignment.center,
-              //     ),
-              title: Text(
-                message,
-                style: const TextStyle(color: Colors.white),
-              ),
-              color: Colors.black87,
+              title: Container(
+                  padding: EdgeInsets.zero,
+                  margin: EdgeInsets.zero,
+                  alignment: Alignment.center,
+                  ),
+
+              color: Colors.white10,
             );
           }).show(_navigationServices.navigationStateKey.currentState!.context);
     } catch (error) {

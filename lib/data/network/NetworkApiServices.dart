@@ -59,16 +59,17 @@ class NetworkApiServices extends BaseApiServices {
 
   @override
   Future<dynamic> getMultipartApiServices({
+    required String method,
     required String url,
-    required Map<String, String> field,
-    required List<http.MultipartFile> file,
-    required Map<String, String> header,
+    required Map<String, String> fields,
+    required List<http.MultipartFile> files,
+    required Map<String, String> headers,
   }) async {
     try {
-      final request = http.MultipartRequest('POST', Uri.parse(url));
-      request.headers.addAll(header);
-      request.fields.addAll(field);
-      request.files.addAll(file);
+      final request = http.MultipartRequest(method, Uri.parse(url));
+      request.headers.addAll(headers);
+      request.fields.addAll(fields);
+      request.files.addAll(files);
 
       final response =
           await request.send().timeout(const Duration(seconds: 30));

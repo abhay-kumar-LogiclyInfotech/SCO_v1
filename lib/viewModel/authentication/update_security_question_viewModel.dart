@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
@@ -10,8 +8,7 @@ import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
 
-class UpdateSecurityQuestionViewModel with ChangeNotifier{
-
+class UpdateSecurityQuestionViewModel with ChangeNotifier {
   late AlertServices _alertServices;
 
   UpdateSecurityQuestionViewModel() {
@@ -35,11 +32,11 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier{
   }
 
   //*------Accessing Api Services------*
-  final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
-
+  final AuthenticationRepository _authenticationRepository =
+      AuthenticationRepository();
 
   ApiResponse<UpdateSecurityQuestionModel> _updateSecurityQuestionResponse =
-  ApiResponse.none();
+      ApiResponse.none();
 
   ApiResponse<UpdateSecurityQuestionModel> get updateSecurityQuestionResponse =>
       _updateSecurityQuestionResponse;
@@ -52,14 +49,14 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier{
 
   Future<bool> updateSecurityQuestion(
       {required BuildContext context,
-        required LanguageChangeViewModel langProvider,
-        required String userId}) async {
+      required LanguageChangeViewModel langProvider,
+      required String userId}) async {
     try {
       setUpdateSecurityQuestionResponse = ApiResponse.loading();
 
       //*-----Create Headers Start-----*
 
-      final headers = {
+      final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
         'authorization': Constants.basicAuth
       };
@@ -74,18 +71,19 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier{
           userId.isEmpty) {
         return false;
       }
-      final body = {
-        "securityQuestion": "'$_securityQuestion'",
-        "securityAnswer": "'$_securityAnswer'",
+      final fields = <String, String>{
+        "securityQuestion": _securityQuestion!,
+        "securityAnswer": _securityAnswer!,
       };
       //*-----Create Body End-----*
 
       //*-----Calling Api Start-----*
       final response = await _authenticationRepository.updateSecurityQuestion(
         userId: userId,
-        body: body,
+        fields: fields,
         headers: headers,
       );
+
       //*-----Calling Api End-----*
 
       //Message to show status of the operation:
@@ -109,7 +107,6 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier{
       return false;
     }
   }
-
 
 //*----------Update Security Question End--------*
 }

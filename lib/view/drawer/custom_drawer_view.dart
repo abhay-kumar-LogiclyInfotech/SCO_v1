@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -9,7 +11,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/components/custom_advanced_switch.dart';
 import '../../viewModel/language_change_ViewModel.dart';
+import '../../viewModel/services/auth_services.dart';
 import '../../viewModel/services/navigation_services.dart';
+import '../authentication/login_view.dart';
 
 class CustomDrawerView extends StatefulWidget {
   final String? userName;
@@ -33,6 +37,8 @@ class CustomDrawerView extends StatefulWidget {
 
 class _CustomDrawerViewState extends State<CustomDrawerView> {
   late NavigationServices _navigationServices;
+  late AuthService _authService;
+  late AlertServices _alertServices;
 
   bool _isArabic = false;
   bool _isLoading = true; // State to track loading
@@ -62,6 +68,10 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
     super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    _authService = getIt.get<AuthService>();
+    _alertServices = getIt.get<AlertServices>();
+
+
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getInitialLanguage();
@@ -179,7 +189,10 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
+
                                 _navigationServices.goBack();
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -371,8 +384,34 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   "assets/sidemenu/contactUs.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
-                              onTap: () {
+                              onTap: () async {
+
                                 _navigationServices.goBack();
+                              },
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
+                              title:  Text(
+                                AppLocalizations.of(context)!.logout,
+
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                              leading: SvgPicture.asset(
+                                  "assets/sidemenu/logout.svg"),
+                              dense: true,
+                              horizontalTitleGap: 5,
+                              onTap: () async{
+
+                                await _authService.clearAllUserData();
+                                await _authService.clearCounter();
+                                _navigationServices.goBack();
+                                _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+                                _alertServices.toastMessage(AppLocalizations.of(context)!.logout_success);
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(

@@ -1,5 +1,8 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -9,10 +12,13 @@ import 'package:sco_v1/resources/components/custom_advanced_switch.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/forgot_password_view.dart';
+import 'package:sco_v1/view/main_view.dart';
+import 'package:sco_v1/viewModel/authentication/login_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
-import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/response/status.dart';
 import '../../resources/components/custom_text_field.dart';
 import '../../viewModel/services/navigation_services.dart';
 
@@ -25,8 +31,9 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   late NavigationServices _navigationServices;
+  late AlertServices _alertServices;
 
-  late TextEditingController _emailController;
+  late TextEditingController _usernameController;
   late TextEditingController _passwordController;
 
   late FocusNode _emailFocusNode;
@@ -56,18 +63,170 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     });
   }
 
+  //Fetching the Device information:
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  Map<String, dynamic> _deviceData = <String, dynamic>{};
+
+  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'version.securityPatch': build.version.securityPatch,
+      'version.sdkInt': build.version.sdkInt,
+      'version.release': build.version.release,
+      'version.previewSdkInt': build.version.previewSdkInt,
+      'version.incremental': build.version.incremental,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'board': build.board,
+      'bootloader': build.bootloader,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'fingerprint': build.fingerprint,
+      'hardware': build.hardware,
+      'host': build.host,
+      'id': build.id,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'product': build.product,
+      'supported32BitAbis': build.supported32BitAbis,
+      'supported64BitAbis': build.supported64BitAbis,
+      'supportedAbis': build.supportedAbis,
+      'tags': build.tags,
+      'type': build.type,
+      'isPhysicalDevice': build.isPhysicalDevice,
+      'systemFeatures': build.systemFeatures,
+      'serialNumber': build.serialNumber,
+    };
+  }
+
+  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'systemName': data.systemName,
+      'systemVersion': data.systemVersion,
+      'model': data.model,
+      'localizedModel': data.localizedModel,
+      'id': data.identifierForVendor,
+      'isPhysicalDevice': data.isPhysicalDevice,
+      'utsname.sysname:': data.utsname.sysname,
+      'utsname.nodename:': data.utsname.nodename,
+      'utsname.release:': data.utsname.release,
+      'utsname.version:': data.utsname.version,
+      'utsname.machine:': data.utsname.machine,
+    };
+  }
+
+  Map<String, dynamic> _readLinuxDeviceInfo(LinuxDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'version': data.version,
+      'id': data.id,
+      'idLike': data.idLike,
+      'versionCodename': data.versionCodename,
+      'versionId': data.versionId,
+      'prettyName': data.prettyName,
+      'buildId': data.buildId,
+      'variant': data.variant,
+      'variantId': data.variantId,
+      'machineId': data.machineId,
+    };
+  }
+
+  Map<String, dynamic> _readMacOsDeviceInfo(MacOsDeviceInfo data) {
+    return <String, dynamic>{
+      'computerName': data.computerName,
+      'hostName': data.hostName,
+      'arch': data.arch,
+      'model': data.model,
+      'kernelVersion': data.kernelVersion,
+      'majorVersion': data.majorVersion,
+      'minorVersion': data.minorVersion,
+      'patchVersion': data.patchVersion,
+      'osRelease': data.osRelease,
+      'activeCPUs': data.activeCPUs,
+      'memorySize': data.memorySize,
+      'cpuFrequency': data.cpuFrequency,
+      'systemGUID': data.systemGUID,
+    };
+  }
+
+  Map<String, dynamic> _readWindowsDeviceInfo(WindowsDeviceInfo data) {
+    return <String, dynamic>{
+      'numberOfCores': data.numberOfCores,
+      'computerName': data.computerName,
+      'systemMemoryInMegabytes': data.systemMemoryInMegabytes,
+      'userName': data.userName,
+      'majorVersion': data.majorVersion,
+      'minorVersion': data.minorVersion,
+      'buildNumber': data.buildNumber,
+      'platformId': data.platformId,
+      'csdVersion': data.csdVersion,
+      'servicePackMajor': data.servicePackMajor,
+      'servicePackMinor': data.servicePackMinor,
+      'suitMask': data.suitMask,
+      'productType': data.productType,
+      'reserved': data.reserved,
+      'buildLab': data.buildLab,
+      'buildLabEx': data.buildLabEx,
+      'digitalProductId': data.digitalProductId,
+      'displayVersion': data.displayVersion,
+      'editionId': data.editionId,
+      'installDate': data.installDate,
+      'productId': data.productId,
+      'productName': data.productName,
+      'registeredOwner': data.registeredOwner,
+      'releaseId': data.releaseId,
+      'deviceId': data.deviceId,
+    };
+  }
+
+  Future<void> initPlatformState() async {
+    var deviceData = <String, dynamic>{};
+
+    try {
+      deviceData = switch (defaultTargetPlatform) {
+        TargetPlatform.android =>
+          _readAndroidBuildData(await deviceInfoPlugin.androidInfo),
+        TargetPlatform.iOS =>
+          _readIosDeviceInfo(await deviceInfoPlugin.iosInfo),
+        TargetPlatform.linux =>
+          _readLinuxDeviceInfo(await deviceInfoPlugin.linuxInfo),
+        TargetPlatform.windows =>
+          _readWindowsDeviceInfo(await deviceInfoPlugin.windowsInfo),
+        TargetPlatform.macOS =>
+          _readMacOsDeviceInfo(await deviceInfoPlugin.macOsInfo),
+        TargetPlatform.fuchsia => <String, dynamic>{
+            'Error:': 'Fuchsia platform isn\'t supported'
+          },
+      };
+    } on PlatformException {
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _deviceData = deviceData;
+      debugPrint(_deviceData['id']);
+    });
+  }
+
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    _alertServices = getIt.get<AlertServices>();
 
-    _emailController = TextEditingController();
+    _usernameController = TextEditingController();
     _passwordController = TextEditingController();
 
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
 
     super.initState();
+    initPlatformState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getInitialLanguage();
@@ -78,7 +237,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   void dispose() {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -113,7 +272,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             margin: EdgeInsets.only(
               top: orientation == Orientation.portrait
                   ? screenHeight / 3
-                  : screenHeight/3,
+                  : screenHeight / 3,
             ),
             padding: EdgeInsets.only(
               left: orientation == Orientation.portrait
@@ -196,7 +355,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
       textDirection: getTextDirection(provider),
       currentFocusNode: _emailFocusNode,
       nextFocusNode: _passwordFocusNode,
-      controller: _emailController,
+      controller: _usernameController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.idEmailOrMobile,
       textInputType: TextInputType.emailAddress,
@@ -256,7 +415,8 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           GestureDetector(
               onTap: () {
                 //Implement Forgot Password link here:
-                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ForgotPasswordView()) );
+                _navigationServices.pushCupertino(CupertinoPageRoute(
+                    builder: (context) => const ForgotPasswordView()));
               },
               child: Text(
                 AppLocalizations.of(context)!.forgotPassword,
@@ -270,25 +430,37 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     );
   }
 
-  Widget _loginButton(LanguageChangeViewModel provider) {
+  Widget _loginButton(LanguageChangeViewModel langProvider) {
     return ChangeNotifierProvider(
-        create: (context) => CommonDataViewModel(),
-        child:
-            Consumer<CommonDataViewModel>(builder: (context, lovCodeViewModel, _) {
+        create: (context) => LoginViewModel(),
+        child: Consumer<LoginViewModel>(builder: (context, provider, _) {
           return CustomButton(
-            textDirection: getTextDirection(provider),
+            textDirection: getTextDirection(langProvider),
             buttonName: AppLocalizations.of(context)!.login,
-            isLoading: false,
+            isLoading:
+                provider.apiResponse.status == Status.LOADING ? true : false,
             onTap: () async {
-              // lovCodeViewModel.fetchCommonData();
+              bool validateFields = _validateFields(langProvider: langProvider);
+              if (validateFields) {
+                provider.username = _usernameController.text;
+                provider.password = _passwordController.text;
+                provider.deviceId = _deviceData['id'];
 
-              _navigationServices.pushNamed("/updateSecurityQuestionView");
+                bool result = await provider.login(
+                    context: context, langProvider: langProvider);
+                if (result) {
+                  //Navigate to MainView after successful login
+                  _navigationServices.goBack();
+                  _navigationServices.pushReplacementCupertino(
+                      CupertinoPageRoute(
+                          builder: (context) => const MainView()));
+                }
+              }
             },
             fontSize: 16,
             buttonColor: AppColors.scoButtonColor,
             elevation: 1,
           );
-
         }));
   }
 
@@ -409,5 +581,26 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             textDirection: TextDirection.rtl, child: Text("عربي")),
       ],
     );
+  }
+
+  bool _validateFields({required LanguageChangeViewModel langProvider}) {
+    if (_usernameController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: "Username can't be empty ",
+          context: context,
+          provider: langProvider);
+
+      return false;
+    }
+
+    if (_passwordController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+          message: "Password can't be empty",
+          context: context,
+          provider: langProvider);
+
+      return false;
+    }
+    return true;
   }
 }

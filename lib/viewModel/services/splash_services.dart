@@ -23,20 +23,12 @@ class SplashServices {
     final bool isLoggedInKey = await _authService.isLoggedIn();
     final int counter = await _authService.getCounter();
 
-    final provider = Provider.of<CommonDataViewModel>(context,listen: false);
-
-
-
-
-
-
+    final provider = Provider.of<CommonDataViewModel>(context, listen: false);
 
     bool isDataStored = HiveManager.isDataStored();
     debugPrint("Common Data Already Stored: ${isDataStored.toString()}");
     if (isLoggedInKey && isDataStored) {
-    //   if (isDataStored) {
-
-        if (counter < 20) {
+      if (counter < 20) {
         final response = HiveManager.getStoredData();
 
         if (response?.data?.response != null) {
@@ -55,12 +47,24 @@ class SplashServices {
           _navigationServices.pushReplacementNamed('/mainView');
         }
       }
-    }
+    } else {
+      if (isDataStored) {
+        final response = HiveManager.getStoredData();
 
-    else {
-      bool commonDataFetched = await provider.fetchCommonData();
-      if (commonDataFetched) {
-        _navigationServices.pushReplacementNamed('/loginView');
+        if (response?.data?.response != null) {
+          Map<String, Response> tempMap = {
+            for (var res in response!.data!.response!) res.lovCode!: res
+          };
+          Constants.lovCodeMap = tempMap;
+          debugPrint('Data stored');
+        }
+        await _authService.incrementCounter();
+        _navigationServices.pushReplacementNamed('/mainView');
+      } else {
+        bool commonDataFetched = await provider.fetchCommonData();
+        if (commonDataFetched) {
+          _navigationServices.pushReplacementNamed('/mainView');
+        }
       }
     }
   }

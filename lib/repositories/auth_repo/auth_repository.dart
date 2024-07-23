@@ -7,6 +7,7 @@ import 'package:sco_v1/models/authentication/terms_and_conditions_model.dart';
 import 'package:sco_v1/models/authentication/update_security_question_model.dart';
 import 'package:sco_v1/resources/app_urls.dart';
 
+import '../../models/authentication/login_model.dart';
 import '../../models/authentication/signup_model.dart';
 
 class AuthenticationRepository {
@@ -84,16 +85,27 @@ class AuthenticationRepository {
   //*------Update Security Question-------*
   Future<UpdateSecurityQuestionModel> updateSecurityQuestion(
       {required String userId,
-      required dynamic headers,
-      required dynamic body}) async {
-    dynamic response = await _apiServices.getPutApiServices(
+      required Map<String,String> headers,
+      required Map<String,String> fields}) async {
+    dynamic response = await _apiServices.getMultipartApiServices(
+      method: 'PUT',
       url: '${AppUrls.baseUrl}e-services/$userId/update-security-question',
       headers: headers,
-      body: body,
+      files: [],
+      fields: fields
     );
     return UpdateSecurityQuestionModel.fromJson(response);
   }
 //*-----Security Question Setup End-----*
 
 //*-----Login Method-----*
+  Future<LoginModel> login(
+      {required dynamic headers, required dynamic body}) async {
+    dynamic response = await _apiServices.getPostApiServices(
+      url: AppUrls.login,
+      headers: headers,
+      body: body,
+    );
+    return LoginModel.fromJson(response);
+  }
 }
