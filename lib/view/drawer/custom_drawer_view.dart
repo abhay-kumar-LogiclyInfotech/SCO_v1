@@ -190,7 +190,6 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               horizontalTitleGap: 5,
                               onTap: () {
 
-                                _navigationServices.goBack();
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
 
                               },

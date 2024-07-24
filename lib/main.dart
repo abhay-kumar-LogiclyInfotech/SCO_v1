@@ -18,6 +18,7 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Test.dart';
 import 'hive/hive_manager.dart';
 
 Future<void> main() async {
@@ -101,7 +102,7 @@ class MyApp extends StatelessWidget {
               routes: _navigationServices.routes,
               initialRoute: "/splashView",
 
-              // home: const UpdateSecurityQuestionView(),
+              // home:  Test(),
             );
           },
         ));
