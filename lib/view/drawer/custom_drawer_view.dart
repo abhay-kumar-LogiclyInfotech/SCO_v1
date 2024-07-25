@@ -103,79 +103,85 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Directionality(
-                      textDirection: widget.textDirection ?? TextDirection.ltr,
-                      child: Column(mainAxisSize: MainAxisSize.min, children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: Image.network(
-                                // "images/images_user_sidebar/Ellipse 28.png",
-                                widget.userProfileImageLink ??
-                                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                                fit: BoxFit.cover,
-                                height: MediaQuery.sizeOf(context).width / 8,
-                                width: MediaQuery.sizeOf(context).width / 8,
-                                errorBuilder: (context, object, _) {
-                                  return SvgPicture.asset(
-                                    "images/images_user_sidebar/profile.svg",
+                  children:
+                  [
+                    Expanded(
+                      child: Directionality(
+                        textDirection: widget.textDirection ?? TextDirection.ltr,
+                        child: SingleChildScrollView(
+                          child: Column(
+                              children: [
+                          
+                            //*------User Profile Section------*/
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Image.network(
+                                    // "images/images_user_sidebar/Ellipse 28.png",
+                                    widget.userProfileImageLink ??
+                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
                                     fit: BoxFit.cover,
-                                    height:
-                                        MediaQuery.sizeOf(context).width / 7,
-                                    width: MediaQuery.sizeOf(context).width / 7,
-                                  );
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width / 24,
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: SizedBox(
-                                height: MediaQuery.sizeOf(context).width * 0.12,
-                                width: MediaQuery.sizeOf(context).width * 0.5,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          widget.userName ?? AppLocalizations.of(context)!.userName,
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: SelectableText(
-                                          widget.userEmail ?? AppLocalizations.of(context)!.userType,
-                                          style: TextStyle(
-                                              color: Colors.white
-                                                  .withOpacity(0.65)),
-                                        ),
-                                      )
-                                    ],
+                                    height: MediaQuery.sizeOf(context).width / 8,
+                                    width: MediaQuery.sizeOf(context).width / 8,
+                                    errorBuilder: (context, object, _) {
+                                      return SvgPicture.asset(
+                                        "images/images_user_sidebar/profile.svg",
+                                        fit: BoxFit.cover,
+                                        height:
+                                            MediaQuery.sizeOf(context).width / 7,
+                                        width: MediaQuery.sizeOf(context).width / 7,
+                                      );
+                                    },
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Column(
-                          // mainAxisSize: MainAxisSize.max,
-                          children: [
+                                SizedBox(
+                                  width: MediaQuery.sizeOf(context).width / 24,
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: SizedBox(
+                                    height: MediaQuery.sizeOf(context).width * 0.12,
+                                    width: MediaQuery.sizeOf(context).width * 0.5,
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              widget.userName ?? AppLocalizations.of(context)!.userName,
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: SelectableText(
+                                              widget.userEmail ?? AppLocalizations.of(context)!.userType,
+                                              style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.65)),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                          
+                            //*------Menu Items Section------*/
+                            //*------Login------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
@@ -189,14 +195,15 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
-
+                          
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-
+                          
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
+                            //*------Home------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
@@ -216,6 +223,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
+                            //*------About Us------*/
                             ExpansionTile(
                               dense: true,
                               shape: UnderlineInputBorder(
@@ -237,7 +245,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
-
+                          
                                      _navigationServices.pushNamed("/aBriefAboutScoView");
                                   },
                                   child: Container(
@@ -284,7 +292,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                           flex: 2,
                                           child: Text(
                                             AppLocalizations.of(context)!.visionMission,
-
+                          
                                             style:const  TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 14),
@@ -314,7 +322,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                             flex: 2,
                                             child: Text(
                                               AppLocalizations.of(context)!.faq,
-
+                          
                                               style:const  TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 14),
@@ -325,6 +333,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 ),
                               ],
                             ),
+                            //*------SCO Programs------*/
                             Visibility(
                               visible: true,
                               child: ListTile(
@@ -340,7 +349,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 dense: true,
                                 horizontalTitleGap: 5,
                                 onTap: () {
-
+                          
                                   _navigationServices.pushNamed("/scoPrograms");
                                 },
                                 shape: UnderlineInputBorder(
@@ -350,12 +359,13 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 ),
                               ),
                             ),
+                            //*------News------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
                               title:  Text(
                                   AppLocalizations.of(context)!.news,
-
+                          
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 14),
                               ),
@@ -370,12 +380,13 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
+                            //*------Contact Us------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
                               title:  Text(
                                 AppLocalizations.of(context)!.contact,
-
+                          
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 14),
                               ),
@@ -384,19 +395,20 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () async {
-
+                          
                                 _navigationServices.goBack();
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
+                            //*------Logout------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
                               title:  Text(
                                 AppLocalizations.of(context)!.logout,
-
+                          
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 14),
                               ),
@@ -405,7 +417,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () async{
-
+                          
                                 await _authService.clearAllUserData();
                                 await _authService.clearCounter();
                                 _navigationServices.goBack();
@@ -416,10 +428,16 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
-                          ],
+                                const SizedBox(height: 40,),
+
+                              ]),
                         ),
-                      ]),
+                      ),
                     ),
+
+
+
+                    //*-----Language Selection Section-----*/
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
