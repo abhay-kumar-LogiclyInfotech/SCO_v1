@@ -1,15 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_confirmation_widget.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../resources/components/custom_simple_app_bar.dart';
@@ -18,7 +15,7 @@ import '../../../viewModel/services/navigation_services.dart';
 class ConfirmationView extends StatefulWidget {
   final bool isVerified;
 
-  const ConfirmationView({super.key,required this.isVerified});
+  const ConfirmationView({super.key, required this.isVerified});
 
   @override
   State<ConfirmationView> createState() => _ConfirmationViewState();
@@ -36,7 +33,6 @@ class _ConfirmationViewState extends State<ConfirmationView>
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
 
-
     super.initState();
   }
 
@@ -49,13 +45,6 @@ class _ConfirmationViewState extends State<ConfirmationView>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scoBgColor,
-      appBar: CustomSimpleAppBar(
-          title: SvgPicture.asset(
-        "assets/sco_logo.svg",
-        fit: BoxFit.fill,
-        height: 35,
-        width: 110,
-      )),
       body: _buildUI(context: context),
     );
   }
@@ -142,7 +131,6 @@ class _ConfirmationViewState extends State<ConfirmationView>
     );
   }
 
-
   //*-----show confirmation Message-----*
   Widget _confirmationMessage({required LanguageChangeViewModel langProvider}) {
     return widget.isVerified
@@ -159,7 +147,7 @@ class _ConfirmationViewState extends State<ConfirmationView>
             backgroundColor: Colors.red.withOpacity(0.1),
             iconBackgroundColor: Colors.red,
             icon: Icons.close,
-            headline: "Wrong Code",
+            headline: "Wrong",
             message: "Password reset unsuccessful. Please try again.");
   }
 
@@ -177,6 +165,7 @@ class _ConfirmationViewState extends State<ConfirmationView>
           _isLoading = true;
         });
         _navigationServices.goBack();
+        _navigationServices.pushReplacementNamed("/loginView");
         setState(() {
           _isLoading = false;
         });

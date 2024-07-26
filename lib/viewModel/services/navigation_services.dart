@@ -12,9 +12,7 @@ import '../../view/main_view/home_view.dart';
 import '../../view/main_view.dart';
 import '../../view/splash_view/splash_view.dart';
 import '../../view/authentication/login/login_view.dart';
-
 class NavigationServices {
-//Creating the global key for navigation State:
   late GlobalKey<NavigatorState> _navigationStateKey;
 
   NavigationServices() {
@@ -23,53 +21,41 @@ class NavigationServices {
 
   GlobalKey<NavigatorState> get navigationStateKey => _navigationStateKey;
 
-  //Creating Routes for the application:
   final Map<String, Widget Function(BuildContext context)> _routes = {
-    "/splashView" : (context)=> const SplashView(),
-    "/loginView" : (context)=> const LoginView(),
-    "/signUpView" : (context)=> const SignUpView(),
-    "/resetPasswordView" : (context)=> const ResetPasswordView(),
-    "/forgotPasswordView" : (context)=> const ForgotPasswordView(),
-    "/aBriefAboutScoView" : (context)=> const ABriefAboutScoView(),
-    "/scoPrograms" : (context)=> const ScoPrograms(),
-    "/updateSecurityQuestionView" : (context)=> const UpdateSecurityQuestionView(),
-
-
-
-
-
-
-
-
-    "/mainView": (context)=> const MainView(),
+    "/splashView": (context) => const SplashView(),
+    "/loginView": (context) => const LoginView(),
+    "/signUpView": (context) => const SignUpView(),
+    "/resetPasswordView": (context) => const ResetPasswordView(),
+    "/forgotPasswordView": (context) => const ForgotPasswordView(),
+    "/aBriefAboutScoView": (context) => const ABriefAboutScoView(),
+    "/scoPrograms": (context) => const ScoPrograms(),
+    "/updateSecurityQuestionView": (context) => const UpdateSecurityQuestionView(),
+    "/mainView": (context) => const MainView(),
   };
-
-  //Creating getter to the routes of the application:
 
   Map<String, Widget Function(BuildContext context)> get routes => _routes;
 
   void push(MaterialPageRoute route) {
-    _navigationStateKey.currentState!.push(route);
+    _navigationStateKey.currentState?.push(route);
   }
 
-  //Page route with animation:
   void pushCupertino(CupertinoPageRoute route) {
-    _navigationStateKey.currentState!.push(route);
+    _navigationStateKey.currentState?.push(route);
   }
-  //Page route with animation:
+
   void pushReplacementCupertino(CupertinoPageRoute route) {
-    _navigationStateKey.currentState!.pushReplacement(route);
+    _navigationStateKey.currentState?.pushReplacement(route);
   }
 
   void pushNamed(String route) {
-    _navigationStateKey.currentState!.pushNamed(route);
+    _navigationStateKey.currentState?.pushNamed(route);
   }
 
   void pushReplacementNamed(String route) {
-    _navigationStateKey.currentState!.pushReplacementNamed(route);
+    _navigationStateKey.currentState?.pushReplacementNamed(route);
   }
 
   void goBack() {
-    _navigationStateKey.currentState!.pop();
+    _navigationStateKey.currentState?.pop();
   }
 }

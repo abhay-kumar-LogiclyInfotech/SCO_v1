@@ -1,14 +1,15 @@
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/NetworkApiServices.dart';
 import 'package:sco_v1/models/authentication/forgot_password/forgot_password_get_Security_question_model.dart';
+import 'package:sco_v1/models/authentication/forgot_password/forgot_security_question_otp_verification_model.dart';
 import 'package:sco_v1/models/authentication/get_security_questions_model.dart';
 import 'package:sco_v1/models/authentication/otp_verification_model.dart';
 import 'package:sco_v1/models/authentication/resend_otp_model.dart';
 import 'package:sco_v1/models/authentication/terms_and_conditions_model.dart';
 import 'package:sco_v1/models/authentication/update_security_question_model.dart';
 import 'package:sco_v1/resources/app_urls.dart';
-import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
 
+import '../../models/authentication/forgot_password/forgot_password_send_mail_model.dart';
 import '../../models/authentication/login_model.dart';
 import '../../models/authentication/signup_model.dart';
 
@@ -87,17 +88,17 @@ class AuthenticationRepository {
   //*------Update Security Question-------*
   Future<UpdateSecurityQuestionModel> updateSecurityQuestion(
       {required String userId,
-      required Map<String,String> headers,
-      required Map<String,String> fields}) async {
+      required Map<String, String> headers,
+      required Map<String, String> fields}) async {
     dynamic response = await _apiServices.getMultipartApiServices(
-      method: 'PUT',
-      url: '${AppUrls.baseUrl}e-services/$userId/update-security-question',
-      headers: headers,
-      files: [],
-      fields: fields
-    );
+        method: 'PUT',
+        url: '${AppUrls.baseUrl}e-services/$userId/update-security-question',
+        headers: headers,
+        files: [],
+        fields: fields);
     return UpdateSecurityQuestionModel.fromJson(response);
   }
+
 //*-----Security Question Setup End-----*
 
 //*-----Login Method-----*
@@ -113,14 +114,38 @@ class AuthenticationRepository {
 
   //*-----Forgot Password Methods-----*
 
-
   //*------Forgot Password Get User Security Question-------*
-  Future<ForgotPasswordGetSecurityQuestionModel> getForgotPasswordSecurityQuestion(
-      {required String email, required dynamic headers}) async {
+  Future<ForgotPasswordGetSecurityQuestionModel>
+      getForgotPasswordSecurityQuestion(
+          {required String email, required dynamic headers}) async {
     dynamic response = await _apiServices.getGetApiServices(
       url: '${AppUrls.baseUrl}users/$email/security-question',
       headers: headers,
     );
     return ForgotPasswordGetSecurityQuestionModel.fromJson(response);
+  }
+
+  //*------Forgot Password send password on mail------*/
+  Future<ForgotPasswordSendMailModel> sendForgotPasswordOnMail(
+      {required String userId,
+      required Map<String, String> headers,
+      }) async {
+    dynamic response = await _apiServices.getMultipartApiServices(
+        method: 'PUT',
+        url: '${AppUrls.baseUrl}users/$userId/reset-password-send',
+        headers: headers,
+        files: [],
+        fields: {});
+    return ForgotPasswordSendMailModel.fromJson(response);
+  }
+
+  //*------Forgot Password Verify OTP-------*
+  Future<ForgotSecurityQuestionOtpVerificationModel> getForgotSecurityQuestionVerificationOtp(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _apiServices.getGetApiServices(
+      url: '${AppUrls.baseUrl}users/$userId/forgot-sequrity-question-verification-code',
+      headers: headers,
+    );
+    return ForgotSecurityQuestionOtpVerificationModel.fromJson(response);
   }
 }

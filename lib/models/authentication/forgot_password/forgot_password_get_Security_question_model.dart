@@ -1,7 +1,4 @@
-/// messageCode : "0000"
-/// message : "Operation Completed Successfully"
-/// data : {"securityQuestion":{"securityQuestion":"what-was-your-first-teacher's-name","securityAnswer":"Abhay","userId":962344,"emailAddress":"abhay.kumar@logiclyinfotech.com"},"securityQuestions":null}
-/// error : false
+
 
 class ForgotPasswordGetSecurityQuestionModel {
   ForgotPasswordGetSecurityQuestionModel({

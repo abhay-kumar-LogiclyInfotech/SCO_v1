@@ -328,21 +328,20 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
                           ?.securityAnswer
                           .toString() ??
                       "";
-                  final String userId = provider
-                      .getSecurityQuestionResponse
-                      .data?.data?.securityQuestion?.userId
-                      .toString() ??
+                  final String userId = provider.getSecurityQuestionResponse
+                          .data?.data?.securityQuestion?.userId
+                          .toString() ??
                       "";
 
                   if (securityQuestion.isNotEmpty &&
-                      securityAnswer.isNotEmpty && userId.isNotEmpty) {
-                    _navigationServices
-                        .pushReplacementCupertino(CupertinoPageRoute(
+                      securityAnswer.isNotEmpty &&
+                      userId.isNotEmpty) {
+                    _navigationServices.pushReplacementCupertino(
+                        CupertinoPageRoute(
                             builder: (context) => AnswerSecurityQuestionView(
-                                  securityQuestion: securityQuestion,
-                                  securityAnswer: securityAnswer,
-                              userId: userId
-                                )));
+                                securityQuestion: securityQuestion,
+                                securityAnswer: securityAnswer,
+                                userId: userId)));
                   }
                 }
               }

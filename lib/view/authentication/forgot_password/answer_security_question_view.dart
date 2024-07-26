@@ -8,12 +8,14 @@ import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/forgot_password/confirmation_view.dart';
+import 'package:sco_v1/view/authentication/forgot_password/forgot_security_question_otp_verification_view.dart';
 import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../../../resources/app_colors.dart';
 import '../../../../viewModel/services/navigation_services.dart';
+import '../../../data/response/status.dart';
 import '../../../resources/components/custom_button.dart';
 import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/validations_and_errorText.dart';
@@ -247,22 +249,61 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
 
   //Forgot Security Question:
   Widget _forgotSecurityQuestion() {
-    return InkWell(
-      onTap: () {},
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            "Forgot Security Question",
-            style: TextStyle(
-              color: AppColors.scoThemeColor,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => ForgotPasswordViewModel(),
+        child: Consumer<ForgotPasswordViewModel>(
+          builder: (context, provider, _) {
+            return InkWell(
+              onTap: () async {
+                bool result =
+                    await provider.getForgotSecurityQuestionVerificationOtp(
+                        userId: widget.userId);
+
+                if (result) {
+                  String? verificationOtp = provider
+                      .forgotSecurityQuestionOtpVerificationResponse
+                      .data
+                      ?.data
+                      ?.verificationCode;
+                  if (verificationOtp != null && verificationOtp.isNotEmpty) {
+                    _navigationService.pushReplacementCupertino(
+                        CupertinoPageRoute(
+                            builder: (context) =>
+                                ForgotSecurityQuestionOtpVerificationView(verificationOtp: verificationOtp,userId:widget.userId)));
+                  }
+                }
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  provider.forgotSecurityQuestionOtpVerificationResponse
+                              .status ==
+                          Status.LOADING
+                      ? const Padding(
+                          padding: EdgeInsets.only(left: 30.0),
+                          child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: AppColors.scoThemeColor,
+                              strokeWidth: 1.5,
+                            ),
+                          ),
+                        )
+                      : const Text(
+                          "Forgot Security Question",
+                          style: TextStyle(
+                            color: AppColors.scoThemeColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ],
+              ),
+            );
+          },
+        ));
   }
 
 // Security Answer submit field
@@ -275,26 +316,31 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
           return CustomButton(
             textDirection: getTextDirection(langProvider),
             buttonName: "Reset Password",
-            isLoading: false,
+            isLoading: provider.sendForgotPasswordSendMailResponse.status ==
+                    Status.LOADING
+                ? true
+                : false,
             onTap: () async {
               bool result = validateForm(langProvider: langProvider);
 
               if (result) {
-                if (_answerController.text.trim() != widget.securityAnswer.trim()) {
+                if (_answerController.text.trim() !=
+                    widget.securityAnswer.trim()) {
                   _alertServices.toastMessage("Enter Correct Security Answer");
                 } else {
+                  //*-----Sending password on mail-----*/
+                  bool mailSent = await provider.sendForgotPasswordOnMail(
+                      userId: widget.userId,
+                      context: context,
+                      langProvider: langProvider);
 
-
-
-
-
-
-
-                  _navigationService
-                      .pushReplacementCupertino(CupertinoPageRoute(
-                          builder: (context) => const ConfirmationView(
-                                isVerified: true,
-                              )));
+                  if (mailSent) {
+                    _navigationService
+                        .pushReplacementCupertino(CupertinoPageRoute(
+                            builder: (context) => ConfirmationView(
+                                  isVerified: mailSent,
+                                )));
+                  }
                 }
               }
             },

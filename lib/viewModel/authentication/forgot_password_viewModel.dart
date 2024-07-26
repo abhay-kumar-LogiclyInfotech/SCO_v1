@@ -1,38 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/models/authentication/forgot_password/forgot_password_get_Security_question_model.dart';
+import 'package:sco_v1/models/authentication/forgot_password/forgot_password_send_mail_model.dart';
+import 'package:sco_v1/models/authentication/forgot_password/forgot_security_question_otp_verification_model.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../data/response/ApiResponse.dart';
 import '../../repositories/auth_repo/auth_repository.dart';
 import '../../utils/constants.dart';
 import '../services/alert_services.dart';
-import '../services/auth_services.dart';
-import '../services/navigation_services.dart';
 
 class ForgotPasswordViewModel with ChangeNotifier {
 //*------Necessary Services------*/
   late AlertServices _alertServices;
-  late NavigationServices _navigationServices;
-  late AuthService _authService;
 
   ForgotPasswordViewModel() {
     final GetIt getIt = GetIt.instance;
     _alertServices = getIt.get<AlertServices>();
-    _navigationServices = getIt.get<NavigationServices>();
-    _authService = getIt.get<AuthService>();
   }
 
   //*------Accessing Api Services------*
-  final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
 
-  ApiResponse<
-      ForgotPasswordGetSecurityQuestionModel>_getSecurityQuestionResponse = ApiResponse
-      .none();
+  //*---common for all methods-----*/
+  final AuthenticationRepository _authenticationRepository =
+      AuthenticationRepository();
 
-  ApiResponse<
-      ForgotPasswordGetSecurityQuestionModel> get getSecurityQuestionResponse =>
-      _getSecurityQuestionResponse;
+  //*------Get Security Question Method Start------*/
+  ApiResponse<ForgotPasswordGetSecurityQuestionModel>
+      _getSecurityQuestionResponse = ApiResponse.none();
+
+  ApiResponse<ForgotPasswordGetSecurityQuestionModel>
+      get getSecurityQuestionResponse => _getSecurityQuestionResponse;
 
   set _setGetSecurityQuestionResponse(
       ApiResponse<ForgotPasswordGetSecurityQuestionModel> response) {
@@ -41,7 +39,9 @@ class ForgotPasswordViewModel with ChangeNotifier {
   }
 
   Future<bool> getSecurityQuestion(
-      {required String email, required BuildContext context, required LanguageChangeViewModel langProvider}) async {
+      {required String email,
+      required BuildContext context,
+      required LanguageChangeViewModel langProvider}) async {
     try {
       _setGetSecurityQuestionResponse = ApiResponse.loading();
 
@@ -62,35 +62,132 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
       _setGetSecurityQuestionResponse = ApiResponse.completed(response);
 
-
       //*-----Extracting Data and validating if response in empty or not-----*
-      final String securityQuestion = getSecurityQuestionResponse.data?.data
-          ?.securityQuestion?.securityQuestion.toString() ?? "";
-      final String securityAnswer = getSecurityQuestionResponse.data?.data
-          ?.securityQuestion?.securityAnswer.toString() ?? "";
+      final String securityQuestion = getSecurityQuestionResponse
+              .data?.data?.securityQuestion?.securityQuestion
+              .toString() ??
+          "";
+      final String securityAnswer = getSecurityQuestionResponse
+              .data?.data?.securityQuestion?.securityAnswer
+              .toString() ??
+          "";
       final String userId = getSecurityQuestionResponse
-          .data?.data?.securityQuestion?.userId
-          .toString() ??
+              .data?.data?.securityQuestion?.userId
+              .toString() ??
           "";
 
-      if (securityQuestion.isEmpty || securityAnswer.isEmpty || userId.isEmpty) {
-        _alertServices.flushBarErrorMessages(context: context,
-            message: "Something went wrong with you account. Please try again later or contact the administrator.",provider: langProvider);
+      if (securityQuestion.isEmpty ||
+          securityAnswer.isEmpty ||
+          userId.isEmpty) {
+        _alertServices.toastMessage(
+            "Something went wrong with you account. Please try again later or contact the administrator.");
         return false;
       }
 
+      return true;
+    } catch (error) {
+      debugPrint('Printing Error: $error');
+      _setGetSecurityQuestionResponse = ApiResponse.error(error.toString());
+      // Message to show status of the operation:
+      _alertServices.toastMessage(error.toString());
 
-    return true;
+      return false;
+    }
   }
-  catch (error)  {
-  debugPrint('Printing Error: $error');
-  _setGetSecurityQuestionResponse = ApiResponse.error(error.toString());
-  //Message to show status of the operation:
-  _alertServices.flushBarErrorMessages(
-  message: error.toString(),
-  context: context,
-  provider: langProvider,
-  );
-  return false;
+
+//*------Get Security Question Method End---------*/
+
+//*------Send Password through mail Start--------*/
+  ApiResponse<ForgotPasswordSendMailModel> _sendForgotPasswordSendMailResponse =
+      ApiResponse.none();
+
+  ApiResponse<ForgotPasswordSendMailModel>
+      get sendForgotPasswordSendMailResponse =>
+          _sendForgotPasswordSendMailResponse;
+
+  set _setSendForgotPasswordSendMailResponse(
+      ApiResponse<ForgotPasswordSendMailModel> response) {
+    _sendForgotPasswordSendMailResponse = response;
+    notifyListeners();
   }
-}}
+
+  //method start:
+  Future<bool> sendForgotPasswordOnMail({
+    required String userId,
+    required BuildContext context,
+    required LanguageChangeViewModel langProvider,
+  }) async {
+    try {
+      _setSendForgotPasswordSendMailResponse = ApiResponse.loading();
+
+      if (userId.isEmpty) {
+        return false;
+      }
+      //*-----Create Headers Start-----*
+      final headers = <String, String>{'authorization': Constants.basicAuth};
+      //*-----Create Headers End-----*
+
+      //*-----Calling Api Start-----*
+      final response = await _authenticationRepository.sendForgotPasswordOnMail(
+        userId: userId,
+        headers: headers,
+      );
+
+      //*-----Calling Api End-----*
+      _setSendForgotPasswordSendMailResponse = ApiResponse.completed(response);
+      _alertServices.toastMessage("Password sent successfully");
+      return true;
+    } catch (e) {
+      debugPrint('Error: $e');
+      return false;
+    }
+  }
+
+//*-----Send Password through mail End---------*/
+
+//*------Forgot Security Question send Verification Code Start---------*/
+  ApiResponse<ForgotSecurityQuestionOtpVerificationModel>
+      _forgotSecurityQuestionOtpVerificationResponse = ApiResponse.none();
+
+  ApiResponse<ForgotSecurityQuestionOtpVerificationModel>
+      get forgotSecurityQuestionOtpVerificationResponse =>
+          _forgotSecurityQuestionOtpVerificationResponse;
+
+  set _setForgotSecurityQuestionOtpVerificationResponse(
+      ApiResponse<ForgotSecurityQuestionOtpVerificationModel> response) {
+    _forgotSecurityQuestionOtpVerificationResponse = response;
+    notifyListeners();
+  }
+
+  Future<bool> getForgotSecurityQuestionVerificationOtp({
+    required String userId,
+  }) async {
+    try {
+      _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.loading();
+
+      if (userId.isEmpty) {
+        return false;
+      }
+      //*-----Create Headers Start-----*
+      final headers = <String, String>{'authorization': Constants.basicAuth};
+      //*-----Create Headers End-----*
+
+      //*-----Calling Api Start-----*
+      final response = await _authenticationRepository
+          .getForgotSecurityQuestionVerificationOtp(
+        userId: userId,
+        headers: headers,
+      );
+      //*-----Calling Api End-----*
+      _setForgotSecurityQuestionOtpVerificationResponse =
+          ApiResponse.completed(response);
+      _alertServices.toastMessage("OTP sent successfully");
+
+      return true;
+    } catch (e) {
+      debugPrint('Error: $e');
+      return false;
+    }
+  }
+//*------Forgot Security Question send Verification Code End---------*/
+}
