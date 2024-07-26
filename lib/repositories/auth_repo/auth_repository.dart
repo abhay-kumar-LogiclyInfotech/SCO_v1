@@ -1,11 +1,13 @@
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/NetworkApiServices.dart';
+import 'package:sco_v1/models/authentication/forgot_password/forgot_password_get_Security_question_model.dart';
 import 'package:sco_v1/models/authentication/get_security_questions_model.dart';
 import 'package:sco_v1/models/authentication/otp_verification_model.dart';
 import 'package:sco_v1/models/authentication/resend_otp_model.dart';
 import 'package:sco_v1/models/authentication/terms_and_conditions_model.dart';
 import 'package:sco_v1/models/authentication/update_security_question_model.dart';
 import 'package:sco_v1/resources/app_urls.dart';
+import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
 
 import '../../models/authentication/login_model.dart';
 import '../../models/authentication/signup_model.dart';
@@ -107,5 +109,18 @@ class AuthenticationRepository {
       body: body,
     );
     return LoginModel.fromJson(response);
+  }
+
+  //*-----Forgot Password Methods-----*
+
+
+  //*------Forgot Password Get User Security Question-------*
+  Future<ForgotPasswordGetSecurityQuestionModel> getForgotPasswordSecurityQuestion(
+      {required String email, required dynamic headers}) async {
+    dynamic response = await _apiServices.getGetApiServices(
+      url: '${AppUrls.baseUrl}users/$email/security-question',
+      headers: headers,
+    );
+    return ForgotPasswordGetSecurityQuestionModel.fromJson(response);
   }
 }

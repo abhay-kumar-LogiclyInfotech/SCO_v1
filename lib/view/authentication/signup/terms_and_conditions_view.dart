@@ -8,15 +8,15 @@ import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_checkbox_tile.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/authentication/update_security_question_view.dart';
+import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
 import 'package:sco_v1/viewModel/authentication/terms_and_conditions_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
-import '../../../resources/app_colors.dart';
-import '../../../viewModel/services/navigation_services.dart';
-import '../../data/response/status.dart';
-import '../../hive/hive_manager.dart';
+import '../../../../resources/app_colors.dart';
+import '../../../../viewModel/services/navigation_services.dart';
+import '../../../data/response/status.dart';
+import '../../../hive/hive_manager.dart';
 
 class TermsAndConditionsView extends StatefulWidget {
   const TermsAndConditionsView({super.key});

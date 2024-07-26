@@ -1,17 +1,17 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sco_v1/view/authentication/forgot_password_view.dart';
+import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
 
 import '../../view/authentication/reset_password_view.dart';
-import '../../view/authentication/sign_up_view.dart';
-import '../../view/authentication/update_security_question_view.dart';
+import '../../view/authentication/signup/sign_up_view.dart';
+import '../../view/authentication/signup/update_security_question_view.dart';
 import '../../view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import '../../view/drawer/custom_drawer_views/sco_programs.dart';
 import '../../view/main_view/home_view.dart';
 import '../../view/main_view.dart';
 import '../../view/splash_view/splash_view.dart';
-import '../../view/authentication/login_view.dart';
+import '../../view/authentication/login/login_view.dart';
 
 class NavigationServices {
 //Creating the global key for navigation State:

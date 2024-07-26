@@ -7,31 +7,35 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/authentication/login_view.dart';
-import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
+import 'package:sco_v1/view/authentication/forgot_password/confirmation_view.dart';
+import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
-import '../../../resources/app_colors.dart';
-import '../../../viewModel/services/navigation_services.dart';
-import '../../data/response/status.dart';
-import '../../hive/hive_manager.dart';
-import '../../resources/components/custom_button.dart';
-import '../../resources/components/custom_dropdown.dart';
-import '../../resources/components/custom_text_field.dart';
-import '../../resources/validations_and_errorText.dart';
-import '../../viewModel/authentication/update_security_question_viewModel.dart';
+import '../../../../resources/app_colors.dart';
+import '../../../../viewModel/services/navigation_services.dart';
+import '../../../resources/components/custom_button.dart';
+import '../../../resources/components/custom_text_field.dart';
+import '../../../resources/validations_and_errorText.dart';
 
-class UpdateSecurityQuestionView extends StatefulWidget {
-  const UpdateSecurityQuestionView({super.key});
+class AnswerSecurityQuestionView extends StatefulWidget {
+  final String securityQuestion;
+  final String securityAnswer;
+  final String userId;
+
+  const AnswerSecurityQuestionView(
+      {super.key,
+      required this.securityQuestion,
+      required this.securityAnswer,
+      required this.userId});
 
   @override
-  State<UpdateSecurityQuestionView> createState() =>
-      _UpdateSecurityQuestionViewState();
+  State<AnswerSecurityQuestionView> createState() =>
+      _AnswerSecurityQuestionViewState();
 }
 
-class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
-    with MediaQueryMixin<UpdateSecurityQuestionView> {
+class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
+    with MediaQueryMixin<AnswerSecurityQuestionView> {
   late NavigationServices _navigationService;
   late AlertServices _alertServices;
 
@@ -41,26 +45,15 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   final FocusNode _questionFocusNode = FocusNode();
   final FocusNode _answerFocusNode = FocusNode();
 
-  List<DropdownMenuItem> _securityQuestionItemsList = [];
-
   String? _answerError;
   String? _userId;
 
   Future<void> _initializeData(
       {required LanguageChangeViewModel langProvider}) async {
-    final provider =
-        Provider.of<SecurityQuestionViewModel>(context, listen: false);
-    await provider.getSecurityQuestions(
-        context: context, langProvider: langProvider, userId: _userId!);
-
-    if (provider.getSecurityQuestionResponse.status == Status.COMPLETED) {
-      _securityQuestionItemsList = populateNormalDropdown(
-          menuItemsList: provider
-                  .getSecurityQuestionResponse.data?.data?.securityQuestions ??
-              [],
-          provider: langProvider);
-      setState(() {});
-    }
+    setState(() {
+      _questionController.text = widget.securityQuestion;
+      debugPrint(_questionController.text);
+    });
   }
 
   @override
@@ -68,9 +61,6 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     final GetIt getIt = GetIt.instance;
     _navigationService = getIt.get<NavigationServices>();
     _alertServices = getIt.get<AlertServices>();
-
-    //initialize the userId:
-    _userId = HiveManager.getUserId();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       _initializeData(
@@ -80,6 +70,15 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
     super.initState();
     _answerError = null;
+  }
+
+  @override
+  void dispose() {
+    _questionController.dispose();
+    _answerController.dispose();
+    _questionFocusNode.dispose();
+    _answerFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -109,7 +108,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         SafeArea(
             child: Align(
           alignment: Alignment.topCenter,
-          child: _bgLogo(),
+          child: bgSecurityLogo(),
         )),
         Container(
           width: double.infinity,
@@ -141,57 +140,49 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
             children: [
               _title(),
               Expanded(
-                child: Consumer<SecurityQuestionViewModel>(
-                  builder: (context, provider, _) {
-                    switch (provider.getSecurityQuestionResponse.status) {
-                      case Status.LOADING:
-                        return const Center(
+                  child: SingleChildScrollView(
+                child: FutureBuilder(
+                  future: _initializeData(langProvider: langProvider),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.active ||
+                        snapshot.connectionState == ConnectionState.none) {
+                      return const Center(
                           child: CircularProgressIndicator(
-                            color: Colors.black,
-                            strokeWidth: 1.5,
-                          ),
-                        );
-                      case Status.ERROR:
-                        return Text(
-                          AppLocalizations.of(context)!.somethingWentWrong,
-                          style: const TextStyle(fontSize: 18),
-                        );
-                      case Status.COMPLETED:
-                        return SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 40),
-                              fieldHeading(
-                                title: AppLocalizations.of(context)!
-                                    .securityQuestion,
-                                important: true,
-                                langProvider: langProvider,
-                              ),
-                              _questionField(langProvider: langProvider),
-                              const SizedBox(height: 20),
-                              fieldHeading(
-                                title: AppLocalizations.of(context)!
-                                    .securityAnswer,
-                                important: true,
-                                langProvider: langProvider,
-                              ),
-                              _answerField(langProvider: langProvider),
-                              const SizedBox(height: 30),
-                              _submitButton(
-                                langProvider: langProvider,
-                              )
-                            ],
-                          ),
-                        );
-                      default:
-                        return const SizedBox.shrink();
+                        strokeWidth: 1.5,
+                        color: Colors.black,
+                      ));
                     }
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 40),
+                        fieldHeading(
+                          title: AppLocalizations.of(context)!.securityQuestion,
+                          important: true,
+                          langProvider: langProvider,
+                        ),
+                        _questionField(langProvider: langProvider),
+                        const SizedBox(height: 20),
+                        fieldHeading(
+                          title: AppLocalizations.of(context)!.securityAnswer,
+                          important: true,
+                          langProvider: langProvider,
+                        ),
+                        _answerField(langProvider: langProvider),
+                        const SizedBox(height: 10),
+                        _forgotSecurityQuestion(),
+                        const SizedBox(height: 35),
+                        _submitButton(
+                          langProvider: langProvider,
+                        )
+                      ],
+                    );
                   },
                 ),
-              ),
+              )),
             ],
           ),
         ),
@@ -199,42 +190,32 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     );
   }
 
-  //background static picture:
-  Widget _bgLogo() {
-    return Padding(
-      padding: const EdgeInsets.all(50.0),
-      child: SvgPicture.asset(
-        "assets/security_question_bg.svg",
-        // fit: BoxFit.fill,
-      ),
-    );
-  }
-
   //title:
   Widget _title() {
     return Text(
-      AppLocalizations.of(context)!.securityQuestionSetup,
+      "Answer Security Question",
       style: AppTextStyles.appBarTitleStyle(),
     );
   }
 
   //security question field:
   Widget _questionField({required LanguageChangeViewModel langProvider}) {
-    return CustomDropdown(
-      textDirection: getTextDirection(langProvider),
-      menuItemsList: _securityQuestionItemsList,
-      onChanged: (value) {
-        setState(() {
-          _questionController.text = value!;
-          FocusScope.of(context).requestFocus(_answerFocusNode);
-        });
-      },
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: const BorderSide(color: AppColors.darkGrey)),
-      currentFocusNode: _questionFocusNode,
-      hintText: AppLocalizations.of(context)!.selectSecurityQuestion,
-    );
+    return CustomTextField(
+        textDirection: getTextDirection(langProvider),
+        readOnly: true,
+        currentFocusNode: _questionFocusNode,
+        nextFocusNode: _answerFocusNode,
+        controller: _questionController,
+        obscureText: false,
+        hintText: AppLocalizations.of(context)!.securityQuestion,
+        textInputType: TextInputType.text,
+        textCapitalization: true,
+        isNumber: false,
+        maxLines: 1,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5),
+            borderSide: const BorderSide(color: AppColors.darkGrey)),
+        onChanged: (value) {});
   }
 
   //security answer field:
@@ -245,7 +226,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         controller: _answerController,
         obscureText: false,
         hintText: AppLocalizations.of(context)!.writeAnswer,
-        textInputType: TextInputType.emailAddress,
+        textInputType: TextInputType.text,
         textCapitalization: true,
         isNumber: false,
         maxLines: 3,
@@ -264,35 +245,57 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         });
   }
 
-//Security Answer submit field
+  //Forgot Security Question:
+  Widget _forgotSecurityQuestion() {
+    return InkWell(
+      onTap: () {},
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            "Forgot Security Question",
+            style: TextStyle(
+              color: AppColors.scoThemeColor,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+// Security Answer submit field
   Widget _submitButton({required LanguageChangeViewModel langProvider}) {
     //Creating single Provider instance i.e. not putting in the top of the widget tree.
     return ChangeNotifierProvider(
-      create: (context) => UpdateSecurityQuestionViewModel(),
-      child: Consumer<UpdateSecurityQuestionViewModel>(
+      create: (context) => ForgotPasswordViewModel(),
+      child: Consumer<ForgotPasswordViewModel>(
         builder: (context, provider, _) {
           return CustomButton(
             textDirection: getTextDirection(langProvider),
-            buttonName: AppLocalizations.of(context)!.submit,
-            isLoading:
-                provider.updateSecurityQuestionResponse.status == Status.LOADING
-                    ? true
-                    : false,
+            buttonName: "Reset Password",
+            isLoading: false,
             onTap: () async {
               bool result = validateForm(langProvider: langProvider);
 
               if (result) {
-                provider.setSecurityQuestion(_questionController.text);
-                provider.setSecurityAnswer(_answerController.text);
-               bool updateResult =  await provider.updateSecurityQuestion(
-                  context: context,
-                  langProvider: langProvider,
-                  userId: _userId!,
-                  // userId: "962229",
-                );
-               if(updateResult){
-                 _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-               }
+                if (_answerController.text.trim() != widget.securityAnswer.trim()) {
+                  _alertServices.toastMessage("Enter Correct Security Answer");
+                } else {
+
+
+
+
+
+
+
+                  _navigationService
+                      .pushReplacementCupertino(CupertinoPageRoute(
+                          builder: (context) => const ConfirmationView(
+                                isVerified: true,
+                              )));
+                }
               }
             },
             fontSize: 16,

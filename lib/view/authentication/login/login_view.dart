@@ -11,16 +11,16 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_advanced_switch.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/authentication/forgot_password_view.dart';
+import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
 import 'package:sco_v1/view/main_view.dart';
 import 'package:sco_v1/viewModel/authentication/login_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/response/status.dart';
-import '../../resources/components/custom_text_field.dart';
-import '../../viewModel/services/navigation_services.dart';
+import '../../../data/response/status.dart';
+import '../../../resources/components/custom_text_field.dart';
+import '../../../viewModel/services/navigation_services.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});

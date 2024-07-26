@@ -6,9 +6,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/view/authentication/otp_verification_view.dart';
-import 'package:sco_v1/view/authentication/terms_and_conditions_view.dart';
-import 'package:sco_v1/view/authentication/update_security_question_view.dart';
+import 'package:sco_v1/view/authentication/forgot_password/answer_security_question_view.dart';
+import 'package:sco_v1/view/authentication/forgot_password/confirmation_view.dart';
+import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
+import 'package:sco_v1/view/authentication/forgot_password/forgot_security_question_otp_verification_view.dart';
+import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
+import 'package:sco_v1/view/authentication/signup/terms_and_conditions_view.dart';
+import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
 import 'package:sco_v1/view/main_view.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
@@ -101,8 +105,8 @@ class MyApp extends StatelessWidget {
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
               initialRoute: "/splashView",
-
-              // home:  Test(),
+              //
+              // home:  const ConfirmationView(),
             );
           },
         ));

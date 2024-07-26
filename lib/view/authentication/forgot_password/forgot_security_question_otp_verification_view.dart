@@ -10,23 +10,24 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/authentication/terms_and_conditions_view.dart';
+import 'package:sco_v1/view/authentication/signup/terms_and_conditions_view.dart';
 import 'package:sco_v1/viewModel/authentication/otp_verification_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../../data/response/status.dart';
-import '../../utils/constants.dart';
-import '../../viewModel/services/navigation_services.dart';
+import '../../../data/response/status.dart';
+import '../../../resources/components/custom_simple_app_bar.dart';
+import '../../../utils/constants.dart';
+import '../../../viewModel/services/navigation_services.dart';
 
-class OtpVerificationView extends StatefulWidget {
-  const OtpVerificationView({super.key});
+class ForgotSecurityQuestionOtpVerificationView extends StatefulWidget {
+  const ForgotSecurityQuestionOtpVerificationView({super.key});
 
   @override
-  State<OtpVerificationView> createState() => _OtpVerificationViewState();
+  State<ForgotSecurityQuestionOtpVerificationView> createState() => _ForgotSecurityQuestionOtpVerificationViewState();
 }
 
-class _OtpVerificationViewState extends State<OtpVerificationView>
-    with MediaQueryMixin<OtpVerificationView> {
+class _ForgotSecurityQuestionOtpVerificationViewState extends State<ForgotSecurityQuestionOtpVerificationView>
+    with MediaQueryMixin<ForgotSecurityQuestionOtpVerificationView> {
   late NavigationServices _navigationServices;
 
   //verification code:
@@ -59,114 +60,117 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Stack(
-        alignment: Alignment.topLeft,
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: Image.asset(
-              'assets/login_bg.png',
-              fit: BoxFit.fill,
-            ),
+      backgroundColor: AppColors.scoBgColor,
+      appBar: CustomSimpleAppBar(
+          title: SvgPicture.asset(
+            "assets/sco_logo.svg",
+            fit: BoxFit.fill,
+            height: 35,
+            width: 110,
+          )),
+      body: _buildUI(context: context),
+    );
+  }
+
+
+
+
+  Widget _buildUI({required BuildContext context}) {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    return Stack(
+      children: [
+        Container(
+          height: double.infinity,
+          width: double.infinity,
+          color: const Color(0xfff8f8fa),
+        ),
+        SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: bgSecurityLogo(),
+            )),
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          margin: EdgeInsets.only(
+            top: orientation == Orientation.portrait
+                ? screenHeight / 3
+                : screenHeight / 3,
           ),
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            margin: EdgeInsets.only(
-              top: orientation == Orientation.portrait
-                  ? screenHeight / 3
-                  : screenHeight / 3,
-            ),
-            padding: EdgeInsets.only(
-              left: orientation == Orientation.portrait
-                  ? screenWidth * 0.08
-                  : screenWidth / 100,
-              right: orientation == Orientation.portrait
-                  ? screenWidth * 0.08
-                  : screenWidth / 100,
-              top: orientation == Orientation.portrait
-                  ? screenWidth * 0.05
-                  : screenWidth / 100 * 5,
-              bottom: orientation == Orientation.portrait
-                  ? screenWidth / 100 * 1
-                  : screenWidth / 100 * 1,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius:
-                  BorderRadius.vertical(top: Radius.elliptical(60, 60)),
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                    child: SvgPicture.asset(
-                  "assets/sco_logo.svg",
-                  fit: BoxFit.fill,
-                  height: 55,
-                  width: 110,
-                )),
-                Expanded(
-                  child: Consumer<LanguageChangeViewModel>(
-                    builder: (context, provider, _) {
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 33),
+          padding: EdgeInsets.only(
+            left: orientation == Orientation.portrait
+                ? screenWidth * 0.08
+                : screenWidth / 100,
+            right: orientation == Orientation.portrait
+                ? screenWidth * 0.08
+                : screenWidth / 100,
+            top: orientation == Orientation.portrait
+                ? screenWidth * 0.05
+                : screenWidth / 100 * 5,
+            bottom: orientation == Orientation.portrait
+                ? screenWidth / 100 * 1
+                : screenWidth / 100 * 1,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.elliptical(60, 60)),
+          ),
+          child: Column(
+            children: [
+              _title(),
+              Expanded(
+                child: Consumer<LanguageChangeViewModel>(
+                  builder: (context, provider, _) {
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 33),
 
-                            //heading:
-                            _heading(provider),
-                            const SizedBox(height: 25),
+                          _subHeading(provider),
+                          const SizedBox(height: 25),
 
-                            _subHeading(provider),
-                            const SizedBox(height: 25),
+                          //pinPut Field:
+                          _pinPutField(provider),
+                          const SizedBox(height: 35),
 
-                            //pinPut Field:
-                            _pinPutField(provider),
-                            const SizedBox(height: 35),
 
-                            _timeLimit(provider),
-                            const SizedBox(height: 13),
-
-                            //Login Button:
-                            _submitButton(provider),
-                            const SizedBox(height: 20),
-
-                            //Or Field:
-                            _or(),
-                            const SizedBox(height: 20),
-                            //Resend Verification Code Button:
-                            _resendVerificationCodeButton(provider),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                          //Login Button:
+                          _submitButton(provider),
+                          const SizedBox(height: 18),
+                          //Resend Verification Code Button:
+                          _resendVerificationCodeButton(provider),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _heading(LanguageChangeViewModel provider) {
-    return Directionality(
-      textDirection: getTextDirection(provider),
-      child: Text(AppLocalizations.of(context)!.otp_verification,
-          style: AppTextStyles.titleBoldTextStyle()),
+
+  //title:
+  Widget _title() {
+    return Text(
+      "Answer Security Question",
+      style: AppTextStyles.appBarTitleStyle(),
     );
   }
+
 
   Widget _subHeading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child: Text(AppLocalizations.of(context)!.otp_verification_message,
-          style: const TextStyle(
+      child: const Text('Please enter the 7 digit code sent to you on your email or mobile to verify your account.',
+          style:  TextStyle(
             color: Colors.black,
             fontSize: 12,
           ),
@@ -209,7 +213,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
                       _navigationServices.pushReplacementCupertino(
                           CupertinoPageRoute(
                               builder: (context) =>
-                                  const TermsAndConditionsView()));
+                              const TermsAndConditionsView()));
                     }
 
                     setState(() {
@@ -280,12 +284,12 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
           builder: (context, provider, _) {
             return CustomButton(
               textDirection: getTextDirection(langProvider),
-              buttonName: AppLocalizations.of(context)!.submit,
+              buttonName: "Verify",
               isLoading:
-                  (provider.otpVerificationResponse.status == Status.LOADING ||
-                          _isLoading)
-                      ? true
-                      : false,
+              (provider.otpVerificationResponse.status == Status.LOADING ||
+                  _isLoading)
+                  ? true
+                  : false,
               onTap: () async {
                 //*------calling the verifyOtp method in the ViewModel------*
                 if (_verificationCodeController.text.isNotEmpty) {
@@ -300,7 +304,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
                     _navigationServices.pushReplacementCupertino(
                         CupertinoPageRoute(
                             builder: (context) =>
-                                const TermsAndConditionsView()));
+                            const TermsAndConditionsView()));
                   }
                 }
               },
@@ -313,28 +317,15 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
   }
 
   Widget _resendVerificationCodeButton(LanguageChangeViewModel langProvider) {
-    return ChangeNotifierProvider(
-        create: (context) => OtpVerificationViewModel(),
-        child:
-            Consumer<OtpVerificationViewModel>(builder: (context, provider, _) {
-          return CustomButton(
-            buttonName: AppLocalizations.of(context)!.resend_code,
-            isLoading: provider.resendOtpResponse.status == Status.LOADING
-                ? true
-                : false,
-            // isLoading: true,
-            textDirection: getTextDirection(langProvider),
-            buttonColor: Colors.white,
-            textColor: AppColors.scoButtonColor,
-            borderColor: AppColors.scoButtonColor,
-            fontSize: 16,
-            onTap: () async {
-              provider.resendOtp(
-                  context: context,
-                  langProvider: langProvider,
-                  userId: _userId);
-            },
-          );
-        }));
-  }
+    return InkWell(
+      onTap: () {},
+      child: const Text(
+        "Resend Verification Code",
+        style: TextStyle(
+          color: AppColors.scoThemeColor,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );  }
 }
