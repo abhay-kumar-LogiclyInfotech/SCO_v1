@@ -296,9 +296,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       textDirection: getTextDirection(langProvider),
       buttonName: AppLocalizations.of(context)!.submit,
       isLoading: false,
-      onTap: () async{
-        bool validateResult = _validateForm(langProvider:langProvider );
-
+      onTap: () async {
+        _validateForm(langProvider: langProvider);
       },
       fontSize: 16,
       buttonColor: AppColors.scoButtonColor,
@@ -386,14 +385,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           provider: langProvider);
       return false;
     }
-    if(_captchaController.text.isEmpty){
+    if (_captchaController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: "Please Enter Captcha",
           context: context,
           provider: langProvider);
       return false;
     }
-    if(_captchaText != _captchaController.text ){
+    if (_captchaText != _captchaController.text) {
       _rotate();
       _alertServices.flushBarErrorMessages(
           message: "Incorrect Captcha",
@@ -404,4 +403,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
 
     return true;
   }
+
+
 }
