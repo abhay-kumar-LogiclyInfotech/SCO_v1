@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
               initialRoute: "/splashView",
-              //
+
               // home:  const ConfirmationView(),
             );
           },
