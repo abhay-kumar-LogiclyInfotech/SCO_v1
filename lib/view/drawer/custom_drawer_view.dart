@@ -428,7 +428,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
-                                const SizedBox(height: 40,),
+                                const SizedBox(height: 50,),
 
                               ]),
                         ),
