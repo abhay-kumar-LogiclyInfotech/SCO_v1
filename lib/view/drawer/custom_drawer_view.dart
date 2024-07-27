@@ -13,7 +13,7 @@ import '../../resources/components/custom_advanced_switch.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/auth_services.dart';
 import '../../viewModel/services/navigation_services.dart';
-import '../authentication/login_view.dart';
+import '../authentication/login/login_view.dart';
 
 class CustomDrawerView extends StatefulWidget {
   final String? userName;

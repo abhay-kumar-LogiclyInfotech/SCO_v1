@@ -15,9 +15,9 @@ class NetworkApiServices extends BaseApiServices {
     try {
       final response = await http
           .get(Uri.parse(url), headers: headers)
-          .timeout(const Duration(minutes: 2));
+          .timeout(const Duration(minutes: 5));
 
-      print(response.statusCode);
+      debugPrint(response.statusCode.toString());
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -73,6 +73,7 @@ class NetworkApiServices extends BaseApiServices {
 
       final response =
           await request.send().timeout(const Duration(seconds: 30));
+      debugPrint(response.statusCode.toString());
       final responseString = await response.stream.bytesToString();
       return _handleResponse(
           http.Response(responseString, response.statusCode));

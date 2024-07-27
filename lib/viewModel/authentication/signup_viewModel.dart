@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:sco_v1/data/response/ApiResponse.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/repositories/auth_repo/auth_repository.dart';
-import 'package:sco_v1/view/authentication/otp_verification_view.dart';
+import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 

@@ -37,9 +37,11 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             children: [
               //CarouselSlider:
               _carouselSlider(),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               _amountContainer(),
+              const SizedBox(height: 15),
               _aboutOrganization(),
+              const SizedBox(height: 15)
             ],
           ),
         ),
@@ -47,59 +49,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     );
   }
 
-  Widget _topAppBar() {
-    return Container(
-      color: Colors.transparent,
-      height: 40,
-      width: double.infinity,
-      alignment: Alignment.center,
-      child: Stack(
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                  height: 35,
-                  width: 80,
-                  child: Image.asset('assets/company_logo.jpg')),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-            height: 40,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    "assets/notification_bell.svg",
-                    height: 20,
-                    width: 20,
-                  ),
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    "assets/search.svg",
-                    height: 20,
-                    width: 20,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
 
   Widget _carouselSlider() {
     return SizedBox(
@@ -242,9 +191,9 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     return Consumer<LanguageChangeViewModel>(
       builder: (context, provider, _) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Material(
-            elevation: 2,
+            elevation: 1,
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             child: Container(
@@ -397,9 +346,9 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     return Consumer<LanguageChangeViewModel>(
       builder: (context, provider, _) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Material(
-            elevation: 2,
+            elevation: 1,
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             child: Container(

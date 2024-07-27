@@ -7,20 +7,20 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/authentication/login_view.dart';
+import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
-import '../../../resources/app_colors.dart';
-import '../../../viewModel/services/navigation_services.dart';
-import '../../data/response/status.dart';
-import '../../hive/hive_manager.dart';
-import '../../resources/components/custom_button.dart';
-import '../../resources/components/custom_dropdown.dart';
-import '../../resources/components/custom_text_field.dart';
-import '../../resources/validations_and_errorText.dart';
-import '../../viewModel/authentication/update_security_question_viewModel.dart';
+import '../../../../resources/app_colors.dart';
+import '../../../../viewModel/services/navigation_services.dart';
+import '../../../data/response/status.dart';
+import '../../../hive/hive_manager.dart';
+import '../../../resources/components/custom_button.dart';
+import '../../../resources/components/custom_dropdown.dart';
+import '../../../resources/components/custom_text_field.dart';
+import '../../../resources/validations_and_errorText.dart';
+import '../../../viewModel/authentication/update_security_question_viewModel.dart';
 
 class UpdateSecurityQuestionView extends StatefulWidget {
   const UpdateSecurityQuestionView({super.key});
@@ -80,6 +80,16 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
     super.initState();
     _answerError = null;
+  }
+
+
+  @override
+  void dispose() {
+    _questionController.dispose();
+    _answerController.dispose();
+    _questionFocusNode.dispose();
+    _answerFocusNode.dispose();
+    super.dispose();
   }
 
   @override

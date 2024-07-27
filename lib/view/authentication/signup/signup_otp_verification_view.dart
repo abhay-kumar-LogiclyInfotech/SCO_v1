@@ -10,13 +10,13 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/authentication/terms_and_conditions_view.dart';
+import 'package:sco_v1/view/authentication/signup/terms_and_conditions_view.dart';
 import 'package:sco_v1/viewModel/authentication/otp_verification_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../../data/response/status.dart';
-import '../../utils/constants.dart';
-import '../../viewModel/services/navigation_services.dart';
+import '../../../data/response/status.dart';
+import '../../../utils/constants.dart';
+import '../../../viewModel/services/navigation_services.dart';
 
 class OtpVerificationView extends StatefulWidget {
   const OtpVerificationView({super.key});

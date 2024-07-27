@@ -10,16 +10,16 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/authentication/otp_verification_view.dart';
+import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
-import '../../data/response/status.dart';
-import '../../resources/components/custom_dropdown.dart';
-import '../../resources/components/custom_text_field.dart';
-import '../../utils/constants.dart';
-import '../../viewModel/services/navigation_services.dart';
+import '../../../data/response/status.dart';
+import '../../../resources/components/custom_dropdown.dart';
+import '../../../resources/components/custom_text_field.dart';
+import '../../../utils/constants.dart';
+import '../../../viewModel/services/navigation_services.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});

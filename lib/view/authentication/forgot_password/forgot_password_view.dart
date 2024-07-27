@@ -1,5 +1,6 @@
 import 'dart:math' show Random, pi;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,12 +10,15 @@ import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/authentication/forgot_password/answer_security_question_view.dart';
+import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../../resources/components/custom_text_field.dart';
-import '../../resources/validations_and_errorText.dart';
-import '../../viewModel/services/alert_services.dart';
-import '../../viewModel/services/navigation_services.dart';
+import '../../../data/response/status.dart';
+import '../../../resources/components/custom_text_field.dart';
+import '../../../resources/validations_and_errorText.dart';
+import '../../../viewModel/services/alert_services.dart';
+import '../../../viewModel/services/navigation_services.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -155,8 +159,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
                             //email Address Field;
                             _emailAddressField(provider),
                             const SizedBox(height: 10),
+
+                            //create Captcha by rotating:
                             _createCaptcha(),
 
+                            //Enter Captcha:
                             _captchaField(provider),
 
                             const SizedBox(height: 35),
@@ -275,34 +282,76 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       textInputType: TextInputType.emailAddress,
       isNumber: false,
       leading: SvgPicture.asset(
-        "assets/email.svg",
+        "assets/captcha.svg",
         // height: 18,
         // width: 18,
       ),
-      errorText: _emailError,
-      onChanged: (value) {
-        if (_emailFocusNode.hasFocus) {
-          setState(() {
-            _emailError =
-                ErrorText.getEmailError(email: value!, context: context);
-          });
-        }
-      },
+      onChanged: (value) {},
     );
   }
 
   Widget _submitButton(LanguageChangeViewModel langProvider) {
-    return CustomButton(
-      textDirection: getTextDirection(langProvider),
-      buttonName: AppLocalizations.of(context)!.submit,
-      isLoading: false,
-      onTap: () async{
-        bool validateResult = _validateForm(langProvider:langProvider );
+    return ChangeNotifierProvider(
+      create: (context) => ForgotPasswordViewModel(),
+      child: Consumer<ForgotPasswordViewModel>(
+        builder: (context, provider, _) {
+          return CustomButton(
+            textDirection: getTextDirection(langProvider),
+            buttonName: AppLocalizations.of(context)!.submit,
+            isLoading:
+                provider.getSecurityQuestionResponse.status == Status.LOADING
+                    ? true
+                    : false,
+            onTap: () async {
+              bool validated = _validateForm(langProvider: langProvider);
 
-      },
-      fontSize: 16,
-      buttonColor: AppColors.scoButtonColor,
-      elevation: 1,
+              if (validated) {
+                bool result = await provider.getSecurityQuestion(
+                    email: _emailController.text,
+                    context: context,
+                    langProvider: langProvider);
+
+                if (result) {
+                  final String securityQuestion = provider
+                          .getSecurityQuestionResponse
+                          .data
+                          ?.data
+                          ?.securityQuestion
+                          ?.securityQuestion
+                          .toString() ??
+                      "";
+                  final String securityAnswer = provider
+                          .getSecurityQuestionResponse
+                          .data
+                          ?.data
+                          ?.securityQuestion
+                          ?.securityAnswer
+                          .toString() ??
+                      "";
+                  final String userId = provider.getSecurityQuestionResponse
+                          .data?.data?.securityQuestion?.userId
+                          .toString() ??
+                      "";
+
+                  if (securityQuestion.isNotEmpty &&
+                      securityAnswer.isNotEmpty &&
+                      userId.isNotEmpty) {
+                    _navigationServices.pushReplacementCupertino(
+                        CupertinoPageRoute(
+                            builder: (context) => AnswerSecurityQuestionView(
+                                securityQuestion: securityQuestion,
+                                securityAnswer: securityAnswer,
+                                userId: userId)));
+                  }
+                }
+              }
+            },
+            fontSize: 16,
+            buttonColor: AppColors.scoButtonColor,
+            elevation: 1,
+          );
+        },
+      ),
     );
   }
 
@@ -386,14 +435,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           provider: langProvider);
       return false;
     }
-    if(_captchaController.text.isEmpty){
+    if (_captchaController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: "Please Enter Captcha",
           context: context,
           provider: langProvider);
       return false;
     }
-    if(_captchaText != _captchaController.text ){
+    if (_captchaText != _captchaController.text) {
       _rotate();
       _alertServices.flushBarErrorMessages(
           message: "Incorrect Captcha",

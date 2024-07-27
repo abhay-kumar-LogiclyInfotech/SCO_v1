@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/app_colors.dart';
@@ -19,12 +20,19 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
   double get verticalPadding => MediaQuery.of(context).padding.vertical;
 }
 
+
+
+//Get Text Direction Method:
 TextDirection getTextDirection(LanguageChangeViewModel provider) {
   return provider.appLocale == const Locale('en') || provider.appLocale == null
       ? TextDirection.ltr
       : TextDirection.rtl;
 }
 
+
+
+
+//TextField Heading Text with importance indicator:
 fieldHeading(
     {required String title,
     required bool important,
@@ -58,6 +66,8 @@ fieldHeading(
   );
 }
 
+
+// populateCommonDataDropdown method with hide property:
 List<DropdownMenuItem> populateCommonDataDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
@@ -82,6 +92,9 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   }).toList();
 }
 
+
+
+//populateNormalDropdown method:
 List<DropdownMenuItem> populateNormalDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
@@ -104,6 +117,9 @@ List<DropdownMenuItem> populateNormalDropdown({
   }).toList();
 }
 
+
+
+//Terms and conditions text with bullet design
 Widget bulletTermsText({required String text, Color? textColor}) {
   return Padding(
     padding: const EdgeInsets.only(top: 3.0, left: 10, right: 10),
@@ -137,6 +153,8 @@ Widget bulletTermsText({required String text, Color? textColor}) {
   );
 }
 
+
+//Normal Terms and conditions text:
 Widget normalTermsText({required String text}) {
   return Padding(
     padding: const EdgeInsets.only(top: 3.0),
@@ -151,3 +169,37 @@ Widget normalTermsText({required String text}) {
     ),
   );
 }
+
+
+//background static picture:
+Widget bgSecurityLogo() {
+  return Padding(
+    padding: const EdgeInsets.all(50.0),
+    child: SvgPicture.asset(
+      "assets/security_question_bg.svg",
+      // fit: BoxFit.fill,
+    ),
+  );}
+
+
+
+
+//creating the animated Route using page builder:
+Route createRoute(dynamic page) {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>  page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var tween = Tween(begin: const Offset(0.0, 1), end: const Offset(0, 0))
+            .chain(CurveTween(curve: Curves.ease));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      });
+}
+
+
+
+
+

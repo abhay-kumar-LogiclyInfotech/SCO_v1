@@ -19,7 +19,7 @@ class AlertServices {
     _navigationServices = _getIt.get<NavigationServices>();
   }
 
-  void showToast({required String message}) {
+  void showToast({required String message, required BuildContext context}) {
     try {
       DelightToastBar(
           autoDismiss: true,
@@ -29,65 +29,81 @@ class AlertServices {
               leading: const Icon(
                 Icons.notifications_active_outlined,
                 size: 28,
-                color: Colors.white,
+                color: Colors.black,
               ),
               title: Container(
-                  padding: EdgeInsets.zero,
-                  margin: EdgeInsets.zero,
-                  alignment: Alignment.center,
-                  ),
-
-              color: Colors.white10,
+                padding: EdgeInsets.zero,
+                margin: EdgeInsets.zero,
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: Text(
+                  message,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+              color: Colors.white,
             );
-          }).show(_navigationServices.navigationStateKey.currentState!.context);
+          }
+      ).show(context);
     } catch (error) {
-      debugPrint(
-          "--------------->>>>>>>Something went wrong when showing the toast");
+      debugPrint("Something went wrong when showing the toast: $error");
     }
   }
 
-  toastMessage(String message) {
+
+  void toastMessage(String message) {
     Fluttertoast.showToast(
-        msg: message, backgroundColor: Colors.black, fontSize: 15);
+      msg: message,
+      backgroundColor: Colors.black,
+      textColor: Colors.white, // Added text color for better visibility
+      fontSize: 15,
+      toastLength: Toast.LENGTH_SHORT, // Added toast length for consistency
+    );
   }
-
-  void flushBarErrorMessages(
-      {required String message,
-      required BuildContext context,
-      required LanguageChangeViewModel provider}) {
+  void flushBarErrorMessages({
+    required String message,
+    required BuildContext context,
+    required LanguageChangeViewModel provider,
+  }) {
     showFlushbar(
-        context: context,
-        flushbar: Flushbar(
-            backgroundColor: Colors.white,
-            textDirection: getTextDirection(provider),
-            messageColor: Colors.black,
-            // showProgressIndicator: true,
-            // progressIndicatorBackgroundColor: Colors.transparent,
-            message: message,
-            forwardAnimationCurve: Curves.bounceInOut,
-            reverseAnimationCurve: Curves.easeInOutBack,
-            duration: const Duration(seconds: 5),
-            borderRadius: BorderRadius.circular(15),
-            icon: const Icon(
-              Icons.notifications_active_outlined,
-              size: 28,
-              color: Colors.black,
-            ),
-            flushbarPosition: FlushbarPosition.TOP,
-            margin: const EdgeInsets.symmetric(
-                // vertical: MediaQuery.sizeOf(context).width * 0.02,
-                // horizontal: MediaQuery.sizeOf(context).width * 0.04),
-                vertical: 5,
-                horizontal: 5))
-          ..show(context));
+      context: context,
+      flushbar: Flushbar(
+        backgroundColor: Colors.white,
+        textDirection: getTextDirection(provider), // Assuming getTextDirection is a function returning TextDirection
+        messageColor: Colors.black,
+        message: message,
+        forwardAnimationCurve: Curves.bounceInOut,
+        reverseAnimationCurve: Curves.easeInOutBack,
+        duration: const Duration(seconds: 5),
+        borderRadius: BorderRadius.circular(15),
+        icon: const Icon(
+          Icons.notifications_active_outlined,
+          size: 28,
+          color: Colors.black,
+        ),
+        flushbarPosition: FlushbarPosition.TOP,
+        margin: const EdgeInsets.symmetric(
+          vertical: 5,
+          horizontal: 5,
+        ),
+      )..show(context),
+    );
   }
 
-  snackBar(String message, BuildContext context) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  void showCustomSnackBar(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
         backgroundColor: Colors.green,
         content: Text(
           message,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        )));
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white, // Added color for better visibility
+          ),
+        ),
+        behavior: SnackBarBehavior.floating, // Optional: Makes the SnackBar float
+        duration: const Duration(seconds: 4), // Optional: Duration of the SnackBar
+      ),
+    );
   }
 }
