@@ -155,7 +155,40 @@
   "privacy_policy_heading_updates_to_privacy_policy": "التحديثات على سياسة الخصوصية",
   "privacy_policy_description_updates_to_privacy_policy": "في حال حدّث مكتب البعثات الدراسية سياسة الخصوصية، فإن ذلك سوف يتمّ عبر صفحة مكتب البعثات الدراسية الرئيسة، بحيث تكون تلك التحديثات في متناول المستخدمين.",
   "logout": "تسجيل خروج",
-  "logout_success": "نجاح تسجيل الخروج"
+  "logout_success": "نجاح تسجيل الخروج",
+  "answer_security_question": "الإجابة على سؤال الأمان",
+  "forgot_security_question": "نسيت سؤال الأمان",
+  "reset_password": "إعادة تعيين كلمة المرور",
+  "enter_correct_security_answer": "أدخل الإجابة الصحيحة للأمان",
+  "select_security_question": "اختر سؤال الأمان",
+  "write_security_answer": "اكتب إجابة الأمان",
+  "security_question": "سؤال الأمان",
+  "write_answer": "اكتب الإجابة",
+  "confirmation_title": "تأكيد",
+  "correct": "صحيح",
+  "correct_message": "تم إعادة تعيين كلمة المرور بنجاح. يرجى التحقق من بريدك الإلكتروني المسجل للحصول على كلمة مرور جديدة.",
+  "wrong": "خطأ",
+  "wrong_message": "فشل في إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.",
+  "click_here_to_login": "انقر هنا لتسجيل الدخول",
+  "enterCaptcha": "أدخل الكود",
+  "pleaseEnterCaptcha": "يرجى إدخال كود التحقق",
+  "incorrectCaptcha": "الكود غير صحيح",
+  "answerSecurityQuestion": "أجب على سؤال الأمان",
+  "pleaseEnterCode": "يرجى إدخال الرمز المكون من 7 أرقام الذي تم إرساله إلى بريدك الإلكتروني أو هاتفك المحمول للتحقق من حسابك.",
+  "verify": "تحقق",
+  "resendVerificationCode": "إعادة إرسال رمز التحقق",
+  "acceptTermsAndConditions": "قبول الشروط والأحكام",
+  "acceptAndContinue": "قبول ومتابعة",
+  "acceptTermsError": "يرجى قبول الشروط والأحكام أولاً",
+  "vision_mission_values": "الرؤية، الرسالة، القيم",
+  "error_fetching_data": "حدث خطأ أثناء جلب البيانات.",
+  "something_went_wrong": "حدث خطأ في حسابك. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالمسؤول.",
+  "password_sent_successfully": "تم إرسال كلمة المرور بنجاح",
+  "otp_sent_successfully": "تم إرسال رمز التحقق بنجاح",
+  "error_occurred": "حدث خطأ أثناء معالجة طلبك."
+
+
+
 }
 
 

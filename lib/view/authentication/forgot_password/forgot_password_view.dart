@@ -278,7 +278,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       currentFocusNode: _captchaFocusNode,
       controller: _captchaController,
       obscureText: false,
-      hintText: "Enter captcha",
+      hintText: AppLocalizations.of(context)!.enterCaptcha,
       textInputType: TextInputType.emailAddress,
       isNumber: false,
       leading: SvgPicture.asset(
@@ -437,7 +437,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     }
     if (_captchaController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Please Enter Captcha",
+          message:AppLocalizations.of(context)!.pleaseEnterCaptcha,
           context: context,
           provider: langProvider);
       return false;
@@ -445,7 +445,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     if (_captchaText != _captchaController.text) {
       _rotate();
       _alertServices.flushBarErrorMessages(
-          message: "Incorrect Captcha",
+          message: AppLocalizations.of(context)!.incorrectCaptcha,
           context: context,
           provider: langProvider);
       return false;

@@ -155,7 +155,40 @@
   "privacy_policy_heading_updates_to_privacy_policy": "Updates to Privacy Policy",
   "privacy_policy_description_updates_to_privacy_policy": "If the Scholarship Office updates the Privacy Policy, the updates will be made available on the main page of the Scholarship Office website for users to review.",
   "logout": "Logout",
-  "logout_success": "Logout success"
+  "logout_success": "Logout success",
+  "answer_security_question": "Answer Security Question",
+  "forgot_security_question": "Forgot Security Question",
+  "reset_password": "Reset Password",
+  "enter_correct_security_answer": "Enter Correct Security Answer",
+  "select_security_question": "Select Security Question",
+  "write_security_answer": "Write Security Answer",
+  "security_question": "Security Question",
+  "write_answer": "Write Answer",
+  "confirmation_title": "Confirmation",
+  "correct": "Correct",
+  "correct_message": "Password reset completed successfully. Please check your registered email for the new password.",
+  "wrong": "Wrong",
+  "wrong_message": "Password reset unsuccessful. Please try again.",
+  "click_here_to_login": "CLICK HERE TO LOGIN",
+  "enterCaptcha": "Enter captcha",
+  "pleaseEnterCaptcha": "Please Enter Captcha",
+  "incorrectCaptcha": "Incorrect Captcha",
+  "answerSecurityQuestion": "Answer Security Question",
+  "pleaseEnterCode": "Please enter the 7 digit code sent to you on your email or mobile to verify your account.",
+  "verify": "Verify",
+  "resendVerificationCode": "Resend Verification Code",
+  "acceptTermsAndConditions": "Accept Terms and Conditions",
+  "acceptAndContinue": "Accept & Continue",
+  "acceptTermsError": "Accept Terms and Conditions First",
+  "vision_mission_values": "Vision, Mission, Values",
+  "error_fetching_data": "An error occurred while fetching data.",
+  "something_went_wrong": "Something went wrong with your account. Please try again later or contact the administrator.",
+  "password_sent_successfully": "Password sent successfully",
+  "otp_sent_successfully": "OTP sent successfully",
+  "error_occurred": "An error occurred while processing your request."
+
+
+
 }
 
 

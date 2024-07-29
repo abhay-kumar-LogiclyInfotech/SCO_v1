@@ -74,22 +74,8 @@ class VisionAndMissionViewModel with ChangeNotifier {
           : 'ar_SA'; // Assuming you have a way to get the selected language code
 
 
-       _content = parseHtmlContent(htmlContent);
+       _content = parseHtmlContent(htmlContent,selectedLanguage);
 
-      // Print extracted data
-      // print('Vision Title: ${content.visionMission.visionTitle}');
-      // print('Vision Text: ${content.visionMission.visionText}');
-      // print('Mission Title: ${content.visionMission.missionTitle}');
-      // print('Mission Text: ${content.visionMission.missionText}');
-      // print('Values:');
-      // print(content.values.valuesTitle);
-      // content.values.valueItems.forEach((value) {
-      //   print('Title: ${value.title}, Text: ${value.text}');
-      // });
-      // print('Goals Title: ${content.goals.goalsTitle}');
-      // content.goals.goals.forEach((goal) {
-      //   print('Goal: $goal');
-      // });
       _setVisionAndMissionResponse = ApiResponse.completed(response);
 
       return true;
@@ -162,7 +148,7 @@ class Content {
   });
 }
 
-Content parseHtmlContent(String htmlString) {
+Content parseHtmlContent(String htmlString,selectedLanguage) {
   // Parse HTML
   final document = htmlParser.parse(htmlString);
 
@@ -191,7 +177,7 @@ Content parseHtmlContent(String htmlString) {
   final goals = goalsElement?.querySelectorAll('.sco-goal').map((element) => element.text.trim()).toList() ?? [];
 
   return Content(
-    languageId: 'ar_SA', // Change as necessary
+    languageId: selectedLanguage, // Change as necessary
     visionMission: VisionMission(
       visionTitle: visionTitle,
       visionText: visionText,

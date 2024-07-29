@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pinput/pinput.dart';
@@ -10,7 +11,6 @@ import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/forgot_password/confirmation_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
-
 import '../../../data/response/status.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../utils/constants.dart';
@@ -149,7 +149,7 @@ class _ForgotSecurityQuestionOtpVerificationViewState
   //*------Heading------/
   Widget _title() {
     return Text(
-      "Answer Security Question",
+      AppLocalizations.of(context)!.answer_security_question,
       style: AppTextStyles.appBarTitleStyle(),
     );
   }
@@ -158,9 +158,8 @@ class _ForgotSecurityQuestionOtpVerificationViewState
   Widget _subHeading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child: const Text(
-          'Please enter the 7 digit code sent to you on your email or mobile to verify your account.',
-          style: TextStyle(
+      child: Text(AppLocalizations.of(context)!.pleaseEnterCode,
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 12,
           ),
@@ -243,7 +242,7 @@ class _ForgotSecurityQuestionOtpVerificationViewState
           builder: (context, provider, _) {
             return CustomButton(
               textDirection: getTextDirection(langProvider),
-              buttonName: "Verify",
+              buttonName: AppLocalizations.of(context)!.verify,
               isLoading: _isLoading,
               onTap: () async {
                 //*------calling the verifyOtp method in the ViewModel------*
@@ -287,7 +286,7 @@ class _ForgotSecurityQuestionOtpVerificationViewState
               onTap: () async {
                 bool result =
                     await provider.getForgotSecurityQuestionVerificationOtp(
-                        userId: widget.userId);
+                        userId: widget.userId,context: context);
 
                 if (result) {
                   String? verificationOtp = provider
@@ -320,9 +319,9 @@ class _ForgotSecurityQuestionOtpVerificationViewState
                             strokeWidth: 1.5,
                           ),
                         )
-                      : const Text(
-                          "Resend Verification Code",
-                          style: TextStyle(
+                      : Text(
+                          AppLocalizations.of(context)!.resendVerificationCode,
+                          style: const TextStyle(
                             color: AppColors.scoThemeColor,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

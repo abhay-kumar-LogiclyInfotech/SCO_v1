@@ -195,7 +195,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
   //title:
   Widget _title() {
     return Text(
-      "Answer Security Question",
+      AppLocalizations.of(context)!.answer_security_question,
       style: AppTextStyles.appBarTitleStyle(),
     );
   }
@@ -257,7 +257,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
               onTap: () async {
                 bool result =
                     await provider.getForgotSecurityQuestionVerificationOtp(
-                        userId: widget.userId);
+                        userId: widget.userId,context: context);
 
                 if (result) {
                   String? verificationOtp = provider
@@ -291,9 +291,9 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
                             ),
                           ),
                         )
-                      : const Text(
-                          "Forgot Security Question",
-                          style: TextStyle(
+                      :  Text(
+                    AppLocalizations.of(context)!.forgot_security_question,
+                          style: const TextStyle(
                             color: AppColors.scoThemeColor,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -315,7 +315,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
         builder: (context, provider, _) {
           return CustomButton(
             textDirection: getTextDirection(langProvider),
-            buttonName: "Reset Password",
+            buttonName:AppLocalizations.of(context)!.reset_password,
             isLoading: provider.sendForgotPasswordSendMailResponse.status ==
                     Status.LOADING
                 ? true
@@ -326,7 +326,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
               if (result) {
                 if (_answerController.text.trim() !=
                     widget.securityAnswer.trim()) {
-                  _alertServices.toastMessage("Enter Correct Security Answer");
+                  _alertServices.toastMessage(AppLocalizations.of(context)!.enter_correct_security_answer);
                 } else {
                   //*-----Sending password on mail-----*/
                   bool mailSent = await provider.sendForgotPasswordOnMail(

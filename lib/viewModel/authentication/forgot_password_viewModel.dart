@@ -4,6 +4,8 @@ import 'package:sco_v1/models/authentication/forgot_password/forgot_password_get
 import 'package:sco_v1/models/authentication/forgot_password/forgot_password_send_mail_model.dart';
 import 'package:sco_v1/models/authentication/forgot_password/forgot_security_question_otp_verification_model.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import '../../data/response/ApiResponse.dart';
 import '../../repositories/auth_repo/auth_repository.dart';
@@ -80,7 +82,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
           securityAnswer.isEmpty ||
           userId.isEmpty) {
         _alertServices.toastMessage(
-            "Something went wrong with you account. Please try again later or contact the administrator.");
+          AppLocalizations.of(context)!.something_went_wrong,);
         return false;
       }
 
@@ -135,7 +137,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
       //*-----Calling Api End-----*
       _setSendForgotPasswordSendMailResponse = ApiResponse.completed(response);
-      _alertServices.toastMessage("Password sent successfully");
+      _alertServices.toastMessage(AppLocalizations.of(context)!.password_sent_successfully);
       return true;
     } catch (e) {
       debugPrint('Error: $e');
@@ -161,6 +163,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
   Future<bool> getForgotSecurityQuestionVerificationOtp({
     required String userId,
+    required BuildContext context,
   }) async {
     try {
       _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.loading();
@@ -181,7 +184,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
       _setForgotSecurityQuestionOtpVerificationResponse =
           ApiResponse.completed(response);
-      _alertServices.toastMessage("OTP sent successfully");
+      _alertServices.toastMessage(AppLocalizations.of(context)!.otp_sent_successfully,);
 
       return true;
     } catch (e) {

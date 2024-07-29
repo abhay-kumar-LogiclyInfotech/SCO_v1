@@ -1,14 +1,19 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
+import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../resources/app_colors.dart';
 import '../../viewModel/language_change_ViewModel.dart';
+import '../drawer/custom_drawer_views/vision_and_mission_view.dart';
 
 enum Language { english, spanish }
 
@@ -20,6 +25,18 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
+
+  late NavigationServices _navigationServices;
+
+
+  @override
+  void initState() {
+    super.initState();
+    final GetIt getIt = GetIt.instance;
+    _navigationServices = getIt.get<NavigationServices>();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -441,7 +458,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 assetName: "assets/faqs.svg",
                 name: AppLocalizations.of(context)!.faqs,
                 textDirection: getTextDirection(provider),
-                onTap: () {},
+                onTap: () {
+                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const FaqView()));
+
+                },
               ),
             ),
             Expanded(
@@ -449,7 +469,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 assetName: "assets/vision_and_mission.svg",
                 name: AppLocalizations.of(context)!.visionAndMission,
                 textDirection: getTextDirection(provider),
-                onTap: () {},
+                onTap: () {
+                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const VisionAndMissionView()));
+
+                },
               ),
             ),
             Expanded(

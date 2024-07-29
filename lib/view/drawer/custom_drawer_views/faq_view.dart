@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
@@ -6,6 +7,7 @@ import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../resources/app_colors.dart';
 import '../../../resources/app_text_styles.dart';
@@ -51,19 +53,14 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
             switch (provider.faqResponse.status) {
               case Status.LOADING:
                 return const Center(
-                  child: SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1.5,
-                      color: AppColors.scoThemeColor,
-                    ),
+                  child: CupertinoActivityIndicator (
+                                   color: AppColors.scoThemeColor,
                   ),
                 );
 
               case Status.ERROR:
-                return const Center(
-                  child: Text("Error Occurred"),
+                return  Center(
+                  child: Text(AppLocalizations.of(context)!.somethingWentWrong,),
                 );
 
               case Status.COMPLETED:
@@ -95,7 +92,7 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
                     });
 
               default:
-                return const Text("Something Went Wrong");
+                return  Text(AppLocalizations.of(context)!.somethingWentWrong,);
             }
           },
         ),

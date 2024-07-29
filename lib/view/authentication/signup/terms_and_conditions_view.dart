@@ -288,7 +288,8 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
       controlAffinity: langProvider.appLocale == const Locale('en')
           ? ListTileControlAffinity.leading
           : ListTileControlAffinity.trailing,
-      title: "Accept Terms and Conditions",
+      title:  AppLocalizations.of(context)!
+          .acceptTermsAndConditions,
       onChanged: (value) {
         setState(() {
           isChecked = value!;
@@ -305,7 +306,8 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
       child: Consumer<TermsAndConditionsViewModel>(
           builder: (context, provider, _) {
         return CustomButton(
-            buttonName: "Accept & Continue",
+            buttonName:  AppLocalizations.of(context)!
+                .acceptAndContinue,
             isLoading:
                 provider.termsAndConditionsResponse.status == Status.LOADING
                     ? true
@@ -331,7 +333,8 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
                 _alertServices.flushBarErrorMessages(
                     context: context,
                     provider: langProvider,
-                    message: "Accept Terms and Conditions First");
+                    message:  AppLocalizations.of(context)!
+                        .acceptTermsError,);
               }
             });
       }),

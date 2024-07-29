@@ -8,6 +8,8 @@ import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_confirmation_widget.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../viewModel/services/navigation_services.dart';
@@ -126,7 +128,7 @@ class _ConfirmationViewState extends State<ConfirmationView>
   //*----show Title of the Page--------*
   Widget _title() {
     return Text(
-      "Confirmation",
+      AppLocalizations.of(context)!.confirmation_title,
       style: AppTextStyles.appBarTitleStyle(),
     );
   }
@@ -139,16 +141,16 @@ class _ConfirmationViewState extends State<ConfirmationView>
             backgroundColor: const Color(0xff00CC99).withOpacity(0.15),
             iconBackgroundColor: Colors.green,
             icon: Icons.check,
-            headline: "Correct",
+            headline:  AppLocalizations.of(context)!.correct,
             message:
-                "Password reset completed successfully. Please check you registered email for new password.")
+            AppLocalizations.of(context)!.correct_message)
         : //Incorrect Confirmation message
         CustomConfirmationWidget(
             backgroundColor: Colors.red.withOpacity(0.1),
             iconBackgroundColor: Colors.red,
             icon: Icons.close,
-            headline: "Wrong",
-            message: "Password reset unsuccessful. Please try again.");
+            headline: AppLocalizations.of(context)!.wrong,
+            message:  AppLocalizations.of(context)!.wrong_message);
   }
 
   /*
@@ -157,7 +159,7 @@ class _ConfirmationViewState extends State<ConfirmationView>
   Widget _clickToLogin({required LanguageChangeViewModel langProvider}) {
     return CustomButton(
       textDirection: getTextDirection(langProvider),
-      buttonName: "CLICK HERE TO LOGIN",
+      buttonName:  AppLocalizations.of(context)!.click_here_to_login,
       isLoading: false,
       onTap: () async {
         //*------calling the verifyOtp method in the ViewModel------*
