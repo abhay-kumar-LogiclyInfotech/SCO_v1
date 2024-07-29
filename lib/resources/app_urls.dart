@@ -14,5 +14,16 @@ class AppUrls {
   //login endpoint
   static String get login => "${_baseUrl}users/login";
 
+  //faq's endpoint
+  static String get faq => "https://stg.sco.ae/api/jsonws/journal.journalarticle/get-latest-article";
+
+  //vision and mission endpoint
+  static String get visionAndMission => "https://stg.sco.ae/api/jsonws/pageview.pagecontent/get-page-content-by-page-url";
+
+
+
+
+
+
 }
 

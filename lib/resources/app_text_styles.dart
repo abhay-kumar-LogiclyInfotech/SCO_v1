@@ -34,6 +34,13 @@ class AppTextStyles {
     );
   }
 
+  static TextStyle normalTextStyle() {
+    return const TextStyle(
+      color: Colors.black,
+      fontSize: 14,
+    );
+  }
+
 
 
 

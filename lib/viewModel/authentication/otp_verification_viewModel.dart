@@ -144,11 +144,10 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Setting Values End------*
 
       //*-----Create Headers Start-----*
-      final String basicAuth =
-          'Basic ${base64Encode(utf8.encode('${Constants.username}:${Constants.password}'))}';
+
       final headers = <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': basicAuth
+        'authorization': Constants.basicAuthWithUsernamePassword
       };
       //*-----Create Headers End-----*
 

@@ -14,24 +14,23 @@ class CustomSimpleAppBar extends StatelessWidget implements PreferredSizeWidget 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LanguageChangeViewModel>(context);
-    return SafeArea(
-      child: Directionality(
-        textDirection: getTextDirection(provider),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          title: title,
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_rounded,
-              color: AppColors.scoButtonColor,
-            ),
-            onPressed: () {
-             Navigator.of(context).pop();
-            },
+    return Directionality(
+      textDirection: getTextDirection(provider),
+      child: AppBar(
+        backgroundColor: Colors.white,
+        title: title,
+
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: AppColors.scoButtonColor,
           ),
-          centerTitle: true,
+          onPressed: () {
+           Navigator.of(context).pop();
+          },
         ),
+        centerTitle: true,
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/vision_and_mission_view.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,6 +15,7 @@ import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/auth_services.dart';
 import '../../viewModel/services/navigation_services.dart';
 import '../authentication/login/login_view.dart';
+import 'custom_drawer_views/faq_view.dart';
 
 class CustomDrawerView extends StatefulWidget {
   final String? userName;
@@ -274,7 +276,9 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    _navigationServices.goBack();
+
+                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const VisionAndMissionView()));
+
                                   },
                                   child: Container(
                                     color: Colors.transparent,
@@ -304,7 +308,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    _navigationServices.goBack();
+                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const FaqView()));
                                   },
                                   child: Container(
                                       color: Colors.transparent,

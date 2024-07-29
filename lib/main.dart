@@ -16,6 +16,8 @@ import 'package:sco_v1/view/authentication/signup/update_security_question_view.
 import 'package:sco_v1/view/main_view.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
+import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
+import 'package:sco_v1/viewModel/drawer/vision_and_mission_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
@@ -70,6 +72,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => LanguageChangeViewModel()),
           ChangeNotifierProvider(create: (_) => SignupViewModel()),
           ChangeNotifierProvider(create: (_) => SecurityQuestionViewModel()),
+          ChangeNotifierProvider(create: (_) => FaqViewModel()),
+          ChangeNotifierProvider(create: (_) => VisionAndMissionViewModel()),
+
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
@@ -106,7 +111,7 @@ class MyApp extends StatelessWidget {
               routes: _navigationServices.routes,
               initialRoute: "/splashView",
 
-              // home:  const ConfirmationView(),
+              // home:  Test()
             );
           },
         ));
