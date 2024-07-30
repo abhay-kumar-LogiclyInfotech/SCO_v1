@@ -80,6 +80,9 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> {
 
                       const SizedBox(height: 20),
 
+
+
+                      //*---------Vision Title---------*/
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -93,7 +96,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      //Vision Description:
+                      //*--------Vision Description--------*/
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -102,12 +105,12 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> {
                                       .toString() ??
                                   "",
                               style: AppTextStyles.normalTextStyle(),
-                          textAlign: TextAlign.justify,),
+                          textAlign: TextAlign.left,),
                         ],
                       ),
                       const SizedBox(height: 20),
 
-                      //Values:
+                      //*---------Values Title--------*/
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -121,7 +124,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> {
                       ),
                       const SizedBox(height: 10),
 
-                      //Values List:
+                      //*---------Values List----------*/
                       ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -138,14 +141,12 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> {
                               ),
                             );
                           }),
-
                       const SizedBox(height: 20),
 
-                      //Goals:
+                      //*---------Goals Title---------*/
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          //Values Title:
                           Text(
                             provider.content?.goals.goalsTitle.toString() ??
                                 "",
@@ -153,9 +154,8 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 10),
-                      // goals List:
+                      //*-------Goals List-----------*/
                       ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,

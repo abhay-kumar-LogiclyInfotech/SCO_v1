@@ -1,25 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
-import 'package:sco_v1/resources/components/custom_expansion_tile.dart';
+import 'package:sco_v1/resources/components/custom_news_and_events_tile.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../resources/app_colors.dart';
 import '../../../resources/app_text_styles.dart';
 
-class FaqView extends StatefulWidget {
-  const FaqView({super.key});
+class NewsAndEventsView extends StatefulWidget {
+  const NewsAndEventsView({super.key});
 
   @override
-  State<FaqView> createState() => _FaqViewState();
+  State<NewsAndEventsView> createState() => _NewsAndEventsViewState();
 }
 
-class _FaqViewState extends State<FaqView> with MediaQueryMixin {
+class _NewsAndEventsViewState extends State<NewsAndEventsView>
+    with MediaQueryMixin {
   @override
   void initState() {
     super.initState();
@@ -36,7 +37,7 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
     return Scaffold(
       appBar: CustomSimpleAppBar(
         title: Text(
-          "FAQ",
+          "News & Events",
           style: AppTextStyles.appBarTitleStyle(),
         ),
       ),
@@ -53,14 +54,16 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
             switch (provider.faqResponse.status) {
               case Status.LOADING:
                 return const Center(
-                  child: CupertinoActivityIndicator (
-                                   color: AppColors.scoThemeColor,
+                  child: CupertinoActivityIndicator(
+                    color: AppColors.scoThemeColor,
                   ),
                 );
 
               case Status.ERROR:
-                return  Center(
-                  child: Text(AppLocalizations.of(context)!.somethingWentWrong,),
+                return Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.somethingWentWrong,
+                  ),
                 );
 
               case Status.COMPLETED:
@@ -77,22 +80,20 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
                             : isLastIndex
                                 ? const EdgeInsets.only(bottom: 30.0)
                                 : const EdgeInsets.only(bottom: 15.0),
-                        child: CustomExpansionTile(
-                            title: provider.questionAnswers[index].question
-                                .toString(),
-                            trailing: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              size: 35,
-                              color: Colors.white,
-                            ),
-                            expandedContent: Text(provider
-                                .questionAnswers[index].answer
-                                .toString())),
+                        child: CustomNewsAndEventsTile(
+                          title: "Conclusion of the forum for new students in the scholarship. Conclusion of the forum for new students in the scholarship",
+                          imagePath: '',
+                          subTitle: 'The Scholarships Office concluded the..',
+                          date: "30-July-2024",
+                          onTap: () {},
+                        ),
                       );
                     });
 
               default:
-                return  Text(AppLocalizations.of(context)!.somethingWentWrong,);
+                return Text(
+                  AppLocalizations.of(context)!.somethingWentWrong,
+                );
             }
           },
         ),

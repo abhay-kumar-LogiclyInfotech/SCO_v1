@@ -5,7 +5,7 @@ import 'package:sco_v1/utils/utils.dart';
 
 import '../app_text_styles.dart';
 
-class CustomTile extends StatefulWidget {
+class CustomScoProgramTile extends StatefulWidget {
 
   final TextDirection textDirection;
   final String imagePath;
@@ -13,7 +13,7 @@ class CustomTile extends StatefulWidget {
   final String subTitle;
   final void Function() onTap;
 
-  const CustomTile({super.key,
+  const CustomScoProgramTile({super.key,
     required this.textDirection,
     required this.imagePath,
     required this.title,
@@ -22,10 +22,10 @@ class CustomTile extends StatefulWidget {
   });
 
   @override
-  State<CustomTile> createState() => _CustomTileState();
+  State<CustomScoProgramTile> createState() => _CustomScoProgramTileState();
 }
 
-class _CustomTileState extends State<CustomTile> with MediaQueryMixin<CustomTile> {
+class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQueryMixin<CustomScoProgramTile> {
   @override
   Widget build(BuildContext context) {
     return   Directionality(
@@ -39,7 +39,7 @@ class _CustomTileState extends State<CustomTile> with MediaQueryMixin<CustomTile
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
             child: Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.only(top: 10,bottom: 10,right: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -71,15 +71,15 @@ class _CustomTileState extends State<CustomTile> with MediaQueryMixin<CustomTile
             widget.imagePath,
             filterQuality: FilterQuality.high,
             fit: BoxFit.fill,
-            width: screenWidth / 4,
-            height: screenHeight / 11,
+            // width: screenWidth / 4,
+            // height: screenHeight / 11,
             errorBuilder: (BuildContext context, Object, StackTrace) {
               return Image.asset(
                 "assets/sidemenu/scholarships_uae.jpg",
                 filterQuality: FilterQuality.high,
                 fit: BoxFit.fill,
-                width: screenWidth / 4,
-                height: screenHeight / 11,
+                // width: screenWidth / 4,
+                // height: screenHeight / 11,
               );
             },
           ),
@@ -121,7 +121,7 @@ class _CustomTileState extends State<CustomTile> with MediaQueryMixin<CustomTile
 
   Widget _titleSection() {
     return Padding(
-      padding: const EdgeInsets.only(left: 4,right: 4),
+      padding: const EdgeInsets.only(left: 10,right: 20),
       child:  Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,14 +129,15 @@ class _CustomTileState extends State<CustomTile> with MediaQueryMixin<CustomTile
         children: [
           //Title
           Text(
-            widget.title,
-            textAlign: TextAlign.justify,
+            widget.title.length < 30 ? widget.title : "${widget.title.substring(0, 30)}...",
+            textAlign: TextAlign.left,
             style: AppTextStyles.titleTextStyle(),
 
           ),
+          const SizedBox(height: 8,),
           Text(
-            widget.subTitle,
-            textAlign: TextAlign.justify,
+            widget.subTitle.length < 50 ? widget.subTitle : "${widget.subTitle.substring(0, 50)}...",
+            textAlign: TextAlign.left,
             style: AppTextStyles.subTitleTextStyle(),
           ),
         ],

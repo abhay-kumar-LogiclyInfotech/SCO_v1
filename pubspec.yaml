@@ -69,7 +69,9 @@ dependencies:
   xml: ^6.5.0
   html_unescape: ^2.0.0
   html:
-
+  url_launcher: ^6.3.0
+  google_maps_flutter: ^2.7.0
+  permission_handler: ^11.3.1
 
   flutter_localizations:
     sdk: flutter

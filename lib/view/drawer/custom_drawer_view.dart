@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/sco_programs.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/vision_and_mission_view.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +17,9 @@ import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/auth_services.dart';
 import '../../viewModel/services/navigation_services.dart';
 import '../authentication/login/login_view.dart';
+import 'custom_drawer_views/contact_us_view.dart';
 import 'custom_drawer_views/faq_view.dart';
+import 'custom_drawer_views/news_and_events_view.dart';
 
 class CustomDrawerView extends StatefulWidget {
   final String? userName;
@@ -247,8 +251,8 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
-                          
-                                     _navigationServices.pushNamed("/aBriefAboutScoView");
+
+                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ABriefAboutScoView()));
                                   },
                                   child: Container(
                                       color: Colors.transparent,
@@ -353,8 +357,10 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 dense: true,
                                 horizontalTitleGap: 5,
                                 onTap: () {
-                          
-                                  _navigationServices.pushNamed("/scoPrograms");
+
+                                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ScoPrograms()));
+
+
                                 },
                                 shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -378,7 +384,8 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
-                                _navigationServices.goBack();
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NewsAndEventsView()));
+
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -399,8 +406,9 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () async {
-                          
-                                _navigationServices.goBack();
+
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ContactUsView()));
+
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -425,7 +433,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 await _authService.clearAllUserData();
                                 await _authService.clearCounter();
                                 _navigationServices.goBack();
-                                _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
                                 _alertServices.toastMessage(AppLocalizations.of(context)!.logout_success);
                               },
                               shape: UnderlineInputBorder(

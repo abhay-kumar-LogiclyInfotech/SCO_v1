@@ -39,6 +39,11 @@ class NavigationServices {
     _navigationStateKey.currentState?.push(route);
   }
 
+  void pushSimpleWithAnimationRoute(Route route) {
+    _navigationStateKey.currentState?.push(route);
+  }
+
+
   void pushCupertino(CupertinoPageRoute route) {
     _navigationStateKey.currentState?.push(route);
   }

@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../resources/app_colors.dart';
@@ -421,7 +423,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/aboutSco.svg",
                 name: AppLocalizations.of(context)!.aboutSco,
-                onTap: () {},
+                onTap: () {
+                  _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ABriefAboutScoView()));
+
+                },
                 textDirection: getTextDirection(provider),
               ),
             ),
@@ -459,7 +464,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 name: AppLocalizations.of(context)!.faqs,
                 textDirection: getTextDirection(provider),
                 onTap: () {
-                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const FaqView()));
+                  _navigationServices.pushSimpleWithAnimationRoute(createRoute(const FaqView()));
 
                 },
               ),
@@ -470,8 +475,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 name: AppLocalizations.of(context)!.visionAndMission,
                 textDirection: getTextDirection(provider),
                 onTap: () {
-                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const VisionAndMissionView()));
-
+               _navigationServices.pushSimpleWithAnimationRoute(createRoute(const VisionAndMissionView()));
                 },
               ),
             ),
@@ -480,7 +484,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 assetName: "assets/news_and_events.svg",
                 name: AppLocalizations.of(context)!.newsAndEvents,
                 textDirection: getTextDirection(provider),
-                onTap: () {},
+                onTap: () {
+                  _navigationServices.pushSimpleWithAnimationRoute(createRoute(const NewsAndEventsView()));
+
+                },
               ),
             ),
           ],

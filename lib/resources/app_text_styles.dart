@@ -34,6 +34,20 @@ class AppTextStyles {
     );
   }
 
+  static TextStyle titleBoldThemeColorTextStyle() {
+    return const TextStyle(
+      color: Color(0xffCDB383),
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    );
+  }
+  static TextStyle normalThemeColorTextStyle() {
+    return const TextStyle(
+      color: Color(0xffCDB383),
+      fontSize: 14,
+    );
+  }
+
   static TextStyle normalTextStyle() {
     return const TextStyle(
       color: Colors.black,

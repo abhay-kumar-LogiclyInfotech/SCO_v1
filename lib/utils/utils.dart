@@ -23,8 +23,8 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 
 
 //Get Text Direction Method:
-TextDirection getTextDirection(LanguageChangeViewModel provider) {
-  return provider.appLocale == const Locale('en') || provider.appLocale == null
+TextDirection getTextDirection(LanguageChangeViewModel langProvider) {
+  return langProvider.appLocale == const Locale('en') || langProvider.appLocale == null
       ? TextDirection.ltr
       : TextDirection.rtl;
 }

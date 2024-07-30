@@ -99,6 +99,11 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
 //*------Get Security Question Method End---------*/
 
+
+
+
+
+
 //*------Send Password through mail Start--------*/
   ApiResponse<ForgotPasswordSendMailModel> _sendForgotPasswordSendMailResponse =
       ApiResponse.none();
@@ -146,6 +151,9 @@ class ForgotPasswordViewModel with ChangeNotifier {
   }
 
 //*-----Send Password through mail End---------*/
+
+
+
 
 //*------Forgot Security Question send Verification Code Start---------*/
   ApiResponse<ForgotSecurityQuestionOtpVerificationModel>

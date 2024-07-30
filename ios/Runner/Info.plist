@@ -2,6 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
+
+  <!-- Explain the URL schemes used by your app -->
+  <!--
+  The following URL schemes are included to allow the app to:
+  - `tel`: Open the phone dialer to make calls.
+  - `sms`: Open the SMS app to send messages.
+  - `https`: Handle HTTPS links to the SCO website.
+  -->
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>tel</string>
+    <string>https</string>
+  </array>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
