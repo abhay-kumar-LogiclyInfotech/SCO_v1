@@ -6,12 +6,12 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/main_view/account_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_view.dart';
 import 'package:sco_v1/view/main_view/home_view.dart';
-import 'package:sco_v1/view/main_view/information_view.dart';
-import 'package:sco_v1/view/main_view/message_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/app_colors.dart';
 import '../resources/components/custom_main_view_app_bar.dart';
+import 'main_view/information_view.dart';
+import 'main_view/sco_program_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -22,14 +22,14 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   bool home = true;
-  bool information = false;
-  bool message = false;
+  bool aboutUs = false;
+  bool scoProgram = false;
   bool account = false;
 
   List<dynamic> screens = [
     const HomeView(),
-    const InformationView(),
-    const MessageView(),
+    const AboutUsView(),
+    const ScoProgramsView(),
     const AccountView()
   ];
 
@@ -87,8 +87,8 @@ class _MainViewState extends State<MainView> {
                       onTap: () {
                         setState(() {
                           home = false;
-                          information = false;
-                          message = false;
+                          aboutUs = false;
+                          scoProgram = false;
                           account = true;
                         });
                       },
@@ -125,8 +125,8 @@ class _MainViewState extends State<MainView> {
                       onTap: () {
                         setState(() {
                           home = false;
-                          information = false;
-                          message = true;
+                          aboutUs = false;
+                          scoProgram = true;
                           account = false;
                         });
                       },
@@ -140,18 +140,18 @@ class _MainViewState extends State<MainView> {
                             SizedBox(
                                 height: 30,
                                 child: SvgPicture.asset(
-                                  message
-                                      ? "assets/message_selected.svg"
-                                      : "assets/message.svg",
+                                  scoProgram
+                                      ? "assets/SCO_Program_selected.svg"
+                                      : "assets/SCO_Program.svg",
                                 )),
                             Text(
-                              AppLocalizations.of(context)!.message,
+                              AppLocalizations.of(context)!.scoPrograms,
                               style: TextStyle(
-                                  color: message
+                                  color: scoProgram
                                       ? Colors.black
                                       : const Color(0xfff9aa6b2),
                                   fontSize: 12,
-                                  fontWeight: message
+                                  fontWeight: scoProgram
                                       ? FontWeight.w900
                                       : FontWeight.w900),
                             ),
@@ -163,8 +163,8 @@ class _MainViewState extends State<MainView> {
                       onTap: () {
                         setState(() {
                           home = false;
-                          information = true;
-                          message = false;
+                          aboutUs = true;
+                          scoProgram = false;
                           account = false;
                         });
                       },
@@ -178,18 +178,18 @@ class _MainViewState extends State<MainView> {
                             SizedBox(
                                 height: 30,
                                 child: SvgPicture.asset(
-                                  information
+                                  aboutUs
                                       ? "assets/information_selected.svg"
                                       : "assets/information.svg",
                                 )),
                             Text(
-                              AppLocalizations.of(context)!.information,
+                              AppLocalizations.of(context)!.aboutUs,
                               style: TextStyle(
-                                  color: information
+                                  color: aboutUs
                                       ? Colors.black
                                       : const Color(0xfff9AA6B2),
                                   fontSize: 12,
-                                  fontWeight: information
+                                  fontWeight: aboutUs
                                       ? FontWeight.w900
                                       : FontWeight.w900),
                             ),
@@ -201,8 +201,8 @@ class _MainViewState extends State<MainView> {
                       onTap: () {
                         setState(() {
                           home = true;
-                          information = false;
-                          message = false;
+                          aboutUs = false;
+                          scoProgram = false;
                           account = false;
                         });
                       },
@@ -248,10 +248,10 @@ class _MainViewState extends State<MainView> {
     if (account) {
       return screens[3];
     }
-    if (message) {
+    if (scoProgram) {
       return screens[2];
     }
-    if (information) {
+    if (aboutUs) {
       return screens[1];
     }
 

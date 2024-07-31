@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 class CustomTextField extends StatefulWidget {
   final FocusNode currentFocusNode;
@@ -10,13 +12,11 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final bool obscureText;
   final String hintText;
-  final bool isNumber;
   bool? textCapitalization;
   Widget? icon;
   bool? filled;
   bool? readOnly;
   TextInputType? textInputType;
-  final TextDirection textDirection;
   dynamic leading;
   dynamic trailing;
   final void Function(String? value) onChanged;
@@ -36,8 +36,6 @@ class CustomTextField extends StatefulWidget {
       required this.obscureText,
       required this.hintText,
       this.textCapitalization,
-      required this.isNumber,
-      required this.textDirection,
       this.icon,
       this.filled,
       this.textInputType,
@@ -58,8 +56,10 @@ class _CustomTextFieldState extends State<CustomTextField>
     with MediaQueryMixin<CustomTextField> {
   @override
   Widget build(BuildContext context) {
+    final langProvider =
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
     return Directionality(
-      textDirection: widget.textDirection,
+      textDirection: getTextDirection(langProvider),
       child: TextField(
         onTap: widget.onTap,
         maxLines: widget.maxLines ?? 1,
@@ -77,7 +77,13 @@ class _CustomTextFieldState extends State<CustomTextField>
             vertical: screenWidth * 0.03,
             horizontal: widget.leading == null ? screenWidth * 0.03 : 0,
           ),
-          prefixIcon: widget.leading,
+          prefixIcon: (widget.maxLines != null && widget.maxLines! > 1)
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 47),
+                  child: widget.leading ?? Container())
+              : widget.leading,
+
+          // add a default widget if leading is null
           prefixIconConstraints: const BoxConstraints(
             minWidth: 30,
             minHeight: 0,
@@ -89,7 +95,8 @@ class _CustomTextFieldState extends State<CustomTextField>
           alignLabelWithHint: true,
           hintText: widget.hintText,
           hintFadeDuration: const Duration(milliseconds: 500),
-          hintStyle: const TextStyle(color: AppColors.darkGrey, fontSize: 14),
+          hintStyle:
+              const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
           border: widget.border ??
               const UnderlineInputBorder(
                   borderRadius: BorderRadius.zero,
@@ -112,8 +119,8 @@ class _CustomTextFieldState extends State<CustomTextField>
                   borderSide: BorderSide(color: AppColors.darkGrey)),
         ),
         inputFormatters: widget.inputFormat,
-        cursorColor: AppColors.darkGrey,
-        style: const TextStyle(color: AppColors.darkGrey),
+        cursorColor: AppColors.hintDarkGrey,
+        style: const TextStyle(color: AppColors.hintDarkGrey),
         keyboardType: widget.textInputType ?? TextInputType.text,
         onSubmitted: (_) {
           widget.nextFocusNode != null

@@ -162,13 +162,11 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
         valueListenable: _newPasswordValueNotifier,
         builder: (context, newPasswordValueNotifier, child) {
           return CustomTextField(
-            textDirection: getTextDirection(provider),
             currentFocusNode: _newPasswordFocusNode,
             nextFocusNode: _confirmPasswordFocusNode,
             controller: _newPasswordController,
             hintText: AppLocalizations.of(context)!.newPassword,
             textInputType: TextInputType.visiblePassword,
-            isNumber: false,
             leading: SvgPicture.asset(
               "assets/lock.svg",
               // height: 18,
@@ -199,12 +197,10 @@ class _ResetPasswordViewState extends State<ResetPasswordView>
         valueListenable: _confirmPasswordValueNotifier,
         builder: (context, confirmPasswordValueNotifier, child) {
           return CustomTextField(
-            textDirection: getTextDirection(provider),
             currentFocusNode: _confirmPasswordFocusNode,
             controller: _confirmPasswordController,
             hintText: AppLocalizations.of(context)!.confirmPassword,
             textInputType: TextInputType.visiblePassword,
-            isNumber: false,
             leading: SvgPicture.asset(
               "assets/lock.svg",
               // height: 18,

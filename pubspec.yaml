@@ -108,6 +108,7 @@ flutter:
   assets:
     - assets/
     - assets/sidemenu/
+    - assets/myAccount/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

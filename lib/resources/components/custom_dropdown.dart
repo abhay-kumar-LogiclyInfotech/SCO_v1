@@ -197,7 +197,7 @@ class _CustomDropdownState extends State<CustomDropdown>
           alignLabelWithHint: true,
           hintText: widget.hintText,
           hintFadeDuration: const Duration(milliseconds: 500),
-          hintStyle: const TextStyle(color: AppColors.darkGrey, fontSize: 14),
+          hintStyle: const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
           border: widget.border ??
               const UnderlineInputBorder(
                   borderRadius: BorderRadius.zero,
@@ -221,14 +221,15 @@ class _CustomDropdownState extends State<CustomDropdown>
         ),
 
         // cursorColor: AppColors.darkGrey,
-        style: const TextStyle(color: AppColors.darkGrey),
+        style: const TextStyle(color: AppColors.hintDarkGrey),
         padding: EdgeInsets.zero,
         hint: Text(
           widget.hintText ?? widget.menuItemsList[0].value.toString(),
           style: const TextStyle(
-              color: AppColors.darkGrey,
-              fontSize: 15,
-              fontWeight: FontWeight.w500),
+            color: AppColors.hintDarkGrey,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         icon: const Icon(
           Icons.keyboard_arrow_down_sharp,

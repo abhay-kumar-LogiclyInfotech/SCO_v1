@@ -250,14 +250,12 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   //security answer field:
   Widget _answerField({required LanguageChangeViewModel langProvider}) {
     return CustomTextField(
-        textDirection: getTextDirection(langProvider),
         currentFocusNode: _answerFocusNode,
         controller: _answerController,
         obscureText: false,
         hintText: AppLocalizations.of(context)!.writeAnswer,
         textInputType: TextInputType.emailAddress,
         textCapitalization: true,
-        isNumber: false,
         maxLines: 3,
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),

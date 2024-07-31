@@ -83,7 +83,7 @@ List<DropdownMenuItem> populateCommonDataDropdown({
             ? element.value
             : element.valueArabic.toString(),
         style: const TextStyle(
-          color: AppColors.darkGrey,
+          color: AppColors.hintDarkGrey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
@@ -198,6 +198,9 @@ Route createRoute(dynamic page) {
         );
       });
 }
+
+
+
 
 
 

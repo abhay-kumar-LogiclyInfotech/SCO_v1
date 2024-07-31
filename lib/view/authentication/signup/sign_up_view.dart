@@ -369,7 +369,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _firstName(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _firstNameFocusNode,
       nextFocusNode: _secondNameFocusNode,
       controller: _firstNameController,
@@ -377,7 +376,6 @@ class _SignUpViewState extends State<SignUpView>
       hintText: AppLocalizations.of(context)!.firstName,
       textInputType: TextInputType.text,
       textCapitalization: true,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/name.svg",
         // height: 18,
@@ -397,7 +395,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _secondName(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _secondNameFocusNode,
       nextFocusNode: _thirdFourthNameFocusNode,
       controller: _secondNameController,
@@ -405,7 +402,6 @@ class _SignUpViewState extends State<SignUpView>
       hintText: AppLocalizations.of(context)!.secondName,
       textInputType: TextInputType.text,
       textCapitalization: true,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/name.svg",
         // height: 18,
@@ -419,7 +415,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _thirdFourthName(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _thirdFourthNameFocusNode,
       nextFocusNode: _familyNameFocusNode,
       controller: _thirdFourthNameController,
@@ -427,7 +422,6 @@ class _SignUpViewState extends State<SignUpView>
       hintText: AppLocalizations.of(context)!.thirdFourthName,
       textInputType: TextInputType.text,
       textCapitalization: true,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/name.svg",
         // height: 18,
@@ -441,7 +435,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _familyName(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _familyNameFocusNode,
       nextFocusNode: _dobFocusNode,
       controller: _familyNameController,
@@ -449,7 +442,6 @@ class _SignUpViewState extends State<SignUpView>
       hintText: AppLocalizations.of(context)!.familyName,
       textInputType: TextInputType.text,
       textCapitalization: true,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/familyName.svg",
         // height: 18,
@@ -470,7 +462,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _dateOfBirth(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       readOnly: true,
       currentFocusNode: _dobFocusNode,
       nextFocusNode: _genderFocusNode,
@@ -479,7 +470,6 @@ class _SignUpViewState extends State<SignUpView>
       hintText: AppLocalizations.of(context)!.dob,
       textInputType: TextInputType.datetime,
       textCapitalization: true,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/calendar.svg",
         // height: 18,
@@ -528,7 +518,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _emailAddress(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _emailFocusNode,
       nextFocusNode: _confirmEmailFocusNode,
       controller: _emailController,
@@ -536,7 +525,6 @@ class _SignUpViewState extends State<SignUpView>
       hintText: AppLocalizations.of(context)!.emailAddress,
       textInputType: TextInputType.emailAddress,
       textCapitalization: true,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/email.svg",
         // height: 18,
@@ -557,7 +545,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _confirmEmailAddress(LanguageChangeViewModel provider) {
     return CustomTextField(
-        textDirection: getTextDirection(provider),
         currentFocusNode: _confirmEmailFocusNode,
         nextFocusNode: _passwordFocusNode,
         controller: _confirmEmailController,
@@ -565,7 +552,6 @@ class _SignUpViewState extends State<SignUpView>
         hintText: AppLocalizations.of(context)!.confirmEmailAddress,
         textInputType: TextInputType.emailAddress,
         textCapitalization: true,
-        isNumber: false,
         leading: SvgPicture.asset(
           "assets/email.svg",
           // height: 18,
@@ -588,13 +574,11 @@ class _SignUpViewState extends State<SignUpView>
         valueListenable: _passwordVisibility,
         builder: (context, obscurePassword, child) {
           return CustomTextField(
-              textDirection: getTextDirection(provider),
               currentFocusNode: _passwordFocusNode,
               nextFocusNode: _confirmPasswordFocusNode,
               controller: _passwordController,
               hintText: AppLocalizations.of(context)!.password,
               textInputType: TextInputType.visiblePassword,
-              isNumber: false,
               leading: SvgPicture.asset(
                 "assets/lock.svg",
                 // height: 18,
@@ -632,13 +616,11 @@ class _SignUpViewState extends State<SignUpView>
         valueListenable: _confirmPasswordVisibility,
         builder: (context, obscurePassword, child) {
           return CustomTextField(
-            textDirection: getTextDirection(provider),
             currentFocusNode: _confirmPasswordFocusNode,
             nextFocusNode: _countryFocusNode,
             controller: _confirmPasswordController,
             hintText: AppLocalizations.of(context)!.confirmPassword,
             textInputType: TextInputType.text,
-            isNumber: false,
             leading: SvgPicture.asset(
               "assets/lock.svg",
               // height: 18,
@@ -690,7 +672,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _emiratesId(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _emiratesIdFocusNode,
       nextFocusNode: _studentPhoneNumberFocusNode,
       controller: _emiratesIdController,
@@ -699,7 +680,6 @@ class _SignUpViewState extends State<SignUpView>
       textInputType: TextInputType.datetime,
       inputFormat: [EmiratesIDFormatter()],
       textCapitalization: true,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/emiratesId.svg",
         // height: 18,
@@ -720,14 +700,12 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _studentPhoneNumber(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _studentPhoneNumberFocusNode,
       controller: _studentPhoneNumberController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.studentMobileNumber,
       textInputType: TextInputType.phone,
       textCapitalization: true,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/phoneNumber.svg",
         // height: 18,

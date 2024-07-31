@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../resources/app_colors.dart';
 
-class InformationView extends StatefulWidget {
-  const InformationView({super.key});
+class AboutUsView extends StatefulWidget {
+  const AboutUsView({super.key});
 
   @override
-  State<InformationView> createState() => _InformationViewState();
+  State<AboutUsView> createState() => _AboutUsViewState();
 }
 
-class _InformationViewState extends State<InformationView> {
+class _AboutUsViewState extends State<AboutUsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

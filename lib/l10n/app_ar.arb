@@ -62,7 +62,7 @@
   "language": "اللغة",
   "forgotPasswordTitle": "نسيت كلمة المرور",
   "pleaseEnterYourEmailAddress": "يرجى إدخال بريدك الإلكتروني!",
-  "nameCantBeEmpty": "الاسم لا يمكن أن يكون فارغًا",
+  "fieldCantBeEmpty": "الحقل لا يمكن أن يكون فارغاً",
   "invalidName": "اسم غير صحيح.\nيسمح فقط بالحروف الإنجليزية والعربية.\nلا يُسمح بالرموز الخاصة أو الأرقام أو المسافات الزائدة.",
   "emailCantBeEmpty": "البريد الإلكتروني لا يمكن أن يكون فارغًا",
   "invalidEmailAddress": "البريد الإلكتروني غير صحيح.",
@@ -185,7 +185,31 @@
   "something_went_wrong": "حدث خطأ في حسابك. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالمسؤول.",
   "password_sent_successfully": "تم إرسال كلمة المرور بنجاح",
   "otp_sent_successfully": "تم إرسال رمز التحقق بنجاح",
-  "error_occurred": "حدث خطأ أثناء معالجة طلبك."
+  "error_occurred": "حدث خطأ أثناء معالجة طلبك.",
+  "nameCantBeEmpty": "الاسم لا يمكن أن يكون فارغاً",
+  "mobileCantBeEmpty": "رقم الهاتف لا يمكن أن يكون فارغاً",
+  "inquiryTypeCantBeEmpty": "نوع الاستفسار لا يمكن أن يكون فارغاً",
+  "subjectCantBeEmpty": "الموضوع لا يمكن أن يكون فارغاً",
+  "messageCantBeEmpty": "الرسالة لا يمكن أن تكون فارغة",
+  "captchaCantBeEmpty": "الرمز المرئي لا يمكن أن يكون فارغاً",
+  "captchaDoesNotMatch": "الرمز المرئي لا يتطابق",
+  "fullName": "الاسم الكامل",
+  "mobile": "رقم الهاتف",
+  "selectInquiryType": "اختر نوع الاستفسار",
+  "subject": "الموضوع",
+  "contactUs": "اتصل بنا",
+  "send": "إرسال",
+  "writeToUs": "اكتب لنا-",
+  "poBox": "صندوق بريد ",
+  "phoneNo": "رقم الهاتف: ",
+  "website": "الموقع الإلكتروني: ",
+  "unitedArabEmirates": "الإمارات العربية المتحدة - أبوظبي",
+  "poBoxTapMessage": "تم النقر على صندوق البريد: ",
+  "phoneNo1": "رقم الهاتف 1",
+  "phoneNo2": "رقم الهاتف 2",
+  "webUrl": "https://www.sco.ae",
+  "phoneCallPermissionDenied": "تم رفض إذن إجراء المكالمات الهاتفية"
+
 
 
 

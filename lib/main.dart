@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/components/custom_account_grid_container.dart';
 import 'package:sco_v1/view/authentication/forgot_password/answer_security_question_view.dart';
 import 'package:sco_v1/view/authentication/forgot_password/confirmation_view.dart';
 import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
@@ -111,7 +112,6 @@ class MyApp extends StatelessWidget {
               routes: _navigationServices.routes,
               initialRoute: "/splashView",
 
-              // home:  Test()
             );
           },
         ));

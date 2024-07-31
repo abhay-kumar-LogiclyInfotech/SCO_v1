@@ -113,6 +113,21 @@ class Validations {
     // Check if answer is not empty
     return answer.isNotEmpty;
   }
+
+  //Name Validation:
+  static bool isEmpty(String string) {
+
+    if (string.isEmpty) {
+      return false;
+    }
+
+    // Check for extra spaces
+    if (string.trim().split(' ').length != string.split(' ').length) {
+      return false;
+    }
+
+    return true;
+  }
 }
 
 class ErrorText {
@@ -184,4 +199,16 @@ class ErrorText {
     }
     return null;
   }
+
+  //Empty Field Error:
+  //Name error:
+  static String? getEmptyFieldError({required String name, required BuildContext context}) {
+    if (name.isEmpty) {
+      return AppLocalizations.of(context)!.fieldCantBeEmpty;
+    } else if (!Validations.isEmpty(name)) {
+      return AppLocalizations.of(context)!.invalidName;
+    }
+    return null;
+  }
+
 }

@@ -44,7 +44,7 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
                   SizedBox(
                     height: 35,
                     width: 80,
-                    child: Image.asset('assets/company_logo.jpg'),
+                    child: SvgPicture.asset('assets/sco_logo-cropped.svg'),
                   ),
                 ],
               ),
@@ -70,17 +70,19 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: SvgPicture.asset(
-                            "assets/notification_bell.svg",
-                            height: 20,
-                            width: 20,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
+
+                        //*------Notifications Bell Deprecated by Designer-----*/
+                        // GestureDetector(
+                        //   onTap: () {},
+                        //   child: SvgPicture.asset(
+                        //     "assets/notification_bell.svg",
+                        //     height: 20,
+                        //     width: 20,
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   width: 30,
+                        // ),
                         GestureDetector(
                           onTap: () {},
                           child: SvgPicture.asset(

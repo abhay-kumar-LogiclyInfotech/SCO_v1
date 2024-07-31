@@ -62,7 +62,7 @@
   "language": "Language",
   "forgotPasswordTitle": "Forgot Password",
   "pleaseEnterYourEmailAddress": "Please enter your Email Address!",
-  "nameCantBeEmpty": "Name can't be empty",
+  "fieldCantBeEmpty": "Field can't be empty",
   "invalidName": "Invalid name.\nOnly English and Arabic characters allowed.\nNo special characters, digits, or extra spaces.",
   "emailCantBeEmpty": "Email can't be empty",
   "invalidEmailAddress": "Invalid email address.",
@@ -185,7 +185,31 @@
   "something_went_wrong": "Something went wrong with your account. Please try again later or contact the administrator.",
   "password_sent_successfully": "Password sent successfully",
   "otp_sent_successfully": "OTP sent successfully",
-  "error_occurred": "An error occurred while processing your request."
+  "error_occurred": "An error occurred while processing your request.",
+  "nameCantBeEmpty": "Name can't be empty",
+  "mobileCantBeEmpty": "Mobile number can't be empty",
+  "inquiryTypeCantBeEmpty": "Inquiry type can't be empty",
+  "subjectCantBeEmpty": "Subject can't be empty",
+  "messageCantBeEmpty": "Message can't be empty",
+  "captchaCantBeEmpty": "Captcha can't be empty",
+  "captchaDoesNotMatch": "Captcha does not match",
+  "fullName": "Full Name",
+  "mobile": "Mobile",
+  "selectInquiryType": "Select Inquiry Type",
+  "subject": "Subject",
+  "contactUs": "Contact Us",
+  "send": "Send",
+  "writeToUs": "Write To Us-",
+  "poBox": "PO Box ",
+  "phoneNo": "Phone No: ",
+  "website": "Website: ",
+  "unitedArabEmirates": "United Arab Emirates - Abu Dhabi",
+  "poBoxTapMessage": "PO Box tapped: ",
+  "phoneNo1": "Phone No 1",
+  "phoneNo2": "Phone No 2",
+  "webUrl": "https://www.sco.ae",
+  "phoneCallPermissionDenied": "Phone call permission denied"
+
 
 
 

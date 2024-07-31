@@ -45,8 +45,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
 
   void _generateRandomCaptcha() {
     setState(() {
-      // Generate a random number between 1000 and 9999
-      int randomNumber = Random().nextInt(100000);
+      int randomNumber = 100000 + Random().nextInt(900000);
       _captchaText = '$randomNumber';
     });
   }
@@ -220,14 +219,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
 
   Widget _emailAddressField(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _emailFocusNode,
       nextFocusNode: _captchaFocusNode,
       controller: _emailController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.emailAddress,
       textInputType: TextInputType.emailAddress,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/email.svg",
         // height: 18,
@@ -274,13 +271,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
 
   Widget _captchaField(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _captchaFocusNode,
       controller: _captchaController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.enterCaptcha,
-      textInputType: TextInputType.emailAddress,
-      isNumber: false,
+      textInputType: TextInputType.number,
       leading: SvgPicture.asset(
         "assets/captcha.svg",
         // height: 18,

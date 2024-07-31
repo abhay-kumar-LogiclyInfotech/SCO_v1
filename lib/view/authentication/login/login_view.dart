@@ -352,14 +352,12 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   Widget _emailAddressField(LanguageChangeViewModel provider) {
     return CustomTextField(
-      textDirection: getTextDirection(provider),
       currentFocusNode: _emailFocusNode,
       nextFocusNode: _passwordFocusNode,
       controller: _usernameController,
       obscureText: false,
       hintText: AppLocalizations.of(context)!.idEmailOrMobile,
       textInputType: TextInputType.emailAddress,
-      isNumber: false,
       leading: SvgPicture.asset(
         "assets/email.svg",
         // height: 18,
@@ -374,12 +372,10 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
         valueListenable: _obscurePassword,
         builder: (context, obscurePassword, child) {
           return CustomTextField(
-            textDirection: getTextDirection(provider),
             currentFocusNode: _passwordFocusNode,
             controller: _passwordController,
             hintText: AppLocalizations.of(context)!.password,
             textInputType: TextInputType.text,
-            isNumber: false,
             leading: SvgPicture.asset(
               "assets/lock.svg",
               // height: 18,

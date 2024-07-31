@@ -203,7 +203,6 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
   //security question field:
   Widget _questionField({required LanguageChangeViewModel langProvider}) {
     return CustomTextField(
-        textDirection: getTextDirection(langProvider),
         readOnly: true,
         currentFocusNode: _questionFocusNode,
         nextFocusNode: _answerFocusNode,
@@ -212,7 +211,6 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
         hintText: AppLocalizations.of(context)!.securityQuestion,
         textInputType: TextInputType.text,
         textCapitalization: true,
-        isNumber: false,
         maxLines: 1,
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
@@ -223,14 +221,12 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
   //security answer field:
   Widget _answerField({required LanguageChangeViewModel langProvider}) {
     return CustomTextField(
-        textDirection: getTextDirection(langProvider),
         currentFocusNode: _answerFocusNode,
         controller: _answerController,
         obscureText: false,
         hintText: AppLocalizations.of(context)!.writeAnswer,
-        textInputType: TextInputType.text,
+        textInputType: TextInputType.multiline,
         textCapitalization: true,
-        isNumber: false,
         maxLines: 3,
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),

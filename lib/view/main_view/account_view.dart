@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/resources/components/user_info_container.dart';
+import 'package:sco_v1/resources/components/custom_account_grid_container.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/view/main_view/accout_views/academic_services_view.dart';
+import 'package:sco_v1/view/main_view/accout_views/addresses_view.dart';
+import 'package:sco_v1/view/main_view/accout_views/application_status_view.dart';
+import 'package:sco_v1/view/main_view/accout_views/change_password_view.dart';
+import 'package:sco_v1/view/main_view/accout_views/employment_status_view.dart';
+import 'package:sco_v1/view/main_view/accout_views/security_questions_view.dart';
+import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
-import '../../resources/app_colors.dart';
-import 'home_view.dart';
+import '../../models/account/account_grid_container_view_model.dart';
+import '../../viewModel/language_change_ViewModel.dart';
+import 'accout_views/personal_details_view.dart';
 
 class AccountView extends StatefulWidget {
   const AccountView({super.key});
@@ -15,213 +22,117 @@ class AccountView extends StatefulWidget {
   State<AccountView> createState() => _AccountViewState();
 }
 
-class _AccountViewState extends State<AccountView>
-    with MediaQueryMixin<AccountView> {
+class _AccountViewState extends State<AccountView> {
+  late NavigationServices _navigationServices;
+
+  @override
+  void initState() {
+    super.initState();
+    final GetIt getIt = GetIt.instance;
+    _navigationServices = getIt.get<NavigationServices>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.emailAddress),
-        actions: [
-          Consumer<LanguageChangeViewModel>(builder: (context, provider, _) {
-            return PopupMenuButton(
-                onSelected: (Language item) {
-                  if (Language.english.name == item.name) {
-                    provider.changeLanguage(const Locale('en'));
-                  } else {
-                    debugPrint('Arabic');
-                    provider.changeLanguage(const Locale('ar'));
-                  }
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<Language>>[
-                      const PopupMenuItem(
-                          value: Language.english, child: Text("English")),
-                      const PopupMenuItem(
-                          value: Language.spanish, child: Text("Arabic"))
-                    ]);
-          })
-        ],
-      ),
-      body: _buildUI(),
+      backgroundColor: const Color(0xffF5F5F5),
+      body: _buildUi(),
     );
   }
 
-  Widget _buildUI() {
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(top: screenWidth * 0.04),
+  Widget _buildUi() {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
+
+    final accountItemsMapList = [
+      {
+        'title': "Personal Details",
+        'assetAddress': "assets/myAccount/personal_details.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const PersonalDetailsView()))
+      },
+      {
+        'title': "Academic Services",
+        'assetAddress': "assets/myAccount/academic_services.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const AcademicServicesView()))
+      },
+      {
+        'title': "Employment Status",
+        'assetAddress': "assets/myAccount/employment_status.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const EmploymentStatusView()))
+      },
+      {
+        'title': "Application Status",
+        'assetAddress': "assets/myAccount/application_status.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const ApplicationStatusView()))
+      },
+      {
+        'title': "Change Password",
+        'assetAddress': "assets/myAccount/change_password.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const ChangePasswordView()))
+      },
+      {
+        'title': "Addresses",
+        'assetAddress': "assets/myAccount/address.svg",
+        "routeBuilder": () => _navigationServices
+            .pushSimpleWithAnimationRoute(createRoute(const AddressesView()))
+      },
+      {
+        'title': "Security Questions",
+        'assetAddress': "assets/myAccount/security_questions.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const SecurityQuestionsView()))
+      }
+    ];
+
+    List<AccountGridContainerModel> itemsList = [];
+
+    for (var element in accountItemsMapList) {
+      itemsList.add(AccountGridContainerModel.fromJson(element));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0, right: 20),
+      child: Directionality(
+        textDirection: getTextDirection(langProvider),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //personal Information:
-              _personalInformation(),
+//providing space from above
+              const SizedBox(height: 20),
 
-              //general information:
-              _generalInformation()
+              //grid View:
+              GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: itemsList.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Number of columns
+                    crossAxisSpacing: 30, // Spacing between columns
+                    mainAxisSpacing: 30, // Spacing between rows
+                    childAspectRatio: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    final lastIndex = itemsList.length - 1;
+                    AccountGridContainerModel item = itemsList[index];
+                    return CustomAccountGridContainer(
+                      assetAddress: item.assetAddress!,
+                      title: item.title!,
+                      onTap: item.routeBuilder!,
+                    );
+                  }),
+
+              //Providing space from below
+              const SizedBox(
+                height: 20,
+              )
             ],
           ),
         ),
       ),
     );
-  }
-
-  //personal Information:
-  Widget _personalInformation() {
-    return Consumer<LanguageChangeViewModel>(builder: (context, provider, _) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //Static Text:
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  child: Directionality(
-                    textDirection: getTextDirection(provider),
-                    child: Text(
-                      AppLocalizations.of(context)!.personalInformation,
-                      style: const TextStyle(
-                          color: Color(0xff8591A9),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(
-              height: 15,
-            ),
-
-            Material(
-                elevation: 4,
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                child: Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: Column(
-                    children: [
-                      UserInfoContainer(
-                        title: AppLocalizations.of(context)!.userName,
-                        displayTitle: "Abhay Kumar",
-                        textDirection: getTextDirection(provider),
-                      ),
-                      const Divider(
-                        color: Color(0xffDFDFDF),
-                      ),
-                      UserInfoContainer(
-                        title: AppLocalizations.of(context)!.location,
-                        displayTitle: "Abhay Kumar",
-                        textDirection: getTextDirection(provider),
-                      ),
-                      const Divider(
-                        color: Color(0xffDFDFDF),
-                      ),
-                      UserInfoContainer(
-                          textDirection: getTextDirection(provider),
-                          title: AppLocalizations.of(context)!.contactNumber,
-                          displayTitle: "Abhay Kumar"),
-                      const Divider(
-                        color: Color(0xffDFDFDF),
-                      ),
-                      UserInfoContainer(
-                          textDirection: getTextDirection(provider),
-                          title: AppLocalizations.of(context)!.emailId,
-                          displayTitle: "Abhay Kumar"),
-                      const Divider(
-                        color: Color(0xffDFDFDF),
-                      ),
-                      UserInfoContainer(
-                          textDirection: getTextDirection(provider),
-                          title: AppLocalizations.of(context)!.password,
-                          displayTitle: "Abhay Kumar"),
-                    ],
-                  ),
-                ))
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _generalInformation() {
-    return Consumer<LanguageChangeViewModel>(builder: (context, provider, _) {
-      return Padding(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //Static Text:
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  child: Directionality(
-                    textDirection: getTextDirection(provider),
-                    child: Text(
-                      AppLocalizations.of(context)!.generalInformation,
-                      style: const TextStyle(
-                          color: Color(0xff8591A9),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-
-            Material(
-                elevation: 4,
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                child: Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: Column(
-                    children: [
-                      UserInfoContainer(
-                          textDirection: getTextDirection(provider),
-                          title: AppLocalizations.of(context)!.scholarship,
-                          displayTitle: "Abhay Kumar"),
-                      const Divider(
-                        color: Color(0xffDFDFDF),
-                      ),
-                      UserInfoContainer(
-                          textDirection: getTextDirection(provider),
-                          title: AppLocalizations.of(context)!.country,
-                          displayTitle: "Abhay Kumar"),
-                      const Divider(
-                        color: Color(0xffDFDFDF),
-                      ),
-                      UserInfoContainer(
-                          textDirection: getTextDirection(provider),
-                          title: AppLocalizations.of(context)!.state,
-                          displayTitle: "Abhay Kumar"),
-                      const Divider(
-                        color: Color(0xffDFDFDF),
-                      ),
-                      UserInfoContainer(
-                          textDirection: getTextDirection(provider),
-                          title: AppLocalizations.of(context)!.address,
-                          displayTitle: "Abhay Kumar"),
-                    ],
-                  ),
-                ))
-          ],
-        ),
-      );
-    });
   }
 }
