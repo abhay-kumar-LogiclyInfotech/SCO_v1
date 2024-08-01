@@ -1,12 +1,11 @@
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/NetworkApiServices.dart';
+import 'package:sco_v1/models/drawer/IndividualImageModel.dart';
 import 'package:sco_v1/models/drawer/faq_model.dart';
 import 'package:sco_v1/models/drawer/news_and_events_model.dart';
 import 'package:sco_v1/models/drawer/vision_and_mission_model.dart';
-import 'package:sco_v1/viewModel/drawer/contact_us_viewModel.dart';
 
 import '../../models/drawer/contact_us_model.dart';
-import '../../models/splash/commonData_model.dart';
 import '../../resources/app_urls.dart';
 
 class DrawerRepository {
@@ -23,8 +22,6 @@ class DrawerRepository {
     return FaqModel.fromJson(response);
   }
 
-
-
   //*------Faq's API method------*/
   Future<VisionAndMissionModel> visionAndMission(
       {required dynamic headers, required dynamic body}) async {
@@ -39,7 +36,7 @@ class DrawerRepository {
   //*------Contact Us methods------*/
   Future<ContactUsModel> contactUs(
       {required Map<String, String> headers,
-        required Map<String, String> fields}) async {
+      required Map<String, String> fields}) async {
     dynamic response = await _apiServices.getMultipartApiServices(
         method: 'POST',
         url: AppUrls.contactUs,
@@ -49,8 +46,6 @@ class DrawerRepository {
     return ContactUsModel.fromJson(response);
   }
 
-
-
   //*------Get News and Events Method-------*
   Future<List<NewsAndEventsModel>> newsAndEvents(
       {required dynamic headers}) async {
@@ -59,12 +54,23 @@ class DrawerRepository {
       headers: headers,
     );
 
-    List<NewsAndEventsModel> _newsAndEventsList = [];
+    List<NewsAndEventsModel> newsAndEventsList = [];
 
-    for(var item in response){
-      _newsAndEventsList.add(NewsAndEventsModel.fromJson(item));
+    for (var item in response) {
+      newsAndEventsList.add(NewsAndEventsModel.fromJson(item));
     }
 
-    return _newsAndEventsList;
+    return newsAndEventsList;
+  }
+
+//*------Get Individual Image-------*
+  Future<IndividualImageModel> individualImage(
+      {required dynamic imageId, required dynamic headers}) async {
+    dynamic response = await _apiServices.getGetApiServices(
+      url: "${AppUrls.individualImage}$imageId",
+      headers: headers,
+    );
+
+    return IndividualImageModel.fromJson(response);
   }
 }

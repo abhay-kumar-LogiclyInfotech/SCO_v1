@@ -34,6 +34,9 @@ class Constants {
             ),
           ]));
 
+
+  static const String newsImageUrl = "https://www.istockphoto.com/photo/cubes-with-the-word-news-on-a-newspaper-gm1128119311-297585902?utm_campaign=srp_photos_top&utm_content=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fnews-and-events&utm_medium=affiliate&utm_source=unsplash&utm_term=news+and+events%3A%3A%3A";
+
   static const String longText = '''
   I love my India. This statement is not just an expression of my emotions, but a profound reflection of the deep-seated affection and pride I feel for my homeland. India, a nation of unparalleled diversity, rich history, and vibrant culture, holds a special place in my heart. Every aspect of this vast land, from its picturesque landscapes to its bustling cities, from its ancient traditions to its modern advancements, evokes a sense of belonging and pride.
 

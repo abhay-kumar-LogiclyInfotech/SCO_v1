@@ -31,4 +31,7 @@ class AppUrls {
   //news and events endpoint
   static String get newsAndEvents =>
       "${_commonBaseUrl}jsonws/newsandevents.newsandevents/find-all-published-item/group-id/20126/is-published/true/is-event/false";
+
+  //individual image endpoint
+  static String get individualImage => "${_baseUrl}common-data/get-image-url/";
 }

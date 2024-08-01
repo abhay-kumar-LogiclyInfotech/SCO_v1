@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
 import 'package:sco_v1/resources/components/custom_news_and_events_tile.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_details_view.dart';
 import 'package:sco_v1/viewModel/drawer/news_and_events_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../../resources/app_colors.dart';
 import '../../../resources/app_text_styles.dart';
@@ -21,9 +24,15 @@ class NewsAndEventsView extends StatefulWidget {
 
 class _NewsAndEventsViewState extends State<NewsAndEventsView>
     with MediaQueryMixin {
+  late NavigationServices _navigationServices;
+
   @override
   void initState() {
     super.initState();
+    //register services:
+    final GetIt getIt = GetIt.instance;
+    _navigationServices = getIt.get<NavigationServices>();
+
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       final provider =
           Provider.of<NewsAndEventsViewmodel>(context, listen: false);
@@ -39,10 +48,8 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        title: Text(
-          "News & Events",
-          style: AppTextStyles.appBarTitleStyle(),
-        ),
+        title: Text(AppLocalizations.of(context)!.newsAndEvents,
+            style: AppTextStyles.appBarTitleStyle()),
       ),
       body: _buildUi(context),
     );
@@ -79,7 +86,10 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
                           provider.parsedNewsAndEventsModelList.length -
                               1); //// Replace 10 with your itemCount if dynamic
                       final item = provider.parsedNewsAndEventsModelList[index];
-                      final languageId = getTextDirection(langProvider) == TextDirection.rtl ? 'ar_SA':'en_US' ;
+                      final languageId =
+                          getTextDirection(langProvider) == TextDirection.rtl
+                              ? 'ar_SA'
+                              : 'en_US';
                       return Padding(
                         padding: index == 0
                             ? const EdgeInsets.only(top: 30.0, bottom: 15.0)
@@ -88,10 +98,19 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
                                 : const EdgeInsets.only(bottom: 15.0),
                         child: CustomNewsAndEventsTile(
                           title: item.getTitle(languageId),
-                          imagePath: '',
+                          imageId: item.coverImageFileEntryId,
                           subTitle: item.getDescription(languageId),
                           date: item.getFormattedDate(),
-                          onTap: () {},
+                          onTap: () {
+                            _navigationServices
+                                .pushCupertino(CupertinoPageRoute(
+                              builder: (context) => NewsAndEventsDetailView(
+                                  imageId: item.coverImageFileEntryId,
+                                  title: item.getTitle(languageId),
+                                  subTitle: item.getDescription(languageId),
+                                  content: item.getContent(languageId)),
+                            ));
+                          },
                         ),
                       );
                     });
