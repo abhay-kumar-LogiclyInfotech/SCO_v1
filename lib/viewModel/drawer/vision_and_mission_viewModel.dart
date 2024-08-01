@@ -26,7 +26,6 @@ class VisionAndMissionViewModel with ChangeNotifier {
 
   //*------Accessing Api Services------*
 
-  //*---common for all methods-----*/
   final DrawerRepository _drawerRepository = DrawerRepository();
 
   //*------Get Security Question Method Start------*/

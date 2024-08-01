@@ -6,7 +6,7 @@ import 'package:sco_v1/data/response/status.dart';
 import 'package:sco_v1/resources/components/custom_news_and_events_tile.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
+import 'package:sco_v1/viewModel/drawer/news_and_events_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../resources/app_colors.dart';
@@ -25,16 +25,19 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      final provider = Provider.of<FaqViewModel>(context, listen: false);
+      final provider =
+          Provider.of<NewsAndEventsViewmodel>(context, listen: false);
       final langProvider =
           Provider.of<LanguageChangeViewModel>(context, listen: false);
-      await provider.getFaq(context: context, langProvider: langProvider);
+      await provider.newsAndEvents(
+          context: context, langProvider: langProvider);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(
           "News & Events",
@@ -46,12 +49,13 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
   }
 
   Widget _buildUi(context) {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.only(left: 10.0, right: 10),
-        child: Consumer<FaqViewModel>(
+        child: Consumer<NewsAndEventsViewmodel>(
           builder: (context, provider, _) {
-            switch (provider.faqResponse.status) {
+            switch (provider.newsAndEventsResponse.status) {
               case Status.LOADING:
                 return const Center(
                   child: CupertinoActivityIndicator(
@@ -69,11 +73,13 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
               case Status.COMPLETED:
                 return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: provider.questionAnswers.length,
+                    itemCount: provider.parsedNewsAndEventsModelList.length,
                     itemBuilder: (context, index) {
                       bool isLastIndex = (index ==
-                          provider.questionAnswers.length - 1); // Replace 10 with your itemCount if dynamic
-
+                          provider.parsedNewsAndEventsModelList.length -
+                              1); //// Replace 10 with your itemCount if dynamic
+                      final item = provider.parsedNewsAndEventsModelList[index];
+                      final languageId = getTextDirection(langProvider) == TextDirection.rtl ? 'ar_SA':'en_US' ;
                       return Padding(
                         padding: index == 0
                             ? const EdgeInsets.only(top: 30.0, bottom: 15.0)
@@ -81,10 +87,10 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
                                 ? const EdgeInsets.only(bottom: 30.0)
                                 : const EdgeInsets.only(bottom: 15.0),
                         child: CustomNewsAndEventsTile(
-                          title: "Conclusion of the forum for new students in the scholarship. Conclusion of the forum for new students in the scholarship",
+                          title: item.getTitle(languageId),
                           imagePath: '',
-                          subTitle: 'The Scholarships Office concluded the..',
-                          date: "30-July-2024",
+                          subTitle: item.getDescription(languageId),
+                          date: item.getFormattedDate(),
                           onTap: () {},
                         ),
                       );

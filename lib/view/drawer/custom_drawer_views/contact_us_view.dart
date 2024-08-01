@@ -6,6 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/data/response/status.dart';
+import 'package:sco_v1/viewModel/drawer/contact_us_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -65,7 +67,9 @@ class _ContactUsViewState extends State<ContactUsView> {
       } else {
         // Handle the case where permission is not granted
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(AppLocalizations.of(context)!.phoneCallPermissionDenied)),
+          SnackBar(
+              content: Text(
+                  AppLocalizations.of(context)!.phoneCallPermissionDenied)),
         );
       }
     }
@@ -119,21 +123,27 @@ class _ContactUsViewState extends State<ContactUsView> {
     });
   }
 
+
+
+  void _initializeData(){
+    //Rooting the angle and generating the new captcha
+    _rotate();
+
+    final provider =
+    Provider.of<LanguageChangeViewModel>(context, listen: false);
+    _inquiryTypeMenuItemsList = populateCommonDataDropdown(
+        menuItemsList: Constants.lovCodeMap['CONTACT_US_TYPE']!.values!,
+        provider: provider);
+  }
+
   @override
   void initState() {
     super.initState();
 
     final GetIt getIt = GetIt.instance;
     _alertServices = getIt.get<AlertServices>();
+    _initializeData();
 
-    //Rooting the angle and generating the new captcha
-    _rotate();
-
-    final provider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
-    _inquiryTypeMenuItemsList = populateCommonDataDropdown(
-        menuItemsList: Constants.lovCodeMap['CONTACT_US_TYPE']!.values!,
-        provider: provider);
   }
 
   @override
@@ -157,6 +167,7 @@ class _ContactUsViewState extends State<ContactUsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomSimpleAppBar(
         title: Text(
           AppLocalizations.of(context)!.contactUs,
@@ -449,14 +460,13 @@ class _ContactUsViewState extends State<ContactUsView> {
       textInputType: TextInputType.phone,
       textCapitalization: true,
       leading: SvgPicture.asset("assets/phoneNumber.svg"),
-      // This field is not required:
-      // errorText: _mobileError,
+      errorText: _mobileError,
       onChanged: (value) {
         if (_mobileFocusNode.hasFocus) {
-          // setState(() {
-          //   _mobileError =
-          //       ErrorText.getPhoneNumberError(phoneNumber: value!, context: context);
-          // });
+          setState(() {
+            _mobileError = ErrorText.getPhoneNumberError(
+                phoneNumber: value!, context: context);
+          });
         }
       },
     );
@@ -573,27 +583,54 @@ class _ContactUsViewState extends State<ContactUsView> {
 
 //*------Submit Section-----*
   Widget _submitButton({required LanguageChangeViewModel langProvider}) {
-    return CustomButton(
-      textDirection: getTextDirection(langProvider),
-      buttonName: AppLocalizations.of(context)!.submit,
-      isLoading: false,
-      onTap: () async {
-        bool validated = _validateForm(langProvider: langProvider);
+    return ChangeNotifierProvider(
+      create: (context) => ContactUsViewModel(),
+      child: Consumer<ContactUsViewModel>(
+        builder: (context, provider, child) {
+          return CustomButton(
+            textDirection: getTextDirection(langProvider),
+            buttonName: AppLocalizations.of(context)!.send,
+            isLoading: provider.contactUsResponse.status == Status.LOADING ? true : false,
+            onTap: () async {
+              bool validated = _validateForm(langProvider: langProvider);
 
-        // if (validated) {
-        //   bool result = await provider.getSecurityQuestion(
-        //       email: _emailController.text,
-        //       context: context,
-        //       langProvider: langProvider);
-        //
-        //   if (result) {
-        //
-        //   }
-        // }
-      },
-      fontSize: 16,
-      buttonColor: AppColors.scoButtonColor,
-      elevation: 1,
+              if (validated) {
+                provider.fullName = _nameController.text.toString();
+                provider.email = _emailController.text.toLowerCase().toString();
+                provider.phoneNumber = _mobileController.text;
+                provider.contactUsType = _inqueryTypeController.text;
+                provider.subject = _subjectController.text;
+                provider.comment = _messageController.text;
+
+                bool result = await provider.contactUS(
+                    context: context, langProvider: langProvider);
+
+                if (result) {
+                  _alertServices.flushBarErrorMessages(
+                      message: "Your Query Submitted Successfully.",
+                      context: context,
+                      provider: langProvider);
+
+                  //*-------Clearing all Fields--------*/
+                  setState(() {
+                    _nameController.clear();
+                    _emailController.clear();
+                    _mobileController.clear();
+                    _inqueryTypeController.clear();
+                    _subjectController.clear();
+                    _messageController.clear();
+                    _captchaController.clear();
+                    _rotate();
+                  });
+                }
+              }
+            },
+            fontSize: 16,
+            buttonColor: AppColors.scoButtonColor,
+            elevation: 1,
+          );
+        },
+      ),
     );
   }
 
@@ -613,6 +650,16 @@ class _ContactUsViewState extends State<ContactUsView> {
     if (_emailController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.emailCantBeEmpty,
+        context: context,
+        provider: langProvider,
+      );
+      return false;
+    }
+
+    // Validate Phone Number
+    if (_mobileController.text.isEmpty) {
+      _alertServices.flushBarErrorMessages(
+        message: AppLocalizations.of(context)!.mobileCantBeEmpty,
         context: context,
         provider: langProvider,
       );

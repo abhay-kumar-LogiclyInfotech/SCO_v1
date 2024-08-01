@@ -12,6 +12,7 @@ import 'package:sco_v1/view/main_view/accout_views/security_questions_view.dart'
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../models/account/account_grid_container_view_model.dart';
+import '../../resources/app_colors.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import 'accout_views/personal_details_view.dart';
 
@@ -35,7 +36,7 @@ class _AccountViewState extends State<AccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF5F5F5),
+      backgroundColor: AppColors.bgColor,
       body: _buildUi(),
     );
   }

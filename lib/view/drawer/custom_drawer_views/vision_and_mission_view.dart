@@ -37,7 +37,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF5F5F5),
+      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(
           AppLocalizations.of(context)!.vision_mission_values,

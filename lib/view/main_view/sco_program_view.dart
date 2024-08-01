@@ -13,7 +13,7 @@ class _ScoProgramsViewState extends State<ScoProgramsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
+      backgroundColor: AppColors.bgColor,
 
       appBar: AppBar(title: Text("Message view"),),
 

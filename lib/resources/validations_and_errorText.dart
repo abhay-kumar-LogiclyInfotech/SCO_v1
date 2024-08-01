@@ -5,6 +5,29 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class Validations {
 
 
+  //Clean the Html Tags:
+  static String stripHtml(String html) {
+    // Define a map for common HTML entities
+    final Map<String, String> htmlEntities = {
+      '&nbsp;': ' ',
+      '&amp;': '&',
+      '&lt;': '<',
+      '&gt;': '>',
+      '&quot;': '"',
+      '&apos;': "'",
+    };
+
+    // Replace HTML entities with their characters
+    String cleanedHtml = html;
+    htmlEntities.forEach((entity, character) {
+      cleanedHtml = cleanedHtml.replaceAll(entity, character);
+    });
+
+    // Remove HTML tags
+    final RegExp exp = RegExp(r'<[^>]*>');
+    return cleanedHtml.replaceAll(exp, '');
+  }
+
 
   static bool containsUppercase(String password) {
     return password.contains(RegExp(r'[A-Z]'));

@@ -28,6 +28,16 @@ class CustomNewsAndEventsTile extends StatefulWidget {
 
 class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile>
     with MediaQueryMixin<CustomNewsAndEventsTile> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    //fetch Image Url:
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final langProvider =
@@ -94,7 +104,6 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile>
             widget.title.length < 63
                 ? widget.title
                 : "${widget.title.substring(0, 63)}..",
-            textAlign: TextAlign.left,
             style: AppTextStyles.titleTextStyle(),
           ),
           const SizedBox(height: 7,),
@@ -102,7 +111,6 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile>
             widget.subTitle.length < 30
                 ? widget.subTitle
                 : "${widget.subTitle.substring(0, 30)}...",
-            textAlign: TextAlign.left,
             style: AppTextStyles.subTitleTextStyle(),
           ),
           const SizedBox(height: 7,),
@@ -118,7 +126,7 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile>
               ),
               Text(
                 widget.date ?? "Date",
-                textAlign: TextAlign.justify,
+                // textAlign: TextAlign.justify,
                 style: const TextStyle(
                   color: Color(0xff9A6F32),
                   fontSize: 10,

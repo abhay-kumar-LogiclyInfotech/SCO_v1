@@ -5,6 +5,7 @@ import 'package:sco_v1/repositories/drawer_repo/drawer_repository.dart';
 import 'package:xml/xml.dart' as xml;
 
 import '../../data/response/ApiResponse.dart';
+import '../../resources/validations_and_errorText.dart';
 import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
@@ -117,8 +118,8 @@ List<QuestionAnswer> parseXmlContent(String xmlContent, String languageCode) {
             orElse: () => xml.XmlElement(xml.XmlName('dynamic-content')),
           );
 
-      final question = cleanHtmlTags(questionElement.text.trim());
-      final answer = cleanHtmlTags(answerElement.text.trim());
+      final question = Validations.stripHtml(questionElement.text.trim());
+      final answer = Validations.stripHtml(answerElement.text.trim());
 
       if (question.isNotEmpty && answer.isNotEmpty) {
         questionAnswerList
@@ -130,9 +131,4 @@ List<QuestionAnswer> parseXmlContent(String xmlContent, String languageCode) {
   return questionAnswerList;
 }
 
-String cleanHtmlTags(String text) {
-  final RegExp htmlTagPattern =
-      RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
-  final cleanedText = text.replaceAll(htmlTagPattern, '');
-  return cleanedText.replaceAll('&nbsp;', ' ').trim();
-}
+

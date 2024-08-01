@@ -14,16 +14,21 @@ class AppUrls {
   //login endpoint
   static String get login => "${_baseUrl}users/login";
 
+  static const String _commonBaseUrl = "https://stg.sco.ae/api/";
+
   //faq's endpoint
-  static String get faq => "https://stg.sco.ae/api/jsonws/journal.journalarticle/get-latest-article";
+  static String get faq =>
+      "${_commonBaseUrl}jsonws/journal.journalarticle/get-latest-article";
 
   //vision and mission endpoint
-  static String get visionAndMission => "https://stg.sco.ae/api/jsonws/pageview.pagecontent/get-page-content-by-page-url";
+  static String get visionAndMission =>
+      "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
 
+  //contact us endpoint
+  static String get contactUs =>
+      "${_commonBaseUrl}jsonws/contactus.contactus/add-contact-us";
 
-
-
-
-
+  //news and events endpoint
+  static String get newsAndEvents =>
+      "${_commonBaseUrl}jsonws/newsandevents.newsandevents/find-all-published-item/group-id/20126/is-published/true/is-event/false";
 }
-

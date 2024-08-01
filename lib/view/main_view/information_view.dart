@@ -13,7 +13,7 @@ class _AboutUsViewState extends State<AboutUsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
+      backgroundColor: AppColors.bgColor,
 
       appBar: AppBar(title: Text("Information view"),),
 

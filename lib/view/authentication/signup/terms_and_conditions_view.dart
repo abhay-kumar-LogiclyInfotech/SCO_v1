@@ -51,7 +51,7 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
+      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(AppLocalizations.of(context)!.termsAndConditions,
             style: AppTextStyles.appBarTitleStyle()),

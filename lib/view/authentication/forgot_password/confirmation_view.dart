@@ -46,7 +46,7 @@ class _ConfirmationViewState extends State<ConfirmationView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
+      backgroundColor: AppColors.bgColor,
       body: _buildUI(context: context),
     );
   }

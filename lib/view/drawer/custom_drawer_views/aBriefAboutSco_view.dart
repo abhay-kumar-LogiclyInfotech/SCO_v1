@@ -30,7 +30,7 @@ class _ABriefAboutScoViewState extends State<ABriefAboutScoView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
+      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(AppLocalizations.of(context)!.aBriefAboutSCO,
             style: AppTextStyles.appBarTitleStyle()),

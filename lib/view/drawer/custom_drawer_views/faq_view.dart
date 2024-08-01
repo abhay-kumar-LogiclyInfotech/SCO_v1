@@ -34,6 +34,7 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(
           "FAQ",

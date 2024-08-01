@@ -18,6 +18,7 @@ import 'package:sco_v1/view/main_view.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
+import 'package:sco_v1/viewModel/drawer/news_and_events_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/vision_and_mission_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
@@ -75,6 +76,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => SecurityQuestionViewModel()),
           ChangeNotifierProvider(create: (_) => FaqViewModel()),
           ChangeNotifierProvider(create: (_) => VisionAndMissionViewModel()),
+          ChangeNotifierProvider(create: (_) => NewsAndEventsViewmodel()),
+
 
         ],
         child: Consumer<LanguageChangeViewModel>(

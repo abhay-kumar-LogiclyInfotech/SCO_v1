@@ -42,7 +42,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
+      backgroundColor: AppColors.bgColor,
       body: _buildUI(),
     );
   }

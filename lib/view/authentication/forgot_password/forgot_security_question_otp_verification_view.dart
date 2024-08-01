@@ -59,7 +59,7 @@ class _ForgotSecurityQuestionOtpVerificationViewState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
+      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
           title: SvgPicture.asset(
         "assets/sco_logo.svg",

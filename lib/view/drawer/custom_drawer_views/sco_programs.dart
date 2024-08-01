@@ -34,7 +34,7 @@ class _ScoProgramsState extends State<ScoPrograms>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scoBgColor,
+      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
           title: Text(
         AppLocalizations.of(context)!.scoPrograms,
