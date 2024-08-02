@@ -11,6 +11,7 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
+import 'package:sco_v1/viewModel/home/home_slider_viewModel.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../resources/app_colors.dart';
@@ -36,6 +37,17 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+
+
+
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+      final provider =
+      Provider.of<HomeSliderViewModel>(context, listen: false);
+      final langProvider =
+      Provider.of<LanguageChangeViewModel>(context, listen: false);
+      await provider.homeSlider(
+          context: context, langProvider: langProvider);
+    });
   }
 
 
@@ -424,7 +436,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 assetName: "assets/aboutSco.svg",
                 name: AppLocalizations.of(context)!.aboutSco,
                 onTap: () {
-                  _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ABriefAboutScoView()));
+                  _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ABriefAboutScoView(appBar: true,)));
 
                 },
                 textDirection: getTextDirection(provider),

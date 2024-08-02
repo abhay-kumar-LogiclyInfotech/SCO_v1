@@ -7,7 +7,8 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/drawer/IndividualImageModel.dart';
-import 'package:sco_v1/resources/components/custom_account_grid_container.dart';
+import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
+import 'package:sco_v1/resources/components/account/custom_account_grid_container.dart';
 import 'package:sco_v1/view/authentication/forgot_password/answer_security_question_view.dart';
 import 'package:sco_v1/view/authentication/forgot_password/confirmation_view.dart';
 import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
@@ -18,10 +19,12 @@ import 'package:sco_v1/view/authentication/signup/update_security_question_view.
 import 'package:sco_v1/view/main_view.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
+import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/individual_image_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/news_and_events_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/vision_and_mission_viewModel.dart';
+import 'package:sco_v1/viewModel/home/home_slider_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
@@ -80,6 +83,12 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => VisionAndMissionViewModel()),
           ChangeNotifierProvider(create: (_) => NewsAndEventsViewmodel()),
           ChangeNotifierProvider(create: (_) => IndividualImageViewModel()),
+          ChangeNotifierProvider(create: (_) => ABriefAboutScoViewModel()),
+          ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
+
+
+
+
 
 
 
@@ -117,7 +126,13 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              initialRoute: "/splashView",
+              // initialRoute: "/splashView",
+
+              home: CustomInformationContainer(expandedContent: Column(
+                children: [
+                  CustomInformationField(title: "Name",description: "Abhay Kumar",)
+                ],
+              ), title: 'Student Information',),
 
             );
           },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:xml/xml.dart';
 
 import '../resources/app_colors.dart';
 
@@ -197,6 +198,19 @@ Route createRoute(dynamic page) {
           child: child,
         );
       });
+}
+
+String extractXmlValue(String xmlString, String languageId, String tagName) {
+  final document = XmlDocument.parse(xmlString);
+  final rootElement = document.rootElement;
+  final elements = rootElement.findElements(tagName);
+  for (var element in elements) {
+    final langId = element.getAttribute('language-id');
+    if (langId == languageId) {
+      return element.text.trim();
+    }
+  }
+  return '';
 }
 
 

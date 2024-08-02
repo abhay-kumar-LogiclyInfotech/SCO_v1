@@ -27,7 +27,7 @@ class NavigationServices {
     "/signUpView": (context) => const SignUpView(),
     "/resetPasswordView": (context) => const ResetPasswordView(),
     "/forgotPasswordView": (context) => const ForgotPasswordView(),
-    "/aBriefAboutScoView": (context) => const ABriefAboutScoView(),
+    // "/aBriefAboutScoView": (context) => const ABriefAboutScoView(),
     "/scoPrograms": (context) => const ScoPrograms(),
     "/updateSecurityQuestionView": (context) => const UpdateSecurityQuestionView(),
     "/mainView": (context) => const MainView(),

@@ -96,9 +96,11 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
             //Image Section:
             _imageSection(langProvider), const SizedBox(height: 20),
 
-            _titleSection(), const SizedBox(height: 5),
-
-            _descriptionSection(), const SizedBox(height: 10),
+            _titleSection(),
+            // const SizedBox(height: 5),
+            //
+            // _descriptionSection(),
+            const SizedBox(height: 10),
 
             //About Us Detailed Text Section:
             _contentSection(), const SizedBox(height: 20),
@@ -161,7 +163,7 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
                 // height: screenHeight / 5.6,
                 errorBuilder: (BuildContext context, Object, StackTrace) {
                   return Image.asset(
-                    "assets/sidemenu/scholarships_uae.jpg",
+                    "assets/news_image.jpg",
                     filterQuality: FilterQuality.high,
                     width: screenWidth,
                     height: screenHeight / 5,

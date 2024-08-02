@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 
 import '../../resources/app_colors.dart';
 
@@ -12,11 +13,6 @@ class AboutUsView extends StatefulWidget {
 class _AboutUsViewState extends State<AboutUsView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-
-      appBar: AppBar(title: Text("Information view"),),
-
-    );
+    return const ABriefAboutScoView(appBar: false,);
   }
 }

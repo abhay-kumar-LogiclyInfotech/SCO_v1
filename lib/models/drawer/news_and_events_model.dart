@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:xml/xml.dart' as xml;
 
 import '../../resources/validations_and_errorText.dart';
+import '../../utils/utils.dart';
 
 
 class NewsAndEventsModel {
@@ -160,18 +161,7 @@ class ParseNewsAndEventsModel {
     required this.entryUrl,
   });
 
-  String extractXmlValue(String xmlString, String languageId, String tagName) {
-    final document = xml.XmlDocument.parse(xmlString);
-    final rootElement = document.rootElement;
-    final elements = rootElement.findElements(tagName);
-    for (var element in elements) {
-      final langId = element.getAttribute('language-id');
-      if (langId == languageId) {
-        return element.text.trim();
-      }
-    }
-    return '';
-  }
+
 
   String getContent(String languageId) {
     final rawContent = extractXmlValue(content, languageId, 'content');

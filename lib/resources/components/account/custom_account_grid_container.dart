@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../app_colors.dart';
+import '../../app_colors.dart';
 
 class CustomAccountGridContainer extends StatefulWidget {
   final String assetAddress;

@@ -6,6 +6,9 @@ import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 
 import '../../models/splash/commonData_model.dart';
 import '../../utils/constants.dart';
+import '../drawer/a_brief_about_sco_viewModel.dart';
+import '../drawer/news_and_events_viewModel.dart';
+import '../language_change_ViewModel.dart';
 import 'auth_services.dart';
 import 'navigation_services.dart';
 
@@ -20,6 +23,21 @@ class SplashServices {
   }
 
   Future<void> checkUserAuthentication(BuildContext context) async {
+    //*------Making call to simple Apis--------*
+    Future<void> callBasicApis() async {
+      //*------Api call for SCO About Us-------*/
+      // Initialize data after widget build phase:
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final langProvider =
+            Provider.of<LanguageChangeViewModel>(context, listen: false);
+        final provider =
+            Provider.of<ABriefAboutScoViewModel>(context, listen: false);
+        await provider.aBriefAboutSco(
+            context: context, langProvider: langProvider);
+      });
+
+    }
+
     final bool isLoggedInKey = await _authService.isLoggedIn();
     final int counter = await _authService.getCounter();
 
@@ -39,11 +57,13 @@ class SplashServices {
           debugPrint('Data stored');
         }
         await _authService.incrementCounter();
+        await callBasicApis();
         _navigationServices.pushReplacementNamed('/mainView');
       } else {
         await _authService.clearCounter();
         bool commonDataFetched = await provider.fetchCommonData();
         if (commonDataFetched && HiveManager.isDataStored()) {
+          await callBasicApis();
           _navigationServices.pushReplacementNamed('/mainView');
         }
       }
@@ -59,10 +79,12 @@ class SplashServices {
           debugPrint('Data stored');
         }
         await _authService.incrementCounter();
+        await callBasicApis();
         _navigationServices.pushReplacementNamed('/mainView');
       } else {
         bool commonDataFetched = await provider.fetchCommonData();
         if (commonDataFetched) {
+          await callBasicApis();
           _navigationServices.pushReplacementNamed('/mainView');
         }
       }

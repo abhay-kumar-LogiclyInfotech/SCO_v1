@@ -8,7 +8,7 @@ class LanguageChangeViewModel with ChangeNotifier {
 
   LanguageChangeViewModel();
 
-  void changeLanguage(Locale type) async {
+  Future<void> changeLanguage(Locale type) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     _appLocale = type;
 

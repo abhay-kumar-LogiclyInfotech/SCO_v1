@@ -1,6 +1,8 @@
 class AppUrls {
   // Use 'const' for a constant base URL
+  static const String _commonBaseUrl = "https://stg.sco.ae/api/";
   static const String _baseUrl = "https://stg.sco.ae/o/mopa-sco-api/";
+
 
   //getting the base URL
   static const String baseUrl = _baseUrl;
@@ -14,7 +16,6 @@ class AppUrls {
   //login endpoint
   static String get login => "${_baseUrl}users/login";
 
-  static const String _commonBaseUrl = "https://stg.sco.ae/api/";
 
   //faq's endpoint
   static String get faq =>
@@ -34,4 +35,14 @@ class AppUrls {
 
   //individual image endpoint
   static String get individualImage => "${_baseUrl}common-data/get-image-url/";
+
+
+  //A Brief About Sco endPoint
+  static String get aBriefAboutSco => "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
+
+
+  //Home Slider EndPoint endPoint
+  static String get homeSlider => "${_commonBaseUrl}jsonws/journal.journalarticle/get-articles/group-id/20126/folder-id/79082";
+
+
 }

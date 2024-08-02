@@ -252,7 +252,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 GestureDetector(
                                   onTap: () {
 
-                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ABriefAboutScoView()));
+                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ABriefAboutScoView(appBar: true,)));
                                   },
                                   child: Container(
                                       color: Colors.transparent,
@@ -470,19 +470,17 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                           activeColor: AppColors.scoThemeColor,
                           inactiveColor: Colors.grey,
                           initialValue: _isArabic,
-                          onChanged: (value) {
+                          onChanged: (value)async {
                             if (value) {
-                              Provider.of<LanguageChangeViewModel>(context,
-                                      listen: false)
+                              await Provider.of<LanguageChangeViewModel>(context,listen: false)
                                   .changeLanguage(const Locale('ar'));
-                              _navigationServices.goBack();
+
                               widget.scaffoldState.currentState!
                                   .openEndDrawer();
                             } else {
-                              Provider.of<LanguageChangeViewModel>(context,
+                             await Provider.of<LanguageChangeViewModel>(context,
                                       listen: false)
                                   .changeLanguage(const Locale('en'));
-                              _navigationServices.goBack();
                               widget.scaffoldState.currentState!.openDrawer();
                             }
                           },

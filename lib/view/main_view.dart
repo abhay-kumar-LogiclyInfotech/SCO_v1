@@ -10,7 +10,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/app_colors.dart';
 import '../resources/components/custom_main_view_app_bar.dart';
-import 'main_view/information_view.dart';
+import 'main_view/about_us_view.dart';
 import 'main_view/sco_program_view.dart';
 
 class MainView extends StatefulWidget {

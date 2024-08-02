@@ -1,6 +1,7 @@
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/NetworkApiServices.dart';
 import 'package:sco_v1/models/drawer/IndividualImageModel.dart';
+import 'package:sco_v1/models/drawer/a_brief_about_sco_model.dart';
 import 'package:sco_v1/models/drawer/faq_model.dart';
 import 'package:sco_v1/models/drawer/news_and_events_model.dart';
 import 'package:sco_v1/models/drawer/vision_and_mission_model.dart';
@@ -72,5 +73,16 @@ class DrawerRepository {
     );
 
     return IndividualImageModel.fromJson(response);
+  }
+
+  //*------Get Individual Image-------*
+  Future<ABriefAboutScoModel> aBriefAboutSco(
+      {required dynamic body, required dynamic headers}) async {
+    dynamic response = await _apiServices.getPostApiServices(
+      url: AppUrls.aBriefAboutSco,
+      headers: headers,
+      body: body
+    );
+    return ABriefAboutScoModel.fromJson(response);
   }
 }
