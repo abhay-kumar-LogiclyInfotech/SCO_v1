@@ -126,13 +126,8 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              // initialRoute: "/splashView",
+              initialRoute: "/splashView",
 
-              home: CustomInformationContainer(expandedContent: Column(
-                children: [
-                  CustomInformationField(title: "Name",description: "Abhay Kumar",)
-                ],
-              ), title: 'Student Information',),
 
             );
           },

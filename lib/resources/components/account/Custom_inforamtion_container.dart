@@ -73,6 +73,9 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
 
           Material(
             color: Colors.white,
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(15),
+            ),
             child: CustomPaint(
               painter: DashedBottomBorderPainter(),
               child: Container(
@@ -103,17 +106,17 @@ class DashedBottomBorderPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = AppColors.scoButtonColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
+      ..strokeWidth = 2;
 
     Paint solidPaint = Paint()
       ..color = AppColors.darkGrey
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    const double dashWidth = 4;
-    const double dashGap = 4;
-    double startX = 3;
+      ..strokeWidth = 1;
+    const double dashWidth = 5;
+    const double dashGap = 5;
+    double startX = 5;
 
-    while (startX < size.width - 2) {
+    while (startX < size.width - 3) {
       canvas.drawLine(
         Offset(startX, 0),
         Offset(startX + dashWidth, 0),
@@ -143,11 +146,14 @@ class DashedBottomBorderPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-//Fields which are used inside the Information Container:
-class CustomInformationField extends StatelessWidget {
+
+
+
+//*----------Fields which are used inside the Information Container-------*
+class CustomInformationContainerField extends StatelessWidget {
   final String title;
   String? description;
-  CustomInformationField({super.key, required this.title, this.description});
+  CustomInformationContainerField({super.key, required this.title, this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +169,9 @@ class CustomInformationField extends StatelessWidget {
               Border(bottom: BorderSide(color: AppColors.darkGrey, width: 1.5)),
         ),
         child: CustomPaint(
-          painter: DashedBottomBorder(),
+          painter: myPainter(),
           child: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            padding: const EdgeInsets.only(top: 10, bottom: 13),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +207,7 @@ class CustomInformationField extends StatelessWidget {
 }
 
 //Bottom Dashed Border for Fields.
-class DashedBottomBorder extends CustomPainter {
+class myPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paintWithColor = Paint()
