@@ -13,7 +13,6 @@ class _AcademicServicesViewState extends State<AcademicServicesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomSimpleAppBar(title: Text("Academic Services"),),
     );
   }
 }

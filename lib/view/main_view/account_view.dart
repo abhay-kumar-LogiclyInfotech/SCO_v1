@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/account/custom_account_grid_container.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/main_view/accout_views/academic_services_view.dart';
+import 'package:sco_v1/view/main_view/academic_services_view.dart';
 import 'package:sco_v1/view/main_view/accout_views/addresses_view.dart';
 import 'package:sco_v1/view/main_view/accout_views/application_status_view.dart';
 import 'package:sco_v1/view/main_view/accout_views/change_password_view.dart';

@@ -1,6 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
+import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -14,11 +13,11 @@ import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart
 import 'package:sco_v1/viewModel/home/home_slider_viewModel.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
+
 import '../../resources/app_colors.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../drawer/custom_drawer_views/vision_and_mission_view.dart';
 
-enum Language { english, spanish }
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

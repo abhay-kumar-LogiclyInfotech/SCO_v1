@@ -508,7 +508,6 @@ class _SignUpViewState extends State<SignUpView>
         debugPrint(value.toString());
         _genderController.text = value!;
 
-        //This thing is creating error: don't know how to fix it:
         FocusScope.of(context).requestFocus(_emailFocusNode);
       },
       currentFocusNode: _genderFocusNode,

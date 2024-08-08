@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../resources/app_colors.dart';
 
-class ScoProgramsView extends StatefulWidget {
-  const ScoProgramsView({super.key});
+class SupportView extends StatefulWidget {
+  const SupportView({super.key});
 
   @override
-  State<ScoProgramsView> createState() => _ScoProgramsViewState();
+  State<SupportView> createState() => _SupportViewState();
 }
 
-class _ScoProgramsViewState extends State<ScoProgramsView> {
+class _SupportViewState extends State<SupportView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-
-      appBar: AppBar(title: Text("Message view"),),
-
     );
   }
 }
