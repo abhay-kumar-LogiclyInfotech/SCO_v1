@@ -72,6 +72,8 @@ dependencies:
   google_maps_flutter: ^2.7.0
   permission_handler: ^11.3.1
   carousel_slider_plus: ^7.0.0
+  connectivity_plus: ^6.0.5
+  get: ^4.6.6
   flutter_localizations:
     sdk: flutter
   device_info_plus: ^9.1.2

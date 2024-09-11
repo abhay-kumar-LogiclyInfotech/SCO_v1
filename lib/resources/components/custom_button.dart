@@ -40,7 +40,7 @@ class _CustomButtonState extends State<CustomButton>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.onTap();
+       widget.isLoading ? null : widget.onTap();
       },
       child: Material(
         elevation: widget.elevation ?? 0,
@@ -84,6 +84,7 @@ class _CustomButtonState extends State<CustomButton>
                                   color: widget.textColor ?? Colors.white,
                                   fontSize: widget.fontSize ?? 22,
                                   fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
                             )),
                 ),
               ],
