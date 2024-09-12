@@ -239,9 +239,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
           FocusScope.of(context).requestFocus(_answerFocusNode);
         });
       },
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
-          borderSide: const BorderSide(color: AppColors.darkGrey)),
+      outlinedBorder:true ,
       currentFocusNode: _questionFocusNode,
       hintText: AppLocalizations.of(context)!.selectSecurityQuestion,
     );

@@ -44,5 +44,7 @@ class AppUrls {
   //Home Slider EndPoint endPoint
   static String get homeSlider => "${_commonBaseUrl}jsonws/journal.journalarticle/get-articles/group-id/20126/folder-id/79082";
 
+  // All Active scholarships endPoint
+  static String get getAllActiveScholarships => "${_commonBaseUrl}jsonws/configuration.submissionconfiguration/find-all-active-scholarship";
 
 }

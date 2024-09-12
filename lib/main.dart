@@ -17,6 +17,7 @@ import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.d
 import 'package:sco_v1/view/authentication/signup/terms_and_conditions_view.dart';
 import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
 import 'package:sco_v1/view/main_view.dart';
+import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
@@ -32,6 +33,7 @@ import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Test.dart';
+import 'controller/dependency_injection.dart';
 import 'hive/hive_manager.dart';
 
 Future<void> main() async {
@@ -47,6 +49,9 @@ Future<void> main() async {
   // ]);
   await setup();
   runApp(MyApp(locale: languageCode));
+
+  DependencyInjection.init();
+
 }
 
 Future<void> setup() async {
@@ -85,6 +90,10 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => IndividualImageViewModel()),
           ChangeNotifierProvider(create: (_) => ABriefAboutScoViewModel()),
           ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
+
+          // find all active scholarships
+          ChangeNotifierProvider(create: (_) => GetAllActiveScholarshipsViewModel()),
+
 
 
 

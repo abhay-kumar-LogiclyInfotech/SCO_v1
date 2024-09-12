@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/apply_scholarship/select_scholarship_type_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
@@ -551,7 +552,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/scholarships.svg",
                 name: AppLocalizations.of(context)!.scholarship,
-                onTap: () {},
+                onTap: () {
+                  _navigationServices.pushSimpleWithAnimationRoute(
+                      createRoute(const SelectScholarshipTypeView()));
+                },
                 textDirection: getTextDirection(provider),
               ),
             ),
@@ -559,7 +563,9 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/certificates.svg",
                 name: AppLocalizations.of(context)!.certificates,
-                onTap: () {},
+                onTap: () {
+
+                },
                 textDirection: getTextDirection(provider),
               ),
             ),

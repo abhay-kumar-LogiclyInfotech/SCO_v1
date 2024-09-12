@@ -57,7 +57,7 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SvgPicture.asset("assets/myAccount/student_information.svg"),
+             widget.leading == null ? const SizedBox.shrink():  widget.leading!,
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(widget.title,
@@ -116,26 +116,26 @@ class DashedBottomBorderPainter extends CustomPainter {
     const double dashGap = 5;
     double startX = 5;
 
-    while (startX < size.width - 3) {
-      canvas.drawLine(
-        Offset(startX, 0),
-        Offset(startX + dashWidth, 0),
-        paint,
-      );
-      startX += dashWidth + dashGap;
-    }
+    // while (startX < size.width - 3) {
+    //   canvas.drawLine(
+    //     Offset(startX, 0),
+    //     Offset(startX + dashWidth, 0),
+    //     paint,
+    //   );
+    //   startX += dashWidth + dashGap;
+    // }
 
     const double radius = 10;
 
     final rightPath = Path()
-      ..moveTo(size.width, 2)
+      ..moveTo(size.width, 0)
       ..lineTo(size.width, size.height - radius)
       ..arcToPoint(Offset(size.width - radius, size.height),
           radius: const Radius.circular(radius))
       ..lineTo(radius, size.height)
       ..arcToPoint(Offset(0, size.height - radius),
           radius: const Radius.circular(radius))
-      ..lineTo(0, 2);
+      ..lineTo(0, 0);
     canvas.drawPath(rightPath, solidPaint);
 
     // canvas.drawLine(Offset(size.width-15,size.height), Offset(0, size.height), paint);

@@ -37,4 +37,22 @@ class Constants {
 
   static const String newsImageUrl = "https://lh3.googleusercontent.com/NCE_l5_GJBa2YT_XNhAUf0aAH7-T5gWc15JfQKZ9YINax0698zDeFK64OnPbun9XDVGd=s142";
 
+
+  static const dynamic scholarshipRequestType= [
+
+    {
+      "code":"INT",
+      "value":"Scholarships In UAE",
+      "valueArabic":"المنح الدراسية في الإمارات العربية المتحدة"
+    },
+    {
+      "code":"EXT",
+      "value":"Scholarships Abroad",
+      "valueArabic":"المنح الدراسية في الخارج"
+    }
+
+  ];
+
+
+
 }

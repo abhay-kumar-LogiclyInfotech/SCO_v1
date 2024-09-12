@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:xml/xml.dart';
@@ -22,22 +24,73 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 
   double get kPadding => 20;
 
-  Widget get kFormHeight => const  SizedBox.square(dimension: 15,);
+  Widget get kFormHeight => const SizedBox.square(
+        dimension: 15,
+      );
 
   double get kCardRadius => 15;
 }
 
+class Utils {
+  //*------Common Loading Indicators Start------*/
 
+  //*-----Material Loading Indicator-----*/
+  static Widget materialLoadingIndicator() => const Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+          strokeWidth: 1.5,
+        ),
+      );
+
+//*-----Cupertino Loading Indicator-----*/
+  static Widget cupertinoLoadingIndicator() => const Center(
+          child: CupertinoActivityIndicator(
+        color: Colors.black,
+      ));
+
+  // *-----Show Loading more data from server-----*/
+
+  static Widget spinkitThreeBounce() => const Center(
+          child: Padding(
+        padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
+        child: SpinKitThreeBounce(
+          color: Colors.black,
+          size: 23,
+        ),
+      ));
+
+//*------Common Loading Indicators End------*/
+
+//*------Common Error Text Start------*/
+  static Widget showOnError() => const Center(
+        child: Text("Something went Wrong"),
+      );
+
+  static Widget showOnNone() => const Center(
+        child: Text("Something went Wrong"),
+      );
+
+  static Widget showOnNull() => const Center(
+        child: Text("Something went Wrong"),
+      );
+
+  static Widget showOnNoDataAvailable() => const Center(
+          child: Padding(
+        padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
+        child: SpinKitThreeBounce(
+          color: Colors.white,
+          size: 23,
+        ),
+      ));
+}
 
 //Get Text Direction Method:
 TextDirection getTextDirection(LanguageChangeViewModel langProvider) {
-  return langProvider.appLocale == const Locale('en') || langProvider.appLocale == null
+  return langProvider.appLocale == const Locale('en') ||
+          langProvider.appLocale == null
       ? TextDirection.ltr
       : TextDirection.rtl;
 }
-
-
-
 
 //TextField Heading Text with importance indicator:
 fieldHeading(
@@ -73,7 +126,6 @@ fieldHeading(
   );
 }
 
-
 // populateCommonDataDropdown method with hide property:
 List<DropdownMenuItem> populateCommonDataDropdown({
   required List menuItemsList,
@@ -99,9 +151,31 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   }).toList();
 }
 
+// populateNormalDropdownWithValue method with hide property:
+List<DropdownMenuItem> populateNormalDropdownWithValue({
+  required List menuItemsList,
+  required LanguageChangeViewModel provider,
+}) {
+  return menuItemsList.map((element) {
+    final textDirection = getTextDirection(provider);
 
+    return DropdownMenuItem(
+      value: element['code'].toString(),
+      child: Text(
+        textDirection == TextDirection.ltr
+            ? element['value'].toString()
+            : element['valueArabic'].toString(),
+        style: const TextStyle(
+          color: AppColors.scoButtonColor,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }).toList();
+}
 
-//populateNormalDropdown method:
+//populateNormalDropdown with single elements method:
 List<DropdownMenuItem> populateNormalDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
@@ -123,8 +197,6 @@ List<DropdownMenuItem> populateNormalDropdown({
     );
   }).toList();
 }
-
-
 
 //Terms and conditions text with bullet design
 Widget bulletTermsText({required String text, Color? textColor}) {
@@ -160,7 +232,6 @@ Widget bulletTermsText({required String text, Color? textColor}) {
   );
 }
 
-
 //Normal Terms and conditions text:
 Widget normalTermsText({required String text}) {
   return Padding(
@@ -177,7 +248,6 @@ Widget normalTermsText({required String text}) {
   );
 }
 
-
 //background static picture:
 Widget bgSecurityLogo() {
   return Padding(
@@ -186,15 +256,13 @@ Widget bgSecurityLogo() {
       "assets/security_question_bg.svg",
       // fit: BoxFit.fill,
     ),
-  );}
-
-
-
+  );
+}
 
 //creating the animated Route using page builder:
 Route createRoute(dynamic page) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>  page,
+      pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var tween = Tween(begin: const Offset(0.0, 1), end: const Offset(0, 0))
             .chain(CurveTween(curve: Curves.ease));
@@ -218,11 +286,3 @@ String extractXmlValue(String xmlString, String languageId, String tagName) {
   }
   return '';
 }
-
-
-
-
-
-
-
-

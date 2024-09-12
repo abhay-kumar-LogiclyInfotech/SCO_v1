@@ -149,11 +149,17 @@ class CustomDropdown extends StatefulWidget {
   // final List<dynamic> menuList;
   final void Function(dynamic value) onChanged;
   final FocusNode currentFocusNode;
+  final FocusNode? nextFocusNode;
+
   final TextDirection textDirection;
   Color? fillColor;
-  InputBorder? border;
+  Color? textColor;
+  dynamic value;
+
+  // InputBorder? border;
   BorderRadiusGeometry? borderRadius;
   String? hintText;
+  bool outlinedBorder;
 
   CustomDropdown({
     super.key,
@@ -162,9 +168,12 @@ class CustomDropdown extends StatefulWidget {
     required this.menuItemsList, // required this.menuList,
     required this.onChanged,
     required this.currentFocusNode,
+    this.value,
+    this.nextFocusNode,
     this.fillColor,
+    this.textColor,
     this.hintText,
-    this.border,
+    this.outlinedBorder = false,
     this.borderRadius,
   });
 
@@ -179,9 +188,10 @@ class _CustomDropdownState extends State<CustomDropdown>
     return Directionality(
       textDirection: widget.textDirection,
       child: DropdownButtonFormField(
-        dropdownColor: AppColors.scoButtonColor,
+        // dropdownColor: AppColors.scoButtonColor,
+        dropdownColor: Colors.white,
         items: widget.menuItemsList,
-
+        value: widget.value,
         onChanged: widget.onChanged,
         focusNode: widget.currentFocusNode,
         decoration: InputDecoration(
@@ -197,36 +207,37 @@ class _CustomDropdownState extends State<CustomDropdown>
           alignLabelWithHint: true,
           hintText: widget.hintText,
           hintFadeDuration: const Duration(milliseconds: 500),
-          hintStyle: const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
-          border: widget.border ??
-              const UnderlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide: BorderSide(color: AppColors.darkGrey)),
-          focusedBorder: widget.border ??
-              const UnderlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide: BorderSide(color: AppColors.darkGrey)),
-          errorBorder: widget.border ??
-              const UnderlineInputBorder(
+          hintStyle:
+              const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
+          border: widget.outlinedBorder
+              ? outlinedInputBorder()
+              : underLinedInputBorder(),
+          focusedBorder: widget.outlinedBorder
+              ? outlinedInputBorder()
+              : underLinedInputBorder(),
+          errorBorder: widget.outlinedBorder
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: const BorderSide(color: Colors.red))
+              : const UnderlineInputBorder(
                   borderRadius: BorderRadius.zero,
                   borderSide: BorderSide(color: Colors.red)),
-          enabledBorder: widget.border ??
-              const UnderlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide: BorderSide(color: AppColors.darkGrey)),
-          focusedErrorBorder: widget.border ??
-              const UnderlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide: BorderSide(color: AppColors.darkGrey)),
+          enabledBorder: widget.outlinedBorder
+              ? outlinedInputBorder()
+              : underLinedInputBorder(),
+          focusedErrorBorder: widget.outlinedBorder
+              ? outlinedInputBorder()
+                  .copyWith(borderSide: const BorderSide(color: Colors.green))
+              : underLinedInputBorder(),
         ),
 
         // cursorColor: AppColors.darkGrey,
-        style: const TextStyle(color: AppColors.hintDarkGrey),
+        style: TextStyle(color: widget.textColor ?? AppColors.hintDarkGrey),
         padding: EdgeInsets.zero,
         hint: Text(
           widget.hintText ?? widget.menuItemsList[0].value.toString(),
-          style: const TextStyle(
-            color: AppColors.hintDarkGrey,
+          style: TextStyle(
+            color: widget.textColor ?? AppColors.hintDarkGrey,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -240,4 +251,16 @@ class _CustomDropdownState extends State<CustomDropdown>
       ),
     );
   }
+}
+
+InputBorder outlinedInputBorder() {
+  return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: const BorderSide(color: AppColors.darkGrey));
+}
+
+InputBorder underLinedInputBorder() {
+  return const UnderlineInputBorder(
+      borderRadius: BorderRadius.zero,
+      borderSide: BorderSide(color: AppColors.darkGrey));
 }
