@@ -45,7 +45,7 @@ class Utils {
 //*-----Cupertino Loading Indicator-----*/
   static Widget cupertinoLoadingIndicator() => const Center(
           child: CupertinoActivityIndicator(
-        color: Colors.black,
+        color: AppColors.scoButtonColor,
       ));
 
   // *-----Show Loading more data from server-----*/

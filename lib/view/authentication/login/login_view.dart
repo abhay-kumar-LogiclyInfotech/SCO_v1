@@ -431,6 +431,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
         create: (context) => LoginViewModel(),
         child: Consumer<LoginViewModel>(builder: (context, provider, _) {
           return CustomButton(
+            fontSize: 16,
             textDirection: getTextDirection(langProvider),
             buttonName: AppLocalizations.of(context)!.login,
             isLoading:
@@ -453,7 +454,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                 }
               }
             },
-            fontSize: 16,
             buttonColor: AppColors.scoButtonColor,
             elevation: 1,
           );
