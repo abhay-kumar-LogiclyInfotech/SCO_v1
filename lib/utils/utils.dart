@@ -29,6 +29,10 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
       );
 
   double get kCardRadius => 15;
+  Widget get kSubmitButtonHeight =>  const SizedBox.square(
+    dimension: 30,
+  );
+
 }
 
 class Utils {

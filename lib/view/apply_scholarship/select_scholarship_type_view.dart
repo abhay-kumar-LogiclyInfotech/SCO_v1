@@ -185,7 +185,8 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                               kFormHeight,
                             ],
                           )),
-                      kFormHeight,
+
+                      kSubmitButtonHeight,
 
                       // submit button section:
                       CustomButton(
