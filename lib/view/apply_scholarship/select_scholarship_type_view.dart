@@ -12,8 +12,10 @@ import 'package:sco_v1/resources/components/custom_dropdown.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/user_info_container.dart';
 import 'package:sco_v1/utils/constants.dart';
+import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 import '../../../data/response/status.dart';
 import '../../../resources/app_colors.dart';
 import '../../../utils/utils.dart';
@@ -31,6 +33,7 @@ class SelectScholarshipTypeView extends StatefulWidget {
 class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
     with MediaQueryMixin<SelectScholarshipTypeView> {
   late NavigationServices _navigationService;
+  late AlertServices _alertService;
 
   // Define focus nodes:
   final FocusNode _requestTypeFocusNode = FocusNode();
@@ -78,6 +81,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
     super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationService = getIt.get<NavigationServices>();
+    _alertService = getIt.get<AlertServices>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       // fetching all active scholarships:
@@ -109,8 +113,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
       padding: EdgeInsets.all(kPadding),
       child: Consumer<GetAllActiveScholarshipsViewModel>(
         builder: (context, provider, _) {
-          return provider.apiResponse.status == Status.LOADING ||
-                  provider.apiResponse.data!.isEmpty
+          return provider.apiResponse.status == Status.LOADING
               ? Utils.cupertinoLoadingIndicator()
               : SingleChildScrollView(
                   child: Column(
@@ -194,7 +197,16 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                           isLoading: false,
                           textDirection: textDirection,
                           buttonColor: AppColors.scoButtonColor,
-                          onTap: () {}),
+                          onTap: () {
+
+
+                            _selectedAcademicCareer.isNotEmpty?_navigationService.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(
+                              selectedScholarshipConfigurationKey: _selectedAcademicCareer, getAllActiveScholarships: provider.apiResponse.data,
+                            ))) :    _alertService.flushBarErrorMessages(message: "Please select Academic Career", context: context, provider: langProvider);
+
+
+
+                          }),
                     ],
                   ),
                 );

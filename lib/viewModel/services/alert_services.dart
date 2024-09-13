@@ -15,13 +15,24 @@ class AlertServices {
   final GetIt _getIt = GetIt.instance;
   late NavigationServices _navigationServices;
 
+  // Flag to track if a notification is being shown
+  bool _isNotificationShowing = false;
+
   AlertServices() {
     _navigationServices = _getIt.get<NavigationServices>();
   }
 
+  // Function to reset flag
+  void _resetNotificationFlag() {
+    _isNotificationShowing = false;
+  }
+
+// Show DelightToastBar with flag control
   void showToast({required String message, required BuildContext context}) {
-    try {
-      DelightToastBar(
+    if (!_isNotificationShowing) {
+      _isNotificationShowing = true;
+      try {
+        DelightToastBar(
           autoDismiss: true,
           position: DelightSnackbarPosition.top,
           builder: (context) {
@@ -43,67 +54,87 @@ class AlertServices {
               ),
               color: Colors.white,
             );
-          }
-      ).show(context);
-    } catch (error) {
-      debugPrint("Something went wrong when showing the toast: $error");
+          },
+        ).show(context);
+
+        // Manually reset the flag after a delay (e.g., the expected duration of the toast)
+        Future.delayed(const Duration(seconds: 3), () {
+          _resetNotificationFlag();
+        });
+      } catch (error) {
+        _resetNotificationFlag();
+        debugPrint("Something went wrong when showing the toast: $error");
+      }
     }
   }
 
 
+  // FlutterToast with flag control
   void toastMessage(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      backgroundColor: Colors.black,
-      textColor: Colors.white, // Added text color for better visibility
-      fontSize: 15,
-      toastLength: Toast.LENGTH_SHORT, // Added toast length for consistency
-    );
+    if (!_isNotificationShowing) {
+      _isNotificationShowing = true;
+      Fluttertoast.showToast(
+        msg: message,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 15,
+        toastLength: Toast.LENGTH_SHORT,
+      ).then((_) => _resetNotificationFlag()); // Reset flag after dismissal
+    }
   }
+
+  // FlushBar notification with flag control
   void flushBarErrorMessages({
     required String message,
     required BuildContext context,
     required LanguageChangeViewModel provider,
   }) {
-    showFlushbar(
-      context: context,
-      flushbar: Flushbar(
-        backgroundColor: Colors.white,
-        textDirection: getTextDirection(provider), // Assuming getTextDirection is a function returning TextDirection
-        messageColor: Colors.black,
-        message: message,
-        forwardAnimationCurve: Curves.bounceInOut,
-        reverseAnimationCurve: Curves.easeInOutBack,
-        duration: const Duration(seconds: 5),
-        borderRadius: BorderRadius.circular(15),
-        icon: const Icon(
-          Icons.notifications_active_outlined,
-          size: 28,
-          color: Colors.black,
-        ),
-        flushbarPosition: FlushbarPosition.TOP,
-        margin: const EdgeInsets.symmetric(
-          vertical: 5,
-          horizontal: 5,
-        ),
-      )..show(context),
-    );
+    if (!_isNotificationShowing) {
+      _isNotificationShowing = true;
+      showFlushbar(
+        context: context,
+        flushbar: Flushbar(
+          backgroundColor: Colors.black,
+          textDirection: getTextDirection(provider),
+          messageColor: Colors.white,
+          message: message,
+          forwardAnimationCurve: Curves.decelerate,
+          reverseAnimationCurve: Curves.decelerate,
+          duration: const Duration(seconds: 5),
+          borderRadius: BorderRadius.circular(15),
+          icon: const Icon(
+            Icons.notifications_active_outlined,
+            size: 28,
+            color: Colors.white,
+          ),
+          flushbarPosition: FlushbarPosition.TOP,
+          margin: const EdgeInsets.symmetric(
+            vertical: 5,
+            horizontal: 5,
+          ),
+        )..show(context).then((_) => _resetNotificationFlag()), // Reset flag after dismissal
+      );
+    }
   }
 
+  // Custom SnackBar with flag control
   void showCustomSnackBar(String message, BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.green,
-        content: Text(
-          message,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white, // Added color for better visibility
+    if (!_isNotificationShowing) {
+      _isNotificationShowing = true;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(
+            message,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
         ),
-        behavior: SnackBarBehavior.floating, // Optional: Makes the SnackBar float
-        duration: const Duration(seconds: 4), // Optional: Duration of the SnackBar
-      ),
-    );
+      ).closed.then((_) => _resetNotificationFlag()); // Reset flag after dismissal
+    }
   }
 }

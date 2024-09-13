@@ -169,7 +169,7 @@ class CustomInformationContainerField extends StatelessWidget {
               Border(bottom: BorderSide(color: AppColors.darkGrey, width: 1.5)),
         ),
         child: CustomPaint(
-          painter: myPainter(),
+          painter: DashedLinePainter(),
           child: Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 13),
             child: Row(
@@ -207,7 +207,7 @@ class CustomInformationContainerField extends StatelessWidget {
 }
 
 //Bottom Dashed Border for Fields.
-class myPainter extends CustomPainter {
+class DashedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paintWithColor = Paint()

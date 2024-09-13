@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/utils/utils.dart';
 
 class CustomButton extends StatefulWidget {
@@ -36,9 +37,33 @@ class CustomButton extends StatefulWidget {
 
 class _CustomButtonState extends State<CustomButton>
     with MediaQueryMixin<CustomButton> {
+  bool _isPressed = false;
+
+
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
+
+      onTapDown: (_) {
+        // When the user starts pressing the container
+        setState(() {
+          _isPressed = true;
+        });
+      },
+      onTapUp: (_) {
+        // When the user lifts the finger
+        setState(() {
+          _isPressed = false;
+        });
+      },
+      onTapCancel: () {
+        // When the touch is cancelled (e.g. by dragging outside)
+        setState(() {
+          _isPressed = false;
+        });
+      },
+
       onTap: () {
        widget.isLoading ? null : widget.onTap();
       },
@@ -51,7 +76,7 @@ class _CustomButtonState extends State<CustomButton>
             padding: EdgeInsets.only(
                 top: screenWidth * 0.02, bottom: screenWidth * 0.02),
             decoration: BoxDecoration(
-                color: widget.buttonColor ?? Colors.black,
+                color: _isPressed ? AppColors.scoThemeColor : widget.buttonColor ?? Colors.black,
                 border: Border.all(color: widget.borderColor ?? Colors.black),
                 gradient: widget.gradient,
                 borderRadius: BorderRadius.circular(180)),

@@ -46,6 +46,9 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   String? _answerError;
   String? _userId;
 
+
+
+  // creating and updating the security question setup view
   Future<void> _initializeData(
       {required LanguageChangeViewModel langProvider}) async {
     final provider =
@@ -254,7 +257,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         hintText: AppLocalizations.of(context)!.writeAnswer,
         textInputType: TextInputType.emailAddress,
         textCapitalization: true,
-        maxLines: 3,
+        maxLines: 1,
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
             borderSide: const BorderSide(color: AppColors.darkGrey)),

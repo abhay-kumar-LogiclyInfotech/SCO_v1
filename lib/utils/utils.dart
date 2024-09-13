@@ -193,7 +193,7 @@ List<DropdownMenuItem> populateNormalDropdown({
             ? element.toString()
             : element.toString(),
         style: const TextStyle(
-          color: AppColors.darkGrey,
+          color: Colors.black,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
