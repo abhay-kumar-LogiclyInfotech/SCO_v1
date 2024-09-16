@@ -43,7 +43,7 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
       textDirection: getTextDirection(langProvider),
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: double.maxFinite,

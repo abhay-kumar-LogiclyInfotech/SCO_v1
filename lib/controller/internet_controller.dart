@@ -9,7 +9,8 @@ class InternetController extends GetxController {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<List<ConnectivityResult>> _subscription;
   // Variable to hold current connection status
-  var isConnected = false.obs;
+  // set initial true to prevent unnecessary bugs
+  var isConnected = true.obs;
 
   @override
   void onInit() {

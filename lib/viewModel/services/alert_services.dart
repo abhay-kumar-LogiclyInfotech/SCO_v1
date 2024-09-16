@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
+import '../../resources/app_colors.dart';
 import 'navigation_services.dart';
 
 class AlertServices {
@@ -94,7 +95,7 @@ class AlertServices {
       showFlushbar(
         context: context,
         flushbar: Flushbar(
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.scoButtonColor,
           textDirection: getTextDirection(provider),
           messageColor: Colors.white,
           message: message,

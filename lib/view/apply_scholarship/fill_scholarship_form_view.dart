@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:getwidget/components/checkbox/gf_checkbox.dart';
 import 'package:getwidget/size/gf_size.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_styles.dart';
@@ -117,7 +120,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView> with 
 
 
   // creating the title for scholarship(Name of the scholarship visible to the user) and number of tabs using multiple conditions
-  void _setTitleAndTotalSections({required BuildContext context}){
+  void _setTitleAndTotalSections({required BuildContext context})
+  {
     try{
       if (_selectedScholarship != null) {
         // Internal Bachelor
@@ -231,12 +235,21 @@ void _initializer(){
 
 
 
+// initialize the services
+void _initializeServices(){
+  final GetIt getIt = GetIt.instance;
+  _navigationService = getIt.get<NavigationServices>();
+  _alertService = getIt.get<AlertServices>();
+}
+
 
 
 
   // *------------Init State of the form start-------*
   @override
   void initState() {
+  // initialize the services
+    _initializeServices();
     // calling initializer to initialize the data
     _initializer();
     super.initState();
@@ -246,166 +259,236 @@ void _initializer(){
 
   @override
   Widget build(BuildContext context) {
+    final langProvider = Provider.of<LanguageChangeViewModel>(
+        context, listen: true);
+
     return Scaffold(
-      appBar: CustomSimpleAppBar(title: Text("Apply Scholarship", style: AppTextStyles.appBarTitleStyle())),
-      backgroundColor: Colors.white,
-      body: ValueListenableBuilder(valueListenable: _notifier, builder: (context,snapshot,child){
+        appBar: CustomSimpleAppBar(title: Text(
+            "Apply Scholarship", style: AppTextStyles.appBarTitleStyle())),
+        backgroundColor: Colors.white,
+        body: ValueListenableBuilder(
+            valueListenable: _notifier, builder: (context, snapshot, child) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: Utils.cupertinoLoadingIndicator());
+          }
+          if (snapshot.hasError) {
+            return Utils.showOnError();
+          }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: Utils.cupertinoLoadingIndicator());
-        }
-        if (snapshot.hasError) {
-          return Utils.showOnError();
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-
-
-            // title and progress section
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: kPadding,vertical: kPadding-10),
-              decoration: const BoxDecoration(color: AppColors.bgColor, border: Border(bottom: BorderSide(color: AppColors.darkGrey))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // scholarship title
-                  Container(
-                    width: double.infinity,
-                    height: 30,
-                    decoration: const BoxDecoration(
-                        color: AppColors.bgColor,
-                        border: Border(bottom: BorderSide(color: AppColors.darkGrey))
-                    ),
-                    child: CustomPaint(
-                        painter: DashedLinePainter(),
-                        child: Text(_scholarshipTitle,style: AppTextStyles.titleBoldTextStyle(),)),
-                  ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
 
-
-                  // Progress Indicator for now but soon going to change this
-                  Row(
-                    children: [
-                      Text('Progress: ${(_currentSectionIndex + 1)}/$totalSections'),
-                      Expanded(
-                        child: LinearProgressIndicator(
-                          value: (_currentSectionIndex + 1) / totalSections,
-                        ),
+              // title and progress section
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: kPadding, vertical: kPadding - 10),
+                decoration: const BoxDecoration(color: AppColors.bgColor,
+                    border: Border(
+                        bottom: BorderSide(color: AppColors.darkGrey))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // scholarship title
+                    Container(
+                      width: double.infinity,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                          color: AppColors.bgColor,
+                          border: Border(bottom: BorderSide(
+                              color: AppColors.darkGrey))
                       ),
-                    ],
-                  ),
-                ],
+                      child: CustomPaint(
+                          painter: DashedLinePainter(),
+                          child: Text(_scholarshipTitle, style: AppTextStyles
+                              .titleBoldTextStyle(),)),
+                    ),
+
+
+                    // Progress Indicator for now but soon going to change this
+                    Row(
+                      children: [
+                        Text('Progress: ${(_currentSectionIndex +
+                            1)}/$totalSections'),
+                        Expanded(
+                          child: LinearProgressIndicator(
+                            value: (_currentSectionIndex + 1) / totalSections,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
 
 
-            // Form Sections with PageView
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),  // Disable swipe gestures
-                itemCount: totalSections,
-                itemBuilder: (context, index) {
-                  // return Padding(
-                  //   padding: const EdgeInsets.all(16.0),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Text('Section ${index + 1}'),
-                  //       const SizedBox(height: 16),
-                  //       // Placeholder for form fields in each section
-                  //       TextFormField(
-                  //         decoration: const InputDecoration(labelText: 'Enter some data'),
-                  //         onChanged: (value) {
-                  //           setState(() {
-                  //             filledSections[index] = value.isNotEmpty;
-                  //           });
-                  //         },
-                  //       ),
-                  //     ],
-                  //   ),
-                  // );
-                  // check if index is zero then show accept pledge section
-                  if(index == 0){
-                   return _studentUndertakingSection();
-                  }
-                  if(index == 1){
-                    filledSections[index] = true;
-
-                    return Text("student details");
-                  }
-                  if(index == 2){
-                    filledSections[index] = true;
-                    return Text("education details");
-                  }
-                },
+              // Form Sections with PageView
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  // Disable swipe gestures
+                  itemCount: totalSections,
+                  itemBuilder: (context, index) {
+                    // return Padding(
+                    //   padding: const EdgeInsets.all(16.0),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Text('Section ${index + 1}'),
+                    //       const SizedBox(height: 16),
+                    //       // Placeholder for form fields in each section
+                    //       TextFormField(
+                    //         decoration: const InputDecoration(labelText: 'Enter some data'),
+                    //         onChanged: (value) {
+                    //           setState(() {
+                    //             filledSections[index] = value.isNotEmpty;
+                    //           });
+                    //         },
+                    //       ),
+                    //     ],
+                    //   ),
+                    // );
+                    // check if index is zero then show accept pledge section
+                    if (index == 0) {
+                      filledSections[index] = _acceptStudentUndertaking;
+                      return _studentUndertakingSection(step: index);
+                    }
+                    if (index == 1) {
+                      filledSections[index] = true;
+                      return _studentDetailsSection(step: index,langProvider: langProvider);
+                    }
+                    if (index == 2) {
+                      filledSections[index] = true;
+                      return Text("education details");
+                    }
+                  },
+                ),
               ),
-            ),
 
-            // Buttons Section (Previous, Next, Save Draft)
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: saveDraft,
-                    child: Text('Save Draft'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _currentSectionIndex > 0 ? previousSection : null,
-                    child: Text('Previous'),
-                  ),
-                  ElevatedButton(
-                    onPressed: isSectionFilled(_currentSectionIndex)
-                        ? nextSection
-                        : null, // Disable "Next" if the current section is not filled
-                    child: Text('Next'),
-                  ),
-                ],
+              // Buttons Section (Previous, Next, Save Draft)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: saveDraft,
+                      child: Text('Save Draft'),
+                    ),
+                    ElevatedButton(
+                      onPressed: _currentSectionIndex > 0
+                          ? previousSection
+                          : null,
+                      child: Text('Previous'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (validateSection(_currentSectionIndex)) {
+                          nextSection(); // Only move to the next section if validation passes
+                        } else {
+                          // Optionally show a validation error message (like a SnackBar)
+                          _alertService.flushBarErrorMessages(
+                              message: 'Please complete the required fields.',
+                              context: context,
+                              provider: langProvider);
+                        }
+                      },
+                      child: Text('Next'),
+                    ),
+
+                  ],
+                ),
               ),
-            ),
-          ],
-        );
-
-      })
+            ],
+          );
+        })
     );
   }
 
+    // student undertaking check:
+    bool _acceptStudentUndertaking = false;
 
-
-
-  // student undertaking check:
-  bool _acceptStudentUndertaking = false;
-
-  // student undertaking
-  Widget _studentUndertakingSection(){
-  return  Column(
-  children: [
-
-
-
-    // Accept Pledge
-      Row(
+    // step-1: student undertaking
+    Widget _studentUndertakingSection({required int step}) {
+      return Column(
         children: [
-          GFCheckbox(
-          size: 20,
-              type: GFCheckboxType.custom,
-                  onChanged: (value) {
+          // Accept Pledge
+          Row(
+            children: [
+              GFCheckbox(
+                size: 20,
+                type: GFCheckboxType.custom,
+                onChanged: (value) {
                   setState(() {
-            _acceptStudentUndertaking = value;
-          });
-              },
-              value: _acceptStudentUndertaking,
-              inactiveIcon: null,
-            ),
-          Expanded(child: Text("Accept Scholarship terms and conditions"))
+                    _acceptStudentUndertaking = value;
+                    filledSections[step] =
+                        _acceptStudentUndertaking; // Update section as filled
+
+                  });
+                },
+                value: _acceptStudentUndertaking,
+                inactiveIcon: null,
+              ),
+              Expanded(child: Text("Accept Scholarship terms and conditions"))
+            ],
+          ),
         ],
-      ),
-],
-  );
-  }
+      );
+    }
+
+    // step-2: student details
+    Widget _studentDetailsSection({required int step,required LanguageChangeViewModel langProvider}) {
+      return Container(
+        color: Colors.grey,
+        alignment: Alignment.topCenter,
+        child: CustomInformationContainer(
+            title: "Student Details", expandedContent: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+
+
+          children: [
+            // Title for arabic name same as passport
+            Text("Arabic name in passport",
+              style: AppTextStyles.titleBoldTextStyle(),),
+
+            // first name
+            fieldHeading(title: "First Name",
+                important: true,
+                langProvider: langProvider),
+
+
+          ],
+
+        )),
+      );
+    }
+
+    // step-3: education details
+    Widget _educationDetailsSection({required int step}) {
+      return Column(
+        children: [
+          // Add your education details form here
+          Text("Education Details"),
+        ],
+      );
+    }
+
+
+    // validate section in accordance with the steps
+    bool validateSection(int step) {
+      // Validation for the first section (Accept Student Undertaking)
+      if (step == 0) {
+        // Validate the "Accept Student Undertaking" section
+        return _acceptStudentUndertaking;
+      }
+      // Add additional validation for other sections if needed
+      // For now, return true for the rest of the sections
+      return true;
+    }
+
+
 }

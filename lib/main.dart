@@ -47,10 +47,10 @@ Future<void> main() async {
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
   // ]);
+  DependencyInjection.init();
   await setup();
   runApp(MyApp(locale: languageCode));
 
-  DependencyInjection.init();
 
 }
 
