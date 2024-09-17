@@ -12,7 +12,7 @@ class AppColors {
   static const Color lightBlue0 = Color(0xffE8F7FF);
   static const Color lightBlue1 = Color(0xff3FD4FA);
   static const Color lightBlue2 = Color(0xff3F85AF);
-
+  static const Color fieldTitleDarkGrey = Color(0xff8591A9);
 
 
 

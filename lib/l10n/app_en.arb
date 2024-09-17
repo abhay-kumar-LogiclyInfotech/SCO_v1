@@ -208,7 +208,10 @@
   "phoneNo1": "Phone No 1",
   "phoneNo2": "Phone No 2",
   "webUrl": "https://www.sco.ae",
-  "phoneCallPermissionDenied": "Phone call permission denied"
+  "phoneCallPermissionDenied": "Phone call permission denied",
+  "invalidArabicName": "Invalid Arabic name. Please use only Arabic letters.",
+  "invalidEnglishName": "Please enter a valid English name"
+
 
 
 

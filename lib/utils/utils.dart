@@ -36,6 +36,26 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 }
 
 class Utils {
+
+  // input borders start
+ static InputBorder outlinedInputBorder() {
+    return OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5),
+        borderSide: const BorderSide(color: AppColors.darkGrey));
+  }
+
+static  InputBorder underLinedInputBorder() {
+    return const UnderlineInputBorder(
+        borderRadius: BorderRadius.zero,
+        borderSide: BorderSide(color: AppColors.darkGrey));
+  }
+  // input borders end
+
+
+
+
+
+
   //*------Common Loading Indicators Start------*/
 
   //*-----Material Loading Indicator-----*/
@@ -114,7 +134,7 @@ fieldHeading(
                   style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xff093B59)),
+                      color: AppColors.fieldTitleDarkGrey),
                   children: <TextSpan>[
                 TextSpan(
                   text: title,

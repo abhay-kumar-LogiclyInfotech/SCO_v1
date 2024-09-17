@@ -74,11 +74,11 @@ class _CustomDropdownState extends State<CustomDropdown>
           hintStyle:
               const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
           border: widget.outlinedBorder
-              ? outlinedInputBorder()
-              : underLinedInputBorder(),
+              ? Utils.outlinedInputBorder()
+              : Utils.underLinedInputBorder(),
           focusedBorder: widget.outlinedBorder
-              ? outlinedInputBorder()
-              : underLinedInputBorder(),
+              ? Utils.outlinedInputBorder()
+              : Utils.underLinedInputBorder(),
           errorBorder: widget.outlinedBorder
               ? OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
@@ -87,12 +87,12 @@ class _CustomDropdownState extends State<CustomDropdown>
                   borderRadius: BorderRadius.zero,
                   borderSide: BorderSide(color: Colors.red)),
           enabledBorder: widget.outlinedBorder
-              ? outlinedInputBorder()
-              : underLinedInputBorder(),
+              ? Utils.outlinedInputBorder()
+              : Utils.underLinedInputBorder(),
           focusedErrorBorder: widget.outlinedBorder
-              ? outlinedInputBorder()
+              ? Utils.outlinedInputBorder()
                   .copyWith(borderSide: const BorderSide(color: Colors.green))
-              : underLinedInputBorder(),
+              : Utils.underLinedInputBorder(),
         ),
 
         // cursorColor: AppColors.darkGrey,
@@ -120,14 +120,4 @@ class _CustomDropdownState extends State<CustomDropdown>
   }
 }
 
-InputBorder outlinedInputBorder() {
-  return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
-      borderSide: const BorderSide(color: AppColors.darkGrey));
-}
 
-InputBorder underLinedInputBorder() {
-  return const UnderlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.darkGrey));
-}

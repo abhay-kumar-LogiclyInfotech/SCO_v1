@@ -53,6 +53,7 @@ class Validations {
       return false;
     }
 
+
     // Check for extra spaces
     if (name.trim().split(' ').length != name.split(' ').length) {
       return false;
@@ -60,6 +61,25 @@ class Validations {
 
     return true;
   }
+
+  // arabic name validation
+  static bool isArabicNameValid(String name) {
+    // Regex to allow only Arabic letters and spaces
+    final regex = RegExp(r'^[\u0600-\u06FF\s]+$');
+
+    // Check if the name matches the regex
+    return regex.hasMatch(name);
+  }
+
+  // English name validation
+  static bool isEnglishNameValid(String name) {
+    // Regex to allow only English letters and spaces
+    final regex = RegExp(r'^[a-zA-Z\s]+$');
+
+    // Check if the name matches the regex
+    return regex.hasMatch(name);
+  }
+
 
   // Email Validation:
   static bool isEmailValid(String email) {
@@ -164,6 +184,34 @@ class ErrorText {
     }
     return null;
   }
+
+  // Arabic name error validation
+  static String? getArabicNameError({
+    required String name,
+    required BuildContext context,
+  }) {
+    if (name.isEmpty) {
+      return AppLocalizations.of(context)!.nameCantBeEmpty;
+    } else if (!Validations.isArabicNameValid(name)) {
+      return AppLocalizations.of(context)!.invalidArabicName; // Adjust this key to match your localization
+    }
+    return null;
+  }
+
+  // English name error validation
+  static String? getEnglishNameError({
+    required String name,
+    required BuildContext context,
+  }) {
+    if (name.isEmpty) {
+      return AppLocalizations.of(context)!.nameCantBeEmpty;
+    } else if (!Validations.isEnglishNameValid(name)) {
+      return AppLocalizations.of(context)!.invalidEnglishName; // Adjust this key to match your localization
+    }
+    return null;
+  }
+
+
 
   //Email error:
   static String? getEmailError({required String email, required BuildContext context}) {

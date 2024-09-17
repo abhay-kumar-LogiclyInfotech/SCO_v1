@@ -6,17 +6,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/models/drawer/IndividualImageModel.dart';
-import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
-import 'package:sco_v1/resources/components/account/custom_account_grid_container.dart';
-import 'package:sco_v1/view/authentication/forgot_password/answer_security_question_view.dart';
-import 'package:sco_v1/view/authentication/forgot_password/confirmation_view.dart';
-import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
-import 'package:sco_v1/view/authentication/forgot_password/forgot_security_question_otp_verification_view.dart';
-import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
-import 'package:sco_v1/view/authentication/signup/terms_and_conditions_view.dart';
-import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
-import 'package:sco_v1/view/main_view.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
@@ -56,13 +45,6 @@ Future<void> main() async {
 
 Future<void> setup() async {
   bool isRegistered = await registerServices();
-  if (isRegistered) {
-    debugPrint(
-        "In main file:---------------->>>>>>>>>>>>>>>>>> All Services Registered Successfully");
-  } else {
-    debugPrint(
-        "In main file:---------------->>>>>>>>>>>>>>>>>>Services not Registered");
-  }
 }
 
 late NavigationServices _navigationServices;
