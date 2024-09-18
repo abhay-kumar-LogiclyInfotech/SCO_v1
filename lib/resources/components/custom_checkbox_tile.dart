@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sco_v1/resources/app_colors.dart';
+import 'package:sco_v1/resources/app_colors.dart';import 'package:getwidget/getwidget.dart';
+
 
 class CustomCheckBoxTile extends StatelessWidget {
   bool isChecked;
@@ -47,3 +48,50 @@ class CustomCheckBoxTile extends StatelessWidget {
         onChanged: onChanged);
   }
 }
+
+
+
+class CustomGFCheckbox extends StatefulWidget {
+  final bool value;
+  final ValueChanged<bool?> onChanged;
+  final String text;
+  TextStyle? textStyle;
+
+  CustomGFCheckbox({
+    required this.value,
+    required this.onChanged,
+    required this.text,
+    this.textStyle,
+  });
+
+  @override
+  _CustomGFCheckboxState createState() => _CustomGFCheckboxState();
+}
+
+class _CustomGFCheckboxState extends State<CustomGFCheckbox> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Toggle checkbox when text is tapped
+        widget.onChanged(!widget.value);
+      },
+      child: Row(
+        children: [
+          GFCheckbox(
+            size: 20,
+            type: GFCheckboxType.custom,
+            onChanged: widget.onChanged,
+            value: widget.value,
+            inactiveIcon: null,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(widget.text,style: widget.textStyle,),
+          ),
+        ],
+      ),
+    );
+  }
+}
+

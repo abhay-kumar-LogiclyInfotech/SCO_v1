@@ -1,208 +1,188 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-// 1. NameAsPassport model for list
-class NameAsPassport {
+// Generalized PersonName model for names (Arabic, English, etc.)
+class PersonName {
   final String nameType;
-  final TextEditingController studentNameController;
-  final TextEditingController fatherNameController;
-  final TextEditingController grandFatherNameController;
-  final TextEditingController familyNameController;
+  final String studentName;
+  final String fatherName;
+  final String grandFatherName;
+  final String familyName;
 
-  NameAsPassport({
+  PersonName({
     required this.nameType,
-    required this.studentNameController,
-    required this.fatherNameController,
-    required this.grandFatherNameController,
-    required this.familyNameController,
+    required this.studentName,
+    required this.fatherName,
+    required this.grandFatherName,
+    required this.familyName,
   });
 
-  factory NameAsPassport.fromJson(Map<String, dynamic> json) {
-    return NameAsPassport(
+  // Factory method to create an instance from JSON
+  factory PersonName.fromJson(Map<String, dynamic> json) {
+    return PersonName(
       nameType: json['nameType'] ?? '',
-      studentNameController: TextEditingController(text: json['studentName'] ?? ''),
-      fatherNameController: TextEditingController(text: json['fatherName'] ?? ''),
-      grandFatherNameController: TextEditingController(text: json['grandFatherName'] ?? ''),
-      familyNameController: TextEditingController(text: json['familyName'] ?? ''),
+      studentName: json['studentName'] ?? '',
+      fatherName: json['fatherName'] ?? '',
+      grandFatherName: json['grandFatherName'] ?? '',
+      familyName: json['familyName'] ?? '',
     );
   }
 
+  // Method to convert the instance to JSON
   Map<String, dynamic> toJson() {
     return {
       'nameType': nameType,
-      'studentName': studentNameController.text,
-      'fatherName': fatherNameController.text,
-      'grandFatherName': grandFatherNameController.text,
-      'familyName': familyNameController.text,
+      'studentName': studentName,
+      'fatherName': fatherName,
+      'grandFatherName': grandFatherName,
+      'familyName': familyName,
     };
   }
 }
 
-// 2. Single EnglishName and ArabicName models
-class EnglishArabicName {
-  final String nameType;
-  final TextEditingController studentNameController;
-  final TextEditingController fatherNameController;
-  final TextEditingController grandFatherNameController;
-  final TextEditingController familyNameController;
+// Now you can use this model for both ArabicName and EnglishName:
+final arabicName = PersonName(
+  nameType: 'Arabic',
+  studentName: 'John Doe',
+  fatherName: 'Doe Sr.',
+  grandFatherName: 'Grandpa Doe',
+  familyName: 'Doe Family',
+);
 
-  EnglishArabicName({
-    required this.nameType,
-    required this.studentNameController,
-    required this.fatherNameController,
-    required this.grandFatherNameController,
-    required this.familyNameController,
-  });
+final englishName = PersonName(
+  nameType: 'English',
+  studentName: 'John Smith',
+  fatherName: 'Smith Sr.',
+  grandFatherName: 'Grandpa Smith',
+  familyName: 'Smith Family',
+);
 
-  factory EnglishArabicName.fromJson(Map<String, dynamic> json) {
-    return EnglishArabicName(
-      nameType: json['nameType'] ?? '',
-      studentNameController: TextEditingController(text: json['studentName'] ?? ''),
-      fatherNameController: TextEditingController(text: json['fatherName'] ?? ''),
-      grandFatherNameController: TextEditingController(text: json['grandFatherName'] ?? ''),
-      familyNameController: TextEditingController(text: json['familyName'] ?? ''),
-    );
-  }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'nameType': nameType,
-      'studentName': studentNameController.text,
-      'fatherName': fatherNameController.text,
-      'grandFatherName': grandFatherNameController.text,
-      'familyName': familyNameController.text,
-    };
-  }
-}
-
-// 3. PhoneNumber model remains the same
 class PhoneNumber {
-  final TextEditingController countryCodeController;
-  final TextEditingController phoneNumberController;
-  final TextEditingController phoneTypeController;
-  final TextEditingController preferredController;
+  final String countryCode;
+  final String phoneNumber;
+  final String phoneType;
+  final String preferred; // Boolean value as a string ('true'/'false')
 
   PhoneNumber({
-    required this.countryCodeController,
-    required this.phoneNumberController,
-    required this.phoneTypeController,
-    required this.preferredController,
+    required this.countryCode,
+    required this.phoneNumber,
+    required this.phoneType,
+    required this.preferred,
   });
 
   factory PhoneNumber.fromJson(Map<String, dynamic> json) {
     return PhoneNumber(
-      countryCodeController: TextEditingController(text: json['countryCode'] ?? ''),
-      phoneNumberController: TextEditingController(text: json['phoneNumber'] ?? ''),
-      phoneTypeController: TextEditingController(text: json['phoneType'] ?? ''),
-      preferredController: TextEditingController(text: json['preferred']?.toString() ?? 'false'),
+      countryCode: json['countryCode'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? '',
+      phoneType: json['phoneType'] ?? '',
+      preferred: json['preferred']?.toString() ?? 'false',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'countryCode': countryCodeController.text,
-      'phoneNumber': phoneNumberController.text,
-      'phoneType': phoneTypeController.text,
-      'preferred': preferredController.text == 'true',
+      'countryCode': countryCode,
+      'phoneNumber': phoneNumber,
+      'phoneType': phoneType,
+      'preferred': preferred,
     };
   }
 }
 
-// 4. Address model remains the same
 class Address {
-  final TextEditingController addressTypeController;
-  final TextEditingController addressLine1Controller;
-  final TextEditingController addressLine2Controller;
-  final TextEditingController cityController;
-  final TextEditingController countryController;
-  final TextEditingController postalCodeController;
+  final String addressType;
+  final String addressLine1;
+  final String addressLine2;
+  final String city;
+  final String country;
+  final String postalCode;
 
   Address({
-    required this.addressTypeController,
-    required this.addressLine1Controller,
-    required this.addressLine2Controller,
-    required this.cityController,
-    required this.countryController,
-    required this.postalCodeController,
+    required this.addressType,
+    required this.addressLine1,
+    required this.addressLine2,
+    required this.city,
+    required this.country,
+    required this.postalCode,
   });
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-      addressTypeController: TextEditingController(text: json['addressType'] ?? ''),
-      addressLine1Controller: TextEditingController(text: json['addressLine1'] ?? ''),
-      addressLine2Controller: TextEditingController(text: json['addressLine2'] ?? ''),
-      cityController: TextEditingController(text: json['city'] ?? ''),
-      countryController: TextEditingController(text: json['country'] ?? ''),
-      postalCodeController: TextEditingController(text: json['postalCode'] ?? ''),
+      addressType: json['addressType'] ?? '',
+      addressLine1: json['addressLine1'] ?? '',
+      addressLine2: json['addressLine2'] ?? '',
+      city: json['city'] ?? '',
+      country: json['country'] ?? '',
+      postalCode: json['postalCode'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'addressType': addressTypeController.text,
-      'addressLine1': addressLine1Controller.text,
-      'addressLine2': addressLine2Controller.text,
-      'city': cityController.text,
-      'country': countryController.text,
-      'postalCode': postalCodeController.text,
+      'addressType': addressType,
+      'addressLine1': addressLine1,
+      'addressLine2': addressLine2,
+      'city': city,
+      'country': country,
+      'postalCode': postalCode,
     };
   }
 }
 
-// 5. EmploymentHistory model remains the same
+
 class EmploymentHistory {
-  final TextEditingController employerNameController;
-  final TextEditingController fromMonthController;
-  final TextEditingController fromYearController;
-  final TextEditingController toMonthController;
-  final TextEditingController toYearController;
-  final TextEditingController occupationController;
-  final TextEditingController titleController;
-  final TextEditingController placeController;
-  final TextEditingController reportingManagerController;
-  final TextEditingController contactNumberController;
+  final String employerName;
+  final String fromMonth;
+  final String fromYear;
+  final String toMonth;
+  final String toYear;
+  final String occupation;
+  final String title;
+  final String place;
+  final String reportingManager;
+  final String contactNumber;
 
   EmploymentHistory({
-    required this.employerNameController,
-    required this.fromMonthController,
-    required this.fromYearController,
-    required this.toMonthController,
-    required this.toYearController,
-    required this.occupationController,
-    required this.titleController,
-    required this.placeController,
-    required this.reportingManagerController,
-    required this.contactNumberController,
+    required this.employerName,
+    required this.fromMonth,
+    required this.fromYear,
+    required this.toMonth,
+    required this.toYear,
+    required this.occupation,
+    required this.title,
+    required this.place,
+    required this.reportingManager,
+    required this.contactNumber,
   });
 
   factory EmploymentHistory.fromJson(Map<String, dynamic> json) {
     return EmploymentHistory(
-      employerNameController: TextEditingController(text: json['employerName'] ?? ''),
-      fromMonthController: TextEditingController(text: json['fromMonth']?.toString() ?? ''),
-      fromYearController: TextEditingController(text: json['fromYear']?.toString() ?? ''),
-      toMonthController: TextEditingController(text: json['toMonth']?.toString() ?? ''),
-      toYearController: TextEditingController(text: json['toYear']?.toString() ?? ''),
-      occupationController: TextEditingController(text: json['occupation'] ?? ''),
-      titleController: TextEditingController(text: json['title'] ?? ''),
-      placeController: TextEditingController(text: json['place'] ?? ''),
-      reportingManagerController: TextEditingController(text: json['reportingManager'] ?? ''),
-      contactNumberController: TextEditingController(text: json['contactNumber'] ?? ''),
+      employerName: json['employerName'] ?? '',
+      fromMonth: json['fromMonth']?.toString() ?? '',
+      fromYear: json['fromYear']?.toString() ?? '',
+      toMonth: json['toMonth']?.toString() ?? '',
+      toYear: json['toYear']?.toString() ?? '',
+      occupation: json['occupation'] ?? '',
+      title: json['title'] ?? '',
+      place: json['place'] ?? '',
+      reportingManager: json['reportingManager'] ?? '',
+      contactNumber: json['contactNumber'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'employerName': employerNameController.text,
-      'fromMonth': fromMonthController.text,
-      'fromYear': fromYearController.text,
-      'toMonth': toMonthController.text,
-      'toYear': toYearController.text,
-      'occupation': occupationController.text,
-      'title': titleController.text,
-      'place': placeController.text,
-      'reportingManager': reportingManagerController.text,
-      'contactNumber': contactNumberController.text,
+      'employerName': employerName,
+      'fromMonth': fromMonth,
+      'fromYear': fromYear,
+      'toMonth': toMonth,
+      'toYear': toYear,
+      'occupation': occupation,
+      'title': title,
+      'place': place,
+      'reportingManager': reportingManager,
+      'contactNumber': contactNumber,
     };
   }
 }
-

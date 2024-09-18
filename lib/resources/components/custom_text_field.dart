@@ -10,7 +10,7 @@ class CustomTextField extends StatefulWidget {
   FocusNode? nextFocusNode;
   bool? autofocus;
   final TextEditingController controller;
-  final bool obscureText;
+   bool? obscureText;
   final String hintText;
   bool? textCapitalization;
   Widget? icon;
@@ -33,7 +33,7 @@ TextStyle? textStyle;
       this.nextFocusNode,
       this.autofocus,
       required this.controller,
-      required this.obscureText,
+        this.obscureText,
       required this.hintText,
       this.textCapitalization,
       this.icon,
@@ -69,7 +69,7 @@ class _CustomTextFieldState extends State<CustomTextField>
         focusNode: widget.currentFocusNode,
         controller: widget.controller,
         autofocus: widget.autofocus ?? false,
-        obscureText: widget.obscureText,
+        obscureText: widget.obscureText ?? false,
         textCapitalization: widget.textCapitalization == true
             ? TextCapitalization.sentences
             : TextCapitalization.none,

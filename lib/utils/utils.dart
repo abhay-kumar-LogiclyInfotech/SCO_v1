@@ -52,6 +52,11 @@ static  InputBorder underLinedInputBorder() {
   // input borders end
 
 
+ // focus request:
+ static void requestFocus({required FocusNode focusNode, required BuildContext context}){
+   FocusScope.of(context).requestFocus(focusNode);
+ }
+
 
 
 
@@ -154,6 +159,7 @@ fieldHeading(
 List<DropdownMenuItem> populateCommonDataDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
+  Color? textColor,
 }) {
   final textDirection = getTextDirection(provider);
   return menuItemsList
@@ -165,8 +171,8 @@ List<DropdownMenuItem> populateCommonDataDropdown({
         textDirection == TextDirection.ltr
             ? element.value
             : element.valueArabic.toString(),
-        style: const TextStyle(
-          color: AppColors.hintDarkGrey,
+        style:  TextStyle(
+          color: textColor ?? AppColors.hintDarkGrey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),

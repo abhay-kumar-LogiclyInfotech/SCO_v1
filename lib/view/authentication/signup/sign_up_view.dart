@@ -18,6 +18,7 @@ import 'package:sco_v1/viewModel/services/alert_services.dart';
 import '../../../data/response/status.dart';
 import '../../../resources/components/custom_dropdown.dart';
 import '../../../resources/components/custom_text_field.dart';
+import '../../../resources/input_formatters/emirates_id_input_formatter.dart';
 import '../../../utils/constants.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
@@ -490,9 +491,6 @@ class _SignUpViewState extends State<SignUpView>
               intl.DateFormat('MM').format(dob).toString();
           _dobYearController.text =
               intl.DateFormat('yyyy').format(dob).toString();
-          debugPrint(_dobDayController.text);
-          debugPrint(_dobMonthController.text);
-          debugPrint(_dobYearController.text);
         }
       },
     );
@@ -660,9 +658,11 @@ class _SignUpViewState extends State<SignUpView>
       textDirection: getTextDirection(provider),
       menuItemsList: _countryMenuItemsList,
       onChanged: (value) {
-        _countryController.text = value!;
-        //This thing is creating error: don't know how to fix it:
-        FocusScope.of(context).requestFocus(_emiratesIdFocusNode);
+        setState(() {
+          _countryController.text = value!;
+          //This thing is creating error: don't know how to fix it:
+          FocusScope.of(context).requestFocus(_emiratesIdFocusNode);
+        });
       },
       currentFocusNode: _countryFocusNode,
       hintText: AppLocalizations.of(context)!.country,
@@ -960,29 +960,3 @@ class _SignUpViewState extends State<SignUpView>
   }
 }
 
-class EmiratesIDFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    String text = newValue.text.replaceAll('-', '');
-
-    // Limit to 15 characters
-    if (text.length > 15) {
-      text = text.substring(0, 15);
-    }
-
-    // Add dashes at specific positions
-    final buffer = StringBuffer();
-    for (int i = 0; i < text.length; i++) {
-      buffer.write(text[i]);
-      if ((i == 2 || i == 6 || i == 13) && i != text.length - 1) {
-        buffer.write('-');
-      }
-    }
-
-    return TextEditingValue(
-      text: buffer.toString(),
-      selection: TextSelection.collapsed(offset: buffer.length),
-    );
-  }
-}

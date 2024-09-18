@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
+
+
+// *---------------------------------------------------------------- Creating Validations for the particular field start ----------------------------------------------------------------***
 class Validations {
-
-
   //Clean the Html Tags:
   static String stripHtml(String html) {
     // Define a map for common HTML entities
@@ -171,8 +172,44 @@ class Validations {
 
     return true;
   }
-}
 
+  // Passport Number Validation
+  static bool isPassportNumberValid(String passportNumber) {
+    // Check if the passport number is empty
+    if (passportNumber.isEmpty) {
+      return false;
+    }
+
+    // Check if passport number has valid length (assuming a length of 6-9 characters is typical)
+    if (passportNumber.length < 6 || passportNumber.length > 9) {
+      return false;
+    }
+
+    // Check if it contains only alphanumeric characters (no spaces or special characters)
+    final RegExp passportRegex = RegExp(r'^[a-zA-Z0-9]+$');
+    return passportRegex.hasMatch(passportNumber);
+  }
+
+  // Unified Number Validation
+  static bool isUnifiedNumberValid(String unifiedNumber) {
+    // Check if the unified number is empty
+    if (unifiedNumber.isEmpty) {
+      return false;
+    }
+
+    // Check if unified number has exactly 12 digits
+    final RegExp unifiedNumberRegex = RegExp(r'^\d{12}$');
+    return unifiedNumberRegex.hasMatch(unifiedNumber);
+  }
+
+}
+// *---------------------------------------------------------------- Creating Validations for the particular field end ----------------------------------------------------------------***
+
+
+
+
+
+/// *---------------------------------------------------------------- Creating Error Texts Based on Validations start ----------------------------------------------------------------****
 class ErrorText {
 
   //Name error:
@@ -271,7 +308,6 @@ class ErrorText {
     return null;
   }
 
-  //Empty Field Error:
   //Name error:
   static String? getEmptyFieldError({required String name, required BuildContext context}) {
     if (name.isEmpty) {
@@ -282,4 +318,33 @@ class ErrorText {
     return null;
   }
 
+
+  // Passport Number Error Text
+  static String? getPassportNumberError({
+    required String passportNumber, required BuildContext context
+  }) {
+    if (passportNumber.isEmpty) {
+      return 'Passport number cannot be empty.';
+    } else if (!Validations.isPassportNumberValid(passportNumber)) {
+      return 'Invalid passport number. Must be 6-9 characters long and contain only letters and numbers.';
+    }
+    return null;
+  }
+
+  // Unified Number Error
+  static String? getUnifiedNumberError({
+  required String unifiedNumber,required BuildContext context
+  }) {
+  if (unifiedNumber.isEmpty) {
+  return 'Unified number cannot be empty.';
+  } else if (!Validations.isUnifiedNumberValid(unifiedNumber)) {
+  return 'Unified number must be exactly 12 digits.';
+  }
+  return null;
+  }
+
+
+
 }
+/// *---------------------------------------------------------------- Creating Error Texts Based on Validations end ----------------------------------------------------------------****
+

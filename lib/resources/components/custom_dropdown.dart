@@ -72,7 +72,7 @@ class _CustomDropdownState extends State<CustomDropdown>
           hintText: widget.hintText,
           hintFadeDuration: const Duration(milliseconds: 500),
           hintStyle:
-              const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
+              const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14,fontWeight: FontWeight.w500),
           border: widget.outlinedBorder
               ? Utils.outlinedInputBorder()
               : Utils.underLinedInputBorder(),
