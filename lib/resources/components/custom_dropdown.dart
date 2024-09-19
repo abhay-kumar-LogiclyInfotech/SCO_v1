@@ -17,6 +17,7 @@ class CustomDropdown extends StatefulWidget {
   final TextDirection textDirection;
   Color? fillColor;
   Color? textColor;
+  String? errorText;
   dynamic value;
 
   // InputBorder? border;
@@ -36,6 +37,7 @@ class CustomDropdown extends StatefulWidget {
     this.fillColor,
     this.textColor,
     this.hintText,
+    this.errorText,
     this.outlinedBorder = false,
     this.borderRadius,
   });
@@ -59,6 +61,7 @@ class _CustomDropdownState extends State<CustomDropdown>
         onChanged: widget.onChanged,
         focusNode: widget.currentFocusNode,
         decoration: InputDecoration(
+          errorText:  widget.errorText,
           contentPadding: EdgeInsets.symmetric(
               vertical: screenWidth * 0.03,
               horizontal: widget.leading == null ? screenWidth * 0.03 : 0),
@@ -80,18 +83,13 @@ class _CustomDropdownState extends State<CustomDropdown>
               ? Utils.outlinedInputBorder()
               : Utils.underLinedInputBorder(),
           errorBorder: widget.outlinedBorder
-              ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: const BorderSide(color: Colors.red))
-              : const UnderlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide: BorderSide(color: Colors.red)),
+              ? Utils.outlinedInputBorder()
+              : Utils.underLinedInputBorder(),
           enabledBorder: widget.outlinedBorder
               ? Utils.outlinedInputBorder()
               : Utils.underLinedInputBorder(),
           focusedErrorBorder: widget.outlinedBorder
               ? Utils.outlinedInputBorder()
-                  .copyWith(borderSide: const BorderSide(color: Colors.green))
               : Utils.underLinedInputBorder(),
         ),
 

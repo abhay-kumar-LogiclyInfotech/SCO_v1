@@ -134,21 +134,23 @@ fieldHeading(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          RichText(
-              text: TextSpan(
-                  style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.fieldTitleDarkGrey),
-                  children: <TextSpan>[
-                TextSpan(
-                  text: title,
-                ),
-                important
-                    ? const TextSpan(
-                        text: " *", style: TextStyle(color: Colors.red))
-                    : const TextSpan()
-              ])),
+          Expanded(
+            child: RichText(
+                text: TextSpan(
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.fieldTitleDarkGrey),
+                    children: <TextSpan>[
+                  TextSpan(
+                    text: title,
+                  ),
+                  important
+                      ? const TextSpan(
+                          text: " *", style: TextStyle(color: Colors.red))
+                      : const TextSpan()
+                ])),
+          ),
         ],
       ),
     ),

@@ -202,6 +202,33 @@ class Validations {
     return unifiedNumberRegex.hasMatch(unifiedNumber);
   }
 
+  // Validation function to allow only English, Arabic characters, and numbers
+  static bool isValidEnglishArabicNumber(String input) {
+    // Check if the input is empty
+    if (input.isEmpty) {
+      return false;
+    }
+
+    // Regular expression to allow only English letters, Arabic letters, and numbers
+    final RegExp validInputRegex = RegExp(r'^[a-zA-Z0-9\u0600-\u06FF\s]+$');
+
+    // Return true if the input matches the pattern
+    return validInputRegex.hasMatch(input);
+  }
+
+  // Name Validation: Allows empty input, but only Arabic and English letters if entered
+  static bool isNameArabicEnglishValid(String name) {
+    if (name.isEmpty) {
+      return true; // Return true if the name is empty
+    }
+
+    // Regular expression to allow only English and Arabic letters
+    final RegExp nameRegex = RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$');
+    return nameRegex.hasMatch(name);
+  }
+
+
+
 }
 // *---------------------------------------------------------------- Creating Validations for the particular field end ----------------------------------------------------------------***
 
@@ -343,6 +370,32 @@ class ErrorText {
   return null;
   }
 
+  // English, Arabic Characters and Number Error
+  static String? getEnglishArabicNumberError({
+    required String input,
+    required BuildContext context,
+  }) {
+    if (input.isEmpty) {
+      return 'This field cannot be empty.';
+    } else if (!Validations.isValidEnglishArabicNumber(input)) {
+      return 'Only English, Arabic characters,\nand numbers are allowed.';
+    }
+    return null;
+  }
+
+
+  // Name Error Text
+  static String? getNameArabicEnglishValidationError({
+    required String name,
+    required BuildContext context,
+  }) {
+    if (name.isEmpty) {
+      return null; // No error if the name is empty
+    } else if (!Validations.isNameArabicEnglishValid(name)) {
+      return 'Only Arabic and English characters are allowed.';
+    }
+    return null; // Return null if validation passes
+  }
 
 
 }

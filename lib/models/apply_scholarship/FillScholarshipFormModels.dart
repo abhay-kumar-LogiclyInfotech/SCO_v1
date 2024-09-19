@@ -40,23 +40,6 @@ class PersonName {
   }
 }
 
-// Now you can use this model for both ArabicName and EnglishName:
-final arabicName = PersonName(
-  nameType: 'Arabic',
-  studentName: 'John Doe',
-  fatherName: 'Doe Sr.',
-  grandFatherName: 'Grandpa Doe',
-  familyName: 'Doe Family',
-);
-
-final englishName = PersonName(
-  nameType: 'English',
-  studentName: 'John Smith',
-  fatherName: 'Smith Sr.',
-  grandFatherName: 'Grandpa Smith',
-  familyName: 'Smith Family',
-);
-
 
 class PhoneNumber {
   final String countryCode;
@@ -183,6 +166,67 @@ class EmploymentHistory {
       'place': place,
       'reportingManager': reportingManager,
       'contactNumber': contactNumber,
+    };
+  }
+}
+
+
+// *------------------------------------------------------------------------------------------------ Relative Information ------------------------------------------------------------------------------------------------
+
+class RelativeInfo {
+  TextEditingController relativeNameController;
+  TextEditingController countryUniversityController;
+  TextEditingController relationTypeController;
+  TextEditingController familyBookNumberController;
+
+
+  // Focus Nodes
+  FocusNode relativeNameFocusNode;
+  FocusNode countryUniversityFocusNode;
+  FocusNode relationTypeFocusNode;
+  FocusNode familyBookNumberFocusNode;
+
+  // Error Text Variables
+  String? relativeNameError;
+  String? countryUniversityError;
+  String? relationTypeError;
+  String? familyBookNumberError;
+
+  RelativeInfo({
+    required this.relativeNameController,
+    required this.countryUniversityController,
+    required this.relationTypeController,
+    required this.familyBookNumberController,
+    required this.relativeNameFocusNode,
+    required this.countryUniversityFocusNode,
+    required this.relationTypeFocusNode,
+    required this.familyBookNumberFocusNode,
+    this.relativeNameError,
+    this.countryUniversityError,
+    this.relationTypeError,
+    this.familyBookNumberError,
+  });
+
+  // From JSON
+  factory RelativeInfo.fromJson(Map<String, dynamic> json) {
+    return RelativeInfo(
+      relativeNameController: TextEditingController(text: json['relativeName']),
+      countryUniversityController: TextEditingController(text: json['countryUniversity']),
+      relationTypeController: TextEditingController(text: json['relationType']),
+      familyBookNumberController: TextEditingController(text: json['familyBookNumber']),
+      relativeNameFocusNode: FocusNode(),
+      countryUniversityFocusNode: FocusNode(),
+      relationTypeFocusNode: FocusNode(),
+      familyBookNumberFocusNode: FocusNode(),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'relativeName': relativeNameController.text,
+      'countryUniversity': countryUniversityController.text,
+      'relationType': relationTypeController.text,
     };
   }
 }
