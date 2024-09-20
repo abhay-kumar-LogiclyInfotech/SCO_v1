@@ -42,32 +42,55 @@ class PersonName {
 
 
 class PhoneNumber {
-  final String countryCode;
-  final String phoneNumber;
-  final String phoneType;
-  final String preferred; // Boolean value as a string ('true'/'false')
+  TextEditingController countryCodeController;
+  TextEditingController phoneNumberController;
+  TextEditingController phoneTypeController;
+
+  // Boolean value for preferred
+  bool preferred;
+
+  // Focus Nodes
+  FocusNode countryCodeFocusNode;
+  FocusNode phoneNumberFocusNode;
+  FocusNode phoneTypeFocusNode;
+
+  // Error Text Variables
+  String? countryCodeError;
+  String? phoneNumberError;
+  String? phoneTypeError;
 
   PhoneNumber({
-    required this.countryCode,
-    required this.phoneNumber,
-    required this.phoneType,
+    required this.countryCodeController,
+    required this.phoneNumberController,
+    required this.phoneTypeController,
     required this.preferred,
+    required this.countryCodeFocusNode,
+    required this.phoneNumberFocusNode,
+    required this.phoneTypeFocusNode,
+    this.countryCodeError,
+    this.phoneNumberError,
+    this.phoneTypeError,
   });
 
+  // From JSON
   factory PhoneNumber.fromJson(Map<String, dynamic> json) {
     return PhoneNumber(
-      countryCode: json['countryCode'] ?? '',
-      phoneNumber: json['phoneNumber'] ?? '',
-      phoneType: json['phoneType'] ?? '',
-      preferred: json['preferred']?.toString() ?? 'false',
+      countryCodeController: TextEditingController(text: json['countryCode']),
+      phoneNumberController: TextEditingController(text: json['phoneNumber']),
+      phoneTypeController: TextEditingController(text: json['phoneType']),
+      preferred: json['preferred'] ?? false,
+      countryCodeFocusNode: FocusNode(),
+      phoneNumberFocusNode: FocusNode(),
+      phoneTypeFocusNode: FocusNode(),
     );
   }
 
+  // To JSON
   Map<String, dynamic> toJson() {
     return {
-      'countryCode': countryCode,
-      'phoneNumber': phoneNumber,
-      'phoneType': phoneType,
+      'countryCode': countryCodeController.text,
+      'phoneNumber': phoneNumberController.text,
+      'phoneType': phoneTypeController.text,
       'preferred': preferred,
     };
   }

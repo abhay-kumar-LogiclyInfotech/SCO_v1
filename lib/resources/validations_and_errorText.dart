@@ -144,12 +144,13 @@ class Validations {
   }
 
 
-  // Phone Number Validation:
+// Phone Number Validation:
   static bool isPhoneNumberValid(String phoneNumber) {
-    // Check for digits and optional + sign only
-    final regex = RegExp(r'^\+?\d+$');
+    // Check for digits and optional + sign only, should not start with 0
+    final regex = RegExp(r'^\+?[1-9]\d*$');
     return regex.hasMatch(phoneNumber);
   }
+
 
 
   //security answer validation:

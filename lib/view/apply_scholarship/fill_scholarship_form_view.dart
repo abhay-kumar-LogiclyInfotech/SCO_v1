@@ -239,8 +239,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
       // Initialize filledSections based on the current totalSections
       updateSections(totalSections);
-      _notifier.value =
-          const AsyncSnapshot.withData(ConnectionState.done, null);
 
       // *--------------------------------------------------------------------------------------------------------------------- Initialize dropdowns start ------------------------------------------------------------------------------------------------------------------------*
       _nationalityMenuItemsList = populateCommonDataDropdown(
@@ -263,7 +261,36 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           provider: langProvider,
           textColor: AppColors.scoButtonColor);
 
+      _phoneNumberTypeMenuItemsList = populateCommonDataDropdown(
+          menuItemsList: Constants.lovCodeMap['PHONE_TYPE']!.values!,
+          provider: langProvider,
+          textColor: AppColors.scoButtonColor);
+
       // *--------------------------------------------------------------------------------------------------------------------- Initialize dropdowns end ------------------------------------------------------------------------------------------------------------------------*
+
+      // initializing contact information
+      _phoneNumberList.add(PhoneNumber(
+        phoneTypeController: TextEditingController(text: 'CELL'),
+        countryCodeController: TextEditingController(),
+        phoneNumberController: TextEditingController(),
+        preferred: true,
+        countryCodeFocusNode: FocusNode(),
+        phoneNumberFocusNode: FocusNode(),
+        phoneTypeFocusNode: FocusNode(),
+      ));
+
+      _phoneNumberList.add(PhoneNumber(
+        phoneTypeController: TextEditingController(text: 'GRD'),
+        countryCodeController: TextEditingController(),
+        phoneNumberController: TextEditingController(),
+        preferred: false,
+        countryCodeFocusNode: FocusNode(),
+        phoneNumberFocusNode: FocusNode(),
+        phoneTypeFocusNode: FocusNode(),
+      ));
+
+      _notifier.value =
+          const AsyncSnapshot.withData(ConnectionState.done, null);
     });
   }
 
@@ -545,7 +572,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   List<DropdownMenuItem> _maritalStatusMenuItemsList = [];
 
   // Emirates ID
-  final TextEditingController _emiratesIdController = TextEditingController();
+  final TextEditingController _emiratesIdController = TextEditingController(text: "784196207416171");
 
 // Emirates ID Expiry Date
   final TextEditingController _emiratesIdExpiryDateController =
@@ -645,8 +672,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         countryUniversityError: null,
         familyBookNumberError: null,
       ));
-
-      debugPrint(_relativeInfoList.length.toString());
     });
   }
 
@@ -929,14 +954,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       outlinedBorder: true,
                       errorText: _passportNationalityError,
                       onChanged: (value) {
+                        _passportNationalityError = null;
                         setState(() {
-                          _passportNationalityError = null;
-                          if (_passportNationalityFocusNode.hasFocus) {
                             _passportNationalityController.text = value!;
                             //This thing is creating error: don't know how to fix it:
+                            debugPrint(_passportNationalityController.text);
                             FocusScope.of(context)
                                 .requestFocus(_passportNumberFocusNode);
-                          }
+
                         });
                       },
                     ),
@@ -1577,7 +1602,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                             //This thing is creating error: don't know how to fix it:
                                             Utils.requestFocus(
                                                 focusNode: _relativeInfoList[
-                                                index]
+                                                        index]
                                                     .countryUniversityFocusNode,
                                                 context: context);
                                           });
@@ -1662,7 +1687,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           }),
 
                                       // ****************************************************************************************************************************************************
-
                                       // remove Relative
                                       _addRemoveMoreSection(
                                           title: "Delete Info",
@@ -1680,6 +1704,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           }),
                                       // ****************************************************************************************************************************************************
 
+                                      // internal sections divider
                                       const MyDivider(
                                         color: AppColors.lightGrey,
                                       ),
@@ -1687,7 +1712,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       // ****************************************************************************************************************************************************
 
                                       // space based on if not last item
-                                      index != _relativeInfoList.length - 1
+                                      (index != _relativeInfoList.length - 1)
                                           ? kFormHeight
                                           : const SizedBox.shrink(),
                                     ],
@@ -1708,21 +1733,241 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // *------------------------------------------------------------------------------------------------------------------------------------ Relative Information Section end ------------------------------------------------------------------------------------------------------------------------------------*/
                     _sectionDivider(),
-                   
+
                     // *------------------------------------------------------------------------------------------------------------------------------------ Contact Information Section start ------------------------------------------------------------------------------------------------------------------------------------*/
+
+                    // ****************************************************************************************************************************************************
                     // Title for Contact Information
                     _sectionTitle(title: "Contact Information"),
-                    // ****************************************************************************************************************************************************
                     kFormHeight,
+                    // ****************************************************************************************************************************************************
 
+                    _phoneNumberSection(),
                     // *------------------------------------------------------------------------------------------------------------------------------------ Contact Information Section end ------------------------------------------------------------------------------------------------------------------------------------*/
-
                   ],
                 )),
             kFormHeight,
           ],
         ),
       ),
+    );
+  }
+
+  // *------------------------------------------------------------------------------------------------------------------------------------------ Phone Number Information data start----------------------------------------------------------------------------------------------------------------------------------*
+
+  // phone number dropdown menu items list
+  List<DropdownMenuItem> _phoneNumberTypeMenuItemsList = [];
+
+  // List of Phone Number information
+  List<PhoneNumber> _phoneNumberList = [];
+
+  // Method to add a new relative section (new RelativeInfo model)
+  void _addPhoneNumber() {
+    setState(() {
+      _phoneNumberList.add(PhoneNumber(
+          countryCodeController: TextEditingController(),
+          phoneNumberController: TextEditingController(),
+          phoneTypeController: TextEditingController(),
+          preferred: false,
+          countryCodeFocusNode: FocusNode(),
+          phoneNumberFocusNode: FocusNode(),
+          phoneTypeFocusNode: FocusNode(),
+          phoneNumberError: null,
+          phoneTypeError: null,
+          countryCodeError: null));
+    });
+  }
+
+  // Method to remove a relative section
+  void _removePhoneNumber(int index) {
+    if (index >= 2 && index < _phoneNumberList.length) {
+      // Check if index is valid
+      setState(() {
+        _phoneNumberList[index]
+            .countryCodeController
+            .dispose(); // Dispose the controllers
+        _phoneNumberList[index].phoneNumberController.dispose();
+        _phoneNumberList[index].phoneTypeController.dispose();
+        _phoneNumberList[index].preferred = false;
+        _phoneNumberList[index]
+            .countryCodeFocusNode
+            .dispose(); // Dispose the controllers
+        _phoneNumberList[index].phoneNumberFocusNode.dispose();
+        _phoneNumberList[index].phoneTypeFocusNode.dispose();
+        _phoneNumberList.removeAt(index);
+      });
+    } else {
+      print("Invalid index: $index"); // Debugging print to show invalid index
+    }
+  }
+
+  // *------------------------------------------------------------------------------------------------------------------------------------------Phone Number Information data end----------------------------------------------------------------------------------------------------------------------------------*
+
+  Widget _phoneNumberSection() {
+    // defining langProvider
+    final langProvider =
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    return Column(
+      children: [
+        ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _phoneNumberList.length,
+            itemBuilder: (context, index) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // phone Type
+                  fieldHeading(
+                      title: "Phone Type",
+                      important: true,
+                      langProvider: langProvider),
+                  CustomDropdown(
+                    readOnly: (index == 0 || index == 1),
+                    value:
+                        _phoneNumberList[index].phoneTypeController.text.isEmpty
+                            ? null
+                            : _phoneNumberList[index].phoneTypeController.text,
+                    currentFocusNode:
+                        _phoneNumberList[index].phoneTypeFocusNode,
+                    textDirection: getTextDirection(langProvider),
+                    menuItemsList: _phoneNumberTypeMenuItemsList,
+                    hintText: "Select Phone Type",
+                    textColor: AppColors.scoButtonColor,
+                    outlinedBorder: true,
+                    errorText: _phoneNumberList[index].phoneTypeError,
+                    onChanged: (value) {
+                      _phoneNumberList[index].phoneTypeError = null;
+                      setState(() {
+                        // setting the value for relation type
+                        _phoneNumberList[index].phoneTypeController.text =
+                            value!;
+                        //This thing is creating error: don't know how to fix it:
+                        Utils.requestFocus(
+                            focusNode:
+                                _phoneNumberList[index].phoneNumberFocusNode,
+                            context: context);
+                      });
+                    },
+                  ),
+                  // ****************************************************************************************************************************************************
+                  kFormHeight,
+                  fieldHeading(
+                      title: "Phone Number",
+                      important: true,
+                      langProvider: langProvider),
+                  _scholarshipFormTextField(
+                      currentFocusNode:
+                          _phoneNumberList[index].phoneNumberFocusNode,
+                      nextFocusNode:
+                          _phoneNumberList[index].countryCodeFocusNode,
+                      controller: _phoneNumberList[index].phoneNumberController,
+                      hintText: "Enter Phone Number",
+                      errorText: _phoneNumberList[index].phoneNumberError,
+                      onChanged: (value) {
+                        // no validation has been provided
+                        if (_phoneNumberList[index]
+                            .phoneNumberFocusNode
+                            .hasFocus) {
+                          setState(() {
+                            _phoneNumberList[index].phoneNumberError =
+                                ErrorText.getPhoneNumberError(
+                                    phoneNumber: _phoneNumberList[index]
+                                        .phoneNumberController
+                                        .text,
+                                    context: context);
+                          });
+                        }
+                      }),
+
+                  // ****************************************************************************************************************************************************
+                  kFormHeight,
+                  fieldHeading(
+                      title: "Country Code",
+                      important: true,
+                      langProvider: langProvider),
+                  _scholarshipFormTextField(
+                      currentFocusNode:
+                          _phoneNumberList[index].countryCodeFocusNode,
+                      nextFocusNode: index < _phoneNumberList.length - 1
+                          ? _phoneNumberList[index + 1].phoneTypeFocusNode
+                          : null,
+                      controller: _phoneNumberList[index].countryCodeController,
+                      hintText: "Enter Phone Number",
+                      errorText: _phoneNumberList[index].countryCodeError,
+                      onChanged: (value) {
+                        // no validation has been provided
+                        if (_phoneNumberList[index]
+                            .countryCodeFocusNode
+                            .hasFocus) {
+                          setState(() {
+                            _phoneNumberList[index].countryCodeError =
+                                ErrorText.getEmptyFieldError(
+                                    name: _phoneNumberList[index]
+                                        .countryCodeController
+                                        .text,
+                                    context: context);
+                          });
+                        }
+                      }),
+
+                  // ****************************************************************************************************************************************************
+                  kFormHeight,
+                  // Preferred
+                  CustomGFCheckbox(
+                      value: _phoneNumberList[index].preferred,
+                      onChanged: (onChanged) {
+                        setState(() {
+                          _phoneNumberList[index].preferred =
+                              !_phoneNumberList[index].preferred;
+                        });
+                      },
+                      text: "Favorite Phone"),
+
+                  // ****************************************************************************************************************************************************
+
+                  // space based on condition
+                  (index == 0 || index == 1)
+                      ? kFormHeight
+                      : const SizedBox.shrink(),
+
+                  // Add More Information container
+                  (_phoneNumberList.isNotEmpty && (index != 0 && index != 1))
+                      ? _addRemoveMoreSection(
+                          title: "Delete Info",
+                          add: false,
+                          onChanged: () {
+                            _removePhoneNumber(index);
+                          })
+                      : const SizedBox.shrink(),
+
+                  const MyDivider(
+                    color: AppColors.lightGrey,
+                  ),
+                  // ****************************************************************************************************************************************************
+
+                  // space based on if not last item
+                  index != _phoneNumberList.length - 1
+                      ? kFormHeight
+                      : const SizedBox.shrink(),
+                ],
+              );
+            }),
+
+        // Add more Phones Numbers
+        // Add More Information container
+        _phoneNumberList.isNotEmpty
+            ? _addRemoveMoreSection(
+                title: "Add Phone Number",
+                add: true,
+                onChanged: () {
+                  _addPhoneNumber();
+                })
+            : const SizedBox.shrink(),
+      ],
     );
   }
 
@@ -1923,14 +2168,40 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             setState(() {
               element.relationTypeError = "Please Select Relation Type";
               firstErrorFocusNode ??= element.relationTypeFocusNode;
-
             });
           }
 
           if (element.familyBookNumberController.text.isEmpty) {
             setState(() {
-              element.familyBookNumberError = "Please Enter your family book number";
+              element.familyBookNumberError =
+                  "Please Enter your family book number";
               firstErrorFocusNode ??= element.familyBookNumberFocusNode;
+            });
+          }
+        }
+      }
+
+      // validate the Phone Number information
+      if (_phoneNumberList.isNotEmpty) {
+        for (var element in _phoneNumberList) {
+          if (element.phoneTypeController.text.isEmpty) {
+            setState(() {
+              element.phoneTypeError = "Please Select Phone Type";
+              firstErrorFocusNode ??= element.phoneTypeFocusNode;
+            });
+          }
+
+          if (element.phoneNumberController.text.isEmpty) {
+            setState(() {
+              element.phoneNumberError = "Please Enter your phone number";
+              firstErrorFocusNode ??= element.phoneNumberFocusNode;
+            });
+          }
+
+          if (element.countryCodeController.text.isEmpty) {
+            setState(() {
+              element.countryCodeError = "Please Enter your country code";
+              firstErrorFocusNode ??= element.countryCodeFocusNode;
             });
           }
         }
@@ -2125,14 +2396,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       // Added by me: need to remove this:
       "relativeInfo":
           _relativeInfoList.map((element) => element.toJson()).toList(),
-      "phoneNumbers": [
-        {
-          "countryCode": "+971",
-          "phoneNumber": "0515516161",
-          "phoneType": "CELL",
-          "preferred": true
-        }
-      ],
+      "phoneNumbers":
+          _phoneNumberList.map((element) => element.toJson()).toList(),
+
       "addressList": [
         {
           "addressType": "ABR",

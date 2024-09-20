@@ -18,6 +18,7 @@ class CustomDropdown extends StatefulWidget {
   Color? fillColor;
   Color? textColor;
   String? errorText;
+  bool? readOnly;
   dynamic value;
 
   // InputBorder? border;
@@ -40,6 +41,7 @@ class CustomDropdown extends StatefulWidget {
     this.errorText,
     this.outlinedBorder = false,
     this.borderRadius,
+    this.readOnly
   });
 
   @override
@@ -52,67 +54,70 @@ class _CustomDropdownState extends State<CustomDropdown>
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: widget.textDirection,
-      child: DropdownButtonFormField(
-        isExpanded: true,
-        // dropdownColor: AppColors.scoButtonColor,
-        dropdownColor: Colors.white,
-        items: widget.menuItemsList,
-        value: widget.value,
-        onChanged: widget.onChanged,
-        focusNode: widget.currentFocusNode,
-        decoration: InputDecoration(
-          errorText:  widget.errorText,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: screenWidth * 0.03,
-              horizontal: widget.leading == null ? screenWidth * 0.03 : 0),
-          prefixIcon: widget.leading,
-          prefixIconConstraints: const BoxConstraints(
-            minWidth: 30,
-            minHeight: 0,
+      child: IgnorePointer(
+        ignoring: widget.readOnly ?? false,
+        child: DropdownButtonFormField(
+          isExpanded: true,
+          // dropdownColor: AppColors.scoButtonColor,
+          dropdownColor: Colors.white,
+          items: widget.menuItemsList,
+          value: widget.value,
+          onChanged: widget.onChanged,
+          focusNode: widget.currentFocusNode,
+          decoration: InputDecoration(
+            errorText:  widget.errorText,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: screenWidth * 0.03,
+                horizontal: widget.leading == null ? screenWidth * 0.03 : 0),
+            prefixIcon: widget.leading,
+            prefixIconConstraints: const BoxConstraints(
+              minWidth: 30,
+              minHeight: 0,
+            ),
+            isDense: true,
+            alignLabelWithHint: true,
+            hintText: widget.hintText,
+            hintFadeDuration: const Duration(milliseconds: 500),
+            hintStyle:
+                const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14,fontWeight: FontWeight.w500),
+            border: widget.outlinedBorder
+                ? Utils.outlinedInputBorder()
+                : Utils.underLinedInputBorder(),
+            focusedBorder: widget.outlinedBorder
+                ? Utils.outlinedInputBorder()
+                : Utils.underLinedInputBorder(),
+            errorBorder: widget.outlinedBorder
+                ? Utils.outlinedInputBorder()
+                : Utils.underLinedInputBorder(),
+            enabledBorder: widget.outlinedBorder
+                ? Utils.outlinedInputBorder()
+                : Utils.underLinedInputBorder(),
+            focusedErrorBorder: widget.outlinedBorder
+                ? Utils.outlinedInputBorder()
+                : Utils.underLinedInputBorder(),
           ),
-          isDense: true,
-          alignLabelWithHint: true,
-          hintText: widget.hintText,
-          hintFadeDuration: const Duration(milliseconds: 500),
-          hintStyle:
-              const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14,fontWeight: FontWeight.w500),
-          border: widget.outlinedBorder
-              ? Utils.outlinedInputBorder()
-              : Utils.underLinedInputBorder(),
-          focusedBorder: widget.outlinedBorder
-              ? Utils.outlinedInputBorder()
-              : Utils.underLinedInputBorder(),
-          errorBorder: widget.outlinedBorder
-              ? Utils.outlinedInputBorder()
-              : Utils.underLinedInputBorder(),
-          enabledBorder: widget.outlinedBorder
-              ? Utils.outlinedInputBorder()
-              : Utils.underLinedInputBorder(),
-          focusedErrorBorder: widget.outlinedBorder
-              ? Utils.outlinedInputBorder()
-              : Utils.underLinedInputBorder(),
-        ),
 
-        // cursorColor: AppColors.darkGrey,
-        style: TextStyle(
-          color: widget.textColor ?? AppColors.hintDarkGrey,
-        ),
-        padding: EdgeInsets.zero,
-        hint: Text(
-          widget.hintText ?? widget.menuItemsList[0].value.toString(),
+          // cursorColor: AppColors.darkGrey,
           style: TextStyle(
             color: widget.textColor ?? AppColors.hintDarkGrey,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
           ),
-          overflow: TextOverflow.ellipsis,
-        ),
-        icon: const Icon(
-          Icons.keyboard_arrow_down_sharp,
-          color: AppColors.darkGrey,
-        ),
+          padding: EdgeInsets.zero,
+          hint: Text(
+            widget.hintText ?? widget.menuItemsList[0].value.toString(),
+            style: TextStyle(
+              color: widget.textColor ?? AppColors.hintDarkGrey,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+          icon: const Icon(
+            Icons.keyboard_arrow_down_sharp,
+            color: AppColors.darkGrey,
+          ),
 
-        // keyboardType: widget.textInputType ?? TextInputType.text,
+          // keyboardType: widget.textInputType ?? TextInputType.text,
+        ),
       ),
     );
   }

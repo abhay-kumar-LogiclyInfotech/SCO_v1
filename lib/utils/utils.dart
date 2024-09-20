@@ -164,7 +164,21 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   Color? textColor,
 }) {
   final textDirection = getTextDirection(provider);
-  return menuItemsList
+
+  List<String> uniqueKeys= [];
+
+  List uniqueMenuItemsList = [];
+
+  for (var element in menuItemsList) {
+    if(uniqueKeys.contains(element.code.toString())){
+      continue; // skip duplicate entries
+    }else{
+      uniqueKeys.add(element.code.toString());
+      uniqueMenuItemsList.add(element);
+    }
+  }
+
+  return uniqueMenuItemsList
       .where((element) => element.hide == false) // filter out hidden elements
       .map((element) {
     return DropdownMenuItem(
