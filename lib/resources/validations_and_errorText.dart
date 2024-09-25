@@ -229,6 +229,17 @@ class Validations {
   }
 
 
+  // PIN Code Validation: Allows empty input, but only numeric characters if entered
+  static bool isPinCodeValid(String pinCode) {
+    if (pinCode.isEmpty) {
+      return true; // Return true if the PIN code is empty
+    }
+
+    // Regular expression to allow only numeric characters
+    final RegExp pinCodeRegex = RegExp(r'^\d+$');
+    return pinCodeRegex.hasMatch(pinCode);
+  }
+
 
 }
 // *---------------------------------------------------------------- Creating Validations for the particular field end ----------------------------------------------------------------***
@@ -394,6 +405,20 @@ class ErrorText {
       return null; // No error if the name is empty
     } else if (!Validations.isNameArabicEnglishValid(name)) {
       return 'Only Arabic and English characters are allowed.';
+    }
+    return null; // Return null if validation passes
+  }
+
+
+  // PIN Code Error Text
+  static String? getPinCodeValidationError({
+    required String pinCode,
+    required BuildContext context,
+  }) {
+    if (pinCode.isEmpty) {
+      return null; // No error if the PIN code is empty
+    } else if (!Validations.isPinCodeValid(pinCode)) {
+      return 'Only numeric characters are allowed.';
     }
     return null; // Return null if validation passes
   }

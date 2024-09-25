@@ -52,6 +52,7 @@ class CustomCheckBoxTile extends StatelessWidget {
 
 
 class CustomGFCheckbox extends StatefulWidget {
+  FocusNode? focusNode;
   final bool value;
   final ValueChanged<bool?> onChanged;
   final String text;
@@ -64,6 +65,7 @@ class CustomGFCheckbox extends StatefulWidget {
     required this.text,
     this.textStyle,
     this.type,
+    this.focusNode
   });
 
   @override
@@ -83,6 +85,7 @@ class _CustomGFCheckboxState extends State<CustomGFCheckbox> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           GFCheckbox(
+            focusNode: widget.focusNode,
             size: 20,
             type: widget.type ?? GFCheckboxType.custom,
             // activeBgColor: AppColors.WHITE,
@@ -111,12 +114,13 @@ class _CustomGFCheckboxState extends State<CustomGFCheckbox> {
 
 
 class CustomRadioListTile extends StatefulWidget {
-  final bool value; // Value for the individual radio button
-  final bool? groupValue; // The current selected value for the group
-  final ValueChanged<bool?> onChanged; // Callback for when the value changes
+  final dynamic value; // Value for the individual radio button
+  final dynamic groupValue; // The current selected value for the group
+  final ValueChanged<dynamic?> onChanged; // Callback for when the value changes
   final String title; // Title text for the list tile
   final TextStyle? textStyle; // Optional custom style for the text
   final EdgeInsets? padding; // Optional padding for the list tile
+  FocusNode? focusNode;
 
   CustomRadioListTile({
     required this.value,
@@ -125,6 +129,8 @@ class CustomRadioListTile extends StatefulWidget {
     required this.title,
     this.textStyle,
     this.padding,
+    this.focusNode
+
   });
 
   @override
@@ -143,7 +149,8 @@ class _CustomRadioListTileState extends State<CustomRadioListTile> {
         padding: widget.padding ?? const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: [
-            GFRadio(
+            GFRadio<dynamic>(
+              focusNode: widget.focusNode,
               size: 20,
               activeBorderColor: AppColors.checkBoxBorderColor,
               inactiveBorderColor: AppColors.checkBoxBorderColor,

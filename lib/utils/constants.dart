@@ -56,3 +56,6 @@ class Constants {
 
 
 }
+
+enum MilitaryStatus { yes, no, postponed, exemption }
+

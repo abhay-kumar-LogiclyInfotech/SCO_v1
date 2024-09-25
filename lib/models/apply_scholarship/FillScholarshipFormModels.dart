@@ -96,42 +96,96 @@ class PhoneNumber {
   }
 }
 
+
+// Address inFormation
 class Address {
-  final String addressType;
-  final String addressLine1;
-  final String addressLine2;
-  final String city;
-  final String country;
-  final String postalCode;
+  // Text Editing Controllers for form fields
+  TextEditingController addressTypeController;
+  TextEditingController addressLine1Controller;
+  TextEditingController addressLine2Controller;
+  TextEditingController cityController;
+  TextEditingController countryController;
+  TextEditingController postalCodeController;
+  TextEditingController stateController;
+
+  // Focus Nodes
+  FocusNode addressTypeFocusNode;
+  FocusNode addressLine1FocusNode;
+  FocusNode addressLine2FocusNode;
+  FocusNode cityFocusNode;
+  FocusNode countryFocusNode;
+  FocusNode postalCodeFocusNode;
+  FocusNode stateFocusNode;
+
+  // Error Text Variables
+  String? addressTypeError;
+  String? addressLine1Error;
+  String? addressLine2Error;
+  String? cityError;
+  String? countryError;
+  String? postalCodeError;
+  String? stateError;
+
+  List<DropdownMenuItem>? countryDropdownMenuItems;
+  List<DropdownMenuItem>? stateDropdownMenuItems;
+
 
   Address({
-    required this.addressType,
-    required this.addressLine1,
-    required this.addressLine2,
-    required this.city,
-    required this.country,
-    required this.postalCode,
+    required this.addressTypeController,
+    required this.addressLine1Controller,
+    required this.addressLine2Controller,
+    required this.cityController,
+    required this.countryController,
+    required this.postalCodeController,
+    required this.stateController,
+    required this.addressTypeFocusNode,
+    required this.addressLine1FocusNode,
+    required this.addressLine2FocusNode,
+    required this.cityFocusNode,
+    required this.countryFocusNode,
+    required this.postalCodeFocusNode,
+    required this.stateFocusNode,
+    this.addressTypeError,
+    this.addressLine1Error,
+    this.addressLine2Error,
+    this.cityError,
+    this.countryError,
+    this.postalCodeError,
+    this.stateError,
+    this.countryDropdownMenuItems,
+    this.stateDropdownMenuItems,
   });
 
+  // From JSON
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-      addressType: json['addressType'] ?? '',
-      addressLine1: json['addressLine1'] ?? '',
-      addressLine2: json['addressLine2'] ?? '',
-      city: json['city'] ?? '',
-      country: json['country'] ?? '',
-      postalCode: json['postalCode'] ?? '',
+      addressTypeController: TextEditingController(text: json['addressType']),
+      addressLine1Controller: TextEditingController(text: json['addressLine1']),
+      addressLine2Controller: TextEditingController(text: json['addressLine2']),
+      cityController: TextEditingController(text: json['city']),
+      countryController: TextEditingController(text: json['country']),
+      postalCodeController: TextEditingController(text: json['postalCode']),
+      stateController: TextEditingController(text: json['state']),
+      addressTypeFocusNode: FocusNode(),
+      addressLine1FocusNode: FocusNode(),
+      addressLine2FocusNode: FocusNode(),
+      cityFocusNode: FocusNode(),
+      countryFocusNode: FocusNode(),
+      postalCodeFocusNode: FocusNode(),
+      stateFocusNode: FocusNode(),
     );
   }
 
+  // To JSON
   Map<String, dynamic> toJson() {
     return {
-      'addressType': addressType,
-      'addressLine1': addressLine1,
-      'addressLine2': addressLine2,
-      'city': city,
-      'country': country,
-      'postalCode': postalCode,
+      'addressType': addressTypeController.text,
+      'addressLine1': addressLine1Controller.text,
+      'addressLine2': addressLine2Controller.text,
+      'city': cityController.text,
+      'country': countryController.text,
+      'postalCode': postalCodeController.text,
+      'state': stateController.text,
     };
   }
 }

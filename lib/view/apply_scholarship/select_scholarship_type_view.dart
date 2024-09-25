@@ -140,7 +140,6 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                     menuItemsList: Constants.scholarshipRequestType,
                                     provider: langProvider),
                                 currentFocusNode: _requestTypeFocusNode,
-                                nextFocusNode: _academicCareerFocusNode,
                                 hintText: "Select Request Type",
                                 textColor: AppColors.scoButtonColor,
                                 outlinedBorder: true,
@@ -155,6 +154,10 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                     element.scholarshipType.toString() == value.toString() &&
                                         element.isActive == true)
                                         .toList();
+
+                                    // request next focus
+                                    Utils.requestFocus(focusNode:                     _academicCareerFocusNode
+                                        , context: context);
                                   });
                                 },
                               ),

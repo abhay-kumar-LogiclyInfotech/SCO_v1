@@ -79,11 +79,14 @@ class _CustomTextFieldState extends State<CustomTextField>
             vertical: screenWidth * 0.03,
             horizontal: widget.leading == null ? screenWidth * 0.03 : 0,
           ),
-          prefixIcon: (widget.maxLines != null && widget.maxLines! > 1)
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 47),
-                  child: widget.leading ?? Container())
-              : widget.leading,
+          prefixIcon: widget.leading, // Adjust padding as needed)
+          // (widget.maxLines != null && widget.maxLines! > 1)
+          //     ? Padding(
+          //         padding: const EdgeInsets.only(bottom: 47),
+          //         child: widget.leading ?? Container())
+          //     :
+
+
 
           // add a default widget if leading is null
           prefixIconConstraints: const BoxConstraints(
@@ -100,16 +103,16 @@ class _CustomTextFieldState extends State<CustomTextField>
           hintStyle: widget.textStyle ?? const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
           border: widget.border ?? Utils.underLinedInputBorder(),
 
-          focusedBorder: widget.border ??
+          focusedBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.green)) ??
                Utils.underLinedInputBorder(),
-          errorBorder: widget.border ??
+          errorBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
               const UnderlineInputBorder(
                   borderRadius: BorderRadius.zero,
                   borderSide: BorderSide(color: Colors.red)),
           enabledBorder: widget.border ??
               Utils.underLinedInputBorder(),
 
-          focusedErrorBorder: widget.border ??
+          focusedErrorBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
               Utils.underLinedInputBorder(),
         ),
         inputFormatters: widget.inputFormat,
