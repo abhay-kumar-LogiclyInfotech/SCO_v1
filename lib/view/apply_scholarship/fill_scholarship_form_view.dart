@@ -276,6 +276,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           provider: langProvider,
           textColor: AppColors.scoButtonColor);
 
+      _highSchoolLevelMenuItemsList = populateCommonDataDropdown(
+          menuItemsList: Constants.lovCodeMap['HIGH_SCHOOL_LEVEL']!.values!,
+          provider: langProvider,
+          textColor: AppColors.scoButtonColor);
+
       // *--------------------------------------------------------------------------------------------------------------------- Initialize dropdowns end ------------------------------------------------------------------------------------------------------------------------*
 
       // initializing contact information manually because Phone types are constants for first two index elements
@@ -301,6 +306,251 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
       // adding at-least one address
       _addAddress();
+
+      // add high school :
+      // TODO: "add high school Conditions";
+      _highSchoolList.add(HighSchool(
+          hsLevelController: TextEditingController(text: '1'),
+          hsNameController: TextEditingController(),
+          hsCountryController: TextEditingController(),
+          hsStateController: TextEditingController(),
+          yearOfPassingController: TextEditingController(),
+          hsTypeController: TextEditingController(),
+          curriculumTypeController: TextEditingController(),
+          curriculumAverageController: TextEditingController(),
+          otherHsNameController: TextEditingController(),
+          passingYearController: TextEditingController(),
+          maxDateController: TextEditingController(),
+          hsLevelFocusNode: FocusNode(),
+          hsNameFocusNode: FocusNode(),
+          hsCountryFocusNode: FocusNode(),
+          hsStateFocusNode: FocusNode(),
+          yearOfPassingFocusNode: FocusNode(),
+          hsTypeFocusNode: FocusNode(),
+          curriculumTypeFocusNode: FocusNode(),
+          curriculumAverageFocusNode: FocusNode(),
+          otherHsNameFocusNode: FocusNode(),
+          passingYearFocusNode: FocusNode(),
+          maxDateFocusNode: FocusNode(),
+          hsDetails: [
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'BIO'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'CHEM'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'ECO'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'ENG'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'GS'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'HS'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'MATH'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'PHY'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'SCI'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+          ],
+          otherHSDetails: [
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH1'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH2'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH3'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH4'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH5'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+          ]));
+      _highSchoolList.add(HighSchool(
+          hsLevelController: TextEditingController(text: '3'),
+          hsNameController: TextEditingController(),
+          hsCountryController: TextEditingController(),
+          hsStateController: TextEditingController(),
+          yearOfPassingController: TextEditingController(),
+          hsTypeController: TextEditingController(),
+          curriculumTypeController: TextEditingController(),
+          curriculumAverageController: TextEditingController(),
+          otherHsNameController: TextEditingController(),
+          passingYearController: TextEditingController(),
+          maxDateController: TextEditingController(),
+          hsLevelFocusNode: FocusNode(),
+          hsNameFocusNode: FocusNode(),
+          hsCountryFocusNode: FocusNode(),
+          hsStateFocusNode: FocusNode(),
+          yearOfPassingFocusNode: FocusNode(),
+          hsTypeFocusNode: FocusNode(),
+          curriculumTypeFocusNode: FocusNode(),
+          curriculumAverageFocusNode: FocusNode(),
+          otherHsNameFocusNode: FocusNode(),
+          passingYearFocusNode: FocusNode(),
+          maxDateFocusNode: FocusNode(),
+          hsDetails: [
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'BIO'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'CHEM'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'ECO'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'ENG'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'GS'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'HS'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'MATH'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'PHY'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'SCI'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+          ],
+          otherHSDetails: [
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH1'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH2'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH3'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH4'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH5'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+          ]));
 
       _notifier.value =
           const AsyncSnapshot.withData(ConnectionState.done, null);
@@ -400,7 +650,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                               step: index, langProvider: langProvider);
                         }
                         if (index == 2) {
-                          return const Text("education details");
+                          return _highSchoolDetailsSection(
+                              step: index, langProvider: langProvider);
                         }
                       },
                     ),
@@ -423,18 +674,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            if (validateSection(
-                                step: _currentSectionIndex,
-                                langProvider: langProvider)) {
-                              nextSection(); // Only move to the next section if validation passes
-                            } else {
-                              // Optionally show a validation error message (like a SnackBar)
-                              _alertService.flushBarErrorMessages(
-                                  message:
-                                      'Please complete the required fields.',
-                                  context: context,
-                                  provider: langProvider);
-                            }
+                            // if (validateSection(
+                            //     step: _currentSectionIndex,
+                            //     langProvider: langProvider)) {
+                            nextSection(); // Only move to the next section if validation passes
+                            // } else {
+                            // Optionally show a validation error message (like a SnackBar)
+                            _alertService.flushBarErrorMessages(
+                                message: 'Please complete the required fields.',
+                                context: context,
+                                provider: langProvider);
+                            // }
                           },
                           child: Text('Next'),
                         ),
@@ -445,6 +695,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
               );
             }));
   }
+
+  // *------------------------------------------------------------------------------------------------------------------------------------------ Accept terms and conditions start ----------------------------------------------------------------------------------------------------------------------------------*
 
   // student undertaking check:
   bool _acceptStudentUndertaking = false;
@@ -469,6 +721,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       ],
     );
   }
+
+  // *------------------------------------------------------------------------------------------------------------------------------------------ Accept terms and conditions end ----------------------------------------------------------------------------------------------------------------------------------*
 
   // *------------------------------------------------------------------------------------------------------------------------------------------ Name as Passport data start ----------------------------------------------------------------------------------------------------------------------------------*
 
@@ -1028,9 +1282,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           if (value! != 'ARE') {
                             _familyInformationEmiratesController.clear();
                             _familyInformationTownVillageNoController.clear();
-                            _familyInformationParentGuardianNameController.clear();
+                            _familyInformationParentGuardianNameController
+                                .clear();
                             _familyInformationRelationTypeController.clear();
-                            _familyInformationFamilyBookNumberController.clear();
+                            _familyInformationFamilyBookNumberController
+                                .clear();
                           }
 
                           // by default set no for military service
@@ -1516,7 +1772,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     // ****************************************************************************************************************************************************
 
                     // Family Information
-
 
                     (_passportNationalityController.text != "ARE" &&
                             _selectedScholarship?.admitType != 'INT')
@@ -2537,6 +2792,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           })
                       : const SizedBox.shrink(),
 
+                  // light color divider
                   const MyDivider(
                     color: AppColors.lightGrey,
                   ),
@@ -2566,15 +2822,16 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // *------------------------------------------------------------------------------------------------------------------------------------------ Address Information Section end ----------------------------------------------------------------------------------------------------------------------------------*
 
-
-    // *------------------------------------------------------------------------------------------------------------------------------------------ Military Information Section start ----------------------------------------------------------------------------------------------------------------------------------*
+  // *------------------------------------------------------------------------------------------------------------------------------------------ Military Information Section start ----------------------------------------------------------------------------------------------------------------------------------*
 
   dynamic _isMilitaryService;
 
   // TextEditingControllers for military service
   TextEditingController _militaryServiceController = TextEditingController();
-  TextEditingController _militaryServiceStartDateController = TextEditingController();
-  TextEditingController _militaryServiceEndDateController = TextEditingController();
+  TextEditingController _militaryServiceStartDateController =
+      TextEditingController();
+  TextEditingController _militaryServiceEndDateController =
+      TextEditingController();
   TextEditingController _reasonForMilitaryController = TextEditingController();
 
   // FocusNodes for each field
@@ -2855,9 +3112,475 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     );
   }
 
-
   // *------------------------------------------------------------------------------------------------------------------------------------------ Military Information Section end ----------------------------------------------------------------------------------------------------------------------------------*
 
+  // *------------------------------------------------------------------------------------------------------------------------------------------ High School Section Start ----------------------------------------------------------------------------------------------------------------------------------*
+  // step-3: high school details
+
+  List _highSchoolLevelMenuItemsList = [];
+
+  List<HighSchool> _highSchoolList = [];
+
+
+  // to populate the states based on high school country
+  _populateHighSchoolStateDropdown(
+      {required LanguageChangeViewModel langProvider, required int index}) {
+    setState(() {
+      if (Constants
+          .lovCodeMap['STATE#${_highSchoolList[index].hsCountryController.text}']?.values != null) {
+        _highSchoolList[index].schoolStateDropdownMenuItems = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['STATE#${_highSchoolList[index].hsCountryController.text}']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);
+
+      }
+    });
+  }
+
+  _populateHighSchoolNameDropdown(
+      {required LanguageChangeViewModel langProvider, required int index}) {
+    setState(() {
+      if (Constants.lovCodeMap['SCHOOL_CD#${_highSchoolList[index].hsStateController.text}']?.values != null) {
+        _highSchoolList[index].schoolNameDropdownMenuItems = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['SCHOOL_CD#${_highSchoolList[index].hsStateController.text}']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);
+
+      }
+    });
+  }
+
+
+  _addHighSchool() {
+    setState(() {
+      _highSchoolList.add(HighSchool(
+          hsLevelController: TextEditingController(),
+          hsNameController: TextEditingController(),
+          hsCountryController: TextEditingController(),
+          hsStateController: TextEditingController(),
+          yearOfPassingController: TextEditingController(),
+          hsTypeController: TextEditingController(),
+          curriculumTypeController: TextEditingController(),
+          curriculumAverageController: TextEditingController(),
+          otherHsNameController: TextEditingController(),
+          passingYearController: TextEditingController(),
+          maxDateController: TextEditingController(),
+          hsLevelFocusNode: FocusNode(),
+          hsNameFocusNode: FocusNode(),
+          hsCountryFocusNode: FocusNode(),
+          hsStateFocusNode: FocusNode(),
+          yearOfPassingFocusNode: FocusNode(),
+          hsTypeFocusNode: FocusNode(),
+          curriculumTypeFocusNode: FocusNode(),
+          curriculumAverageFocusNode: FocusNode(),
+          otherHsNameFocusNode: FocusNode(),
+          passingYearFocusNode: FocusNode(),
+          maxDateFocusNode: FocusNode(),
+          hsDetails: [
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'BIO'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'CHEM'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'ECO'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'ENG'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'GS'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'HS'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'MATH'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'PHY'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'SCI'),
+              gradeController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+            ),
+          ],
+          otherHSDetails: [
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH1'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH2'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH3'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH4'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+            HSDetails(
+              subjectTypeController: TextEditingController(text: 'OTH5'),
+              gradeController: TextEditingController(),
+              otherSubjectNameController: TextEditingController(),
+              subjectTypeFocusNode: FocusNode(),
+              gradeFocusNode: FocusNode(),
+              otherSubjectNameFocusNode: FocusNode(),
+            ),
+          ]));
+    });
+  }
+
+  _removeHighSchool(int index) {
+    if (index >= 2 && index < _highSchoolList.length) {
+      setState(() {
+        final highSchool = _highSchoolList[index];
+
+        // Dispose controllers and focus nodes of HSDetails
+        for (var detail in highSchool.hsDetails) {
+          detail.subjectTypeController.dispose();
+          detail.gradeController.dispose();
+          detail.subjectTypeFocusNode.dispose();
+          detail.gradeFocusNode.dispose();
+        }
+
+        // Dispose controllers and focus nodes of otherHSDetails
+        for (var detail in highSchool.otherHSDetails) {
+          detail.subjectTypeController.dispose();
+          detail.gradeController.dispose();
+          detail.otherSubjectNameController?.dispose();
+          detail.subjectTypeFocusNode.dispose();
+          detail.gradeFocusNode.dispose();
+          detail.otherSubjectNameFocusNode?.dispose();
+        }
+
+        // Dispose main HighSchool controllers and focus nodes
+        highSchool.hsLevelController.dispose();
+        highSchool.hsNameController.dispose();
+        highSchool.hsCountryController.dispose();
+        highSchool.hsStateController.dispose();
+        highSchool.yearOfPassingController.dispose();
+        highSchool.hsTypeController.dispose();
+        highSchool.curriculumTypeController.dispose();
+        highSchool.curriculumAverageController.dispose();
+        highSchool.otherHsNameController.dispose();
+        highSchool.passingYearController.dispose();
+        highSchool.maxDateController.dispose();
+
+        highSchool.hsLevelFocusNode.dispose();
+        highSchool.hsNameFocusNode.dispose();
+        highSchool.hsCountryFocusNode.dispose();
+        highSchool.hsStateFocusNode.dispose();
+        highSchool.yearOfPassingFocusNode.dispose();
+        highSchool.hsTypeFocusNode.dispose();
+        highSchool.curriculumTypeFocusNode.dispose();
+        highSchool.curriculumAverageFocusNode.dispose();
+        highSchool.otherHsNameFocusNode.dispose();
+        highSchool.passingYearFocusNode.dispose();
+        highSchool.maxDateFocusNode.dispose();
+
+        _highSchoolList.removeAt(index);
+      });
+    } else {
+      print("Cannot remove items at index less than 2.");
+    }
+  }
+
+  Widget _highSchoolDetailsSection(
+      {required int step, required LanguageChangeViewModel langProvider}) {
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: kPadding),
+        color: Colors.grey.shade200,
+        child: SingleChildScrollView(
+            child: Column(children: [
+          kFormHeight,
+          CustomInformationContainer(
+              title: "High School Details",
+              expandedContent: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _sectionTitle(title: "High School Level"),
+                  _highSchoolInformationSection(),
+                ],
+              ))
+        ])));
+  }
+
+  // list view of high schools
+  Widget _highSchoolInformationSection() {
+    // defining langProvider
+    final langProvider =
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    return Column(children: [
+      ListView.builder(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: _highSchoolList.length,
+          itemBuilder: (context, index) {
+            final highSchoolInfo = _highSchoolList[index];
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // ****************************************************************************************************************************************************
+                  kFormHeight,
+                  // title
+                  fieldHeading(
+                      title: "High School Level",
+                      important: true,
+                      langProvider: langProvider),
+
+                  // dropdowns on the basis of selected one
+                  ((_selectedScholarship?.admitType == 'MOS' ||
+                                  _selectedScholarship?.admitType == 'MOP') &&
+                              index == 0) ||
+                          index <= 1
+                      ? Column(children: [
+                          _scholarshipFormDropdown(
+                            readOnly: true,
+                            filled: true,
+                            controller: highSchoolInfo.hsLevelController,
+                            currentFocusNode: highSchoolInfo.hsLevelFocusNode,
+                            menuItemsList: _highSchoolLevelMenuItemsList,
+                            hintText: "Select High School Level",
+                            errorText: highSchoolInfo.hsLevelError,
+                            onChanged: (value) {
+                              highSchoolInfo.hsLevelError = null;
+                              setState(() {
+                                // setting the value for address type
+                                highSchoolInfo.hsLevelController.text = value!;
+
+                                // populating the state dropdown
+
+                                _populateStateDropdown(
+                                    langProvider: langProvider, index: index);
+
+                                //This thing is creating error: don't know how to fix it:
+                                Utils.requestFocus(
+                                    focusNode:
+                                        highSchoolInfo.hsCountryFocusNode,
+                                    context: context);
+                              });
+                            },
+                          )
+                        ])
+                      : (((_selectedScholarship?.admitType == 'MOS' ||
+                                      _selectedScholarship?.admitType ==
+                                          'MOP') &&
+                                  index > 0) ||
+                              (_selectedScholarship?.acadmicCareer == 'HCHL' &&
+                                  index >= 1) ||
+                              index >= 2)
+                          ? _scholarshipFormDropdown(
+                              controller: highSchoolInfo.hsLevelController,
+                              currentFocusNode: highSchoolInfo.hsLevelFocusNode,
+                              menuItemsList: _highSchoolLevelMenuItemsList,
+                              hintText: "Select High School Level",
+                              errorText: highSchoolInfo.hsLevelError,
+                              onChanged: (value) {
+                                highSchoolInfo.hsLevelError = null;
+                                setState(() {
+                                  // setting the value for address type
+                                  highSchoolInfo.hsLevelController.text =
+                                      value!;
+
+                                  // populating the state dropdown
+
+                                  _populateStateDropdown(
+                                      langProvider: langProvider, index: index);
+
+                                  //This thing is creating error: don't know how to fix it:
+                                  Utils.requestFocus(
+                                      focusNode:
+                                          highSchoolInfo.hsCountryFocusNode,
+                                      context: context);
+                                });
+                              },
+                            )
+                          : const SizedBox.shrink(),
+
+                  kFormHeight,
+                  // ****************************************************************************************************************************************************
+
+                  // country
+                  fieldHeading(
+                      title: "Country",
+                      important: true,
+                      langProvider: langProvider),
+
+                  _scholarshipFormDropdown(
+                    controller: highSchoolInfo.hsCountryController,
+                    currentFocusNode: highSchoolInfo.hsCountryFocusNode,
+                    menuItemsList: _nationalityMenuItemsList,
+                    hintText: "Select Country",
+                    errorText: highSchoolInfo.hsCountryError,
+                    onChanged: (value) {
+                      highSchoolInfo.hsCountryError = null;
+                      setState(() {
+                        // setting the value for address type
+                        highSchoolInfo.hsCountryController.text = value!;
+
+                        highSchoolInfo.hsStateController.clear();
+                        highSchoolInfo.hsNameController.clear();
+                        highSchoolInfo.schoolStateDropdownMenuItems?.clear();
+                        highSchoolInfo.schoolNameDropdownMenuItems?.clear();
+                        // populating the high school state dropdown
+                        _populateHighSchoolStateDropdown(langProvider: langProvider, index: index);
+
+                        //This thing is creating error: don't know how to fix it:
+                        Utils.requestFocus(focusNode: highSchoolInfo.hsStateFocusNode, context: context);
+                      });
+                    },
+                  ),
+
+                  kFormHeight,
+                  // ****************************************************************************************************************************************************
+
+                  // state
+                  fieldHeading(
+                      title: "State",
+                      important: true,
+                      langProvider: langProvider),
+
+                  _scholarshipFormDropdown(
+                    controller: highSchoolInfo.hsStateController,
+                    currentFocusNode: highSchoolInfo.hsStateFocusNode,
+                    menuItemsList: highSchoolInfo.schoolStateDropdownMenuItems ?? [],
+                    hintText: "Select State",
+                    errorText: highSchoolInfo.hsStateError,
+                    onChanged: (value) {
+                      highSchoolInfo.hsStateError = null;
+                      setState(() {
+                        // setting the value for address type
+                        highSchoolInfo.hsStateController.text = value!;
+
+
+                        highSchoolInfo.hsNameController.clear();
+                        highSchoolInfo.schoolNameDropdownMenuItems?.clear();
+
+                        // populating the high school state dropdown
+                        _populateHighSchoolNameDropdown(langProvider: langProvider, index: index);
+
+                        //This thing is creating error: don't know how to fix it:
+                        Utils.requestFocus(focusNode: highSchoolInfo.hsNameFocusNode, context: context);
+                      });
+                    },
+                  ),
+
+                  kFormHeight,
+                  // ****************************************************************************************************************************************************
+
+                  // school name
+                  fieldHeading(
+                      title: "School Name",
+                      important: true,
+                      langProvider: langProvider),
+
+                  _scholarshipFormDropdown(
+                    controller: highSchoolInfo.hsNameController,
+                    currentFocusNode: highSchoolInfo.hsNameFocusNode,
+                    menuItemsList: highSchoolInfo.schoolNameDropdownMenuItems ?? [],
+                    hintText: "Select School Name",
+                    errorText: highSchoolInfo.hsNameError,
+                    onChanged: (value) {
+                      highSchoolInfo.hsNameError = null;
+                      setState(() {
+                        // setting the value for address type
+                        highSchoolInfo.hsNameController.text =
+                        value!;
+
+                        // highSchoolInfo.hsNameController.clear();
+                        // highSchoolInfo.schoolNameDropdownMenuItems?.clear();
+                        //
+                        // // populating the high school state dropdown
+                        // _populateHighSchoolNameDropdown(langProvider: langProvider, index: index);
+
+                        //This thing is creating error: don't know how to fix it:
+                        Utils.requestFocus(focusNode: highSchoolInfo.hsTypeFocusNode, context: context);
+                      });
+                    },
+                  ),
+
+
+
+                  const MyDivider(
+                    color: AppColors.lightGrey,
+                  ),
+                  // ****************************************************************************************************************************************************
+
+                  // if it obeys the constraints of showing dropdown only then it will be visible to the user to delete the item
+                  (((_selectedScholarship?.admitType == 'MOS' ||
+                      _selectedScholarship?.admitType ==
+                          'MOP') &&
+                      index > 0) ||
+                      (_selectedScholarship?.acadmicCareer == 'HCHL' &&
+                          index >= 1) ||
+                      index >= 2) ?   _addRemoveMoreSection(
+                      title: "delete",
+                      add: false,
+                      onChanged: () {
+                        setState(() {
+                          _removeHighSchool(index);
+                        });
+                      }) : const SizedBox.shrink(),
+                ]);
+          }),
+
+      _addRemoveMoreSection(
+          title: "Add",
+          add: true,
+          onChanged: () {
+            setState(() {
+              _addHighSchool();
+            });
+          }),
+    ]);
+  }
+
+  // *------------------------------------------------------------------------------------------------------------------------------------------ High School Section end ----------------------------------------------------------------------------------------------------------------------------------*
 
   // *------------------------------------------------------------------------------------------------------------------------------------ validate section in accordance with the steps start ------------------------------------------------------------------------------------------------------------------------------------*
 
@@ -3051,11 +3774,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
 
       //validate the family information
-      if (
-
-      _passportNationalityController.text == "ARE"
-
-      ) {
+      if (_passportNationalityController.text == "ARE") {
         if (_familyInformationEmiratesController.text.isEmpty) {
           setState(() {
             _familyInformationEmiratesErrorText = 'Please select the Emirates';
@@ -3213,14 +3932,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
             break;
 
-
           case MilitaryStatus.no:
             break;
 
           case (MilitaryStatus.exemption || MilitaryStatus.postponed):
             setState(() {
-              _reasonForMilitaryErrorText =
-              'Please Enter Reason';
+              _reasonForMilitaryErrorText = 'Please Enter Reason';
               firstErrorFocusNode ??= _reasonForMilitaryFocusNode;
             });
             break;
@@ -3314,6 +4031,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     required dynamic menuItemsList,
     required String hintText,
     String? errorText,
+    bool? filled,
     required void Function(dynamic value) onChanged,
   }) {
     final langProvider =
@@ -3326,6 +4044,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       menuItemsList: menuItemsList,
       hintText: hintText,
       textColor: AppColors.scoButtonColor,
+      filled: filled,
       outlinedBorder: true,
       errorText: errorText,
       onChanged: onChanged,
@@ -3425,7 +4144,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       "dateOfBirth": _dateOfBirthController.text,
       "placeOfBirth": _placeOfBirthController.text,
       "gender": _genderController.text,
-      "maritalStatus":_maritalStatusController.text,
+      "maritalStatus": _maritalStatusController.text,
       "emailId": _studentEmailController.text,
       "passportId": _passportNumberController.text,
       "passportExpiryDate": _passportExpiryDateController.text,
@@ -3453,9 +4172,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       "nameAsPassport": _nameAsPassport,
       "englishName": _englishName,
       "arabicName": _arabicName,
-      "phoneNumbers": _phoneNumberList.map((element) => element.toJson()).toList(),
-      "addressList": _addressInformationList.map((element) => element.toJson()).toList(),
-      "relativeDetails": _relativeInfoList.map((element) => element.toJson()).toList(),
+      "phoneNumbers":
+          _phoneNumberList.map((element) => element.toJson()).toList(),
+      "addressList":
+          _addressInformationList.map((element) => element.toJson()).toList(),
+      "relativeDetails":
+          _relativeInfoList.map((element) => element.toJson()).toList(),
       "highSchoolList": [],
       "graduationList": [
         {

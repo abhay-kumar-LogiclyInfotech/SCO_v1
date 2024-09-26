@@ -15,7 +15,7 @@ class CustomDropdown extends StatefulWidget {
   final FocusNode? nextFocusNode;
 
   final TextDirection textDirection;
-  Color? fillColor;
+  bool? filled;
   Color? textColor;
   String? errorText;
   bool? readOnly;
@@ -35,7 +35,7 @@ class CustomDropdown extends StatefulWidget {
     required this.currentFocusNode,
     this.value,
     this.nextFocusNode,
-    this.fillColor,
+    this.filled,
     this.textColor,
     this.hintText,
     this.errorText,
@@ -59,6 +59,7 @@ class _CustomDropdownState extends State<CustomDropdown>
         child: DropdownButtonFormField(
           isExpanded: true,
           // dropdownColor: AppColors.scoButtonColor,
+
           dropdownColor: Colors.white,
           items: widget.menuItemsList,
           value: widget.value,
@@ -95,6 +96,7 @@ class _CustomDropdownState extends State<CustomDropdown>
             focusedErrorBorder: widget.outlinedBorder
                 ? Utils.outlinedInputBorder()
                 : Utils.underLinedInputBorder(),
+            filled: widget.filled,
           ),
 
           // cursorColor: AppColors.darkGrey,
@@ -115,6 +117,7 @@ class _CustomDropdownState extends State<CustomDropdown>
             Icons.keyboard_arrow_down_sharp,
             color: AppColors.darkGrey,
           ),
+
 
           // keyboardType: widget.textInputType ?? TextInputType.text,
         ),

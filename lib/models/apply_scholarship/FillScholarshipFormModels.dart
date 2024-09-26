@@ -231,6 +231,15 @@ class HighSchool {
   String? passingYearError;
   String? maxDateError;
 
+  List<DropdownMenuItem>? schoolStateDropdownMenuItems;
+  List<DropdownMenuItem>? schoolNameDropdownMenuItems;
+  List<DropdownMenuItem>? schoolTypeDropdownMenuItems;
+  List<DropdownMenuItem>? curriculumTypeDropdownMenuItems;
+
+
+
+
+
   List<HSDetails> hsDetails;
   List<HSDetails> otherHSDetails;
 
@@ -297,12 +306,8 @@ class HighSchool {
       otherHsNameFocusNode: FocusNode(),
       passingYearFocusNode: FocusNode(),
       maxDateFocusNode: FocusNode(),
-      hsDetails: (json['hsDetails']['com.mopa.sco.application.HSDetails'] as List)
-          .map((e) => HSDetails.fromJson(e))
-          .toList(),
-      otherHSDetails: (json['otherHSDetails']['com.mopa.sco.application.HSDetails'] as List)
-          .map((e) => HSDetails.fromJson(e))
-          .toList(),
+      hsDetails: (json['hsDetails']['com.mopa.sco.application.HSDetails'] as List).map((e) => HSDetails.fromJson(e)).toList(),
+      otherHSDetails: (json['otherHSDetails']['com.mopa.sco.application.HSDetails'] as List).map((e) => HSDetails.fromJson(e)).toList(),
     );
   }
 
@@ -485,3 +490,5 @@ class RelativeInfo {
     };
   }
 }
+
+
