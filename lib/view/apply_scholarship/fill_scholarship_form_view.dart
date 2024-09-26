@@ -396,13 +396,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           return _studentUndertakingSection(step: index);
                         }
                         if (index == 1) {
-                          filledSections[index] = true;
                           return _studentDetailsSection(
                               step: index, langProvider: langProvider);
                         }
                         if (index == 2) {
-                          filledSections[index] = true;
-                          return Text("education details");
+                          return const Text("education details");
                         }
                       },
                     ),
@@ -986,6 +984,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         langProvider: langProvider),
                     _scholarshipFormTextField(
                         currentFocusNode: _englishFamilyNameFocusNode,
+                        nextFocusNode: _passportNationalityFocusNode,
                         controller: _englishFamilyNameController,
                         hintText: "Enter Family Name",
                         errorText: _englishFamilyNameError,
@@ -2043,7 +2042,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // List of Phone Number information
   List<PhoneNumber> _phoneNumberList = [];
 
-  // Method to add a new relative section (new RelativeInfo model)
+  // Method to add a new phone number to the contact information list
   void _addPhoneNumber() {
     setState(() {
       _phoneNumberList.add(PhoneNumber(
@@ -2060,7 +2059,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     });
   }
 
-  // Method to remove a relative section
+  // Method to add a new phone number to the contact information list
   void _removePhoneNumber(int index) {
     if (index >= 2 && index < _phoneNumberList.length) {
       // Check if index is valid
@@ -2567,14 +2566,15 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // *------------------------------------------------------------------------------------------------------------------------------------------ Address Information Section end ----------------------------------------------------------------------------------------------------------------------------------*
 
+
+    // *------------------------------------------------------------------------------------------------------------------------------------------ Military Information Section start ----------------------------------------------------------------------------------------------------------------------------------*
+
   dynamic _isMilitaryService;
 
   // TextEditingControllers for military service
   TextEditingController _militaryServiceController = TextEditingController();
-  TextEditingController _militaryServiceStartDateController =
-      TextEditingController();
-  TextEditingController _militaryServiceEndDateController =
-      TextEditingController();
+  TextEditingController _militaryServiceStartDateController = TextEditingController();
+  TextEditingController _militaryServiceEndDateController = TextEditingController();
   TextEditingController _reasonForMilitaryController = TextEditingController();
 
   // FocusNodes for each field
@@ -2589,6 +2589,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   String? _militaryServiceEndDateErrorText;
   String? _reasonForMilitaryErrorText;
 
+  // Show round radiobuttons to select the military options
   Widget _militaryServicesSection() {
     final langProvider =
         Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -2603,7 +2604,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
         // ****************************************************************************************************************************************************
 
-        // Yes or no : Show round checkboxes
+        // Yes or no : Show round checkboxes to select the military options
         CustomRadioListTile(
           value: MilitaryStatus.yes,
           groupValue: _isMilitaryService,
@@ -2672,6 +2673,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     );
   }
 
+  // input fields based on selection on military services
   Widget _militaryServicesFields() {
     final langProvider =
         Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -2826,7 +2828,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   }
 
   // reason widget which is used as common for both relief and exemption
-
   Widget _reason(langProvider) {
     return Column(
       children: [
@@ -2853,6 +2854,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       ],
     );
   }
+
+
+  // *------------------------------------------------------------------------------------------------------------------------------------------ Military Information Section end ----------------------------------------------------------------------------------------------------------------------------------*
+
 
   // *------------------------------------------------------------------------------------------------------------------------------------ validate section in accordance with the steps start ------------------------------------------------------------------------------------------------------------------------------------*
 
@@ -3451,6 +3456,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       "phoneNumbers": _phoneNumberList.map((element) => element.toJson()).toList(),
       "addressList": _addressInformationList.map((element) => element.toJson()).toList(),
       "relativeDetails": _relativeInfoList.map((element) => element.toJson()).toList(),
+      "highSchoolList": [],
       "graduationList": [
         {
           "currentlyStudying": true,

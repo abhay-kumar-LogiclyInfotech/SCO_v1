@@ -190,6 +190,184 @@ class Address {
   }
 }
 
+// HighSchool model
+class HighSchool {
+  // Text Editing Controllers for form fields
+  TextEditingController hsLevelController;
+  TextEditingController hsNameController;
+  TextEditingController hsCountryController;
+  TextEditingController hsStateController;
+  TextEditingController yearOfPassingController;
+  TextEditingController hsTypeController;
+  TextEditingController curriculumTypeController;
+  TextEditingController curriculumAverageController;
+  TextEditingController otherHsNameController;
+  TextEditingController passingYearController;
+  TextEditingController maxDateController;
+
+  // Focus Nodes
+  FocusNode hsLevelFocusNode;
+  FocusNode hsNameFocusNode;
+  FocusNode hsCountryFocusNode;
+  FocusNode hsStateFocusNode;
+  FocusNode yearOfPassingFocusNode;
+  FocusNode hsTypeFocusNode;
+  FocusNode curriculumTypeFocusNode;
+  FocusNode curriculumAverageFocusNode;
+  FocusNode otherHsNameFocusNode;
+  FocusNode passingYearFocusNode;
+  FocusNode maxDateFocusNode;
+
+  // Error Text Variables
+  String? hsLevelError;
+  String? hsNameError;
+  String? hsCountryError;
+  String? hsStateError;
+  String? yearOfPassingError;
+  String? hsTypeError;
+  String? curriculumTypeError;
+  String? curriculumAverageError;
+  String? otherHsNameError;
+  String? passingYearError;
+  String? maxDateError;
+
+  List<HSDetails> hsDetails;
+  List<HSDetails> otherHSDetails;
+
+  HighSchool({
+    required this.hsLevelController,
+    required this.hsNameController,
+    required this.hsCountryController,
+    required this.hsStateController,
+    required this.yearOfPassingController,
+    required this.hsTypeController,
+    required this.curriculumTypeController,
+    required this.curriculumAverageController,
+    required this.otherHsNameController,
+    required this.passingYearController,
+    required this.maxDateController,
+    required this.hsLevelFocusNode,
+    required this.hsNameFocusNode,
+    required this.hsCountryFocusNode,
+    required this.hsStateFocusNode,
+    required this.yearOfPassingFocusNode,
+    required this.hsTypeFocusNode,
+    required this.curriculumTypeFocusNode,
+    required this.curriculumAverageFocusNode,
+    required this.otherHsNameFocusNode,
+    required this.passingYearFocusNode,
+    required this.maxDateFocusNode,
+    this.hsLevelError,
+    this.hsNameError,
+    this.hsCountryError,
+    this.hsStateError,
+    this.yearOfPassingError,
+    this.hsTypeError,
+    this.curriculumTypeError,
+    this.curriculumAverageError,
+    this.otherHsNameError,
+    this.passingYearError,
+    this.maxDateError,
+    required this.hsDetails,
+    required this.otherHSDetails,
+  });
+
+  // From JSON
+  factory HighSchool.fromJson(Map<String, dynamic> json) {
+    return HighSchool(
+      hsLevelController: TextEditingController(text: json['hsLevel']),
+      hsNameController: TextEditingController(text: json['hsName']),
+      hsCountryController: TextEditingController(text: json['hsCountry']),
+      hsStateController: TextEditingController(text: json['hsState']),
+      yearOfPassingController: TextEditingController(text: json['yearOfPassing']),
+      hsTypeController: TextEditingController(text: json['hsType']),
+      curriculumTypeController: TextEditingController(text: json['curriculumType']),
+      curriculumAverageController: TextEditingController(text: json['curriculumAverage']),
+      otherHsNameController: TextEditingController(text: json['otherHsName']),
+      passingYearController: TextEditingController(text: json['passignYear']),
+      maxDateController: TextEditingController(text: json['maxDate']),
+      hsLevelFocusNode: FocusNode(),
+      hsNameFocusNode: FocusNode(),
+      hsCountryFocusNode: FocusNode(),
+      hsStateFocusNode: FocusNode(),
+      yearOfPassingFocusNode: FocusNode(),
+      hsTypeFocusNode: FocusNode(),
+      curriculumTypeFocusNode: FocusNode(),
+      curriculumAverageFocusNode: FocusNode(),
+      otherHsNameFocusNode: FocusNode(),
+      passingYearFocusNode: FocusNode(),
+      maxDateFocusNode: FocusNode(),
+      hsDetails: (json['hsDetails']['com.mopa.sco.application.HSDetails'] as List)
+          .map((e) => HSDetails.fromJson(e))
+          .toList(),
+      otherHSDetails: (json['otherHSDetails']['com.mopa.sco.application.HSDetails'] as List)
+          .map((e) => HSDetails.fromJson(e))
+          .toList(),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'hsLevel': hsLevelController.text,
+      'hsName': hsNameController.text,
+      'hsCountry': hsCountryController.text,
+      'hsState': hsStateController.text,
+      'yearOfPassing': yearOfPassingController.text,
+      'hsType': hsTypeController.text,
+      'curriculumType': curriculumTypeController.text,
+      'curriculumAverage': curriculumAverageController.text,
+      'otherHsName': otherHsNameController.text,
+      'passignYear': passingYearController.text,
+      'maxDate': maxDateController.text,
+      'hsDetails': hsDetails.map((e) => e.toJson()).toList(),
+      'otherHSDetails': otherHSDetails.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+// HSDetails model
+class HSDetails {
+  TextEditingController subjectTypeController;
+  TextEditingController gradeController;
+  TextEditingController? otherSubjectNameController;
+
+  FocusNode subjectTypeFocusNode;
+  FocusNode gradeFocusNode;
+  FocusNode? otherSubjectNameFocusNode;
+
+  HSDetails({
+    required this.subjectTypeController,
+    required this.gradeController,
+    this.otherSubjectNameController,
+    required this.subjectTypeFocusNode,
+    required this.gradeFocusNode,
+    this.otherSubjectNameFocusNode,
+  });
+
+  factory HSDetails.fromJson(Map<String, dynamic> json) {
+    return HSDetails(
+      subjectTypeController: TextEditingController(text: json['subjectType']),
+      gradeController: TextEditingController(text: json['grade']),
+      otherSubjectNameController: json['otherSubjectName'] != null
+          ? TextEditingController(text: json['otherSubjectName'])
+          : null,
+      subjectTypeFocusNode: FocusNode(),
+      gradeFocusNode: FocusNode(),
+      otherSubjectNameFocusNode: json['otherSubjectName'] != null ? FocusNode() : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'subjectType': subjectTypeController.text,
+      'grade': gradeController.text,
+      'otherSubjectName': otherSubjectNameController?.text,
+    };
+  }
+}
+
+
 
 class EmploymentHistory {
   final String employerName;
