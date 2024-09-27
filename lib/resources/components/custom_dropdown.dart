@@ -97,6 +97,7 @@ class _CustomDropdownState extends State<CustomDropdown>
                 ? Utils.outlinedInputBorder()
                 : Utils.underLinedInputBorder(),
             filled: widget.filled,
+            fillColor: Colors.grey.shade200,
           ),
 
           // cursorColor: AppColors.darkGrey,

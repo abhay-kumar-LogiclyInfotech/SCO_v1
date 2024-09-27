@@ -25,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   List<TextInputFormatter>? inputFormat;
   InputBorder? border;
   int? maxLines;
+  int? maxLength;
 TextStyle? textStyle;
    CustomTextField(
       {super.key,
@@ -47,6 +48,7 @@ TextStyle? textStyle;
       this.inputFormat,
       this.border,
       this.maxLines,
+        this.maxLength,
       this.textStyle,
       });
 
@@ -64,6 +66,7 @@ class _CustomTextFieldState extends State<CustomTextField>
       textDirection: getTextDirection(langProvider),
       child: TextField(
         onTap: widget.onTap,
+        maxLength: widget.maxLength,
         maxLines: widget.maxLines ?? 1,
         readOnly: widget.readOnly ?? false,
         focusNode: widget.currentFocusNode,

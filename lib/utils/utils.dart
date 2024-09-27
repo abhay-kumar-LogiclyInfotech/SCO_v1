@@ -28,38 +28,37 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
         dimension: 15,
       );
 
-  double get kCardRadius => 15;
-  Widget get kSubmitButtonHeight =>  const SizedBox.square(
-    dimension: 30,
-  );
+  // shrink box
+  Widget get showVoid => const SizedBox.shrink();
 
+  double get kCardRadius => 15;
+
+  Widget get kSubmitButtonHeight => const SizedBox.square(
+        dimension: 30,
+      );
 }
 
 class Utils {
-
   // input borders start
- static InputBorder outlinedInputBorder() {
+  static InputBorder outlinedInputBorder() {
     return OutlineInputBorder(
         borderRadius: BorderRadius.circular(5),
         borderSide: const BorderSide(color: AppColors.darkGrey));
   }
 
-static  InputBorder underLinedInputBorder() {
+  static InputBorder underLinedInputBorder() {
     return const UnderlineInputBorder(
         borderRadius: BorderRadius.zero,
         borderSide: BorderSide(color: AppColors.darkGrey));
   }
+
   // input borders end
 
-
- // focus request:
- static void requestFocus({required FocusNode focusNode, required BuildContext context}){
-   FocusScope.of(context).requestFocus(focusNode);
- }
-
-
-
-
+  // focus request:
+  static void requestFocus(
+      {required FocusNode focusNode, required BuildContext context}) {
+    FocusScope.of(context).requestFocus(focusNode);
+  }
 
   //*------Common Loading Indicators Start------*/
 
@@ -158,6 +157,32 @@ fieldHeading(
 }
 
 // populateCommonDataDropdown method with hide property:
+List<dynamic> populateSimpleValuesFromLOV({
+  required List menuItemsList,
+  required LanguageChangeViewModel provider,
+  Color? textColor,
+}) {
+  final textDirection = getTextDirection(provider);
+
+  List<String> uniqueKeys = [];
+
+  List uniqueItemsList = [];
+
+  for (var element in menuItemsList) {
+    if (uniqueKeys.contains(element.code.toString())) {
+      continue; // skip duplicate entries
+    } else {
+      if (element.hide == false) {
+        uniqueKeys.add(element.code.toString());
+        uniqueItemsList.add(element);
+      }
+    }
+  }
+
+  return uniqueItemsList;
+}
+
+// populateCommonDataDropdown method with hide property:
 List<DropdownMenuItem> populateCommonDataDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
@@ -165,14 +190,14 @@ List<DropdownMenuItem> populateCommonDataDropdown({
 }) {
   final textDirection = getTextDirection(provider);
 
-  List<String> uniqueKeys= [];
+  List<String> uniqueKeys = [];
 
   List uniqueMenuItemsList = [];
 
   for (var element in menuItemsList) {
-    if(uniqueKeys.contains(element.code.toString())){
+    if (uniqueKeys.contains(element.code.toString())) {
       continue; // skip duplicate entries
-    }else{
+    } else {
       uniqueKeys.add(element.code.toString());
       uniqueMenuItemsList.add(element);
     }
@@ -187,7 +212,7 @@ List<DropdownMenuItem> populateCommonDataDropdown({
         textDirection == TextDirection.ltr
             ? element.value
             : element.valueArabic.toString(),
-        style:  TextStyle(
+        style: TextStyle(
           color: textColor ?? AppColors.hintDarkGrey,
           fontSize: 14,
           fontWeight: FontWeight.w500,

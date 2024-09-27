@@ -40,7 +40,6 @@ class PersonName {
   }
 }
 
-
 class PhoneNumber {
   TextEditingController countryCodeController;
   TextEditingController phoneNumberController;
@@ -96,7 +95,6 @@ class PhoneNumber {
   }
 }
 
-
 // Address inFormation
 class Address {
   // Text Editing Controllers for form fields
@@ -128,7 +126,6 @@ class Address {
 
   List<DropdownMenuItem>? countryDropdownMenuItems;
   List<DropdownMenuItem>? stateDropdownMenuItems;
-
 
   Address({
     required this.addressTypeController,
@@ -192,7 +189,7 @@ class Address {
 
 // HighSchool model
 class HighSchool {
-  // Text Editing Controllers for form fields
+  // Existing fields...
   TextEditingController hsLevelController;
   TextEditingController hsNameController;
   TextEditingController hsCountryController;
@@ -204,6 +201,11 @@ class HighSchool {
   TextEditingController otherHsNameController;
   TextEditingController passingYearController;
   TextEditingController maxDateController;
+
+  // New fields
+  TextEditingController disableStateController;
+  TextEditingController isNewController;
+  TextEditingController highestQualificationController;
 
   // Focus Nodes
   FocusNode hsLevelFocusNode;
@@ -234,11 +236,7 @@ class HighSchool {
   List<DropdownMenuItem>? schoolStateDropdownMenuItems;
   List<DropdownMenuItem>? schoolNameDropdownMenuItems;
   List<DropdownMenuItem>? schoolTypeDropdownMenuItems;
-  List<DropdownMenuItem>? curriculumTypeDropdownMenuItems;
-
-
-
-
+  List<DropdownMenuItem>? schoolCurriculumTypeDropdownMenuItems;
 
   List<HSDetails> hsDetails;
   List<HSDetails> otherHSDetails;
@@ -266,6 +264,9 @@ class HighSchool {
     required this.otherHsNameFocusNode,
     required this.passingYearFocusNode,
     required this.maxDateFocusNode,
+    required this.disableStateController,
+    required this.isNewController,
+    required this.highestQualificationController,
     this.hsLevelError,
     this.hsNameError,
     this.hsCountryError,
@@ -279,22 +280,40 @@ class HighSchool {
     this.maxDateError,
     required this.hsDetails,
     required this.otherHSDetails,
+    this.schoolStateDropdownMenuItems,
+    this.schoolNameDropdownMenuItems,
+    this.schoolTypeDropdownMenuItems,
+    this.schoolCurriculumTypeDropdownMenuItems,
   });
 
   // From JSON
   factory HighSchool.fromJson(Map<String, dynamic> json) {
     return HighSchool(
-      hsLevelController: TextEditingController(text: json['hsLevel']),
-      hsNameController: TextEditingController(text: json['hsName']),
-      hsCountryController: TextEditingController(text: json['hsCountry']),
-      hsStateController: TextEditingController(text: json['hsState']),
-      yearOfPassingController: TextEditingController(text: json['yearOfPassing']),
-      hsTypeController: TextEditingController(text: json['hsType']),
-      curriculumTypeController: TextEditingController(text: json['curriculumType']),
-      curriculumAverageController: TextEditingController(text: json['curriculumAverage']),
-      otherHsNameController: TextEditingController(text: json['otherHsName']),
-      passingYearController: TextEditingController(text: json['passignYear']),
-      maxDateController: TextEditingController(text: json['maxDate']),
+      hsLevelController:
+          TextEditingController(text: json['hsLevel'].toString()),
+      hsNameController: TextEditingController(text: json['hsName'].toString()),
+      hsCountryController:
+          TextEditingController(text: json['hsCountry'].toString()),
+      hsStateController:
+          TextEditingController(text: json['hsState'].toString()),
+      yearOfPassingController:
+          TextEditingController(text: json['yearOfPassing'].toString()),
+      hsTypeController: TextEditingController(text: json['hsType'].toString()),
+      curriculumTypeController:
+          TextEditingController(text: json['curriculumType'].toString()),
+      curriculumAverageController:
+          TextEditingController(text: json['curriculumAverage'].toString()),
+      otherHsNameController:
+          TextEditingController(text: json['otherHsName'].toString()),
+      passingYearController:
+          TextEditingController(text: json['passingYear'].toString()),
+      maxDateController:
+          TextEditingController(text: json['maxDate'].toString()),
+      disableStateController:
+          TextEditingController(text: json['disableState'].toString()),
+      isNewController: TextEditingController(text: json['isNew'].toString()),
+      highestQualificationController:
+          TextEditingController(text: json['highestQualification'].toString()),
       hsLevelFocusNode: FocusNode(),
       hsNameFocusNode: FocusNode(),
       hsCountryFocusNode: FocusNode(),
@@ -306,8 +325,12 @@ class HighSchool {
       otherHsNameFocusNode: FocusNode(),
       passingYearFocusNode: FocusNode(),
       maxDateFocusNode: FocusNode(),
-      hsDetails: (json['hsDetails']['com.mopa.sco.application.HSDetails'] as List).map((e) => HSDetails.fromJson(e)).toList(),
-      otherHSDetails: (json['otherHSDetails']['com.mopa.sco.application.HSDetails'] as List).map((e) => HSDetails.fromJson(e)).toList(),
+      hsDetails: (json['hsDetails'] as List)
+          .map((e) => HSDetails.fromJson(e))
+          .toList(),
+      otherHSDetails: (json['otherHSDetails'] as List)
+          .map((e) => HSDetails.fromJson(e))
+          .toList(),
     );
   }
 
@@ -323,8 +346,11 @@ class HighSchool {
       'curriculumType': curriculumTypeController.text,
       'curriculumAverage': curriculumAverageController.text,
       'otherHsName': otherHsNameController.text,
-      'passignYear': passingYearController.text,
+      'passingYear': passingYearController.text,
       'maxDate': maxDateController.text,
+      'disableState': disableStateController.text,
+      'isNew': isNewController.text,
+      'highestQualification': highestQualificationController.text,
       'hsDetails': hsDetails.map((e) => e.toJson()).toList(),
       'otherHSDetails': otherHSDetails.map((e) => e.toJson()).toList(),
     };
@@ -341,6 +367,10 @@ class HSDetails {
   FocusNode gradeFocusNode;
   FocusNode? otherSubjectNameFocusNode;
 
+  String? subjectTypeError;
+  String? gradeError;
+  String? otherSubjectNameError;
+
   HSDetails({
     required this.subjectTypeController,
     required this.gradeController,
@@ -348,31 +378,43 @@ class HSDetails {
     required this.subjectTypeFocusNode,
     required this.gradeFocusNode,
     this.otherSubjectNameFocusNode,
+    this.subjectTypeError,
+    this.gradeError,
+    this.otherSubjectNameError,
   });
 
+  // From JSON
   factory HSDetails.fromJson(Map<String, dynamic> json) {
     return HSDetails(
-      subjectTypeController: TextEditingController(text: json['subjectType']),
-      gradeController: TextEditingController(text: json['grade']),
+      subjectTypeController:
+          TextEditingController(text: json['subjectType'].toString()),
+      gradeController: TextEditingController(text: json['grade'].toString()),
       otherSubjectNameController: json['otherSubjectName'] != null
-          ? TextEditingController(text: json['otherSubjectName'])
+          ? TextEditingController(text: json['otherSubjectName'].toString())
           : null,
       subjectTypeFocusNode: FocusNode(),
       gradeFocusNode: FocusNode(),
-      otherSubjectNameFocusNode: json['otherSubjectName'] != null ? FocusNode() : null,
+      otherSubjectNameFocusNode:
+          json['otherSubjectName'] != null ? FocusNode() : null,
     );
   }
 
+  // To JSON
   Map<String, dynamic> toJson() {
-    return {
+    final data = {
       'subjectType': subjectTypeController.text,
       'grade': gradeController.text,
-      'otherSubjectName': otherSubjectNameController?.text,
     };
+
+    // Only include otherSubjectName if it is not null and not empty
+    if (otherSubjectNameController != null &&
+        otherSubjectNameController!.text.isNotEmpty) {
+      data['otherSubjectName'] = otherSubjectNameController!.text;
+    }
+
+    return data;
   }
 }
-
-
 
 class EmploymentHistory {
   final String employerName;
@@ -430,7 +472,6 @@ class EmploymentHistory {
   }
 }
 
-
 // *------------------------------------------------------------------------------------------------ Relative Information ------------------------------------------------------------------------------------------------
 
 class RelativeInfo {
@@ -438,7 +479,6 @@ class RelativeInfo {
   TextEditingController countryUniversityController;
   TextEditingController relationTypeController;
   TextEditingController familyBookNumberController;
-
 
   // Focus Nodes
   FocusNode relativeNameFocusNode;
@@ -471,9 +511,11 @@ class RelativeInfo {
   factory RelativeInfo.fromJson(Map<String, dynamic> json) {
     return RelativeInfo(
       relativeNameController: TextEditingController(text: json['relativeName']),
-      countryUniversityController: TextEditingController(text: json['countryUniversity']),
+      countryUniversityController:
+          TextEditingController(text: json['countryUniversity']),
       relationTypeController: TextEditingController(text: json['relationType']),
-      familyBookNumberController: TextEditingController(text: json['familyBookNumber']),
+      familyBookNumberController:
+          TextEditingController(text: json['familyBookNumber']),
       relativeNameFocusNode: FocusNode(),
       countryUniversityFocusNode: FocusNode(),
       relationTypeFocusNode: FocusNode(),
@@ -491,4 +533,67 @@ class RelativeInfo {
   }
 }
 
-
+Map<String, dynamic> highSchoolJsonList = {
+  "highSchoolList": [
+    {
+      "hsLevel": "1",
+      "hsName": "OTH",
+      "hsCountry": "ARE",
+      "hsState": "ALN",
+      "yearOfPassing": "2024-09-27 00:00:00.0 UTC",
+      "hsType": "PRI",
+      "curriculumType": "GERM",
+      "curriculumAverage": "12",
+      "otherHsName": "asd",
+      "disableState": "false",
+      "hsDetails": [
+        {"subjectType": "BIO", "grade": ""},
+        {"subjectType": "CHEM", "grade": ""},
+        {"subjectType": "ECO", "grade": ""},
+        {"subjectType": "ENG", "grade": ""},
+        {"subjectType": "GS", "grade": ""},
+        {"subjectType": "HS", "grade": ""},
+        {"subjectType": "MATH", "grade": ""},
+        {"subjectType": "PHY", "grade": ""},
+        {"subjectType": "SCI", "grade": ""}
+      ],
+      "otherHSDetails": [
+        {"subjectType": "OTH1", "grade": ""},
+        {"subjectType": "OTH2", "grade": ""},
+        {"subjectType": "OTH3", "grade": ""},
+        {"subjectType": "OTH4", "grade": ""},
+        {"subjectType": "OTH5", "grade": ""}
+      ],
+      "isNew": "true",
+      "highestQualification": "false",
+      "passingYear": "2024-2025",
+      "maxDate": "2025-09-27 12:02:48.20 UTC"
+    },
+    {
+      "hsLevel": "3",
+      "hsCountry": "ARE",
+      "disableState": "false",
+      "hsDetails": [
+        {"subjectType": "BIO", "grade": ""},
+        {"subjectType": "CHEM", "grade": ""},
+        {"subjectType": "ECO", "grade": ""},
+        {"subjectType": "ENG", "grade": ""},
+        {"subjectType": "GS", "grade": ""},
+        {"subjectType": "HS", "grade": ""},
+        {"subjectType": "MATH", "grade": ""},
+        {"subjectType": "PHY", "grade": ""},
+        {"subjectType": "SCI", "grade": ""}
+      ],
+      "otherHSDetails": [
+        {"subjectType": "OTH1", "grade": ""},
+        {"subjectType": "OTH2", "grade": ""},
+        {"subjectType": "OTH3", "grade": ""},
+        {"subjectType": "OTH4", "grade": ""},
+        {"subjectType": "OTH5", "grade": ""}
+      ],
+      "isNew": "true",
+      "highestQualification": "false",
+      "maxDate": "2025-09-27 12:02:48.21 UTC"
+    }
+  ]
+};

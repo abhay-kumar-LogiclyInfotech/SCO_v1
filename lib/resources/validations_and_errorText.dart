@@ -423,6 +423,39 @@ class ErrorText {
     return null; // Return null if validation passes
   }
 
+  // Grade Validation Error Text
+  static String? getGradeValidationError({
+    required String grade,
+    required BuildContext context,
+  }) {
+    if (grade.isEmpty) {
+      return null; // No error if the grade is empty
+    } else if (!_isGradeValid(grade)) {
+      return 'Please enter a valid grade (A, A+, B, ...) or a number between 0 and 100.';
+    }
+    return null; // Return null if validation passes
+  }
+
+  // Helper function to validate the grade
+  static bool _isGradeValid(String grade) {
+    // List of valid letter grades
+    final validLetterGrades = ['A', 'A+', 'B', 'B+', 'C', 'C+', 'D', 'D+', 'F'];
+
+    // Check if the input is a valid letter grade
+    if (validLetterGrades.contains(grade.toUpperCase())) {
+      return true;
+    }
+
+    // Check if the input is a number between 0 and 100
+    final numericGrade = int.tryParse(grade);
+    if (numericGrade != null && numericGrade >= 0 && numericGrade <= 100) {
+      return true;
+    }
+
+    // Return false if neither a valid letter grade nor a valid numeric grade
+    return false;
+  }
+
 
 }
 /// *---------------------------------------------------------------- Creating Error Texts Based on Validations end ----------------------------------------------------------------****
