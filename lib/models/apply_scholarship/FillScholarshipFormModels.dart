@@ -40,6 +40,7 @@ class PersonName {
   }
 }
 
+// phone number
 class PhoneNumber {
   TextEditingController countryCodeController;
   TextEditingController phoneNumberController;
@@ -472,8 +473,7 @@ class EmploymentHistory {
   }
 }
 
-// *------------------------------------------------------------------------------------------------ Relative Information ------------------------------------------------------------------------------------------------
-
+// relative information
 class RelativeInfo {
   TextEditingController relativeNameController;
   TextEditingController countryUniversityController;
@@ -532,6 +532,164 @@ class RelativeInfo {
     };
   }
 }
+
+// graduation information
+class GraduationInfo {
+  // TextEditingControllers
+  TextEditingController levelController;
+  TextEditingController countryController;
+  TextEditingController universityController;
+  TextEditingController majorController;
+  TextEditingController cgpaController;
+  TextEditingController graduationStartDateController;
+  TextEditingController lastTermController;
+  TextEditingController caseStudyTitleController;
+  TextEditingController caseStudyDescriptionController;
+  TextEditingController caseStudyStartYearController;
+
+  // New properties
+  TextEditingController isNewController;
+  TextEditingController sponsorShipController;
+  TextEditingController errorMessageController;
+  bool highestQualification;
+  bool showCurrentlyStudying;
+
+  // Focus Nodes
+  FocusNode levelFocusNode;
+  FocusNode countryFocusNode;
+  FocusNode universityFocusNode;
+  FocusNode majorFocusNode;
+  FocusNode cgpaFocusNode;
+  FocusNode graduationStartDateFocusNode;
+  FocusNode lastTermFocusNode;
+  FocusNode caseStudyTitleFocusNode;
+  FocusNode caseStudyDescriptionFocusNode;
+  FocusNode caseStudyStartYearFocusNode;
+
+  // Error Text Variables
+  String? levelError;
+  String? countryError;
+  String? universityError;
+  String? majorError;
+  String? cgpaError;
+  String? graduationStartDateError;
+  String? lastTermError;
+  String? caseStudyTitleError;
+  String? caseStudyDescriptionError;
+  String? caseStudyStartYearError;
+
+  // New property
+  bool currentlyStudying;
+
+
+  List<DropdownMenuItem>? lastTerm;
+  List<DropdownMenuItem>? graduationLevel;
+  List<DropdownMenuItem>? university;
+
+
+
+  GraduationInfo({
+    required this.levelController,
+    required this.countryController,
+    required this.universityController,
+    required this.majorController,
+    required this.cgpaController,
+    required this.graduationStartDateController,
+    required this.lastTermController,
+    required this.caseStudyTitleController,
+    required this.caseStudyDescriptionController,
+    required this.caseStudyStartYearController,
+    required this.levelFocusNode,
+    required this.countryFocusNode,
+    required this.universityFocusNode,
+    required this.majorFocusNode,
+    required this.cgpaFocusNode,
+    required this.graduationStartDateFocusNode,
+    required this.lastTermFocusNode,
+    required this.caseStudyTitleFocusNode,
+    required this.caseStudyDescriptionFocusNode,
+    required this.caseStudyStartYearFocusNode,
+    this.levelError,
+    this.countryError,
+    this.universityError,
+    this.majorError,
+    this.cgpaError,
+    this.graduationStartDateError,
+    this.lastTermError,
+    this.caseStudyTitleError,
+    this.caseStudyDescriptionError,
+    this.caseStudyStartYearError,
+    required this.currentlyStudying,
+    required this.isNewController,
+    required this.sponsorShipController,
+    required this.errorMessageController,
+    required this.highestQualification,
+    required this.showCurrentlyStudying,
+    this.lastTerm,
+    this.graduationLevel,
+    this.university,
+  });
+
+  // From JSON (null-safe)
+  factory GraduationInfo.fromJson(Map<String, dynamic> json) {
+    return GraduationInfo(
+      levelController: TextEditingController(text: json['level'] ?? ''),
+      countryController: TextEditingController(text: json['country'] ?? ''),
+      universityController: TextEditingController(text: json['university'] ?? ''),
+      majorController: TextEditingController(text: json['major'] ?? ''),
+      cgpaController: TextEditingController(text: json['cgpa'] ?? ''),
+      graduationStartDateController: TextEditingController(text: json['graduationStartDate'] ?? ''),
+      lastTermController: TextEditingController(text: json['lastTerm'] ?? ''),
+      caseStudyTitleController: TextEditingController(text: json['caseStudy']?['title'] ?? ''),
+      caseStudyDescriptionController: TextEditingController(text: json['caseStudy']?['description'] ?? ''),
+      caseStudyStartYearController: TextEditingController(text: json['caseStudy']?['startYear'] ?? ''),
+      levelFocusNode: FocusNode(),
+      countryFocusNode: FocusNode(),
+      universityFocusNode: FocusNode(),
+      majorFocusNode: FocusNode(),
+      cgpaFocusNode: FocusNode(),
+      graduationStartDateFocusNode: FocusNode(),
+      lastTermFocusNode: FocusNode(),
+      caseStudyTitleFocusNode: FocusNode(),
+      caseStudyDescriptionFocusNode: FocusNode(),
+      caseStudyStartYearFocusNode: FocusNode(),
+      currentlyStudying: json['currentlyStudying'] == 'true',
+      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      sponsorShipController: TextEditingController(text: json['sponsorShip'] ?? 'no'),
+      errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+      highestQualification: json['highestQualification'] == 'true',
+      showCurrentlyStudying: json['showCurrentlyStudying'] == 'true',
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'level': levelController.text,
+      'country': countryController.text,
+      'university': universityController.text,
+      'major': majorController.text,
+      'cgpa': cgpaController.text,
+      'graduationStartDate': graduationStartDateController.text,
+      'lastTerm': lastTermController.text,
+      'caseStudy': {
+        'title': caseStudyTitleController.text,
+        'description': caseStudyDescriptionController.text,
+        'startYear': caseStudyStartYearController.text,
+      },
+      'currentlyStudying': currentlyStudying.toString(),
+      'isNew': isNewController.text,
+      'sponsorShip': sponsorShipController.text,
+      'errorMessage': errorMessageController.text,
+      'highestQualification': highestQualification.toString(),
+      'showCurrentlyStudying': showCurrentlyStudying.toString(),
+    };
+  }
+}
+
+
+
+
 
 Map<String, dynamic> highSchoolJsonList = {
   "highSchoolList": [
@@ -597,3 +755,8 @@ Map<String, dynamic> highSchoolJsonList = {
     }
   ]
 };
+
+
+
+
+ String draftString =   "<com.mopa.sco.application.ApplicationData>  <acadCareer>UGRD</acadCareer>  <AdmApplicationNumber>00000000</AdmApplicationNumber>  <institution>SCO</institution>  <admApplCtr>AD</admApplCtr>  <admitType>ONL</admitType>  <admitTerm>2457</admitTerm>  <citizenship>ARE</citizenship>  <country>ABW</country>  <acadProgram>SCO-U</acadProgram>  <acadProgramDds></acadProgramDds>  <acadProgramPgrd></acadProgramPgrd>  <programStatus>AP</programStatus>  <programAction>APPL</programAction>  <acadLoadAppr>F</acadLoadAppr>  <campus>AD</campus>  <acadPlan>SCO-U</acadPlan>  <errorMessage></errorMessage>  <nameAsPasport>    <com.mopa.sco.application.NameAsPassport>      <nameType>PRI</nameType>      <studentName>أبهاي</studentName>      <fatherName>أبهاي</fatherName>      <grandFatherName>أبهاي</grandFatherName>      <familyName>أبهاي</familyName>    </com.mopa.sco.application.NameAsPassport>    <com.mopa.sco.application.NameAsPassport>      <nameType>ENG</nameType>      <studentName>Test</studentName>      <fatherName>Test</fatherName>      <grandFatherName>Test</grandFatherName>      <familyName>Test</familyName>    </com.mopa.sco.application.NameAsPassport>  </nameAsPasport>  <dateOfBirth>2003-09-11 00:00:00.0 UTC</dateOfBirth>  <placeOfBirth>fsdfdsf</placeOfBirth>  <gender>M</gender>  <maritalStatus>M</maritalStatus>  <emailId>test1@hotmail.com</emailId>  <passportId>2342322</passportId>  <passportExpiryDate>2024-09-19 00:00:00.0 UTC</passportExpiryDate>  <passportIssueDate>2016-09-16 00:00:00.0 UTC</passportIssueDate>  <passportIssuePlace>fsdfdsf</passportIssuePlace>  <unifiedNo>24334243243243</unifiedNo>  <emirateId>784200479031062</emirateId>  <relativeStudyinScholarship>false</relativeStudyinScholarship>  <uaeMother>true</uaeMother>  <scholarshipType>INT</scholarshipType>  <cohortId>2024</cohortId>  <scholarshipSubmissionCode>SCOUGRDINT</scholarshipSubmissionCode>  <emirateIdExpiryDate>2024-09-11 00:00:00.0 UTC</emirateIdExpiryDate>  <maxCountUniversity>0</maxCountUniversity>  <maxCountMajors>0</maxCountMajors>  <militaryService>N</militaryService>  <phoneNunbers>    <com.mopa.sco.application.PhoneNumber>      <countryCode>971</countryCode>      <phoneNumber>12323456789</phoneNumber>      <phoneType>CELL</phoneType>      <prefered>true</prefered>      <isExisting>false</isExisting>    </com.mopa.sco.application.PhoneNumber>    <com.mopa.sco.application.PhoneNumber>      <countryCode>971</countryCode>      <phoneNumber>24343432423</phoneNumber>      <phoneType>GRD</phoneType>      <prefered>false</prefered>      <isExisting>false</isExisting>    </com.mopa.sco.application.PhoneNumber>  </phoneNunbers>  <graduationList>    <com.mopa.sco.application.GraduationBean>      <country>ARE</country>      <isNew>true</isNew>      <currentlyStudying>false</currentlyStudying>      <highestQualification>false</highestQualification>      <showCurrentlyStudying>true</showCurrentlyStudying>      <caseStudy/>    </com.mopa.sco.application.GraduationBean>  </graduationList>  <universtiesPriorityList>    <com.mopa.sco.application.UniverstiesPriority>      <countryId>ARE</countryId>      <isNew>true</isNew>    </com.mopa.sco.application.UniverstiesPriority>  </universtiesPriorityList>  <requiredExaminationList>    <com.mopa.sco.application.RequiredExamination>      <minScore>0</minScore>      <maxScore>0</maxScore>      <isNew>true</isNew>    </com.mopa.sco.application.RequiredExamination>  </requiredExaminationList>  <addressList>    <com.mopa.sco.application.Address>      <addressType>CAMP</addressType>      <addressLine1>sfsdfsd</addressLine1>      <addressLine2>fsdfdsf</addressLine2>      <city>fsdfsdf</city>      <country>ABW</country>      <postalCode>234234</postalCode>      <disableState>true</disableState>      <isExisting>false</isExisting>    </com.mopa.sco.application.Address>  </addressList>  <highSchoolList>    <com.mopa.sco.application.HighSchoolInfoBean>      <hsLevel>1</hsLevel>      <hsName>OTH</hsName>      <hsCountry>ARE</hsCountry>      <hsState>ALN</hsState>      <yearOfPassing>2024-09-27 00:00:00.0 UTC</yearOfPassing>      <hsType>PRI</hsType>      <curriculumType>GERM</curriculumType>      <curriculumAverage>12</curriculumAverage>      <otherHsName>asd</otherHsName>      <disableState>false</disableState>      <hsDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>BIO</subjectType>          <grade>10</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>CHEM</subjectType>          <grade>10</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>ECO</subjectType>          <grade>10</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>ENG</subjectType>          <grade>10</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>GS</subjectType>          <grade>10</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>HS</subjectType>          <grade>10</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>MATH</subjectType>          <grade>A+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>PHY</subjectType>          <grade>A+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>SCI</subjectType>          <grade>A+</grade>        </com.mopa.sco.application.HSDetails>      </hsDetails>      <otherHSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH1</subjectType>          <grade>10</grade>          <otherSubjectName>name 1</otherSubjectName>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH2</subjectType>          <grade>10</grade>          <otherSubjectName>name 2</otherSubjectName>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH3</subjectType>          <grade>10</grade>          <otherSubjectName>name 3</otherSubjectName>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH4</subjectType>          <grade>10</grade>          <otherSubjectName>name 4</otherSubjectName>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH5</subjectType>          <grade></grade>          <otherSubjectName>name 5</otherSubjectName>        </com.mopa.sco.application.HSDetails>      </otherHSDetails>      <isNew>true</isNew>      <highestQualification>false</highestQualification>      <passignYear>2024-2025</passignYear>      <maxDate>2025-09-30 05:53:44.774 UTC</maxDate>    </com.mopa.sco.application.HighSchoolInfoBean>    <com.mopa.sco.application.HighSchoolInfoBean>      <hsLevel>3</hsLevel>      <hsCountry>AFG</hsCountry>      <disableState>false</disableState>      <hsDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>BIO</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>CHEM</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>ECO</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>ENG</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>GS</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>HS</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>MATH</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>PHY</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>SCI</subjectType>          <grade>B+</grade>        </com.mopa.sco.application.HSDetails>      </hsDetails>      <otherHSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH1</subjectType>          <grade>A+</grade>          <otherSubjectName>name 1</otherSubjectName>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH2</subjectType>          <grade>A+</grade>          <otherSubjectName>name 1</otherSubjectName>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH3</subjectType>          <grade>A+</grade>          <otherSubjectName>name 1</otherSubjectName>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH4</subjectType>          <grade>A+</grade>          <otherSubjectName>name 1</otherSubjectName>        </com.mopa.sco.application.HSDetails>        <com.mopa.sco.application.HSDetails>          <subjectType>OTH5</subjectType>          <grade>A+</grade>          <otherSubjectName>name 1</otherSubjectName>        </com.mopa.sco.application.HSDetails>      </otherHSDetails>      <isNew>true</isNew>      <highestQualification>false</highestQualification>      <maxDate>2025-09-30 05:53:44.776 UTC</maxDate>    </com.mopa.sco.application.HighSchoolInfoBean>  </highSchoolList>  <emplymentHistory>    <com.mopa.sco.application.EmployementHistory>      <isNew>true</isNew>    </com.mopa.sco.application.EmployementHistory>  </emplymentHistory>  <majorWishList>    <com.mopa.sco.application.MajorWishListItem>      <isNew>true</isNew>    </com.mopa.sco.application.MajorWishListItem>    <com.mopa.sco.application.MajorWishListItem>      <isNew>true</isNew>    </com.mopa.sco.application.MajorWishListItem>    <com.mopa.sco.application.MajorWishListItem>      <isNew>true</isNew>    </com.mopa.sco.application.MajorWishListItem>  </majorWishList>  <relativeDetails>    <com.mopa.sco.application.RelativeDetail/>  </relativeDetails>  <attachments>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL073</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL073</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file23</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL074</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL074</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file24</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL002</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL002</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file25</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL006</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.jpeg|.jpg|.JPEG|.JPG</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL006</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file26</fileId>      <fileType>1</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL019</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL019</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file27</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL023</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL023</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file28</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL018</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL018</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file29</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL004</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL004</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file30</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL014</documentCD>      <required>XMRL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL014</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file31</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL015</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL015</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file32</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL047</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL047</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file33</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL082</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL082</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file34</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL001</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL001</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file35</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>UNVADM</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:UNVADM</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file36</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL009</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL009</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file37</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL058</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL058</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file38</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL053</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL053</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file39</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL063</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL063</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file40</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL030</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL030</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file41</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL064</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL064</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file42</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL065</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL065</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file43</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL075</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL075</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file44</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>    <com.mopa.sco.bean.AttachmentBean>      <processCD>UGUAE</processCD>      <documentCD>SEL043</documentCD>      <required>XOPL</required>      <fileUploaded>false</fileUploaded>      <height>0</height>      <width>0</width>      <supportedFileType>.pdf|.PDF</supportedFileType>      <maxFileSize>5242880</maxFileSize>      <attachmentName>UGUAE:SEL043</attachmentName>      <applictionDetailId>0</applictionDetailId>      <emiratesId>784200479031062</emiratesId>      <isApproved>false</isApproved>      <fileId>file64</fileId>      <fileType>2</fileType>      <newFile>true</newFile>    </com.mopa.sco.bean.AttachmentBean>  </attachments>  <studyCountry>true</studyCountry>  <employmentStatus>N</employmentStatus></com.mopa.sco.application.ApplicationData>";
