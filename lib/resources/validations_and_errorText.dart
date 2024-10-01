@@ -241,6 +241,43 @@ class Validations {
   }
 
 
+  // Helper function to validate the grade
+  static bool isGradeValid(String grade) {
+    // List of valid letter grades
+    final validLetterGrades = ['A', 'A+', 'B', 'B+', 'C', 'C+', 'D', 'D+', 'F'];
+
+    // Check if the input is a valid letter grade
+    if (validLetterGrades.contains(grade.toUpperCase())) {
+      return true;
+    }
+
+    // Check if the input is a number between 0 and 100
+    final numericGrade = int.tryParse(grade);
+    if (numericGrade != null && numericGrade >= 0 && numericGrade <= 100) {
+      return true;
+    }
+
+    // Return false if neither a valid letter grade nor a valid numeric grade
+    return false;
+  }
+
+
+
+  // Helper function to check if the CGPA is valid
+  static bool isCGPAValid(String cgpa) {
+    // Try to parse the CGPA as a double
+    double? cgpaValue = double.tryParse(cgpa);
+
+    // Return false if parsing fails or if the CGPA is out of range
+    if (cgpaValue == null || cgpaValue < 0.0 || cgpaValue > 4.0) {
+      return false;
+    }
+
+    // If all checks pass, the CGPA is valid
+    return true;
+  }
+
+
 }
 // *---------------------------------------------------------------- Creating Validations for the particular field end ----------------------------------------------------------------***
 
@@ -430,31 +467,31 @@ class ErrorText {
   }) {
     if (grade.isEmpty) {
       return null; // No error if the grade is empty
-    } else if (!_isGradeValid(grade)) {
+    } else if (!Validations.isGradeValid(grade)) {
       return 'Please enter a valid grade (A, A+, B, ...) or a number between 0 and 100.';
     }
     return null; // Return null if validation passes
   }
 
-  // Helper function to validate the grade
-  static bool _isGradeValid(String grade) {
-    // List of valid letter grades
-    final validLetterGrades = ['A', 'A+', 'B', 'B+', 'C', 'C+', 'D', 'D+', 'F'];
 
-    // Check if the input is a valid letter grade
-    if (validLetterGrades.contains(grade.toUpperCase())) {
-      return true;
+
+
+
+  // CGPA Validation Error Text
+  static String? getCGPAValidationError({
+    required String cgpa,
+    required BuildContext context,
+  }) {
+    if (cgpa.isEmpty) {
+      return null; // No error if the CGPA is empty
+    } else if (!Validations.isCGPAValid(cgpa)) {
+      return 'Please enter a valid CGPA (between 0.0 and 4.0).'; // Adjust the range according to your requirements
     }
-
-    // Check if the input is a number between 0 and 100
-    final numericGrade = int.tryParse(grade);
-    if (numericGrade != null && numericGrade >= 0 && numericGrade <= 100) {
-      return true;
-    }
-
-    // Return false if neither a valid letter grade nor a valid numeric grade
-    return false;
+    return null; // Return null if validation passes
   }
+
+
+
 
 
 }

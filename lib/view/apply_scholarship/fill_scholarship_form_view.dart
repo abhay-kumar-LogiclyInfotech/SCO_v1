@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:getwidget/components/form/form_field/widgets/gf_formdropdown.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
@@ -103,7 +104,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // Function to save draft
   void saveDraft() {
     // Save draft logic here
- cleanXmlToJson(draftString);
+    cleanXmlToJson(draftString);
     // print("Draft saved");
   }
 
@@ -289,6 +290,22 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           menuItemsList: Constants.lovCodeMap['SUBJECT']!.values!,
           provider: langProvider,
           textColor: AppColors.scoButtonColor);
+
+      // for dds graduation level
+
+      _graduationLevelDDSMenuItems = populateCommonDataDropdown(
+          menuItemsList:
+              Constants.lovCodeMap['DDS_GRAD_LEVEL#SIS_GRAD_LEVEL']!.values!,
+          provider: langProvider,
+          textColor: AppColors.scoButtonColor);
+
+      // for other graduation level
+      if (Constants.lovCodeMap['GRADUATION_LEVEL']?.values != null) {
+        _graduationLevelMenuItems = populateCommonDataDropdown(
+            menuItemsList: Constants.lovCodeMap['GRADUATION_LEVEL']!.values!,
+            provider: langProvider,
+            textColor: AppColors.scoButtonColor);
+      }
 
       // *------------------------------------------ Initialize dropdowns end ------------------------------------------------------------------*
 
@@ -4066,12 +4083,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // *--------------------------------------------------------------- Graduation Details Section start ----------------------------------------------------------------------------*
 
-
-
-
   List<GraduationInfo> _graduationDetailsList = [];
 
+  List<DropdownMenuItem> _graduationLevelMenuItems = [];
+  List<DropdownMenuItem> _graduationLevelDDSMenuItems = [];
 
+
+  // sponsorship question for dds
+  bool? _sponsorshipQuestion = null;
 
   // to populate the graduation Details
   _populateGraduationLastTermMenuItemsList(
@@ -4086,36 +4105,64 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     });
   }
 
+  // populate menu items list
+  _populateUniversityMenuItemsList(
+      {required LanguageChangeViewModel langProvider, required int index}) {
+    setState(() {
+      if (Constants
+              .lovCodeMap[
+                  'GRAD_UNIVERSITY#${_graduationDetailsList[index].countryController.text}#UNV']
+              ?.values !=
+          null) {
+        _graduationDetailsList[index].university = populateCommonDataDropdown(
+            menuItemsList: Constants
+                .lovCodeMap[
+                    'GRAD_UNIVERSITY#${_graduationDetailsList[index].countryController.text}#UNV']!
+                .values!,
+            provider: langProvider,
+            textColor: AppColors.scoButtonColor);
+      }
+    });
+  }
 
   _addGraduationDetail() {
     setState(() {
       _graduationDetailsList.add(GraduationInfo(
-          levelController: TextEditingController(),
-          countryController: TextEditingController(),
-          universityController: TextEditingController(),
-          majorController: TextEditingController(),
-          cgpaController: TextEditingController(),
-          graduationStartDateController: TextEditingController(),
-          lastTermController: TextEditingController(),
-          caseStudyTitleController: TextEditingController(),
-          caseStudyDescriptionController: TextEditingController(),
-          caseStudyStartYearController: TextEditingController(),
-          levelFocusNode: FocusNode(),
-          countryFocusNode: FocusNode(),
-          universityFocusNode: FocusNode(),
-          majorFocusNode: FocusNode(),
-          cgpaFocusNode: FocusNode(),
-          graduationStartDateFocusNode: FocusNode(),
-          lastTermFocusNode: FocusNode(),
-          caseStudyTitleFocusNode: FocusNode(),
-          caseStudyDescriptionFocusNode: FocusNode(),
-          caseStudyStartYearFocusNode: FocusNode(),
-          isNewController: TextEditingController(),
-          sponsorShipController: TextEditingController(),
-          errorMessageController: TextEditingController(),
-          highestQualification: false,
-          showCurrentlyStudying: false,
-          currentlyStudying: false));
+        levelController: TextEditingController(),
+        countryController: TextEditingController(),
+        universityController: TextEditingController(),
+        majorController: TextEditingController(),
+        cgpaController: TextEditingController(),
+        graduationStartDateController: TextEditingController(),
+        lastTermController: TextEditingController(),
+        caseStudyTitleController: TextEditingController(),
+        caseStudyDescriptionController: TextEditingController(),
+        caseStudyStartYearController: TextEditingController(),
+        levelFocusNode: FocusNode(),
+        countryFocusNode: FocusNode(),
+        universityFocusNode: FocusNode(),
+        majorFocusNode: FocusNode(),
+        cgpaFocusNode: FocusNode(),
+        graduationStartDateFocusNode: FocusNode(),
+        lastTermFocusNode: FocusNode(),
+        caseStudyTitleFocusNode: FocusNode(),
+        caseStudyDescriptionFocusNode: FocusNode(),
+        caseStudyStartYearFocusNode: FocusNode(),
+        isNewController: TextEditingController(),
+        sponsorShipController: TextEditingController(),
+        errorMessageController: TextEditingController(),
+        highestQualification: false,
+        showCurrentlyStudying: false,
+        currentlyStudying: false,
+        lastTerm: [],
+        graduationLevel: [],
+        university: [],
+        otherUniversityController: TextEditingController(),
+        otherUniversityFocusNode: FocusNode(),
+        graduationEndDateController: TextEditingController(),
+        graduationEndDateFocusNode: FocusNode(),
+        sponsorShipFocusNode: FocusNode(),
+      ));
     });
   }
 
@@ -4182,7 +4229,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         setState(() {
                                           graduationInfo.showCurrentlyStudying =
                                               value;
-                                          // populate graduation details
+
+                                          // populate LAST term
                                           _populateGraduationLastTermMenuItemsList(
                                               langProvider: langProvider,
                                               index: index);
@@ -4207,9 +4255,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         },
                                         title: "No",
                                         textStyle: _textFieldTextStyle),
+                                    // ****************************************************************************************************************************************************
 
                                     kFormHeight,
-                                    // ****************************************************************************************************************************************************
 
                                     // last term
                                     graduationInfo.showCurrentlyStudying
@@ -4251,63 +4299,23 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                             ],
                                           )
                                         : showVoid,
-
-                                    kFormHeight,
                                     // ****************************************************************************************************************************************************
 
-                                    // state
-                                    fieldHeading(
-                                        title: "State",
-                                        important: true,
-                                        // important: highSchoolInfo
-                                        //     .schoolStateDropdownMenuItems!.isNotEmpty,
-                                        langProvider: langProvider),
+                                    (_selectedScholarship?.acadmicCareer ==
+                                            'UGRD')
+                                        ? (graduationInfo.showCurrentlyStudying
+                                            ?
 
-                                    kFormHeight,
-                                    // ****************************************************************************************************************************************************
-
-                                    // ****************************************************************************************************************************************************
-
-                                    // ****************************************************************************************************************************************************
-                                    // school type
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: "School Type",
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    // ****************************************************************************************************************************************************
-                                    // curriculum Type
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: "Curriculum Type",
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    // ****************************************************************************************************************************************************
-
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: "Curriculum Average",
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    // ****************************************************************************************************************************************************
-
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: "Year Of Passing",
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    // ****************************************************************************************************************************************************
-                                    kFormHeight,
-                                    const MyDivider(
-                                      color: AppColors.lightGrey,
-                                    ),
-                                    kFormHeight,
-
-                                    // ****************************************************************************************************************************************************
+                                            // copy paste full below code
+                                            _graduationInformation(
+                                                index: index,
+                                                langProvider: langProvider,
+                                                graduationInfo: graduationInfo)
+                                            : showVoid)
+                                        : _graduationInformation(
+                                            index: index,
+                                            langProvider: langProvider,
+                                            graduationInfo: graduationInfo),
 
                                     // ****************************************************************************************************************************************************
                                   ]);
@@ -4333,6 +4341,522 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   ))
               : showVoid)
         ])));
+  }
+
+  Widget _graduationInformation(
+      {required int index,
+      required LanguageChangeViewModel langProvider,
+      required GraduationInfo graduationInfo}) {
+    return Column(
+      children: [
+        kFormHeight,
+        // ****************************************************************************************************************************************************
+
+        // _selectedScholarship.acadmicCareer == 'UGRD' ?
+        // Column() : showVoid,
+
+        // graduation level
+
+        (index > 0 &&
+                _selectedScholarship?.acadmicCareer != 'UGRD' &&
+                _selectedScholarship?.acadmicCareer != 'DDS')
+            ? Column(
+                children: [
+                  fieldHeading(
+                      title: "Graduation Level",
+                      important: true,
+                      langProvider: langProvider),
+                  _scholarshipFormDropdown(
+                    controller: graduationInfo.levelController,
+                    currentFocusNode: graduationInfo.levelFocusNode,
+                    menuItemsList: _graduationLevelMenuItems ?? [],
+                    hintText: "Select Graduation Level",
+                    errorText: graduationInfo.levelError,
+                    onChanged: (value) {
+                      graduationInfo.levelError = null;
+                      setState(() {
+                        // setting the value for address type
+                        graduationInfo.levelController.text = value!;
+
+                        //This thing is creating error: don't know how to fix it:
+                        Utils.requestFocus(
+                            focusNode: graduationInfo.countryFocusNode,
+                            context: context);
+                      });
+                    },
+                  ),
+                ],
+              )
+            : // for UGRD Specially
+
+            // ****************************************************************************************************************************************************
+            // show static bachelor graduation level
+            (index == 0 || _selectedScholarship?.acadmicCareer == 'UGRD')
+                ? _showBachelorScholarshipByDefault(
+                    index: index,
+                    langProvider: langProvider,
+                    graduationInfo: graduationInfo)
+                : showVoid,
+
+        // ****************************************************************************************************************************************************
+
+        // to dropdown for dds
+        (index != 0 && _selectedScholarship?.acadmicCareer == 'DDS')
+            ? Column(
+                children: [
+                  fieldHeading(
+                      title: "DDS Graduation Level",
+                      important: true,
+                      langProvider: langProvider),
+                  _scholarshipFormDropdown(
+                    controller: graduationInfo.levelController,
+                    currentFocusNode: graduationInfo.levelFocusNode,
+                    menuItemsList: _graduationLevelDDSMenuItems ?? [],
+                    hintText: "Select DDS Graduation Level",
+                    errorText: graduationInfo.levelError,
+                    onChanged: (value) {
+                      graduationInfo.levelError = null;
+                      setState(() {
+                        // setting the value for address type
+                        graduationInfo.levelController.text = value!;
+
+                        //This thing is creating error: don't know how to fix it:
+                        Utils.requestFocus(
+                            focusNode: graduationInfo.countryFocusNode,
+                            context: context);
+                      });
+                    },
+                  ),
+                ],
+              )
+            : showVoid,
+
+        kFormHeight,
+
+        // ****************************************************************************************************************************************************
+        // country
+        fieldHeading(
+            title: "Country", important: true, langProvider: langProvider),
+        _scholarshipFormDropdown(
+          controller: graduationInfo.countryController,
+          currentFocusNode: graduationInfo.countryFocusNode,
+          menuItemsList: _nationalityMenuItemsList ?? [],
+          hintText: "Select Country",
+          errorText: graduationInfo.countryError,
+          onChanged: (value) {
+            graduationInfo.countryError = null;
+            setState(() {
+              // setting the value for address type
+              graduationInfo.countryController.text = value!;
+
+              // clearing and reinitializing the dropdowns
+              graduationInfo.university?.clear();
+              graduationInfo.universityController.clear();
+              graduationInfo.otherUniversityController.clear();
+
+              // populate dropdowns
+              _populateUniversityMenuItemsList(
+                  langProvider: langProvider, index: index);
+
+              //This thing is creating error: don't know how to fix it:
+              Utils.requestFocus(
+                  focusNode: graduationInfo.universityFocusNode,
+                  context: context);
+            });
+          },
+        ),
+
+        // ****************************************************************************************************************************************************
+        // graduation university
+
+        _selectedScholarship?.acadmicCareer != 'DDS'
+            ? Column(
+                children: [
+                  kFormHeight,
+                  fieldHeading(
+                      title: "Graduation University",
+                      important: true,
+                      langProvider: langProvider),
+                  _scholarshipFormDropdown(
+                    controller: graduationInfo.universityController,
+                    currentFocusNode: graduationInfo.universityFocusNode,
+                    menuItemsList: graduationInfo.university ?? [],
+                    hintText: "Select Grad University",
+                    errorText: graduationInfo.universityError,
+                    onChanged: (value) {
+                      graduationInfo.universityError = null;
+                      setState(() {
+                        // setting the value for address type
+                        graduationInfo.universityController.text = value!;
+
+                        // clearing and reinitializing the dropdowns
+                        graduationInfo.otherUniversityController.clear();
+
+                        Utils.requestFocus(
+                            focusNode: graduationInfo.otherUniversityFocusNode,
+                            context: context);
+                      });
+                    },
+                  ),
+                ],
+              )
+            : showVoid,
+
+        // ****************************************************************************************************************************************************
+        // other university
+        graduationInfo.universityController.text == 'OTH'
+            ? Column(
+                children: [
+                  kFormHeight,
+                  fieldHeading(
+                      title: _selectedScholarship?.acadmicCareer != 'DDS'
+                          ? "Other University"
+                          : 'dds.university',
+                      important: true,
+                      langProvider: langProvider),
+                  _scholarshipFormTextField(
+                      maxLength: 40,
+                      currentFocusNode: graduationInfo.otherUniversityFocusNode,
+                      nextFocusNode: graduationInfo.majorFocusNode,
+                      controller: graduationInfo.otherUniversityController,
+                      hintText: _selectedScholarship?.acadmicCareer != 'DDS'
+                          ? "Enter Other University"
+                          : 'Enter dds.university',
+                      errorText: graduationInfo.otherUniversityError,
+                      onChanged: (value) {
+                        if (graduationInfo.otherUniversityFocusNode.hasFocus) {
+                          setState(() {
+                            graduationInfo.otherUniversityError =
+                                ErrorText.getNameArabicEnglishValidationError(
+                                    name: graduationInfo
+                                        .otherUniversityController.text,
+                                    context: context);
+                          });
+                        }
+                      })
+                ],
+              )
+            : showVoid,
+
+        // ****************************************************************************************************************************************************
+        //  major
+        kFormHeight,
+        fieldHeading(
+            title: _selectedScholarship?.acadmicCareer != 'DDS'
+                ? 'hs.major'
+                : 'dds.major',
+            important: true,
+            langProvider: langProvider),
+        _scholarshipFormTextField(
+            maxLength: 40,
+            currentFocusNode: graduationInfo.majorFocusNode,
+            nextFocusNode: graduationInfo.cgpaFocusNode,
+            controller: graduationInfo.majorController,
+            hintText: _selectedScholarship?.acadmicCareer != 'DDS'
+                ? 'Enter hs.major'
+                : 'Enter dds.major',
+            errorText: graduationInfo.majorError,
+            onChanged: (value) {
+              if (graduationInfo.majorFocusNode.hasFocus) {
+                setState(() {
+                  graduationInfo.majorError =
+                      ErrorText.getNameArabicEnglishValidationError(
+                          name: graduationInfo.majorController.text,
+                          context: context);
+                });
+              }
+            }),
+        // ****************************************************************************************************************************************************
+// cgpa
+        fieldHeading(
+            title: "CGPA", important: true, langProvider: langProvider),
+        _scholarshipFormTextField(
+            maxLength: 4,
+            currentFocusNode: graduationInfo.cgpaFocusNode,
+            nextFocusNode: graduationInfo.graduationStartDateFocusNode,
+            controller: graduationInfo.cgpaController,
+            hintText: 'Enter CGPA',
+            errorText: graduationInfo.cgpaError,
+            onChanged: (value) {
+              if (graduationInfo.graduationStartDateFocusNode.hasFocus) {
+                setState(() {
+                  graduationInfo.cgpaError = ErrorText.getCGPAValidationError(
+                      cgpa: graduationInfo.majorController.text,
+                      context: context);
+                });
+              }
+            }),
+
+        // ****************************************************************************************************************************************************
+
+        // start date
+        fieldHeading(
+            title: "Start Date", important: true, langProvider: langProvider),
+        CustomTextField(
+          readOnly: true,
+          currentFocusNode: graduationInfo.graduationStartDateFocusNode,
+          nextFocusNode: graduationInfo.graduationEndDateFocusNode,
+          controller: graduationInfo.graduationStartDateController,
+          border: Utils.outlinedInputBorder(),
+          hintText: "Select Start Date",
+          textStyle: _textFieldTextStyle,
+          textInputType: TextInputType.datetime,
+          textCapitalization: true,
+          trailing: const Icon(
+            Icons.calendar_month,
+            color: AppColors.scoLightThemeColor,
+            size: 16,
+          ),
+          errorText: graduationInfo.graduationStartDateError,
+          onChanged: (value) async {
+            setState(() {
+              if (graduationInfo.graduationStartDateFocusNode.hasFocus) {
+                graduationInfo.graduationStartDateError =
+                    ErrorText.getEmptyFieldError(
+                        name: graduationInfo.graduationStartDateController.text,
+                        context: context);
+              }
+            });
+          },
+          onTap: () async {
+            // Clear the error if a date is selected
+            graduationInfo.graduationStartDateError = null;
+
+            // Define the initial date (e.g., today's date)
+            final DateTime initialDate = DateTime.now();
+
+            // Define the start date (100 years ago from today)
+            final DateTime firstDate =
+                DateTime.now().subtract(const Duration(days: 100 * 365));
+
+            DateTime? date = await showDatePicker(
+              context: context,
+              barrierColor: AppColors.scoButtonColor.withOpacity(0.1),
+              barrierDismissible: false,
+              locale:
+                  Provider.of<LanguageChangeViewModel>(context, listen: false)
+                      .appLocale,
+              initialDate: initialDate,
+              firstDate: firstDate,
+              lastDate: initialDate,
+            );
+            if (date != null) {
+              setState(() {
+                Utils.requestFocus(
+                    focusNode: graduationInfo.graduationEndDateFocusNode,
+                    context: context);
+                graduationInfo.graduationStartDateController.text =
+                    DateFormat('dd/MM/yyyy').format(date).toString();
+              });
+            }
+          },
+        ),
+
+        // ****************************************************************************************************************************************************
+
+        // start date
+        kFormHeight,
+        fieldHeading(
+            title: "End Date",
+            important: graduationInfo.showCurrentlyStudying &&
+                graduationInfo.levelController.text.isNotEmpty,
+            langProvider: langProvider),
+        CustomTextField(
+          readOnly: graduationInfo.showCurrentlyStudying &&
+              graduationInfo.levelController.text.isNotEmpty,
+          filled: graduationInfo.showCurrentlyStudying &&
+              graduationInfo.levelController.text.isNotEmpty,
+          enabled: graduationInfo.showCurrentlyStudying &&
+              graduationInfo.levelController.text.isNotEmpty,
+          currentFocusNode: graduationInfo.graduationEndDateFocusNode,
+          nextFocusNode: graduationInfo.sponsorShipFocusNode,
+          controller: graduationInfo.graduationEndDateController,
+          border: Utils.outlinedInputBorder(),
+          hintText: "Select End Date",
+          textStyle: _textFieldTextStyle,
+          textInputType: TextInputType.datetime,
+          textCapitalization: true,
+          trailing: const Icon(
+            Icons.calendar_month,
+            color: AppColors.scoLightThemeColor,
+            size: 16,
+          ),
+          errorText: graduationInfo.graduationEndDateError,
+          onChanged: (value) async {
+            setState(() {
+              if (graduationInfo.graduationEndDateFocusNode.hasFocus) {
+                graduationInfo.graduationStartDateError =
+                    ErrorText.getEmptyFieldError(
+                        name: graduationInfo.graduationStartDateController.text,
+                        context: context);
+              }
+            });
+          },
+          onTap: () async {
+            // Clear the error if a date is selected
+            graduationInfo.graduationEndDateError = null;
+
+            // Define the initial date (e.g., today's date)
+            final DateTime initialDate = DateTime.now();
+
+            // Define the start date (100 years ago from today)
+            final DateTime firstDate =
+                DateTime.now().subtract(const Duration(days: 100 * 365));
+
+            DateTime? date = await showDatePicker(
+              context: context,
+              barrierColor: AppColors.scoButtonColor.withOpacity(0.1),
+              barrierDismissible: false,
+              locale:
+                  Provider.of<LanguageChangeViewModel>(context, listen: false)
+                      .appLocale,
+              initialDate: initialDate,
+              firstDate: firstDate,
+              lastDate: initialDate,
+            );
+            if (date != null) {
+              setState(() {
+                Utils.requestFocus(
+                    focusNode: graduationInfo.graduationEndDateFocusNode,
+                    context: context);
+                graduationInfo.graduationEndDateController.text =
+                    DateFormat('dd/MM/yyyy').format(date).toString();
+              });
+            }
+          },
+        ),
+        // ****************************************************************************************************************************************************
+
+        // questions if dds
+        _selectedScholarship?.acadmicCareer == 'DDS'
+            ? Column(
+                children: [
+                  kFormHeight,
+
+                  // check if dds then only ask question if only dds scholarship
+                  fieldHeading(
+                      title:
+                          "Are you currently receiving a scholarship or grant from another party?",
+                      important: true,
+                      langProvider: langProvider),
+
+                  // ****************************************************************************************************************************************************
+
+                  // Yes or no : Show round radio
+                  CustomRadioListTile(
+                    value: true,
+                    groupValue: _sponsorshipQuestion,
+                    onChanged: (value) {
+                      setState(() {
+                        _sponsorshipQuestion =
+                            value;
+                      });
+                    },
+                    title: "Yes",
+                    textStyle: _textFieldTextStyle,
+                  ),
+
+                  // ****************************************************************************************************************************************************
+                  CustomRadioListTile(
+                      value: false,
+                      groupValue: _sponsorshipQuestion,
+                      onChanged: (value) {
+                        setState(() {
+                          _sponsorshipQuestion = value;
+                          // clear the relatives list
+                          // _relativeInfoList.clear();
+                        });
+                      },
+                      title: "No",
+                      textStyle: _textFieldTextStyle),
+                ],
+              )
+            : showVoid,
+
+
+        // TODO: Need havingSponsor  key from fetch all scholarships
+        ((_sponsorshipQuestion != null && _sponsorshipQuestion!) || _selectedScholarship?.acadmicCareer != 'DDS')?
+
+            Column(
+              children: [
+                kFormHeight,
+                fieldHeading(
+                    title:
+                    "Sponsorship",
+                    important: true,
+                    langProvider: langProvider),
+                _scholarshipFormTextField(
+                    maxLength:50,
+                    currentFocusNode: graduationInfo.sponsorShipFocusNode,
+                    nextFocusNode: graduationInfo.caseStudyTitleFocusNode,
+                    controller: graduationInfo.sponsorShipController,
+                    hintText: 'Enter Sponsorship',
+                    errorText: graduationInfo.sponsorShipError,
+                    onChanged: (value) {
+                      if (graduationInfo.sponsorShipFocusNode.hasFocus) {
+                        setState(() {
+                          graduationInfo.sponsorShipError = ErrorText.getEmptyFieldError(
+                              name: graduationInfo.sponsorShipController.text,
+                              context: context);
+                        });
+                      }
+                    }),
+
+
+              ],
+            )
+
+            : showVoid,
+
+
+        // ****************************************************************************************************************************************************
+
+        kFormHeight,
+        const MyDivider(
+          color: AppColors.lightGrey,
+        ),
+        kFormHeight,
+
+        // ****************************************************************************************************************************************************
+      ],
+    );
+  }
+
+  // this is made separate because we have to show bachelor by default for graduation level at index 1
+  Widget _showBachelorScholarshipByDefault(
+      {required int index,
+      required LanguageChangeViewModel langProvider,
+      required GraduationInfo graduationInfo}) {
+    // setting bachelor by default
+    graduationInfo.levelController.text = 'UG';
+    return Column(
+      children: [
+        fieldHeading(
+            title: "Graduation Level",
+            important: true,
+            langProvider: langProvider),
+        _scholarshipFormDropdown(
+          readOnly: true,
+          filled: true,
+          controller: graduationInfo.levelController,
+          currentFocusNode: graduationInfo.levelFocusNode,
+          menuItemsList: _graduationLevelMenuItems ?? [],
+          hintText: "Select Graduation Level",
+          errorText: graduationInfo.levelError,
+          onChanged: (value) {
+            graduationInfo.levelError = null;
+            setState(() {
+              // setting the value for address type
+              graduationInfo.levelController.text = value!;
+
+              //This thing is creating error: don't know how to fix it:
+              Utils.requestFocus(
+                  focusNode: graduationInfo.countryFocusNode, context: context);
+            });
+          },
+        ),
+      ],
+    );
   }
 
   // *--------------------------------------------------------------- Graduation Details Section end ----------------------------------------------------------------------------*
@@ -4901,7 +5425,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     // Helper function to extract values from the XML and clean keys
     dynamic extractData(XmlElement element) {
       Map<String, dynamic> data = {};
-
 
       for (var child in element.children) {
         if (child is XmlElement) {

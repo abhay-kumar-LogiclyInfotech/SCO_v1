@@ -539,13 +539,16 @@ class GraduationInfo {
   TextEditingController levelController;
   TextEditingController countryController;
   TextEditingController universityController;
+  TextEditingController otherUniversityController;
   TextEditingController majorController;
   TextEditingController cgpaController;
   TextEditingController graduationStartDateController;
+  TextEditingController graduationEndDateController;
   TextEditingController lastTermController;
   TextEditingController caseStudyTitleController;
   TextEditingController caseStudyDescriptionController;
   TextEditingController caseStudyStartYearController;
+
 
   // New properties
   TextEditingController isNewController;
@@ -558,21 +561,29 @@ class GraduationInfo {
   FocusNode levelFocusNode;
   FocusNode countryFocusNode;
   FocusNode universityFocusNode;
+  FocusNode otherUniversityFocusNode;
   FocusNode majorFocusNode;
   FocusNode cgpaFocusNode;
   FocusNode graduationStartDateFocusNode;
+  FocusNode graduationEndDateFocusNode;
   FocusNode lastTermFocusNode;
   FocusNode caseStudyTitleFocusNode;
   FocusNode caseStudyDescriptionFocusNode;
   FocusNode caseStudyStartYearFocusNode;
+  FocusNode sponsorShipFocusNode;
+
+
 
   // Error Text Variables
   String? levelError;
   String? countryError;
   String? universityError;
+  String? otherUniversityError;
   String? majorError;
   String? cgpaError;
+  String? sponsorShipError;
   String? graduationStartDateError;
+  String? graduationEndDateError;
   String? lastTermError;
   String? caseStudyTitleError;
   String? caseStudyDescriptionError;
@@ -592,9 +603,11 @@ class GraduationInfo {
     required this.levelController,
     required this.countryController,
     required this.universityController,
+    required this.otherUniversityController,
     required this.majorController,
     required this.cgpaController,
     required this.graduationStartDateController,
+    required this.graduationEndDateController,
     required this.lastTermController,
     required this.caseStudyTitleController,
     required this.caseStudyDescriptionController,
@@ -602,23 +615,29 @@ class GraduationInfo {
     required this.levelFocusNode,
     required this.countryFocusNode,
     required this.universityFocusNode,
+    required this.otherUniversityFocusNode,
     required this.majorFocusNode,
     required this.cgpaFocusNode,
     required this.graduationStartDateFocusNode,
+    required this.graduationEndDateFocusNode,
     required this.lastTermFocusNode,
     required this.caseStudyTitleFocusNode,
     required this.caseStudyDescriptionFocusNode,
     required this.caseStudyStartYearFocusNode,
+    required this.sponsorShipFocusNode,
     this.levelError,
     this.countryError,
     this.universityError,
+    this.otherUniversityError,
     this.majorError,
     this.cgpaError,
     this.graduationStartDateError,
+    this.graduationEndDateError,
     this.lastTermError,
     this.caseStudyTitleError,
     this.caseStudyDescriptionError,
     this.caseStudyStartYearError,
+    this.sponsorShipError,
     required this.currentlyStudying,
     required this.isNewController,
     required this.sponsorShipController,
@@ -636,9 +655,11 @@ class GraduationInfo {
       levelController: TextEditingController(text: json['level'] ?? ''),
       countryController: TextEditingController(text: json['country'] ?? ''),
       universityController: TextEditingController(text: json['university'] ?? ''),
+      otherUniversityController: TextEditingController(text: json['otherUniversity'] ?? ''),
       majorController: TextEditingController(text: json['major'] ?? ''),
       cgpaController: TextEditingController(text: json['cgpa'] ?? ''),
       graduationStartDateController: TextEditingController(text: json['graduationStartDate'] ?? ''),
+      graduationEndDateController: TextEditingController(text: json['graduationEndDate'] ?? ''),
       lastTermController: TextEditingController(text: json['lastTerm'] ?? ''),
       caseStudyTitleController: TextEditingController(text: json['caseStudy']?['title'] ?? ''),
       caseStudyDescriptionController: TextEditingController(text: json['caseStudy']?['description'] ?? ''),
@@ -646,9 +667,11 @@ class GraduationInfo {
       levelFocusNode: FocusNode(),
       countryFocusNode: FocusNode(),
       universityFocusNode: FocusNode(),
+      otherUniversityFocusNode: FocusNode(),
       majorFocusNode: FocusNode(),
       cgpaFocusNode: FocusNode(),
       graduationStartDateFocusNode: FocusNode(),
+      graduationEndDateFocusNode: FocusNode(),
       lastTermFocusNode: FocusNode(),
       caseStudyTitleFocusNode: FocusNode(),
       caseStudyDescriptionFocusNode: FocusNode(),
@@ -659,6 +682,7 @@ class GraduationInfo {
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
       highestQualification: json['highestQualification'] == 'true',
       showCurrentlyStudying: json['showCurrentlyStudying'] == 'true',
+      sponsorShipFocusNode: FocusNode(),
     );
   }
 
@@ -671,6 +695,7 @@ class GraduationInfo {
       'major': majorController.text,
       'cgpa': cgpaController.text,
       'graduationStartDate': graduationStartDateController.text,
+      'graduationEndDate': graduationEndDateController.text,
       'lastTerm': lastTermController.text,
       'caseStudy': {
         'title': caseStudyTitleController.text,

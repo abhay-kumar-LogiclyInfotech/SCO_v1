@@ -26,6 +26,7 @@ class CustomTextField extends StatefulWidget {
   InputBorder? border;
   int? maxLines;
   int? maxLength;
+  bool? enabled;
 TextStyle? textStyle;
    CustomTextField(
       {super.key,
@@ -50,6 +51,7 @@ TextStyle? textStyle;
       this.maxLines,
         this.maxLength,
       this.textStyle,
+        this.enabled
       });
 
   @override
@@ -65,6 +67,7 @@ class _CustomTextFieldState extends State<CustomTextField>
     return Directionality(
       textDirection: getTextDirection(langProvider),
       child: TextField(
+        enabled: widget.enabled,
         onTap: widget.onTap,
         maxLength: widget.maxLength,
         maxLines: widget.maxLines ?? 1,
@@ -117,6 +120,7 @@ class _CustomTextFieldState extends State<CustomTextField>
 
           focusedErrorBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
               Utils.underLinedInputBorder(),
+          filled: widget.filled
         ),
         inputFormatters: widget.inputFormat,
         cursorColor: AppColors.hintDarkGrey,
