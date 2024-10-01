@@ -41,19 +41,13 @@ class AlertServices {
               leading: const Icon(
                 Icons.notifications_active_outlined,
                 size: 28,
-                color: Colors.black,
-              ),
-              title: Container(
-                padding: EdgeInsets.zero,
-                margin: EdgeInsets.zero,
-                alignment: Alignment.center,
                 color: Colors.white,
-                child: Text(
-                  message,
-                  style: const TextStyle(color: Colors.black),
-                ),
               ),
-              color: Colors.white,
+              title: Text(
+                message,
+                style: const TextStyle(color: Colors.white),
+              ),
+              color: AppColors.scoButtonColor,
             );
           },
         ).show(context);

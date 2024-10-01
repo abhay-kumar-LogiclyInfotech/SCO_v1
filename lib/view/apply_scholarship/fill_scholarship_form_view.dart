@@ -508,6 +508,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       //   log('highSchoolList not found or is not a list in the JSON data.');
       // }
 
+      // add graduation detail
+      _addGraduationDetail();
+
       _notifier.value =
       const AsyncSnapshot.withData(ConnectionState.done, null);
     });
@@ -4205,6 +4208,52 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     });
   }
 
+  _deleteGraduationDetail(int index) {
+    if (index > 0 && index < _graduationDetailsList.length) {
+
+      setState(() {
+
+        // Get the item to be deleted
+      final item = _graduationDetailsList[index];
+
+      // Dispose of all the TextEditingController instances
+      item.levelController.dispose();
+      item.countryController.dispose();
+      item.universityController.dispose();
+      item.majorController.dispose();
+      item.cgpaController.dispose();
+      item.graduationStartDateController.dispose();
+      item.lastTermController.dispose();
+      item.caseStudyTitleController.dispose();
+      item.caseStudyDescriptionController.dispose();
+      item.caseStudyStartYearController.dispose();
+      item.isNewController.dispose();
+      item.sponsorShipController.dispose();
+      item.errorMessageController.dispose();
+      item.otherUniversityController.dispose();
+      item.graduationEndDateController.dispose();
+
+      // Dispose of all the FocusNode instances
+      item.levelFocusNode.dispose();
+      item.countryFocusNode.dispose();
+      item.universityFocusNode.dispose();
+      item.majorFocusNode.dispose();
+      item.cgpaFocusNode.dispose();
+      item.graduationStartDateFocusNode.dispose();
+      item.lastTermFocusNode.dispose();
+      item.caseStudyTitleFocusNode.dispose();
+      item.caseStudyDescriptionFocusNode.dispose();
+      item.caseStudyStartYearFocusNode.dispose();
+      item.otherUniversityFocusNode.dispose();
+      item.graduationEndDateFocusNode.dispose();
+      item.sponsorShipFocusNode.dispose();
+
+      // Remove the item from the list
+        _graduationDetailsList.removeAt(index);
+      });
+    }
+  }
+
   Widget _graduationDetailsSection(
       {required int step, required LanguageChangeViewModel langProvider}) {
     return Container(
@@ -4359,31 +4408,33 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                                     // ****************************************************************************************************************************************************
 
-                                    !((_selectedScholarship?.scholarshipType ==
+                                    (!(_selectedScholarship?.scholarshipType ==
                                         'INT' &&
                                         _selectedScholarship?.acadmicCareer ==
                                             'UGRD') &&
-                                        _selectedScholarship?.acadmicCareer !=
-                                            'UGRD') ?
+                                        index != 0) ?
                                     _addRemoveMoreSection(
                                         title: "Delete",
-                                        add: true,
+                                        add: false,
                                         onChanged: () {
                                           setState(() {
-                                            _deleteGraduationDetail();
+                                            _deleteGraduationDetail(index);
                                           });
-                                        }) :showVoid
+                                        }) :showVoid,
+
+                                    // ****************************************************************************************************************************************************
+                                    kFormHeight,
+                                    const MyDivider(
+                                      color: AppColors.lightGrey,
+                                    ),
+                                    kFormHeight,
+
+                                    // ****************************************************************************************************************************************************
+
                                   ]);
                             }),
-                        // ****************************************************************************************************************************************************
-                        const MyDivider(
-                          color: AppColors.lightGrey,
-                        ),
-                        kFormHeight,
 
-                        // ****************************************************************************************************************************************************
-
-                        !((_selectedScholarship?.scholarshipType == 'INT' &&
+                        (!(_selectedScholarship?.scholarshipType == 'INT' &&
                             _selectedScholarship?.acadmicCareer == 'UGRD') &&
                             _selectedScholarship?.acadmicCareer != 'UGRD')
                             ? _addRemoveMoreSection(
@@ -4398,10 +4449,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       ]),
                     ],
                   ))
-                  : showVoid)
+                  : showVoid),
+
+
+
             ])));
   }
 
+  // graduation detail information
   Widget _graduationInformation({required int index,
     required LanguageChangeViewModel langProvider,
     required GraduationInfo graduationInfo}) {
@@ -4409,12 +4464,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       children: [
         kFormHeight,
         // ****************************************************************************************************************************************************
-
-        // _selectedScholarship.acadmicCareer == 'UGRD' ?
-        // Column() : showVoid,
-
         // graduation level
-
         (index > 0 &&
             _selectedScholarship?.acadmicCareer != 'UGRD' &&
             _selectedScholarship?.acadmicCareer != 'DDS')
@@ -4432,17 +4482,32 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
               errorText: graduationInfo.levelError,
               onChanged: (value) {
                 graduationInfo.levelError = null;
-                setState(() {
-                  // setting the value for address type
-                  graduationInfo.levelController.text = value!;
 
-                  //This thing is creating error: don't know how to fix it:
-                  Utils.requestFocus(
+                setState(() {
+                  bool alreadySelected = _graduationDetailsList.any((info) {
+                    return info != graduationInfo && info.levelController.text == value!;
+                  });
+                  if (alreadySelected) {
+                    // If duplicate is found, show an error and clear the controller
+                    _alertService.showToast(
+                      context: context,
+                      message: "This level has already been selected. Please choose another one.",
+                    );
+                    graduationInfo.levelError = "Please choose another";
+
+                  } else {
+                    // Assign the value only if it's not already selected
+                    graduationInfo.levelController.text = value!;
+                    // Move focus to the next field
+                    Utils.requestFocus(
                       focusNode: graduationInfo.countryFocusNode,
-                      context: context);
+                      context: context,
+                    );
+                  }
                 });
               },
-            ),
+            )
+
           ],
         )
             : // for UGRD Specially
@@ -4474,16 +4539,31 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
               errorText: graduationInfo.levelError,
               onChanged: (value) {
                 graduationInfo.levelError = null;
-                setState(() {
-                  // setting the value for address type
-                  graduationInfo.levelController.text = value!;
 
-                  //This thing is creating error: don't know how to fix it:
-                  Utils.requestFocus(
+                setState(() {
+                  bool alreadySelected = _graduationDetailsList.any((info) {
+                    return info != graduationInfo && info.levelController.text == value!;
+                  });
+                  if (alreadySelected) {
+                    // If duplicate is found, show an error and clear the controller
+                    _alertService.showToast(
+                      context: context,
+                      message: "This level has already been selected. Please choose another one.",
+                    );
+                    graduationInfo.levelError = "Please choose another";
+
+                  } else {
+                    // Assign the value only if it's not already selected
+                    graduationInfo.levelController.text = value!;
+                    // Move focus to the next field
+                    Utils.requestFocus(
                       focusNode: graduationInfo.countryFocusNode,
-                      context: context);
+                      context: context,
+                    );
+                  }
                 });
               },
+
             ),
           ],
         )
@@ -4786,7 +4866,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           },
         ),
         // ****************************************************************************************************************************************************
-
         // questions if dds
         _selectedScholarship?.acadmicCareer == 'DDS'
             ? Column(
@@ -4868,6 +4947,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         )
             : showVoid,
 
+        // ****************************************************************************************************************************************************
 
         // case study
         (graduationInfo.levelController.text == 'PGRD' ||
@@ -4876,9 +4956,18 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             kFormHeight,
+            // ****************************************************************************************************************************************************
+
+            const MyDivider(
+              color: AppColors.lightGrey,
+            ),
+            kFormHeight,
+            // ****************************************************************************************************************************************************
 
             _sectionTitle(title: "Case Study"),
+            // ****************************************************************************************************************************************************
 
             kFormHeight,
             fieldHeading(
@@ -4963,14 +5052,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
 
         // ****************************************************************************************************************************************************
-
-        kFormHeight,
-        const MyDivider(
-          color: AppColors.lightGrey,
-        ),
-        kFormHeight,
-
-        // ****************************************************************************************************************************************************
       ],
     );
   }
@@ -5017,7 +5098,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // if section is already fulfilling the requirements then move forward to next step:
   bool validateSection(
-      {required int step, required LanguageChangeViewModel langProvider}) {
+      {required int step, required LanguageChangeViewModel langProvider})
+  {
     // To request focus where field needs to adjust:
     FocusNode? firstErrorFocusNode;
 
