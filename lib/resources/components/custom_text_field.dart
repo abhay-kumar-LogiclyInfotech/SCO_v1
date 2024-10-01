@@ -120,7 +120,8 @@ class _CustomTextFieldState extends State<CustomTextField>
 
           focusedErrorBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
               Utils.underLinedInputBorder(),
-          filled: widget.filled
+          filled: widget.filled,
+          fillColor: Colors.grey.shade200,
         ),
         inputFormatters: widget.inputFormat,
         cursorColor: AppColors.hintDarkGrey,
