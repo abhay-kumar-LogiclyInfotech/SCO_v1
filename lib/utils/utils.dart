@@ -162,7 +162,6 @@ List<dynamic> populateSimpleValuesFromLOV({
   required LanguageChangeViewModel provider,
   Color? textColor,
 }) {
-  final textDirection = getTextDirection(provider);
 
   List<String> uniqueKeys = [];
 

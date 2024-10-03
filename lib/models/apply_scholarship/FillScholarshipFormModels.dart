@@ -417,61 +417,6 @@ class HSDetails {
   }
 }
 
-class EmploymentHistory {
-  final String employerName;
-  final String fromMonth;
-  final String fromYear;
-  final String toMonth;
-  final String toYear;
-  final String occupation;
-  final String title;
-  final String place;
-  final String reportingManager;
-  final String contactNumber;
-
-  EmploymentHistory({
-    required this.employerName,
-    required this.fromMonth,
-    required this.fromYear,
-    required this.toMonth,
-    required this.toYear,
-    required this.occupation,
-    required this.title,
-    required this.place,
-    required this.reportingManager,
-    required this.contactNumber,
-  });
-
-  factory EmploymentHistory.fromJson(Map<String, dynamic> json) {
-    return EmploymentHistory(
-      employerName: json['employerName'] ?? '',
-      fromMonth: json['fromMonth']?.toString() ?? '',
-      fromYear: json['fromYear']?.toString() ?? '',
-      toMonth: json['toMonth']?.toString() ?? '',
-      toYear: json['toYear']?.toString() ?? '',
-      occupation: json['occupation'] ?? '',
-      title: json['title'] ?? '',
-      place: json['place'] ?? '',
-      reportingManager: json['reportingManager'] ?? '',
-      contactNumber: json['contactNumber'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'employerName': employerName,
-      'fromMonth': fromMonth,
-      'fromYear': fromYear,
-      'toMonth': toMonth,
-      'toYear': toYear,
-      'occupation': occupation,
-      'title': title,
-      'place': place,
-      'reportingManager': reportingManager,
-      'contactNumber': contactNumber,
-    };
-  }
-}
 
 // relative information
 class RelativeInfo {
@@ -712,8 +657,220 @@ class GraduationInfo {
   }
 }
 
+// required Examinations
+class RequiredExaminations {
+  // TextEditingControllers for the examination fields
+  TextEditingController examinationController;
+  TextEditingController examinationTypeIdController;
+  TextEditingController examinationGradeController;
+  TextEditingController minScoreController;
+  TextEditingController maxScoreController;
+  TextEditingController examDateController;
+  TextEditingController isNewController;
+  TextEditingController errorMessageController;
 
+  // Focus Nodes
+  FocusNode examinationFocusNode;
+  FocusNode examinationTypeIdFocusNode;
+  FocusNode examinationGradeFocusNode;
+  FocusNode minScoreFocusNode;
+  FocusNode maxScoreFocusNode;
+  FocusNode examDateFocusNode;
 
+  // Error Text Variables
+  String? examinationError;
+  String? examinationTypeIdError;
+  String? examinationGradeError;
+  String? minScoreError;
+  String? maxScoreError;
+  String? examDateError;
+  String? errorMessageError;
+
+  List<DropdownMenuItem>? examinationTypeDropdown;
+
+  RequiredExaminations({
+    required this.examinationController,
+    required this.examinationTypeIdController,
+    required this.examinationGradeController,
+    required this.minScoreController,
+    required this.maxScoreController,
+    required this.examDateController,
+    required this.isNewController,
+    required this.errorMessageController,
+    required this.examinationFocusNode,
+    required this.examinationTypeIdFocusNode,
+    required this.examinationGradeFocusNode,
+    required this.minScoreFocusNode,
+    required this.maxScoreFocusNode,
+    required this.examDateFocusNode,
+    this.examinationError,
+    this.examinationTypeIdError,
+    this.examinationGradeError,
+    this.minScoreError,
+    this.maxScoreError,
+    this.examDateError,
+    this.errorMessageError,
+    this.examinationTypeDropdown,
+  });
+
+  // From JSON
+  factory RequiredExaminations.fromJson(Map<String, dynamic> json) {
+    return RequiredExaminations(
+      examinationController: TextEditingController(text: json['examination'] ?? ''),
+      examinationTypeIdController: TextEditingController(text: json['examinationTypeId'] ?? ''),
+      examinationGradeController: TextEditingController(text: json['examinationGrade'] ?? ''),
+      minScoreController: TextEditingController(text: json['minScore'] ?? ''),
+      maxScoreController: TextEditingController(text: json['maxScore'] ?? ''),
+      examDateController: TextEditingController(text: json['examDate'] ?? ''),
+      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+      examinationFocusNode: FocusNode(),
+      examinationTypeIdFocusNode: FocusNode(),
+      examinationGradeFocusNode: FocusNode(),
+      minScoreFocusNode: FocusNode(),
+      maxScoreFocusNode: FocusNode(),
+      examDateFocusNode: FocusNode(),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'examination': examinationController.text,
+      'examinationTypeId': examinationTypeIdController.text,
+      'examinationGrade': examinationGradeController.text,
+      'minScore': minScoreController.text,
+      'maxScore': maxScoreController.text,
+      'examDate': examDateController.text,
+      'isNew': isNewController.text,
+      'errorMessage': errorMessageController.text,
+    };
+  }
+}
+
+// employment history
+class EmploymentHistory {
+  // TextEditingControllers for the employment history fields
+  TextEditingController employerNameController;
+  TextEditingController designationController;
+  TextEditingController startDateController;
+  TextEditingController endDateController;
+  TextEditingController occupationController;
+  TextEditingController titleController;
+  TextEditingController placeController;
+  TextEditingController reportingManagerController;
+  TextEditingController contactNumberController;
+  TextEditingController contactEmailController;
+  TextEditingController isNewController;
+  TextEditingController errorMessageController;
+
+  // Focus Nodes
+  FocusNode employerNameFocusNode;
+  FocusNode designationFocusNode;
+  FocusNode startDateFocusNode;
+  FocusNode endDateFocusNode;
+  FocusNode occupationFocusNode;
+  FocusNode titleFocusNode;
+  FocusNode placeFocusNode;
+  FocusNode reportingManagerFocusNode;
+  FocusNode contactNumberFocusNode;
+  FocusNode contactEmailFocusNode;
+
+  // Error Text Variables
+  String? employerNameError;
+  String? designationError;
+  String? startDateError;
+  String? endDateError;
+  String? occupationError;
+  String? titleError;
+  String? placeError;
+  String? reportingManagerError;
+  String? contactNumberError;
+  String? contactEmailError;
+  String? errorMessageError;
+
+  EmploymentHistory({
+    required this.employerNameController,
+    required this.designationController,
+    required this.startDateController,
+    required this.endDateController,
+    required this.occupationController,
+    required this.titleController,
+    required this.placeController,
+    required this.reportingManagerController,
+    required this.contactNumberController,
+    required this.contactEmailController,
+    required this.isNewController,
+    required this.errorMessageController,
+    required this.employerNameFocusNode,
+    required this.designationFocusNode,
+    required this.startDateFocusNode,
+    required this.endDateFocusNode,
+    required this.occupationFocusNode,
+    required this.titleFocusNode,
+    required this.placeFocusNode,
+    required this.reportingManagerFocusNode,
+    required this.contactNumberFocusNode,
+    required this.contactEmailFocusNode,
+    this.employerNameError,
+    this.designationError,
+    this.startDateError,
+    this.endDateError,
+    this.occupationError,
+    this.titleError,
+    this.placeError,
+    this.reportingManagerError,
+    this.contactNumberError,
+    this.contactEmailError,
+    this.errorMessageError,
+  });
+
+  // From JSON
+  factory EmploymentHistory.fromJson(Map<String, dynamic> json) {
+    return EmploymentHistory(
+      employerNameController: TextEditingController(text: json['employerName'] ?? ''),
+      designationController: TextEditingController(text: json['designation'] ?? ''),
+      startDateController: TextEditingController(text: json['startDate'] ?? ''),
+      endDateController: TextEditingController(text: json['endDate'] ?? ''),
+      occupationController: TextEditingController(text: json['occupation'] ?? ''),
+      titleController: TextEditingController(text: json['title'] ?? ''),
+      placeController: TextEditingController(text: json['place'] ?? ''),
+      reportingManagerController: TextEditingController(text: json['reportingManager'] ?? ''),
+      contactNumberController: TextEditingController(text: json['contactNumber'] ?? ''),
+      contactEmailController: TextEditingController(text: json['contactEmail'] ?? ''),
+      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+      employerNameFocusNode: FocusNode(),
+      designationFocusNode: FocusNode(),
+      startDateFocusNode: FocusNode(),
+      endDateFocusNode: FocusNode(),
+      occupationFocusNode: FocusNode(),
+      titleFocusNode: FocusNode(),
+      placeFocusNode: FocusNode(),
+      reportingManagerFocusNode: FocusNode(),
+      contactNumberFocusNode: FocusNode(),
+      contactEmailFocusNode: FocusNode(),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'employerName': employerNameController.text,
+      'designation': designationController.text,
+      'startDate': startDateController.text,
+      'endDate': endDateController.text,
+      'occupation': occupationController.text,
+      'title': titleController.text,
+      'place': placeController.text,
+      'reportingManager': reportingManagerController.text,
+      'contactNumber': contactNumberController.text,
+      'contactEmail': contactEmailController.text,
+      'isNew': isNewController.text,
+      'errorMessage': errorMessageController.text,
+    };
+  }
+}
 
 
 Map<String, dynamic> highSchoolJsonList = {
