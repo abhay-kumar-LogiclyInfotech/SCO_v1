@@ -72,6 +72,7 @@ dependencies:
   permission_handler: ^11.3.1
   carousel_slider_plus: ^7.0.0
   connectivity_plus: ^6.0.5
+  file_picker: ^8.1.2
   get: ^4.6.6
   dio: ^5.6.0
   logger:

@@ -872,6 +872,60 @@ class EmploymentHistory {
   }
 }
 
+class Attachment {
+  // TextEditingControllers for the attachment fields
+  TextEditingController processCDController;
+  TextEditingController documentCDController;
+  TextEditingController descriptionController;
+  TextEditingController userFileNameController;
+  TextEditingController commentController;
+  TextEditingController base64StringController;
+  TextEditingController errorMessageController;
+
+
+
+  Attachment({
+    required this.processCDController,
+    required this.documentCDController,
+    required this.descriptionController,
+    required this.userFileNameController,
+    required this.commentController,
+    required this.base64StringController,
+    required this.errorMessageController,
+
+  });
+
+  // From JSON
+  factory Attachment.fromJson(Map<String, dynamic> json) {
+    return Attachment(
+      processCDController: TextEditingController(text: json['processCD'] ?? ''),
+      documentCDController: TextEditingController(text: json['documentCD'] ?? ''),
+      descriptionController: TextEditingController(text: json['description'] ?? ''),
+      userFileNameController: TextEditingController(text: json['userFileName'] ?? ''),
+      commentController: TextEditingController(text: json['commnet'] ?? ''),  // Assuming typo in API
+      base64StringController: TextEditingController(text: json['base64String'] ?? ''),
+      errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'processCD': processCDController.text,
+      'documentCD': documentCDController.text,
+      'description': descriptionController.text,
+      'userFileName': userFileNameController.text,
+      'commnet': commentController.text,  // Keeping the typo in "commnet"
+      'base64String': base64StringController.text,
+      'errorMessage': errorMessageController.text,
+    };
+  }
+}
+
+
+
+
+
 
 Map<String, dynamic> highSchoolJsonList = {
   "highSchoolList": [
