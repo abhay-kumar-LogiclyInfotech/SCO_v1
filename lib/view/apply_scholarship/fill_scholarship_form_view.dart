@@ -709,11 +709,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                 ],
                               ),
                             );
-                          case 3: // Add handling for index 3 if required, or adjust itemCount to exclude it
-                            return Container(); // Placeholder or valid section
+                          case 3:
+                            return _selectedScholarship?.acadmicCareer != 'SCHL' ? _universityAndMajorsDetailsSection(step: index, langProvider: langProvider) : showVoid;
                           case 4:
-                            return _requiredExaminationsDetailsSection(
-                                step: index, langProvider: langProvider);
+                          // if selected scholarship matches the condition then high school details section else don't
+                            return !(_selectedScholarship?.acadmicCareer == 'SCHL' || _selectedScholarship?.acadmicCareer == 'HCHL') ?  _requiredExaminationsDetailsSection(step: index, langProvider: langProvider) : showVoid;
                           case 5:
                             return _employmentHistoryDetailsSection(
                                 step: index, langProvider: langProvider);
@@ -767,11 +767,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   }
 
   // *--------------------------------------------------------------- Accept terms and conditions start ----------------------------------------------------------------------------*
+  // step-1: student undertaking
 
   // student undertaking check:
   bool _acceptStudentUndertaking = false;
 
-  // step-1: student undertaking
   Widget _studentUndertakingSection({required int step}) {
     return Column(
       children: [
@@ -794,6 +794,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // *--------------------------------------------------------------- Accept terms and conditions end ----------------------------------------------------------------------------*
 
+
+  // *--------------------------------------------------------------- Student Details Section start ----------------------------------------------------------------------------*
+// step-2
   // *--------------------------------------------------------------- Name as Passport data start ----------------------------------------------------------------------------*
 
   // Text controllers for Arabic name fields
@@ -2854,10 +2857,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // TextEditingControllers for military service
   TextEditingController _militaryServiceController = TextEditingController();
-  TextEditingController _militaryServiceStartDateController =
-  TextEditingController();
-  TextEditingController _militaryServiceEndDateController =
-  TextEditingController();
+  TextEditingController _militaryServiceStartDateController = TextEditingController();
+  TextEditingController _militaryServiceEndDateController = TextEditingController();
   TextEditingController _reasonForMilitaryController = TextEditingController();
 
   // FocusNodes for each field
@@ -5115,7 +5116,54 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // *--------------------------------------------------------------- Graduation Details Section end ----------------------------------------------------------------------------*
 
+
+  // *--------------------------------------------------------------- University And Majors Section Start ----------------------------------------------------------------------------*
+  // step-4
+
+  _universityAndMajorsDetailsSection  ({required int step, required LanguageChangeViewModel langProvider}) {
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: kPadding),
+    color: Colors.grey.shade200,
+    child: SingleChildScrollView(
+    child: Column(children: [
+
+
+
+    CustomInformationContainer(
+    title:  _selectedScholarship?.acadmicCareer == 'PGRD'? 'pgrd.major.wishlist' : 'major.wishlist',
+    expandedContent: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+
+
+     ( _selectedScholarship?.acadmicCareer == 'PGRD' && _selectedScholarship?.acadmicCareer != 'DDS')? Column(
+
+
+       children: [
+         fieldHeading(title: "pgrd.adac.program", important: true, langProvider: langProvider),
+       ],
+     )
+ : showVoid
+
+
+
+    ]))
+
+
+
+    ])));
+}
+
+  // *--------------------------------------------------------------- University And Majors Section end ----------------------------------------------------------------------------*
+
+
+
+
+
+
   // *--------------------------------------------------------------- Required Examinations start ----------------------------------------------------------------------------*
+  // step-5
 
   List<RequiredExaminations> _requiredExaminationList = [];
 
@@ -5147,6 +5195,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // get min score and max score just fetching the elements from the lov and based on exam and exam type selection we will find min and max score and set that to the fields
   List _testScoreVal = [];
 
+  // min max score for values
   _setMinMaxScore(
       {required LanguageChangeViewModel langProvider, required int index}) {
     if (_testScoreVal.isNotEmpty) {
@@ -5172,7 +5221,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       debugPrint("TEST_SCORE_VAL is Empty");
     }
   }
-
+// function to add examination from list
   _addRequiredExamination() {
     setState(() {
       _requiredExaminationList.add(RequiredExaminations(
@@ -5194,7 +5243,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       ));
     });
   }
-
+// function to delete examination from list
   _deleteRequiredExamination(int index) {
     if (index > 0 && index < _requiredExaminationList.length) {
       setState(() {
@@ -5225,6 +5274,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     }
   }
 
+
+  // Section for Required Examinations
   Widget _requiredExaminationsDetailsSection(
       {required int step, required LanguageChangeViewModel langProvider}) {
     return Container(
@@ -5234,10 +5285,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             child: Column(children: [
               kFormHeight,
 
-              // if selected scholarship matches the condition then high school details section else don't
-              !(_selectedScholarship?.acadmicCareer == 'SCHL' ||
-                  _selectedScholarship?.acadmicCareer == 'HCHL')
-                  ? CustomInformationContainer(
+              CustomInformationContainer(
                   title: _selectedScholarship?.acadmicCareer == 'DDS'
                       ? 'dds.exams'
                       : "'examination.for.universiti",
@@ -5531,15 +5579,16 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           ,
                         ])
                       ]))
-                  : showVoid
+
             ])));
   }
-
   // *--------------------------------------------------------------- Required Examinations end ----------------------------------------------------------------------------*
 
-  // *--------------------------------------------------------------- Employment history section start ----------------------------------------------------------------------------*
+
+
 
   // *--------------------------------------------------------------- Employment history section start ----------------------------------------------------------------------------*
+  // step-6
 
   // available employment status from lov
   List _employmentStatusItemsList = [];
@@ -6135,6 +6184,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   }
 
   // *--------------------------------------------------------- Attachments Section start ------------------------------------------------------------------------------*
+  // step-7
 
   // List of Attachments:
   List _attachmentsList = [];
@@ -6325,6 +6375,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   }
 
   // *--------------------------------------------------------- Attachments Section end ------------------------------------------------------------------------------*
+
+
+
+
+
+
 
   // *--------------------------------------------------------- validate section in accordance with the steps start ------------------------------------------------------------------------------*
 
