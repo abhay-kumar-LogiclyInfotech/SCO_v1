@@ -1361,12 +1361,20 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           if (value! != 'ARE') {
                             _familyInformationEmiratesController.clear();
                             _familyInformationTownVillageNoController.clear();
-                            _familyInformationParentGuardianNameController
-                                .clear();
+                            _familyInformationParentGuardianNameController.clear();
                             _familyInformationRelationTypeController.clear();
-                            _familyInformationFamilyBookNumberController
-                                .clear();
+                            _familyInformationFamilyBookNumberController.clear();
                           }
+
+                          // isStudyCountry for majors selection
+                          isStudyCountry = value == 'ARE' ? true : false;
+                          _majorsMenuItemsList =  getMajors(); // calling the getMajors method to populate the majors function
+                          print(_majorsMenuItemsList.toString());
+
+
+
+
+
 
                           // by default set no for military service
                           _isMilitaryService = MilitaryStatus.no;
@@ -5106,6 +5114,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // "acadProgramDds": "FELL",
   // "acadProgramPgrd": "MSTRS",
 
+
   // controllers, focus nodes and error text variables for Academic program
   final TextEditingController _acadProgramController = TextEditingController();
   final TextEditingController _acadProgramDdsController = TextEditingController();
@@ -5115,18 +5124,99 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   final FocusNode _acadProgramDdsFocusNode = FocusNode();
   final FocusNode _acadProgramPgrdFocusNode = FocusNode();
 
-
-String? _acadProgramErrorText;
-String? _acadProgramDdsErrorText;
-String? _acadProgramPgrdErrorText;
-
-
+  String? _acadProgramErrorText;
+  String? _acadProgramDdsErrorText;
+  String? _acadProgramPgrdErrorText;
 
   // list of Academic Program PGRD
   List<DropdownMenuItem> _acadProgramPgrdMenuItemsList = [];
 
   // list of Academic Program DDS
   List<DropdownMenuItem> _acadProgramDdsMenuItemsList = [];
+
+
+
+
+
+  List<DropdownMenuItem> getMajors() {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+
+    // Step 1: Check for postgraduate academic career ("PGRD")
+    if (_selectedScholarship?.acadmicCareer?.toUpperCase() == "PGRD") {
+      String majorCriteria = "MAJORSPGRD#${_selectedScholarship?.acadmicCareer?.toUpperCase()}#${isStudyCountry ? 'N' : 'Y'}";
+      return populateCommonDataDropdown(
+        menuItemsList: Constants.lovCodeMap[majorCriteria]?.values ?? [],
+        provider: langProvider,
+      );
+    }
+
+    // Step 2: Default major criteria for non-PGRD
+    String majorCriteria = "MAJORS#${_selectedScholarship?.acadmicCareer?.toUpperCase()}#${isStudyCountry ? 'N' : 'Y'}";
+    List<dynamic> items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+
+    // Step 3: Check for different admit types
+    if (_selectedScholarship?.admitType?.toUpperCase() == "ACT") {
+      // For "ACT" admit type
+      majorCriteria = "MAJORSACT#${_selectedScholarship?.acadmicCareer?.toUpperCase()}#${isStudyCountry ? 'N' : 'Y'}";
+      items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+
+    } else if (_selectedScholarship?.admitType?.toUpperCase() == "NLU") {
+      // For "NLU" admit type
+      majorCriteria = "MAJORSNL#${_selectedScholarship?.acadmicCareer?.toUpperCase()}#${isStudyCountry ? 'N' : 'Y'}";
+      items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+
+    } else if (_selectedScholarship?.scholarshipType?.toUpperCase() == "INT" &&
+        _selectedScholarship?.admitType?.toUpperCase() != "MET") {
+      // Handle "INT" admit type with specific filtering for "OTH"
+      List<dynamic> filteredItems = [];
+      for (var item in items) {
+        if (item.code?.toUpperCase() == "OTH") {
+          if (_isValidAdmitTypeForINT(_selectedScholarship?.admitType, _selectedScholarship?.configurationKey)) {
+            filteredItems.add(item);
+          }
+        } else {
+          filteredItems.add(item); // Add other items directly
+        }
+      }
+      items = filteredItems; // Update items with filtered items
+
+    } else if (_selectedScholarship?.scholarshipType?.toUpperCase() == "EXT") {
+      // For "EXT" scholarship type, items already fetched
+    } else {
+      // Default case to only add "BAM" items
+      List<dynamic> filteredItems = [];
+      for (var item in items) {
+        if (item.code?.toUpperCase() == "BAM") {
+          filteredItems.add(item);
+        }
+      }
+      items = filteredItems; // Update items with filtered items
+    }
+
+    // Step 4: Handle special cases
+    if (_selectedScholarship?.isSpecialCase ?? false) {
+      items.add({'value': 'OTH', 'label': 'آخر'}); // Append special case "OTH"
+    }
+
+    // Return the final list of majors
+    return populateCommonDataDropdown(menuItemsList: items, provider: langProvider);
+  }
+
+// Helper method to validate INT admit type
+  bool _isValidAdmitTypeForINT(String? admitType, String? configurationKey) {
+    return ["MOP", "MOS"].contains(admitType?.toUpperCase()) ||
+        configurationKey?.toUpperCase() == "SCOUGRDINTHH";
+  }
+
+// major dropdown menu items list
+  List<DropdownMenuItem> _majorsMenuItemsList = [];
+
+
+  bool isStudyCountry = false ;
+
+
+
+
 
   _universityAndMajorsDetailsSection(
       {required int step, required LanguageChangeViewModel langProvider}) {
@@ -5143,28 +5233,27 @@ String? _acadProgramPgrdErrorText;
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-
-                    // dropdown for pgrd students
+                    // dropdown for pgrd students academic program
                     (_selectedScholarship?.acadmicCareer == 'PGRD' &&
                             _selectedScholarship?.acadmicCareer != 'DDS')
                         ? Column(
                             children: [
                               fieldHeading(
-                                  title: "pgrd.adac.program",
-                                  important: true,
-                                  langProvider: langProvider),
+                                title: "pgrd.adac.program",
+                                important: true,
+                                langProvider: langProvider,
+                              ),
                               _scholarshipFormDropdown(
-                                  controller: _acadProgramPgrdController,
-                                  currentFocusNode: _acadProgramPgrdFocusNode,
-                                  menuItemsList: _acadProgramPgrdMenuItemsList,
-                                  hintText: "Select Academic Program",
+                                controller: _acadProgramPgrdController,
+                                currentFocusNode: _acadProgramPgrdFocusNode,
+                                menuItemsList: _acadProgramPgrdMenuItemsList,
+                                hintText: "Select Academic Program",
                                 errorText: _acadProgramPgrdErrorText,
                                 onChanged: (value) {
                                   _acadProgramPgrdErrorText = null;
 
                                   setState(() {
-                                  _acadProgramPgrdController
-                                        .text = value!;
+                                    _acadProgramPgrdController.text = value!;
 
 // TODO: Pending implementation of the academic program next focus request
                                     // // Move focus to the next field
@@ -5175,11 +5264,49 @@ String? _acadProgramPgrdErrorText;
                                     // );
                                   });
                                 },
-
-                                  )
+                              )
                             ],
                           )
-                        : showVoid
+                        : showVoid,
+
+                    // Select Majors wishlist
+                    _selectedScholarship?.acadmicCareer != 'DDS' ?
+
+                        Column(
+                          children: [
+                            fieldHeading(title: "Major",
+                                important: true,
+                                langProvider: langProvider),
+                            _scholarshipFormDropdown(
+                              controller: _acadProgramPgrdController,
+                              currentFocusNode: _acadProgramPgrdFocusNode,
+                              menuItemsList: _majorsMenuItemsList ?? [],
+                              hintText: "Select Academic Program",
+                              errorText: _acadProgramPgrdErrorText,
+                              onChanged: (value) {
+                                _acadProgramPgrdErrorText = null;
+
+                                setState(() {
+                                  _acadProgramPgrdController.text = value!;
+
+// TODO: Pending implementation of the academic program next focus request
+                                  // // Move focus to the next field
+                                  // Utils.requestFocus(
+                                  //   focusNode: requiredExamInfo
+                                  //       .examinationGradeFocusNode,
+                                  //   context: context,
+                                  // );
+                                });
+                              },
+                            )
+
+                          ],
+                        )
+                        :showVoid
+
+
+
+
                   ]))
         ])));
   }
@@ -7027,6 +7154,7 @@ String? _acadProgramPgrdErrorText;
   // the final form which we have to submit
   void _finalForm({bool isUrlEncoded = false}) {
     Map<String, dynamic> form = {
+      // specialCase = '',
       // "sccTempId": "",
       // "acadCareer": _selectedScholarship?.acadmicCareer ?? '',
       // "studentCarNumber": "0",
