@@ -872,6 +872,154 @@ class EmploymentHistory {
   }
 }
 
+// attachments
+class MajorWishList {
+  // TextEditingControllers for the major wishlist fields
+  TextEditingController majorController;
+  TextEditingController errorMessageController;
+  TextEditingController isNewController;
+
+  // Focus Nodes
+  FocusNode majorFocusNode;
+  FocusNode errorMessageFocusNode;
+  FocusNode isNewFocusNode;
+
+  // Error Text Variables
+  String? majorError;
+  String? errorMessageError;
+  String? isNewError;
+
+  MajorWishList({
+    required this.majorController,
+    required this.errorMessageController,
+    required this.isNewController,
+    required this.majorFocusNode,
+    required this.errorMessageFocusNode,
+    required this.isNewFocusNode,
+    this.majorError,
+    this.errorMessageError,
+    this.isNewError,
+  });
+
+  // From JSON
+  factory MajorWishList.fromJson(Map<String, dynamic> json) {
+    return MajorWishList(
+      majorController: TextEditingController(text: json['major'] ?? ''),
+      errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      majorFocusNode: FocusNode(),
+      errorMessageFocusNode: FocusNode(),
+      isNewFocusNode: FocusNode(),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'major': majorController.text,
+      'errorMessage': errorMessageController.text,
+      'isNew': isNewController.text,
+    };
+  }
+}
+
+// university priority list
+class UniversityPriority {
+  // TextEditingControllers for each field
+  TextEditingController countryIdController;
+  TextEditingController universityIdController;
+  TextEditingController otherUniversityNameController;
+  TextEditingController majorsController;
+  TextEditingController otherMajorsController;
+
+  TextEditingController statusController;
+  TextEditingController errorMessageController;
+  TextEditingController isNewController;
+
+  // Focus Nodes
+  FocusNode countryIdFocusNode;
+  FocusNode universityIdFocusNode;
+  FocusNode otherUniversityNameFocusNode;
+  FocusNode majorsFocusNode;
+  FocusNode otherMajorsFocusNode;
+  FocusNode statusFocusNode;
+
+  // Error Text Variables
+  String? countryIdError;
+  String? universityIdError;
+  String? otherUniversityNameError;
+  String? majorsError;
+  String? otherMajorsError;
+  String? statusError;
+  String? errorMessageError;
+
+
+  List<DropdownMenuItem>? universityDropdown;
+
+
+  UniversityPriority({
+    required this.countryIdController,
+    required this.universityIdController,
+    required this.otherUniversityNameController,
+    required this.majorsController,
+    required this.otherMajorsController,
+    required this.statusController,
+    required this.errorMessageController,
+    required this.isNewController,
+    required this.countryIdFocusNode,
+    required this.universityIdFocusNode,
+    required this.otherUniversityNameFocusNode,
+    required this.majorsFocusNode,
+    required this.otherMajorsFocusNode,
+    required this.statusFocusNode,
+    this.countryIdError,
+    this.universityIdError,
+    this.otherUniversityNameError,
+    this.majorsError,
+    this.otherMajorsError,
+    this.statusError,
+    this.errorMessageError,
+    this.universityDropdown,
+
+  });
+
+  // From JSON
+  factory UniversityPriority.fromJson(Map<String, dynamic> json) {
+    return UniversityPriority(
+      countryIdController: TextEditingController(text: json['countryId'] ?? ''),
+      universityIdController: TextEditingController(text: json['universityId'] ?? ''),
+      otherUniversityNameController: TextEditingController(text: json['otherUniversityName'] ?? ''),
+      majorsController: TextEditingController(text: json['majors'] ?? ''),
+      otherMajorsController: TextEditingController(text: json['otherMajors'] ?? ''),
+      statusController: TextEditingController(text: json['status'] ?? ''),
+      errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      countryIdFocusNode: FocusNode(),
+      universityIdFocusNode: FocusNode(),
+      otherUniversityNameFocusNode: FocusNode(),
+      majorsFocusNode: FocusNode(),
+      otherMajorsFocusNode: FocusNode(),
+      statusFocusNode: FocusNode(),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'countryId': countryIdController.text,
+      'universityId': universityIdController.text,
+      'otherUniversityName': otherUniversityNameController.text,
+      'majors': majorsController.text,
+      'otherMajors': otherMajorsController.text,
+      'status': statusController.text,
+      'errorMessage': errorMessageController.text,
+      'isNew': isNewController.text,
+    };
+  }
+}
+
+
+
 class Attachment {
   // TextEditingControllers for the attachment fields
   TextEditingController processCDController;
