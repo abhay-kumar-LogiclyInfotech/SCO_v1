@@ -501,7 +501,8 @@ class GraduationInfo {
   TextEditingController errorMessageController;
   bool highestQualification;
   bool showCurrentlyStudying;
-
+  // New property
+  bool currentlyStudying;
   // Focus Nodes
   FocusNode levelFocusNode;
   FocusNode countryFocusNode;
@@ -534,8 +535,7 @@ class GraduationInfo {
   String? caseStudyDescriptionError;
   String? caseStudyStartYearError;
 
-  // New property
-  bool currentlyStudying;
+
 
 
   List<DropdownMenuItem>? lastTerm;

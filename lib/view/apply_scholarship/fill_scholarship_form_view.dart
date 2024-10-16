@@ -927,12 +927,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   List<DropdownMenuItem> _maritalStatusMenuItemsList = [];
 
   // Emirates ID
-  final TextEditingController _emiratesIdController =
-      TextEditingController(text: "784196207416171");
+  final TextEditingController _emiratesIdController = TextEditingController(text: "784196207416171");
 
 // Emirates ID Expiry Date
-  final TextEditingController _emiratesIdExpiryDateController =
-      TextEditingController();
+  final TextEditingController _emiratesIdExpiryDateController = TextEditingController();
 
 // Date of Birth
   final TextEditingController _dateOfBirthController = TextEditingController();
@@ -944,15 +942,13 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   final TextEditingController _genderController = TextEditingController();
 
 // Marital Status
-  final TextEditingController _maritalStatusController =
-      TextEditingController();
+  final TextEditingController _maritalStatusController = TextEditingController();
 
 // Student Email Address
   final TextEditingController _studentEmailController = TextEditingController();
 
 // Is Mother UAE National?
-  final TextEditingController _motherUAENationalController =
-      TextEditingController();
+  final TextEditingController _motherUAENationalController = TextEditingController();
 
 // Focus Nodes
 
@@ -2872,10 +2868,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // TextEditingControllers for military service
   TextEditingController _militaryServiceController = TextEditingController();
-  TextEditingController _militaryServiceStartDateController =
-      TextEditingController();
-  TextEditingController _militaryServiceEndDateController =
-      TextEditingController();
+  TextEditingController _militaryServiceStartDateController = TextEditingController();
+  TextEditingController _militaryServiceEndDateController = TextEditingController();
   TextEditingController _reasonForMilitaryController = TextEditingController();
 
   // FocusNodes for each field
@@ -3519,16 +3513,16 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     _scholarshipFormDropdown(
                                       controller:
                                           highSchoolInfo.hsCountryController,
-                                      currentFocusNode:
-                                          highSchoolInfo.hsCountryFocusNode,
+                                      currentFocusNode: highSchoolInfo.hsCountryFocusNode,
                                       menuItemsList: _nationalityMenuItemsList,
                                       hintText: "Select Country",
                                       errorText: highSchoolInfo.hsCountryError,
                                       onChanged: (value) {
+                                        highSchoolInfo.hsCountryError = null;
+                                        highSchoolInfo.hsStateError = null;
+                                        highSchoolInfo.hsNameError = null;
                                         setState(() {
-                                          highSchoolInfo.hsCountryError = null;
-                                          highSchoolInfo.hsStateError = null;
-                                          highSchoolInfo.hsNameError = null;
+
 
 
                                           // setting the value for address type
@@ -4179,7 +4173,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   List<DropdownMenuItem> _caseStudyYearDropdownMenuItems = [];
 
   // sponsorship question for dds
-  bool? _sponsorshipQuestion = null;
+  String havingSponsor = '';
 
   // to populate the graduation Details
   _populateGraduationLastTermMenuItemsList(
@@ -4215,6 +4209,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   }
 
   _addGraduationDetail() {
+
+   bool isAlreadyCurrentlyStudying = _graduationDetailsList.any((element) => element.currentlyStudying == true);
     setState(() {
       _graduationDetailsList.add(GraduationInfo(
         levelController: TextEditingController(),
@@ -4241,7 +4237,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         sponsorShipController: TextEditingController(),
         errorMessageController: TextEditingController(),
         highestQualification: false,
-        showCurrentlyStudying: false,
+        showCurrentlyStudying:  !isAlreadyCurrentlyStudying,
         currentlyStudying: false,
         lastTerm: [],
         graduationLevel: [],
@@ -4297,6 +4293,33 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         _graduationDetailsList.removeAt(index);
       });
     }
+    print(_graduationDetailsList.length.toString());
+    if(_graduationDetailsList.length == 1){
+      print(_graduationDetailsList.length.toString());
+      final item = _graduationDetailsList[0];
+      _updateShowCurrentlyStudyingWithFalse(item);
+    }
+  }
+
+  // when selecting currently studying yes or no then update the ui accordingly
+  _updateShowCurrentlyStudyingWithYes(GraduationInfo graduationInfo){
+    for(var element in _graduationDetailsList){
+      if(element != graduationInfo && element.showCurrentlyStudying){
+        setState(() {
+          element.showCurrentlyStudying = false;
+          element.currentlyStudying = false;
+          element.lastTermController.clear();
+        });
+      }
+    }
+  }
+  _updateShowCurrentlyStudyingWithFalse(GraduationInfo graduationInfo){
+    for(var element in _graduationDetailsList){{
+        setState(() {
+          element.showCurrentlyStudying = true;
+        });
+      }
+    }
   }
 
   Widget _graduationDetailsSection(
@@ -4310,7 +4333,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
           // if selected scholarship matches the condition then high school details section else don't
           (_selectedScholarship?.acadmicCareer != 'SCHL' &&
-                  _selectedScholarship?.acadmicCareer != 'HCHL'
+                  _selectedScholarship?.acadmicCareer != 'HCHL')
               ? CustomInformationContainer(
                   title: _selectedScholarship?.acadmicCareer == 'DDS'
                       ? 'dds.graduation.title'
@@ -4336,33 +4359,27 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     // ****************************************************************************************************************************************************
 
                                     _sectionTitle(
-                                        title: _selectedScholarship
-                                                    ?.acadmicCareer ==
-                                                'DDS'
-                                            ? 'dds.graduation.title ${index + 1}'
-                                            : "Graduation Detail ${index + 1}"),
+                                        title: _selectedScholarship?.acadmicCareer == 'DDS' ? 'dds.graduation.title ${index + 1}' : "Graduation Detail ${index + 1}"),
 
-                                    kFormHeight,
-                                    // title
+                              graduationInfo.showCurrentlyStudying ?  Column(children:[
+                                kFormHeight,
+// title
                                     fieldHeading(
                                         title: "Currently Studying",
                                         important: true,
                                         langProvider: langProvider),
 
-                                    // radiobuttons for yes or no
-
                                     // ****************************************************************************************************************************************************
-
+                                    // radiobuttons for yes or no
                                     // Yes or no : Show round radio
                                     CustomRadioListTile(
                                       value: true,
-                                      groupValue:
-                                          graduationInfo.showCurrentlyStudying,
+                                      groupValue: graduationInfo.currentlyStudying,
                                       onChanged: (value) {
                                         setState(() {
-                                          graduationInfo.showCurrentlyStudying =
-                                              value;
-
+                                          // graduationInfo.showCurrentlyStudying = value;
+                                          graduationInfo.currentlyStudying = value;
+                                          _updateShowCurrentlyStudyingWithYes(graduationInfo);
                                           // populate LAST term
                                           _populateGraduationLastTermMenuItemsList(
                                               langProvider: langProvider,
@@ -4377,23 +4394,27 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     CustomRadioListTile(
                                         value: false,
                                         groupValue: graduationInfo
-                                            .showCurrentlyStudying,
+                                            .currentlyStudying,
                                         onChanged: (value) {
                                           setState(() {
-                                            graduationInfo
-                                                .showCurrentlyStudying = value;
+                                            // graduationInfo.showCurrentlyStudying = value;
+                                            graduationInfo.currentlyStudying = value;
+                                            // showing selection option that you are currently doing this course or not
+                                            _updateShowCurrentlyStudyingWithFalse(graduationInfo);
+
                                             // clear the relatives list
                                             // _relativeInfoList.clear();
                                           });
                                         },
                                         title: "No",
                                         textStyle: _textFieldTextStyle),
+]) : showVoid,
                                     // ****************************************************************************************************************************************************
 
                                     kFormHeight,
 
                                     // last term
-                                    graduationInfo.showCurrentlyStudying
+                                    graduationInfo.currentlyStudying && graduationInfo.showCurrentlyStudying
                                         ? Column(
                                             children: [
                                               fieldHeading(
@@ -4434,12 +4455,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         : showVoid,
                                     // ****************************************************************************************************************************************************
 
-                                    (_selectedScholarship?.acadmicCareer ==
-                                            'UGRD')
-                                        ? (graduationInfo.showCurrentlyStudying
-                                            ?
-
-                                            // copy paste full below code
+                                    (_selectedScholarship?.acadmicCareer == 'UGRD') ? (graduationInfo.showCurrentlyStudying ? // copy paste full below code
                                             _graduationInformation(
                                                 index: index,
                                                 langProvider: langProvider,
@@ -4494,7 +4510,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       ]),
                     ],
                   ))
-              : showVoid),
+              : showVoid,
         ])));
   }
 
@@ -4903,11 +4919,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                   // Yes or no : Show round radio
                   CustomRadioListTile(
-                    value: true,
-                    groupValue: _sponsorshipQuestion,
+                    value: 'Y',
+                    groupValue: havingSponsor,
                     onChanged: (value) {
                       setState(() {
-                        _sponsorshipQuestion = value;
+                        havingSponsor = value;
                       });
                     },
                     title: "Yes",
@@ -4916,11 +4932,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                   // ****************************************************************************************************************************************************
                   CustomRadioListTile(
-                      value: false,
-                      groupValue: _sponsorshipQuestion,
+                      value: "N",
+                      groupValue: havingSponsor,
                       onChanged: (value) {
                         setState(() {
-                          _sponsorshipQuestion = value;
+                          havingSponsor = value;
                           // clear the relatives list
                           graduationInfo.sponsorShipController.clear();
                         });
@@ -4935,7 +4951,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
         // SPONSORSHIP
         // TODO: Need havingSponsor  key from fetch all scholarships
-        ((_sponsorshipQuestion != null && _sponsorshipQuestion!) ||
+        ((havingSponsor == 'Y') ||
                 _selectedScholarship?.acadmicCareer != 'DDS')
             ? Column(
                 children: [
@@ -4967,7 +4983,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             : showVoid,
 
         // ****************************************************************************************************************************************************
-
         // case study
         (graduationInfo.levelController.text == 'PGRD' ||
                 graduationInfo.levelController.text == 'PG' ||
@@ -5119,10 +5134,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // controllers, focus nodes and error text variables for Academic program
   final TextEditingController _acadProgramController = TextEditingController();
-  final TextEditingController _acadProgramDdsController =
-      TextEditingController();
-  final TextEditingController _acadProgramPgrdController =
-      TextEditingController();
+  final TextEditingController _acadProgramDdsController = TextEditingController();
+  final TextEditingController _acadProgramPgrdController = TextEditingController();
 
   final FocusNode _acadProgramFocusNode = FocusNode();
   final FocusNode _acadProgramDdsFocusNode = FocusNode();
@@ -5378,11 +5391,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // dropdown for pgrd students academic program
-                    (_selectedScholarship?.acadmicCareer == 'PGRD' &&
-                            _selectedScholarship?.acadmicCareer != 'DDS')
-                        ? Column(
-                            children: [
-                              fieldHeading(
+                    (_selectedScholarship?.acadmicCareer == 'PGRD' && _selectedScholarship?.acadmicCareer != 'DDS') ? Column(children: [
+                      fieldHeading(
                                 title: "pgrd.adac.program",
                                 important: true,
                                 langProvider: langProvider,
@@ -5409,15 +5419,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   });
                                 },
                               )
-                            ],
-                          )
-                        : showVoid,
+                            ],) : showVoid,
 
                     kFormHeight,
 
                     // Select Majors wishlist
-                    _selectedScholarship?.acadmicCareer != 'DDS'
-                        ? ListView.builder(
+                    _selectedScholarship?.acadmicCareer != 'DDS' ? ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),
@@ -5485,15 +5492,39 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   kFormHeight,
                                 ],
                               );
-                            })
-                        : showVoid
+                            }) : showVoid,
+
+                    // major when academic program is dds
+                    _selectedScholarship?.acadmicCareer == 'DDS' ? Column(
+                      children: [
+                        fieldHeading(
+                          title: "ddsMajor1",
+                          important: true,
+                          langProvider: langProvider,
+                        ),
+                        _scholarshipFormDropdown(
+                          controller: _acadProgramDdsController,
+                          currentFocusNode: _acadProgramDdsFocusNode,
+                          menuItemsList: _acadProgramDdsMenuItemsList,
+                          hintText: "Select DDS Academic Program",
+                          errorText: _acadProgramDdsErrorText,
+                          onChanged: (value) {
+                            _acadProgramDdsErrorText = null;
+
+                            setState(() {
+                              _acadProgramDdsController.text = value!;
+                            });
+                          },
+                        )
+                      ],
+                    ): showVoid
                   ])),
           kFormHeight,
           // university list
           CustomInformationContainer(
               title: _selectedScholarship?.acadmicCareer == 'DDS'
-                  ? 'DDS wishlist'
-                  : 'major wishlist',
+                  ? 'DDS University wishlist'
+                  : 'University wishlist',
               expandedContent: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -5903,6 +5934,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   }
 
   // *--------------------------------------------------------------- University And Majors Section end ----------------------------------------------------------------------------*
+
+
+
+
+
+
+
+
+
+
+
 
   // *--------------------------------------------------------------- Required Examinations start ----------------------------------------------------------------------------*
   // step-5
@@ -6976,10 +7018,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           onPressed: () async {
                                             // pick file
 
-                                            // final permissionChecker = PermissionChecker();
-                                            // permissionChecker.checkAndRequestPermission(Permission.manageExternalStorage, context);
-                                            file = await _mediaServices
-                                                .getSingleImageFromGallery();
+                                            final permissionChecker = PermissionChecker();
+                                            permissionChecker.checkAndRequestPermission(Platform.isIOS ? Permission.storage: Permission.photos, context);
+                                            file = await _mediaServices.getSingleFileFromPicker();
 
                                             if (file != null) {
                                               setState(() {
@@ -7472,10 +7513,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
     }
 
-    // Step 2: Validate High School
+    // Step 2:
     if (step == 2) {
       // If any error found, move to the first error focus node
-
+     // Validate High School
     if  ((_selectedScholarship?.acadmicCareer == 'UG' ||
           _selectedScholarship?.acadmicCareer == 'UGRD' ||
           _selectedScholarship?.acadmicCareer == 'SCHL' ||
@@ -7562,14 +7603,175 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             });
           }
         }
-
-
-
-
-
         }
     }
 
+    // validate graduation details
+    if(_selectedScholarship?.acadmicCareer != 'SCHL' &&
+        _selectedScholarship?.acadmicCareer != 'HCHL'){
+
+      for (int index = 0; index < _graduationDetailsList.length; index++) {
+        var element = _graduationDetailsList[index];
+
+        if (element.currentlyStudying && element.showCurrentlyStudying) {
+          // validating last term
+          if (element.lastTermController.text.isEmpty) {
+            setState(() {
+              element.lastTermError = "Please Select Your Last Term";
+              firstErrorFocusNode ??= element.lastTermFocusNode;
+            });
+          }
+
+
+        }
+// #################################################################
+        // Condition using index and scholarship details
+        if (index > 0 &&
+            _selectedScholarship?.acadmicCareer != 'UGRD' &&
+            _selectedScholarship?.acadmicCareer != 'DDS') {
+
+          // validating graduation level
+          if(element.levelController.text.isEmpty){
+            setState(() {
+              element.levelError = "Please Select Your Graduation Level";
+              firstErrorFocusNode ??= element.levelFocusNode;
+            });
+          }
+
+        }
+
+        // #################################################################
+        // validating dds graduation level
+        if(index != 0 && _selectedScholarship?.acadmicCareer == 'DDS'){
+          if(element.levelController.text.isEmpty){
+            setState(() {
+              element.levelError = "Please Select Your DDS Graduation Level";
+              firstErrorFocusNode ??= element.levelFocusNode;
+            });
+          }
+        }
+        // #################################################################
+        // validating graduation country
+        if(element.countryController.text.isEmpty){
+          setState(() {
+            element.countryError = "Please Select Your Graduation Country";
+            firstErrorFocusNode ??= element.countryFocusNode;
+          });
+        }
+        // #################################################################
+        // high school university
+        if(_selectedScholarship?.acadmicCareer != 'DDS'){
+          if(element.universityController.text.isEmpty){
+            setState(() {
+              element.universityError = "Please Select Your High School University";
+              firstErrorFocusNode ??= element.universityFocusNode;
+            });
+          }
+        }
+
+        // #################################################################
+        // other university
+        if(element.universityController.text == 'OTH'){
+          if(element.otherUniversityController.text.isEmpty){
+            setState(() {
+              element.otherUniversityError = "Please Enter Other Univeersity Name";
+              firstErrorFocusNode ??= element.otherUniversityFocusNode;
+            });
+          }
+        }
+        // #################################################################
+        // major
+        if(element.majorController.text.isEmpty){
+          setState(() {
+            element.majorError = "Please select your major";
+            firstErrorFocusNode ??= element.majorFocusNode;
+          });
+        }
+        // #################################################################
+        // cgpa
+        if(element.cgpaController.text.isEmpty){
+          setState(() {
+            element.cgpaError = "Please Enter your cgpa";
+            firstErrorFocusNode ??= element.cgpaFocusNode;
+          });
+        }
+        // #################################################################
+        if(element.graduationStartDateController.text.isEmpty){
+          setState(() {
+            element.graduationStartDateError = "Please Enter Graduation Start Date";
+            firstErrorFocusNode ??= element.graduationStartDateFocusNode;
+          });
+        }
+        // #################################################################
+        // graduation end data
+        if(!element.currentlyStudying &&
+            element.levelController.text.isNotEmpty){
+
+          if(element.graduationEndDateController.text.isEmpty){
+            setState(() {
+              element.graduationEndDateError = "Please Enter Graduation End Date";
+              firstErrorFocusNode ??= element.graduationEndDateFocusNode;
+            });
+          }
+        }
+        // #################################################################
+        // Are you currently receiving scholarship or grant from other university
+if(_selectedScholarship?.acadmicCareer == 'DDS'){
+  if(havingSponsor.isEmpty){
+    _alertService.flushBarErrorMessages(message: "Are you currently receiving scholarship or grant from other university", context: context, provider: Provider.of<LanguageChangeViewModel>(context,listen: false));
+  }
+}
+        // #################################################################
+        // sponsorship name
+        if((havingSponsor == 'Y') ||
+            _selectedScholarship?.acadmicCareer != 'DDS'){
+  if(element.sponsorShipController.text.isEmpty){
+    setState(() {
+      element.sponsorShipError = "Please Fill Sponsorship";
+      firstErrorFocusNode ??= element.sponsorShipFocusNode;
+    });
+  }
+        }
+
+        // #################################################################
+    if(element.levelController.text == 'PGRD' ||
+    element.levelController.text == 'PG' ||
+    element.levelController.text == 'DDS'){
+
+
+      // case study title
+      if(element.caseStudyTitleController.text.isEmpty){
+        setState(() {
+          element.caseStudyTitleError = "Please Enter Case Study Title";
+          firstErrorFocusNode ??= element.caseStudyTitleFocusNode;
+        });
+      }
+
+      // case study start year
+      if(element.caseStudyStartYearController.text.isEmpty){
+        setState(() {
+          element.caseStudyStartYearError = "Please Enter Case Study Title";
+          firstErrorFocusNode ??= element.caseStudyStartYearFocusNode;
+        });
+      }
+      // case study description
+      if(element.caseStudyDescriptionController.text.isEmpty){
+        setState(() {
+          element.caseStudyDescriptionError = "Please Enter Case Study Description";
+          firstErrorFocusNode ??= element.caseStudyDescriptionFocusNode;
+        });
+      }
+
+      }
+        // #################################################################
+
+
+
+      }
+
+
+
+    }
 
 
 
@@ -7578,15 +7780,69 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         return false;
       } else {
         // No errors found, return true
-
-        // initialize the models also
-        _initializeStudentDetailsModels();
-        _finalForm(isUrlEncoded: true);
-
         return true;
       }
     }
 
+
+    // Step 3:
+    if (step == 3)
+    {
+
+      // academic program pgrd
+      if(_selectedScholarship?.acadmicCareer == 'PGRD' && _selectedScholarship?.acadmicCareer != 'DDS'){
+        if(_acadProgramPgrdController.text.isEmpty){
+          setState(() {
+            _acadProgramPgrdErrorText = "Please Enter Your PGRD Program";
+            firstErrorFocusNode ??= _acadProgramPgrdFocusNode;
+          });
+        }
+      }
+// #################################################################
+      // major
+      for(int i = 0; i < _majorsWishlist.length ; i++){
+        var element = _majorsWishlist[i];
+        if(i == 0 && element.majorController.text.isEmpty){
+          setState(() {
+            element.majorError = "Please Enter Your Major Name";
+            firstErrorFocusNode ??= element.majorFocusNode;
+          });
+        }
+      }
+// #################################################################
+
+      // academic program dds
+      if(_selectedScholarship?.acadmicCareer == 'DDS'){
+        if(_acadProgramDdsController.text.isEmpty){
+          setState(() {
+            _acadProgramDdsErrorText = "Please Enter Your DDS Program";
+            firstErrorFocusNode ??= _acadProgramDdsFocusNode;
+          });
+        }
+      }
+
+ // #################################################################
+
+
+
+
+
+
+
+
+      // checking for fist error node
+      if (firstErrorFocusNode != null) {
+        FocusScope.of(context).requestFocus(firstErrorFocusNode);
+        return false;
+      } else {
+        // No errors found, return true
+        return true;
+      }
+    }
+
+    // initialize the models also
+    _initializeStudentDetailsModels();
+    _finalForm(isUrlEncoded: true);
     // Default to true for other sections
     return true;
   }
