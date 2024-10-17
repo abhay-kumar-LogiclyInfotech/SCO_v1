@@ -72,10 +72,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => IndividualImageViewModel()),
           ChangeNotifierProvider(create: (_) => ABriefAboutScoViewModel()),
           ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
-
           // find all active scholarships
           ChangeNotifierProvider(create: (_) => GetAllActiveScholarshipsViewModel()),
-
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
