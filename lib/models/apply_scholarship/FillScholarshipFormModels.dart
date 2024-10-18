@@ -78,7 +78,7 @@ class PhoneNumber {
       countryCodeController: TextEditingController(text: json['countryCode']),
       phoneNumberController: TextEditingController(text: json['phoneNumber']),
       phoneTypeController: TextEditingController(text: json['phoneType']),
-      preferred: json['preferred'] ?? false,
+      preferred: json['prefered'] ?? false,
       countryCodeFocusNode: FocusNode(),
       phoneNumberFocusNode: FocusNode(),
       phoneTypeFocusNode: FocusNode(),
@@ -91,7 +91,8 @@ class PhoneNumber {
       'countryCode': countryCodeController.text,
       'phoneNumber': phoneNumberController.text,
       'phoneType': phoneTypeController.text,
-      'preferred': preferred,
+      'prefered': preferred,
+      'isExisting' : "false"
     };
   }
 }
@@ -457,8 +458,8 @@ class RelativeInfo {
     return RelativeInfo(
       relativeNameController: TextEditingController(text: json['relativeName']),
       countryUniversityController:
-          TextEditingController(text: json['countryUniversity']),
-      relationTypeController: TextEditingController(text: json['relationType']),
+          TextEditingController(text: json['relativeUniversity']),
+      relationTypeController: TextEditingController(text: json['relativeRelationType']),
       familyBookNumberController:
           TextEditingController(text: json['familyBookNumber']),
       relativeNameFocusNode: FocusNode(),
@@ -472,8 +473,8 @@ class RelativeInfo {
   Map<String, dynamic> toJson() {
     return {
       'relativeName': relativeNameController.text,
-      'countryUniversity': countryUniversityController.text,
-      'relationType': relationTypeController.text,
+      'relativeUniversity': countryUniversityController.text,
+      'relativeRelationType': relationTypeController.text,
     };
   }
 }
@@ -637,6 +638,7 @@ class GraduationInfo {
       'level': levelController.text,
       'country': countryController.text,
       'university': universityController.text,
+      "otherUniversity":otherUniversityController.text,
       'major': majorController.text,
       'cgpa': cgpaController.text,
       'graduationStartDate': graduationStartDateController.text,

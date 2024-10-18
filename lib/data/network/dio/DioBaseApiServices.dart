@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 abstract class DioBaseApiServices {
   Future<dynamic> dioGetApiService({
     required String url,
-    required Map<String, String> headers,
+    required Map<String, String>? headers,
     Map<String, String>? queryParams, // Optional query parameters
   });
 

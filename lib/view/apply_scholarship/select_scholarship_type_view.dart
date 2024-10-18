@@ -13,6 +13,7 @@ import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/user_info_container.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
+import 'package:sco_v1/viewModel/account/studentProfileViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
@@ -85,12 +86,11 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       // fetching all active scholarships:
-      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context,
-          listen: false);
-      await provider.getAllActiveScholarships(
-          context: context,
-          langProvider:
-              Provider.of<LanguageChangeViewModel>(context, listen: false));
+      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context, listen: false);
+      await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
+
+
+
     });
   }
 
@@ -156,7 +156,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                         .toList();
 
                                     // request next focus
-                                    Utils.requestFocus(focusNode:                     _academicCareerFocusNode
+                                    Utils.requestFocus(focusNode: _academicCareerFocusNode
                                         , context: context);
                                   });
                                 },
@@ -204,7 +204,9 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
 
                             _selectedAcademicCareer.isNotEmpty?_navigationService.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(
-                              selectedScholarshipConfigurationKey: _selectedAcademicCareer, getAllActiveScholarships: provider.apiResponse.data,
+                              selectedScholarshipConfigurationKey: _selectedAcademicCareer,
+                              getAllActiveScholarships: provider.apiResponse.data,
+
                             ))) :    _alertService.flushBarErrorMessages(message: "Please select Academic Career", context: context, provider: langProvider);
 
 

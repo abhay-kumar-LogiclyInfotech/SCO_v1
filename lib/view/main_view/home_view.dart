@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,9 +8,11 @@ import 'package:sco_v1/resources/components/custom_about_organization_containers
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/select_scholarship_type_view.dart';
+import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
+import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../resources/app_colors.dart';
@@ -26,12 +29,14 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   late NavigationServices _navigationServices;
+  late AuthService _authService;
 
   @override
   void initState() {
     super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    _authService = getIt.get<AuthService>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       // final provider = Provider.of<HomeSliderViewModel>(context, listen: false);
@@ -552,9 +557,22 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/scholarships.svg",
                 name: AppLocalizations.of(context)!.scholarship,
-                onTap: () {
-                  _navigationServices.pushSimpleWithAnimationRoute(
-                      createRoute(const SelectScholarshipTypeView()));
+                onTap: () async{
+
+                  // check if user is logged in or not
+                  final bool alreadyLoggedIn = await _authService.isLoggedIn();
+                  if(!alreadyLoggedIn)
+                  {
+              _navigationServices.goBackUntilFirstScreen();
+              _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+                }
+                  else{
+                    _navigationServices.pushSimpleWithAnimationRoute(
+                        createRoute(const SelectScholarshipTypeView()));
+                  }
+
+
+
                 },
                 textDirection: getTextDirection(provider),
               ),

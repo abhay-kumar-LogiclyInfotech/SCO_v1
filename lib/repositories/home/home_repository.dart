@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
+import 'package:sco_v1/models/account/StudentProfileModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
+import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
 import 'package:sco_v1/models/home/HomeSliderModel.dart';
 
 import '../../data/network/NetworkApiServices.dart';
@@ -53,4 +55,29 @@ class HomeRepository {
     }
   }
 
+
+
+
+// *------ Get User (student) Information Method ------*/
+  Future<StudentProfileModel> studentProfileInformation(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.baseUrl}self-service/personalInformation/$userId',
+      headers: headers,
+    );
+    return StudentProfileModel.fromJson(response);
+  }
+
+
+  // *------ Save As Draft Method ------*/
+
+  Future<SaveAsDraftModel> saveAsDraft(
+      {required String userId,required String applicationNumber,required dynamic body, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+      url: '${AppUrls.baseUrl}e-services/${userId}/draft-application/${applicationNumber}',
+      body: body,
+      headers: headers,
+    );
+    return SaveAsDraftModel.fromJson(response);
+  }
 }

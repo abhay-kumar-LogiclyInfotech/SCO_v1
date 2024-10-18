@@ -43,7 +43,6 @@ class NavigationServices {
     _navigationStateKey.currentState?.push(route);
   }
 
-
   void pushCupertino(CupertinoPageRoute route) {
     _navigationStateKey.currentState?.push(route);
   }
@@ -61,6 +60,12 @@ class NavigationServices {
   }
 
   void goBack() {
-    _navigationStateKey.currentState?.pop();
+    if (_navigationStateKey.currentState!.canPop() == true) {
+      _navigationStateKey.currentState?.pop();
+    }
+  }
+  // Method to pop all screens until the first screen
+  void goBackUntilFirstScreen() {
+    _navigationStateKey.currentState?.popUntil((route) => route.isFirst);
   }
 }

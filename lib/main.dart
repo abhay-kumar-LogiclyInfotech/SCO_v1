@@ -6,7 +6,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/viewModel/account/studentProfileViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
+import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
@@ -72,6 +74,15 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => IndividualImageViewModel()),
           ChangeNotifierProvider(create: (_) => ABriefAboutScoViewModel()),
           ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
+
+          // Account
+          ChangeNotifierProvider(create: (_) => StudentProfileViewmodel()),
+
+          // save as draft
+          ChangeNotifierProvider(create: (_) => SaveAsDraftViewmodel()),
+
+
+
           // find all active scholarships
           ChangeNotifierProvider(create: (_) => GetAllActiveScholarshipsViewModel()),
         ],

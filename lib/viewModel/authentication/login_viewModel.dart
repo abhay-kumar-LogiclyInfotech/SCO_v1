@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:sco_v1/models/authentication/login_model.dart';
 
 import '../../data/response/ApiResponse.dart';
@@ -112,6 +113,7 @@ class LoginViewModel with ChangeNotifier {
       _setResponse = ApiResponse.completed(response);
 
      await  HiveManager.storeUserId(response.data!.user!.userId.toString());
+
      await  _authService.saveAuthState(true);
 
      _alertServices.toastMessage(response.message.toString(),);
