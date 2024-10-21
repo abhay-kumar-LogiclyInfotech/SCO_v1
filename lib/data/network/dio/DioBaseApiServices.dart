@@ -20,6 +20,11 @@ abstract class DioBaseApiServices {
     required dynamic body,
   });
 
+  Future<dynamic> dioDeleteApiService({
+    required String url,
+    required Map<String, String> headers,
+  });
+
   Future<dynamic> dioMultipartApiService({
     required String method,
     required String url,

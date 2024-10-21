@@ -3,11 +3,13 @@ import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
 import 'package:sco_v1/models/account/StudentProfileModel.dart';
+import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
 import 'package:sco_v1/models/home/HomeSliderModel.dart';
 
 import '../../data/network/NetworkApiServices.dart';
+import '../../models/apply_scholarship/FindDraftByConfigurationKeyModel.dart';
 import '../../resources/app_urls.dart';
 
 class HomeRepository {
@@ -70,7 +72,6 @@ class HomeRepository {
 
 
   // *------ Save As Draft Method ------*/
-
   Future<SaveAsDraftModel> saveAsDraft(
       {required String userId,required String applicationNumber,required dynamic body, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
@@ -80,4 +81,27 @@ class HomeRepository {
     );
     return SaveAsDraftModel.fromJson(response);
   }
+
+  // *------ Fetch Draft By Configuration Key ------*/
+  Future<FindDraftByConfigurationKeyModel> findDraftByConfigurationKey(
+      {required dynamic headers,required dynamic body}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+      url: AppUrls.findDraftByConfigurationKey,
+      headers: headers,
+      body: body,
+    );
+    return FindDraftByConfigurationKeyModel.fromJson(response);
+  }
+
+  // *------ Delete Draft Method ------*/
+  Future<DeleteDraftModel> deleteDraft(
+      {required String userId,required String draftId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioDeleteApiService(
+      url: '${AppUrls.baseUrl}e-services/${userId}/delete-draft/${draftId}',
+      headers: headers,
+    );
+    return DeleteDraftModel.fromJson(response);
+  }
+
+
 }

@@ -41,6 +41,7 @@ class SplashServices {
     final bool isLoggedInKey = await _authService.isLoggedIn();
     final int counter = await _authService.getCounter();
 
+    // This is for LOV's
     final provider = Provider.of<CommonDataViewModel>(context, listen: false);
 
     bool isDataStored = HiveManager.isDataStored();

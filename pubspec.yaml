@@ -75,6 +75,7 @@ dependencies:
   file_picker: ^8.1.2
   get: ^4.6.6
   dio: ^5.6.0
+  material_dialogs: ^1.1.5
   logger:
   getwidget: ^4.0.0
   flutter_localizations:

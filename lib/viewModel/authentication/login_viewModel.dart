@@ -113,7 +113,7 @@ class LoginViewModel with ChangeNotifier {
       _setResponse = ApiResponse.completed(response);
 
      await  HiveManager.storeUserId(response.data!.user!.userId.toString());
-
+     await  HiveManager.storeEmiratesId(response.data!.user!.emirateId.toString());
      await  _authService.saveAuthState(true);
 
      _alertServices.toastMessage(response.message.toString(),);

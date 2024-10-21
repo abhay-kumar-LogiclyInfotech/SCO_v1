@@ -47,4 +47,8 @@ class AppUrls {
   // All Active scholarships endPoint
   static String get getAllActiveScholarships => "${_commonBaseUrl}jsonws/configuration.submissionconfiguration/find-all-active-scholarship";
 
+  // find-draft-by-emirate-id-and-config-key
+  static String get findDraftByConfigurationKey   => "https://stg.sco.ae/api/jsonws/application.applicationdetails/find-draft-by-emirate-id-and-config-key";
+
+
 }

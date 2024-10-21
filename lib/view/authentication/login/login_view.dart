@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_common/get_reset.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
@@ -439,9 +440,9 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             onTap: () async {
               bool validateFields = _validateFields(langProvider: langProvider);
               if (validateFields) {
-                provider.username = _usernameController.text;
-                provider.password = _passwordController.text;
-                provider.deviceId = _deviceData['id'];
+                provider.username = _usernameController.text.trim();
+                provider.password = _passwordController.text.trim();
+                provider.deviceId = _deviceData['id'].toString().trim();
 
                 bool result = await provider.login(
                     context: context, langProvider: langProvider);

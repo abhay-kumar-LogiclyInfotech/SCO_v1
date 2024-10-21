@@ -78,4 +78,31 @@ class HiveManager {
   }
 //*-------storing the UserID End--------*
 
+
+  //*-------storing the Emirates Start--------*
+  static Future<void> storeEmiratesId(String userId) async {
+    await Boxes.getUserDataBox().put("emiratesID", userId);
+  }
+
+  static bool isEmiratesIdStored() {
+    return Boxes.getUserDataBox().containsKey('emiratesID');
+  }
+
+  static String? getEmiratesId() {
+    if (isUserIdStored()) {
+      return Boxes.getUserDataBox().get("emiratesID");
+    }
+    return null;
+  }
+
+  //when we logout clear Data:
+  static void clearEmiratesId() {
+    Boxes.getUserDataBox().delete('emiratesID');
+    debugPrint('emiratesID Data cleared');
+  }
+//*-------storing the Emirates End--------*
+
+
+
+
 }

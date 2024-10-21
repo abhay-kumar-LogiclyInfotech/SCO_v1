@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -356,3 +358,57 @@ String extractXmlValue(String xmlString, String languageId, String tagName) {
   }
   return '';
 }
+
+
+String cleanDraftXmlToJson(String xmlString) {
+  // Parse the XML string
+  final document = XmlDocument.parse(xmlString);
+
+  // Create a map to hold the cleaned data
+  Map<String, dynamic> cleanedData = {};
+
+  // Helper function to extract values from the XML and clean keys
+  dynamic extractData(XmlElement element) {
+    Map<String, dynamic> data = {};
+
+    for (var child in element.children) {
+      if (child is XmlElement) {
+        String key = child.name.local;
+
+        // Recursively extract child data
+        var childData = extractData(child);
+
+        // Check if the child data has a nested key structure
+        if (childData is Map<String, dynamic> && childData.keys.length == 1) {
+          String nestedKey = childData.keys.first;
+          // Flatten the structure by assigning nested data to the parent key
+          data[key] = childData[nestedKey];
+        } else {
+          // Check if this child has multiple values (is a list)
+          if (data.containsKey(key)) {
+            if (data[key] is! List) {
+              data[key] = [data[key]]; // Convert to list if not already
+            }
+            data[key].add(childData);
+          } else {
+            // Store child data
+            data[key] = childData;
+          }
+        }
+      }
+    }
+
+    // If there's only text content, return the text instead of a map
+    return data.isEmpty ? element.text.trim() : data;
+  }
+
+  // Start processing from the root element
+  cleanedData = extractData(document.rootElement);
+
+  // Convert the map to JSON string
+  String jsonString = jsonEncode(cleanedData);
+
+  return jsonString;
+}
+
+

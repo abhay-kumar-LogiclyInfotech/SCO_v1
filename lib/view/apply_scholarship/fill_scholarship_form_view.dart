@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +9,9 @@ import 'package:get_it/get_it.dart';
 import 'package:getwidget/components/form/form_field/widgets/gf_formdropdown.dart';
 import 'package:getwidget/components/radio/gf_radio.dart';
 import 'package:intl/intl.dart' hide TextDirection;
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
@@ -20,6 +24,7 @@ import 'package:sco_v1/resources/input_formatters/emirates_id_input_formatter.da
 import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/steps_progress_view.dart';
+import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
@@ -35,6 +40,7 @@ import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/myDivider.dart';
 import '../../utils/constants.dart';
 import '../../viewModel/account/studentProfileViewmodel.dart';
+import '../../viewModel/apply_scholarship/deleteDraftViewmodel.dart';
 import '../../viewModel/services/alert_services.dart';
 import '../../viewModel/services/navigation_services.dart';
 
@@ -111,14 +117,15 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     });
   }
 
-  // Function to check if a section is filled
-  bool isSectionFilled(int index) {
-    return filledSections[index];
-  }
+  dynamic draftId;
 
   // Function to save draft
-  void saveDraft() {
+  void saveDraft() async {
     _finalForm();
+    final saveDraftProvider =
+        Provider.of<SaveAsDraftViewmodel>(context, listen: false);
+    await saveDraftProvider.saveAsDraft(
+        form: form, applicationNumber: draftId?.toString() ?? '0');
   }
 
   // scholarship title
@@ -140,7 +147,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         debugPrint(_selectedScholarship.toString());
       });
     } catch (e) {
-      _alertService.toastMessage("An error occurred while trying to fetch the selected scholarship. Please try again.");
+      _alertService.toastMessage(
+          "An error occurred while trying to fetch the selected scholarship. Please try again.");
       debugPrint("Error fetching selected scholarship: $e");
     }
   }
@@ -230,18 +238,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     }
   }
 
-  final _notifier = ValueNotifier<AsyncSnapshot<void>>(const AsyncSnapshot.waiting());
+  final _notifier =
+      ValueNotifier<AsyncSnapshot<void>>(const AsyncSnapshot.waiting());
 
   //  Initializer to process initial data
   void _initializer() {
-    WidgetsBinding.instance.addPostFrameCallback((callback) async{
-      _notifier.value = const AsyncSnapshot.withData(ConnectionState.waiting, null);
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+      _notifier.value =
+          const AsyncSnapshot.withData(ConnectionState.waiting, null);
 
-      final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
-
-
-
-
+      final langProvider =
+          Provider.of<LanguageChangeViewModel>(context, listen: false);
 
       // get selected scholarship
       _getSelectedScholarship();
@@ -253,185 +260,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       updateSections(totalSections);
 
       // *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
-//       _nationalityMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['COUNTRY']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       _genderMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       _maritalStatusMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['MARITAL_STATUS']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       _relationshipTypeMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['RELATIONSHIP_TYPE']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       _phoneNumberTypeMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['PHONE_TYPE']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       _familyInformationEmiratesMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['EMIRATES_ID']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       _addressTypeMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['ADDRESS_TYPE']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       _highSchoolLevelMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['HIGH_SCHOOL_LEVEL']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       _highSchoolTypeMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['HIGH_SCHOOL_TYPE']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       // ***********************************************************************
-//       // not used for dropdown
-//       _highSchoolSubjectsItemsList = populateSimpleValuesFromLOV(
-//           menuItemsList: Constants.lovCodeMap['SUBJECT']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//       // ***********************************************************************
-//
-//       // for dds graduation level
-//       _graduationLevelDDSMenuItems = populateCommonDataDropdown(
-//           menuItemsList:
-//               Constants.lovCodeMap['DDS_GRAD_LEVEL#SIS_GRAD_LEVEL']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       // for other graduation level
-//       _graduationLevelMenuItems = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['GRADUATION_LEVEL']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       // case Study Year dropdown
-//       _caseStudyYearDropdownMenuItems = populateCommonDataDropdown(
-//           menuItemsList: Constants
-//               .lovCodeMap['BATCH#${_selectedScholarship?.acadmicCareer}']!
-//               .values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       // case Study Year dropdown
-//       _requiredExaminationDropdownMenuItems = populateCommonDataDropdown(
-//           menuItemsList: Constants
-//               .lovCodeMap['EXAMINATION#${_selectedScholarship?.acadmicCareer}']!
-//               .values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       // pgrd Academic program menu items list
-//       _acadProgramPgrdMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['ACAD_PROG_PGRD']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       // dds Academic Program meni items list
-//       _acadProgramDdsMenuItemsList = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['ACAD_PROG_DDS']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-// // university status for university and majors
-//       _universityPriorityStatus = populateCommonDataDropdown(
-//           menuItemsList: Constants.lovCodeMap['UNIVERSITY_STATUS']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       // ***********************************************************************
-//       // Test Score Elements for min max score in the required examination details // note: this is not for dropdown
-//       _testScoreVal = populateSimpleValuesFromLOV(
-//           menuItemsList: Constants.lovCodeMap['TEST_SCORE_VAL']!.values!,
-//           provider: langProvider,
-//           textColor: AppColors.scoButtonColor);
-//
-//       // employment Status
-//       // not used for dropdown just list of values
-//       if(Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null){
-//         _employmentStatusItemsList = populateSimpleValuesFromLOV(
-//             menuItemsList: Constants.lovCodeMap['EMPLOYMENT_STATUS']!.values!,
-//             provider: langProvider,
-//             textColor: AppColors.scoButtonColor);
-//       }
-//
-// // ***********************************************************************
-//
-//       print(_selectedScholarship?.approvedChecklistCode.toString());
-//       print(_selectedScholarship?.checklistCode.toString());
-//       // when we approved checklist of attachments
-//       if (_selectedScholarship?.approvedChecklistCode != null &&
-//           _selectedScholarship!.approvedChecklistCode.toString().isNotEmpty) {
-//         // attachments list
-//         _attachmentsList = populateSimpleValuesFromLOV(
-//             menuItemsList: Constants
-//                 .lovCodeMap[
-//                     _selectedScholarship!.approvedChecklistCode.toString()]!
-//                 .values!,
-//             provider: langProvider,
-//             textColor: AppColors.scoButtonColor);
-//
-//         // creating attachments list
-//         for (var element in _attachmentsList) {
-//           final processCD =
-//               element.code.toString().split(':').elementAt(0).toString();
-//           final documentCD = element.code.toString().split(':').last.toString();
-//           _myAttachmentsList.add(Attachment(
-//             processCDController: TextEditingController(text: processCD),
-//             documentCDController: TextEditingController(text: documentCD),
-//             descriptionController: TextEditingController(),
-//             userFileNameController: TextEditingController(),
-//             commentController: TextEditingController(),
-//             base64StringController: TextEditingController(),
-//             errorMessageController: TextEditingController(),
-//           ));
-//         }
-//       } else {
-//         if (_selectedScholarship?.checklistCode != null &&
-//             _selectedScholarship!.checklistCode.toString().isNotEmpty) {
-//
-//           // attachments list
-//           _attachmentsList = populateSimpleValuesFromLOV(
-//               menuItemsList: Constants
-//                   .lovCodeMap[_selectedScholarship!.checklistCode.toString()]!
-//                   .values!,
-//               provider: langProvider,
-//               textColor: AppColors.scoButtonColor);
-//
-//           // creating attachments list
-//           for (var element in _attachmentsList) {
-//             final processCD = element.code.toString().split(':').elementAt(0).toString();
-//             final documentCD = element.code.toString().split(':').last.toString();
-//             _myAttachmentsList.add(Attachment(
-//               processCDController: TextEditingController(text: processCD),
-//               documentCDController: TextEditingController(text: documentCD),
-//               descriptionController: TextEditingController(),
-//               userFileNameController: TextEditingController(),
-//               commentController: TextEditingController(),
-//               base64StringController: TextEditingController(),
-//               errorMessageController: TextEditingController(),
-//             ));
-//           }
-//         }
-//       }
-
-
       // Check and populate dropdowns only if the values exist
-
       if (Constants.lovCodeMap['COUNTRY']?.values != null) {
         _nationalityMenuItemsList = populateCommonDataDropdown(
             menuItemsList: Constants.lovCodeMap['COUNTRY']!.values!,
@@ -502,10 +331,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             textColor: AppColors.scoButtonColor);
       }
 
-      if (Constants.lovCodeMap['DDS_GRAD_LEVEL#SIS_GRAD_LEVEL']?.values != null) {
+      if (Constants.lovCodeMap['DDS_GRAD_LEVEL#SIS_GRAD_LEVEL']?.values !=
+          null) {
         _graduationLevelDDSMenuItems = populateCommonDataDropdown(
             menuItemsList:
-            Constants.lovCodeMap['DDS_GRAD_LEVEL#SIS_GRAD_LEVEL']!.values!,
+                Constants.lovCodeMap['DDS_GRAD_LEVEL#SIS_GRAD_LEVEL']!.values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
       }
@@ -517,7 +347,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             textColor: AppColors.scoButtonColor);
       }
 
-      if (Constants.lovCodeMap['BATCH#${_selectedScholarship?.acadmicCareer}']?.values != null) {
+      if (Constants.lovCodeMap['BATCH#${_selectedScholarship?.acadmicCareer}']
+              ?.values !=
+          null) {
         _caseStudyYearDropdownMenuItems = populateCommonDataDropdown(
             menuItemsList: Constants
                 .lovCodeMap['BATCH#${_selectedScholarship?.acadmicCareer}']!
@@ -526,10 +358,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             textColor: AppColors.scoButtonColor);
       }
 
-      if (Constants.lovCodeMap['EXAMINATION#${_selectedScholarship?.acadmicCareer}']?.values != null) {
+      if (Constants
+              .lovCodeMap['EXAMINATION#${_selectedScholarship?.acadmicCareer}']
+              ?.values !=
+          null) {
         _requiredExaminationDropdownMenuItems = populateCommonDataDropdown(
             menuItemsList: Constants
-                .lovCodeMap['EXAMINATION#${_selectedScholarship?.acadmicCareer}']!
+                .lovCodeMap[
+                    'EXAMINATION#${_selectedScholarship?.acadmicCareer}']!
                 .values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
@@ -577,7 +413,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         _attachmentsList = populateSimpleValuesFromLOV(
             menuItemsList: Constants
                 .lovCodeMap[
-            _selectedScholarship!.approvedChecklistCode.toString()]!
+                    _selectedScholarship!.approvedChecklistCode.toString()]!
                 .values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
@@ -585,7 +421,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         // creating attachments list
         for (var element in _attachmentsList) {
           final processCD =
-          element.code.toString().split(':').elementAt(0).toString();
+              element.code.toString().split(':').elementAt(0).toString();
           final documentCD = element.code.toString().split(':').last.toString();
           _myAttachmentsList.add(Attachment(
             processCDController: TextEditingController(text: processCD),
@@ -598,11 +434,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           ));
         }
       } else {
-
         // if there is no approved checklist then use simple checklist
         if (_selectedScholarship?.checklistCode != null &&
             _selectedScholarship!.checklistCode.toString().isNotEmpty) {
-
           // attachments list
           _attachmentsList = populateSimpleValuesFromLOV(
               menuItemsList: Constants
@@ -613,8 +447,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
           // creating attachments list
           for (var element in _attachmentsList) {
-            final processCD = element.code.toString().split(':').elementAt(0).toString();
-            final documentCD = element.code.toString().split(':').last.toString();
+            final processCD =
+                element.code.toString().split(':').elementAt(0).toString();
+            final documentCD =
+                element.code.toString().split(':').last.toString();
             _myAttachmentsList.add(Attachment(
               processCDController: TextEditingController(text: processCD),
               documentCDController: TextEditingController(text: documentCD),
@@ -628,63 +464,13 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         }
       }
 
-// Attachments handling logic with similar checks
-//       if (_selectedScholarship?.approvedChecklistCode != null &&
-//           _selectedScholarship!.approvedChecklistCode.toString().isNotEmpty &&
-//           Constants.lovCodeMap[_selectedScholarship!.approvedChecklistCode.toString()]?.values != null) {
-//         _attachmentsList = populateSimpleValuesFromLOV(
-//             menuItemsList: Constants
-//                 .lovCodeMap[_selectedScholarship!.approvedChecklistCode.toString()]!
-//                 .values!,
-//             provider: langProvider,
-//             textColor: AppColors.scoButtonColor);
-//
-//         for (var element in _attachmentsList) {
-//           final processCD =
-//           element.code.toString().split(':').elementAt(0).toString();
-//           final documentCD =
-//           element.code.toString().split(':').last.toString();
-//           _myAttachmentsList.add(Attachment(
-//             processCDController: TextEditingController(text: processCD),
-//             documentCDController: TextEditingController(text: documentCD),
-//             descriptionController: TextEditingController(),
-//             userFileNameController: TextEditingController(),
-//             commentController: TextEditingController(),
-//             base64StringController: TextEditingController(),
-//             errorMessageController: TextEditingController(),
-//           ));
-//         }
-//       } else if (_selectedScholarship?.checklistCode != null &&
-//           _selectedScholarship!.checklistCode.toString().isNotEmpty &&
-//           Constants.lovCodeMap[_selectedScholarship!.checklistCode.toString()]?.values != null) {
-//         _attachmentsList = populateSimpleValuesFromLOV(
-//             menuItemsList: Constants
-//                 .lovCodeMap[_selectedScholarship!.checklistCode.toString()]!
-//                 .values!,
-//             provider: langProvider,
-//             textColor: AppColors.scoButtonColor);
-//
-//         for (var element in _attachmentsList) {
-//           final processCD =
-//           element.code.toString().split(':').elementAt(0).toString();
-//           final documentCD =
-//           element.code.toString().split(':').last.toString();
-//           _myAttachmentsList.add(Attachment(
-//             processCDController: TextEditingController(text: processCD),
-//             documentCDController: TextEditingController(text: documentCD),
-//             descriptionController: TextEditingController(),
-//             userFileNameController: TextEditingController(),
-//             commentController: TextEditingController(),
-//             base64StringController: TextEditingController(),
-//             errorMessageController: TextEditingController(),
-//           ));
-//         }
-//       }
+      _initializeStudentDetailsModels();
 
-
-      // ***********************************************************************
-
-      // *------------------------------------------ Initialize dropdowns end ------------------------------------------------------------------*
+      // setting studyCountry Variable
+      // isStudyCountry for majors selection
+      isStudyCountry = _selectedScholarship?.scholarshipType == 'INT' ? true : false;
+      _majorsMenuItemsList = getMajors(); // calling the getMajors method to populate the majors function
+      print(_majorsMenuItemsList.toString());
 
       // initializing contact information manually because Phone types are constants for first two index elements
       _phoneNumberList.add(PhoneNumber(
@@ -710,11 +496,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       // adding at-least one address
       _addAddress();
 
+
       // add high school :
-      if(_selectedScholarship?.acadmicCareer == 'UG' ||
-          _selectedScholarship?.acadmicCareer == 'UGRD' ||
-          _selectedScholarship?.acadmicCareer == 'SCHL' ||
-          _selectedScholarship?.acadmicCareer == 'HCHL'){
+      if(displayHighSchool()) {
         _highSchoolList.add(HighSchool(
             hsLevelController: TextEditingController(text: '1'),
             hsNameController: TextEditingController(),
@@ -743,29 +527,29 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             maxDateFocusNode: FocusNode(),
             hsDetails: _highSchoolSubjectsItemsList
                 .where((element) => !element.code
-                .startsWith('OTH')) // Filter for regular subjects
+                    .startsWith('OTH')) // Filter for regular subjects
                 .map((element) => HSDetails(
-              subjectTypeController:
-              TextEditingController(text: element.code.toString()),
-              gradeController: TextEditingController(),
-              subjectTypeFocusNode: FocusNode(),
-              gradeFocusNode: FocusNode(),
-            ))
+                      subjectTypeController:
+                          TextEditingController(text: element.code.toString()),
+                      gradeController: TextEditingController(),
+                      subjectTypeFocusNode: FocusNode(),
+                      gradeFocusNode: FocusNode(),
+                    ))
                 .toList(),
             otherHSDetails: _highSchoolSubjectsItemsList
-                .where((element) =>
-                element.code.startsWith('OTH')) // Filter for regular subjects
+                .where((element) => element.code
+                    .startsWith('OTH')) // Filter for regular subjects
                 .map(
                   (element) => HSDetails(
-                subjectTypeController:
-                TextEditingController(text: element.code.toString()),
-                gradeController: TextEditingController(),
-                otherSubjectNameController: TextEditingController(),
-                subjectTypeFocusNode: FocusNode(),
-                gradeFocusNode: FocusNode(),
-                otherSubjectNameFocusNode: FocusNode(),
-              ),
-            )
+                    subjectTypeController:
+                        TextEditingController(text: element.code.toString()),
+                    gradeController: TextEditingController(),
+                    otherSubjectNameController: TextEditingController(),
+                    subjectTypeFocusNode: FocusNode(),
+                    gradeFocusNode: FocusNode(),
+                    otherSubjectNameFocusNode: FocusNode(),
+                  ),
+                )
                 .toList(),
             schoolStateDropdownMenuItems: [],
             schoolNameDropdownMenuItems: [],
@@ -799,83 +583,35 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             maxDateFocusNode: FocusNode(),
             hsDetails: _highSchoolSubjectsItemsList
                 .where((element) => !element.code
-                .startsWith('OTH')) // Filter for regular subjects
+                    .startsWith('OTH')) // Filter for regular subjects
                 .map((element) => HSDetails(
-              subjectTypeController:
-              TextEditingController(text: element.code.toString()),
-              gradeController: TextEditingController(),
-              subjectTypeFocusNode: FocusNode(),
-              gradeFocusNode: FocusNode(),
-            ))
+                      subjectTypeController:
+                          TextEditingController(text: element.code.toString()),
+                      gradeController: TextEditingController(),
+                      subjectTypeFocusNode: FocusNode(),
+                      gradeFocusNode: FocusNode(),
+                    ))
                 .toList(),
             otherHSDetails: _highSchoolSubjectsItemsList
-                .where((element) =>
-                element.code.startsWith('OTH')) // Filter for regular subjects
+                .where((element) => element.code
+                    .startsWith('OTH')) // Filter for regular subjects
                 .map(
                   (element) => HSDetails(
-                subjectTypeController:
-                TextEditingController(text: element.code.toString()),
-                gradeController: TextEditingController(),
-                otherSubjectNameController: TextEditingController(),
-                subjectTypeFocusNode: FocusNode(),
-                gradeFocusNode: FocusNode(),
-                otherSubjectNameFocusNode: FocusNode(),
-              ),
-            )
+                    subjectTypeController:
+                        TextEditingController(text: element.code.toString()),
+                    gradeController: TextEditingController(),
+                    otherSubjectNameController: TextEditingController(),
+                    subjectTypeFocusNode: FocusNode(),
+                    gradeFocusNode: FocusNode(),
+                    otherSubjectNameFocusNode: FocusNode(),
+                  ),
+                )
                 .toList(),
             schoolStateDropdownMenuItems: [],
             schoolNameDropdownMenuItems: [],
             schoolTypeDropdownMenuItems: [],
             schoolCurriculumTypeDropdownMenuItems: []));
       }
-
-      //
-      // if (highSchoolJsonList['highSchoolList'] != null) {
-      //   log(highSchoolJsonList['highSchoolList'].toString());
-      //
-      //   for (var highSchoolJson in highSchoolJsonList['highSchoolList']) {
-      //     try {
-      //       // Parse each highSchool entry
-      //       HighSchool highSchool = HighSchool.fromJson(highSchoolJson);
-      //       _highSchoolList.add(highSchool);
-      //       _populateHighSchoolStateDropdown(langProvider: langProvider,index: index);
-      //       _populateHighSchoolNameDropdown(langProvider: langProvider,index: index);
-      //       _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider,index: index);
-      //     } catch (e) {
-      //       log("Error parsing high school entry: $e");
-      //     }
-      //   }
-      // } else {
-      //   log('highSchoolList not found in the JSON data.');
-      // }
-
-      // String cleanJson = cleanXmlToJson(draftString);
-
-      // Map<String,dynamic> draft = jsonDecode(cleanJson);
-      // log("Draft Print: ${cleanJson.toString()}");
-      //
-      //
-      // if (draft['highSchoolList'] is List) {
-      //   log(draft['highSchoolList'].toString());
-      //
-      //   highSchoolJsonList['highSchoolList'].asMap().forEach((index, highSchoolJson) {
-      //     try {
-      //       // Parse each highSchool entry
-      //       HighSchool highSchool = HighSchool.fromJson(highSchoolJson);
-      //       _highSchoolList.add(highSchool);
-      //
-      //       // Populate dropdowns for the high school
-      //       _populateHighSchoolStateDropdown(langProvider: langProvider, index: index);
-      //       _populateHighSchoolNameDropdown(langProvider: langProvider, index: index);
-      //       _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider, index: index);
-      //
-      //     } catch (e) {
-      //       log("Error parsing high school entry: $e - Entry: $highSchoolJson");
-      //     }
-      //   });
-      // } else {
-      //   log('highSchoolList not found or is not a list in the JSON data.');
-      // }
 
       // add graduation detail
       _addGraduationDetail();
@@ -885,30 +621,28 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         addMajorWishList();
       }
       // add university priority
-      if(_selectedScholarship?.acadmicCareer != 'SCHL')
-      {
+      if (_selectedScholarship?.acadmicCareer != 'SCHL') {
         addUniversityPriority();
       }
 
-      if(!(_selectedScholarship?.acadmicCareer == 'SCHL' || _selectedScholarship?.acadmicCareer == 'HCHL')){
+      if (!(_selectedScholarship?.acadmicCareer == 'SCHL' ||
+          _selectedScholarship?.acadmicCareer == 'HCHL')) {
         // add Required Examination
         _addRequiredExamination();
       }
 
-
       // add employment history
-      if(displayEmploymentHistory()){
+      if (displayEmploymentHistory()) {
         _addEmploymentHistory();
       }
 
-
       // fetch student profile Information t prefill the user information
-      final studentProfileProvider = Provider.of<StudentProfileViewmodel>(context,listen: false);
+      final studentProfileProvider =
+          Provider.of<StudentProfileViewmodel>(context, listen: false);
       await studentProfileProvider.studentProfile();
 
-      if(studentProfileProvider.apiResponse.status == Status.COMPLETED){
+      if (studentProfileProvider.apiResponse.status == Status.COMPLETED) {
         var data = studentProfileProvider.apiResponse.data?.data?.user;
-
 
         // prefilling names but TODO: Check if arabic then store in arabic else in english
         _arabicStudentNameController.text = data?.firstName ?? '';
@@ -925,7 +659,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         _studentEmailController.text = data?.emailAddress ?? '';
 
         // setting emirates id
-        _emiratesIdController.text = data?.emirateId  ?? '';
+        _emiratesIdController.text = data?.emirateId ?? '';
 
         // set date of birth
         _dateOfBirthController.text = data?.birthDate ?? '';
@@ -937,14 +671,325 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         _passportNationalityController.text = data?.nationality ?? '';
 
         // set phone Number
-        if(_phoneNumberList.isNotEmpty)
-          {
-            _phoneNumberList[0].phoneNumberController.text = data?.phoneNumber ?? '';
-          }
+        if (_phoneNumberList.isNotEmpty) {
+          _phoneNumberList[0].phoneNumberController.text =
+              data?.phoneNumber ?? '';
+        }
       }
 
-      _notifier.value = const AsyncSnapshot.withData(ConnectionState.done, null);
+      // initialize the name As passport
+      _initializeStudentDetailsModels();
+
+
+
+      // fetch Draft for current Application
+      await _fetchDraft();
+
+      _notifier.value =
+          const AsyncSnapshot.withData(ConnectionState.done, null);
     });
+  }
+
+  // fetch draft and check if available then set draft id and if the user want to move with draft then prefill form with draft and if not then delete draft and set userId null.
+  Future _fetchDraft() async {
+    final findDraftByConfigurationKeyProvider =
+        Provider.of<FindDraftByConfigurationKeyViewmodel>(context,
+            listen: false);
+
+    // fetching te draft
+    await findDraftByConfigurationKeyProvider.findDraftByConfigurationKey(
+        configurationKey: _selectedScholarship?.configurationKey);
+
+    if (findDraftByConfigurationKeyProvider.apiResponse.status ==
+        Status.COMPLETED) {
+      var draftData = findDraftByConfigurationKeyProvider.apiResponse.data;
+      final draft =
+          draftData?.status; // to ensure that draft version is available or not
+
+      if (draft != null) {
+        // setting draft id ( it is used to store save draft with the same id if it is available before)
+        draftId = draftData?.applicationId;
+        return Dialogs.materialDialog(
+            barrierDismissible: false,
+            msg: 'Would you like to move with the Draft version',
+            title: "Draft Available",
+            color: Colors.white,
+            context: context,
+            actionsBuilder: (context) {
+              return [
+                // delete draft
+                Consumer<DeleteDraftViewmodel>(
+                  builder: (context, provider, _) {
+                    return provider.apiResponse.status == Status.LOADING
+                        ? Utils.cupertinoLoadingIndicator()
+                        : IconsOutlineButton(
+                            onPressed: () async {
+                              // delete Draft Permanent
+                              await provider.deleteDraft(
+                                  draftId: draftId ?? '');
+                              if (provider.apiResponse.status ==
+                                  Status.COMPLETED) {
+                                draftId = null;
+                                _navigationService.goBack();
+                              }
+                            },
+                            text: 'No',
+                            iconData: Icons.cancel_outlined,
+                            textStyle: const TextStyle(color: Colors.grey),
+                            iconColor: Colors.grey,
+                          );
+                  },
+                ),
+
+                // go with draft
+                IconsButton(
+                  onPressed: () {
+                    // clean the draft application data and prefill the fields
+                    Map<String, dynamic> cleanedDraft = jsonDecode(
+                        cleanDraftXmlToJson(draftData?.applicationData ?? ''));
+
+                    if (cleanedDraft['nameAsPasport'] != null &&
+                        cleanedDraft['nameAsPasport'].isNotEmpty) {
+                      _nameAsPassport.clear();
+                      for (var element in cleanedDraft['nameAsPasport']) {
+                        _nameAsPassport.add(PersonName.fromJson(element));
+                      }
+                    }
+
+                    final langProvider = Provider.of<LanguageChangeViewModel>(
+                        context,
+                        listen: false);
+
+                    // passport Data Prefilled
+                    _passportNationalityController.text =
+                        cleanedDraft['country'] ?? '';
+                    _passportPlaceOfIssueController.text =
+                        cleanedDraft['passportIssuePlace'] ?? '';
+                    _passportNumberController.text =
+                        cleanedDraft['passportId'] ?? '';
+                    _passportIssueDateController.text =
+                        cleanedDraft['passportIssueDate'] ?? '';
+                    _passportExpiryDateController.text =
+                        cleanedDraft['passportExpiryDate'] ?? '';
+                    _passportUnifiedNoController.text =
+                        cleanedDraft['unifiedNo'] ?? '';
+
+                    // personal information prefill
+                    _emiratesIdExpiryDateController.text =
+                        cleanedDraft['emirateIdExpiryDate'] ?? '';
+                    _dateOfBirthController.text =
+                        cleanedDraft['dateOfBirth'] ?? '';
+                    _placeOfBirthController.text =
+                        cleanedDraft['placeOfBirth'] ?? '';
+                    _genderController.text = cleanedDraft['gender'] ?? '';
+
+                    _maritalStatusController.text =
+                        cleanedDraft['maritalStatus'] ?? '';
+                    _studentEmailController.text =
+                        cleanedDraft['emailId'] ?? '';
+
+                    // family information
+                    _familyInformationEmiratesController.text =
+                        cleanedDraft['familyNo'] ?? '';
+                    _populateTownOnFamilyInformationEmiratesItem(
+                        langProvider: langProvider);
+                    _familyInformationTownVillageNoController.text =
+                        cleanedDraft['town'] ?? '';
+                    _familyInformationParentGuardianNameController.text =
+                        cleanedDraft['parentName'] ?? '';
+                    _familyInformationRelationTypeController.text =
+                        cleanedDraft['relationType'] ?? '';
+                    _familyInformationFamilyBookNumberController.text =
+                        cleanedDraft['familyNumber'] ?? '';
+                    _familyInformationMotherNameController.text =
+                        cleanedDraft['motherName'] ?? '';
+
+                    // scholarship relative
+                    _isRelativeStudyingFromScholarship =
+                        cleanedDraft['relativeStudyinScholarship'] == 'true';
+                    if ((_isRelativeStudyingFromScholarship ?? false) &&
+                        cleanedDraft['relativeDetails'] != null) {
+                      for (var element in cleanedDraft['relativeDetails']) {
+                        _relativeInfoList.add(RelativeInfo.fromJson(element));
+                      }
+                    }
+
+                    // contact information
+                    if (cleanedDraft['phoneNunbers'] != null) {
+                      _phoneNumberList.clear();
+                      for (var element in cleanedDraft['phoneNunbers']) {
+                        _phoneNumberList.add(PhoneNumber.fromJson(element));
+                      }
+                    }
+
+                    // address information
+                    if (cleanedDraft['addressList'] != null) {
+                      _addressInformationList.clear(); // Clear the current list
+
+
+                      if (cleanedDraft['addressList'] != List) {
+                        _addressInformationList.add(Address.fromJson(cleanedDraft['addressList'])); // Add to the list
+                      _populateStateDropdown(langProvider: langProvider, index: 0);
+                      } else {
+
+                      for (int index = 0;
+                          index < cleanedDraft['addressList'].length;
+                          index++) {
+                        var element = cleanedDraft['addressList'][index];
+                        _addressInformationList.add(Address.fromJson(element)); // Add to the list
+                        _populateStateDropdown(langProvider: langProvider, index: index);
+                      }}
+                    }
+
+                    // military Services:
+                    _militaryServiceController.text =
+                        cleanedDraft['militaryService'] ?? '';
+                    switch (_militaryServiceController.text) {
+                      case 'Y':
+                        _isMilitaryService = MilitaryStatus.yes;
+                      case 'N':
+                        _isMilitaryService = MilitaryStatus.no;
+                      case 'P':
+                        _isMilitaryService = MilitaryStatus.postponed;
+                      case 'R':
+                        _isMilitaryService = MilitaryStatus.exemption;
+                    }
+                    _militaryServiceStartDateController.text =
+                        cleanedDraft['militaryServiceStartDate'] ?? '';
+                    _militaryServiceEndDateController.text =
+                        cleanedDraft['militaryServiceEndDate'] ?? '';
+                    _reasonForMilitaryController.text =
+                        cleanedDraft['reasonForMilitarty'] ?? '';
+
+                    // graduation details
+                    if (cleanedDraft['graduationList'] != null) {
+                      _graduationDetailsList.clear(); // Clear the current list
+                      if(cleanedDraft['graduationList'] != List) {
+                    _graduationDetailsList.add(GraduationInfo.fromJson(cleanedDraft['graduationList'])); // Add to the list
+                       // populate dropdowns
+                    _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: 0);
+                    _populateUniversityMenuItemsList(langProvider: langProvider, index: 0);
+                      }
+                    else{
+                      for (int index = 0; index < cleanedDraft['graduationList'].length; index++) {
+                        var element = cleanedDraft['graduationList'][index];
+                        _graduationDetailsList.add(GraduationInfo.fromJson(element)); // Add to the list
+                        // populate dropdowns
+                        _populateGraduationLastTermMenuItemsList(
+                            langProvider: langProvider, index: index);
+                        _populateUniversityMenuItemsList(
+                            langProvider: langProvider, index: index);
+                      }}
+                    }
+
+                    _acadProgramDdsController.text = cleanedDraft['acadProgramDds'] ?? '';
+                    _acadProgramPgrdController.text = cleanedDraft['acadProgramPgrd'] ?? '';
+
+                    // major Details
+                    if (cleanedDraft['majorWishList'] != null) {
+                      _majorsWishlist.clear(); // Clear the current list
+                      for (int index = 0;
+                          index < cleanedDraft['majorWishList'].length;
+                          index++) {
+                        var element = cleanedDraft['majorWishList'][index];
+                        _majorsWishlist.add(
+                            MajorWishList.fromJson(element)); // Add to the list
+                      }
+                    }
+
+                    // university Priority
+                    if (cleanedDraft['universtiesPriorityList'] != null) {
+                      _universityPriorityList.clear(); // Clear the current list
+                      for (int index = 0;
+                          index <
+                              cleanedDraft['universtiesPriorityList'].length;
+                          index++) {
+                        var element =
+                            cleanedDraft['universtiesPriorityList'][index];
+                        _universityPriorityList.add(UniversityPriority.fromJson(
+                            element)); // Add to the list
+                        populateUniversitiesWishList(
+                            _universityPriorityList[index]);
+                      }
+                    }
+
+                    // required Examinations
+                    if (cleanedDraft['requiredExaminationList'] != null) {
+                      _requiredExaminationList.clear(); // Clear the current list
+                      if (cleanedDraft['requiredExaminationList'] != List) {
+                        _requiredExaminationList.add(RequiredExaminations.fromJson(cleanedDraft['requiredExaminationList'])); // Add to the list
+                      _populateExaminationTypeDropdown(langProvider: langProvider, index: 0,);
+
+                      } else {
+                      for (int index = 0; index < cleanedDraft['requiredExaminationList'].length; index++) {
+                        var element = cleanedDraft['requiredExaminationList'][index];
+                        _requiredExaminationList.add(RequiredExaminations.fromJson(element)); // Add to the list
+                        // populate examination type dropdown
+                        _populateExaminationTypeDropdown(langProvider: langProvider, index: index,);
+                      }
+                    }}
+
+                    // employment Status
+                    _employmentStatus = cleanedDraft['employmentStatus'] ?? '';
+
+                    // Employment History
+                    if (cleanedDraft['emplymentHistory'] != null && displayEmploymentHistory()) {
+                      _employmentHistoryList.clear(); // Clear the current list
+
+                      if (cleanedDraft['emplymentHistory'] != List) {
+                        _employmentHistoryList.add(EmploymentHistory.fromJson(
+                            cleanedDraft['emplymentHistory'])); // Add to the list
+                        // populate examination type dropdown
+                        _populateExaminationTypeDropdown(
+                          langProvider: langProvider,
+                          index: 0,
+                        );
+                      } else {
+                        for (int index = 0;
+                            index < cleanedDraft['emplymentHistory'].length;
+                            index++) {
+                          var element = cleanedDraft['emplymentHistory'][index];
+                          _employmentHistoryList.add(EmploymentHistory.fromJson(
+                              element)); // Add to the list
+                          // populate examination type dropdown
+                          _populateExaminationTypeDropdown(
+                            langProvider: langProvider,
+                            index: index,
+                          );
+                        }
+                      }
+                    }
+
+                    // high school
+
+                    print(cleanedDraft['highSchoolList']);
+                    if (cleanedDraft['highSchoolList'] != null && displayHighSchool()) {
+                      _highSchoolList.clear(); // Clear the current list
+                      if (cleanedDraft['highSchoolList'] != List) {
+                        _highSchoolList.add(HighSchool.fromJson(cleanedDraft['highSchoolList'])); // Add to the list
+                      } else {
+                        for (int index = 0; index < cleanedDraft['highSchoolList'].length; index++) {
+                          var element = cleanedDraft['highSchoolList'][index];
+                          _highSchoolList.add(HighSchool.fromJson(element)); // Add to the list
+                        }
+                      }
+                    }
+
+
+                    _navigationService.goBack();
+                  },
+                  text: 'Yes',
+                  iconData: Icons.arrow_circle_right_outlined,
+                  color: Colors.green,
+                  textStyle: const TextStyle(color: Colors.white),
+                  iconColor: Colors.white,
+                ),
+              ];
+            });
+        // prefill the form with the draft
+        // _prefillFormWithDraft(draft);
+      }
+    }
   }
 
   // *------------------------- Init State of the form start ----------------------------------*
@@ -1004,7 +1049,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           color: AppColors.hintDarkGrey,
                         ),
                         // Progress Indicator for validated steps:
-                        StepsProgressView(totalSections: totalSections, currentSectionIndex: _currentSectionIndex),
+                        StepsProgressView(
+                            totalSections: totalSections,
+                            currentSectionIndex: _currentSectionIndex),
                       ],
                     ),
                   ),
@@ -1012,18 +1059,21 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   // Form Sections with PageView
                   Expanded(
                     child: PageView.builder(
-                      controller: _pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      // Disable swipe gestures
-                      itemCount: totalSections,
-
+                        controller: _pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        // Disable swipe gestures
+                        itemCount: totalSections,
                         itemBuilder: (context, index) {
                           String key = _selectedScholarship?.configurationKey;
-                          String? acadmicCareer = _selectedScholarship?.acadmicCareer;
+                          String? acadmicCareer =
+                              _selectedScholarship?.acadmicCareer;
 
                           // Use a helper function to avoid repetition
                           bool shouldShowHighSchoolDetails() {
-                            return acadmicCareer == 'UG' || acadmicCareer == 'UGRD' || acadmicCareer == 'SCHL' || acadmicCareer == 'HCHL';
+                            return acadmicCareer == 'UG' ||
+                                acadmicCareer == 'UGRD' ||
+                                acadmicCareer == 'SCHL' ||
+                                acadmicCareer == 'HCHL';
                           }
 
                           bool isUniversityAndMajorsRequired() {
@@ -1031,7 +1081,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           }
 
                           bool isRequiredExaminationDetailsRequired() {
-                            return !(acadmicCareer == 'SCHL' || acadmicCareer == 'HCHL');
+                            return !(acadmicCareer == 'SCHL' ||
+                                acadmicCareer == 'HCHL');
                           }
 
                           bool isAttachmentSectionForExt() {
@@ -1045,10 +1096,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           // Switch case handling for index
                           switch (index) {
                             case 0:
-                              return _studentUndertakingSection(step: index,langProvider: langProvider);
+                              return _studentUndertakingSection(
+                                  step: index, langProvider: langProvider);
 
                             case 1:
-                              return _studentDetailsSection(step: index, langProvider: langProvider);
+                              return _studentDetailsSection(
+                                  step: index, langProvider: langProvider);
 
                             case 2:
                               return SingleChildScrollView(
@@ -1056,64 +1109,76 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   children: [
                                     // High school details section if the condition matches
                                     shouldShowHighSchoolDetails()
-                                        ? _highSchoolDetailsSection(step: index, langProvider: langProvider)
+                                        ? _highSchoolDetailsSection(
+                                            step: index,
+                                            langProvider: langProvider)
                                         : showVoid,
 
                                     // Graduation details section
-                                    _graduationDetailsSection(step: index, langProvider: langProvider),
+                                    _graduationDetailsSection(
+                                        step: index,
+                                        langProvider: langProvider),
                                   ],
                                 ),
                               );
 
                             case 3:
-                            // University and majors section if the condition matches
+                              // University and majors section if the condition matches
                               return isUniversityAndMajorsRequired()
-                                  ? _universityAndMajorsDetailsSection(step: index, langProvider: langProvider)
+                                  ? _universityAndMajorsDetailsSection(
+                                      step: index, langProvider: langProvider)
                                   : showVoid;
 
                             case 4:
-                            // Handle based on scholarship type and configuration key
+                              // Handle based on scholarship type and configuration key
                               if (isAttachmentSectionForExt()) {
-                                return _attachmentsSection(step: index, langProvider: langProvider);
+                                return _attachmentsSection(
+                                    step: index, langProvider: langProvider);
                               } else {
                                 return isRequiredExaminationDetailsRequired()
-                                    ? _requiredExaminationsDetailsSection(step: index, langProvider: langProvider)
+                                    ? _requiredExaminationsDetailsSection(
+                                        step: index, langProvider: langProvider)
                                     : showVoid;
                               }
 
                             case 5:
-                            // Handling based on configuration key for attachments or employment history
+                              // Handling based on configuration key for attachments or employment history
                               if (isAttachmentSectionForExt()) {
                                 return Container(child: Text("Confirmation"));
-                              } else if (key == 'SCOACTUGRD' || key == "SCOUGRDINT" || key == 'SCOMETLOGINT' || key == 'SCOUGRDEXT') {
-                                return _attachmentsSection(step: index, langProvider: langProvider);
+                              } else if (key == 'SCOACTUGRD' ||
+                                  key == "SCOUGRDINT" ||
+                                  key == 'SCOMETLOGINT' ||
+                                  key == 'SCOUGRDEXT') {
+                                return _attachmentsSection(
+                                    step: index, langProvider: langProvider);
                               } else {
                                 return shouldDisplayEmploymentHistory()
-                                    ? _employmentHistoryDetailsSection(step: index, langProvider: langProvider)
+                                    ? _employmentHistoryDetailsSection(
+                                        step: index, langProvider: langProvider)
                                     : showVoid;
                               }
 
                             case 6:
-                            // Display confirmation based on configuration key
-                              if (key == 'SCOACTUGRD' || key == "SCOUGRDINT" || key == "SCOMETLOGINT" || key == "SCOUGRDEXT") {
+                              // Display confirmation based on configuration key
+                              if (key == 'SCOACTUGRD' ||
+                                  key == "SCOUGRDINT" ||
+                                  key == "SCOMETLOGINT" ||
+                                  key == "SCOUGRDEXT") {
                                 return Container(child: Text("Confirmation"));
                               } else {
-                                return _attachmentsSection(step: index, langProvider: langProvider);
+                                return _attachmentsSection(
+                                    step: index, langProvider: langProvider);
                               }
 
                             case 7:
-                            // Confirmation at the end
+                              // Confirmation at the end
                               return Container(child: Text("Confirmation"));
 
                             default:
                               return Container(); // Fallback for unexpected index values
                           }
-                        }
-
-                    ),
+                        }),
                   ),
-
-
                 ],
               );
             }));
@@ -1125,7 +1190,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // student undertaking check:
   bool _acceptStudentUndertaking = false;
 
-  Widget _studentUndertakingSection({required int step,required LanguageChangeViewModel langProvider}) {
+  Widget _studentUndertakingSection(
+      {required int step, required LanguageChangeViewModel langProvider}) {
     return Column(
       children: [
         // Accept Pledge
@@ -1143,17 +1209,21 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         ),
 
         Padding(
-          padding:  EdgeInsets.all(kPadding),
-          child: CustomButton(buttonName: "Submit", buttonColor: AppColors.scoThemeColor,borderColor: Colors.transparent, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
-           var result =  validateSection(step: 0, langProvider: langProvider);
-           if(result){
-             nextSection();
-           }
-          }),
+          padding: EdgeInsets.all(kPadding),
+          child: CustomButton(
+              buttonName: "Submit",
+              buttonColor: AppColors.scoThemeColor,
+              borderColor: Colors.transparent,
+              isLoading: false,
+              textDirection: getTextDirection(langProvider),
+              onTap: () {
+                var result =
+                    validateSection(step: 0, langProvider: langProvider);
+                if (result) {
+                  nextSection();
+                }
+              }),
         )
-
-
-
       ],
     );
   }
@@ -1208,27 +1278,26 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   String? _englishGrandFatherNameError;
   String? _englishFamilyNameError;
 
-  late Map<String, dynamic> _arabicName = {};
-  late Map<String, dynamic> _englishName = {};
-  late List<Map<String, dynamic>> _nameAsPassport = [];
+  late PersonName _arabicName;
+
+  late PersonName _englishName;
+  late List<PersonName> _nameAsPassport = [];
 
   // to save the details in the passport data list for name as passport
   void _initializeStudentDetailsModels() {
     _arabicName = PersonName(
-            nameType: 'PRI',
-            studentName: _arabicStudentNameController.text,
-            fatherName: _arabicFatherNameController.text,
-            grandFatherName: _arabicGrandFatherNameController.text,
-            familyName: _arabicFamilyNameController.text)
-        .toJson();
+        nameType: 'PRI',
+        studentName: _arabicStudentNameController.text,
+        fatherName: _arabicFatherNameController.text,
+        grandFatherName: _arabicGrandFatherNameController.text,
+        familyName: _arabicFamilyNameController.text);
 
     _englishName = PersonName(
-            nameType: 'ENG',
-            studentName: _englishStudentNameController.text,
-            fatherName: _englishFatherNameController.text,
-            grandFatherName: _englishGrandFatherNameController.text,
-            familyName: _englishFamilyNameController.text)
-        .toJson();
+        nameType: 'ENG',
+        studentName: _englishStudentNameController.text,
+        fatherName: _englishFatherNameController.text,
+        grandFatherName: _englishGrandFatherNameController.text,
+        familyName: _englishFamilyNameController.text);
 
     _nameAsPassport = [_arabicName, _englishName];
   }
@@ -1276,10 +1345,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   List<DropdownMenuItem> _maritalStatusMenuItemsList = [];
 
   // Emirates ID
-  final TextEditingController _emiratesIdController = TextEditingController(text: "784196207416171");
+  final TextEditingController _emiratesIdController =
+      TextEditingController(text: "784196207416171");
 
 // Emirates ID Expiry Date
-  final TextEditingController _emiratesIdExpiryDateController = TextEditingController();
+  final TextEditingController _emiratesIdExpiryDateController =
+      TextEditingController();
 
 // Date of Birth
   final TextEditingController _dateOfBirthController = TextEditingController();
@@ -1291,13 +1362,15 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   final TextEditingController _genderController = TextEditingController();
 
 // Marital Status
-  final TextEditingController _maritalStatusController = TextEditingController();
+  final TextEditingController _maritalStatusController =
+      TextEditingController();
 
 // Student Email Address
   final TextEditingController _studentEmailController = TextEditingController();
 
 // Is Mother UAE National?
-  final TextEditingController _motherUAENationalController = TextEditingController();
+  final TextEditingController _motherUAENationalController =
+      TextEditingController();
 
 // Focus Nodes
 
@@ -1363,7 +1436,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       TextEditingController();
   final TextEditingController _familyInformationFamilyBookNumberController =
       TextEditingController();
-  final TextEditingController _familyInformationMotherNameController = TextEditingController();
+  final TextEditingController _familyInformationMotherNameController =
+      TextEditingController();
 
 // Focus Nodes for Family Information
   final FocusNode _familyInformationEmiratesFocusNode = FocusNode();
@@ -1498,6 +1572,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         onChanged: (value) {
                           setState(() {
                             if (_arabicStudentNameFocusNode.hasFocus) {
+                              // calling to convert to json name as passport
+                              _initializeStudentDetailsModels();
                               _arabicStudentNameError =
                                   ErrorText.getArabicNameError(
                                       name: _arabicStudentNameController.text,
@@ -1523,6 +1599,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         onChanged: (value) {
                           setState(() {
                             if (_arabicFatherNameFocusNode.hasFocus) {
+                              _initializeStudentDetailsModels();
                               _arabicFatherNameError =
                                   ErrorText.getArabicNameError(
                                       name: _arabicFatherNameController.text,
@@ -1548,6 +1625,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         onChanged: (value) {
                           if (_arabicGrandFatherNameFocusNode.hasFocus) {
                             setState(() {
+                              _initializeStudentDetailsModels();
+
                               _arabicGrandFatherNameError =
                                   ErrorText.getArabicNameError(
                                       name:
@@ -1574,6 +1653,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         onChanged: (value) {
                           if (_arabicFamilyNameFocusNode.hasFocus) {
                             setState(() {
+                              _initializeStudentDetailsModels();
+
                               _arabicFamilyNameError =
                                   ErrorText.getArabicNameError(
                                       name: _arabicFamilyNameController.text,
@@ -1607,6 +1688,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         onChanged: (value) {
                           setState(() {
                             if (_englishStudentNameFocusNode.hasFocus) {
+                              _initializeStudentDetailsModels();
+
                               _englishStudentNameError =
                                   ErrorText.getEnglishNameError(
                                       name: _englishStudentNameController.text,
@@ -1632,6 +1715,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         onChanged: (value) {
                           setState(() {
                             if (_englishFatherNameFocusNode.hasFocus) {
+                              _initializeStudentDetailsModels();
+
                               _englishFatherNameError =
                                   ErrorText.getEnglishNameError(
                                       name: _englishFatherNameController.text,
@@ -1657,6 +1742,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         onChanged: (value) {
                           if (_englishGrandFatherNameFocusNode.hasFocus) {
                             setState(() {
+                              _initializeStudentDetailsModels();
+
                               _englishGrandFatherNameError =
                                   ErrorText.getEnglishNameError(
                                       name: _englishGrandFatherNameController
@@ -1683,6 +1770,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         onChanged: (value) {
                           if (_englishFamilyNameFocusNode.hasFocus) {
                             setState(() {
+                              _initializeStudentDetailsModels();
+
                               _englishFamilyNameError =
                                   ErrorText.getEnglishNameError(
                                       name: _englishFamilyNameController.text,
@@ -1726,12 +1815,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                             _familyInformationFamilyBookNumberController
                                 .clear();
                           }
-
-                          // isStudyCountry for majors selection
-                          isStudyCountry = value == 'ARE' ? true : false;
-                          _majorsMenuItemsList =
-                              getMajors(); // calling the getMajors method to populate the majors function
-                          print(_majorsMenuItemsList.toString());
 
                           // by default set no for military service
                           _isMilitaryService = MilitaryStatus.no;
@@ -2379,11 +2462,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       langProvider: langProvider),
                                   _scholarshipFormTextField(
                                       currentFocusNode:
-                                      _familyInformationMotherNameFocusNode,
+                                          _familyInformationMotherNameFocusNode,
                                       controller:
-                                      _familyInformationMotherNameController,
+                                          _familyInformationMotherNameController,
                                       hintText: "Enter Mother Name",
-                                      errorText: _familyInformationMotherNameErrorText,
+                                      errorText:
+                                          _familyInformationMotherNameErrorText,
                                       onChanged: (value) {
                                         if (_familyInformationMotherNameFocusNode
                                             .hasFocus) {
@@ -2391,8 +2475,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                             _familyInformationMotherNameErrorText =
                                                 ErrorText.getEmptyFieldError(
                                                     name:
-                                                    _familyInformationMotherNameController
-                                                        .text,
+                                                        _familyInformationMotherNameController
+                                                            .text,
                                                     context: context);
                                           });
                                         }
@@ -2550,10 +2634,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           currentFocusNode: relativeInformation
                                               .countryUniversityFocusNode,
                                           nextFocusNode: index <
-                                          _relativeInfoList.length - 1
-                                          ? _relativeInfoList[index + 1]
-                                      .relativeNameFocusNode
-                                      : null,
+                                                  _relativeInfoList.length - 1
+                                              ? _relativeInfoList[index + 1]
+                                                  .relativeNameFocusNode
+                                              : null,
                                           controller: relativeInformation
                                               .countryUniversityController,
                                           hintText:
@@ -2788,6 +2872,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       langProvider: langProvider),
                   _scholarshipFormDropdown(
                     readOnly: (index == 0 || index == 1),
+                    filled: (index == 0 || index == 1),
                     controller: phoneNumber.phoneTypeController,
                     currentFocusNode: phoneNumber.phoneTypeFocusNode,
                     menuItemsList: _phoneNumberTypeMenuItemsList,
@@ -3132,10 +3217,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   // phone Type
                   fieldHeading(
                       title: "Emirates/State",
-                      important:
-                          addressInformation.stateDropdownMenuItems!.isNotEmpty,
+                      important: addressInformation
+                              .stateDropdownMenuItems?.isNotEmpty ??
+                          false,
                       langProvider: langProvider),
                   _scholarshipFormDropdown(
+                    filled: addressInformation.stateDropdownMenuItems?.isEmpty,
                     controller: addressInformation.stateController,
                     currentFocusNode: addressInformation.stateFocusNode,
                     menuItemsList: addressInformation.stateDropdownMenuItems,
@@ -3252,8 +3339,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // TextEditingControllers for military service
   TextEditingController _militaryServiceController = TextEditingController();
-  TextEditingController _militaryServiceStartDateController = TextEditingController();
-  TextEditingController _militaryServiceEndDateController = TextEditingController();
+  TextEditingController _militaryServiceStartDateController =
+      TextEditingController();
+  TextEditingController _militaryServiceEndDateController =
+      TextEditingController();
   TextEditingController _reasonForMilitaryController = TextEditingController();
 
   // FocusNodes for each field
@@ -3517,7 +3606,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // *--------------------------------------------------------------- High School Section Start ----------------------------------------------------------------------------*
   // step-3: high school details
-
+    bool displayHighSchool(){
+    return (_selectedScholarship?.acadmicCareer == 'UG' ||
+        _selectedScholarship?.acadmicCareer == 'UGRD' ||
+        _selectedScholarship?.acadmicCareer == 'SCHL' ||
+        _selectedScholarship?.acadmicCareer == 'HCHL');
+  }
   List _highSchoolLevelMenuItemsList = [];
   List _highSchoolTypeMenuItemsList = [];
   List _highSchoolSubjectsItemsList = [];
@@ -3734,808 +3828,774 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           kFormHeight,
 
           // *--------------------------------------------------------------- High School Details Section Start ----------------------------------------------------------------------------*
-              CustomInformationContainer(
-                  title: "High School Details",
-                  expandedContent: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // list view of high schools: this will include the information of the school like school level,country, ...., subjects details
-                      Column(children: [
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _highSchoolList.length,
-                            itemBuilder: (context, index) {
-                              final highSchoolInfo = _highSchoolList[index];
-                              return Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // ****************************************************************************************************************************************************
+          CustomInformationContainer(
+              title: "High School Details",
+              expandedContent: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // list view of high schools: this will include the information of the school like school level,country, ...., subjects details
+                  Column(children: [
+                    ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _highSchoolList.length,
+                        itemBuilder: (context, index) {
+                          final highSchoolInfo = _highSchoolList[index];
+                          return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // ****************************************************************************************************************************************************
 
-                                    _sectionTitle(
-                                        title:
-                                            "High School Detail ${index + 1}"),
+                                _sectionTitle(
+                                    title: "High School Detail ${index + 1}"),
 
-                                    kFormHeight,
-                                    // title
-                                    fieldHeading(
-                                        title: "High School Level",
-                                        important: true,
-                                        langProvider: langProvider),
+                                kFormHeight,
+                                // title
+                                fieldHeading(
+                                    title: "High School Level",
+                                    important: true,
+                                    langProvider: langProvider),
 
-                                    // dropdowns on the basis of selected one
-                                    ((_selectedScholarship?.admitType ==
+                                // dropdowns on the basis of selected one
+                                ((_selectedScholarship?.admitType == 'MOS' ||
+                                                _selectedScholarship
+                                                        ?.admitType ==
+                                                    'MOP') &&
+                                            index == 1) ||
+                                        index <=
+                                            1 // Todo: before <=2 did be me is <=1
+
+                                    ? Column(children: [
+                                        _scholarshipFormDropdown(
+                                          readOnly: true,
+                                          filled: true,
+                                          controller:
+                                              highSchoolInfo.hsLevelController,
+                                          currentFocusNode:
+                                              highSchoolInfo.hsLevelFocusNode,
+                                          menuItemsList:
+                                              _highSchoolLevelMenuItemsList,
+                                          hintText: "Select High School Level",
+                                          errorText:
+                                              highSchoolInfo.hsLevelError,
+                                          onChanged: (value) {
+                                            highSchoolInfo.hsLevelError = null;
+                                            setState(() {
+                                              // setting the value for address type
+                                              highSchoolInfo.hsLevelController
+                                                  .text = value!;
+
+                                              // populating the state dropdown
+
+                                              _populateStateDropdown(
+                                                  langProvider: langProvider,
+                                                  index: index);
+
+                                              //This thing is creating error: don't know how to fix it:
+                                              Utils.requestFocus(
+                                                  focusNode: highSchoolInfo
+                                                      .hsCountryFocusNode,
+                                                  context: context);
+                                            });
+                                          },
+                                        )
+                                      ])
+                                    : (((_selectedScholarship?.admitType ==
                                                         'MOS' ||
                                                     _selectedScholarship
                                                             ?.admitType ==
                                                         'MOP') &&
-                                                index == 1) ||
-                                            index <=
-                                                1 // Todo: before <=2 did be me is <=1
-
-                                        ? Column(children: [
-                                            _scholarshipFormDropdown(
-                                              readOnly: true,
-                                              filled: true,
-                                              controller: highSchoolInfo
-                                                  .hsLevelController,
-                                              currentFocusNode: highSchoolInfo
-                                                  .hsLevelFocusNode,
-                                              menuItemsList:
-                                                  _highSchoolLevelMenuItemsList,
-                                              hintText:
-                                                  "Select High School Level",
-                                              errorText:
-                                                  highSchoolInfo.hsLevelError,
-                                              onChanged: (value) {
-                                                highSchoolInfo.hsLevelError =
-                                                    null;
-                                                setState(() {
-                                                  // setting the value for address type
-                                                  highSchoolInfo
-                                                      .hsLevelController
-                                                      .text = value!;
-
-                                                  // populating the state dropdown
-
-                                                  _populateStateDropdown(
-                                                      langProvider:
-                                                          langProvider,
-                                                      index: index);
-
-                                                  //This thing is creating error: don't know how to fix it:
-                                                  Utils.requestFocus(
-                                                      focusNode: highSchoolInfo
-                                                          .hsCountryFocusNode,
-                                                      context: context);
-                                                });
-                                              },
-                                            )
-                                          ])
-                                        : (((_selectedScholarship?.admitType ==
-                                                            'MOS' ||
-                                                        _selectedScholarship
-                                                                ?.admitType ==
-                                                            'MOP') &&
-                                                    index > 0) ||
-                                                (_selectedScholarship
-                                                            ?.acadmicCareer ==
-                                                        'HCHL' &&
-                                                    index >= 1) ||
-                                                index >= 2)
-                                            ? _scholarshipFormDropdown(
-                                                controller: highSchoolInfo
-                                                    .hsLevelController,
-                                                currentFocusNode: highSchoolInfo
-                                                    .hsLevelFocusNode,
-                                                menuItemsList:
-                                                    _highSchoolLevelMenuItemsList,
-                                                hintText:
-                                                    "Select High School Level",
-                                                errorText:
-                                                    highSchoolInfo.hsLevelError,
-                                                onChanged: (value) {
-                                                  highSchoolInfo.hsLevelError =
-                                                      null;
-
-                                                  setState(() {
-                                                    bool alreadySelected =
-                                                        _highSchoolList
-                                                            .any((info) {
-                                                      return info !=
-                                                              highSchoolInfo &&
-                                                          info.hsLevelController
-                                                                  .text ==
-                                                              value!;
-                                                    });
-                                                    if (alreadySelected) {
-                                                      // If duplicate is found, show an error and clear the controller
-                                                      _alertService.showToast(
-                                                        context: context,
-                                                        message:
-                                                            "This level has already been selected. Please choose another one.",
-                                                      );
-                                                      highSchoolInfo
-                                                              .hsLevelError =
-                                                          "Please choose another";
-                                                    } else {
-                                                      // Assign the value only if it's not already selected
-                                                      highSchoolInfo
-                                                          .hsLevelController
-                                                          .text = value!;
-                                                      // Move focus to the next field
-                                                      Utils.requestFocus(
-                                                        focusNode: highSchoolInfo
-                                                            .hsCountryFocusNode,
-                                                        context: context,
-                                                      );
-                                                    }
-                                                  });
-                                                },
-                                              )
-                                            : showVoid,
-
-                                    kFormHeight,
-                                    // ****************************************************************************************************************************************************
-
-                                    // country
-                                    fieldHeading(
-                                        title: "Country",
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    _scholarshipFormDropdown(
-                                      controller:
-                                          highSchoolInfo.hsCountryController,
-                                      currentFocusNode: highSchoolInfo.hsCountryFocusNode,
-                                      menuItemsList: _nationalityMenuItemsList,
-                                      hintText: "Select Country",
-                                      errorText: highSchoolInfo.hsCountryError,
-                                      onChanged: (value) {
-                                        highSchoolInfo.hsCountryError = null;
-                                        highSchoolInfo.hsStateError = null;
-                                        highSchoolInfo.hsNameError = null;
-                                        setState(() {
-
-
-
-                                          // setting the value for address type
-                                          highSchoolInfo.hsCountryController
-                                              .text = value!;
-
-                                          highSchoolInfo.hsStateController
-                                              .clear();
-                                          highSchoolInfo.hsNameController
-                                              .clear();
-                                          highSchoolInfo
-                                              .schoolStateDropdownMenuItems
-                                              ?.clear();
-                                          highSchoolInfo
-                                              .schoolNameDropdownMenuItems
-                                              ?.clear();
-                                          // populating the high school state dropdown
-                                          _populateHighSchoolStateDropdown(
-                                              langProvider: langProvider,
-                                              index: index);
-
-                                          //This thing is creating error: don't know how to fix it:
-                                          Utils.requestFocus(
-                                              focusNode: highSchoolInfo
-                                                  .hsStateFocusNode,
-                                              context: context);
-                                        });
-                                      },
-                                    ),
-
-                                    kFormHeight,
-                                    // ****************************************************************************************************************************************************
-
-                                    // state
-                                    fieldHeading(
-                                        title: "State",
-                                        // important: true,
-                                        important: highSchoolInfo
-                                            .schoolStateDropdownMenuItems?.isNotEmpty ?? false,
-                                        langProvider: langProvider),
-
-                                    _scholarshipFormDropdown(
-                                      filled: highSchoolInfo
-                                          .schoolStateDropdownMenuItems?.isEmpty ?? false,
-                                      readOnly: highSchoolInfo
-                                          .schoolStateDropdownMenuItems?.isEmpty ?? false,
-                                      controller:
-                                          highSchoolInfo.hsStateController,
-                                      currentFocusNode:
-                                          highSchoolInfo.hsStateFocusNode,
-                                      menuItemsList: highSchoolInfo
-                                              .schoolStateDropdownMenuItems ??
-                                          [],
-                                      hintText: "Select State",
-                                      errorText: highSchoolInfo.hsStateError,
-                                      onChanged: (value) {
-                                        highSchoolInfo.hsStateError = null;
-                                        highSchoolInfo.hsNameError = null;
-                                        setState(() {
-                                          highSchoolInfo
-                                              .hsStateController.text = value!;
-
-                                          highSchoolInfo.hsNameController
-                                              .clear();
-                                          highSchoolInfo
-                                              .schoolNameDropdownMenuItems
-                                              ?.clear();
-
-                                          // populating the high school state dropdown
-                                          _populateHighSchoolNameDropdown(
-                                              langProvider: langProvider,
-                                              index: index);
-
-                                          //This thing is creating error: don't know how to fix it:
-                                          Utils.requestFocus(
-                                              focusNode: highSchoolInfo
-                                                  .hsNameFocusNode,
-                                              context: context);
-                                        });
-                                      },
-                                    ),
-
-                                    kFormHeight,
-                                    // ****************************************************************************************************************************************************
-// high school name
-                                    if (highSchoolInfo
-                                            .hsCountryController.text ==
-                                        'ARE')
-                                      Column(
-                                        children: [
-// school name from dropdown
-                                          fieldHeading(
-                                              title: "School Name",
-                                              important: highSchoolInfo
-                                                  .hsCountryController.text ==
-                                                  'ARE',
-                                              langProvider: langProvider),
-                                          _scholarshipFormDropdown(
-                                            controller:
-                                                highSchoolInfo.hsNameController,
-                                            currentFocusNode:
-                                                highSchoolInfo.hsNameFocusNode,
-                                            menuItemsList: highSchoolInfo
-                                                    .schoolNameDropdownMenuItems ??
-                                                [],
-                                            hintText: "Select School Name",
-                                            errorText:
-                                                highSchoolInfo.hsNameError,
-                                            onChanged: (value) {
-                                              highSchoolInfo.hsNameError = null;
-                                              setState(() {
-                                                // setting the value for address type
-                                                highSchoolInfo.hsNameController
-                                                    .text = value!;
-                                                Utils.requestFocus(
-                                                    focusNode: highSchoolInfo
-                                                        .hsTypeFocusNode,
-                                                    context: context);
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      ),
-
-                                    // ****************************************************************************************************************************************************
-                                    // school name or other school name will be shown based on the conditions
-
-                                    // show school input filed based on the condition
-                                    if (highSchoolInfo
-                                                .hsCountryController.text !=
-                                            'ARE' ||
-                                        highSchoolInfo.hsNameController.text ==
-                                            'OTH')
-                                      Column(
-                                        children: [
-                                          kFormHeight,
-                                          fieldHeading(
-                                              title: highSchoolInfo
-                                                          .hsCountryController
-                                                          .text ==
-                                                      'ARE'
-                                                  ? "Other School Name"
-                                                  : "School Name",
-                                              important: true,
-                                              langProvider: langProvider),
-                                          _scholarshipFormTextField(
-                                              currentFocusNode: highSchoolInfo
-                                                          .hsCountryController
-                                                          .text ==
-                                                      'ARE'
-                                                  ? highSchoolInfo
-                                                      .otherHsNameFocusNode
-                                                  : highSchoolInfo
-                                                      .hsNameFocusNode,
-                                              nextFocusNode: highSchoolInfo
-                                                  .hsTypeFocusNode,
-                                              controller: highSchoolInfo
-                                                          .hsCountryController
-                                                          .text ==
-                                                      'ARE'
-                                                  ? highSchoolInfo
-                                                      .otherHsNameController
-                                                  : highSchoolInfo
-                                                      .hsNameController,
-                                              hintText: highSchoolInfo
-                                                          .hsCountryController
-                                                          .text ==
-                                                      'ARE'
-                                                  ? "Enter Other School Name"
-                                                  : "Enter School Name",
-                                              errorText: highSchoolInfo
-                                                          .hsCountryController
-                                                          .text ==
-                                                      'ARE'
-                                                  ? highSchoolInfo
-                                                      .otherHsNameError
-                                                  : highSchoolInfo.hsNameError,
-                                              onChanged: (value) {
-                                                // live error display for  high school name
-                                                if (highSchoolInfo
-                                                    .hsNameFocusNode.hasFocus) {
-                                                  setState(() {
-                                                    highSchoolInfo.hsNameError =
-                                                        ErrorText.getNameArabicEnglishValidationError(
-                                                            name: highSchoolInfo
-                                                                .hsNameController
-                                                                .text,
-                                                            context: context);
-                                                  });
-                                                }
-
-                                                // live error display for other high school name
-                                                if (highSchoolInfo
-                                                    .otherHsNameFocusNode
-                                                    .hasFocus) {
-                                                  setState(() {
-                                                    highSchoolInfo
-                                                            .otherHsNameError =
-                                                        ErrorText.getNameArabicEnglishValidationError(
-                                                            name: highSchoolInfo
-                                                                .otherHsNameController
-                                                                .text,
-                                                            context: context);
-                                                  });
-                                                }
-                                              }),
-                                        ],
-                                      ),
-
-                                    // ****************************************************************************************************************************************************
-                                    // school type
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: "School Type",
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    _scholarshipFormDropdown(
-                                      controller:
-                                          highSchoolInfo.hsTypeController,
-                                      currentFocusNode:
-                                          highSchoolInfo.hsTypeFocusNode,
-                                      menuItemsList:
-                                          _highSchoolTypeMenuItemsList ?? [],
-                                      hintText: "Select School Type",
-                                      errorText: highSchoolInfo.hsTypeError,
-                                      onChanged: (value) {
-                                        highSchoolInfo.hsTypeError = null;
-                                        highSchoolInfo.curriculumTypeError = null;
-                                        setState(() {
-                                          // setting the value for high school type
-                                          highSchoolInfo.hsTypeController.text =
-                                              value!;
-
-                                          highSchoolInfo
-                                              .curriculumTypeController
-                                              .clear();
-                                          highSchoolInfo
-                                              .schoolCurriculumTypeDropdownMenuItems
-                                              ?.clear();
-
-                                          // populating the high school curriculum dropdown
-                                          _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider, index: index);
-
-                                          Utils.requestFocus(focusNode: highSchoolInfo.curriculumTypeFocusNode, context: context);
-                                        });
-                                      },
-                                    ),
-
-                                    // ****************************************************************************************************************************************************
-                                    // curriculum Type
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: "Curriculum Type",
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    _scholarshipFormDropdown(
-                                      controller: highSchoolInfo
-                                          .curriculumTypeController,
-                                      currentFocusNode: highSchoolInfo
-                                          .curriculumTypeFocusNode,
-                                      menuItemsList: highSchoolInfo
-                                              .schoolCurriculumTypeDropdownMenuItems ??
-                                          [],
-                                      hintText: "Select Curriculum Type",
-                                      errorText:
-                                          highSchoolInfo.curriculumTypeError,
-                                      onChanged: (value) {
-                                        highSchoolInfo.curriculumTypeError =
-                                            null;
-                                        setState(() {
-                                          // setting the value for high school type
-                                          highSchoolInfo
-                                              .curriculumTypeController
-                                              .text = value!;
-
-                                          Utils.requestFocus(
-                                              focusNode: highSchoolInfo
-                                                  .curriculumAverageFocusNode,
-                                              context: context);
-                                        });
-                                      },
-                                    ),
-                                    // ****************************************************************************************************************************************************
-
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: "Curriculum Average",
-                                        important: true,
-                                        langProvider: langProvider),
-                                    _scholarshipFormTextField(
-                                        currentFocusNode: highSchoolInfo
-                                            .curriculumAverageFocusNode,
-                                        nextFocusNode: highSchoolInfo
-                                            .yearOfPassingFocusNode,
-                                        controller: highSchoolInfo
-                                            .curriculumAverageController,
-                                        hintText: "Enter Curriculum Average",
-                                        maxLength: highSchoolInfo
-                                                    .curriculumTypeController
-                                                    .text !=
-                                                'BRT'
-                                            ? 4
-                                            : 6,
-                                        errorText: highSchoolInfo
-                                            .curriculumAverageError,
-                                        onChanged: (value) {
-                                          if (highSchoolInfo
-                                              .curriculumAverageFocusNode
-                                              .hasFocus) {
-                                            setState(() {
-                                              highSchoolInfo
-                                                      .curriculumAverageError =
-                                                  ErrorText.getGradeValidationError(
-                                                      grade: highSchoolInfo
-                                                          .curriculumAverageController
-                                                          .text,
-                                                      context: context);
-                                            });
-                                          }
-                                        }),
-
-                                    // ****************************************************************************************************************************************************
-                                    // year of passing
-                                    fieldHeading(
-                                        title: "Year Of Passing",
-                                        important: (highSchoolInfo.curriculumAverageController.text.isNotEmpty),
-                                        langProvider: langProvider),
-                                    _scholarshipFormDateField(
-                                      // Prevent manual typing
-                                      currentFocusNode: highSchoolInfo.yearOfPassingFocusNode,
-                                      controller: highSchoolInfo.yearOfPassingController,
-                                      hintText: "Select Year of Passing",
-                                      errorText: highSchoolInfo.yearOfPassingError,
-                                      // Display error text if any
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (highSchoolInfo
-                                              .yearOfPassingFocusNode
-                                              .hasFocus) {
-                                            // Check if the year of passing field is empty or invalid
-                                            highSchoolInfo.yearOfPassingError =
-                                                ErrorText.getEmptyFieldError(
-                                              name: highSchoolInfo
-                                                  .yearOfPassingController.text,
-                                              context: context,
-                                            );
-                                          }
-                                        });
-                                      },
-                                      onTap: () async {
-                                        // Clear the error message when a date is selected
-                                        highSchoolInfo.yearOfPassingError =
-                                            null;
-
-                                        // Define the initial date as today's date (for year selection)
-                                        final DateTime initialDate =
-                                            DateTime.now();
-
-                                        // Use a specific max date if required (like schoolPassingDate from your controller)
-                                        // If no schoolPassingDate is available, use the current date as a fallback
-
-                                        // Todo: No Max date is given
-                                        final DateTime maxDate = DateTime.now();
-
-                                        // Define the valid date range for "Year of Passing"
-                                        final DateTime firstDate =
-                                            maxDate.subtract(const Duration(
-                                                days:
-                                                    20 * 365)); // Last 20 years
-                                        final DateTime lastDate = maxDate.add(
-                                            const Duration(
-                                                days:
-                                                    365)); // Limit up to the maxDate (e.g., current year or schoolPassingDate)
-
-                                        DateTime? date = await showDatePicker(
-                                          context: context,
-                                          barrierColor: AppColors.scoButtonColor
-                                              .withOpacity(0.1),
-                                          barrierDismissible: false,
-                                          locale: Provider.of<
-                                                      LanguageChangeViewModel>(
-                                                  context,
-                                                  listen: false)
-                                              .appLocale,
-                                          initialDate: initialDate,
-                                          firstDate: firstDate,
-                                          // Limit to the last 20 years
-                                          lastDate:
-                                              lastDate, // Limit up to the maxDate or current year
-                                        );
-
-                                        if (date != null) {
-                                          setState(() {
-                                            // Set the selected date in the controller (format to show only the year)
-                                            highSchoolInfo
-                                                    .yearOfPassingController
-                                                    .text =
-                                                DateFormat("dd/MM/yyyy")
-                                                    .format(date)
-                                                    .toString();
-
-                                            // Get the current year
-                                            String currentYear =
-                                                DateFormat('yyyy').format(date);
-
-                                            // Get the next year
-                                            String nextYear = DateFormat('yyyy')
-                                                .format(date.add(const Duration(
-                                                    days:
-                                                        365))); // Adding 365 days to get to next year
-
-                                            // Combine current and next year
-                                            String yearOfGraduation =
-                                                '$currentYear-$nextYear';
-
-                                            // Print the passing year
-                                            highSchoolInfo.passingYearController
-                                                .text = yearOfGraduation;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    // ****************************************************************************************************************************************************
-                                    // year of graduation:
-                                    kFormHeight,
-                                    const MyDivider(),
-                                    Container(
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.all(8),
-                                        color: AppColors.lightBlue1
-                                            .withOpacity(0.4),
-                                        child: Row(children: [
-                                          _sectionTitle(
-                                              title: "Year of Graduation"),
-                                          kFormHeight,
-                                          Expanded(
-                                              child: Text(highSchoolInfo
-                                                  .passingYearController.text))
-                                        ])),
-
-                                    kFormHeight,
-                                    // ****************************************************************************************************************************************************
-
-                                    const MyDivider(
-                                      color: AppColors.lightGrey,
-                                    ),
-                                    // ****************************************************************************************************************************************************
-
-                                    kFormHeight,
-                                    _sectionTitle(title: "Subjects"),
-                                    kFormHeight,
-                                    // ****************************************************************************************************************************************************
-                                    // regular subjects
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          highSchoolInfo.hsDetails.length,
-                                      itemBuilder: (context, index) {
-                                        var element =
-                                            highSchoolInfo.hsDetails[index];
-                                        return Column(
-                                          children: [
-                                            _subjectTitle(element
-                                                .subjectTypeController.text
-                                                .toString()),
-                                            _scholarshipFormTextField(
-                                              currentFocusNode: element.gradeFocusNode,
-                                              nextFocusNode: index + 1 <
-                                                      highSchoolInfo
-                                                          .hsDetails.length
-                                                  ? highSchoolInfo
-                                                      .hsDetails[index + 1]
-                                                      .gradeFocusNode
-                                                  : null,
-                                              controller:
-                                                  element.gradeController,
-                                              hintText: "Grade/Percentage",
-                                              maxLength: 4,
-                                              errorText: element.gradeError,
-                                              onChanged: (value) {
-                                                if (element
-                                                    .gradeFocusNode.hasFocus) {
-                                                  setState(() {
-                                                    element.gradeError = ErrorText
-                                                        .getGradeValidationError(
-                                                            grade: element
-                                                                .gradeController
-                                                                .text,
-                                                            context: context);
-                                                  });
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-
-                                    // ****************************************************************************************************************************************************
-
-                                    const MyDivider(
-                                      color: AppColors.lightGrey,
-                                    ),
-                                    kFormHeight,
-
-                                    // ****************************************************************************************************************************************************
-                                    // other subjects
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          highSchoolInfo.otherHSDetails.length,
-                                      itemBuilder: (context, index) {
-                                        var element = highSchoolInfo
-                                            .otherHSDetails[index];
-                                        return Column(
-                                          children: [
-                                            _subjectTitle(element
-                                                .subjectTypeController.text
-                                                .toString()),
-
-                                            // subject Name
-                                            _scholarshipFormTextField(
-                                              currentFocusNode: element
-                                                      .otherSubjectNameFocusNode ??
-                                                  FocusNode(),
-                                              nextFocusNode:
-                                                  element.gradeFocusNode,
-                                              controller: element
-                                                      .otherSubjectNameController ??
-                                                  TextEditingController(),
-                                              hintText: "Other Subject Name",
-                                              errorText:
-                                                  element.otherSubjectNameError,
-                                              onChanged: (value) {
-                                                if (element
-                                                    .otherSubjectNameFocusNode!
-                                                    .hasFocus) {
-                                                  setState(() {
-                                                    element.otherSubjectNameError =
-                                                        ErrorText
-                                                            .getNameArabicEnglishValidationError(
-                                                                name: element
-                                                                    .otherSubjectNameController!
-                                                                    .text,
-                                                                context:
-                                                                    context);
-                                                  });
-                                                }
-                                              },
-                                            ),
-                                            kFormHeight,
-                                            // grade
-                                            _scholarshipFormTextField(
-                                              currentFocusNode:
-                                                  element.gradeFocusNode,
-                                              nextFocusNode: index + 1 <
-                                                      highSchoolInfo
-                                                          .otherHSDetails.length
-                                                  ? highSchoolInfo
-                                                      .otherHSDetails[index + 1]
-                                                      .otherSubjectNameFocusNode
-                                                  : null,
-                                              controller:
-                                                  element.gradeController,
-                                              hintText: "Grade/Percentage",
-                                              maxLength: 4,
-                                              errorText: element.gradeError,
-                                              onChanged: (value) {
-                                                if (element
-                                                    .gradeFocusNode.hasFocus) {
-                                                  setState(() {
-                                                    element.gradeError = ErrorText
-                                                        .getGradeValidationError(
-                                                            grade: element
-                                                                .gradeController
-                                                                .text,
-                                                            context: context);
-                                                  });
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-
-                                    // ****************************************************************************************************************************************************
-                                    // if it obeys the constraints of showing dropdown only then it will be visible to the user to delete the item
-                                    // Todo: Condition Applied by me that index check should only for greater then not equal to
-                                    (_selectedScholarship?.admitType == 'MOS' ||
-                                                _selectedScholarship
-                                                        ?.admitType ==
-                                                    'MOP') ||
+                                                index > 0) ||
                                             (_selectedScholarship
                                                         ?.acadmicCareer ==
                                                     'HCHL' &&
                                                 index >= 1) ||
-                                            index > 1
-                                        ? _addRemoveMoreSection(
-                                            title: "Delete",
-                                            add: false,
-                                            onChanged: () {
+                                            index >= 2)
+                                        ? _scholarshipFormDropdown(
+                                            controller: highSchoolInfo
+                                                .hsLevelController,
+                                            currentFocusNode:
+                                                highSchoolInfo.hsLevelFocusNode,
+                                            menuItemsList:
+                                                _highSchoolLevelMenuItemsList,
+                                            hintText:
+                                                "Select High School Level",
+                                            errorText:
+                                                highSchoolInfo.hsLevelError,
+                                            onChanged: (value) {
+                                              highSchoolInfo.hsLevelError =
+                                                  null;
+
                                               setState(() {
-                                                _removeHighSchool(index);
+                                                bool alreadySelected =
+                                                    _highSchoolList.any((info) {
+                                                  return info !=
+                                                          highSchoolInfo &&
+                                                      info.hsLevelController
+                                                              .text ==
+                                                          value!;
+                                                });
+                                                if (alreadySelected) {
+                                                  // If duplicate is found, show an error and clear the controller
+                                                  _alertService.showToast(
+                                                    context: context,
+                                                    message:
+                                                        "This level has already been selected. Please choose another one.",
+                                                  );
+                                                  highSchoolInfo.hsLevelError =
+                                                      "Please choose another";
+                                                } else {
+                                                  // Assign the value only if it's not already selected
+                                                  highSchoolInfo
+                                                      .hsLevelController
+                                                      .text = value!;
+                                                  // Move focus to the next field
+                                                  Utils.requestFocus(
+                                                    focusNode: highSchoolInfo
+                                                        .hsCountryFocusNode,
+                                                    context: context,
+                                                  );
+                                                }
                                               });
-                                            })
+                                            },
+                                          )
                                         : showVoid,
-                                  ]);
-                            }),
-                        // ****************************************************************************************************************************************************
-                        const MyDivider(
-                          color: AppColors.lightGrey,
-                        ),
-                        kFormHeight,
 
-                        // ****************************************************************************************************************************************************
+                                kFormHeight,
+                                // ****************************************************************************************************************************************************
 
-                        _addRemoveMoreSection(
-                            title: "Add",
-                            add: true,
-                            onChanged: () {
-                              setState(() {
-                                _addHighSchool();
-                              });
-                            }),
-                      ]),
-                      // _highSchoolInformationSection()
-                    ],
-                  ))
+                                // country
+                                fieldHeading(
+                                    title: "Country",
+                                    important: true,
+                                    langProvider: langProvider),
+
+                                _scholarshipFormDropdown(
+                                  controller:
+                                      highSchoolInfo.hsCountryController,
+                                  currentFocusNode:
+                                      highSchoolInfo.hsCountryFocusNode,
+                                  menuItemsList: _nationalityMenuItemsList,
+                                  hintText: "Select Country",
+                                  errorText: highSchoolInfo.hsCountryError,
+                                  onChanged: (value) {
+                                    highSchoolInfo.hsCountryError = null;
+                                    highSchoolInfo.hsStateError = null;
+                                    highSchoolInfo.hsNameError = null;
+                                    setState(() {
+                                      // setting the value for address type
+                                      highSchoolInfo.hsCountryController.text =
+                                          value!;
+
+                                      highSchoolInfo.hsStateController.clear();
+                                      highSchoolInfo.hsNameController.clear();
+                                      highSchoolInfo
+                                          .schoolStateDropdownMenuItems
+                                          ?.clear();
+                                      highSchoolInfo.schoolNameDropdownMenuItems
+                                          ?.clear();
+                                      // populating the high school state dropdown
+                                      _populateHighSchoolStateDropdown(
+                                          langProvider: langProvider,
+                                          index: index);
+
+                                      //This thing is creating error: don't know how to fix it:
+                                      Utils.requestFocus(
+                                          focusNode:
+                                              highSchoolInfo.hsStateFocusNode,
+                                          context: context);
+                                    });
+                                  },
+                                ),
+
+                                kFormHeight,
+                                // ****************************************************************************************************************************************************
+
+                                // state
+                                fieldHeading(
+                                    title: "State",
+                                    // important: true,
+                                    important: highSchoolInfo
+                                            .schoolStateDropdownMenuItems
+                                            ?.isNotEmpty ??
+                                        false,
+                                    langProvider: langProvider),
+
+                                _scholarshipFormDropdown(
+                                  filled: highSchoolInfo
+                                          .schoolStateDropdownMenuItems
+                                          ?.isEmpty ??
+                                      false,
+                                  readOnly: highSchoolInfo
+                                          .schoolStateDropdownMenuItems
+                                          ?.isEmpty ??
+                                      false,
+                                  controller: highSchoolInfo.hsStateController,
+                                  currentFocusNode:
+                                      highSchoolInfo.hsStateFocusNode,
+                                  menuItemsList: highSchoolInfo
+                                          .schoolStateDropdownMenuItems ??
+                                      [],
+                                  hintText: "Select State",
+                                  errorText: highSchoolInfo.hsStateError,
+                                  onChanged: (value) {
+                                    highSchoolInfo.hsStateError = null;
+                                    highSchoolInfo.hsNameError = null;
+                                    setState(() {
+                                      highSchoolInfo.hsStateController.text =
+                                          value!;
+
+                                      highSchoolInfo.hsNameController.clear();
+                                      highSchoolInfo.schoolNameDropdownMenuItems
+                                          ?.clear();
+
+                                      // populating the high school state dropdown
+                                      _populateHighSchoolNameDropdown(
+                                          langProvider: langProvider,
+                                          index: index);
+
+                                      //This thing is creating error: don't know how to fix it:
+                                      Utils.requestFocus(
+                                          focusNode:
+                                              highSchoolInfo.hsNameFocusNode,
+                                          context: context);
+                                    });
+                                  },
+                                ),
+
+                                kFormHeight,
+                                // ****************************************************************************************************************************************************
+// high school name
+                                if (highSchoolInfo.hsCountryController.text ==
+                                    'ARE')
+                                  Column(
+                                    children: [
+// school name from dropdown
+                                      fieldHeading(
+                                          title: "School Name",
+                                          important: highSchoolInfo
+                                                  .hsCountryController.text ==
+                                              'ARE',
+                                          langProvider: langProvider),
+                                      _scholarshipFormDropdown(
+                                        controller:
+                                            highSchoolInfo.hsNameController,
+                                        currentFocusNode:
+                                            highSchoolInfo.hsNameFocusNode,
+                                        menuItemsList: highSchoolInfo
+                                                .schoolNameDropdownMenuItems ??
+                                            [],
+                                        hintText: "Select School Name",
+                                        errorText: highSchoolInfo.hsNameError,
+                                        onChanged: (value) {
+                                          highSchoolInfo.hsNameError = null;
+                                          setState(() {
+                                            // setting the value for address type
+                                            highSchoolInfo
+                                                .hsNameController.text = value!;
+                                            Utils.requestFocus(
+                                                focusNode: highSchoolInfo
+                                                    .hsTypeFocusNode,
+                                                context: context);
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+
+                                // ****************************************************************************************************************************************************
+                                // school name or other school name will be shown based on the conditions
+
+                                // show school input filed based on the condition
+                                if (highSchoolInfo.hsCountryController.text !=
+                                        'ARE' ||
+                                    highSchoolInfo.hsNameController.text ==
+                                        'OTH')
+                                  Column(
+                                    children: [
+                                      kFormHeight,
+                                      fieldHeading(
+                                          title: highSchoolInfo
+                                                      .hsCountryController
+                                                      .text ==
+                                                  'ARE'
+                                              ? "Other School Name"
+                                              : "School Name",
+                                          important: true,
+                                          langProvider: langProvider),
+                                      _scholarshipFormTextField(
+                                          currentFocusNode: highSchoolInfo
+                                              .otherHsNameFocusNode,
+                                          nextFocusNode:
+                                              highSchoolInfo.hsTypeFocusNode,
+                                          controller: highSchoolInfo
+                                              .otherHsNameController,
+                                          hintText: highSchoolInfo
+                                                      .hsCountryController
+                                                      .text ==
+                                                  'ARE'
+                                              ? "Enter Other School Name"
+                                              : "Enter School Name",
+                                          errorText:
+                                              highSchoolInfo.otherHsNameError,
+                                          onChanged: (value) {
+                                            // live error display for  high school name
+                                            if (highSchoolInfo
+                                                .otherHsNameFocusNode
+                                                .hasFocus) {
+                                              setState(() {
+                                                highSchoolInfo
+                                                        .otherHsNameError =
+                                                    ErrorText
+                                                        .getNameArabicEnglishValidationError(
+                                                            name: highSchoolInfo
+                                                                .otherHsNameController
+                                                                .text,
+                                                            context: context);
+                                              });
+                                            }
+
+                                            // live error display for other high school name
+                                            if (highSchoolInfo
+                                                .otherHsNameFocusNode
+                                                .hasFocus) {
+                                              setState(() {
+                                                highSchoolInfo
+                                                        .otherHsNameError =
+                                                    ErrorText
+                                                        .getNameArabicEnglishValidationError(
+                                                            name: highSchoolInfo
+                                                                .otherHsNameController
+                                                                .text,
+                                                            context: context);
+                                              });
+                                            }
+                                          }),
+                                    ],
+                                  ),
+
+                                // ****************************************************************************************************************************************************
+                                // school type
+                                kFormHeight,
+                                fieldHeading(
+                                    title: "School Type",
+                                    important: true,
+                                    langProvider: langProvider),
+
+                                _scholarshipFormDropdown(
+                                  controller: highSchoolInfo.hsTypeController,
+                                  currentFocusNode:
+                                      highSchoolInfo.hsTypeFocusNode,
+                                  menuItemsList:
+                                      _highSchoolTypeMenuItemsList ?? [],
+                                  hintText: "Select School Type",
+                                  errorText: highSchoolInfo.hsTypeError,
+                                  onChanged: (value) {
+                                    highSchoolInfo.hsTypeError = null;
+                                    highSchoolInfo.curriculumTypeError = null;
+                                    setState(() {
+                                      // setting the value for high school type
+                                      highSchoolInfo.hsTypeController.text =
+                                          value!;
+
+                                      highSchoolInfo.curriculumTypeController
+                                          .clear();
+                                      highSchoolInfo
+                                          .schoolCurriculumTypeDropdownMenuItems
+                                          ?.clear();
+
+                                      // populating the high school curriculum dropdown
+                                      _populateHighSchoolCurriculumTypeDropdown(
+                                          langProvider: langProvider,
+                                          index: index);
+
+                                      Utils.requestFocus(
+                                          focusNode: highSchoolInfo
+                                              .curriculumTypeFocusNode,
+                                          context: context);
+                                    });
+                                  },
+                                ),
+
+                                // ****************************************************************************************************************************************************
+                                // curriculum Type
+                                kFormHeight,
+                                fieldHeading(
+                                    title: "Curriculum Type",
+                                    important: true,
+                                    langProvider: langProvider),
+
+                                _scholarshipFormDropdown(
+                                  controller:
+                                      highSchoolInfo.curriculumTypeController,
+                                  currentFocusNode:
+                                      highSchoolInfo.curriculumTypeFocusNode,
+                                  menuItemsList: highSchoolInfo
+                                          .schoolCurriculumTypeDropdownMenuItems ??
+                                      [],
+                                  hintText: "Select Curriculum Type",
+                                  errorText: highSchoolInfo.curriculumTypeError,
+                                  onChanged: (value) {
+                                    highSchoolInfo.curriculumTypeError = null;
+                                    setState(() {
+                                      // setting the value for high school type
+                                      highSchoolInfo.curriculumTypeController
+                                          .text = value!;
+
+                                      Utils.requestFocus(
+                                          focusNode: highSchoolInfo
+                                              .curriculumAverageFocusNode,
+                                          context: context);
+                                    });
+                                  },
+                                ),
+                                // ****************************************************************************************************************************************************
+
+                                kFormHeight,
+                                fieldHeading(
+                                    title: "Curriculum Average",
+                                    important: true,
+                                    langProvider: langProvider),
+                                _scholarshipFormTextField(
+                                    currentFocusNode: highSchoolInfo
+                                        .curriculumAverageFocusNode,
+                                    nextFocusNode:
+                                        highSchoolInfo.yearOfPassingFocusNode,
+                                    controller: highSchoolInfo
+                                        .curriculumAverageController,
+                                    hintText: "Enter Curriculum Average",
+                                    maxLength: highSchoolInfo
+                                                .curriculumTypeController
+                                                .text !=
+                                            'BRT'
+                                        ? 4
+                                        : 6,
+                                    errorText:
+                                        highSchoolInfo.curriculumAverageError,
+                                    onChanged: (value) {
+                                      if (highSchoolInfo
+                                          .curriculumAverageFocusNode
+                                          .hasFocus) {
+                                        setState(() {
+                                          highSchoolInfo
+                                                  .curriculumAverageError =
+                                              ErrorText.getGradeValidationError(
+                                                  grade: highSchoolInfo
+                                                      .curriculumAverageController
+                                                      .text,
+                                                  context: context);
+                                        });
+                                      }
+                                    }),
+
+                                // ****************************************************************************************************************************************************
+                                // year of passing
+                                fieldHeading(
+                                    title: "Year Of Passing",
+                                    important: (highSchoolInfo
+                                        .curriculumAverageController
+                                        .text
+                                        .isNotEmpty),
+                                    langProvider: langProvider),
+                                _scholarshipFormDateField(
+                                  // Prevent manual typing
+                                  currentFocusNode:
+                                      highSchoolInfo.yearOfPassingFocusNode,
+                                  controller:
+                                      highSchoolInfo.yearOfPassingController,
+                                  hintText: "Select Year of Passing",
+                                  errorText: highSchoolInfo.yearOfPassingError,
+                                  // Display error text if any
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (highSchoolInfo
+                                          .yearOfPassingFocusNode.hasFocus) {
+                                        // Check if the year of passing field is empty or invalid
+                                        highSchoolInfo.yearOfPassingError =
+                                            ErrorText.getEmptyFieldError(
+                                          name: highSchoolInfo
+                                              .yearOfPassingController.text,
+                                          context: context,
+                                        );
+                                      }
+                                    });
+                                  },
+                                  onTap: () async {
+                                    // Clear the error message when a date is selected
+                                    highSchoolInfo.yearOfPassingError = null;
+
+                                    // Define the initial date as today's date (for year selection)
+                                    final DateTime initialDate = DateTime.now();
+
+                                    // Use a specific max date if required (like schoolPassingDate from your controller)
+                                    // If no schoolPassingDate is available, use the current date as a fallback
+
+                                    // Todo: No Max date is given
+                                    final DateTime maxDate = DateTime.now();
+
+                                    // Define the valid date range for "Year of Passing"
+                                    final DateTime firstDate = maxDate.subtract(
+                                        const Duration(
+                                            days: 20 * 365)); // Last 20 years
+                                    final DateTime lastDate = maxDate.add(
+                                        const Duration(
+                                            days:
+                                                365)); // Limit up to the maxDate (e.g., current year or schoolPassingDate)
+
+                                    DateTime? date = await showDatePicker(
+                                      context: context,
+                                      barrierColor: AppColors.scoButtonColor
+                                          .withOpacity(0.1),
+                                      barrierDismissible: false,
+                                      locale:
+                                          Provider.of<LanguageChangeViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .appLocale,
+                                      initialDate: initialDate,
+                                      firstDate: firstDate,
+                                      // Limit to the last 20 years
+                                      lastDate:
+                                          lastDate, // Limit up to the maxDate or current year
+                                    );
+
+                                    if (date != null) {
+                                      setState(() {
+                                        // Set the selected date in the controller (format to show only the year)
+                                        highSchoolInfo
+                                                .yearOfPassingController.text =
+                                            DateFormat("yyyy-MM-dd")
+                                                .format(date)
+                                                .toString();
+
+                                        // Get the current year
+                                        String currentYear =
+                                            DateFormat('yyyy').format(date);
+
+                                        // Get the next year
+                                        String nextYear = DateFormat('yyyy')
+                                            .format(date.add(const Duration(
+                                                days:
+                                                    365))); // Adding 365 days to get to next year
+
+                                        // Combine current and next year
+                                        String yearOfGraduation =
+                                            '$currentYear-$nextYear';
+
+                                        // Print the passing year
+                                        highSchoolInfo.passingYearController
+                                            .text = yearOfGraduation;
+                                      });
+                                    }
+                                  },
+                                ),
+                                // ****************************************************************************************************************************************************
+                                // year of graduation:
+                                kFormHeight,
+                                const MyDivider(),
+                                Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(8),
+                                    color:
+                                        AppColors.lightBlue1.withOpacity(0.4),
+                                    child: Row(children: [
+                                      _sectionTitle(
+                                          title: "Year of Graduation"),
+                                      kFormHeight,
+                                      Expanded(
+                                          child: Text(highSchoolInfo
+                                              .passingYearController.text))
+                                    ])),
+
+                                kFormHeight,
+                                // ****************************************************************************************************************************************************
+
+                                const MyDivider(
+                                  color: AppColors.lightGrey,
+                                ),
+                                // ****************************************************************************************************************************************************
+
+                                kFormHeight,
+                                _sectionTitle(title: "Subjects"),
+                                kFormHeight,
+                                // ****************************************************************************************************************************************************
+                                // regular subjects
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: highSchoolInfo.hsDetails.length,
+                                  itemBuilder: (context, index) {
+                                    var element =
+                                        highSchoolInfo.hsDetails[index];
+                                    return Column(
+                                      children: [
+                                        _subjectTitle(element
+                                            .subjectTypeController.text
+                                            .toString()),
+                                        _scholarshipFormTextField(
+                                          currentFocusNode:
+                                              element.gradeFocusNode,
+                                          nextFocusNode: index + 1 <
+                                                  highSchoolInfo
+                                                      .hsDetails.length
+                                              ? highSchoolInfo
+                                                  .hsDetails[index + 1]
+                                                  .gradeFocusNode
+                                              : null,
+                                          controller: element.gradeController,
+                                          hintText: "Grade/Percentage",
+                                          maxLength: 4,
+                                          errorText: element.gradeError,
+                                          onChanged: (value) {
+                                            if (element
+                                                .gradeFocusNode.hasFocus) {
+                                              setState(() {
+                                                element.gradeError = ErrorText
+                                                    .getGradeValidationError(
+                                                        grade: element
+                                                            .gradeController
+                                                            .text,
+                                                        context: context);
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+
+                                // ****************************************************************************************************************************************************
+
+                                const MyDivider(
+                                  color: AppColors.lightGrey,
+                                ),
+                                kFormHeight,
+
+                                // ****************************************************************************************************************************************************
+                                // other subjects
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                      highSchoolInfo.otherHSDetails.length,
+                                  itemBuilder: (context, index) {
+                                    var element =
+                                        highSchoolInfo.otherHSDetails[index];
+                                    return Column(
+                                      children: [
+                                        _subjectTitle(element
+                                            .subjectTypeController.text
+                                            .toString()),
+
+                                        // subject Name
+                                        _scholarshipFormTextField(
+                                          currentFocusNode: element
+                                                  .otherSubjectNameFocusNode ??
+                                              FocusNode(),
+                                          nextFocusNode: element.gradeFocusNode,
+                                          controller: element
+                                                  .otherSubjectNameController ??
+                                              TextEditingController(),
+                                          hintText: "Other Subject Name",
+                                          errorText:
+                                              element.otherSubjectNameError,
+                                          onChanged: (value) {
+                                            if (element
+                                                .otherSubjectNameFocusNode!
+                                                .hasFocus) {
+                                              setState(() {
+                                                element.otherSubjectNameError =
+                                                    ErrorText
+                                                        .getNameArabicEnglishValidationError(
+                                                            name: element
+                                                                .otherSubjectNameController!
+                                                                .text,
+                                                            context: context);
+                                              });
+                                            }
+                                          },
+                                        ),
+                                        kFormHeight,
+                                        // grade
+                                        _scholarshipFormTextField(
+                                          currentFocusNode:
+                                              element.gradeFocusNode,
+                                          nextFocusNode: index + 1 <
+                                                  highSchoolInfo
+                                                      .otherHSDetails.length
+                                              ? highSchoolInfo
+                                                  .otherHSDetails[index + 1]
+                                                  .otherSubjectNameFocusNode
+                                              : null,
+                                          controller: element.gradeController,
+                                          hintText: "Grade/Percentage",
+                                          maxLength: 4,
+                                          errorText: element.gradeError,
+                                          onChanged: (value) {
+                                            if (element
+                                                .gradeFocusNode.hasFocus) {
+                                              setState(() {
+                                                element.gradeError = ErrorText
+                                                    .getGradeValidationError(
+                                                        grade: element
+                                                            .gradeController
+                                                            .text,
+                                                        context: context);
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+
+                                // ****************************************************************************************************************************************************
+                                // if it obeys the constraints of showing dropdown only then it will be visible to the user to delete the item
+                                // Todo: Condition Applied by me that index check should only for greater then not equal to
+                                (_selectedScholarship?.admitType == 'MOS' ||
+                                            _selectedScholarship?.admitType ==
+                                                'MOP') ||
+                                        (_selectedScholarship?.acadmicCareer ==
+                                                'HCHL' &&
+                                            index >= 1) ||
+                                        index > 1
+                                    ? _addRemoveMoreSection(
+                                        title: "Delete",
+                                        add: false,
+                                        onChanged: () {
+                                          setState(() {
+                                            _removeHighSchool(index);
+                                          });
+                                        })
+                                    : showVoid,
+                              ]);
+                        }),
+                    // ****************************************************************************************************************************************************
+                    const MyDivider(
+                      color: AppColors.lightGrey,
+                    ),
+                    kFormHeight,
+
+                    // ****************************************************************************************************************************************************
+
+                    _addRemoveMoreSection(
+                        title: "Add",
+                        add: true,
+                        onChanged: () {
+                          setState(() {
+                            _addHighSchool();
+                          });
+                        }),
+                  ]),
+                  // _highSchoolInformationSection()
+                ],
+              ))
         ])));
   }
 
@@ -4586,8 +4646,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   }
 
   _addGraduationDetail() {
-
-   bool isAlreadyCurrentlyStudying = _graduationDetailsList.any((element) => element.currentlyStudying == true);
+    bool isAlreadyCurrentlyStudying = _graduationDetailsList
+        .any((element) => element.currentlyStudying == true);
     setState(() {
       _graduationDetailsList.add(GraduationInfo(
         levelController: TextEditingController(),
@@ -4614,7 +4674,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         sponsorShipController: TextEditingController(),
         errorMessageController: TextEditingController(),
         highestQualification: false,
-        showCurrentlyStudying:  !isAlreadyCurrentlyStudying,
+        showCurrentlyStudying: !isAlreadyCurrentlyStudying,
         currentlyStudying: false,
         lastTerm: [],
         graduationLevel: [],
@@ -4671,7 +4731,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       });
     }
     print(_graduationDetailsList.length.toString());
-    if(_graduationDetailsList.length == 1){
+    if (_graduationDetailsList.length == 1) {
       print(_graduationDetailsList.length.toString());
       final item = _graduationDetailsList[0];
       _updateShowCurrentlyStudyingWithFalse(item);
@@ -4679,9 +4739,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   }
 
   // when selecting currently studying yes or no then update the ui accordingly
-  _updateShowCurrentlyStudyingWithYes(GraduationInfo graduationInfo){
-    for(var element in _graduationDetailsList){
-      if(element != graduationInfo && element.showCurrentlyStudying){
+  _updateShowCurrentlyStudyingWithYes(GraduationInfo graduationInfo) {
+    for (var element in _graduationDetailsList) {
+      if (element != graduationInfo && element.showCurrentlyStudying) {
         setState(() {
           element.showCurrentlyStudying = false;
           element.currentlyStudying = false;
@@ -4690,8 +4750,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
     }
   }
-  _updateShowCurrentlyStudyingWithFalse(GraduationInfo graduationInfo){
-    for(var element in _graduationDetailsList){{
+
+  _updateShowCurrentlyStudyingWithFalse(GraduationInfo graduationInfo) {
+    for (var element in _graduationDetailsList) {
+      {
         setState(() {
           element.showCurrentlyStudying = true;
         });
@@ -4706,7 +4768,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-              draftPrevNextButtons(langProvider),
+          draftPrevNextButtons(langProvider),
           // if selected scholarship matches the condition then high school details section else don't
           (_selectedScholarship?.acadmicCareer != 'SCHL' &&
                   _selectedScholarship?.acadmicCareer != 'HCHL')
@@ -4735,62 +4797,83 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     // ****************************************************************************************************************************************************
 
                                     _sectionTitle(
-                                        title: _selectedScholarship?.acadmicCareer == 'DDS' ? 'dds.graduation.title ${index + 1}' : "Graduation Detail ${index + 1}"),
+                                        title: _selectedScholarship
+                                                    ?.acadmicCareer ==
+                                                'DDS'
+                                            ? 'dds.graduation.title ${index + 1}'
+                                            : "Graduation Detail ${index + 1}"),
 
-                              graduationInfo.showCurrentlyStudying ?  Column(children:[
-                                kFormHeight,
+                                    graduationInfo.showCurrentlyStudying
+                                        ? Column(children: [
+                                            kFormHeight,
 // title
-                                    fieldHeading(
-                                        title: "Currently Studying",
-                                        important: true,
-                                        langProvider: langProvider),
+                                            fieldHeading(
+                                                title: "Currently Studying",
+                                                important: true,
+                                                langProvider: langProvider),
 
-                                    // ****************************************************************************************************************************************************
-                                    // radiobuttons for yes or no
-                                    // Yes or no : Show round radio
-                                    CustomRadioListTile(
-                                      value: true,
-                                      groupValue: graduationInfo.currentlyStudying,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          // graduationInfo.showCurrentlyStudying = value;
-                                          graduationInfo.currentlyStudying = value;
-                                          _updateShowCurrentlyStudyingWithYes(graduationInfo);
-                                          // populate LAST term
-                                          _populateGraduationLastTermMenuItemsList(
-                                              langProvider: langProvider,
-                                              index: index);
-                                        });
-                                      },
-                                      title: "Yes",
-                                      textStyle: _textFieldTextStyle,
-                                    ),
+                                            // ****************************************************************************************************************************************************
+                                            // radiobuttons for yes or no
+                                            // Yes or no : Show round radio
+                                            CustomRadioListTile(
+                                              value: true,
+                                              groupValue: graduationInfo
+                                                  .currentlyStudying,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  // graduationInfo.showCurrentlyStudying = value;
+                                                  graduationInfo
+                                                          .currentlyStudying =
+                                                      value;
+                                                  _updateShowCurrentlyStudyingWithYes(
+                                                      graduationInfo);
+                                                  // populate LAST term
+                                                  _populateGraduationLastTermMenuItemsList(
+                                                      langProvider:
+                                                          langProvider,
+                                                      index: index);
+                                                });
+                                              },
+                                              title: "Yes",
+                                              textStyle: _textFieldTextStyle,
+                                            ),
 
-                                    // ****************************************************************************************************************************************************
-                                    CustomRadioListTile(
-                                        value: false,
-                                        groupValue: graduationInfo
-                                            .currentlyStudying,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            // graduationInfo.showCurrentlyStudying = value;
-                                            graduationInfo.currentlyStudying = value;
-                                            // showing selection option that you are currently doing this course or not
-                                            _updateShowCurrentlyStudyingWithFalse(graduationInfo);
+                                            // ****************************************************************************************************************************************************
+                                            CustomRadioListTile(
+                                                value: false,
+                                                groupValue: graduationInfo
+                                                    .currentlyStudying,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    // graduationInfo.showCurrentlyStudying = value;
+                                                    graduationInfo
+                                                            .currentlyStudying =
+                                                        value;
+                                                    // showing selection option that you are currently doing this course or not
+                                                    _updateShowCurrentlyStudyingWithFalse(
+                                                        graduationInfo);
+                                                    graduationInfo
+                                                        .graduationEndDateController
+                                                        .clear();
+                                                    graduationInfo
+                                                        .lastTermController
+                                                        .clear();
 
-                                            // clear the relatives list
-                                            // _relativeInfoList.clear();
-                                          });
-                                        },
-                                        title: "No",
-                                        textStyle: _textFieldTextStyle),
-]) : showVoid,
+                                                    // clear the relatives list
+                                                    // _relativeInfoList.clear();
+                                                  });
+                                                },
+                                                title: "No",
+                                                textStyle: _textFieldTextStyle),
+                                          ])
+                                        : showVoid,
                                     // ****************************************************************************************************************************************************
 
                                     kFormHeight,
 
                                     // last term
-                                    graduationInfo.currentlyStudying && graduationInfo.showCurrentlyStudying
+                                    graduationInfo.currentlyStudying &&
+                                            graduationInfo.showCurrentlyStudying
                                         ? Column(
                                             children: [
                                               fieldHeading(
@@ -4831,7 +4914,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         : showVoid,
                                     // ****************************************************************************************************************************************************
 
-                                    (_selectedScholarship?.acadmicCareer == 'UGRD') ? (graduationInfo.showCurrentlyStudying ? // copy paste full below code
+                                    (_selectedScholarship?.acadmicCareer ==
+                                            'UGRD')
+                                        ? (graduationInfo.currentlyStudying
+                                            ? // copy paste full below code
                                             _graduationInformation(
                                                 index: index,
                                                 langProvider: langProvider,
@@ -4886,7 +4972,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       ]),
                     ],
                   ))
-              : showVoid, draftPrevNextButtons(langProvider)
+              : showVoid,
+          draftPrevNextButtons(langProvider)
         ])));
   }
 
@@ -4897,13 +4984,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       required GraduationInfo graduationInfo}) {
     return Column(
       children: [
-              // ****************************************************************************************************************************************************
+        // ****************************************************************************************************************************************************
         // graduation level
         (index > 0 &&
                 _selectedScholarship?.acadmicCareer != 'UGRD' &&
                 _selectedScholarship?.acadmicCareer != 'DDS')
             ? Column(
                 children: [
+                  kFormHeight,
                   fieldHeading(
                       title: "Graduation Level",
                       important: true,
@@ -5220,11 +5308,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         kFormHeight,
         fieldHeading(
             title: "End Date",
-            important: !graduationInfo.showCurrentlyStudying &&
-                graduationInfo.levelController.text.isNotEmpty,
+            important: (!graduationInfo.currentlyStudying &&
+                graduationInfo.levelController.text.isNotEmpty),
             langProvider: langProvider),
         _scholarshipFormDateField(
-          filled: !(!graduationInfo.showCurrentlyStudying &&
+          filled: !(!graduationInfo.currentlyStudying &&
               graduationInfo.levelController.text.isNotEmpty),
           currentFocusNode: graduationInfo.graduationEndDateFocusNode,
           controller: graduationInfo.graduationEndDateController,
@@ -5233,16 +5321,16 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           onChanged: (value) async {
             setState(() {
               if (graduationInfo.graduationEndDateFocusNode.hasFocus) {
-                graduationInfo.graduationStartDateError =
+                graduationInfo.graduationEndDateError =
                     ErrorText.getEmptyFieldError(
-                        name: graduationInfo.graduationStartDateController.text,
+                        name: graduationInfo.graduationEndDateController.text,
                         context: context);
               }
             });
           },
           onTap: () async {
-            if (!graduationInfo.showCurrentlyStudying &&
-                graduationInfo.levelController.text.isNotEmpty) {
+            if ((!graduationInfo.currentlyStudying &&
+                graduationInfo.levelController.text.isNotEmpty)) {
               // Clear the error if a date is selected
               graduationInfo.graduationEndDateError = null;
 
@@ -5326,8 +5414,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
         // SPONSORSHIP
         // TODO: Need havingSponsor  key from fetch all scholarships
-        ((havingSponsor == 'Y') ||
-                _selectedScholarship?.acadmicCareer != 'DDS')
+        ((havingSponsor == 'Y') || _selectedScholarship?.acadmicCareer != 'DDS')
             ? Column(
                 children: [
                   kFormHeight,
@@ -5457,7 +5544,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             : showVoid,
 
         // ****************************************************************************************************************************************************
-
       ],
     );
   }
@@ -5510,8 +5596,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // controllers, focus nodes and error text variables for Academic program
   final TextEditingController _acadProgramController = TextEditingController();
-  final TextEditingController _acadProgramDdsController = TextEditingController();
-  final TextEditingController _acadProgramPgrdController = TextEditingController();
+  final TextEditingController _acadProgramDdsController =
+      TextEditingController();
+  final TextEditingController _acadProgramPgrdController =
+      TextEditingController();
 
   final FocusNode _acadProgramFocusNode = FocusNode();
   final FocusNode _acadProgramDdsFocusNode = FocusNode();
@@ -5704,7 +5792,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       // Handle the case where the values are null (e.g., return an empty list or log an error)
       return []; // or any appropriate fallback
     }
-
   }
 
   List<DropdownMenuItem> _universityPriorityStatus = [];
@@ -5713,7 +5800,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   void addUniversityPriority() {
     // Create a new UniversityPriority instance with only countryId set
     UniversityPriority newPriority = UniversityPriority(
-      countryIdController: TextEditingController(text: "ARE"),
+      // countryIdController: TextEditingController(text: _selectedScholarship?.acadmicCareer == 'UGRD' ? "ARE" : ''),
+      countryIdController:
+          TextEditingController(text: isStudyCountry ? "ARE" : ''),
       universityIdController: TextEditingController(),
       otherUniversityNameController: TextEditingController(),
       majorsController: TextEditingController(),
@@ -5763,7 +5852,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-              draftPrevNextButtons(langProvider),
+          draftPrevNextButtons(langProvider),
           // majors
           CustomInformationContainer(
               title: _selectedScholarship?.acadmicCareer == 'PGRD'
@@ -5774,8 +5863,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // dropdown for pgrd students academic program
-                    (_selectedScholarship?.acadmicCareer == 'PGRD' && _selectedScholarship?.acadmicCareer != 'DDS') ? Column(children: [
-                      fieldHeading(
+                    (_selectedScholarship?.acadmicCareer == 'PGRD' &&
+                            _selectedScholarship?.acadmicCareer != 'DDS')
+                        ? Column(
+                            children: [
+                              fieldHeading(
                                 title: "pgrd.adac.program",
                                 important: true,
                                 langProvider: langProvider,
@@ -5802,12 +5894,15 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   });
                                 },
                               )
-                            ],) : showVoid,
+                            ],
+                          )
+                        : showVoid,
 
                     kFormHeight,
 
                     // Select Majors wishlist
-                    _selectedScholarship?.acadmicCareer != 'DDS' ? ListView.builder(
+                    _selectedScholarship?.acadmicCareer != 'DDS'
+                        ? ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),
@@ -5835,19 +5930,24 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     hintText: "Select Major Program",
                                     errorText: majorInfo.majorError,
                                     onChanged: (value) {
-
                                       majorInfo.majorError = null;
-                                      bool alreadySelected = _majorsWishlist.any((info) {
-                                        return info != majorInfo && info.majorController.text == value;
+                                      bool alreadySelected =
+                                          _majorsWishlist.any((info) {
+                                        return info != majorInfo &&
+                                            info.majorController.text == value;
                                       });
 
                                       if (alreadySelected) {
                                         setState(() {
                                           majorInfo.majorError = null;
                                           majorInfo.majorController.clear();
-                                          majorInfo.isNewController.text = "false";
+                                          majorInfo.isNewController.text =
+                                              "false";
 
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("This major has already been selected. Please choose another one.")));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "This major has already been selected. Please choose another one.")));
                                           // Show the toast message inside setState to reflect UI change
                                           _alertService.toastMessage(
                                             "This major has already been selected. Please choose another one.",
@@ -5855,11 +5955,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         });
                                       } else {
                                         setState(() {
-                                          majorInfo.majorController.text = value!;
-                                          majorInfo.isNewController.text = "true"; // Mark entry as valid
+                                          majorInfo.majorController.text =
+                                              value!;
+                                          majorInfo.isNewController.text =
+                                              "true"; // Mark entry as valid
 
                                           // If necessary, you can also add a success toast here
-                                          _alertService.toastMessage("Major selected successfully.");
+                                          _alertService.toastMessage(
+                                              "Major selected successfully.");
                                         });
                                       }
                                     },
@@ -5867,32 +5970,35 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   kFormHeight,
                                 ],
                               );
-                            }) : showVoid,
+                            })
+                        : showVoid,
 
                     // major when academic program is dds
-                    _selectedScholarship?.acadmicCareer == 'DDS' ? Column(
-                      children: [
-                        fieldHeading(
-                          title: "ddsMajor1",
-                          important: true,
-                          langProvider: langProvider,
-                        ),
-                        _scholarshipFormDropdown(
-                          controller: _acadProgramDdsController,
-                          currentFocusNode: _acadProgramDdsFocusNode,
-                          menuItemsList: _acadProgramDdsMenuItemsList,
-                          hintText: "Select DDS Academic Program",
-                          errorText: _acadProgramDdsErrorText,
-                          onChanged: (value) {
-                            _acadProgramDdsErrorText = null;
+                    _selectedScholarship?.acadmicCareer == 'DDS'
+                        ? Column(
+                            children: [
+                              fieldHeading(
+                                title: "ddsMajor1",
+                                important: true,
+                                langProvider: langProvider,
+                              ),
+                              _scholarshipFormDropdown(
+                                controller: _acadProgramDdsController,
+                                currentFocusNode: _acadProgramDdsFocusNode,
+                                menuItemsList: _acadProgramDdsMenuItemsList,
+                                hintText: "Select DDS Academic Program",
+                                errorText: _acadProgramDdsErrorText,
+                                onChanged: (value) {
+                                  _acadProgramDdsErrorText = null;
 
-                            setState(() {
-                              _acadProgramDdsController.text = value!;
-                            });
-                          },
-                        )
-                      ],
-                    ): showVoid
+                                  setState(() {
+                                    _acadProgramDdsController.text = value!;
+                                  });
+                                },
+                              )
+                            ],
+                          )
+                        : showVoid
                   ])),
           kFormHeight,
           // university list
@@ -5924,12 +6030,15 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       important: true,
                                       langProvider: langProvider),
 
-                                 _scholarshipFormDropdown(
+                                  _scholarshipFormDropdown(
                                     readOnly: isStudyCountry,
                                     filled: isStudyCountry,
-                                    controller: isStudyCountry ? universityInfo.countryIdController = TextEditingController(text: 'ARE') : universityInfo.countryIdController,
-                                    currentFocusNode: universityInfo.universityIdFocusNode,
-                                    menuItemsList: _nationalityMenuItemsList ?? [],
+                                    controller:
+                                        universityInfo.countryIdController,
+                                    currentFocusNode:
+                                        universityInfo.universityIdFocusNode,
+                                    menuItemsList:
+                                        _nationalityMenuItemsList ?? [],
                                     hintText: "Select Country",
                                     errorText: universityInfo.countryIdError,
                                     onChanged: (value) {
@@ -5937,69 +6046,75 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       setState(() {
                                         universityInfo.countryIdError = null;
                                         // Set the major value if no duplicates are found
-                                        universityInfo.countryIdController.text = value!;
+                                        universityInfo
+                                            .countryIdController.text = value!;
                                         populateUniversitiesWishList(
                                             universityInfo);
                                       });
                                     },
-                                  ) ,
+                                  ),
                                   // ********************************************************************
                                   kFormHeight,
                                   // major
-                                  _selectedScholarship?.acadmicCareer != 'DDS' ?
-                                      Column(
-                                        children: [
-                                          fieldHeading(
-                                              title: "Majors",
-                                              important: true,
-                                              langProvider: langProvider),
-                                          _scholarshipFormDropdown(
-                                            controller: universityInfo.majorsController,
-                                            currentFocusNode:
-                                            universityInfo.majorsFocusNode,
-                                            menuItemsList: _majorsMenuItemsList ?? [],
-                                            hintText: "Select",
-                                            errorText: universityInfo.majorsError,
-                                            onChanged: (value) {
-                                              // Clear the error initially
-                                              setState(() {
-                                                universityInfo.majorsError = null;
+                                  _selectedScholarship?.acadmicCareer != 'DDS'
+                                      ? Column(
+                                          children: [
+                                            fieldHeading(
+                                                title: "Majors",
+                                                important: true,
+                                                langProvider: langProvider),
+                                            _scholarshipFormDropdown(
+                                              controller: universityInfo
+                                                  .majorsController,
+                                              currentFocusNode: universityInfo
+                                                  .majorsFocusNode,
+                                              menuItemsList:
+                                                  _majorsMenuItemsList ?? [],
+                                              hintText: "Select",
+                                              errorText:
+                                                  universityInfo.majorsError,
+                                              onChanged: (value) {
+                                                // Clear the error initially
+                                                setState(() {
+                                                  universityInfo.majorsError =
+                                                      null;
 
-                                                // // Check if the selected major is already in the wishlist
-                                                // bool alreadySelected =
-                                                // _universityPriorityList.any((info) {
-                                                //   // Make sure we're not checking against the current item and compare the selected value
-                                                //   return info != universityInfo &&
-                                                //       info.majorsController.text ==
-                                                //           value;
-                                                // });
-                                                //
-                                                // if (alreadySelected) {
-                                                //   // If the major is already selected, show a toast message and set an error
-                                                //   _alertService.showToast(
-                                                //     context: context,
-                                                //     message:
-                                                //     "This  has already been selected. Please choose another one.",
-                                                //   );
-                                                //   universityInfo.majorsError =
-                                                //   "Please choose another";
-                                                //
-                                                //   // Clear the selected major value in the controller
-                                                //   universityInfo.majorsController
-                                                //       .clear();
-                                                //   universityInfo.isNewController.text =
-                                                //   "false"; // Reset to indicate it's not a valid entry
-                                                // } else {
+                                                  // // Check if the selected major is already in the wishlist
+                                                  // bool alreadySelected =
+                                                  // _universityPriorityList.any((info) {
+                                                  //   // Make sure we're not checking against the current item and compare the selected value
+                                                  //   return info != universityInfo &&
+                                                  //       info.majorsController.text ==
+                                                  //           value;
+                                                  // });
+                                                  //
+                                                  // if (alreadySelected) {
+                                                  //   // If the major is already selected, show a toast message and set an error
+                                                  //   _alertService.showToast(
+                                                  //     context: context,
+                                                  //     message:
+                                                  //     "This  has already been selected. Please choose another one.",
+                                                  //   );
+                                                  //   universityInfo.majorsError =
+                                                  //   "Please choose another";
+                                                  //
+                                                  //   // Clear the selected major value in the controller
+                                                  //   universityInfo.majorsController
+                                                  //       .clear();
+                                                  //   universityInfo.isNewController.text =
+                                                  //   "false"; // Reset to indicate it's not a valid entry
+                                                  // } else {
                                                   // Set the major value if no duplicates are found
-                                                  universityInfo.majorsController.text =
-                                                  value!;
-                                                // }
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      ) : showVoid,
-
+                                                  universityInfo
+                                                      .majorsController
+                                                      .text = value!;
+                                                  // }
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        )
+                                      : showVoid,
 
                                   // ****************************************************************************************************************************************************
                                   kFormHeight,
@@ -6168,22 +6283,27 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                         'DDS'
                                                     ? 'university.name.if.other'
                                                     : 'dds.university',
-                                                important: (_selectedScholarship?.acadmicCareer != 'DDS' && universityInfo.universityIdController.text == 'OTH' && (universityInfo
-                                                    .countryIdController
-                                                    .text
-                                                    .isNotEmpty ||
-                                                    universityInfo
-                                                        .otherMajorsController
-                                                        .text
-                                                        .isNotEmpty ||
-                                                    universityInfo
-                                                        .otherUniversityNameController
-                                                        .text
-                                                        .isNotEmpty ||
-                                                    universityInfo
-                                                        .statusController
-                                                        .text
-                                                        .isNotEmpty)),
+                                                important: (_selectedScholarship
+                                                            ?.acadmicCareer !=
+                                                        'DDS' &&
+                                                    universityInfo.universityIdController.text ==
+                                                        'OTH' &&
+                                                    (universityInfo
+                                                            .countryIdController
+                                                            .text
+                                                            .isNotEmpty ||
+                                                        universityInfo
+                                                            .otherMajorsController
+                                                            .text
+                                                            .isNotEmpty ||
+                                                        universityInfo
+                                                            .otherUniversityNameController
+                                                            .text
+                                                            .isNotEmpty ||
+                                                        universityInfo
+                                                            .statusController
+                                                            .text
+                                                            .isNotEmpty)),
                                                 langProvider: langProvider),
                                             _scholarshipFormTextField(
                                                 currentFocusNode: universityInfo
@@ -6201,22 +6321,29 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                       .otherUniversityNameFocusNode
                                                       .hasFocus) {
                                                     setState(() {
-                                                      universityInfo.otherUniversityNameError = (_selectedScholarship?.acadmicCareer != 'DDS' && universityInfo.universityIdController.text == 'OTH' && (universityInfo
-                                                          .countryIdController
-                                                          .text
-                                                          .isNotEmpty ||
-                                                          universityInfo
-                                                              .otherMajorsController
-                                                              .text
-                                                              .isNotEmpty ||
-                                                          universityInfo
-                                                              .otherUniversityNameController
-                                                              .text
-                                                              .isNotEmpty ||
-                                                          universityInfo
-                                                              .statusController
-                                                              .text
-                                                              .isNotEmpty))
+                                                      universityInfo.otherUniversityNameError = (_selectedScholarship
+                                                                      ?.acadmicCareer !=
+                                                                  'DDS' &&
+                                                              universityInfo
+                                                                      .universityIdController
+                                                                      .text ==
+                                                                  'OTH' &&
+                                                              (universityInfo
+                                                                      .countryIdController
+                                                                      .text
+                                                                      .isNotEmpty ||
+                                                                  universityInfo
+                                                                      .otherMajorsController
+                                                                      .text
+                                                                      .isNotEmpty ||
+                                                                  universityInfo
+                                                                      .otherUniversityNameController
+                                                                      .text
+                                                                      .isNotEmpty ||
+                                                                  universityInfo
+                                                                      .statusController
+                                                                      .text
+                                                                      .isNotEmpty))
                                                           ? ErrorText.getEmptyFieldError(
                                                               name: universityInfo
                                                                   .otherUniversityNameController
@@ -6261,7 +6388,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       // Clear the error initially
                                       universityInfo.statusError = null;
                                       setState(() {
-                                        universityInfo.statusController.text = value!;
+                                        universityInfo.statusController.text =
+                                            value!;
                                       });
                                     },
                                   ),
@@ -6296,22 +6424,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           });
                         }),
                   ])),
-              draftPrevNextButtons(langProvider)
+          draftPrevNextButtons(langProvider)
         ])));
   }
 
   // *--------------------------------------------------------------- University And Majors Section end ----------------------------------------------------------------------------*
-
-
-
-
-
-
-
-
-
-
-
 
   // *--------------------------------------------------------------- Required Examinations start ----------------------------------------------------------------------------*
   // step-5
@@ -6428,7 +6545,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-              draftPrevNextButtons(langProvider),          CustomInformationContainer(
+          draftPrevNextButtons(langProvider),
+          CustomInformationContainer(
               title: _selectedScholarship?.acadmicCareer == 'DDS'
                   ? 'dds.exams'
                   : "'examination.for.universiti",
@@ -6666,7 +6784,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         // Set the selected date in the controller (format to show only the year)
                                         requiredExamInfo
                                                 .examDateController.text =
-                                            DateFormat("dd/MM/yyyy")
+                                            DateFormat("yyyy-MM-dd")
                                                 .format(date)
                                                 .toString();
                                       });
@@ -6708,27 +6826,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       // ****************************************************************************************************************************************************
                       ,
                     ])
-                  ])),draftPrevNextButtons(langProvider)
+                  ])),
+          draftPrevNextButtons(langProvider)
         ])));
   }
 
   // *--------------------------------------------------------------- Required Examinations end ----------------------------------------------------------------------------*
 
-
-
-
-
-
-
-
-
-
-
-
   // *--------------------------------------------------------------- Employment history section start ----------------------------------------------------------------------------*
   // step-6
 // function to check weather to display employment history or not
-  bool displayEmploymentHistory(){
+  bool displayEmploymentHistory() {
     final key = _selectedScholarship?.configurationKey;
     return (key == 'SCOPGRDINT' || key == 'SCOPGRDEXT' || key == 'SCODDSEXT');
   }
@@ -6818,7 +6926,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-              draftPrevNextButtons(langProvider),          CustomInformationContainer(
+          draftPrevNextButtons(langProvider),
+          CustomInformationContainer(
               title: "Employment History",
               expandedContent: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -6842,23 +6951,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   value: element.code,
                                   groupValue: _employmentStatus,
                                   onChanged: (value) {
-
                                     setState(() {
                                       _employmentStatus = value;
 
-                                      if(_employmentStatus == 'N'){
+                                      if (_employmentStatus == 'N') {
                                         _employmentHistoryList.clear();
                                       }
-                                        if(_employmentHistoryList.isEmpty){
-                                          _addEmploymentHistory();
-                                        }
-                                        else{
-                                          _employmentHistoryList.clear();
-                                          _addEmploymentHistory();
-
-                                        }
+                                      if (_employmentHistoryList.isEmpty) {
+                                        _addEmploymentHistory();
+                                      } else {
+                                        _employmentHistoryList.clear();
+                                        _addEmploymentHistory();
+                                      }
                                     });
-
                                   },
                                   title: getTextDirection(langProvider) ==
                                           TextDirection.ltr
@@ -6874,462 +6979,502 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   _employmentStatus != '' &&
                                   _employmentStatus != 'N'
                               ? Column(
-                                children: [
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      padding: EdgeInsets.zero,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemCount: _employmentHistoryList.length,
-                                      itemBuilder: (context, index) {
-                                        final employmentHistInfo = _employmentHistoryList[index];
-                                        return Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            // ****************************************************************************************************************************************************
+                                  children: [
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.zero,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount:
+                                            _employmentHistoryList.length,
+                                        itemBuilder: (context, index) {
+                                          final employmentHistInfo =
+                                              _employmentHistoryList[index];
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              // ****************************************************************************************************************************************************
 
-                                            // Employer name
-                                            fieldHeading(
-                                                title: "Employer Name",
-                                                important: true,
-                                                langProvider: langProvider),
-                                            _scholarshipFormTextField(
-                                                currentFocusNode: employmentHistInfo
-                                                    .employerNameFocusNode,
-                                                nextFocusNode: employmentHistInfo
-                                                    .designationFocusNode,
-                                                controller: employmentHistInfo
-                                                    .employerNameController,
-                                                hintText: 'Enter Employer Name',
-                                                errorText: employmentHistInfo
-                                                    .employerNameError,
-                                                onChanged: (value) {
-                                                  if (employmentHistInfo
-                                                      .employerNameFocusNode
-                                                      .hasFocus) {
-                                                    setState(() {
+                                              // Employer name
+                                              fieldHeading(
+                                                  title: "Employer Name",
+                                                  important: true,
+                                                  langProvider: langProvider),
+                                              _scholarshipFormTextField(
+                                                  currentFocusNode:
                                                       employmentHistInfo
-                                                              .employerNameError =
-                                                          ErrorText.getNameArabicEnglishValidationError(
-                                                              name: employmentHistInfo
-                                                                  .employerNameController
-                                                                  .text,
-                                                              context: context);
-                                                    });
-                                                  }
-                                                }),
-
-                                            // ****************************************************************************************************************************************************
-
-                                            kFormHeight,
-                                            // Designation
-                                            fieldHeading(
-                                                title: "Designation",
-                                                important: true,
-                                                langProvider: langProvider),
-                                            _scholarshipFormTextField(
-                                                currentFocusNode: employmentHistInfo
-                                                    .titleFocusNode,
-                                                nextFocusNode: employmentHistInfo
-                                                    .occupationFocusNode,
-                                                controller: employmentHistInfo
-                                                    .titleController,
-                                                hintText: 'Enter Designation',
-                                                errorText: employmentHistInfo
-                                                    .titleError,
-                                                onChanged: (value) {
-                                                  if (employmentHistInfo
-                                                      .titleFocusNode
-                                                      .hasFocus) {
-                                                    setState(() {
+                                                          .employerNameFocusNode,
+                                                  nextFocusNode:
                                                       employmentHistInfo
-                                                              .titleError =
-                                                          ErrorText.getNameArabicEnglishValidationError(
-                                                              name: employmentHistInfo
-                                                                  .titleController
-                                                                  .text,
-                                                              context: context);
-                                                    });
-                                                  }
-                                                }),
-
-                                            // ****************************************************************************************************************************************************
-
-                                            kFormHeight,
-                                            // occupation
-                                            fieldHeading(
-                                                title: 'Occupation',
-                                                important: true,
-                                                langProvider: langProvider),
-                                            _scholarshipFormTextField(
-                                                currentFocusNode: employmentHistInfo
-                                                    .occupationFocusNode,
-                                                nextFocusNode: employmentHistInfo
-                                                    .placeFocusNode,
-                                                controller: employmentHistInfo
-                                                    .occupationController,
-                                                hintText: 'Enter Occupation',
-                                                errorText: employmentHistInfo
-                                                    .occupationError,
-                                                onChanged: (value) {
-                                                  if (employmentHistInfo
-                                                      .occupationFocusNode
-                                                      .hasFocus) {
-                                                    setState(() {
-                                                      employmentHistInfo
-                                                              .occupationError =
-                                                          ErrorText.getEmptyFieldError(
-                                                              name: employmentHistInfo
-                                                                  .occupationController
-                                                                  .text,
-                                                              context: context);
-                                                    });
-                                                  }
-                                                }),
-                                            // ****************************************************************************************************************************************************
-                                            kFormHeight,
-                                            // work place
-                                            fieldHeading(
-                                                title: 'Work Place',
-                                                important: true,
-                                                langProvider: langProvider),
-                                            _scholarshipFormTextField(
-                                                currentFocusNode: employmentHistInfo
-                                                    .placeFocusNode,
-                                                nextFocusNode: employmentHistInfo
-                                                    .startDateFocusNode,
-                                                controller: employmentHistInfo
-                                                    .placeController,
-                                                hintText: 'Enter Work Place',
-                                                errorText:
-                                                    employmentHistInfo.placeError,
-                                                onChanged: (value) {
-                                                  if (employmentHistInfo
-                                                      .placeFocusNode.hasFocus) {
-                                                    setState(() {
-                                                      employmentHistInfo
-                                                              .placeError =
-                                                          ErrorText.getEmptyFieldError(
-                                                              name: employmentHistInfo
-                                                                  .placeController
-                                                                  .text,
-                                                              context: context);
-                                                    });
-                                                  }
-                                                }),
-
-                                            // ****************************************************************************************************************************************************
-
-                                            kFormHeight,
-                                            // start date
-                                            fieldHeading(
-                                                title: 'Employment Start Date',
-                                                important: true,
-                                                langProvider: langProvider),
-                                            _scholarshipFormDateField(
-                                              currentFocusNode: employmentHistInfo
-                                                  .startDateFocusNode,
-                                              controller: employmentHistInfo
-                                                  .startDateController,
-                                              hintText:
-                                                  "Select Employment Start Date",
-                                              errorText:
-                                                  employmentHistInfo.startDateError,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  if (employmentHistInfo
-                                                      .startDateFocusNode
-                                                      .hasFocus) {
-                                                    employmentHistInfo
-                                                            .startDateError =
-                                                        ErrorText
-                                                            .getEmptyFieldError(
-                                                      name: employmentHistInfo
-                                                          .startDateController.text,
-                                                      context: context,
-                                                    );
-                                                  }
-                                                });
-                                              },
-                                              onTap: () async {
-                                                // Clear the error message when a date is selected
-                                                employmentHistInfo.startDateError =
-                                                    null;
-
-                                                // Define the initial date as today's date (for year selection)
-                                                final DateTime initialDate =
-                                                    DateTime.now();
-                                                final DateTime maxDate =
-                                                    DateTime.now();
-
-                                                final DateTime firstDate =
-                                                    maxDate.subtract(const Duration(
-                                                        days: 10 * 365));
-                                                DateTime? date =
-                                                    await showDatePicker(
-                                                  context: context,
-                                                  barrierColor: AppColors
-                                                      .scoButtonColor
-                                                      .withOpacity(0.1),
-                                                  barrierDismissible: false,
-                                                  locale: Provider.of<
-                                                              LanguageChangeViewModel>(
-                                                          context,
-                                                          listen: false)
-                                                      .appLocale,
-                                                  initialDate: initialDate,
-                                                  firstDate: firstDate,
-                                                  // Limit to the last 10 years
-                                                  lastDate:
-                                                      initialDate, // Limit up to the maxDate or current year
-                                                );
-
-                                                if (date != null) {
-                                                  setState(() {
-                                                    employmentHistInfo
-                                                            .startDateController
-                                                            .text =
-                                                        DateFormat("dd/MM/yyyy")
-                                                            .format(date)
-                                                            .toString();
-
-                                                    Utils.requestFocus(
-                                                        focusNode:
-                                                            employmentHistInfo
-                                                                .endDateFocusNode,
-                                                        context: context);
-                                                  });
-                                                }
-                                              },
-                                            ),
-
-                                            // ****************************************************************************************************************************************************
-                                            kFormHeight,
-                                            // end date
-                                            fieldHeading(
-                                                title: 'Employment End Date',
-                                                important: _employmentStatus == 'P',
-                                                langProvider: langProvider),
-                                            _scholarshipFormDateField(
-                                              currentFocusNode: employmentHistInfo
-                                                  .endDateFocusNode,
-                                              controller: employmentHistInfo
-                                                  .endDateController,
-                                              hintText:
-                                                  "Select Employment End Date",
-                                              errorText:
-                                                  employmentHistInfo.endDateError,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  if (employmentHistInfo
-                                                      .endDateFocusNode.hasFocus) {
-                                                    employmentHistInfo
-                                                            .endDateError =
-                                                        ErrorText
-                                                            .getEmptyFieldError(
-                                                      name: employmentHistInfo
-                                                          .endDateController.text,
-                                                      context: context,
-                                                    );
-                                                  }
-                                                });
-                                              },
-                                              onTap: () async {
-                                                // Clear the error message when a date is selected
-                                                employmentHistInfo.endDateError =
-                                                    null;
-
-                                                // Define the initial date as today's date (for year selection)
-                                                final DateTime initialDate =
-                                                    DateTime.now();
-                                                final DateTime maxDate =
-                                                    DateTime.now();
-
-                                                final DateTime firstDate =
-                                                    maxDate.subtract(const Duration(
-                                                        days: 10 * 365));
-                                                DateTime? date =
-                                                    await showDatePicker(
-                                                  context: context,
-                                                  barrierColor: AppColors
-                                                      .scoButtonColor
-                                                      .withOpacity(0.1),
-                                                  barrierDismissible: false,
-                                                  locale: Provider.of<
-                                                              LanguageChangeViewModel>(
-                                                          context,
-                                                          listen: false)
-                                                      .appLocale,
-                                                  initialDate: initialDate,
-                                                  firstDate: firstDate,
-                                                  // Limit to the last 10 years
-                                                  lastDate:
-                                                      initialDate, // Limit up to the maxDate or current year
-                                                );
-
-                                                if (date != null) {
-                                                  setState(() {
-                                                    employmentHistInfo
-                                                            .endDateController
-                                                            .text =
-                                                        DateFormat("dd/MM/yyyy")
-                                                            .format(date)
-                                                            .toString();
-
-                                                    Utils.requestFocus(
-                                                        focusNode: employmentHistInfo
-                                                            .reportingManagerFocusNode,
-                                                        context: context);
-                                                  });
-                                                }
-                                              },
-                                            ),
-
-                                            // ****************************************************************************************************************************************************
-                                            kFormHeight,
-                                            // reporting manager
-                                            fieldHeading(
-                                                title: 'Reporting Manager',
-                                                important: true,
-                                                langProvider: langProvider),
-                                            _scholarshipFormTextField(
-                                                currentFocusNode: employmentHistInfo
-                                                    .reportingManagerFocusNode,
-                                                nextFocusNode: employmentHistInfo
-                                                    .contactNumberFocusNode,
-                                                controller: employmentHistInfo
-                                                    .reportingManagerController,
-                                                hintText: 'Enter Reporting Manager',
-                                                errorText: employmentHistInfo
-                                                    .reportingManagerError,
-                                                onChanged: (value) {
-                                                  if (employmentHistInfo
-                                                      .reportingManagerFocusNode
-                                                      .hasFocus) {
-                                                    setState(() {
-                                                      employmentHistInfo
-                                                              .reportingManagerError =
-                                                          ErrorText.getNameArabicEnglishValidationError(
-                                                              name: employmentHistInfo
-                                                                  .reportingManagerController
-                                                                  .text,
-                                                              context: context);
-                                                    });
-                                                  }
-                                                }),
-                                            // ****************************************************************************************************************************************************
-                                            kFormHeight,
-                                            // contact number
-                                            fieldHeading(
-                                                title: 'Contact Number',
-                                                important: true,
-                                                langProvider: langProvider),
-                                            _scholarshipFormTextField(
-                                                currentFocusNode: employmentHistInfo
-                                                    .contactNumberFocusNode,
-                                                nextFocusNode: employmentHistInfo
-                                                    .contactEmailFocusNode,
-                                                controller: employmentHistInfo
-                                                    .contactNumberController,
-                                                hintText: 'Enter Contact Number',
-                                                errorText: employmentHistInfo
-                                                    .contactNumberError,
-                                                onChanged: (value) {
-                                                  if (employmentHistInfo
-                                                      .contactNumberFocusNode
-                                                      .hasFocus) {
-                                                    setState(() {
-                                                      employmentHistInfo
-                                                              .contactNumberError =
-                                                          ErrorText.getPhoneNumberError(
-                                                              phoneNumber:
-                                                                  employmentHistInfo
-                                                                      .contactNumberController
-                                                                      .text,
-                                                              context: context);
-                                                    });
-                                                  }
-                                                }),
-                                            // ****************************************************************************************************************************************************
-                                            kFormHeight,
-                                            // contact email
-                                            fieldHeading(
-                                                title: 'Contact Email',
-                                                important: true,
-                                                langProvider: langProvider),
-                                            _scholarshipFormTextField(
-                                                currentFocusNode: employmentHistInfo
-                                                    .contactEmailFocusNode,
-                                                controller: employmentHistInfo
-                                                    .contactEmailController,
-                                                nextFocusNode: index <
-                                                        _employmentHistoryList
-                                                                .length -
-                                                            1
-                                                    ? _employmentHistoryList[
-                                                            index + 1]
+                                                          .designationFocusNode,
+                                                  controller: employmentHistInfo
+                                                      .employerNameController,
+                                                  hintText:
+                                                      'Enter Employer Name',
+                                                  errorText: employmentHistInfo
+                                                      .employerNameError,
+                                                  onChanged: (value) {
+                                                    if (employmentHistInfo
                                                         .employerNameFocusNode
-                                                    : null,
-                                                hintText: 'Enter Manager Email',
+                                                        .hasFocus) {
+                                                      setState(() {
+                                                        employmentHistInfo
+                                                                .employerNameError =
+                                                            ErrorText.getNameArabicEnglishValidationError(
+                                                                name: employmentHistInfo
+                                                                    .employerNameController
+                                                                    .text,
+                                                                context:
+                                                                    context);
+                                                      });
+                                                    }
+                                                  }),
+
+                                              // ****************************************************************************************************************************************************
+
+                                              kFormHeight,
+                                              // Designation
+                                              fieldHeading(
+                                                  title: "Designation",
+                                                  important: true,
+                                                  langProvider: langProvider),
+                                              _scholarshipFormTextField(
+                                                  currentFocusNode:
+                                                      employmentHistInfo
+                                                          .titleFocusNode,
+                                                  nextFocusNode:
+                                                      employmentHistInfo
+                                                          .occupationFocusNode,
+                                                  controller: employmentHistInfo
+                                                      .titleController,
+                                                  hintText: 'Enter Designation',
+                                                  errorText: employmentHistInfo
+                                                      .titleError,
+                                                  onChanged: (value) {
+                                                    if (employmentHistInfo
+                                                        .titleFocusNode
+                                                        .hasFocus) {
+                                                      setState(() {
+                                                        employmentHistInfo
+                                                                .titleError =
+                                                            ErrorText
+                                                                .getNameArabicEnglishValidationError(
+                                                                    name: employmentHistInfo
+                                                                        .titleController
+                                                                        .text,
+                                                                    context:
+                                                                        context);
+                                                      });
+                                                    }
+                                                  }),
+
+                                              // ****************************************************************************************************************************************************
+
+                                              kFormHeight,
+                                              // occupation
+                                              fieldHeading(
+                                                  title: 'Occupation',
+                                                  important: true,
+                                                  langProvider: langProvider),
+                                              _scholarshipFormTextField(
+                                                  currentFocusNode:
+                                                      employmentHistInfo
+                                                          .occupationFocusNode,
+                                                  nextFocusNode:
+                                                      employmentHistInfo
+                                                          .placeFocusNode,
+                                                  controller: employmentHistInfo
+                                                      .occupationController,
+                                                  hintText: 'Enter Occupation',
+                                                  errorText: employmentHistInfo
+                                                      .occupationError,
+                                                  onChanged: (value) {
+                                                    if (employmentHistInfo
+                                                        .occupationFocusNode
+                                                        .hasFocus) {
+                                                      setState(() {
+                                                        employmentHistInfo
+                                                                .occupationError =
+                                                            ErrorText.getEmptyFieldError(
+                                                                name: employmentHistInfo
+                                                                    .occupationController
+                                                                    .text,
+                                                                context:
+                                                                    context);
+                                                      });
+                                                    }
+                                                  }),
+                                              // ****************************************************************************************************************************************************
+                                              kFormHeight,
+                                              // work place
+                                              fieldHeading(
+                                                  title: 'Work Place',
+                                                  important: true,
+                                                  langProvider: langProvider),
+                                              _scholarshipFormTextField(
+                                                  currentFocusNode:
+                                                      employmentHistInfo
+                                                          .placeFocusNode,
+                                                  nextFocusNode:
+                                                      employmentHistInfo
+                                                          .startDateFocusNode,
+                                                  controller: employmentHistInfo
+                                                      .placeController,
+                                                  hintText: 'Enter Work Place',
+                                                  errorText: employmentHistInfo
+                                                      .placeError,
+                                                  onChanged: (value) {
+                                                    if (employmentHistInfo
+                                                        .placeFocusNode
+                                                        .hasFocus) {
+                                                      setState(() {
+                                                        employmentHistInfo
+                                                                .placeError =
+                                                            ErrorText
+                                                                .getEmptyFieldError(
+                                                                    name: employmentHistInfo
+                                                                        .placeController
+                                                                        .text,
+                                                                    context:
+                                                                        context);
+                                                      });
+                                                    }
+                                                  }),
+
+                                              // ****************************************************************************************************************************************************
+
+                                              kFormHeight,
+                                              // start date
+                                              fieldHeading(
+                                                  title:
+                                                      'Employment Start Date',
+                                                  important: true,
+                                                  langProvider: langProvider),
+                                              _scholarshipFormDateField(
+                                                currentFocusNode:
+                                                    employmentHistInfo
+                                                        .startDateFocusNode,
+                                                controller: employmentHistInfo
+                                                    .startDateController,
+                                                hintText:
+                                                    "Select Employment Start Date",
                                                 errorText: employmentHistInfo
-                                                    .contactEmailError,
+                                                    .startDateError,
                                                 onChanged: (value) {
-                                                  if (employmentHistInfo
-                                                      .contactEmailFocusNode
-                                                      .hasFocus) {
+                                                  setState(() {
+                                                    if (employmentHistInfo
+                                                        .startDateFocusNode
+                                                        .hasFocus) {
+                                                      employmentHistInfo
+                                                              .startDateError =
+                                                          ErrorText
+                                                              .getEmptyFieldError(
+                                                        name: employmentHistInfo
+                                                            .startDateController
+                                                            .text,
+                                                        context: context,
+                                                      );
+                                                    }
+                                                  });
+                                                },
+                                                onTap: () async {
+                                                  // Clear the error message when a date is selected
+                                                  employmentHistInfo
+                                                      .startDateError = null;
+
+                                                  // Define the initial date as today's date (for year selection)
+                                                  final DateTime initialDate =
+                                                      DateTime.now();
+                                                  final DateTime maxDate =
+                                                      DateTime.now();
+
+                                                  final DateTime firstDate =
+                                                      maxDate.subtract(
+                                                          const Duration(
+                                                              days: 10 * 365));
+                                                  DateTime? date =
+                                                      await showDatePicker(
+                                                    context: context,
+                                                    barrierColor: AppColors
+                                                        .scoButtonColor
+                                                        .withOpacity(0.1),
+                                                    barrierDismissible: false,
+                                                    locale: Provider.of<
+                                                                LanguageChangeViewModel>(
+                                                            context,
+                                                            listen: false)
+                                                        .appLocale,
+                                                    initialDate: initialDate,
+                                                    firstDate: firstDate,
+                                                    // Limit to the last 10 years
+                                                    lastDate:
+                                                        initialDate, // Limit up to the maxDate or current year
+                                                  );
+
+                                                  if (date != null) {
                                                     setState(() {
                                                       employmentHistInfo
-                                                              .contactEmailError =
-                                                          ErrorText.getEmailError(
-                                                              email: employmentHistInfo
-                                                                  .contactEmailController
-                                                                  .text,
-                                                              context: context);
+                                                          .startDateController
+                                                          .text = DateFormat(
+                                                              "yyyy-MM-dd")
+                                                          .format(date)
+                                                          .toString();
+
+                                                      Utils.requestFocus(
+                                                          focusNode:
+                                                              employmentHistInfo
+                                                                  .endDateFocusNode,
+                                                          context: context);
                                                     });
                                                   }
-                                                }),
-                                            // ****************************************************************************************************************************************************
+                                                },
+                                              ),
 
-                                            (index >= 1)
-                                                ? _addRemoveMoreSection(
-                                                    title: "Delete",
-                                                    add: false,
-                                                    onChanged: () {
+                                              // ****************************************************************************************************************************************************
+                                              kFormHeight,
+                                              // end date
+                                              fieldHeading(
+                                                  title: 'Employment End Date',
+                                                  important:
+                                                      _employmentStatus == 'P',
+                                                  langProvider: langProvider),
+                                              _scholarshipFormDateField(
+                                                currentFocusNode:
+                                                    employmentHistInfo
+                                                        .endDateFocusNode,
+                                                controller: employmentHistInfo
+                                                    .endDateController,
+                                                hintText:
+                                                    "Select Employment End Date",
+                                                errorText: employmentHistInfo
+                                                    .endDateError,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    if (employmentHistInfo
+                                                        .endDateFocusNode
+                                                        .hasFocus) {
+                                                      employmentHistInfo
+                                                              .endDateError =
+                                                          ErrorText
+                                                              .getEmptyFieldError(
+                                                        name: employmentHistInfo
+                                                            .endDateController
+                                                            .text,
+                                                        context: context,
+                                                      );
+                                                    }
+                                                  });
+                                                },
+                                                onTap: () async {
+                                                  // Clear the error message when a date is selected
+                                                  employmentHistInfo
+                                                      .endDateError = null;
+
+                                                  // Define the initial date as today's date (for year selection)
+                                                  final DateTime initialDate =
+                                                      DateTime.now();
+                                                  final DateTime maxDate =
+                                                      DateTime.now();
+
+                                                  final DateTime firstDate =
+                                                      maxDate.subtract(
+                                                          const Duration(
+                                                              days: 10 * 365));
+                                                  DateTime? date =
+                                                      await showDatePicker(
+                                                    context: context,
+                                                    barrierColor: AppColors
+                                                        .scoButtonColor
+                                                        .withOpacity(0.1),
+                                                    barrierDismissible: false,
+                                                    locale: Provider.of<
+                                                                LanguageChangeViewModel>(
+                                                            context,
+                                                            listen: false)
+                                                        .appLocale,
+                                                    initialDate: initialDate,
+                                                    firstDate: firstDate,
+                                                    // Limit to the last 10 years
+                                                    lastDate:
+                                                        initialDate, // Limit up to the maxDate or current year
+                                                  );
+
+                                                  if (date != null) {
+                                                    setState(() {
+                                                      employmentHistInfo
+                                                          .endDateController
+                                                          .text = DateFormat(
+                                                              "yyyy-MM-dd")
+                                                          .format(date)
+                                                          .toString();
+
+                                                      Utils.requestFocus(
+                                                          focusNode:
+                                                              employmentHistInfo
+                                                                  .reportingManagerFocusNode,
+                                                          context: context);
+                                                    });
+                                                  }
+                                                },
+                                              ),
+
+                                              // ****************************************************************************************************************************************************
+                                              kFormHeight,
+                                              // reporting manager
+                                              fieldHeading(
+                                                  title: 'Reporting Manager',
+                                                  important: true,
+                                                  langProvider: langProvider),
+                                              _scholarshipFormTextField(
+                                                  currentFocusNode:
+                                                      employmentHistInfo
+                                                          .reportingManagerFocusNode,
+                                                  nextFocusNode:
+                                                      employmentHistInfo
+                                                          .contactNumberFocusNode,
+                                                  controller: employmentHistInfo
+                                                      .reportingManagerController,
+                                                  hintText:
+                                                      'Enter Reporting Manager',
+                                                  errorText: employmentHistInfo
+                                                      .reportingManagerError,
+                                                  onChanged: (value) {
+                                                    if (employmentHistInfo
+                                                        .reportingManagerFocusNode
+                                                        .hasFocus) {
                                                       setState(() {
-                                                        _removeEmploymentHistory(
-                                                            index);
+                                                        employmentHistInfo
+                                                                .reportingManagerError =
+                                                            ErrorText.getNameArabicEnglishValidationError(
+                                                                name: employmentHistInfo
+                                                                    .reportingManagerController
+                                                                    .text,
+                                                                context:
+                                                                    context);
                                                       });
-                                                    })
-                                                : showVoid,
-                                            kFormHeight,
-                                            const MyDivider(
-                                              color: AppColors.lightGrey,
-                                            ),
-                                            kFormHeight,
-                                            // ****************************************************************************************************************************************************
-                                          ],
-                                        );
-                                      }),
-                                  // ****************************************************************************************************************************************************
-                                  _addRemoveMoreSection(
-                                      title: "Add",
-                                      add: true,
-                                      onChanged: () {
-                                        setState(() {
-                                          _addEmploymentHistory();
-                                        });
-                                      })
-                                ],
-                              )
+                                                    }
+                                                  }),
+                                              // ****************************************************************************************************************************************************
+                                              kFormHeight,
+                                              // contact number
+                                              fieldHeading(
+                                                  title: 'Contact Number',
+                                                  important: true,
+                                                  langProvider: langProvider),
+                                              _scholarshipFormTextField(
+                                                  currentFocusNode:
+                                                      employmentHistInfo
+                                                          .contactNumberFocusNode,
+                                                  nextFocusNode:
+                                                      employmentHistInfo
+                                                          .contactEmailFocusNode,
+                                                  controller: employmentHistInfo
+                                                      .contactNumberController,
+                                                  hintText:
+                                                      'Enter Contact Number',
+                                                  errorText: employmentHistInfo
+                                                      .contactNumberError,
+                                                  onChanged: (value) {
+                                                    if (employmentHistInfo
+                                                        .contactNumberFocusNode
+                                                        .hasFocus) {
+                                                      setState(() {
+                                                        employmentHistInfo
+                                                                .contactNumberError =
+                                                            ErrorText.getPhoneNumberError(
+                                                                phoneNumber:
+                                                                    employmentHistInfo
+                                                                        .contactNumberController
+                                                                        .text,
+                                                                context:
+                                                                    context);
+                                                      });
+                                                    }
+                                                  }),
+                                              // ****************************************************************************************************************************************************
+                                              kFormHeight,
+                                              // contact email
+                                              fieldHeading(
+                                                  title: 'Contact Email',
+                                                  important: true,
+                                                  langProvider: langProvider),
+                                              _scholarshipFormTextField(
+                                                  currentFocusNode:
+                                                      employmentHistInfo
+                                                          .contactEmailFocusNode,
+                                                  controller: employmentHistInfo
+                                                      .contactEmailController,
+                                                  nextFocusNode: index <
+                                                          _employmentHistoryList
+                                                                  .length -
+                                                              1
+                                                      ? _employmentHistoryList[
+                                                              index + 1]
+                                                          .employerNameFocusNode
+                                                      : null,
+                                                  hintText:
+                                                      'Enter Manager Email',
+                                                  errorText: employmentHistInfo
+                                                      .contactEmailError,
+                                                  onChanged: (value) {
+                                                    if (employmentHistInfo
+                                                        .contactEmailFocusNode
+                                                        .hasFocus) {
+                                                      setState(() {
+                                                        employmentHistInfo
+                                                                .contactEmailError =
+                                                            ErrorText.getEmailError(
+                                                                email: employmentHistInfo
+                                                                    .contactEmailController
+                                                                    .text,
+                                                                context:
+                                                                    context);
+                                                      });
+                                                    }
+                                                  }),
+                                              // ****************************************************************************************************************************************************
+
+                                              (index >= 1)
+                                                  ? _addRemoveMoreSection(
+                                                      title: "Delete",
+                                                      add: false,
+                                                      onChanged: () {
+                                                        setState(() {
+                                                          _removeEmploymentHistory(
+                                                              index);
+                                                        });
+                                                      })
+                                                  : showVoid,
+                                              kFormHeight,
+                                              const MyDivider(
+                                                color: AppColors.lightGrey,
+                                              ),
+                                              kFormHeight,
+                                              // ****************************************************************************************************************************************************
+                                            ],
+                                          );
+                                        }),
+                                    // ****************************************************************************************************************************************************
+                                    _addRemoveMoreSection(
+                                        title: "Add",
+                                        add: true,
+                                        onChanged: () {
+                                          setState(() {
+                                            _addEmploymentHistory();
+                                          });
+                                        })
+                                  ],
+                                )
                               : showVoid,
 
                           // ****************************************************************************************************************************************************
-
                         ])
-                  ])),draftPrevNextButtons(langProvider)
+                  ])),
+          draftPrevNextButtons(langProvider)
         ])));
   }
 
@@ -7348,7 +7493,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-              draftPrevNextButtons(langProvider),          CustomInformationContainer(
+          draftPrevNextButtons(langProvider),
+          CustomInformationContainer(
               title: "Attachments",
               expandedContent: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -7418,9 +7564,16 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           onPressed: () async {
                                             // pick file
 
-                                            final permissionChecker = PermissionChecker();
-                                            permissionChecker.checkAndRequestPermission(Platform.isIOS ? Permission.storage: Permission.photos, context);
-                                            file = await _mediaServices.getSingleFileFromPicker();
+                                            final permissionChecker =
+                                                PermissionChecker();
+                                            permissionChecker
+                                                .checkAndRequestPermission(
+                                                    Platform.isIOS
+                                                        ? Permission.storage
+                                                        : Permission.photos,
+                                                    context);
+                                            file = await _mediaServices
+                                                .getSingleFileFromPicker();
 
                                             if (file != null) {
                                               setState(() {
@@ -7528,7 +7681,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                 kFormHeight
                               ]);
                         })
-                  ])),draftPrevNextButtons(langProvider)
+                  ])),
+          draftPrevNextButtons(langProvider)
         ])));
   }
 
@@ -7539,14 +7693,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // *--------------------------------------------------------- validate section in accordance with the steps start ------------------------------------------------------------------------------*
 
   // if section is already fulfilling the requirements then move forward to next step:
-  bool validateSection({required int step, required LanguageChangeViewModel langProvider}) {
-
+  bool validateSection(
+      {required int step, required LanguageChangeViewModel langProvider}) {
     String? acadmicCareer = _selectedScholarship?.acadmicCareer;
     String key = _selectedScholarship?.configurationKey ?? '';
 
     // Helper functions for specific validations
     bool shouldShowHighSchoolDetails() {
-      return acadmicCareer == 'UG' || acadmicCareer == 'UGRD' || acadmicCareer == 'SCHL' || acadmicCareer == 'HCHL';
+      return acadmicCareer == 'UG' ||
+          acadmicCareer == 'UGRD' ||
+          acadmicCareer == 'SCHL' ||
+          acadmicCareer == 'HCHL';
     }
 
     bool isUniversityAndMajorsRequired() {
@@ -7564,8 +7721,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     bool shouldDisplayEmploymentHistory() {
       return displayEmploymentHistory();
     }
-
-
 
     switch (step) {
       case 0:
@@ -7603,992 +7758,951 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         return true;
 
       case 6:
-      // If configuration requires, validate the final confirmation step
+        // If configuration requires, validate the final confirmation step
         return validateAttachmentsSection(langProvider);
 
       case 7:
-      // Confirmation step, usually no validation required here
+        // Confirmation step, usually no validation required here
         return true;
 
       default:
         return true; // No validation for undefined steps
-    }}
+    }
+  }
 
-    // To request focus where field needs to adjust:
-    FocusNode? firstErrorFocusNode;
+  // To request focus where field needs to adjust:
+  FocusNode? firstErrorFocusNode;
 
-    // Step 0: Validate "Accept Student Undertaking" section
+  // Step 0: Validate "Accept Student Undertaking" section
   bool validateStudentUndertakingSection(langProvider) {
     firstErrorFocusNode = null;
 
     // Add validation logic for student details
-      if (!_acceptStudentUndertaking) {
-        _alertService.flushBarErrorMessages(
-            message: 'Please accept the scholarship terms and conditions.',
-            context: context,
-            provider: langProvider);
-        return false;
-      }
-      return true;
+    if (!_acceptStudentUndertaking) {
+      _alertService.flushBarErrorMessages(
+          message: 'Please accept the scholarship terms and conditions.',
+          context: context,
+          provider: langProvider);
+      return false;
+    }
+    return true;
+  }
+
+  bool validateStudentDetailsSection(langProvider) {
+    firstErrorFocusNode = null;
+    // Validate Arabic Name fields
+    if (_arabicStudentNameController.text.isEmpty ||
+        !Validations.isArabicNameValid(_arabicStudentNameController.text)) {
+      setState(() {
+        _arabicStudentNameError = 'Please enter the student name in Arabic.';
+        firstErrorFocusNode ??=
+            _arabicStudentNameFocusNode; // Set firstErrorFocusNode if it's null
+      });
     }
 
-  bool validateStudentDetailsSection (langProvider) {
-    firstErrorFocusNode = null;
-      // Validate Arabic Name fields
-      if (_arabicStudentNameController.text.isEmpty ||
-          !Validations.isArabicNameValid(_arabicStudentNameController.text)) {
+    if (_arabicFatherNameController.text.isEmpty ||
+        !Validations.isArabicNameValid(_arabicFatherNameController.text)) {
+      setState(() {
+        _arabicFatherNameError = 'Please enter the father\'s name in Arabic.';
+        firstErrorFocusNode ??=
+            _arabicFatherNameFocusNode; // Set firstErrorFocusNode if it's null
+      });
+    }
+
+    if (_arabicGrandFatherNameController.text.isEmpty ||
+        !Validations.isArabicNameValid(_arabicGrandFatherNameController.text)) {
+      setState(() {
+        _arabicGrandFatherNameError =
+            'Please enter the grandfather\'s name in Arabic.';
+        firstErrorFocusNode ??= _arabicGrandFatherNameFocusNode;
+      });
+    }
+
+    if (_arabicFamilyNameController.text.isEmpty ||
+        !Validations.isArabicNameValid(_arabicFamilyNameController.text)) {
+      setState(() {
+        _arabicFamilyNameError = 'Please enter the family name in Arabic.';
+        firstErrorFocusNode ??= _arabicFamilyNameFocusNode;
+      });
+    }
+
+    // Validate English Name fields
+    if (_englishStudentNameController.text.isEmpty ||
+        !Validations.isEnglishNameValid(_englishStudentNameController.text)) {
+      setState(() {
+        _englishStudentNameError = 'Please enter the student name in English.';
+        firstErrorFocusNode ??= _englishStudentNameFocusNode;
+      });
+    }
+
+    if (_englishFatherNameController.text.isEmpty ||
+        !Validations.isEnglishNameValid(_englishFatherNameController.text)) {
+      setState(() {
+        _englishFatherNameError = 'Please enter the father\'s name in English.';
+        firstErrorFocusNode ??= _englishFatherNameFocusNode;
+      });
+    }
+
+    if (_englishGrandFatherNameController.text.isEmpty ||
+        !Validations.isEnglishNameValid(
+            _englishGrandFatherNameController.text)) {
+      setState(() {
+        _englishGrandFatherNameError =
+            'Please enter the grandfather\'s name in English.';
+        firstErrorFocusNode ??= _englishGrandFatherNameFocusNode;
+      });
+    }
+
+    if (_englishFamilyNameController.text.isEmpty ||
+        !Validations.isEnglishNameValid(_englishFamilyNameController.text)) {
+      setState(() {
+        _englishFamilyNameError = 'Please enter the family name in English.';
+        firstErrorFocusNode ??= _englishFamilyNameFocusNode;
+      });
+    }
+
+    // passport data validation start
+    if (_passportNationalityController.text.isEmpty) {
+      setState(() {
+        _passportNationalityError = 'Please select your nationality';
+        firstErrorFocusNode ??= _passportNationalityFocusNode;
+      });
+    }
+
+    if (_passportNumberController.text.isEmpty) {
+      setState(() {
+        _passportNumberError = 'Please enter your passport number';
+        firstErrorFocusNode ??= _passportNumberFocusNode;
+      });
+    }
+
+    if (_passportIssueDateController.text.isEmpty) {
+      setState(() {
+        _passportIssueDateError = 'Please select your passport issue date';
+        firstErrorFocusNode ??= _passportIssueDateFocusNode;
+      });
+    }
+
+    if (_passportExpiryDateController.text.isEmpty) {
+      setState(() {
+        _passportExpiryDateError = 'Please select your passport Expiry date';
+        firstErrorFocusNode ??= _passportExpiryDateFocusNode;
+      });
+    }
+
+    if (_passportPlaceOfIssueController.text.isEmpty) {
+      setState(() {
+        _passportPlaceOfIssueError =
+            'Please select your passport place of issue';
+        firstErrorFocusNode ??= _passportPlaceOfIssueFocusNode;
+      });
+    }
+
+    if (_passportUnifiedNoController.text.isEmpty) {
+      setState(() {
+        _passportUnifiedNoError = 'Please enter your passport unified no';
+        firstErrorFocusNode ??= _passportUnifiedNoFocusNode;
+      });
+    }
+
+    // personal details validation
+    if (_emiratesIdController.text.isEmpty) {
+      setState(() {
+        _emiratesIdError = 'Please enter your Emirates ID';
+        firstErrorFocusNode ??= _emiratesIdFocusNode;
+      });
+    }
+
+    if (_emiratesIdExpiryDateController.text.isEmpty) {
+      setState(() {
+        _emiratesIdExpiryDateError =
+            'Please select your Emirates ID expiry date';
+        firstErrorFocusNode ??= _emiratesIdExpiryDateFocusNode;
+      });
+    }
+
+    if (_dateOfBirthController.text.isEmpty) {
+      setState(() {
+        _dateOfBirthError = 'Please enter your date of birth';
+        firstErrorFocusNode ??= _dateOfBirthFocusNode;
+      });
+    }
+
+    if (_placeOfBirthController.text.isEmpty) {
+      setState(() {
+        _placeOfBirthError = 'Please enter your place of birth';
+        firstErrorFocusNode ??= _placeOfBirthFocusNode;
+      });
+    }
+
+    if (_genderController.text.isEmpty) {
+      setState(() {
+        _genderError = 'Please select your gender';
+        firstErrorFocusNode ??= _genderFocusNode;
+      });
+    }
+
+    if (_maritalStatusController.text.isEmpty) {
+      setState(() {
+        _maritalStatusError = 'Please select your marital status';
+        firstErrorFocusNode ??= _maritalStatusFocusNode;
+      });
+    }
+
+    if (_studentEmailController.text.isEmpty) {
+      setState(() {
+        _studentEmailError = 'Please enter your student email';
+        firstErrorFocusNode ??= _studentEmailFocusNode;
+      });
+    }
+
+    //validate the family information
+    if (_passportNationalityController.text == "ARE") {
+      if (_familyInformationEmiratesController.text.isEmpty) {
         setState(() {
-          _arabicStudentNameError = 'Please enter the student name in Arabic.';
-          firstErrorFocusNode ??= _arabicStudentNameFocusNode; // Set firstErrorFocusNode if it's null
+          _familyInformationEmiratesErrorText = 'Please select the Emirates';
+          firstErrorFocusNode ??= _familyInformationEmiratesFocusNode;
         });
       }
 
-      if (_arabicFatherNameController.text.isEmpty ||
-          !Validations.isArabicNameValid(_arabicFatherNameController.text)) {
+      if (_familyInformationTownVillageNoController.text.isEmpty) {
         setState(() {
-          _arabicFatherNameError = 'Please enter the father\'s name in Arabic.';
-          firstErrorFocusNode ??=
-              _arabicFatherNameFocusNode; // Set firstErrorFocusNode if it's null
+          _familyInformationTownVillageNoErrorText =
+              'Please enter Town/Village';
+          firstErrorFocusNode ??= _familyInformationTownVillageNoFocusNode;
         });
       }
 
-      if (_arabicGrandFatherNameController.text.isEmpty ||
-          !Validations.isArabicNameValid(
-              _arabicGrandFatherNameController.text)) {
+      if (_familyInformationParentGuardianNameController.text.isEmpty) {
         setState(() {
-          _arabicGrandFatherNameError =
-              'Please enter the grandfather\'s name in Arabic.';
-          firstErrorFocusNode ??= _arabicGrandFatherNameFocusNode;
+          _familyInformationParentGuardianNameErrorText =
+              'Please enter Parent/Guardian Name';
+          firstErrorFocusNode ??= _familyInformationParentGuardianNameFocusNode;
         });
       }
 
-      if (_arabicFamilyNameController.text.isEmpty ||
-          !Validations.isArabicNameValid(_arabicFamilyNameController.text)) {
+      if (_familyInformationRelationTypeController.text.isEmpty) {
         setState(() {
-          _arabicFamilyNameError = 'Please enter the family name in Arabic.';
-          firstErrorFocusNode ??= _arabicFamilyNameFocusNode;
+          _familyInformationRelationTypeErrorText =
+              'Please Select Relation Type';
+          firstErrorFocusNode ??= _familyInformationRelationTypeFocusNode;
         });
       }
 
-      // Validate English Name fields
-      if (_englishStudentNameController.text.isEmpty ||
-          !Validations.isEnglishNameValid(_englishStudentNameController.text)) {
+      if (_familyInformationMotherNameController.text.isEmpty) {
         setState(() {
-          _englishStudentNameError =
-              'Please enter the student name in English.';
-          firstErrorFocusNode ??= _englishStudentNameFocusNode;
+          _familyInformationMotherNameErrorText = 'Please Enter Mother Name';
+          firstErrorFocusNode ??= _familyInformationMotherNameFocusNode;
         });
-      }
-
-      if (_englishFatherNameController.text.isEmpty ||
-          !Validations.isEnglishNameValid(_englishFatherNameController.text)) {
-        setState(() {
-          _englishFatherNameError =
-              'Please enter the father\'s name in English.';
-          firstErrorFocusNode ??= _englishFatherNameFocusNode;
-        });
-      }
-
-      if (_englishGrandFatherNameController.text.isEmpty ||
-          !Validations.isEnglishNameValid(
-              _englishGrandFatherNameController.text)) {
-        setState(() {
-          _englishGrandFatherNameError =
-              'Please enter the grandfather\'s name in English.';
-          firstErrorFocusNode ??= _englishGrandFatherNameFocusNode;
-        });
-      }
-
-      if (_englishFamilyNameController.text.isEmpty ||
-          !Validations.isEnglishNameValid(_englishFamilyNameController.text)) {
-        setState(() {
-          _englishFamilyNameError = 'Please enter the family name in English.';
-          firstErrorFocusNode ??= _englishFamilyNameFocusNode;
-        });
-      }
-
-      // passport data validation start
-      if (_passportNationalityController.text.isEmpty) {
-        setState(() {
-          _passportNationalityError = 'Please select your nationality';
-          firstErrorFocusNode ??= _passportNationalityFocusNode;
-        });
-      }
-
-      if (_passportNumberController.text.isEmpty) {
-        setState(() {
-          _passportNumberError = 'Please enter your passport number';
-          firstErrorFocusNode ??= _passportNumberFocusNode;
-        });
-      }
-
-      if (_passportIssueDateController.text.isEmpty) {
-        setState(() {
-          _passportIssueDateError = 'Please select your passport issue date';
-          firstErrorFocusNode ??= _passportIssueDateFocusNode;
-        });
-      }
-
-      if (_passportExpiryDateController.text.isEmpty) {
-        setState(() {
-          _passportExpiryDateError = 'Please select your passport Expiry date';
-          firstErrorFocusNode ??= _passportExpiryDateFocusNode;
-        });
-      }
-
-      if (_passportPlaceOfIssueController.text.isEmpty) {
-        setState(() {
-          _passportPlaceOfIssueError =
-              'Please select your passport place of issue';
-          firstErrorFocusNode ??= _passportPlaceOfIssueFocusNode;
-        });
-      }
-
-      if (_passportUnifiedNoController.text.isEmpty) {
-        setState(() {
-          _passportUnifiedNoError = 'Please enter your passport unified no';
-          firstErrorFocusNode ??= _passportUnifiedNoFocusNode;
-        });
-      }
-
-      // personal details validation
-      if (_emiratesIdController.text.isEmpty) {
-        setState(() {
-          _emiratesIdError = 'Please enter your Emirates ID';
-          firstErrorFocusNode ??= _emiratesIdFocusNode;
-        });
-      }
-
-      if (_emiratesIdExpiryDateController.text.isEmpty) {
-        setState(() {
-          _emiratesIdExpiryDateError =
-              'Please select your Emirates ID expiry date';
-          firstErrorFocusNode ??= _emiratesIdExpiryDateFocusNode;
-        });
-      }
-
-      if (_dateOfBirthController.text.isEmpty) {
-        setState(() {
-          _dateOfBirthError = 'Please enter your date of birth';
-          firstErrorFocusNode ??= _dateOfBirthFocusNode;
-        });
-      }
-
-      if (_placeOfBirthController.text.isEmpty) {
-        setState(() {
-          _placeOfBirthError = 'Please enter your place of birth';
-          firstErrorFocusNode ??= _placeOfBirthFocusNode;
-        });
-      }
-
-      if (_genderController.text.isEmpty) {
-        setState(() {
-          _genderError = 'Please select your gender';
-          firstErrorFocusNode ??= _genderFocusNode;
-        });
-      }
-
-      if (_maritalStatusController.text.isEmpty) {
-        setState(() {
-          _maritalStatusError = 'Please select your marital status';
-          firstErrorFocusNode ??= _maritalStatusFocusNode;
-        });
-      }
-
-      if (_studentEmailController.text.isEmpty) {
-        setState(() {
-          _studentEmailError = 'Please enter your student email';
-          firstErrorFocusNode ??= _studentEmailFocusNode;
-        });
-      }
-
-      //validate the family information
-      if (_passportNationalityController.text == "ARE") {
-        if (_familyInformationEmiratesController.text.isEmpty) {
-          setState(() {
-            _familyInformationEmiratesErrorText = 'Please select the Emirates';
-            firstErrorFocusNode ??= _familyInformationEmiratesFocusNode;
-          });
-        }
-
-        if (_familyInformationTownVillageNoController.text.isEmpty) {
-          setState(() {
-            _familyInformationTownVillageNoErrorText =
-                'Please enter Town/Village';
-            firstErrorFocusNode ??= _familyInformationTownVillageNoFocusNode;
-          });
-        }
-
-        if (_familyInformationParentGuardianNameController.text.isEmpty) {
-          setState(() {
-            _familyInformationParentGuardianNameErrorText =
-                'Please enter Parent/Guardian Name';
-            firstErrorFocusNode ??=
-                _familyInformationParentGuardianNameFocusNode;
-          });
-        }
-
-        if (_familyInformationRelationTypeController.text.isEmpty) {
-          setState(() {
-            _familyInformationRelationTypeErrorText =
-                'Please Select Relation Type';
-            firstErrorFocusNode ??= _familyInformationRelationTypeFocusNode;
-          });
-        }
-
-        if (_familyInformationMotherNameController.text.isEmpty) {
-          setState(() {
-            _familyInformationMotherNameErrorText =
-                'Please Enter Mother Name';
-            firstErrorFocusNode ??= _familyInformationMotherNameFocusNode;
-          });
-        }
-      }
-
-      // validate the Relative information
-      if (_isRelativeStudyingFromScholarship == null) {
-        setState(() {
-          firstErrorFocusNode ??=
-              _isRelativeStudyingFromScholarshipYesFocusNode;
-        });
-      }
-
-      if (_relativeInfoList.isNotEmpty) {
-        for (var element in _relativeInfoList) {
-          if (element.relationTypeController.text.isEmpty) {
-            setState(() {
-              element.relationTypeError = "Please Select Relation Type";
-              firstErrorFocusNode ??= element.relationTypeFocusNode;
-            });
-          }
-
-          if (element.familyBookNumberController.text.isEmpty) {
-            setState(() {
-              element.familyBookNumberError =
-                  "Please Enter your family book number";
-              firstErrorFocusNode ??= element.familyBookNumberFocusNode;
-            });
-          }
-        }
-      }
-
-      // validate the Phone Number information
-      if (_phoneNumberList.isNotEmpty) {
-        for (var element in _phoneNumberList) {
-          if (element.phoneTypeController.text.isEmpty) {
-            setState(() {
-              element.phoneTypeError = "Please Select Phone Type";
-              firstErrorFocusNode ??= element.phoneTypeFocusNode;
-            });
-          }
-
-          if (element.phoneNumberController.text.isEmpty) {
-            setState(() {
-              element.phoneNumberError = "Please Enter your phone number";
-              firstErrorFocusNode ??= element.phoneNumberFocusNode;
-            });
-          }
-
-          if (element.countryCodeController.text.isEmpty) {
-            setState(() {
-              element.countryCodeError = "Please Enter your country code";
-              firstErrorFocusNode ??= element.countryCodeFocusNode;
-            });
-          }
-        }
-      }
-
-      // validate the Address information
-      if (_addressInformationList.isNotEmpty) {
-        for (var element in _addressInformationList) {
-          if (element.addressTypeController.text.isEmpty) {
-            setState(() {
-              element.addressTypeError = "Please Select Address Type";
-              firstErrorFocusNode ??= element.addressTypeFocusNode;
-            });
-          }
-
-          if (element.addressLine1Controller.text.isEmpty) {
-            setState(() {
-              element.addressLine1Error = "Please Enter Address Line 1";
-              firstErrorFocusNode ??= element.addressLine1FocusNode;
-            });
-          }
-
-          if (element.countryController.text.isEmpty) {
-            setState(() {
-              element.countryError = "Please Select Country";
-              firstErrorFocusNode ??= element.countryFocusNode;
-            });
-          }
-
-          if (element.stateDropdownMenuItems!.isNotEmpty &&
-              element.stateController.text.isEmpty) {
-            setState(() {
-              element.stateError = "Please Select State";
-              firstErrorFocusNode ??= element.stateFocusNode;
-            });
-          }
-
-          if (element.cityController.text.isEmpty) {
-            setState(() {
-              element.cityError = "Please Enter City";
-              firstErrorFocusNode ??= element.cityFocusNode;
-            });
-          }
-        }
-      }
-
-      // validate military services:
-      if (_passportNationalityController.text == 'ARE') {
-        switch (_isMilitaryService) {
-          case MilitaryStatus.yes:
-            if (_militaryServiceStartDateController.text.isEmpty) {
-              setState(() {
-                _militaryServiceStartDateErrorText =
-                    'Please select Military Service Start Date';
-                firstErrorFocusNode ??= _militaryServiceStartDateFocusNode;
-              });
-            }
-
-            if (_militaryServiceEndDateController.text.isEmpty) {
-              setState(() {
-                _militaryServiceEndDateErrorText =
-                    'Please select Military Service End Date';
-                firstErrorFocusNode ??= _militaryServiceEndDateFocusNode;
-              });
-            }
-
-            break;
-
-          case MilitaryStatus.no:
-            break;
-
-          case (MilitaryStatus.exemption || MilitaryStatus.postponed):
-            if(_reasonForMilitaryController.text.isEmpty){
-              setState(() {
-                _reasonForMilitaryErrorText = 'Please Enter Reason';
-                firstErrorFocusNode ??= _reasonForMilitaryFocusNode;
-              });
-            }
-
-            break;
-        }
-      }
-
-      // If any error found, move to the first error focus node
-      if (firstErrorFocusNode != null) {
-        FocusScope.of(context).requestFocus(firstErrorFocusNode);
-        return false;
-      } else {
-        // No errors found, return true
-
-        // initialize the models also
-        _initializeStudentDetailsModels();
-        _finalForm(isUrlEncoded: true);
-
-        return true;
       }
     }
 
-  bool validateHighSchoolDetails (langProvider)  {
-    firstErrorFocusNode = null;
+    // validate the Relative information
+    if (_isRelativeStudyingFromScholarship == null) {
+      setState(() {
+        firstErrorFocusNode ??= _isRelativeStudyingFromScholarshipYesFocusNode;
+      });
+    }
 
-    if  ((_selectedScholarship?.acadmicCareer == 'UG' ||
-  _selectedScholarship?.acadmicCareer == 'UGRD' ||
-  _selectedScholarship?.acadmicCareer == 'SCHL' ||
-  _selectedScholarship?.acadmicCareer == 'HCHL')&& _highSchoolList.isNotEmpty) {
-
-  for (var element in _highSchoolList) {
-  if (element.hsLevelController.text.isEmpty) {
-  setState(() {
-  element.hsLevelError = "Please Select High school level";
-  firstErrorFocusNode ??= element.hsLevelFocusNode;
-  });
-  }
-
-  if (element.hsCountryController.text.isEmpty) {
-  setState(() {
-  element.hsCountryError = "Please Select the Country";
-  firstErrorFocusNode ??= element.hsCountryFocusNode;
-  });
-  }
-  if(element.schoolStateDropdownMenuItems?.isNotEmpty ?? false){
-
-  if (element.hsStateController.text.isEmpty) {
-  setState(() {
-  element.hsStateError = "Please Enter your State";
-  firstErrorFocusNode ??= element.hsStateFocusNode;
-  });
-  }
-  }
-  if(element.hsCountryController.text == 'ARE'){
-  if(element.hsNameController.text.isEmpty){
-  setState(() {
-  element.hsNameError = "Please Enter your High School Name";
-  firstErrorFocusNode ??= element.hsNameFocusNode;
-  });
-  }
-  }
-  if (element.hsCountryController.text != 'ARE' || element.hsNameController.text == 'OTH'){
-
-  if(element.hsCountryController.text != 'ARE'){
-  if(element.hsNameController.text.isEmpty){
-  setState(() {
-  element.hsNameError = "Please Enter your High School Name";
-  firstErrorFocusNode ??= element.hsNameFocusNode;
-  });
-  }
-  }
-  if(element.hsNameController.text == 'OTH'){
-  if(element.otherHsNameController.text.isEmpty){
-  setState(() {
-  element.otherHsNameError = "Please Enter your High School Name";
-  firstErrorFocusNode ??= element.otherHsNameFocusNode;
-  });
-  }
-  }
-  }
-  // high school type
-  if(element.hsTypeController.text.isEmpty){
-  setState(() {
-  element.hsTypeError = "Please Select High School Type";
-  firstErrorFocusNode ??= element.hsTypeFocusNode;
-  });
-  }
-  // high school curriculum type
-  if(element.curriculumTypeController.text.isEmpty){
-  setState(() {
-  element.curriculumTypeError = "Please Select High School Curriculum Type";
-  firstErrorFocusNode ??= element.curriculumTypeFocusNode;
-  });
-  }
-
-  // high school curriculum average
-  if(element.curriculumAverageController.text.isEmpty){
-  setState(() {
-  element.curriculumAverageError = "Please Select High School Curriculum Type";
-  firstErrorFocusNode ??= element.curriculumAverageFocusNode;
-  });
-  }
-
-  if(element.curriculumAverageController.text.isNotEmpty){
-  if(element.yearOfPassingController.text.isEmpty){
-  setState(() {
-  element.yearOfPassingError = "Please Select Year of Passing";
-  firstErrorFocusNode ??= element.yearOfPassingFocusNode;
-  });
-  }
-  }
-  }
-  }
-  if (firstErrorFocusNode != null) {
-  FocusScope.of(context).requestFocus(firstErrorFocusNode);
-  return false;
-  } else {
-  // No errors found, return true
-  return true;
-  }
-}
-
-  bool validateGraduationDetails (langProvider){
-    firstErrorFocusNode = null;
-
-    // validate graduation details
-    if(_selectedScholarship?.acadmicCareer != 'SCHL' &&
-        _selectedScholarship?.acadmicCareer != 'HCHL'){
-
-      for (int index = 0; index < _graduationDetailsList.length; index++) {
-        var element = _graduationDetailsList[index];
-
-        if (element.currentlyStudying && element.showCurrentlyStudying) {
-          // validating last term
-          if (element.lastTermController.text.isEmpty) {
-            setState(() {
-              element.lastTermError = "Please Select Your Last Term";
-              firstErrorFocusNode ??= element.lastTermFocusNode;
-            });
-          }
-
-
-        }
-// #################################################################
-        // Condition using index and scholarship details
-        if (index > 0 &&
-            _selectedScholarship?.acadmicCareer != 'UGRD' &&
-            _selectedScholarship?.acadmicCareer != 'DDS') {
-
-          // validating graduation level
-          if(element.levelController.text.isEmpty){
-            setState(() {
-              element.levelError = "Please Select Your Graduation Level";
-              firstErrorFocusNode ??= element.levelFocusNode;
-            });
-          }
-
-        }
-
-        // #################################################################
-        // validating dds graduation level
-        if(index != 0 && _selectedScholarship?.acadmicCareer == 'DDS'){
-          if(element.levelController.text.isEmpty){
-            setState(() {
-              element.levelError = "Please Select Your DDS Graduation Level";
-              firstErrorFocusNode ??= element.levelFocusNode;
-            });
-          }
-        }
-        // #################################################################
-        // validating graduation country
-        if(element.countryController.text.isEmpty){
+    if (_relativeInfoList.isNotEmpty) {
+      for (var element in _relativeInfoList) {
+        if (element.relationTypeController.text.isEmpty) {
           setState(() {
-            element.countryError = "Please Select Your Graduation Country";
+            element.relationTypeError = "Please Select Relation Type";
+            firstErrorFocusNode ??= element.relationTypeFocusNode;
+          });
+        }
+
+        // if (element.familyBookNumberController.text.isEmpty) {
+        //   setState(() {
+        //     element.familyBookNumberError =
+        //         "Please Enter your family book number";
+        //     firstErrorFocusNode ??= element.familyBookNumberFocusNode;
+        //   });
+        // }
+      }
+    }
+
+    // validate the Phone Number information
+    if (_phoneNumberList.isNotEmpty) {
+      for (var element in _phoneNumberList) {
+        if (element.phoneTypeController.text.isEmpty) {
+          setState(() {
+            element.phoneTypeError = "Please Select Phone Type";
+            firstErrorFocusNode ??= element.phoneTypeFocusNode;
+          });
+        }
+
+        if (element.phoneNumberController.text.isEmpty) {
+          setState(() {
+            element.phoneNumberError = "Please Enter your phone number";
+            firstErrorFocusNode ??= element.phoneNumberFocusNode;
+          });
+        }
+
+        if (element.countryCodeController.text.isEmpty) {
+          setState(() {
+            element.countryCodeError = "Please Enter your country code";
+            firstErrorFocusNode ??= element.countryCodeFocusNode;
+          });
+        }
+      }
+    }
+
+    // validate the Address information
+    if (_addressInformationList.isNotEmpty) {
+      for (var element in _addressInformationList) {
+        if (element.addressTypeController.text.isEmpty) {
+          setState(() {
+            element.addressTypeError = "Please Select Address Type";
+            firstErrorFocusNode ??= element.addressTypeFocusNode;
+          });
+        }
+
+        if (element.addressLine1Controller.text.isEmpty) {
+          setState(() {
+            element.addressLine1Error = "Please Enter Address Line 1";
+            firstErrorFocusNode ??= element.addressLine1FocusNode;
+          });
+        }
+
+        if (element.countryController.text.isEmpty) {
+          setState(() {
+            element.countryError = "Please Select Country";
             firstErrorFocusNode ??= element.countryFocusNode;
           });
         }
-        // #################################################################
-        // high school university
-        if(_selectedScholarship?.acadmicCareer != 'DDS'){
-          if(element.universityController.text.isEmpty){
-            setState(() {
-              element.universityError = "Please Select Your High School University";
-              firstErrorFocusNode ??= element.universityFocusNode;
-            });
-          }
-        }
 
-        // #################################################################
-        // other university
-        if(element.universityController.text == 'OTH'){
-          if(element.otherUniversityController.text.isEmpty){
-            setState(() {
-              element.otherUniversityError = "Please Enter Other Univeersity Name";
-              firstErrorFocusNode ??= element.otherUniversityFocusNode;
-            });
-          }
-        }
-        // #################################################################
-        // major
-        if(element.majorController.text.isEmpty){
-          setState(() {
-            element.majorError = "Please select your major";
-            firstErrorFocusNode ??= element.majorFocusNode;
+        // if ( element.stateController.text.isEmpty && element.stateDropdownMenuItems?.isNotEmpty ?? false) {
+        if ( element.stateController.text.isEmpty && (element.stateDropdownMenuItems?.isNotEmpty ?? false)) {
+
+        setState(() {
+            element.stateError = "Please Select State";
+            firstErrorFocusNode ??= element.stateFocusNode;
           });
         }
-        // #################################################################
-        // cgpa
-        if(element.cgpaController.text.isEmpty){
+
+        if (element.cityController.text.isEmpty) {
           setState(() {
-            element.cgpaError = "Please Enter your cgpa";
-            firstErrorFocusNode ??= element.cgpaFocusNode;
+            element.cityError = "Please Enter City";
+            firstErrorFocusNode ??= element.cityFocusNode;
           });
         }
-        // #################################################################
-        if(element.graduationStartDateController.text.isEmpty){
-          setState(() {
-            element.graduationStartDateError = "Please Enter Graduation Start Date";
-            firstErrorFocusNode ??= element.graduationStartDateFocusNode;
-          });
-        }
-        // #################################################################
-        // graduation end data
-        if(!element.currentlyStudying &&
-            element.levelController.text.isNotEmpty){
-
-          if(element.graduationEndDateController.text.isEmpty){
-            setState(() {
-              element.graduationEndDateError = "Please Enter Graduation End Date";
-              firstErrorFocusNode ??= element.graduationEndDateFocusNode;
-            });
-          }
-        }
-        // #################################################################
-        // Are you currently receiving scholarship or grant from other university
-if(_selectedScholarship?.acadmicCareer == 'DDS'){
-  if(havingSponsor.isEmpty){
-    _alertService.flushBarErrorMessages(message: "Are you currently receiving scholarship or grant from other university", context: context, provider: Provider.of<LanguageChangeViewModel>(context,listen: false));
-  }
-}
-        // #################################################################
-        // sponsorship name
-        if((havingSponsor == 'Y') ||
-            _selectedScholarship?.acadmicCareer != 'DDS'){
-  if(element.sponsorShipController.text.isEmpty){
-    setState(() {
-      element.sponsorShipError = "Please Fill Sponsorship";
-      firstErrorFocusNode ??= element.sponsorShipFocusNode;
-    });
-  }
-        }
-
-        // #################################################################
-    if(element.levelController.text == 'PGRD' ||
-    element.levelController.text == 'PG' ||
-    element.levelController.text == 'DDS'){
-
-
-      // case study title
-      if(element.caseStudyTitleController.text.isEmpty){
-        setState(() {
-          element.caseStudyTitleError = "Please Enter Case Study Title";
-          firstErrorFocusNode ??= element.caseStudyTitleFocusNode;
-        });
-      }
-
-      // case study start year
-      if(element.caseStudyStartYearController.text.isEmpty){
-        setState(() {
-          element.caseStudyStartYearError = "Please Enter Case Study Title";
-          firstErrorFocusNode ??= element.caseStudyStartYearFocusNode;
-        });
-      }
-      // case study description
-      if(element.caseStudyDescriptionController.text.isEmpty){
-        setState(() {
-          element.caseStudyDescriptionError = "Please Enter Case Study Description";
-          firstErrorFocusNode ??= element.caseStudyDescriptionFocusNode;
-        });
-      }
-
-      }
-        // #################################################################
-
-
-
-      }
-
-
-
-    }
-
-
-
-      if (firstErrorFocusNode != null) {
-        FocusScope.of(context).requestFocus(firstErrorFocusNode);
-        return false;
-      } else {
-        // No errors found, return true
-        return true;
       }
     }
 
-  bool validateUniversityAndMajorsDetails (langProvider) {
+    // validate military services:
+    if (_passportNationalityController.text == 'ARE') {
+      switch (_isMilitaryService) {
+        case MilitaryStatus.yes:
+          if (_militaryServiceStartDateController.text.isEmpty) {
+            setState(() {
+              _militaryServiceStartDateErrorText =
+                  'Please select Military Service Start Date';
+              firstErrorFocusNode ??= _militaryServiceStartDateFocusNode;
+            });
+          }
+
+          if (_militaryServiceEndDateController.text.isEmpty) {
+            setState(() {
+              _militaryServiceEndDateErrorText =
+                  'Please select Military Service End Date';
+              firstErrorFocusNode ??= _militaryServiceEndDateFocusNode;
+            });
+          }
+
+          break;
+
+        case MilitaryStatus.no:
+          break;
+
+        case (MilitaryStatus.exemption || MilitaryStatus.postponed):
+          if (_reasonForMilitaryController.text.isEmpty) {
+            setState(() {
+              _reasonForMilitaryErrorText = 'Please Enter Reason';
+              firstErrorFocusNode ??= _reasonForMilitaryFocusNode;
+            });
+          }
+
+          break;
+      }
+    }
+
+    // If any error found, move to the first error focus node
+    if (firstErrorFocusNode != null) {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      // No errors found, return true
+
+      // saving student details in model
+      // // initialize the models also
+      // _initializeStudentDetailsModels();
+      _finalForm(isUrlEncoded: true);
+
+      return true;
+    }
+  }
+
+  bool validateHighSchoolDetails(langProvider) {
     firstErrorFocusNode = null;
 
-    // academic program pgrd
-        if(_selectedScholarship?.acadmicCareer == 'PGRD' && _selectedScholarship?.acadmicCareer != 'DDS'){
-          if(_acadProgramPgrdController.text.isEmpty){
+    if ((_selectedScholarship?.acadmicCareer == 'UG' ||
+            _selectedScholarship?.acadmicCareer == 'UGRD' ||
+            _selectedScholarship?.acadmicCareer == 'SCHL' ||
+            _selectedScholarship?.acadmicCareer == 'HCHL') &&
+        _highSchoolList.isNotEmpty) {
+      for (var element in _highSchoolList) {
+        if (element.hsLevelController.text.isEmpty) {
+          setState(() {
+            element.hsLevelError = "Please Select High school level";
+            firstErrorFocusNode ??= element.hsLevelFocusNode;
+          });
+        }
+
+        if (element.hsCountryController.text.isEmpty) {
+          setState(() {
+            element.hsCountryError = "Please Select the Country";
+            firstErrorFocusNode ??= element.hsCountryFocusNode;
+          });
+        }
+        if (element.schoolStateDropdownMenuItems?.isNotEmpty ?? false) {
+          if (element.hsStateController.text.isEmpty) {
             setState(() {
-              _acadProgramPgrdErrorText = "Please Enter Your PGRD Program";
-              firstErrorFocusNode ??= _acadProgramPgrdFocusNode;
+              element.hsStateError = "Please Enter your State";
+              firstErrorFocusNode ??= element.hsStateFocusNode;
             });
           }
         }
-// #################################################################
-        // major
-        for(int i = 0; i < _majorsWishlist.length ; i++){
-          var element = _majorsWishlist[i];
-          if(i == 0 && element.majorController.text.isEmpty){
+        if (element.hsCountryController.text == 'ARE') {
+          if (element.hsNameController.text.isEmpty) {
             setState(() {
-              element.majorError = "Please Enter Your Major Name";
-              firstErrorFocusNode ??= element.majorFocusNode;
-            });
-          }
-          if(element.majorError != null){
-            setState(() {
-              element.majorError = "Please Select Other major";
-              firstErrorFocusNode ??= element.majorFocusNode;
+              element.hsNameError = "Please Enter your High School Name";
+              firstErrorFocusNode ??= element.hsNameFocusNode;
             });
           }
         }
-// #################################################################
+        if (element.hsCountryController.text != 'ARE' ||
+            element.hsNameController.text == 'OTH') {
 
-        // academic program dds
-        if(_selectedScholarship?.acadmicCareer == 'DDS'){
-          if(_acadProgramDdsController.text.isEmpty){
-            setState(() {
-              _acadProgramDdsErrorText = "Please Enter Your DDS Program";
-              firstErrorFocusNode ??= _acadProgramDdsFocusNode;
-            });
-          }
-        }
-
-        // #################################################################
-
-        // university wishlish validation
-        if(_selectedScholarship?.acadmicCareer != 'HCHL'){
-
-
-          for(int i =0 ; i<_universityPriorityList.length ; i++){
-            var element = _universityPriorityList[i];
-            if( !isStudyCountry &&  element.countryIdController.text.isEmpty){
+            if (element.otherHsNameController.text.isEmpty) {
               setState(() {
-                element.countryIdError = "Please Select Your University Country";
-                firstErrorFocusNode ??= element.countryIdFocusNode;
+                element.otherHsNameError = "Please Enter your High School Name";
+                firstErrorFocusNode ??= element.otherHsNameFocusNode;
               });
             }
 
-
-            // #################################################################
-            if(_selectedScholarship?.acadmicCareer != 'DDS'){
-              if(element.majorsController.text.isEmpty){
-                setState(() {
-                  element.majorsError = "Please Select Your Major";
-                  firstErrorFocusNode ??= element.majorsFocusNode;
-                });
-              }
-            }
-            // #################################################################
-            // validate other university
-            if(_selectedScholarship?.acadmicCareer != 'DDS' && element.universityIdController.text == 'OTH' && (element
-                .countryIdController
-                .text
-                .isNotEmpty ||
-                element
-                    .otherMajorsController
-                    .text
-                    .isNotEmpty ||
-                element
-                    .otherUniversityNameController
-                    .text
-                    .isNotEmpty ||
-                element
-                    .statusController
-                    .text
-                    .isNotEmpty)){
-
-              if(element.majorsController.text.isEmpty){
-                setState(() {
-                  element.otherMajorsError = "Please Enter other majors name";
-                  firstErrorFocusNode ??= element.otherMajorsFocusNode;
-                });
-              }
-            }
-
-// #################################################################
-            // validate university
-            if(_selectedScholarship?.acadmicCareer != 'DDS'){
-              if(element.universityIdController.text.isEmpty){
-                setState(() {
-                  element.universityIdError = "Please Select Your Major";
-                  firstErrorFocusNode ??= element.universityIdFocusNode;
-                });
-              }
-            }
-// #################################################################
-            // validate other university
-            if(_selectedScholarship?.acadmicCareer != 'DDS' && element.universityIdController.text == 'OTH' && (element
-                .countryIdController
-                .text
-                .isNotEmpty ||
-                element
-                    .otherMajorsController
-                    .text
-                    .isNotEmpty ||
-                element
-                    .otherUniversityNameController
-                    .text
-                    .isNotEmpty ||
-                element
-                    .statusController
-                    .text
-                    .isNotEmpty)){
-              if(element.otherUniversityNameController.text.isEmpty){
-                setState(() {
-                  element.otherUniversityNameError = "Please Enter university name";
-                  firstErrorFocusNode ??= element.otherUniversityNameFocusNode;
-                });
-              }
-            }
-
-            // #################################################################
-            if( _selectedScholarship
-                ?.acadmicCareer !=
-                'DDS' &&
-                (element.countryIdController
-                    .text.isNotEmpty ||
-                    element.otherMajorsController
-                        .text.isNotEmpty ||
-                    element
-                        .otherUniversityNameController
-                        .text
-                        .isNotEmpty ||
-                    element.statusController
-                        .text.isNotEmpty)){
-
-              if(element.statusController.text.isEmpty){
-                setState(() {
-                  element.statusError = "Please Select University Status";
-                  firstErrorFocusNode ??= element.statusFocusNode;
-                });
-              }
-            }
-          }
-
-
-
+        }
+        // high school type
+        if (element.hsTypeController.text.isEmpty) {
+          setState(() {
+            element.hsTypeError = "Please Select High School Type";
+            firstErrorFocusNode ??= element.hsTypeFocusNode;
+          });
+        }
+        // high school curriculum type
+        if (element.curriculumTypeController.text.isEmpty) {
+          setState(() {
+            element.curriculumTypeError =
+                "Please Select High School Curriculum Type";
+            firstErrorFocusNode ??= element.curriculumTypeFocusNode;
+          });
         }
 
-
-        // checking for fist error node
-        if (firstErrorFocusNode != null) {
-          FocusScope.of(context).requestFocus(firstErrorFocusNode);
-          return false;
-        } else {
-          // No errors found, return true
-          return true;
+        // high school curriculum average
+        if (element.curriculumAverageController.text.isEmpty) {
+          setState(() {
+            element.curriculumAverageError =
+                "Please Select High School Curriculum Type";
+            firstErrorFocusNode ??= element.curriculumAverageFocusNode;
+          });
         }
 
-
-      }
-
-  bool validateRequiredExaminations (langProvider){
-        for( int i = 0; i< _requiredExaminationList.length; i++)
-{
-  firstErrorFocusNode = null;
-
-  var element = _requiredExaminationList[i];
-  if(element.examinationController.text.isEmpty){
+        if (element.curriculumAverageController.text.isNotEmpty) {
+          if (element.yearOfPassingController.text.isEmpty) {
             setState(() {
-              element.examinationError = "Please Enter Examination Name";
-              firstErrorFocusNode ??= element.examinationFocusNode;
+              element.yearOfPassingError = "Please Select Year of Passing";
+              firstErrorFocusNode ??= element.yearOfPassingFocusNode;
             });
           }
-          if(element.examinationTypeIdController.text.isEmpty){
-            setState(() {
-              element.examinationTypeIdError = "Please Enter Examination Type";
-              firstErrorFocusNode ??= element.examinationTypeIdFocusNode;
-            });
-          }
-          if(element.examinationGradeController.text.isEmpty){
-            setState(() {
-              element.examinationGradeError = "Please Enter Examination Grade";
-              firstErrorFocusNode ??= element.examinationGradeFocusNode;
-            });
-          } if(element.examDateController.text.isEmpty){
-            setState(() {
-              element.examDateError = "Please Enter Exam Date";
-              firstErrorFocusNode ??= element.examDateFocusNode;
-            });
-          }
-        }
-
-
-        // checking for fist error node
-        if (firstErrorFocusNode != null) {
-          FocusScope.of(context).requestFocus(firstErrorFocusNode);
-          return false;
-        } else {
-          // No errors found, return true
-          return true;
         }
       }
+    }
+    if (firstErrorFocusNode != null) {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      // No errors found, return true
+      return true;
+    }
+  }
 
-  bool validateEmploymentHistory (langProvider){
+  bool validateGraduationDetails(langProvider) {
+    firstErrorFocusNode = null;
+
+    // validate graduation details
+    if (_selectedScholarship?.acadmicCareer != 'SCHL' &&
+        _selectedScholarship?.acadmicCareer != 'HCHL') {
+      for (int index = 0; index < _graduationDetailsList.length; index++) {
+        var element = _graduationDetailsList[index];
+        validateGraduationDetails(element) {
+          if (element.currentlyStudying && element.showCurrentlyStudying) {
+            // validating last term
+            if (element.lastTermController.text.isEmpty) {
+              setState(() {
+                element.lastTermError = "Please Select Your Last Term";
+                firstErrorFocusNode ??= element.lastTermFocusNode;
+              });
+            }
+          }
+// #################################################################
+          // Condition using index and scholarship details
+          if (index > 0 &&
+              _selectedScholarship?.acadmicCareer != 'UGRD' &&
+              _selectedScholarship?.acadmicCareer != 'DDS') {
+            // validating graduation level
+            if (element.levelController.text.isEmpty) {
+              setState(() {
+                element.levelError = "Please Select Your Graduation Level";
+                firstErrorFocusNode ??= element.levelFocusNode;
+              });
+            }
+          }
+
+          // #################################################################
+          // validating dds graduation level
+          if (index != 0 && _selectedScholarship?.acadmicCareer == 'DDS') {
+            if (element.levelController.text.isEmpty) {
+              setState(() {
+                element.levelError = "Please Select Your DDS Graduation Level";
+                firstErrorFocusNode ??= element.levelFocusNode;
+              });
+            }
+          }
+          // #################################################################
+          // validating graduation country
+          if (element.countryController.text.isEmpty) {
+            setState(() {
+              element.countryError = "Please Select Your Graduation Country";
+              firstErrorFocusNode ??= element.countryFocusNode;
+            });
+          }
+          // #################################################################
+          // high school university
+          if (_selectedScholarship?.acadmicCareer != 'DDS') {
+            if (element.universityController.text.isEmpty) {
+              setState(() {
+                element.universityError =
+                    "Please Select Your High School University";
+                firstErrorFocusNode ??= element.universityFocusNode;
+              });
+            }
+          }
+
+          // #################################################################
+          // other university
+          if (element.universityController.text == 'OTH') {
+            if (element.otherUniversityController.text.isEmpty) {
+              setState(() {
+                element.otherUniversityError =
+                    "Please Enter Other Univeersity Name";
+                firstErrorFocusNode ??= element.otherUniversityFocusNode;
+              });
+            }
+          }
+          // #################################################################
+          // major
+          if (element.majorController.text.isEmpty) {
+            setState(() {
+              element.majorError = "Please select your major";
+              firstErrorFocusNode ??= element.majorFocusNode;
+            });
+          }
+          // #################################################################
+          // cgpa
+          if (element.cgpaController.text.isEmpty) {
+            setState(() {
+              element.cgpaError = "Please Enter your cgpa";
+              firstErrorFocusNode ??= element.cgpaFocusNode;
+            });
+          }
+          // #################################################################
+          if (element.graduationStartDateController.text.isEmpty) {
+            setState(() {
+              element.graduationStartDateError =
+                  "Please Enter Graduation Start Date";
+              firstErrorFocusNode ??= element.graduationStartDateFocusNode;
+            });
+          }
+          // #################################################################
+          // graduation end data
+          element.graduationEndDateError = null;
+          if ((!element.currentlyStudying &&
+              element.levelController.text.isNotEmpty)) {
+            print("In graduation");
+
+            if (element.graduationEndDateController.text.isEmpty) {
+              setState(() {
+                element.graduationEndDateError =
+                    "Please Enter Graduation End Date";
+                firstErrorFocusNode ??= element.graduationEndDateFocusNode;
+              });
+            }
+          }
+          // #################################################################
+          // Are you currently receiving scholarship or grant from other university
+          if (_selectedScholarship?.acadmicCareer == 'DDS') {
+            if (havingSponsor.isEmpty) {
+              _alertService.flushBarErrorMessages(
+                  message:
+                      "Are you currently receiving scholarship or grant from other university",
+                  context: context,
+                  provider: Provider.of<LanguageChangeViewModel>(context,
+                      listen: false));
+            }
+          }
+          // #################################################################
+          // sponsorship name
+          if ((havingSponsor == 'Y') ||
+              _selectedScholarship?.acadmicCareer != 'DDS') {
+            if (element.sponsorShipController.text.isEmpty) {
+              setState(() {
+                element.sponsorShipError = "Please Fill Sponsorship";
+                firstErrorFocusNode ??= element.sponsorShipFocusNode;
+              });
+            }
+          }
+
+          // #################################################################
+          if (element.levelController.text == 'PGRD' ||
+              element.levelController.text == 'PG' ||
+              element.levelController.text == 'DDS') {
+            // case study title
+            if (element.caseStudyTitleController.text.isEmpty) {
+              setState(() {
+                element.caseStudyTitleError = "Please Enter Case Study Title";
+                firstErrorFocusNode ??= element.caseStudyTitleFocusNode;
+              });
+            }
+
+            // case study start year
+            if (element.caseStudyStartYearController.text.isEmpty) {
+              setState(() {
+                element.caseStudyStartYearError =
+                    "Please Enter Case Study Title";
+                firstErrorFocusNode ??= element.caseStudyStartYearFocusNode;
+              });
+            }
+            // case study description
+            if (element.caseStudyDescriptionController.text.isEmpty) {
+              setState(() {
+                element.caseStudyDescriptionError =
+                    "Please Enter Case Study Description";
+                firstErrorFocusNode ??= element.caseStudyDescriptionFocusNode;
+              });
+            }
+          }
+          // #################################################################
+        }
+
+        if (_selectedScholarship?.acadmicCareer == 'UGRD' &&
+            element.currentlyStudying) {
+          validateGraduationDetails(element);
+        }
+        if (_selectedScholarship?.acadmicCareer != 'UGRD') {
+          validateGraduationDetails(element);
+        }
+      }
+    }
+
+    if (firstErrorFocusNode != null) {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      // No errors found, return true
+      return true;
+    }
+  }
+
+  bool validateUniversityAndMajorsDetails(langProvider) {
+    firstErrorFocusNode = null;
+
+    // academic program pgrd
+    if (_selectedScholarship?.acadmicCareer == 'PGRD' &&
+        _selectedScholarship?.acadmicCareer != 'DDS') {
+      if (_acadProgramPgrdController.text.isEmpty) {
+        setState(() {
+          _acadProgramPgrdErrorText = "Please Enter Your PGRD Program";
+          firstErrorFocusNode ??= _acadProgramPgrdFocusNode;
+        });
+      }
+    }
+// #################################################################
+    // major
+    for (int i = 0; i < _majorsWishlist.length; i++) {
+      var element = _majorsWishlist[i];
+      if (i == 0 && element.majorController.text.isEmpty) {
+        setState(() {
+          element.majorError = "Please Enter Your Major Name";
+          firstErrorFocusNode ??= element.majorFocusNode;
+        });
+      }
+      if (element.majorError != null) {
+        setState(() {
+          element.majorError = "Please Select Other major";
+          firstErrorFocusNode ??= element.majorFocusNode;
+        });
+      }
+    }
+// #################################################################
+
+    // academic program dds
+    if (_selectedScholarship?.acadmicCareer == 'DDS') {
+      if (_acadProgramDdsController.text.isEmpty) {
+        setState(() {
+          _acadProgramDdsErrorText = "Please Enter Your DDS Program";
+          firstErrorFocusNode ??= _acadProgramDdsFocusNode;
+        });
+      }
+    }
+
+    // #################################################################
+
+    // university wishlish validation
+    if (_selectedScholarship?.acadmicCareer != 'HCHL') {
+      for (int i = 0; i < _universityPriorityList.length; i++) {
+        var element = _universityPriorityList[i];
+        if (!isStudyCountry && element.countryIdController.text.isEmpty) {
+          setState(() {
+            element.countryIdError = "Please Select Your University Country";
+            firstErrorFocusNode ??= element.countryIdFocusNode;
+          });
+        }
+
+        // #################################################################
+        if (_selectedScholarship?.acadmicCareer != 'DDS') {
+          if (element.majorsController.text.isEmpty) {
+            setState(() {
+              element.majorsError = "Please Select Your Major";
+              firstErrorFocusNode ??= element.majorsFocusNode;
+            });
+          }
+        }
+        // #################################################################
+        // validate other university
+        if (_selectedScholarship?.acadmicCareer != 'DDS' &&
+            element.universityIdController.text == 'OTH' &&
+            (element.countryIdController.text.isNotEmpty ||
+                element.otherMajorsController.text.isNotEmpty ||
+                element.otherUniversityNameController.text.isNotEmpty ||
+                element.statusController.text.isNotEmpty)) {
+          if (element.majorsController.text.isEmpty) {
+            setState(() {
+              element.otherMajorsError = "Please Enter other majors name";
+              firstErrorFocusNode ??= element.otherMajorsFocusNode;
+            });
+          }
+        }
+
+// #################################################################
+        // validate university
+        if (_selectedScholarship?.acadmicCareer != 'DDS') {
+          if (element.universityIdController.text.isEmpty) {
+            setState(() {
+              element.universityIdError = "Please Select Your Major";
+              firstErrorFocusNode ??= element.universityIdFocusNode;
+            });
+          }
+        }
+// #################################################################
+        // validate other university
+        if (_selectedScholarship?.acadmicCareer != 'DDS' &&
+            element.universityIdController.text == 'OTH' &&
+            (element.countryIdController.text.isNotEmpty ||
+                element.otherMajorsController.text.isNotEmpty ||
+                element.otherUniversityNameController.text.isNotEmpty ||
+                element.statusController.text.isNotEmpty)) {
+          if (element.otherUniversityNameController.text.isEmpty) {
+            setState(() {
+              element.otherUniversityNameError = "Please Enter university name";
+              firstErrorFocusNode ??= element.otherUniversityNameFocusNode;
+            });
+          }
+        }
+
+        // #################################################################
+        if (_selectedScholarship?.acadmicCareer != 'DDS' &&
+            (element.countryIdController.text.isNotEmpty ||
+                element.otherMajorsController.text.isNotEmpty ||
+                element.otherUniversityNameController.text.isNotEmpty ||
+                element.statusController.text.isNotEmpty)) {
+          if (element.statusController.text.isEmpty) {
+            setState(() {
+              element.statusError = "Please Select University Status";
+              firstErrorFocusNode ??= element.statusFocusNode;
+            });
+          }
+        }
+      }
+    }
+
+    // checking for fist error node
+    if (firstErrorFocusNode != null) {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      // No errors found, return true
+      return true;
+    }
+  }
+
+  bool validateRequiredExaminations(langProvider) {
+    for (int i = 0; i < _requiredExaminationList.length; i++) {
+      firstErrorFocusNode = null;
+
+      var element = _requiredExaminationList[i];
+      if (element.examinationController.text.isEmpty) {
+        setState(() {
+          element.examinationError = "Please Enter Examination Name";
+          firstErrorFocusNode ??= element.examinationFocusNode;
+        });
+      }
+      if (element.examinationTypeIdController.text.isEmpty) {
+        setState(() {
+          element.examinationTypeIdError = "Please Enter Examination Type";
+          firstErrorFocusNode ??= element.examinationTypeIdFocusNode;
+        });
+      }
+      if (element.examinationGradeController.text.isEmpty) {
+        setState(() {
+          element.examinationGradeError = "Please Enter Examination Grade";
+          firstErrorFocusNode ??= element.examinationGradeFocusNode;
+        });
+      }
+      if (element.examDateController.text.isEmpty) {
+        setState(() {
+          element.examDateError = "Please Enter Exam Date";
+          firstErrorFocusNode ??= element.examDateFocusNode;
+        });
+      }
+    }
+
+    // checking for fist error node
+    if (firstErrorFocusNode != null) {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      // No errors found, return true
+      return true;
+    }
+  }
+
+  bool validateEmploymentHistory(langProvider) {
     firstErrorFocusNode = null;
 
     // validate employment history
 
-      // select employment status
-      if(_employmentStatus == null || _employmentStatus == ''){
-        _alertService.showToast(message: "Please select your employment status", context: context);
-      }
-
-      if(_employmentStatus != null &&
-          _employmentStatus != '' &&
-          _employmentStatus != 'N'){
-
-        for (int i = 0; i < _employmentHistoryList.length; i++){
-          var element = _employmentHistoryList[i];
-
-          // employer name
-          if(element.employerNameController.text.isEmpty){
-            setState(() {
-              element.employerNameError = "Please Enter Employer Name";
-              firstErrorFocusNode ??= element.employerNameFocusNode;
-            });
-          }
-
-          // designation
-          if(element.titleController.text.isEmpty){
-            setState(() {
-              element.titleError = "Please Enter Employer Name";
-              firstErrorFocusNode ??= element.titleFocusNode;
-            });
-          }
-
-          //work place
-          if(element.placeController.text.isEmpty){
-            setState(() {
-              element.placeError = "Please Enter Work Place";
-              firstErrorFocusNode ??= element.placeFocusNode;
-            });
-          }
-
-          //occupation
-          if(element.occupationController.text.isEmpty){
-            setState(() {
-              element.occupationError = "Please Enter Occupation";
-              firstErrorFocusNode ??= element.occupationFocusNode;
-            });
-          }
-
-          // start date
-          if(element.startDateController.text.isEmpty){
-            setState(() {
-              element.startDateError = "Please Enter Start Date";
-              firstErrorFocusNode ??= element.startDateFocusNode;
-            });
-          }
-
-          // end date
-          if( _employmentStatus == 'P' &&  element.endDateController.text.isEmpty){
-            setState(() {
-              element.endDateError = "Please Enter End Date";
-              firstErrorFocusNode ??= element.endDateFocusNode;
-            });
-          }
-
-          // reporting manager
-          if(element.reportingManagerController.text.isEmpty){
-            setState(() {
-              element.reportingManagerError = "Please Enter Reporting Manager";
-              firstErrorFocusNode ??= element.reportingManagerFocusNode;
-            });
-          }
-          // contact number
-          if(element.contactNumberController.text.isEmpty){
-            setState(() {
-              element.contactNumberError = "Please Enter Reporting Manager";
-              firstErrorFocusNode ??= element.contactNumberFocusNode;
-            });
-          }
-          // email
-          if(element.contactEmailController.text.isEmpty){
-            setState(() {
-              element.contactEmailError = "Please Enter Reporting Manager";
-              firstErrorFocusNode ??= element.contactEmailFocusNode;
-            });
-          }
-      }}
-      // checking for fist error node
-      if (firstErrorFocusNode != null || _employmentStatus == null || _employmentStatus == '') {
-        FocusScope.of(context).requestFocus(firstErrorFocusNode);
-        return false;
-      } else {
-        // No errors found, return true
-        return true;
-      }
-
+    // select employment status
+    if (_employmentStatus == null || _employmentStatus == '') {
+      _alertService.showToast(
+          message: "Please select your employment status", context: context);
     }
 
-  bool validateAttachmentsSection(langProvider){
+    if (_employmentStatus != null &&
+        _employmentStatus != '' &&
+        _employmentStatus != 'N') {
+      for (int i = 0; i < _employmentHistoryList.length; i++) {
+        var element = _employmentHistoryList[i];
+
+        // employer name
+        if (element.employerNameController.text.isEmpty) {
+          setState(() {
+            element.employerNameError = "Please Enter Employer Name";
+            firstErrorFocusNode ??= element.employerNameFocusNode;
+          });
+        }
+
+        // designation
+        if (element.titleController.text.isEmpty) {
+          setState(() {
+            element.titleError = "Please Enter Employer Name";
+            firstErrorFocusNode ??= element.titleFocusNode;
+          });
+        }
+
+        //work place
+        if (element.placeController.text.isEmpty) {
+          setState(() {
+            element.placeError = "Please Enter Work Place";
+            firstErrorFocusNode ??= element.placeFocusNode;
+          });
+        }
+
+        //occupation
+        if (element.occupationController.text.isEmpty) {
+          setState(() {
+            element.occupationError = "Please Enter Occupation";
+            firstErrorFocusNode ??= element.occupationFocusNode;
+          });
+        }
+
+        // start date
+        if (element.startDateController.text.isEmpty) {
+          setState(() {
+            element.startDateError = "Please Enter Start Date";
+            firstErrorFocusNode ??= element.startDateFocusNode;
+          });
+        }
+
+        // end date
+        if (_employmentStatus == 'P' &&
+            element.endDateController.text.isEmpty) {
+          setState(() {
+            element.endDateError = "Please Enter End Date";
+            firstErrorFocusNode ??= element.endDateFocusNode;
+          });
+        }
+
+        // reporting manager
+        if (element.reportingManagerController.text.isEmpty) {
+          setState(() {
+            element.reportingManagerError = "Please Enter Reporting Manager";
+            firstErrorFocusNode ??= element.reportingManagerFocusNode;
+          });
+        }
+        // contact number
+        if (element.contactNumberController.text.isEmpty) {
+          setState(() {
+            element.contactNumberError = "Please Enter Reporting Manager";
+            firstErrorFocusNode ??= element.contactNumberFocusNode;
+          });
+        }
+        // email
+        if (element.contactEmailController.text.isEmpty) {
+          setState(() {
+            element.contactEmailError = "Please Enter Reporting Manager";
+            firstErrorFocusNode ??= element.contactEmailFocusNode;
+          });
+        }
+      }
+    }
+    // checking for fist error node
+    if (firstErrorFocusNode != null ||
+        _employmentStatus == null ||
+        _employmentStatus == '') {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      // No errors found, return true
+      return true;
+    }
+  }
+
+  bool validateAttachmentsSection(langProvider) {
     firstErrorFocusNode = null;
 
-    return true;}
-
-
-
+    return true;
+  }
 
   // *--------------------------------------------------------- validate section in accordance with the steps end ------------------------------------------------------------------------------*
 
@@ -8626,11 +8740,10 @@ if(_selectedScholarship?.acadmicCareer == 'DDS'){
       fontWeight: FontWeight.w500,
       color: AppColors.scoButtonColor);
 
-
   // Buttons Section (Previous, Next, Save Draft)
-  Widget draftPrevNextButtons(langProvider){
+  Widget draftPrevNextButtons(langProvider) {
     return Padding(
-      padding:  EdgeInsets.symmetric( vertical: kPadding),
+      padding: EdgeInsets.symmetric(vertical: kPadding),
       child: SizedBox(
         width: double.infinity,
         child: Wrap(
@@ -8638,51 +8751,64 @@ if(_selectedScholarship?.acadmicCareer == 'DDS'){
           runAlignment: WrapAlignment.spaceBetween,
           runSpacing: 10,
           children: <Widget>[
-            saveDraftButton(),
-            Wrap(
-                spacing: 10,
-                children: <Widget>[ previousButton(),nextButton(langProvider),]),
+            saveDraftButton(context),
+            Wrap(spacing: 10, children: <Widget>[
+              previousButton(),
+              nextButton(langProvider),
+            ]),
           ],
         ),
       ),
     );
   }
 
-
-  Widget saveDraftButton()
-  {
-    return  MaterialButton( onPressed: saveDraft,
-      color: AppColors.scoButtonColor,
-      textColor: Colors.white,
-      height: 30,
-
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      child: Text('Save as Draft',style: TextStyle(fontSize: 12),),);
+  Widget saveDraftButton(BuildContext context) {
+    return Consumer<SaveAsDraftViewmodel>(
+      builder: (context, provider, _) {
+        final status = provider.apiResponse.status;
+        return MaterialButton(
+          onPressed: status == Status.LOADING ? null : saveDraft,
+          color: AppColors.scoButtonColor,
+          textColor: Colors.white,
+          height: 30,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          child: status == Status.LOADING
+              ? SizedBox(
+                  height: 10,
+                  width: 10,
+                  child: Utils.cupertinoLoadingIndicator())
+              : const Text(
+                  'Save as Draft',
+                  style: TextStyle(fontSize: 12),
+                ),
+        );
+      },
+    );
   }
 
-  Widget previousButton()
-  {
+  Widget previousButton() {
     return MaterialButton(
       onPressed: _currentSectionIndex > 0 ? previousSection : null,
       color: AppColors.lightBlue1,
       height: 30,
-      textColor: Colors.white,      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      child: Text('Previous',style: TextStyle(fontSize: 12),),
+      textColor: Colors.white,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      child: Text(
+        'Previous',
+        style: TextStyle(fontSize: 12),
+      ),
     );
-
   }
 
-  Widget nextButton(langProvider)
-  {
-    return   MaterialButton(
+  Widget nextButton(langProvider) {
+    return MaterialButton(
       color: AppColors.lightBlue2,
       height: 30,
-
-      textColor: Colors.white, materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      textColor: Colors.white,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       onPressed: () {
         if (validateSection(
-            step: _currentSectionIndex,
-            langProvider: langProvider)) {
+            step: _currentSectionIndex, langProvider: langProvider)) {
           nextSection(); // Only move to the next section if validation passes
         } else {
           // Optionally show a validation error message (like a SnackBar)
@@ -8692,12 +8818,12 @@ if(_selectedScholarship?.acadmicCareer == 'DDS'){
               provider: langProvider);
         }
       },
-      child: Text('Next',style: TextStyle(fontSize: 12),),
+      child: const Text(
+        'Next',
+        style: TextStyle(fontSize: 12),
+      ),
     );
-
   }
-
-
 
   // to reduce the copy of code we created this where obscure text and border is not copied again and again, and if we need to use more features then we will use CustomTextField
   dynamic _scholarshipFormTextField({
@@ -8856,64 +8982,11 @@ if(_selectedScholarship?.acadmicCareer == 'DDS'){
 
   // *----------------------------------------------------------------------------- Custom Widgets for Scholarship Form only end --------------------------------------------------------------------------------------------------***
 
-  String cleanXmlToJson(String xmlString) {
-    // Parse the XML string
-    final document = XmlDocument.parse(xmlString);
-
-    // Create a map to hold the cleaned data
-    Map<String, dynamic> cleanedData = {};
-
-    // Helper function to extract values from the XML and clean keys
-    dynamic extractData(XmlElement element) {
-      Map<String, dynamic> data = {};
-
-      for (var child in element.children) {
-        if (child is XmlElement) {
-          // print(child.toString());
-          String key = child.name.local;
-          // print(key.toString());
-
-          // Remove unwanted prefixes
-          // key = key.replaceAll(RegExp(r'(com\.mopa\.sco\.application\.|com\.mopa\.sco\.bean\.)'), '');
-
-          // Recursively extract child data
-          var childData = extractData(child);
-          print(childData.toString());
-
-          // Check if this child has multiple values (is a list)
-          if (data.containsKey(key)) {
-            if (data[key] is! List) {
-              data[key] = [data[key]]; // Convert to list if not already
-            }
-            data[key].add(childData);
-          } else if (childData is Map<String, dynamic> &&
-              childData.length == 1 &&
-              childData.containsKey(key)) {
-            // Flatten the structure if the child has a single key matching the parent's key
-            data[key] = childData[key];
-          } else {
-            // Store child data
-            data[key] = childData;
-          }
-        }
-      }
-
-      // If there's only text content, return the text instead of a map
-      return data.isEmpty ? element.text.trim() : data;
-    }
-
-    // Start processing from the root element
-    cleanedData = extractData(document.rootElement);
-
-    // Convert the map to JSON string
-    String jsonString = jsonEncode(cleanedData);
-
-    return jsonString;
-  }
+  Map<String, dynamic> form = {};
 
   // the final form which we have to submit
-  void _finalForm({bool isUrlEncoded = false})async {
-    Map<String, dynamic> form = {
+  void _finalForm({bool isUrlEncoded = false}) async {
+    form = {
       "applicationData": {
         // 'specialCase' = '',
         "sccTempId": "",
@@ -8949,6 +9022,7 @@ if(_selectedScholarship?.acadmicCareer == 'DDS'){
         "unifiedNo": _passportUnifiedNoController.text,
         "emirateId": _emiratesIdController.text,
         "emirateIdExpiryDate": _emiratesIdExpiryDateController.text,
+        "uaeMother": _isMotherUAECheckbox,
         "otherNumber": "",
         "relativeStudyinScholarship":
             _isRelativeStudyingFromScholarship ?? false,
@@ -8957,53 +9031,51 @@ if(_selectedScholarship?.acadmicCareer == 'DDS'){
         "scholarshipSubmissionCode":
             _selectedScholarship?.configurationKey ?? '',
         // "highestQualification": "UG",
-        havingSponsor: havingSponsor,
-        "employmentStatus": _employmentStatus.toString(),
-        "admApplicationNumber": "00000000",
-
+        "havingSponsor": havingSponsor,
 
         "familyNo": _familyInformationEmiratesController.text,
         "town": _familyInformationTownVillageNoController.text,
         "parentName": _familyInformationParentGuardianNameController.text,
         "relationType": _familyInformationRelationTypeController.text,
-        "familyNumber":_familyInformationFamilyBookNumberController.text,
+        "familyNumber": _familyInformationFamilyBookNumberController.text,
         "motherName": _familyInformationMotherNameController.text,
-
 
         "militaryService": _militaryServiceController.text,
         "militaryServiceStartDate": _militaryServiceStartDateController.text,
         "militaryServiceEndDate": _militaryServiceEndDateController.text,
-        "reasonForMilitary": _reasonForMilitaryController.text,
+        "reasonForMilitarty": _reasonForMilitaryController.text,
 
+        "nameAsPasport":
+            _nameAsPassport.map((element) => element.toJson()).toList(),
 
-        "nameAsPasport": [_arabicName,_englishName],
-
-
-        "relativeDetails": _relativeInfoList.map((element) => element.toJson()).toList(),
-        "phoneNunbers": _phoneNumberList.map((element) => element.toJson()).toList(),
-        "addressList":_addressInformationList.map((element) => element.toJson()).toList(),
-        // "highSchoolList":_highSchoolList.map((element) => element.toJson()).toList(),
-        "graduationList": _graduationDetailsList.map((element) => element.toJson()).toList(),
-        // "requiredExaminationList": _requiredExaminationList
-        //     .map((element) => element.toJson())
-        //     .toList(),
+        "relativeDetails":
+            _relativeInfoList.map((element) => element.toJson()).toList(),
+        "phoneNunbers":
+            _phoneNumberList.map((element) => element.toJson()).toList(),
+        "addressList":
+            _addressInformationList.map((element) => element.toJson()).toList(),
+        "highSchoolList":
+            _highSchoolList.map((element) => element.toJson()).toList(),
+        "graduationList":
+            _graduationDetailsList.map((element) => element.toJson()).toList(),
         "acadProgramDds": _acadProgramDdsController.text,
         "acadProgramPgrd": _acadProgramPgrdController.text,
-        "majorWishList": _majorsWishlist.map((element) => element.toJson()).toList(),
-        "universtiesPriorityList":_universityPriorityList.map((element) => element.toJson()).toList(),
+        "majorWishList":
+            _majorsWishlist.map((element) => element.toJson()).toList(),
+        "universtiesPriorityList":
+            _universityPriorityList.map((element) => element.toJson()).toList(),
+        "requiredExaminationList": _requiredExaminationList
+            .map((element) => element.toJson())
+            .toList(),
+
+        "employmentStatus": _employmentStatus.toString(),
+        "emplymentHistory":
+            _employmentHistoryList.map((element) => element.toJson()).toList(),
+
         // Rest of the fields...
       }
     };
 
     log(form.toString());
-
-
-
-   final saveDraftProvider =  Provider.of<SaveAsDraftViewmodel>(context,listen: false);
-
-   await saveDraftProvider.saveAsDraft(
-     form: form,applicationNumber: '0'
-   );
-
   }
 }
