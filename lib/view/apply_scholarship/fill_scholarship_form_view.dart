@@ -965,16 +965,54 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     print(cleanedDraft['highSchoolList']);
                     if (cleanedDraft['highSchoolList'] != null && displayHighSchool()) {
                       _highSchoolList.clear(); // Clear the current list
-                      if (cleanedDraft['highSchoolList'] != List) {
-                        _highSchoolList.add(HighSchool.fromJson(cleanedDraft['highSchoolList'])); // Add to the list
-                      } else {
+                      if (cleanedDraft['highSchoolList'] is List) {
+
                         for (int index = 0; index < cleanedDraft['highSchoolList'].length; index++) {
                           var element = cleanedDraft['highSchoolList'][index];
-                          _highSchoolList.add(HighSchool.fromJson(element)); // Add to the list
+                          _highSchoolList.add( HighSchool(
+                              hsLevelController: TextEditingController(text: element['hsLevel']),
+                              hsNameController: TextEditingController(text: element['hsName']),
+                              hsCountryController: TextEditingController(text: element['hsCountry']),
+                              hsStateController: TextEditingController(text: element['hsState']),
+                              yearOfPassingController: TextEditingController(text: element['yearOfPassing']),
+                              hsTypeController: TextEditingController(text: element['hsType']),
+                              curriculumTypeController: TextEditingController(text: element['curriculumType']),
+                              curriculumAverageController: TextEditingController(text: element['curriculumAverage']),
+                              otherHsNameController: TextEditingController(text: element['otherHsName'] ),
+                              passingYearController: TextEditingController(text: element['passingYear']),
+                              maxDateController: TextEditingController(text: element['maxDate']),
+                              disableStateController: TextEditingController(text: element['disableState']),
+                              isNewController: TextEditingController(text: element['isNew']),
+                              highestQualificationController: TextEditingController(text: element['highestQualification']),
+                              hsLevelFocusNode: FocusNode(),
+                              hsNameFocusNode: FocusNode(),
+                              hsCountryFocusNode: FocusNode(),
+                              hsStateFocusNode: FocusNode(),
+                              yearOfPassingFocusNode: FocusNode(),
+                              hsTypeFocusNode: FocusNode(),
+                              curriculumTypeFocusNode: FocusNode(),
+                              curriculumAverageFocusNode: FocusNode(),
+                              otherHsNameFocusNode: FocusNode(),
+                              passingYearFocusNode: FocusNode(),
+                              maxDateFocusNode: FocusNode(),
+                              hsDetails: (element['hsDetails'] as List)
+                                  .map((e) => HSDetails.fromJson(e))
+                                  .toList(),
+                              otherHSDetails: (element['otherHSDetails'] as List)
+                                  .map((e) => HSDetails.fromJson(e))
+                                  .toList(),
+                              schoolStateDropdownMenuItems: [],
+                              schoolNameDropdownMenuItems: [],
+                              schoolTypeDropdownMenuItems: [],
+                              schoolCurriculumTypeDropdownMenuItems: [])); // Add to the list
+                          _populateHighSchoolStateDropdown(langProvider: langProvider,index: index);
+                          _populateHighSchoolNameDropdown(langProvider: langProvider,index: index);
+                          _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider,index: index);
                         }
+                      } else {
+                        _highSchoolList.add(HighSchool.fromJson(cleanedDraft['highSchoolList'])); // Add to the list
                       }
                     }
-
 
                     _navigationService.goBack();
                   },
