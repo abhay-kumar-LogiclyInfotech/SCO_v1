@@ -192,60 +192,100 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   final textDirection = getTextDirection(provider);
 
   List<String> uniqueKeys = [];
-
   List uniqueMenuItemsList = [];
 
+  // Filter out duplicates based on 'code'
   for (var element in menuItemsList) {
-    if (uniqueKeys.contains(element.code.toString())) {
-      continue; // skip duplicate entries
-    } else {
+    if (!uniqueKeys.contains(element.code.toString())) {
       uniqueKeys.add(element.code.toString());
       uniqueMenuItemsList.add(element);
     }
   }
 
-  return uniqueMenuItemsList
-      .where((element) => element.hide == false) // filter out hidden elements
-      .map((element) {
-    return DropdownMenuItem(
-      value: element.code.toString(),
+  // Add the constant "Select" option at the 0th index
+  List<DropdownMenuItem> dropdownItems = [
+    DropdownMenuItem(
+      value: '',  // Empty value for the default option
       child: Text(
-        textDirection == TextDirection.ltr
-            ? element.value
-            : element.valueArabic.toString(),
+        textDirection == TextDirection.ltr ? 'Select' : 'اختر',  // 'Select' in both languages
         style: TextStyle(
           color: textColor ?? AppColors.hintDarkGrey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
       ),
-    );
-  }).toList();
+    ),
+  ];
+
+  // Add filtered and unique items (excluding hidden ones)
+  dropdownItems.addAll(
+    uniqueMenuItemsList
+        .where((element) => element.hide == false)  // Filter out hidden elements
+        .map((element) {
+      return DropdownMenuItem(
+        value: element.code.toString(),
+        child: Text(
+          textDirection == TextDirection.ltr
+              ? element.value
+              : element.valueArabic.toString(),
+          style: TextStyle(
+            color: textColor ?? AppColors.hintDarkGrey,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    }).toList(),
+  );
+
+  return dropdownItems;
 }
 
-// populateNormalDropdownWithValue method with hide property:
+
+// // populateNormalDropdownWithValue method with hide property:
 List<DropdownMenuItem> populateNormalDropdownWithValue({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
 }) {
-  return menuItemsList.map((element) {
-    final textDirection = getTextDirection(provider);
+  final textDirection = getTextDirection(provider);
 
-    return DropdownMenuItem(
-      value: element['code'].toString(),
+  // Add a constant "Select" option at the 0th index
+  List<DropdownMenuItem> dropdownItems = [
+    DropdownMenuItem(
+      value: '',  // Empty value
       child: Text(
-        textDirection == TextDirection.ltr
-            ? element['value'].toString()
-            : element['valueArabic'].toString(),
+        textDirection == TextDirection.ltr ? 'Select' : 'اختر',  // 'Select' in both languages
         style: const TextStyle(
           color: AppColors.scoButtonColor,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
       ),
-    );
-  }).toList();
+    ),
+  ];
+
+  // Add the rest of the dropdown items from the menuItemsList
+  dropdownItems.addAll(
+    menuItemsList.map((element) {
+      return DropdownMenuItem(
+        value: element['code'].toString(),
+        child: Text(
+          textDirection == TextDirection.ltr
+              ? element['value'].toString()
+              : element['valueArabic'].toString(),
+          style: const TextStyle(
+            color: AppColors.scoButtonColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    }).toList(),
+  );
+
+  return dropdownItems;
 }
+
 
 //populateNormalDropdown with single elements method:
 List<DropdownMenuItem> populateNormalDropdown({
@@ -409,6 +449,35 @@ String cleanDraftXmlToJson(String xmlString) {
   String jsonString = jsonEncode(cleanedData);
 
   return jsonString;
+}
+
+bool isEighteenYearsOld(String dob) {
+  DateTime birthDate;
+
+  // Normalize the string to ISO 8601 format if it contains a timezone like 'UTC'
+  if (dob.contains('UTC')) {
+    // Replace 'UTC' with 'Z' to match the ISO 8601 format
+    dob = dob.replaceFirst(' UTC', 'Z');
+    birthDate = DateTime.parse(dob);
+  } else {
+    // Parse the string assuming it only contains the date or ISO standard datetime
+    birthDate = DateTime.parse(dob);
+  }
+
+  // Get the current date
+  DateTime today = DateTime.now();
+
+  // Calculate the age
+  int age = today.year - birthDate.year;
+
+  // Adjust for cases where the person has not had their birthday this year
+  if (today.month < birthDate.month ||
+      (today.month == birthDate.month && today.day < birthDate.day)) {
+    age--;
+  }
+
+  // Return true if the person is 18 or older
+  return age >= 18;
 }
 
 

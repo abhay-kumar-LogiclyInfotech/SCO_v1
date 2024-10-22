@@ -122,10 +122,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // Function to save draft
   void saveDraft() async {
     _finalForm();
-    final saveDraftProvider =
-        Provider.of<SaveAsDraftViewmodel>(context, listen: false);
-    await saveDraftProvider.saveAsDraft(
-        form: form, applicationNumber: draftId?.toString() ?? '0');
+    final saveDraftProvider = Provider.of<SaveAsDraftViewmodel>(context, listen: false);
+    await saveDraftProvider.saveAsDraft(form: form, applicationNumber: draftId?.toString() ?? '0');
+    if(saveDraftProvider.apiResponse.status == Status.COMPLETED){
+      draftId = saveDraftProvider.apiResponse.data?.data?.applicationNumber ?? '0';
+    }
   }
 
   // scholarship title
@@ -447,10 +448,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
           // creating attachments list
           for (var element in _attachmentsList) {
-            final processCD =
-                element.code.toString().split(':').elementAt(0).toString();
-            final documentCD =
-                element.code.toString().split(':').last.toString();
+            final processCD = element.code.toString().split(':').elementAt(0).toString();
+            final documentCD = element.code.toString().split(':').last.toString();
             _myAttachmentsList.add(Attachment(
               processCDController: TextEditingController(text: processCD),
               documentCDController: TextEditingController(text: documentCD),
@@ -470,7 +469,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       // isStudyCountry for majors selection
       isStudyCountry = _selectedScholarship?.scholarshipType == 'INT' ? true : false;
       _majorsMenuItemsList = getMajors(); // calling the getMajors method to populate the majors function
-      print(_majorsMenuItemsList.toString());
 
       // initializing contact information manually because Phone types are constants for first two index elements
       _phoneNumberList.add(PhoneNumber(
@@ -637,23 +635,23 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
 
       // fetch student profile Information t prefill the user information
-      final studentProfileProvider =
-          Provider.of<StudentProfileViewmodel>(context, listen: false);
+      final studentProfileProvider = Provider.of<StudentProfileViewmodel>(context, listen: false);
       await studentProfileProvider.studentProfile();
 
       if (studentProfileProvider.apiResponse.status == Status.COMPLETED) {
         var data = studentProfileProvider.apiResponse.data?.data?.user;
 
-        // prefilling names but TODO: Check if arabic then store in arabic else in english
-        _arabicStudentNameController.text = data?.firstName ?? '';
-        _arabicFatherNameController.text = data?.middleName ?? '';
-        _arabicGrandFatherNameController.text = data?.middleName2 ?? '';
-        _arabicFamilyNameController.text = data?.lastName ?? '';
 
-        _englishStudentNameController.text = data?.firstName ?? '';
-        _englishFatherNameController.text = data?.middleName ?? '';
-        _englishGrandFatherNameController.text = data?.middleName2 ?? '';
-        _englishFamilyNameController.text = data?.lastName ?? '';
+        _arabicName.studentNameController.text = data?.firstName ?? '';
+        _arabicName.fatherNameController.text = data?.middleName ?? '';
+        _arabicName.grandFatherNameController.text = data?.middleName2 ?? '';
+        _arabicName.familyNameController.text = data?.lastName ?? '';
+
+
+        _englishName.studentNameController.text = data?.firstName ?? '';
+        _englishName.fatherNameController.text = data?.middleName ?? '';
+        _englishName.grandFatherNameController.text = data?.middleName2 ?? '';
+        _englishName.familyNameController.text = data?.lastName ?? '';
 
         // prefill email
         _studentEmailController.text = data?.emailAddress ?? '';
@@ -678,7 +676,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
 
       // initialize the name As passport
-      _initializeStudentDetailsModels();
 
 
 
@@ -748,17 +745,27 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     Map<String, dynamic> cleanedDraft = jsonDecode(
                         cleanDraftXmlToJson(draftData?.applicationData ?? ''));
 
-                    if (cleanedDraft['nameAsPasport'] != null &&
-                        cleanedDraft['nameAsPasport'].isNotEmpty) {
-                      _nameAsPassport.clear();
-                      for (var element in cleanedDraft['nameAsPasport']) {
-                        _nameAsPassport.add(PersonName.fromJson(element));
-                      }
-                    }
 
                     final langProvider = Provider.of<LanguageChangeViewModel>(
                         context,
                         listen: false);
+
+                    if (cleanedDraft['nameAsPasport'] != null) {
+                      _nameAsPassport.clear();
+                      if(cleanedDraft['nameAsPasport'] is List){
+                        for (var ele in cleanedDraft['nameAsPasport']) {
+                          final element = PersonName.fromJson(ele);
+                          if(element.nameTypeController.text == 'PRI'){
+                            _arabicName = element;
+                          }
+                          if(element.nameTypeController.text == 'ENG'){
+                            _englishName = element;
+                          }
+                      }
+                      }
+                    }
+
+
 
                     // passport Data Prefilled
                     _passportNationalityController.text =
@@ -788,6 +795,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     _studentEmailController.text =
                         cleanedDraft['emailId'] ?? '';
 
+
+                    _isMotherUAECheckbox = cleanedDraft["uaeMother"] == 'true'? true : false;
+                    havingSponsor = cleanedDraft["havingSponser"] ?? '';
+
+
+
                     // family information
                     _familyInformationEmiratesController.text =
                         cleanedDraft['familyNo'] ?? '';
@@ -805,13 +818,21 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         cleanedDraft['motherName'] ?? '';
 
                     // scholarship relative
-                    _isRelativeStudyingFromScholarship =
-                        cleanedDraft['relativeStudyinScholarship'] == 'true';
-                    if ((_isRelativeStudyingFromScholarship ?? false) &&
-                        cleanedDraft['relativeDetails'] != null) {
+                    _isRelativeStudyingFromScholarship = cleanedDraft['relativeStudyinScholarship'] == 'true';
+                    if ((_isRelativeStudyingFromScholarship ?? false) && cleanedDraft['relativeDetails'] != null) {
+
+                      _relativeInfoList.clear();
+
+                      if(cleanedDraft['relativeDetails'] is List)
+                      {
                       for (var element in cleanedDraft['relativeDetails']) {
                         _relativeInfoList.add(RelativeInfo.fromJson(element));
                       }
+                      }
+                      else{
+                        _relativeInfoList.add(RelativeInfo.fromJson(cleanedDraft['relativeDetails']));
+                      }
+
                     }
 
                     // contact information
@@ -827,18 +848,20 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       _addressInformationList.clear(); // Clear the current list
 
 
-                      if (cleanedDraft['addressList'] != List) {
-                        _addressInformationList.add(Address.fromJson(cleanedDraft['addressList'])); // Add to the list
-                      _populateStateDropdown(langProvider: langProvider, index: 0);
+                      if (cleanedDraft['addressList'] is List) {
+                        for (int index = 0;
+                        index < cleanedDraft['addressList'].length;
+                        index++) {
+                          var element = cleanedDraft['addressList'][index];
+                          _addressInformationList.add(Address.fromJson(element)); // Add to the list
+                          _populateStateDropdown(langProvider: langProvider, index: index);
+                        }
                       } else {
 
-                      for (int index = 0;
-                          index < cleanedDraft['addressList'].length;
-                          index++) {
-                        var element = cleanedDraft['addressList'][index];
-                        _addressInformationList.add(Address.fromJson(element)); // Add to the list
-                        _populateStateDropdown(langProvider: langProvider, index: index);
-                      }}
+                        _addressInformationList.add(Address.fromJson(cleanedDraft['addressList'])); // Add to the list
+                        _populateStateDropdown(langProvider: langProvider, index: 0);
+
+                     }
                     }
 
                     // military Services:
@@ -864,90 +887,101 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     // graduation details
                     if (cleanedDraft['graduationList'] != null) {
                       _graduationDetailsList.clear(); // Clear the current list
-                      if(cleanedDraft['graduationList'] != List) {
-                    _graduationDetailsList.add(GraduationInfo.fromJson(cleanedDraft['graduationList'])); // Add to the list
-                       // populate dropdowns
-                    _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: 0);
-                    _populateUniversityMenuItemsList(langProvider: langProvider, index: 0);
+                      if(cleanedDraft['graduationList'] is List) {
+
+                        for (int index = 0; index < cleanedDraft['graduationList'].length; index++) {
+                          var element = cleanedDraft['graduationList'][index];
+                          _graduationDetailsList.add(GraduationInfo.fromJson(element)); // Add to the list
+                          // populate dropdowns
+                          _populateGraduationLastTermMenuItemsList(
+                              langProvider: langProvider, index: index);
+                          _populateUniversityMenuItemsList(
+                              langProvider: langProvider, index: index);
+                        }
+
                       }
                     else{
-                      for (int index = 0; index < cleanedDraft['graduationList'].length; index++) {
-                        var element = cleanedDraft['graduationList'][index];
-                        _graduationDetailsList.add(GraduationInfo.fromJson(element)); // Add to the list
+                        _graduationDetailsList.add(GraduationInfo.fromJson(cleanedDraft['graduationList'])); // Add to the list
                         // populate dropdowns
-                        _populateGraduationLastTermMenuItemsList(
-                            langProvider: langProvider, index: index);
-                        _populateUniversityMenuItemsList(
-                            langProvider: langProvider, index: index);
-                      }}
+                        _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: 0);
+                        _populateUniversityMenuItemsList(langProvider: langProvider, index: 0);
+                    }
                     }
 
                     _acadProgramDdsController.text = cleanedDraft['acadProgramDds'] ?? '';
                     _acadProgramPgrdController.text = cleanedDraft['acadProgramPgrd'] ?? '';
 
                     // major Details
-                    if (cleanedDraft['majorWishList'] != null) {
+                    if (cleanedDraft['majorWishList'] != null && cleanedDraft['majorWishList'] != 'true') {
                       _majorsWishlist.clear(); // Clear the current list
-                      for (int index = 0;
-                          index < cleanedDraft['majorWishList'].length;
-                          index++) {
-                        var element = cleanedDraft['majorWishList'][index];
-                        _majorsWishlist.add(
-                            MajorWishList.fromJson(element)); // Add to the list
+
+                      if(cleanedDraft['majorWishList'] is List){
+                        for (int index = 0;
+                        index < cleanedDraft['majorWishList'].length;
+                        index++) {
+                          var element = cleanedDraft['majorWishList'][index];
+                          _majorsWishlist.add(MajorWishList.fromJson(element)); // Add to the list
+                        }
                       }
+                      else{
+                        _majorsWishlist.add(MajorWishList.fromJson(cleanedDraft['majorWishList'])); // Add to the list
+                      }
+
+
                     }
+
+
+
 
                     // university Priority
                     if (cleanedDraft['universtiesPriorityList'] != null) {
                       _universityPriorityList.clear(); // Clear the current list
-                      for (int index = 0;
-                          index <
-                              cleanedDraft['universtiesPriorityList'].length;
-                          index++) {
-                        var element =
-                            cleanedDraft['universtiesPriorityList'][index];
-                        _universityPriorityList.add(UniversityPriority.fromJson(
-                            element)); // Add to the list
-                        populateUniversitiesWishList(
-                            _universityPriorityList[index]);
+
+                      if( cleanedDraft['universtiesPriorityList'] is List){
+
+                      for (int index = 0; index < cleanedDraft['universtiesPriorityList'].length; index++) {
+                        var element = cleanedDraft['universtiesPriorityList'][index];
+                        _universityPriorityList.add(UniversityPriority.fromJson(element)); // Add to the list
+                        populateUniversitiesWishList(_universityPriorityList[index]);
+                      }}
+                      else{
+                        _universityPriorityList.add(UniversityPriority.fromJson(cleanedDraft['universtiesPriorityList']));
+                        populateUniversitiesWishList(_universityPriorityList[0]);
                       }
                     }
 
                     // required Examinations
                     if (cleanedDraft['requiredExaminationList'] != null) {
                       _requiredExaminationList.clear(); // Clear the current list
-                      if (cleanedDraft['requiredExaminationList'] != List) {
-                        _requiredExaminationList.add(RequiredExaminations.fromJson(cleanedDraft['requiredExaminationList'])); // Add to the list
-                      _populateExaminationTypeDropdown(langProvider: langProvider, index: 0,);
+                      if (cleanedDraft['requiredExaminationList'] is List) {
+                        for (int index = 0; index < cleanedDraft['requiredExaminationList'].length; index++) {
 
-                      } else {
-                      for (int index = 0; index < cleanedDraft['requiredExaminationList'].length; index++) {
                         var element = cleanedDraft['requiredExaminationList'][index];
                         _requiredExaminationList.add(RequiredExaminations.fromJson(element)); // Add to the list
                         // populate examination type dropdown
                         _populateExaminationTypeDropdown(langProvider: langProvider, index: index,);
                       }
+
+                      } else {
+                        _requiredExaminationList.add(RequiredExaminations.fromJson(cleanedDraft['requiredExaminationList'])); // Add to the list
+                        _populateExaminationTypeDropdown(langProvider: langProvider, index: 0,);
+
+
                     }}
 
                     // employment Status
                     _employmentStatus = cleanedDraft['employmentStatus'] ?? '';
 
+
                     // Employment History
-                    if (cleanedDraft['emplymentHistory'] != null && displayEmploymentHistory()) {
+                    if (cleanedDraft['emplymentHistory'] != null && cleanedDraft['emplymentHistory'] != 'true' &&  displayEmploymentHistory()) {
                       _employmentHistoryList.clear(); // Clear the current list
 
-                      if (cleanedDraft['emplymentHistory'] != List) {
-                        _employmentHistoryList.add(EmploymentHistory.fromJson(
-                            cleanedDraft['emplymentHistory'])); // Add to the list
-                        // populate examination type dropdown
-                        _populateExaminationTypeDropdown(
-                          langProvider: langProvider,
-                          index: 0,
-                        );
-                      } else {
+                      if (cleanedDraft['emplymentHistory'] is List) {
+
                         for (int index = 0;
-                            index < cleanedDraft['emplymentHistory'].length;
-                            index++) {
+                        index < cleanedDraft['emplymentHistory'].length;
+                        index++) {
                           var element = cleanedDraft['emplymentHistory'][index];
                           _employmentHistoryList.add(EmploymentHistory.fromJson(
                               element)); // Add to the list
@@ -957,12 +991,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                             index: index,
                           );
                         }
+
+                      } else {
+                        _employmentHistoryList.add(EmploymentHistory.fromJson(
+                            cleanedDraft['emplymentHistory'])); // Add to the list
+                        // populate examination type dropdown
+                        _populateExaminationTypeDropdown(
+                          langProvider: langProvider,
+                          index: 0,
+                        );
                       }
                     }
 
                     // high school
-
-                    print(cleanedDraft['highSchoolList']);
                     if (cleanedDraft['highSchoolList'] != null && displayHighSchool()) {
                       _highSchoolList.clear(); // Clear the current list
                       if (cleanedDraft['highSchoolList'] is List) {
@@ -995,12 +1036,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                               otherHsNameFocusNode: FocusNode(),
                               passingYearFocusNode: FocusNode(),
                               maxDateFocusNode: FocusNode(),
-                              hsDetails: (element['hsDetails'] as List)
+                              hsDetails: (element['hsDetails'] is List
+                                  ? (element['hsDetails'] as List)
                                   .map((e) => HSDetails.fromJson(e))
-                                  .toList(),
-                              otherHSDetails: (element['otherHSDetails'] as List)
+                                  .toList()
+                                  : []), // Provide an empty list if hsDetails is not a List
+
+                              otherHSDetails: (element['otherHSDetails'] is List
+                                  ? (element['otherHSDetails'] as List)
                                   .map((e) => HSDetails.fromJson(e))
-                                  .toList(),
+                                  .toList()
+                                  : []), // Provide an empty list if otherHSDetails is not a List
                               schoolStateDropdownMenuItems: [],
                               schoolNameDropdownMenuItems: [],
                               schoolTypeDropdownMenuItems: [],
@@ -1013,6 +1059,21 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         _highSchoolList.add(HighSchool.fromJson(cleanedDraft['highSchoolList'])); // Add to the list
                       }
                     }
+
+
+                    print("print attachements issue: ${cleanedDraft['attachments']}");
+                    // attachments
+                    if (cleanedDraft['attachments'] != null && cleanedDraft['attachments'].toString().trim().isNotEmpty) {
+                      _myAttachmentsList.clear(); // Clear the current list
+                      if(cleanedDraft['attachments'] is List){
+                      for (int index = 0; index < cleanedDraft['attachments'].length; index++) {
+                        var element = cleanedDraft['attachments'][index];
+                        _myAttachmentsList.add(Attachment.fromJson(element));
+                    }}
+                      else{
+              _myAttachmentsList.add(Attachment.fromJson(cleanedDraft['attachments']));
+              }}
+
 
                     _navigationService.goBack();
                   },
@@ -1089,7 +1150,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         // Progress Indicator for validated steps:
                         StepsProgressView(
                             totalSections: totalSections,
-                            currentSectionIndex: _currentSectionIndex),
+                            currentSectionIndex: _currentSectionIndex,
+                        selectedScholarship: _selectedScholarship,
+                        ),
                       ],
                     ),
                   ),
@@ -1182,7 +1245,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                             case 5:
                               // Handling based on configuration key for attachments or employment history
                               if (isAttachmentSectionForExt()) {
-                                return Container(child: Text("Confirmation"));
+                                return _confirmation();
                               } else if (key == 'SCOACTUGRD' ||
                                   key == "SCOUGRDINT" ||
                                   key == 'SCOMETLOGINT' ||
@@ -1202,7 +1265,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   key == "SCOUGRDINT" ||
                                   key == "SCOMETLOGINT" ||
                                   key == "SCOUGRDEXT") {
-                                return Container(child: Text("Confirmation"));
+                                return _confirmation();
                               } else {
                                 return _attachmentsSection(
                                     step: index, langProvider: langProvider);
@@ -1210,7 +1273,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                             case 7:
                               // Confirmation at the end
-                              return Container(child: Text("Confirmation"));
+                              return _confirmation();
 
                             default:
                               return Container(); // Fallback for unexpected index values
@@ -1269,74 +1332,37 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // *--------------------------------------------------------------- Accept terms and conditions end ----------------------------------------------------------------------------*
 
   // *--------------------------------------------------------------- Student Details Section start ----------------------------------------------------------------------------*
-// step-2
+  // step-2
   // *--------------------------------------------------------------- Name as Passport data start ----------------------------------------------------------------------------*
 
-  // Text controllers for Arabic name fields
-  final TextEditingController _arabicStudentNameController =
-      TextEditingController();
-  final TextEditingController _arabicFatherNameController =
-      TextEditingController();
-  final TextEditingController _arabicGrandFatherNameController =
-      TextEditingController();
-  final TextEditingController _arabicFamilyNameController =
-      TextEditingController();
+   PersonName _arabicName = PersonName(
+    nameTypeController: TextEditingController(text: 'PRI'),
+    studentNameController: TextEditingController(),
+    fatherNameController: TextEditingController(),
+    grandFatherNameController: TextEditingController(),
+    familyNameController: TextEditingController(),
+    nameTypeFocusNode: FocusNode(),
+    studentNameFocusNode: FocusNode(),
+    fatherNameFocusNode: FocusNode(),
+    grandFatherNameFocusNode: FocusNode(),
+    familyNameFocusNode: FocusNode(),
+  );
 
-  // Text controllers for English name fields
-  final TextEditingController _englishStudentNameController =
-      TextEditingController();
-  final TextEditingController _englishFatherNameController =
-      TextEditingController();
-  final TextEditingController _englishGrandFatherNameController =
-      TextEditingController();
-  final TextEditingController _englishFamilyNameController =
-      TextEditingController();
+   PersonName _englishName = PersonName(
+    nameTypeController: TextEditingController(text: 'ENG'),
+    studentNameController: TextEditingController(),
+    fatherNameController: TextEditingController(),
+    grandFatherNameController: TextEditingController(),
+    familyNameController: TextEditingController(),
+    nameTypeFocusNode: FocusNode(),
+    studentNameFocusNode: FocusNode(),
+    fatherNameFocusNode: FocusNode(),
+    grandFatherNameFocusNode: FocusNode(),
+    familyNameFocusNode: FocusNode(),
+  );
+   List<PersonName> _nameAsPassport = [];
 
-  // Focus nodes for Arabic name fields
-  final FocusNode _arabicStudentNameFocusNode = FocusNode();
-  final FocusNode _arabicFatherNameFocusNode = FocusNode();
-  final FocusNode _arabicGrandFatherNameFocusNode = FocusNode();
-  final FocusNode _arabicFamilyNameFocusNode = FocusNode();
-
-// Focus nodes for English name fields
-  final FocusNode _englishStudentNameFocusNode = FocusNode();
-  final FocusNode _englishFatherNameFocusNode = FocusNode();
-  final FocusNode _englishGrandFatherNameFocusNode = FocusNode();
-  final FocusNode _englishFamilyNameFocusNode = FocusNode();
-
-  // Error text variables for Arabic name fields
-  String? _arabicStudentNameError;
-  String? _arabicFatherNameError;
-  String? _arabicGrandFatherNameError;
-  String? _arabicFamilyNameError;
-
-// Error text variables for English name fields
-  String? _englishStudentNameError;
-  String? _englishFatherNameError;
-  String? _englishGrandFatherNameError;
-  String? _englishFamilyNameError;
-
-  late PersonName _arabicName;
-
-  late PersonName _englishName;
-  late List<PersonName> _nameAsPassport = [];
-
-  // to save the details in the passport data list for name as passport
   void _initializeStudentDetailsModels() {
-    _arabicName = PersonName(
-        nameType: 'PRI',
-        studentName: _arabicStudentNameController.text,
-        fatherName: _arabicFatherNameController.text,
-        grandFatherName: _arabicGrandFatherNameController.text,
-        familyName: _arabicFamilyNameController.text);
-
-    _englishName = PersonName(
-        nameType: 'ENG',
-        studentName: _englishStudentNameController.text,
-        fatherName: _englishFatherNameController.text,
-        grandFatherName: _englishGrandFatherNameController.text,
-        familyName: _englishFamilyNameController.text);
-
     _nameAsPassport = [_arabicName, _englishName];
   }
 
@@ -1503,10 +1529,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       {required LanguageChangeViewModel langProvider}) {
     setState(() {
       _familyInformationTownMenuItemsList = populateCommonDataDropdown(
-          menuItemsList: Constants
-              .lovCodeMap[
-                  'VILLAGE_NUM#${_familyInformationEmiratesController.text}']!
-              .values!,
+          menuItemsList: Constants.lovCodeMap['VILLAGE_NUM#${_familyInformationEmiratesController.text}']?.values ?? [],
           provider: langProvider,
           textColor: AppColors.scoButtonColor);
     });
@@ -1602,19 +1625,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         important: true,
                         langProvider: langProvider),
                     _scholarshipFormTextField(
-                        currentFocusNode: _arabicStudentNameFocusNode,
-                        nextFocusNode: _arabicFatherNameFocusNode,
-                        controller: _arabicStudentNameController,
+                        currentFocusNode: _arabicName.studentNameFocusNode,
+                        nextFocusNode: _arabicName.fatherNameFocusNode,
+                        controller: _arabicName.studentNameController,
                         hintText: "Enter Name",
-                        errorText: _arabicStudentNameError,
+                        errorText: _arabicName.studentNameError,
                         onChanged: (value) {
                           setState(() {
-                            if (_arabicStudentNameFocusNode.hasFocus) {
+                            if (_arabicName.studentNameFocusNode.hasFocus) {
                               // calling to convert to json name as passport
                               _initializeStudentDetailsModels();
-                              _arabicStudentNameError =
+                              _arabicName.studentNameError =
                                   ErrorText.getArabicNameError(
-                                      name: _arabicStudentNameController.text,
+                                      name: _arabicName.studentNameController.text,
                                       context: context);
                             }
                           });
@@ -1629,18 +1652,18 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         important: true,
                         langProvider: langProvider),
                     _scholarshipFormTextField(
-                        currentFocusNode: _arabicFatherNameFocusNode,
-                        nextFocusNode: _arabicGrandFatherNameFocusNode,
-                        controller: _arabicFatherNameController,
+                        currentFocusNode:  _arabicName.fatherNameFocusNode,
+                        nextFocusNode:  _arabicName.grandFatherNameFocusNode,
+                        controller:  _arabicName.fatherNameController,
                         hintText: "Enter Father's Name",
-                        errorText: _arabicFatherNameError,
+                        errorText:  _arabicName.fatherNameError,
                         onChanged: (value) {
                           setState(() {
-                            if (_arabicFatherNameFocusNode.hasFocus) {
+                            if (_arabicName.fatherNameFocusNode.hasFocus) {
                               _initializeStudentDetailsModels();
-                              _arabicFatherNameError =
+                              _arabicName.fatherNameError =
                                   ErrorText.getArabicNameError(
-                                      name: _arabicFatherNameController.text,
+                                      name: _arabicName.fatherNameController.text,
                                       context: context);
                             }
                           });
@@ -1655,20 +1678,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         important: true,
                         langProvider: langProvider),
                     _scholarshipFormTextField(
-                        currentFocusNode: _arabicGrandFatherNameFocusNode,
-                        nextFocusNode: _arabicFamilyNameFocusNode,
-                        controller: _arabicGrandFatherNameController,
+                        currentFocusNode: _arabicName.grandFatherNameFocusNode,
+                        nextFocusNode: _arabicName.familyNameFocusNode,
+                        controller: _arabicName.grandFatherNameController,
                         hintText: "Enter Grandfather's Name",
-                        errorText: _arabicGrandFatherNameError,
+                        errorText: _arabicName.grandFatherNameError,
                         onChanged: (value) {
-                          if (_arabicGrandFatherNameFocusNode.hasFocus) {
+                          if ( _arabicName.grandFatherNameFocusNode.hasFocus) {
                             setState(() {
                               _initializeStudentDetailsModels();
 
-                              _arabicGrandFatherNameError =
+                              _arabicName.grandFatherNameError =
                                   ErrorText.getArabicNameError(
-                                      name:
-                                          _arabicGrandFatherNameController.text,
+                                      name: _arabicName.grandFatherNameController.text,
                                       context: context);
                             });
                           }
@@ -1683,19 +1705,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         important: true,
                         langProvider: langProvider),
                     _scholarshipFormTextField(
-                        currentFocusNode: _arabicFamilyNameFocusNode,
-                        nextFocusNode: _englishStudentNameFocusNode,
-                        controller: _arabicFamilyNameController,
+                        currentFocusNode: _arabicName.familyNameFocusNode,
+                        nextFocusNode: _englishName.studentNameFocusNode,
+                        controller: _arabicName.familyNameController,
                         hintText: "Enter Family Name",
-                        errorText: _arabicFamilyNameError,
+                        errorText: _arabicName.familyNameError,
                         onChanged: (value) {
-                          if (_arabicFamilyNameFocusNode.hasFocus) {
+                          if (_arabicName.familyNameFocusNode.hasFocus) {
                             setState(() {
                               _initializeStudentDetailsModels();
 
-                              _arabicFamilyNameError =
+                              _arabicName.familyNameError =
                                   ErrorText.getArabicNameError(
-                                      name: _arabicFamilyNameController.text,
+                                      name: _arabicName.familyNameController.text,
                                       context: context);
                             });
                           }
@@ -1718,19 +1740,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         important: true,
                         langProvider: langProvider),
                     _scholarshipFormTextField(
-                        currentFocusNode: _englishStudentNameFocusNode,
-                        nextFocusNode: _englishFatherNameFocusNode,
-                        controller: _englishStudentNameController,
+                        currentFocusNode: _englishName.studentNameFocusNode,
+                        nextFocusNode: _englishName.fatherNameFocusNode,
+                        controller: _englishName.studentNameController,
                         hintText: "Enter Name",
-                        errorText: _englishStudentNameError,
+                        errorText: _englishName.studentNameError,
                         onChanged: (value) {
                           setState(() {
-                            if (_englishStudentNameFocusNode.hasFocus) {
+                            if (_englishName.studentNameFocusNode.hasFocus) {
                               _initializeStudentDetailsModels();
 
-                              _englishStudentNameError =
+                              _englishName.studentNameError =
                                   ErrorText.getEnglishNameError(
-                                      name: _englishStudentNameController.text,
+                                      name: _englishName.studentNameController.text,
                                       context: context);
                             }
                           });
@@ -1745,19 +1767,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         important: true,
                         langProvider: langProvider),
                     _scholarshipFormTextField(
-                        currentFocusNode: _englishFatherNameFocusNode,
-                        nextFocusNode: _englishGrandFatherNameFocusNode,
-                        controller: _englishFatherNameController,
+                        currentFocusNode:  _englishName.fatherNameFocusNode,
+                        nextFocusNode:  _englishName.grandFatherNameFocusNode,
+                        controller:  _englishName.fatherNameController,
                         hintText: "Enter Father's Name",
-                        errorText: _englishFatherNameError,
+                        errorText:  _englishName.fatherNameError,
                         onChanged: (value) {
                           setState(() {
-                            if (_englishFatherNameFocusNode.hasFocus) {
+                            if ( _englishName.fatherNameFocusNode.hasFocus) {
                               _initializeStudentDetailsModels();
 
-                              _englishFatherNameError =
+                              _englishName.fatherNameError =
                                   ErrorText.getEnglishNameError(
-                                      name: _englishFatherNameController.text,
+                                      name:  _englishName.fatherNameController.text,
                                       context: context);
                             }
                           });
@@ -1772,19 +1794,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         important: true,
                         langProvider: langProvider),
                     _scholarshipFormTextField(
-                        currentFocusNode: _englishGrandFatherNameFocusNode,
-                        nextFocusNode: _englishFamilyNameFocusNode,
-                        controller: _englishGrandFatherNameController,
+                        currentFocusNode: _englishName.grandFatherNameFocusNode,
+                        nextFocusNode: _englishName.familyNameFocusNode,
+                        controller: _englishName.grandFatherNameController,
                         hintText: "Enter Grandfather's Name",
-                        errorText: _englishGrandFatherNameError,
+                        errorText: _englishName.grandFatherNameError,
                         onChanged: (value) {
-                          if (_englishGrandFatherNameFocusNode.hasFocus) {
+                          if (_englishName.grandFatherNameFocusNode.hasFocus) {
                             setState(() {
                               _initializeStudentDetailsModels();
 
-                              _englishGrandFatherNameError =
+                              _englishName.grandFatherNameError =
                                   ErrorText.getEnglishNameError(
-                                      name: _englishGrandFatherNameController
+                                      name: _englishName.grandFatherNameController
                                           .text,
                                       context: context);
                             });
@@ -1800,19 +1822,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         important: true,
                         langProvider: langProvider),
                     _scholarshipFormTextField(
-                        currentFocusNode: _englishFamilyNameFocusNode,
-                        nextFocusNode: _passportNationalityFocusNode,
-                        controller: _englishFamilyNameController,
+                        currentFocusNode: _englishName.familyNameFocusNode,
+                        nextFocusNode: _englishName.studentNameFocusNode,
+                        controller: _englishName.familyNameController,
                         hintText: "Enter Family Name",
-                        errorText: _englishFamilyNameError,
+                        errorText: _englishName.familyNameError,
                         onChanged: (value) {
-                          if (_englishFamilyNameFocusNode.hasFocus) {
+                          if ( _englishName.familyNameFocusNode.hasFocus) {
                             setState(() {
                               _initializeStudentDetailsModels();
 
-                              _englishFamilyNameError =
+                              _englishName.familyNameError =
                                   ErrorText.getEnglishNameError(
-                                      name: _englishFamilyNameController.text,
+                                      name:  _englishName.familyNameController.text,
                                       context: context);
                             });
                           }
@@ -6157,7 +6179,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   // ****************************************************************************************************************************************************
                                   kFormHeight,
 
-                                  universityInfo.majorsController.text == 'OTH'
+                                  universityInfo.majorsController.text == 'OTH' || _selectedScholarship
+                                      ?.acadmicCareer == 'DDS'
                                       ? Column(
                                           children: [
                                             fieldHeading(
@@ -6167,42 +6190,18 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                             'DDS'
                                                         ? "Other Major"
                                                         : "dds.major",
-                                                important: _selectedScholarship
-                                                            ?.acadmicCareer !=
-                                                        'DDS' &&
-                                                    universityInfo
-                                                            .majorsController
-                                                            .text ==
-                                                        'OTH' &&
-                                                    (universityInfo
-                                                            .countryIdController
-                                                            .text
-                                                            .isNotEmpty ||
-                                                        universityInfo
-                                                            .otherMajorsController
-                                                            .text
-                                                            .isNotEmpty ||
-                                                        universityInfo
-                                                            .otherUniversityNameController
-                                                            .text
-                                                            .isNotEmpty ||
-                                                        universityInfo
-                                                            .statusController
-                                                            .text
-                                                            .isNotEmpty),
+                                                important: _selectedScholarship?.acadmicCareer != 'DDS' && universityInfo.majorsController.text == 'OTH' && (universityInfo.countryIdController.text.isNotEmpty || universityInfo.otherMajorsController.text.isNotEmpty || universityInfo.otherUniversityNameController.text.isNotEmpty || universityInfo.statusController.text.isNotEmpty),
                                                 langProvider: langProvider),
                                             _scholarshipFormTextField(
-                                                currentFocusNode: universityInfo
-                                                    .otherMajorsFocusNode,
-                                                nextFocusNode: universityInfo
-                                                    .universityIdFocusNode,
-                                                controller: universityInfo
-                                                    .otherMajorsController,
+                                                currentFocusNode: universityInfo.otherMajorsFocusNode,
+                                                nextFocusNode: universityInfo.universityIdFocusNode,
+                                                controller: universityInfo.otherMajorsController,
                                                 hintText: 'Enter majors',
                                                 maxLength: 30,
-                                                errorText: universityInfo
-                                                    .otherMajorsError,
+                                                errorText: universityInfo.otherMajorsError,
                                                 onChanged: (value) {
+                                                  print(universityInfo.otherMajorsController.text)
+;
                                                   if (universityInfo
                                                       .otherMajorsFocusNode
                                                       .hasFocus) {
@@ -6312,7 +6311,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                                   kFormHeight,
                                   universityInfo.universityIdController.text ==
-                                          'OTH'
+                                          'OTH' || _selectedScholarship
+                                      ?.acadmicCareer == 'DDS'
                                       ? Column(
                                           children: [
                                             fieldHeading(
@@ -6726,17 +6726,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     important: true,
                                     langProvider: langProvider),
                                 _scholarshipFormTextField(
-                                    currentFocusNode: requiredExamInfo
-                                        .examinationGradeFocusNode,
-                                    nextFocusNode:
-                                        requiredExamInfo.examDateFocusNode,
-                                    controller: requiredExamInfo
-                                        .examinationGradeController,
-                                    hintText:
-                                        _selectedScholarship?.acadmicCareer !=
-                                                'DDS'
-                                            ? 'Enter examination.grade'
-                                            : 'Enter examination.dds.grade',
+                                    currentFocusNode: requiredExamInfo.examinationGradeFocusNode,
+                                    nextFocusNode: requiredExamInfo.examDateFocusNode,
+                                    controller: requiredExamInfo.examinationGradeController,
+                                    hintText: _selectedScholarship?.acadmicCareer != 'DDS' ? 'Enter examination.grade' : 'Enter examination.dds.grade',
                                     errorText:
                                         requiredExamInfo.examinationGradeError,
                                     onChanged: (value) {
@@ -7543,8 +7536,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: _myAttachmentsList.length,
                         itemBuilder: (context, index) {
-                          print(_attachmentsList.toString());
-
                           final attachment = _attachmentsList[index];
                           final myAttachment = _myAttachmentsList[index];
                           final title = getTextDirection(langProvider) ==
@@ -7570,17 +7561,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         .copyWith(fontWeight: FontWeight.w600),
                                   ),
                                   TextSpan(
-                                    text:
-                                        (attachment.required.toString() ==
-                                                    'XMRL' ||
-                                                attachment.required
-                                                        .toString() ==
-                                                    'MRL' ||
-                                                attachment.required
-                                                        .toString() ==
-                                                    'NMRL')
-                                            ? "*"
-                                            : "",
+                                    text: (attachment.required.toString() == 'XMRL' || attachment.required.toString() == 'MRL' || attachment.required.toString() == 'NMRL') ? "*" : "",
                                     style: AppTextStyles.titleBoldTextStyle()
                                         .copyWith(
                                             fontWeight: FontWeight.w600,
@@ -7602,49 +7583,30 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           onPressed: () async {
                                             // pick file
 
-                                            final permissionChecker =
-                                                PermissionChecker();
-                                            permissionChecker
-                                                .checkAndRequestPermission(
-                                                    Platform.isIOS
-                                                        ? Permission.storage
-                                                        : Permission.photos,
-                                                    context);
-                                            file = await _mediaServices
-                                                .getSingleFileFromPicker();
+
+
+                                            // available extensions
+                                            // 'jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'
+
+                                            final permissionChecker = PermissionChecker();
+                                            permissionChecker.checkAndRequestPermission(Platform.isIOS ? Permission.storage : Permission.photos, context);
+                                            file = await _mediaServices.getSingleFileFromPicker(allowedExtensions: myAttachment.documentCDController.text.toUpperCase() == 'SEL006' ? ['jpg', 'jpeg'] : ['pdf']);
 
                                             if (file != null) {
                                               setState(() {
-                                                myAttachment
-                                                        .userFileNameController
-                                                        .text =
-                                                    file!.path
-                                                        .toString()
-                                                        .split('-')
-                                                        .last;
+                                                myAttachment.userFileNameController.text = file!.path.toString().split('-').last;
 
                                                 // converted and stored in base64 string
-                                                myAttachment
-                                                        .base64StringController
-                                                        .text =
-                                                    base64Encode(file!
-                                                        .readAsBytesSync());
+                                                myAttachment.base64StringController.text = base64Encode(file!.readAsBytesSync());
                                               });
                                             }
                                           },
                                           color: AppColors.scoButtonColor,
                                           enableFeedback: false,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          materialTapTargetSize:
-                                              MaterialTapTargetSize.shrinkWrap,
-                                          child: Text(
-                                            "Choose File",
-                                            style:
-                                                AppTextStyles.titleTextStyle()
-                                                    .copyWith(
-                                                        color: Colors.white),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          child: Text("Choose File",
+                                            style: AppTextStyles.titleTextStyle().copyWith(color: Colors.white),
                                           ),
                                         ),
 
@@ -7660,7 +7622,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     )),
 
                                 // show available file type
-                                Text("Select Only from these types",
+                                Text( myAttachment.documentCDController.text.toUpperCase() == 'SEL006'  ? "Select .jpeg|.jpg|.JPEG|.JPG file type only" : "Select Pdf file only",
                                     style: AppTextStyles.normalTextStyle()
                                         .copyWith(
                                             color: Colors.blueGrey,
@@ -7726,13 +7688,59 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // *--------------------------------------------------------- Attachments Section end ------------------------------------------------------------------------------*
 
+
+  Widget _confirmation()
+  {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context,listen: false);
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.lightGrey,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Padding(
+        padding:  EdgeInsets.all(kPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            draftPrevNextButtons(langProvider),
+          CustomInformationContainer(
+              title: "Confirmation",
+        expandedContent: Column(
+          children: [
+
+            kFormHeight,
+            CustomGFCheckbox(value: true, onChanged: (value){}, text: "I agree. All information is correct and filled properly"),
+            kFormHeight,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: CustomButton(buttonName: "Print", isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){},buttonColor: AppColors.scoThemeColor,borderColor: Colors.transparent,),
+            ),
+            kFormHeight,
+            kFormHeight,
+
+          ],
+        ),
+          ),
+
+            SizedBox(height: 20),
+
+            draftPrevNextButtons(langProvider),
+
+
+          ]),
+      ));
+  }
+
+
   // *--------------------------------------------------------- validate section in accordance with the steps start ------------------------------------------------------------------------------*
 
   // *--------------------------------------------------------- validate section in accordance with the steps start ------------------------------------------------------------------------------*
 
   // if section is already fulfilling the requirements then move forward to next step:
   bool validateSection(
-      {required int step, required LanguageChangeViewModel langProvider}) {
+      {required int step, required LanguageChangeViewModel langProvider})
+  {
     String? acadmicCareer = _selectedScholarship?.acadmicCareer;
     String key = _selectedScholarship?.configurationKey ?? '';
 
@@ -7760,6 +7768,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       return displayEmploymentHistory();
     }
 
+    // Switch case for validation based on step
     switch (step) {
       case 0:
         return validateStudentUndertakingSection(langProvider);
@@ -7777,36 +7786,35 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         if (isUniversityAndMajorsRequired()) {
           return validateUniversityAndMajorsDetails(langProvider);
         }
-        return true; // No validation required for this step if not applicable
+        return true;
 
       case 4:
-        if (isAttachmentSectionForExt()) {
-          return validateAttachmentsSection(langProvider);
+        if (key == 'SCOUPPEXT') {
+          return validateAttachmentsSection(langProvider); // Validation for SCOUPPEXT at step 4
         } else if (isRequiredExaminationDetailsRequired()) {
           return validateRequiredExaminations(langProvider);
         }
         return true;
 
       case 5:
-        if (isAttachmentSectionForExt()) {
-          return true; // No validation needed for this case
+        if (acadmicCareer == 'UGRD') {
+          return validateAttachmentsSection(langProvider); // Validation for UGRD at step 5
         } else if (shouldDisplayEmploymentHistory()) {
           return validateEmploymentHistory(langProvider);
         }
         return true;
 
       case 6:
-        // If configuration requires, validate the final confirmation step
-        return validateAttachmentsSection(langProvider);
+        return validateAttachmentsSection(langProvider); // Final confirmation for attachments if applicable
 
       case 7:
-        // Confirmation step, usually no validation required here
-        return true;
+        return true; // No validation required
 
       default:
-        return true; // No validation for undefined steps
+        return true;
     }
   }
+
 
   // To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode;
@@ -7829,73 +7837,71 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   bool validateStudentDetailsSection(langProvider) {
     firstErrorFocusNode = null;
     // Validate Arabic Name fields
-    if (_arabicStudentNameController.text.isEmpty ||
-        !Validations.isArabicNameValid(_arabicStudentNameController.text)) {
+    if (_arabicName.studentNameController.text.isEmpty || !Validations.isArabicNameValid(_arabicName.studentNameController.text)) {
       setState(() {
-        _arabicStudentNameError = 'Please enter the student name in Arabic.';
-        firstErrorFocusNode ??=
-            _arabicStudentNameFocusNode; // Set firstErrorFocusNode if it's null
+        _arabicName.studentNameError = 'Please enter the student name in Arabic.';
+        firstErrorFocusNode ??= _arabicName.studentNameFocusNode; // Set firstErrorFocusNode if it's null
       });
     }
 
-    if (_arabicFatherNameController.text.isEmpty ||
-        !Validations.isArabicNameValid(_arabicFatherNameController.text)) {
+    if (_arabicName.fatherNameController.text.isEmpty ||
+        !Validations.isArabicNameValid(_arabicName.fatherNameController.text)) {
       setState(() {
-        _arabicFatherNameError = 'Please enter the father\'s name in Arabic.';
+        _arabicName.fatherNameError = 'Please enter the father\'s name in Arabic.';
         firstErrorFocusNode ??=
-            _arabicFatherNameFocusNode; // Set firstErrorFocusNode if it's null
+            _arabicName.fatherNameFocusNode; // Set firstErrorFocusNode if it's null
       });
     }
 
-    if (_arabicGrandFatherNameController.text.isEmpty ||
-        !Validations.isArabicNameValid(_arabicGrandFatherNameController.text)) {
+    if (_arabicName.grandFatherNameController.text.isEmpty ||
+        !Validations.isArabicNameValid(_arabicName.grandFatherNameController.text)) {
       setState(() {
-        _arabicGrandFatherNameError =
+        _arabicName.grandFatherNameError =
             'Please enter the grandfather\'s name in Arabic.';
-        firstErrorFocusNode ??= _arabicGrandFatherNameFocusNode;
+        firstErrorFocusNode ??= _arabicName.grandFatherNameFocusNode;
       });
     }
 
-    if (_arabicFamilyNameController.text.isEmpty ||
-        !Validations.isArabicNameValid(_arabicFamilyNameController.text)) {
+    if (_arabicName.familyNameController.text.isEmpty ||
+        !Validations.isArabicNameValid(_arabicName.familyNameController.text)) {
       setState(() {
-        _arabicFamilyNameError = 'Please enter the family name in Arabic.';
-        firstErrorFocusNode ??= _arabicFamilyNameFocusNode;
+        _arabicName.familyNameError = 'Please enter the family name in Arabic.';
+        firstErrorFocusNode ??= _arabicName.familyNameFocusNode;
       });
     }
 
     // Validate English Name fields
-    if (_englishStudentNameController.text.isEmpty ||
-        !Validations.isEnglishNameValid(_englishStudentNameController.text)) {
+    if (_englishName.studentNameController.text.isEmpty ||
+        !Validations.isEnglishNameValid(_englishName.studentNameController.text)) {
       setState(() {
-        _englishStudentNameError = 'Please enter the student name in English.';
-        firstErrorFocusNode ??= _englishStudentNameFocusNode;
+        _englishName.studentNameError = 'Please enter the student name in English.';
+        firstErrorFocusNode ??= _englishName.studentNameFocusNode;
       });
     }
 
-    if (_englishFatherNameController.text.isEmpty ||
-        !Validations.isEnglishNameValid(_englishFatherNameController.text)) {
+    if (_englishName.fatherNameController.text.isEmpty ||
+        !Validations.isEnglishNameValid(_englishName.fatherNameController.text)) {
       setState(() {
-        _englishFatherNameError = 'Please enter the father\'s name in English.';
-        firstErrorFocusNode ??= _englishFatherNameFocusNode;
+        _englishName.fatherNameError = 'Please enter the father\'s name in English.';
+        firstErrorFocusNode ??= _englishName.fatherNameFocusNode;
       });
     }
 
-    if (_englishGrandFatherNameController.text.isEmpty ||
+    if (_englishName.grandFatherNameController.text.isEmpty ||
         !Validations.isEnglishNameValid(
-            _englishGrandFatherNameController.text)) {
+            _englishName.grandFatherNameController.text)) {
       setState(() {
-        _englishGrandFatherNameError =
+        _englishName.grandFatherNameError =
             'Please enter the grandfather\'s name in English.';
-        firstErrorFocusNode ??= _englishGrandFatherNameFocusNode;
+        firstErrorFocusNode ??= _englishName.grandFatherNameFocusNode;
       });
     }
 
-    if (_englishFamilyNameController.text.isEmpty ||
-        !Validations.isEnglishNameValid(_englishFamilyNameController.text)) {
+    if (_englishName.familyNameController.text.isEmpty ||
+        !Validations.isEnglishNameValid(_englishName.familyNameController.text)) {
       setState(() {
-        _englishFamilyNameError = 'Please enter the family name in English.';
-        firstErrorFocusNode ??= _englishFamilyNameFocusNode;
+        _englishName.familyNameError = 'Please enter the family name in English.';
+        firstErrorFocusNode ??= _englishName.familyNameFocusNode;
       });
     }
 
@@ -7927,6 +7933,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         firstErrorFocusNode ??= _passportExpiryDateFocusNode;
       });
     }
+    if(_passportIssueDateController.text == _passportExpiryDateController.text ){
+      setState(() {
+        _passportExpiryDateError = 'Please select correct passport Expiry date';
+        firstErrorFocusNode ??= _passportExpiryDateFocusNode;
+      });
+    }
+
+
 
     if (_passportPlaceOfIssueController.text.isEmpty) {
       setState(() {
@@ -7962,6 +7976,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     if (_dateOfBirthController.text.isEmpty) {
       setState(() {
         _dateOfBirthError = 'Please enter your date of birth';
+        firstErrorFocusNode ??= _dateOfBirthFocusNode;
+      });
+    }
+    if(!isEighteenYearsOld(_dateOfBirthController.text)){
+      setState(() {
+        _dateOfBirthError = 'Please enter your correct DOB';
         firstErrorFocusNode ??= _dateOfBirthFocusNode;
       });
     }
@@ -8071,9 +8091,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           });
         }
 
-        if (element.phoneNumberController.text.isEmpty) {
+        if (element.phoneNumberController.text.isEmpty || !Validations.isPhoneNumberValid(element.phoneNumberController.text)) {
           setState(() {
-            element.phoneNumberError = "Please Enter your phone number";
+            element.phoneNumberError = "Please Enter correct phone number";
             firstErrorFocusNode ??= element.phoneNumberFocusNode;
           });
         }
@@ -8149,6 +8169,13 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             });
           }
 
+          if (_militaryServiceStartDateController.text == _militaryServiceEndDateController.text) {
+            setState(() {
+              _militaryServiceEndDateErrorText =
+              'Start Date and end Date cannot be same';
+              firstErrorFocusNode ??= _militaryServiceEndDateFocusNode;
+            });
+          }
           break;
 
         case MilitaryStatus.no:
@@ -8386,6 +8413,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                 firstErrorFocusNode ??= element.graduationEndDateFocusNode;
               });
             }
+
+            if (element.graduationEndDateController.text == element.graduationStartDateController.text) {
+              setState(() {
+                element.graduationEndDateError =
+                "Please Enter correct start and end Date";
+                firstErrorFocusNode ??= element.graduationEndDateFocusNode;
+              });
+            }
+
+
+
           }
           // #################################################################
           // Are you currently receiving scholarship or grant from other university
@@ -8397,6 +8435,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   context: context,
                   provider: Provider.of<LanguageChangeViewModel>(context,
                       listen: false));
+              return false;
             }
           }
           // #################################################################
@@ -8474,7 +8513,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           firstErrorFocusNode ??= _acadProgramPgrdFocusNode;
         });
       }
-    }
+
 // #################################################################
     // major
     for (int i = 0; i < _majorsWishlist.length; i++) {
@@ -8491,7 +8530,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           firstErrorFocusNode ??= element.majorFocusNode;
         });
       }
-    }
+    }}
 // #################################################################
 
     // academic program dds
@@ -8701,6 +8740,15 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           });
         }
 
+        // end date
+        if (element.endDateController.text.isNotEmpty && (element.endDateController.text == element.startDateController.text)) {
+
+          setState(() {
+            element.endDateError = "Please correct start and End Date";
+            firstErrorFocusNode ??= element.endDateFocusNode;
+          });
+        }
+
         // reporting manager
         if (element.reportingManagerController.text.isEmpty) {
           setState(() {
@@ -8739,6 +8787,33 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   bool validateAttachmentsSection(langProvider) {
     firstErrorFocusNode = null;
 
+
+    print("validate Attachments section");
+    for(var i = 0; i < _myAttachmentsList.length; i++) {
+      var element = _myAttachmentsList[i];
+
+
+      final code1 = "${element.processCDController.text}:${element.documentCDController.text}";
+      bool required = false;
+      for(var i = 0; i < _attachmentsList.length; i++) {
+        var val = _attachmentsList[i];
+        if(val.code.toString() == code1){
+          required =  val.required.toString() == 'XMRL' || val.required.toString() == 'MRL' || val.required.toString() == 'NMRL';
+        }
+      }
+
+      if(required &&  element.base64StringController.text.isEmpty)
+      {
+
+        print("Upload all attachments");
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.red,content: Text("Upload all required attachments")));
+        return false;
+      }
+    }
+    for(var ele in _myAttachmentsList){
+      print(ele.toJson());
+    }
+
     return true;
   }
 
@@ -8746,15 +8821,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   @override
   void dispose() {
-    // Dispose of controllers
-    _arabicStudentNameController.dispose();
-    _arabicFatherNameController.dispose();
-    _arabicGrandFatherNameController.dispose();
-    _arabicFamilyNameController.dispose();
-    _englishStudentNameController.dispose();
-    _englishFatherNameController.dispose();
-    _englishGrandFatherNameController.dispose();
-    _englishFamilyNameController.dispose();
+
 
     // Dispose controllers
     _militaryServiceController.dispose();
@@ -8844,7 +8911,60 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       height: 30,
       textColor: Colors.white,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      onPressed: () {
+      onPressed: _currentSectionIndex == totalSections-1 ? (){
+
+        // submit Application function
+        showDialog(context: context, builder: (context){
+          return Dialog(
+            alignment: Alignment.center,
+                backgroundColor: Colors.transparent,
+                child:  CustomInformationContainer(
+                    title: "Confirmation",
+                  trailing: GestureDetector(onTap:(){_navigationService.goBack();},child: const Icon(Icons.close,color: Colors.white,)),
+                  expandedContent: Column(
+                      children: [
+
+                       kFormHeight,
+                        Text( "Are your sure?",style: AppTextStyles.titleTextStyle(),),
+
+                        kFormHeight,
+                        Text( "You want to submit this application.",style: AppTextStyles.normalTextStyle(),),
+                        kFormHeight,
+                    Wrap(
+
+                      alignment: WrapAlignment.spaceBetween,
+                      runAlignment: WrapAlignment.spaceBetween,
+                      runSpacing: 10,
+                      spacing: 20,
+
+
+                      children: [
+                        // MaterialButton(child: Text("No",style: TextStyle(color: AppColors.scoThemeColor),),  onPressed: (){},color: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius)),),
+                        SizedBox(
+                          width: screenWidth/4,
+                          child: CustomButton(buttonName: "No", isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){_navigationService.goBack();},buttonColor: Colors.white,borderColor: AppColors.scoThemeColor,textColor: AppColors.scoThemeColor,),
+                        ),
+                        SizedBox(
+                          width: screenWidth/4,
+                          child: CustomButton(buttonName: "Yes", isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){},buttonColor: AppColors.scoThemeColor,textColor: Colors.white,borderColor: Colors.transparent,),
+                        ),
+                      ],
+                    ),
+      kFormHeight,
+      kFormHeight,
+
+    ],
+  ),
+),
+
+          );
+
+
+        });
+
+
+      }: () {
+        // run validations function
         if (validateSection(
             step: _currentSectionIndex, langProvider: langProvider)) {
           nextSection(); // Only move to the next section if validation passes
@@ -8856,9 +8976,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
               provider: langProvider);
         }
       },
-      child: const Text(
-        'Next',
-        style: TextStyle(fontSize: 12),
+      child:  Text(
+        _currentSectionIndex == totalSections-1 ? "Submit": 'Next',
+        style: const TextStyle(fontSize: 12),
       ),
     );
   }
@@ -9062,14 +9182,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         "emirateIdExpiryDate": _emiratesIdExpiryDateController.text,
         "uaeMother": _isMotherUAECheckbox,
         "otherNumber": "",
-        "relativeStudyinScholarship":
-            _isRelativeStudyingFromScholarship ?? false,
+        "relativeStudyinScholarship": _isRelativeStudyingFromScholarship ?? false,
         // "graduationStatus": null,
         "cohortId": _selectedScholarship?.cohort ?? '',
-        "scholarshipSubmissionCode":
-            _selectedScholarship?.configurationKey ?? '',
+        "scholarshipSubmissionCode": _selectedScholarship?.configurationKey ?? '',
         // "highestQualification": "UG",
-        "havingSponsor": havingSponsor,
+        "havingSponser": havingSponsor,
 
         "familyNo": _familyInformationEmiratesController.text,
         "town": _familyInformationTownVillageNoController.text,
@@ -9083,32 +9201,21 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         "militaryServiceEndDate": _militaryServiceEndDateController.text,
         "reasonForMilitarty": _reasonForMilitaryController.text,
 
-        "nameAsPasport":
-            _nameAsPassport.map((element) => element.toJson()).toList(),
+        "nameAsPasport": _nameAsPassport.map((element) => element.toJson()).toList(),
 
-        "relativeDetails":
-            _relativeInfoList.map((element) => element.toJson()).toList(),
-        "phoneNunbers":
-            _phoneNumberList.map((element) => element.toJson()).toList(),
-        "addressList":
-            _addressInformationList.map((element) => element.toJson()).toList(),
-        "highSchoolList":
-            _highSchoolList.map((element) => element.toJson()).toList(),
-        "graduationList":
-            _graduationDetailsList.map((element) => element.toJson()).toList(),
+        "relativeDetails": _relativeInfoList.map((element) => element.toJson()).toList(),
+        "phoneNunbers": _phoneNumberList.map((element) => element.toJson()).toList(),
+        "addressList": _addressInformationList.map((element) => element.toJson()).toList(),
+        "highSchoolList": _highSchoolList.map((element) => element.toJson()).toList(),
+        "graduationList": _graduationDetailsList.map((element) => element.toJson()).toList(),
         "acadProgramDds": _acadProgramDdsController.text,
         "acadProgramPgrd": _acadProgramPgrdController.text,
-        "majorWishList":
-            _majorsWishlist.map((element) => element.toJson()).toList(),
-        "universtiesPriorityList":
-            _universityPriorityList.map((element) => element.toJson()).toList(),
-        "requiredExaminationList": _requiredExaminationList
-            .map((element) => element.toJson())
-            .toList(),
-
+        "majorWishList": _majorsWishlist.map((element) => element.toJson()).toList(),
+        "universtiesPriorityList": _universityPriorityList.map((element) => element.toJson()).toList(),
+        "requiredExaminationList": _requiredExaminationList.map((element) => element.toJson()).toList(),
         "employmentStatus": _employmentStatus.toString(),
-        "emplymentHistory":
-            _employmentHistoryList.map((element) => element.toJson()).toList(),
+        "emplymentHistory": _employmentHistoryList.map((element) => element.toJson()).toList(),
+        "attachments": _myAttachmentsList.map((element) => element.toJson()).toList(),
 
         // Rest of the fields...
       }

@@ -269,7 +269,7 @@ class Validations {
     double? cgpaValue = double.tryParse(cgpa);
 
     // Return false if parsing fails or if the CGPA is out of range
-    if (cgpaValue == null || cgpaValue < 0.0 || cgpaValue > 4.0) {
+    if (cgpaValue == null || cgpaValue < 0.0 || cgpaValue > 10.0) {
       return false;
     }
 

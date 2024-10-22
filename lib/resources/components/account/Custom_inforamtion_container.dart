@@ -10,11 +10,13 @@ import '../../app_colors.dart';
 class CustomInformationContainer extends StatefulWidget {
   final String title;
   Widget? leading;
+  Widget? trailing;
   final Widget expandedContent;
 
   CustomInformationContainer({
     required this.title,
     this.leading,
+    this.trailing,
     required this.expandedContent,
   });
 
@@ -66,6 +68,8 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
                         color: Colors.white,
                       )),
                 ),
+                widget.trailing == null ? const SizedBox.shrink():  widget.trailing!,
+
               ],
             ),
           ),

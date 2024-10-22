@@ -172,6 +172,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
                               // Dropdown for Academic Career
                               CustomDropdown(
+                                filled: (academicCareerMenuItemList == null || academicCareerMenuItemList!.isEmpty),
                                 textDirection: textDirection,
                                 menuItemsList: populateAcademicCareer(
                                     menuItemsList: (academicCareerMenuItemList == null || academicCareerMenuItemList!.isEmpty) ? [] : academicCareerMenuItemList!,
@@ -201,7 +202,6 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                           textDirection: textDirection,
                           buttonColor: AppColors.scoButtonColor,
                           onTap: () {
-
 
                             _selectedAcademicCareer.isNotEmpty?_navigationService.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(
                               selectedScholarshipConfigurationKey: _selectedAcademicCareer,
