@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
+import '../../utils/utils.dart';
+
 // Generalized PersonName model for names (Arabic, English, etc.)
 // class PersonName {
 //   final String nameType;
@@ -375,7 +377,7 @@ class HighSchool {
       otherHsNameController:
           TextEditingController(text: json['otherHsName'].toString()),
       passingYearController:
-          TextEditingController(text: json['passingYear'].toString()),
+          TextEditingController(text: json['passignYear'].toString()),
       maxDateController:
           TextEditingController(text: json['maxDate'].toString()),
       disableStateController:
@@ -415,7 +417,7 @@ class HighSchool {
       'curriculumType': curriculumTypeController.text,
       'curriculumAverage': curriculumAverageController.text,
       'otherHsName': otherHsNameController.text,
-      'passingYear': passingYearController.text,
+      'passignYear': passingYearController.text,
       'maxDate': maxDateController.text,
       'disableState': disableStateController.text,
       'isNew': isNewController.text,
@@ -430,11 +432,11 @@ class HighSchool {
 class HSDetails {
   TextEditingController subjectTypeController;
   TextEditingController gradeController;
-  TextEditingController? otherSubjectNameController;
+  TextEditingController otherSubjectNameController;
 
   FocusNode subjectTypeFocusNode;
   FocusNode gradeFocusNode;
-  FocusNode? otherSubjectNameFocusNode;
+  FocusNode otherSubjectNameFocusNode;
 
   String? subjectTypeError;
   String? gradeError;
@@ -443,10 +445,10 @@ class HSDetails {
   HSDetails({
     required this.subjectTypeController,
     required this.gradeController,
-    this.otherSubjectNameController,
+    required this.otherSubjectNameController,
     required this.subjectTypeFocusNode,
     required this.gradeFocusNode,
-    this.otherSubjectNameFocusNode,
+    required this.otherSubjectNameFocusNode,
     this.subjectTypeError,
     this.gradeError,
     this.otherSubjectNameError,
@@ -458,13 +460,10 @@ class HSDetails {
       subjectTypeController:
           TextEditingController(text: json['subjectType'].toString()),
       gradeController: TextEditingController(text: json['grade'].toString()),
-      otherSubjectNameController: json['otherSubjectName'] != null
-          ? TextEditingController(text: json['otherSubjectName'].toString())
-          : null,
+      otherSubjectNameController: json['otherSubjectName'] != null ? TextEditingController(text: json['otherSubjectName'].toString()) : TextEditingController(),
       subjectTypeFocusNode: FocusNode(),
       gradeFocusNode: FocusNode(),
-      otherSubjectNameFocusNode:
-          json['otherSubjectName'] != null ? FocusNode() : null,
+      otherSubjectNameFocusNode: json['otherSubjectName'] != null ? FocusNode() : FocusNode(),
     );
   }
 
@@ -671,8 +670,8 @@ class GraduationInfo {
       otherUniversityController: TextEditingController(text: json['otherUniversity'] ?? ''),
       majorController: TextEditingController(text: json['major'] ?? ''),
       cgpaController: TextEditingController(text: json['cgpa'] ?? ''),
-      graduationStartDateController: TextEditingController(text: json['graduationStartDate'] ?? ''),
-      graduationEndDateController: TextEditingController(text: json['graduationEndDate'] ?? ''),
+      graduationStartDateController: TextEditingController(text: formatDateOnly(json['graduationStartDate'] ?? '')),
+      graduationEndDateController: TextEditingController(text: formatDateOnly(json['graduationEndDate'] ?? '')),
       lastTermController: TextEditingController(text: json['lastTerm'] ?? ''),
       caseStudyTitleController: TextEditingController(
         text: (json['caseStudy'] != null && json['caseStudy'] is Map && json['caseStudy']['title'] != null)
@@ -804,7 +803,7 @@ class RequiredExaminations {
       examinationGradeController: TextEditingController(text: json['examinationGrade'] ?? ''),
       minScoreController: TextEditingController(text: json['minScore'] ?? ''),
       maxScoreController: TextEditingController(text: json['maxScore'] ?? ''),
-      examDateController: TextEditingController(text: json['examDate'] ?? ''),
+      examDateController: TextEditingController(text: formatDateOnly(json['examDate'] ?? '')),
       isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
       examinationFocusNode: FocusNode(),

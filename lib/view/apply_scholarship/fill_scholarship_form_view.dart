@@ -122,6 +122,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // Function to save draft
   void saveDraft() async {
     _finalForm();
+    log(form.toString());
+
+
     final saveDraftProvider = Provider.of<SaveAsDraftViewmodel>(context, listen: false);
     await saveDraftProvider.saveAsDraft(form: form, applicationNumber: draftId?.toString() ?? '0');
     if(saveDraftProvider.apiResponse.status == Status.COMPLETED){
@@ -527,10 +530,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                 .where((element) => !element.code
                     .startsWith('OTH')) // Filter for regular subjects
                 .map((element) => HSDetails(
-                      subjectTypeController:
-                          TextEditingController(text: element.code.toString()),
+                      subjectTypeController: TextEditingController(text: element.code.toString()),
+                      otherSubjectNameController: TextEditingController(),
                       gradeController: TextEditingController(),
                       subjectTypeFocusNode: FocusNode(),
+                      otherSubjectNameFocusNode: FocusNode(),
                       gradeFocusNode: FocusNode(),
                     ))
                 .toList(),
@@ -583,10 +587,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                 .where((element) => !element.code
                     .startsWith('OTH')) // Filter for regular subjects
                 .map((element) => HSDetails(
-                      subjectTypeController:
-                          TextEditingController(text: element.code.toString()),
+                      subjectTypeController: TextEditingController(text: element.code.toString()),
+                      otherSubjectNameController: TextEditingController(),
                       gradeController: TextEditingController(),
                       subjectTypeFocusNode: FocusNode(),
+                      otherSubjectNameFocusNode: FocusNode(),
                       gradeFocusNode: FocusNode(),
                     ))
                 .toList(),
@@ -757,9 +762,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           final element = PersonName.fromJson(ele);
                           if(element.nameTypeController.text == 'PRI'){
                             _arabicName = element;
+                            _nameAsPassport.add(_arabicName);
                           }
                           if(element.nameTypeController.text == 'ENG'){
                             _englishName = element;
+                            _nameAsPassport.add(_englishName);
                           }
                       }
                       }
@@ -768,32 +775,22 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
 
                     // passport Data Prefilled
-                    _passportNationalityController.text =
-                        cleanedDraft['country'] ?? '';
-                    _passportPlaceOfIssueController.text =
-                        cleanedDraft['passportIssuePlace'] ?? '';
-                    _passportNumberController.text =
-                        cleanedDraft['passportId'] ?? '';
-                    _passportIssueDateController.text =
-                        cleanedDraft['passportIssueDate'] ?? '';
-                    _passportExpiryDateController.text =
-                        cleanedDraft['passportExpiryDate'] ?? '';
-                    _passportUnifiedNoController.text =
-                        cleanedDraft['unifiedNo'] ?? '';
+                    _passportNationalityController.text = cleanedDraft['country'] ?? '';
+                    _passportPlaceOfIssueController.text = cleanedDraft['passportIssuePlace'] ?? '';
+                    _passportNumberController.text = cleanedDraft['passportId'] ?? '';
+                    _passportIssueDateController.text = formatDateOnly(cleanedDraft['passportIssueDate'].toString() ?? '');
+                    _passportExpiryDateController.text = formatDateOnly(cleanedDraft['passportExpiryDate'].toString() ?? '');
+
+                    _passportUnifiedNoController.text = cleanedDraft['unifiedNo'].toString() ?? '';
 
                     // personal information prefill
-                    _emiratesIdExpiryDateController.text =
-                        cleanedDraft['emirateIdExpiryDate'] ?? '';
-                    _dateOfBirthController.text =
-                        cleanedDraft['dateOfBirth'] ?? '';
-                    _placeOfBirthController.text =
-                        cleanedDraft['placeOfBirth'] ?? '';
+                    _emiratesIdExpiryDateController.text = formatDateOnly(cleanedDraft['emirateIdExpiryDate'].toString() ?? '');
+                    _dateOfBirthController.text = formatDateOnly(cleanedDraft['dateOfBirth'].toString() ?? '');
+                    _placeOfBirthController.text = cleanedDraft['placeOfBirth'] ?? '';
                     _genderController.text = cleanedDraft['gender'] ?? '';
 
-                    _maritalStatusController.text =
-                        cleanedDraft['maritalStatus'] ?? '';
-                    _studentEmailController.text =
-                        cleanedDraft['emailId'] ?? '';
+                    _maritalStatusController.text = cleanedDraft['maritalStatus'] ?? '';
+                    _studentEmailController.text = cleanedDraft['emailId'] ?? '';
 
 
                     _isMotherUAECheckbox = cleanedDraft["uaeMother"] == 'true'? true : false;
@@ -802,20 +799,13 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
 
                     // family information
-                    _familyInformationEmiratesController.text =
-                        cleanedDraft['familyNo'] ?? '';
-                    _populateTownOnFamilyInformationEmiratesItem(
-                        langProvider: langProvider);
-                    _familyInformationTownVillageNoController.text =
-                        cleanedDraft['town'] ?? '';
-                    _familyInformationParentGuardianNameController.text =
-                        cleanedDraft['parentName'] ?? '';
-                    _familyInformationRelationTypeController.text =
-                        cleanedDraft['relationType'] ?? '';
-                    _familyInformationFamilyBookNumberController.text =
-                        cleanedDraft['familyNumber'] ?? '';
-                    _familyInformationMotherNameController.text =
-                        cleanedDraft['motherName'] ?? '';
+                    _familyInformationEmiratesController.text = cleanedDraft['familyNo'] ?? '';
+                    _populateTownOnFamilyInformationEmiratesItem(langProvider: langProvider);
+                    _familyInformationTownVillageNoController.text = cleanedDraft['town'] ?? '';
+                    _familyInformationParentGuardianNameController.text = cleanedDraft['parentName'] ?? '';
+                    _familyInformationRelationTypeController.text = cleanedDraft['relationType'] ?? '';
+                    _familyInformationFamilyBookNumberController.text = cleanedDraft['familyNumber'] ?? '';
+                    _familyInformationMotherNameController.text = cleanedDraft['motherName'] ?? '';
 
                     // scholarship relative
                     _isRelativeStudyingFromScholarship = cleanedDraft['relativeStudyinScholarship'] == 'true';
@@ -865,8 +855,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     }
 
                     // military Services:
-                    _militaryServiceController.text =
-                        cleanedDraft['militaryService'] ?? '';
+                    _militaryServiceController.text = cleanedDraft['militaryService'] ?? '';
                     switch (_militaryServiceController.text) {
                       case 'Y':
                         _isMilitaryService = MilitaryStatus.yes;
@@ -877,12 +866,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       case 'R':
                         _isMilitaryService = MilitaryStatus.exemption;
                     }
-                    _militaryServiceStartDateController.text =
-                        cleanedDraft['militaryServiceStartDate'] ?? '';
-                    _militaryServiceEndDateController.text =
-                        cleanedDraft['militaryServiceEndDate'] ?? '';
-                    _reasonForMilitaryController.text =
-                        cleanedDraft['reasonForMilitarty'] ?? '';
+                    _militaryServiceStartDateController.text = cleanedDraft['militaryServiceStartDate'] ?? '';
+                    _militaryServiceEndDateController.text = cleanedDraft['militaryServiceEndDate'] ?? '';
+                    _reasonForMilitaryController.text = cleanedDraft['reasonForMilitarty'] ?? '';
 
                     // graduation details
                     if (cleanedDraft['graduationList'] != null) {
@@ -1015,13 +1001,13 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                               hsNameController: TextEditingController(text: element['hsName']),
                               hsCountryController: TextEditingController(text: element['hsCountry']),
                               hsStateController: TextEditingController(text: element['hsState']),
-                              yearOfPassingController: TextEditingController(text: element['yearOfPassing']),
+                              yearOfPassingController: TextEditingController(text: formatDateOnly(element['yearOfPassing'])),
                               hsTypeController: TextEditingController(text: element['hsType']),
                               curriculumTypeController: TextEditingController(text: element['curriculumType']),
                               curriculumAverageController: TextEditingController(text: element['curriculumAverage']),
                               otherHsNameController: TextEditingController(text: element['otherHsName'] ),
-                              passingYearController: TextEditingController(text: element['passingYear']),
-                              maxDateController: TextEditingController(text: element['maxDate']),
+                              passingYearController: TextEditingController(text: element['passignYear']),
+                              maxDateController: TextEditingController(text: formatDateOnly(element['maxDate'])),
                               disableStateController: TextEditingController(text: element['disableState']),
                               isNewController: TextEditingController(text: element['isNew']),
                               highestQualificationController: TextEditingController(text: element['highestQualification']),
@@ -1055,13 +1041,21 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           _populateHighSchoolNameDropdown(langProvider: langProvider,index: index);
                           _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider,index: index);
                         }
+                        // print(_highSchoolList[0].hsDetails.toString());
+                        // print(_highSchoolList[0].otherHSDetails.toString());
+                        for(var hs in _highSchoolList) {
+                          print(hs.toJson().toString());
+
+                        }
+
                       } else {
                         _highSchoolList.add(HighSchool.fromJson(cleanedDraft['highSchoolList'])); // Add to the list
                       }
                     }
 
 
-                    print("print attachements issue: ${cleanedDraft['attachments']}");
+                    print(cleanedDraft['attachments']);
+
                     // attachments
                     if (cleanedDraft['attachments'] != null && cleanedDraft['attachments'].toString().trim().isNotEmpty) {
                       _myAttachmentsList.clear(); // Clear the current list
@@ -1072,7 +1066,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     }}
                       else{
               _myAttachmentsList.add(Attachment.fromJson(cleanedDraft['attachments']));
-              }}
+              }
+
+                    }
 
 
                     _navigationService.goBack();
@@ -3788,8 +3784,10 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
               .map((element) => HSDetails(
                     subjectTypeController:
                         TextEditingController(text: element.code.toString()),
+                    otherSubjectNameController: TextEditingController(),
                     gradeController: TextEditingController(),
                     subjectTypeFocusNode: FocusNode(),
+                    otherSubjectNameFocusNode: FocusNode(),
                     gradeFocusNode: FocusNode(),
                   ))
               .toList(),
@@ -3885,7 +3883,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-          kFormHeight,
+              draftPrevNextButtons(langProvider),
+          // kFormHeight,
 
           // *--------------------------------------------------------------- High School Details Section Start ----------------------------------------------------------------------------*
           CustomInformationContainer(
@@ -4426,8 +4425,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     if (date != null) {
                                       setState(() {
                                         // Set the selected date in the controller (format to show only the year)
-                                        highSchoolInfo
-                                                .yearOfPassingController.text =
+                                        highSchoolInfo.yearOfPassingController.text =
                                             DateFormat("yyyy-MM-dd")
                                                 .format(date)
                                                 .toString();
@@ -4467,8 +4465,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           title: "Year of Graduation"),
                                       kFormHeight,
                                       Expanded(
-                                          child: Text(highSchoolInfo
-                                              .passingYearController.text))
+                                          child: Text(highSchoolInfo.passingYearController.text))
                                     ])),
 
                                 kFormHeight,
@@ -4541,33 +4538,22 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                 ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount:
-                                      highSchoolInfo.otherHSDetails.length,
+                                  itemCount: highSchoolInfo.otherHSDetails.length,
                                   itemBuilder: (context, index) {
-                                    var element =
-                                        highSchoolInfo.otherHSDetails[index];
+                                    var element = highSchoolInfo.otherHSDetails[index];
                                     return Column(
                                       children: [
-                                        _subjectTitle(element
-                                            .subjectTypeController.text
-                                            .toString()),
+                                        _subjectTitle(element.subjectTypeController.text.toString()),
 
                                         // subject Name
                                         _scholarshipFormTextField(
-                                          currentFocusNode: element
-                                                  .otherSubjectNameFocusNode ??
-                                              FocusNode(),
+                                          currentFocusNode: element.otherSubjectNameFocusNode,
                                           nextFocusNode: element.gradeFocusNode,
-                                          controller: element
-                                                  .otherSubjectNameController ??
-                                              TextEditingController(),
+                                          controller: element.otherSubjectNameController,
                                           hintText: "Other Subject Name",
-                                          errorText:
-                                              element.otherSubjectNameError,
+                                          errorText: element.otherSubjectNameError,
                                           onChanged: (value) {
-                                            if (element
-                                                .otherSubjectNameFocusNode!
-                                                .hasFocus) {
+                                            if (element.otherSubjectNameFocusNode?.hasFocus ?? false) {
                                               setState(() {
                                                 element.otherSubjectNameError =
                                                     ErrorText
@@ -4597,15 +4583,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           maxLength: 4,
                                           errorText: element.gradeError,
                                           onChanged: (value) {
-                                            if (element
-                                                .gradeFocusNode.hasFocus) {
+                                            if (element.gradeFocusNode.hasFocus) {
                                               setState(() {
-                                                element.gradeError = ErrorText
-                                                    .getGradeValidationError(
-                                                        grade: element
-                                                            .gradeController
-                                                            .text,
-                                                        context: context);
+                                                element.gradeError = ErrorText.getGradeValidationError(grade: element.gradeController.text, context: context);
                                               });
                                             }
                                           },
@@ -4828,7 +4808,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-          draftPrevNextButtons(langProvider),
+           if(!displayHighSchool())  draftPrevNextButtons(langProvider),
+          kFormHeight,
           // if selected scholarship matches the condition then high school details section else don't
           (_selectedScholarship?.acadmicCareer != 'SCHL' &&
                   _selectedScholarship?.acadmicCareer != 'HCHL')
@@ -6005,7 +5986,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                               "false";
 
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              .showSnackBar(const SnackBar(
                                                   content: Text(
                                                       "This major has already been selected. Please choose another one.")));
                                           // Show the toast message inside setState to reflect UI change
@@ -6396,7 +6377,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       : showVoid,
                                   // ****************************************************************************************************************************************************
 
-                                  kFormHeight,
+                                  // kFormHeight,
                                   fieldHeading(
                                       title: "Status",
                                       important: _selectedScholarship
@@ -6416,18 +6397,15 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                                   _scholarshipFormDropdown(
                                     controller: universityInfo.statusController,
-                                    currentFocusNode:
-                                        universityInfo.statusFocusNode,
-                                    menuItemsList:
-                                        _universityPriorityStatus ?? [],
+                                    currentFocusNode: universityInfo.statusFocusNode,
+                                    menuItemsList: _universityPriorityStatus ?? [],
                                     hintText: "Select  Status",
                                     errorText: universityInfo.statusError,
                                     onChanged: (value) {
                                       // Clear the error initially
                                       universityInfo.statusError = null;
                                       setState(() {
-                                        universityInfo.statusController.text =
-                                            value!;
+                                        universityInfo.statusController.text = value!;
                                       });
                                     },
                                   ),
@@ -7771,24 +7749,29 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     // Switch case for validation based on step
     switch (step) {
       case 0:
+        print("Inside case 0");
         return validateStudentUndertakingSection(langProvider);
 
       case 1:
+        print("Inside case 1");
         return validateStudentDetailsSection(langProvider);
 
       case 2:
+        print("Inside case 2");
         if (shouldShowHighSchoolDetails()) {
           if (!validateHighSchoolDetails(langProvider)) return false;
         }
         return validateGraduationDetails(langProvider);
 
       case 3:
+        print("Inside case 3");
         if (isUniversityAndMajorsRequired()) {
           return validateUniversityAndMajorsDetails(langProvider);
         }
         return true;
 
       case 4:
+        print("Inside case 4");
         if (key == 'SCOUPPEXT') {
           return validateAttachmentsSection(langProvider); // Validation for SCOUPPEXT at step 4
         } else if (isRequiredExaminationDetailsRequired()) {
@@ -7797,6 +7780,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         return true;
 
       case 5:
+        print("Inside case 5");
         if (acadmicCareer == 'UGRD') {
           return validateAttachmentsSection(langProvider); // Validation for UGRD at step 5
         } else if (shouldDisplayEmploymentHistory()) {
@@ -7805,6 +7789,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         return true;
 
       case 6:
+        print("Inside case 6");
         return validateAttachmentsSection(langProvider); // Final confirmation for attachments if applicable
 
       case 7:
@@ -8794,6 +8779,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
 
       final code1 = "${element.processCDController.text}:${element.documentCDController.text}";
+      print(code1);
       bool required = false;
       for(var i = 0; i < _attachmentsList.length; i++) {
         var val = _attachmentsList[i];
@@ -8804,7 +8790,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
       if(required &&  element.base64StringController.text.isEmpty)
       {
-
         print("Upload all attachments");
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.red,content: Text("Upload all required attachments")));
         return false;
@@ -8994,6 +8979,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     int? maxLength,
     bool? filled,
     bool? readOnly,
+    TextInputType? textInputType,
     List<TextInputFormatter>? inputFormat,
     required Function(String? value) onChanged,
   }) {
@@ -9012,7 +8998,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       inputFormat: inputFormat,
       errorText: errorText,
       onChanged: onChanged,
-      textInputType: TextInputType.multiline,
+      textInputType: textInputType ?? TextInputType.text,
     );
   }
 
@@ -9221,6 +9207,5 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
     };
 
-    log(form.toString());
   }
 }

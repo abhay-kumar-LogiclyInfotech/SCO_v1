@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:xml/xml.dart';
 
@@ -479,5 +480,26 @@ bool isEighteenYearsOld(String dob) {
   // Return true if the person is 18 or older
   return age >= 18;
 }
+
+
+
+String formatDateOnly(String? dateString) {
+  if (dateString == null || dateString.isEmpty) {
+    return ''; // Handle null or empty input
+  }
+
+  try {
+    // Preprocess to make it ISO 8601 compatible
+    String processedDateString = dateString.replaceFirst(' ', 'T').replaceFirst(' UTC', 'Z');
+    // Parse the input date string to DateTime
+    DateTime parsedDate = DateTime.parse(processedDateString);
+    // Format to date-only string
+    return DateFormat('yyyy-MM-dd').format(parsedDate);
+  } catch (e) {
+    // Handle invalid date string format
+    return '';
+  }
+}
+
 
 
