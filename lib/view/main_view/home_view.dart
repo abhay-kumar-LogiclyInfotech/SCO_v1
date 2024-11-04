@@ -1,9 +1,11 @@
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
@@ -16,6 +18,7 @@ import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../resources/app_colors.dart';
+import '../../resources/components/custom_sco_program_tile.dart';
 import '../../resources/custom_painters/faq_painters.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../drawer/custom_drawer_views/vision_and_mission_view.dart';
@@ -71,11 +74,13 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               kFormHeight,
               _scholarshipApproved(langProvider: langProvider),
               kFormHeight,
-              _faqContainer(langProvider: langProvider),
+              // _faqContainer(langProvider: langProvider),
               kFormHeight,
               _aboutOrganization(langProvider: langProvider),
               kFormHeight,
-              const SizedBox(height: 15)
+              _applyScholarshipButton(langProvider: langProvider),
+              kFormHeight,
+              _scoPrograms(langProvider: langProvider),
             ],
           ),
         ),
@@ -227,20 +232,12 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
 // *---Container for approved scholarships-----*
   Widget _scholarshipApproved({required LanguageChangeViewModel langProvider}) {
-    return Material(
-      elevation: 1,
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.all(25),
-        child: Column(
+    return _homeViewCard(
+        langProvider: langProvider,
+        title: AppLocalizations.of(context)!.scholarshipOffice,
+        icon: Image.asset("assets/scholarship_office.png"),
+        content: Column(
           children: [
-            // Scholarship Office Header
-            _buildHomeViewCardTitle(
-                langProvider: langProvider,
-                title: AppLocalizations.of(context)!.scholarshipOffice,
-                icon: Image.asset("assets/scholarship_office.png")),
-
             // Amount and Read More Button
             _buildAmountAndButton(langProvider: langProvider),
 
@@ -253,135 +250,119 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             // Date Information
             _buildDateInfo(langProvider: langProvider, date: null),
           ],
-        ),
-      ),
-    );
+        ));
   }
 
   // *----Scholarship applied container----*
   Widget _scholarshipAppliedContainer(
       {required LanguageChangeViewModel langProvider}) {
-    return Directionality(
-        textDirection: getTextDirection(langProvider),
-        child: Container(
-          padding: EdgeInsets.all(kPadding),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(kCardRadius)),
-          child: Column(
-            children: [
-              _buildHomeViewCardTitle(
-                  langProvider: langProvider,
-                  title: AppLocalizations.of(context)!.scholarshipOffice,
-                  icon: Image.asset("assets/scholarship_office.png")),
+    return _homeViewCard(
+        langProvider: langProvider,
+        title: AppLocalizations.of(context)!.scholarshipOffice,
+        icon: Image.asset("assets/scholarship_office.png"),
+        content: Column(
+          children: [
 
-              kFormHeight,
-
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Scholarship status:
-                  const Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Scholarship Status",
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Scholarship status:
+                const Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Scholarship Status",
+                        style: TextStyle(
+                            fontSize: 12, color: AppColors.hintDarkGrey),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text("Scholarship Applied",
                           style: TextStyle(
-                              fontSize: 12, color: AppColors.hintDarkGrey),
-                          textAlign: TextAlign.start,
-                        ),
-                        Text("Scholarship Applied",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.greenColor,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.start)
-                      ],
-                    ),
+                              fontSize: 14,
+                              color: AppColors.greenColor,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.start)
+                    ],
                   ),
+                ),
 
-                  // read more button
-                  SizedBox(
-                    width: screenWidth * 0.35,
-                    child: CustomButton(
-                      buttonName: AppLocalizations.of(context)!.readMore,
-                      isLoading: false,
-                      onTap: () {},
-                      textDirection: getTextDirection(langProvider),
-                      textColor: const Color(0xffAD8138),
-                      borderColor: const Color(0xffAD8138),
-                      buttonColor: Colors.white,
-                      fontSize: 14,
-                      height: 40,
-                    ),
+                // read more button
+                SizedBox(
+                  width: screenWidth * 0.35,
+                  child: CustomButton(
+                    buttonName: AppLocalizations.of(context)!.readMore,
+                    isLoading: false,
+                    onTap: () {},
+                    textDirection: getTextDirection(langProvider),
+                    textColor: const Color(0xffAD8138),
+                    borderColor: const Color(0xffAD8138),
+                    buttonColor: Colors.white,
+                    fontSize: 14,
+                    height: 40,
                   ),
-                ],
-              ),
-              kFormHeight,
+                ),
+              ],
+            ),
+            kFormHeight,
 
-              // divider
-              const Divider(color: AppColors.lightGrey),
-              const SizedBox.square(
-                dimension: 5,
-              ),
+            // divider
+            const Divider(color: AppColors.lightGrey),
+            const SizedBox.square(
+              dimension: 5,
+            ),
 
-              // date
-              _buildDateInfo(langProvider: langProvider, date: "DD/MM/YYYY"),
-            ],
-          ),
+            // date
+            _buildDateInfo(langProvider: langProvider, date: "DD/MM/YYYY"),
+          ],
         ));
   }
 
   // *------Faq Container------*
-  Widget _faqContainer({required LanguageChangeViewModel langProvider}) {
-    return Directionality(
-        textDirection: getTextDirection(langProvider),
-        child: Container(
-          width: double.infinity,
-          height: 170,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(kCardRadius),
-              border: Border.all(color: AppColors.hintDarkGrey)),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(kCardRadius - 1),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: CustomPaint(
-                    painter: FaqSmallPainter(),
-                    size: const Size(double.maxFinite, 90),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: CustomPaint(
-                    foregroundPainter: FaqBigPainter(),
-                    size: const Size(double.maxFinite, 120),
-                  ),
-                ),
-                Container(
-                  color: AppColors.lightBlue0.withOpacity(0.3),
-                ),
-
-                Positioned(
-                  top: kPadding,
-                  bottom: kPadding,
-                  right: kPadding,
-                  child: SvgPicture.asset(
-                    "assets/icon_faq_home.svg",
-                  ),
-                ),
-
-              ],
-            ),
-          ),
-        ));
-  }
+  // Widget _faqContainer({required LanguageChangeViewModel langProvider}) {
+  //   return Container(
+  //     width: double.infinity,
+  //     height: 170,
+  //     decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(kCardRadius),
+  //         border: Border.all(color: AppColors.hintDarkGrey)),
+  //     child: ClipRRect(
+  //       borderRadius: BorderRadius.circular(kCardRadius - 1),
+  //       child: Stack(
+  //         children: [
+  //           Align(
+  //             alignment: Alignment.bottomCenter,
+  //             child: CustomPaint(
+  //               painter: FaqSmallPainter(),
+  //               size: const Size(double.maxFinite, 90),
+  //             ),
+  //           ),
+  //           Align(
+  //             alignment: Alignment.bottomCenter,
+  //             child: CustomPaint(
+  //               foregroundPainter: FaqBigPainter(),
+  //               size: const Size(double.maxFinite, 120),
+  //             ),
+  //           ),
+  //           Container(
+  //             color: AppColors.lightBlue0.withOpacity(0.3),
+  //           ),
+  //           Positioned(
+  //             top: kPadding,
+  //             bottom: kPadding,
+  //             right: kPadding,
+  //             child: SvgPicture.asset(
+  //               "assets/icon_faq_home.svg",
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildAmountAndButton(
       {required LanguageChangeViewModel langProvider}) {
@@ -448,88 +429,162 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   Widget _buildDateInfo(
       {required LanguageChangeViewModel langProvider, required dynamic date}) {
-    return Directionality(
-      textDirection: getTextDirection(langProvider),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(Icons.calendar_month_outlined, color: Color(0xffA7B0C1)),
-          const SizedBox(width: 5),
-          Text(
-            date ?? "01/09/2023 - 01/09/2024",
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: AppColors.hintDarkGrey,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Icon(Icons.calendar_month_outlined, color: Color(0xffA7B0C1)),
+        const SizedBox(width: 5),
+        Text(
+          date ?? "01/09/2023 - 01/09/2024",
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: AppColors.hintDarkGrey,
           ),
-          // SizedBox(width: 5),
-          // Text(
-          //   "(12 mon)",
-          //   style: TextStyle(
-          //     fontSize: 12,
-          //     fontWeight: FontWeight.w400,
-          //     color: Color(0xff8591A7),
-          //   ),
-          // ),
-        ],
-      ),
+        ),
+        // SizedBox(width: 5),
+        // Text(
+        //   "(12 mon)",
+        //   style: TextStyle(
+        //     fontSize: 12,
+        //     fontWeight: FontWeight.w400,
+        //     color: Color(0xff8591A7),
+        //   ),
+        // ),
+      ],
     );
   }
 
   Widget _aboutOrganization({required LanguageChangeViewModel langProvider}) {
-    return Material(
-      elevation: 1,
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+    return _homeViewCard(
+        icon: SvgPicture.asset(
+          "assets/aboutTheOrganization.svg",
+          height: 20,
+          width: 20,
+        ),
+        title: AppLocalizations.of(context)!.aboutTheOrganization,
+        langProvider: langProvider,
+        content: Column(
           children: [
-            // Title
-            _buildHomeViewCardTitle(
-              icon: SvgPicture.asset(
-                "assets/aboutTheOrganization.svg",
-                height: 20,
-                width: 20,
-              ),
-              title: AppLocalizations.of(context)!.aboutTheOrganization,
-              langProvider: langProvider,
-            ),
-            const SizedBox(height: 15),
             const Divider(color: Color(0xffDFDFDF)),
             const SizedBox(height: 10),
             _buildInfoRow1(),
             const SizedBox(height: 10),
             _buildInfoRow2(),
           ],
+        ));
+  }
+
+  // Apply Scholarship Button
+  Widget _applyScholarshipButton(
+      {required LanguageChangeViewModel langProvider}) {
+    return _homeViewCard(
+        langProvider: langProvider,
+        title: AppLocalizations.of(context)!.scholarshipOffice,
+        icon: Image.asset("assets/scholarship_office.png"),
+        content: CustomButton(
+          buttonName: "Apply Scholarship",
+          isLoading: false,
+          onTap: () {},
+          textDirection: getTextDirection(langProvider),
+          textColor: AppColors.scoThemeColor,
+          borderColor: AppColors.scoThemeColor,
+          buttonColor: Colors.white,
+          fontSize: 16,
+          height: 45,
+        ));
+  }
+
+  // *---- Sco programs ----*
+
+  Widget _scoPrograms({required LanguageChangeViewModel langProvider}) {
+    return Column(
+      crossAxisAlignment:CrossAxisAlignment.start
+      ,children: [
+        Row(
+          children: [
+
+            // title for sco programs
+            Text("SCO Program",style: AppTextStyles.appBarTitleStyle(),textAlign: TextAlign.left,overflow: TextOverflow.ellipsis,),
+
+            // slider for sco programs
+
+
+          ],
         ),
-      ),
+      CarouselSlider(
+        options: CarouselOptions(
+          // height: orientation == Orientation.portrait ? 190.0 : 210,
+          aspectRatio: 16 / 9,
+          viewportFraction: 1,
+          initialPage: 0,
+          enableInfiniteScroll: true,
+          reverse: false,
+          autoPlay: true,
+          autoPlayInterval: const Duration(seconds: 3),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enlargeCenterPage: true,
+          enlargeFactor: 0.2,
+          scrollDirection: Axis.horizontal,
+        ),
+        items: [CustomScoProgramTile(
+            textDirection: getTextDirection(langProvider),
+            imagePath: "assets/sidemenu/distinguished_doctors.jpg",
+            title: "Scholarships in Abroad",
+            subTitle:
+            "The office, which was establishe in 1999 under the direct..",
+            onTap: () {})]),
+
+    ],
     );
   }
 
-  Widget _buildHomeViewCardTitle(
+  // main card for home
+  Widget _homeViewCard(
       {required String title,
       required Widget icon,
+      required Widget content,
       required LanguageChangeViewModel langProvider}) {
-    return Directionality(
-      textDirection: getTextDirection(langProvider),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          icon,
-          const SizedBox(width: 10),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Color(0xff093B59),
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
+    return Material(
+      elevation: 1,
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(kCardRadius),
+      child: Directionality(
+        textDirection: getTextDirection(langProvider),
+        child: Padding(
+          padding: EdgeInsets.all(kPadding),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(child: Row(
+                    children: [
+                      icon,
+                      const SizedBox(width: 10),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          color: Color(0xff093B59),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ))
+                 ,
+                  Icon( getTextDirection(langProvider) == TextDirection.rtl ? Icons.keyboard_arrow_left_outlined : Icons.keyboard_arrow_right_outlined)
+                ],
+              ),
+              kFormHeight,
+              content
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -557,22 +612,17 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/scholarships.svg",
                 name: AppLocalizations.of(context)!.scholarship,
-                onTap: () async{
-
+                onTap: () async {
                   // check if user is logged in or not
                   final bool alreadyLoggedIn = await _authService.isLoggedIn();
-                  if(!alreadyLoggedIn)
-                  {
-              _navigationServices.goBackUntilFirstScreen();
-              _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                }
-                  else{
+                  if (!alreadyLoggedIn) {
+                    _navigationServices.goBackUntilFirstScreen();
+                    _navigationServices.pushCupertino(CupertinoPageRoute(
+                        builder: (context) => const LoginView()));
+                  } else {
                     _navigationServices.pushSimpleWithAnimationRoute(
                         createRoute(const SelectScholarshipTypeView()));
                   }
-
-
-
                 },
                 textDirection: getTextDirection(provider),
               ),
@@ -581,9 +631,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               child: CustomAboutOrganizationContainers(
                 assetName: "assets/certificates.svg",
                 name: AppLocalizations.of(context)!.certificates,
-                onTap: () {
-
-                },
+                onTap: () {},
                 textDirection: getTextDirection(provider),
               ),
             ),

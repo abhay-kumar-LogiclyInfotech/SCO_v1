@@ -53,40 +53,40 @@ class _StepsProgressViewState extends State<StepsProgressView> with MediaQueryMi
     // Switch case for text based on step
     switch (step) {
       case 0:
-        return "Student Undertaking Section";
+        return "Student Undertaking";
 
       case 1:
-        return "Student Details Section";
+        return "Student Details";
 
       case 2:
         if (shouldShowHighSchoolDetails()) {
-          return "High School Details Section";
+          return "High School Details";
         }
         // Graduation Details Section as fallback
-        return "Graduation Details Section";
+        return "Graduation Details";
 
       case 3:
         if (isUniversityAndMajorsRequired()) {
-          return "University and Majors Section";
+          return "University and Majors";
         }
         return "Not Applicable for University and Majors";
 
       case 4:
         if (isAttachmentSectionForExt()) {
-          return "Attachments Section";
+          return "Attachments";
         } else if (isRequiredExaminationDetailsRequired()) {
-          return "Required Examinations Section";
+          return "Required Examinations";
         }
-        return "No Examination Required Section";
+        return "No Examination Required";
 
       case 5:
       // Attachments Section if UGRD key or show Employment History if applicable
         if (acadmicCareer == 'UGRD') {
-          return "UGRD Attachments Section";
+          return "UGRD Attachments";
         } else if (shouldDisplayEmploymentHistory()) {
-          return "Employment History Section";
+          return "Employment History";
         }
-        return "No Employment History Required Section";
+        return "No Employment History Required";
 
       case 6:
       // Final Confirmation or Attachments Section based on key
@@ -94,17 +94,17 @@ class _StepsProgressViewState extends State<StepsProgressView> with MediaQueryMi
             key == 'SCOUGRDINT' ||
             key == 'SCOMETLOGINT' ||
             key == 'SCOUGRDEXT') {
-          return "Final Confirmation Section";
+          return "Final Confirmation";
         } else {
-          return "Attachments Section";
+          return "Attachments";
         }
 
       case 7:
       // Confirmation at the end
-        return "Final Confirmation Section";
+        return "Final Confirmation";
 
       default:
-        return "Unknown Section"; // Default case for unexpected step values
+        return "Unknown"; // Default case for unexpected step values
     }
   }
 
@@ -113,7 +113,7 @@ class _StepsProgressViewState extends State<StepsProgressView> with MediaQueryMi
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: screenHeight/7,
+      height: 105,
       width: double.infinity,
       child: ListView.builder(
         // shrinkWrap: true,

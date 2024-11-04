@@ -160,7 +160,7 @@ fieldHeading(
 }
 
 // populateCommonDataDropdown method with hide property:
-List<dynamic> populateSimpleValuesFromLOV({
+List<dynamic> populateUniqueSimpleValuesFromLOV({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
   Color? textColor,
@@ -182,6 +182,27 @@ List<dynamic> populateSimpleValuesFromLOV({
   }
 
   return uniqueItemsList;
+}
+
+// populateCommonDataDropdown method with hide property:
+List<dynamic> populateSimpleValuesFromLOV({
+  required List menuItemsList,
+  required LanguageChangeViewModel provider,
+  Color? textColor,
+}) {
+
+  final List<dynamic> finalList = [];
+
+
+  for (var element in menuItemsList) {
+
+      if (element.hide == false) {
+        finalList.add(element);
+      }
+
+  }
+
+  return finalList;
 }
 
 // populateCommonDataDropdown method with hide property:

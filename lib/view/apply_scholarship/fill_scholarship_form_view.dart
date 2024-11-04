@@ -23,6 +23,7 @@ import 'package:sco_v1/resources/components/custom_text_field.dart';
 import 'package:sco_v1/resources/input_formatters/emirates_id_input_formatter.dart';
 import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/apply_scholarship/attachment.dart';
 import 'package:sco_v1/view/apply_scholarship/steps_progress_view.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
@@ -46,6 +47,8 @@ import '../../viewModel/services/navigation_services.dart';
 
 import 'dart:convert';
 import 'package:xml/xml.dart';
+
+import 'form_view_Utils.dart';
 
 class FillScholarshipFormView extends StatefulWidget {
   final String selectedScholarshipConfigurationKey;
@@ -329,7 +332,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
 
       if (Constants.lovCodeMap['SUBJECT']?.values != null) {
-        _highSchoolSubjectsItemsList = populateSimpleValuesFromLOV(
+        _highSchoolSubjectsItemsList = populateUniqueSimpleValuesFromLOV(
             menuItemsList: Constants.lovCodeMap['SUBJECT']!.values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
@@ -397,57 +400,30 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
 
       if (Constants.lovCodeMap['TEST_SCORE_VAL']?.values != null) {
-        _testScoreVal = populateSimpleValuesFromLOV(
+        _testScoreVal = populateUniqueSimpleValuesFromLOV(
             menuItemsList: Constants.lovCodeMap['TEST_SCORE_VAL']!.values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
       }
 
       if (Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null) {
-        _employmentStatusItemsList = populateSimpleValuesFromLOV(
+        _employmentStatusItemsList = populateUniqueSimpleValuesFromLOV(
             menuItemsList: Constants.lovCodeMap['EMPLOYMENT_STATUS']!.values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
       }
 
-      // when we approved checklist of attachments
-      if (_selectedScholarship?.approvedChecklistCode != null &&
-          _selectedScholarship!.approvedChecklistCode.toString().isNotEmpty) {
-        // attachments list
-        _attachmentsList = populateSimpleValuesFromLOV(
-            menuItemsList: Constants
-                .lovCodeMap[
-                    _selectedScholarship!.approvedChecklistCode.toString()]!
-                .values!,
-            provider: langProvider,
-            textColor: AppColors.scoButtonColor);
 
-        // creating attachments list
-        for (var element in _attachmentsList) {
-          final processCD =
-              element.code.toString().split(':').elementAt(0).toString();
-          final documentCD = element.code.toString().split(':').last.toString();
-          _myAttachmentsList.add(Attachment(
-            processCDController: TextEditingController(text: processCD),
-            documentCDController: TextEditingController(text: documentCD),
-            descriptionController: TextEditingController(),
-            userFileNameController: TextEditingController(),
-            commentController: TextEditingController(),
-            base64StringController: TextEditingController(),
-            errorMessageController: TextEditingController(),
-          ));
-        }
-      } else {
         // if there is no approved checklist then use simple checklist
-        if (_selectedScholarship?.checklistCode != null &&
-            _selectedScholarship!.checklistCode.toString().isNotEmpty) {
+        if (_selectedScholarship?.checklistCode != null && _selectedScholarship!.checklistCode.toString().isNotEmpty) {
+
           // attachments list
           _attachmentsList = populateSimpleValuesFromLOV(
-              menuItemsList: Constants
-                  .lovCodeMap[_selectedScholarship!.checklistCode.toString()]!
-                  .values!,
+              menuItemsList: Constants.lovCodeMap[_selectedScholarship!.checklistCode.toString()]!.values!,
               provider: langProvider,
               textColor: AppColors.scoButtonColor);
+
+
 
           // creating attachments list
           for (var element in _attachmentsList) {
@@ -464,7 +440,29 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             ));
           }
         }
-      }
+        else{
+          // attachments list
+          _attachmentsList = populateUniqueSimpleValuesFromLOV(
+              menuItemsList: Constants.lovCodeMap['ATTACH_REQ_Y_N']!.values!,
+              provider: langProvider,
+              textColor: AppColors.scoButtonColor);
+          // creating attachments list
+          for (var element in _attachmentsList) {
+            final processCD = element.code.toString().split(':').elementAt(0).toString();
+            final documentCD = element.code.toString().split(':').last.toString();
+            _myAttachmentsList.add(Attachment(
+              processCDController: TextEditingController(text: processCD),
+              documentCDController: TextEditingController(text: documentCD),
+              descriptionController: TextEditingController(),
+              userFileNameController: TextEditingController(),
+              commentController: TextEditingController(),
+              base64StringController: TextEditingController(),
+              errorMessageController: TextEditingController(),
+            ));
+          }
+
+        }
+
 
       _initializeStudentDetailsModels();
 
@@ -1054,21 +1052,19 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     }
 
 
-                    print(cleanedDraft['attachments']);
-
                     // attachments
-                    if (cleanedDraft['attachments'] != null && cleanedDraft['attachments'].toString().trim().isNotEmpty) {
-                      _myAttachmentsList.clear(); // Clear the current list
-                      if(cleanedDraft['attachments'] is List){
-                      for (int index = 0; index < cleanedDraft['attachments'].length; index++) {
-                        var element = cleanedDraft['attachments'][index];
-                        _myAttachmentsList.add(Attachment.fromJson(element));
-                    }}
-                      else{
-              _myAttachmentsList.add(Attachment.fromJson(cleanedDraft['attachments']));
-              }
-
-                    }
+              //       if (cleanedDraft['attachments'] != null && cleanedDraft['attachments'].toString().trim().isNotEmpty) {
+              //         _myAttachmentsList.clear(); // Clear the current list
+              //         if(cleanedDraft['attachments'] is List){
+              //         for (int index = 0; index < cleanedDraft['attachments'].length; index++) {
+              //           var element = cleanedDraft['attachments'][index];
+              //           _myAttachmentsList.add(Attachment.fromJson(element));
+              //       }}
+              //         else{
+              // _myAttachmentsList.add(Attachment.fromJson(cleanedDraft['attachments']));
+              // }
+              //
+              //       }
 
 
                     _navigationService.goBack();
@@ -1610,7 +1606,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   children: [
                     //*--------------------------------------------------------- Arabic Name Section start ------------------------------------------------------------------------------*/
                     // Title for arabic name same as passport
-                    _sectionTitle(title: "Arabic name in passport"),
+                    sectionTitle(title: "Arabic name in passport"),
 
                     // ****************************************************************************************************************************************************
 
@@ -1620,7 +1616,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Name",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _arabicName.studentNameFocusNode,
                         nextFocusNode: _arabicName.fatherNameFocusNode,
                         controller: _arabicName.studentNameController,
@@ -1647,7 +1643,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Father's Name",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode:  _arabicName.fatherNameFocusNode,
                         nextFocusNode:  _arabicName.grandFatherNameFocusNode,
                         controller:  _arabicName.fatherNameController,
@@ -1673,7 +1669,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Grandfather's Name",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _arabicName.grandFatherNameFocusNode,
                         nextFocusNode: _arabicName.familyNameFocusNode,
                         controller: _arabicName.grandFatherNameController,
@@ -1700,7 +1696,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Family Name",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _arabicName.familyNameFocusNode,
                         nextFocusNode: _englishName.studentNameFocusNode,
                         controller: _arabicName.familyNameController,
@@ -1725,7 +1721,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // *--------------------------------------------------------- English Name Section Start ------------------------------------------------------------------------------*/
                     // Title for English name same as passport
-                    _sectionTitle(title: "English name in passport"),
+                    sectionTitle(title: "English name in passport"),
 
                     // ****************************************************************************************************************************************************
 
@@ -1735,7 +1731,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Name",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _englishName.studentNameFocusNode,
                         nextFocusNode: _englishName.fatherNameFocusNode,
                         controller: _englishName.studentNameController,
@@ -1762,7 +1758,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Father's Name",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode:  _englishName.fatherNameFocusNode,
                         nextFocusNode:  _englishName.grandFatherNameFocusNode,
                         controller:  _englishName.fatherNameController,
@@ -1789,7 +1785,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Grandfather's Name",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _englishName.grandFatherNameFocusNode,
                         nextFocusNode: _englishName.familyNameFocusNode,
                         controller: _englishName.grandFatherNameController,
@@ -1817,7 +1813,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Family Name",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _englishName.familyNameFocusNode,
                         nextFocusNode: _englishName.studentNameFocusNode,
                         controller: _englishName.familyNameController,
@@ -1841,7 +1837,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     //*--------------------------------------------------------- Passport Data Section Start ------------------------------------------------------------------------------*/
                     // passport data heading
-                    _sectionTitle(title: "Passport Data"),
+                    sectionTitle(title: "Passport Data"),
 
                     // ****************************************************************************************************************************************************
                     kFormHeight,
@@ -1850,7 +1846,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Nationality",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormDropdown(
+                    scholarshipFormDropdown(context:context,
                       controller: _passportNationalityController,
                       currentFocusNode: _passportNationalityFocusNode,
                       menuItemsList: _nationalityMenuItemsList,
@@ -1860,24 +1856,22 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         _passportNationalityError = null;
                         setState(() {
                           _passportNationalityController.text = value!;
+                          _isMotherUAECheckbox = false;
 
                           // if nationality is not UAE then clear all the values of the family information
                           if (value! != 'ARE') {
                             _familyInformationEmiratesController.clear();
                             _familyInformationTownVillageNoController.clear();
-                            _familyInformationParentGuardianNameController
-                                .clear();
+                            _familyInformationParentGuardianNameController.clear();
                             _familyInformationRelationTypeController.clear();
-                            _familyInformationFamilyBookNumberController
-                                .clear();
+                            _familyInformationFamilyBookNumberController.clear();
                           }
 
                           // by default set no for military service
                           _isMilitaryService = MilitaryStatus.no;
 
                           //This thing is creating error: don't know how to fix it:
-                          FocusScope.of(context)
-                              .requestFocus(_passportNumberFocusNode);
+                          FocusScope.of(context).requestFocus(_passportNumberFocusNode);
                         });
                       },
                     ),
@@ -1890,7 +1884,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Passport Number",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _passportNumberFocusNode,
                         controller: _passportNumberController,
                         hintText: "Enter Passport Number",
@@ -1915,7 +1909,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Issue Date",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormDateField(
+                    scholarshipFormDateField(
                       currentFocusNode: _passportIssueDateFocusNode,
                       controller: _passportIssueDateController,
                       hintText: "Enter Issue Date",
@@ -1966,7 +1960,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Expiry Date",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormDateField(
+                    scholarshipFormDateField(
                       currentFocusNode: _passportExpiryDateFocusNode,
                       controller: _passportExpiryDateController,
                       hintText: "Enter Expiry Date",
@@ -2018,7 +2012,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Place Of Issue",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _passportPlaceOfIssueFocusNode,
                         nextFocusNode: _passportUnifiedNoFocusNode,
                         controller: _passportPlaceOfIssueController,
@@ -2044,7 +2038,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Passport Unified Number",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _passportUnifiedNoFocusNode,
                         nextFocusNode: _emiratesIdFocusNode,
                         controller: _passportUnifiedNoController,
@@ -2067,7 +2061,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // *--------------------------------------------------------- Personal Details Section start ------------------------------------------------------------------------------*/
                     // personal Details heading
-                    _sectionTitle(title: "Personal Details"),
+                    sectionTitle(title: "Personal Details"),
                     // ****************************************************************************************************************************************************
 
                     kFormHeight,
@@ -2076,7 +2070,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Emirates ID",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                       readOnly: true,
                       currentFocusNode: _emiratesIdFocusNode,
                       nextFocusNode: _emiratesIdFocusNode,
@@ -2103,7 +2097,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Emirates ID Expiry Date",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormDateField(
+                    scholarshipFormDateField(
                       currentFocusNode: _emiratesIdExpiryDateFocusNode,
                       controller: _emiratesIdExpiryDateController,
                       hintText: "Enter Emirates ID Expiry Date",
@@ -2155,7 +2149,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Date Of Birth",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormDateField(
+                    scholarshipFormDateField(
                       currentFocusNode: _dateOfBirthFocusNode,
                       controller: _dateOfBirthController,
                       hintText: "Enter Date Of Birth",
@@ -2212,7 +2206,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Place Of Birth",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _placeOfBirthFocusNode,
                         nextFocusNode: _genderFocusNode,
                         controller: _placeOfBirthController,
@@ -2237,7 +2231,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Gender",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormDropdown(
+                    scholarshipFormDropdown(context:context,
                       controller: _genderController,
                       currentFocusNode: _genderFocusNode,
                       menuItemsList: _genderMenuItemsList,
@@ -2263,7 +2257,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Marital Status",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormDropdown(
+                    scholarshipFormDropdown(context:context,
                       controller: _maritalStatusController,
                       currentFocusNode: _maritalStatusFocusNode,
                       menuItemsList: _maritalStatusMenuItemsList,
@@ -2288,7 +2282,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         title: "Email Address",
                         important: true,
                         langProvider: langProvider),
-                    _scholarshipFormTextField(
+                    scholarshipFormTextField(
                         currentFocusNode: _studentEmailFocusNode,
                         // nextFocusNode: ,
                         controller: _studentEmailController,
@@ -2340,7 +2334,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                                   // *--------------------------------------------------------- Family Information Section end ------------------------------------------------------------------------------*/
                                   // Family Information
-                                  _sectionTitle(title: "Family Information"),
+                                  sectionTitle(title: "Family Information"),
                                   // ****************************************************************************************************************************************************
                                   kFormHeight,
                                   // Emirates
@@ -2349,7 +2343,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       important: true,
                                       langProvider: langProvider),
 
-                                  _scholarshipFormDropdown(
+                                  scholarshipFormDropdown(context:context,
                                     controller:
                                         _familyInformationEmiratesController,
                                     currentFocusNode:
@@ -2389,7 +2383,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       important: true,
                                       langProvider: langProvider),
 
-                                  _scholarshipFormDropdown(
+                                  scholarshipFormDropdown(context:context,
                                     controller:
                                         _familyInformationTownVillageNoController,
                                     currentFocusNode:
@@ -2422,7 +2416,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       title: "Parent/Guardian name",
                                       important: true,
                                       langProvider: langProvider),
-                                  _scholarshipFormTextField(
+                                  scholarshipFormTextField(
                                       currentFocusNode:
                                           _familyInformationParentGuardianNameFocusNode,
                                       nextFocusNode:
@@ -2454,7 +2448,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       title: "Relation Type",
                                       important: true,
                                       langProvider: langProvider),
-                                  _scholarshipFormDropdown(
+                                  scholarshipFormDropdown(context:context,
                                     controller:
                                         _familyInformationRelationTypeController,
                                     currentFocusNode:
@@ -2486,7 +2480,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       title: "Family Book Number",
                                       important: false,
                                       langProvider: langProvider),
-                                  _scholarshipFormTextField(
+                                  scholarshipFormTextField(
                                       currentFocusNode:
                                           _familyInformationFamilyBookNumberFocusNode,
                                       controller:
@@ -2516,7 +2510,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       title: "Mother Name",
                                       important: true,
                                       langProvider: langProvider),
-                                  _scholarshipFormTextField(
+                                  scholarshipFormTextField(
                                       currentFocusNode:
                                           _familyInformationMotherNameFocusNode,
                                       controller:
@@ -2547,7 +2541,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // *--------------------------------------------------------- Relative Information Section Start ------------------------------------------------------------------------------*/
                     // Relative Information
-                    _sectionTitle(title: "Add a Scholarship Relative"),
+                    sectionTitle(title: "Add a Scholarship Relative"),
                     // ****************************************************************************************************************************************************
 
                     kFormHeight,
@@ -2617,7 +2611,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           title: "Relative Name",
                                           important: false,
                                           langProvider: langProvider),
-                                      _scholarshipFormTextField(
+                                      scholarshipFormTextField(
                                           currentFocusNode: relativeInformation
                                               .relativeNameFocusNode,
                                           nextFocusNode: relativeInformation
@@ -2651,7 +2645,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           title: "Relation Type",
                                           important: true,
                                           langProvider: langProvider),
-                                      _scholarshipFormDropdown(
+                                      scholarshipFormDropdown(context:context,
                                         controller: relativeInformation
                                             .relationTypeController,
                                         currentFocusNode: relativeInformation
@@ -2686,7 +2680,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           title: "Country - University",
                                           important: false,
                                           langProvider: langProvider),
-                                      _scholarshipFormTextField(
+                                      scholarshipFormTextField(
                                           currentFocusNode: relativeInformation
                                               .countryUniversityFocusNode,
                                           nextFocusNode: index <
@@ -2726,7 +2720,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       //     title: "Family Book Number",
                                       //     important: true,
                                       //     langProvider: langProvider),
-                                      // _scholarshipFormTextField(
+                                      // scholarshipFormTextField(
                                       //     currentFocusNode: relativeInformation
                                       //         .familyBookNumberFocusNode,
                                       //     nextFocusNode: index <
@@ -2808,7 +2802,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // ****************************************************************************************************************************************************
                     // Title for Contact Information
-                    _sectionTitle(title: "Contact Information"),
+                    sectionTitle(title: "Contact Information"),
                     kFormHeight,
                     // ****************************************************************************************************************************************************
 
@@ -2821,7 +2815,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // ****************************************************************************************************************************************************
                     // Title for Address Information
-                    _sectionTitle(title: "Address Data"),
+                    sectionTitle(title: "Address Data"),
                     kFormHeight,
                     // ****************************************************************************************************************************************************
                     _addressInformationSection(),
@@ -2838,7 +2832,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                               // ****************************************************************************************************************************************************
                               // Title for Address Information
-                              _sectionTitle(title: "Military Services"),
+                              sectionTitle(title: "Military Services"),
                               kFormHeight,
                               // ****************************************************************************************************************************************************
 
@@ -2926,7 +2920,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Phone Type",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormDropdown(
+                  scholarshipFormDropdown(context:context,
                     readOnly: (index == 0 || index == 1),
                     filled: (index == 0 || index == 1),
                     controller: phoneNumber.phoneTypeController,
@@ -2952,7 +2946,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Phone Number",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       currentFocusNode: phoneNumber.phoneNumberFocusNode,
                       nextFocusNode: phoneNumber.countryCodeFocusNode,
                       controller: phoneNumber.phoneNumberController,
@@ -2977,7 +2971,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Country Code",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       currentFocusNode: phoneNumber.countryCodeFocusNode,
                       nextFocusNode: index < _phoneNumberList.length - 1
                           ? _phoneNumberList[index + 1].phoneTypeFocusNode
@@ -3167,7 +3161,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Address Type",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormDropdown(
+                  scholarshipFormDropdown(context:context,
                     controller: addressInformation.addressTypeController,
                     currentFocusNode: addressInformation.addressTypeFocusNode,
                     menuItemsList: _addressTypeMenuItemsList,
@@ -3191,7 +3185,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Address Line 1",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       currentFocusNode:
                           addressInformation.addressLine1FocusNode,
                       nextFocusNode: addressInformation.addressLine2FocusNode,
@@ -3216,7 +3210,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Address Line 2",
                       important: false,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       currentFocusNode:
                           addressInformation.addressLine2FocusNode,
                       nextFocusNode: addressInformation.countryFocusNode,
@@ -3242,7 +3236,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Country",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormDropdown(
+                  scholarshipFormDropdown(context:context,
                     controller: addressInformation.countryController,
                     currentFocusNode: addressInformation.countryFocusNode,
                     menuItemsList: _nationalityMenuItemsList,
@@ -3277,7 +3271,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                               .stateDropdownMenuItems?.isNotEmpty ??
                           false,
                       langProvider: langProvider),
-                  _scholarshipFormDropdown(
+                  scholarshipFormDropdown(context:context,
                     filled: addressInformation.stateDropdownMenuItems?.isEmpty,
                     controller: addressInformation.stateController,
                     currentFocusNode: addressInformation.stateFocusNode,
@@ -3303,7 +3297,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "City",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       currentFocusNode: addressInformation.cityFocusNode,
                       nextFocusNode: addressInformation.postalCodeFocusNode,
                       controller: addressInformation.cityController,
@@ -3327,7 +3321,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "PO Box",
                       important: false,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       currentFocusNode: addressInformation.postalCodeFocusNode,
                       controller: addressInformation.postalCodeController,
                       hintText: "Enter PO Box",
@@ -3511,7 +3505,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                 title: "Start Date",
                 important: true,
                 langProvider: langProvider),
-            _scholarshipFormDateField(
+            scholarshipFormDateField(
               currentFocusNode: _militaryServiceStartDateFocusNode,
               controller: _militaryServiceStartDateController,
               hintText: "Select Start Date",
@@ -3566,7 +3560,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             fieldHeading(
                 title: "End Date", important: true, langProvider: langProvider),
 
-            _scholarshipFormDateField(
+            scholarshipFormDateField(
               currentFocusNode: _militaryServiceEndDateFocusNode,
               controller: _militaryServiceEndDateController,
               hintText: "Select End Date",
@@ -3638,7 +3632,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         kFormHeight,
         fieldHeading(
             title: "Reason", important: true, langProvider: langProvider),
-        _scholarshipFormTextField(
+        scholarshipFormTextField(
             currentFocusNode: _reasonForMilitaryFocusNode,
             controller: _reasonForMilitaryController,
             maxLines: 3,
@@ -3909,7 +3903,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                               children: [
                                 // ****************************************************************************************************************************************************
 
-                                _sectionTitle(
+                                sectionTitle(
                                     title: "High School Detail ${index + 1}"),
 
                                 kFormHeight,
@@ -3929,7 +3923,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                             1 // Todo: before <=2 did be me is <=1
 
                                     ? Column(children: [
-                                        _scholarshipFormDropdown(
+                                        scholarshipFormDropdown(context:context,
                                           readOnly: true,
                                           filled: true,
                                           controller:
@@ -3974,7 +3968,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                     'HCHL' &&
                                                 index >= 1) ||
                                             index >= 2)
-                                        ? _scholarshipFormDropdown(
+                                        ? scholarshipFormDropdown(context:context,
                                             controller: highSchoolInfo
                                                 .hsLevelController,
                                             currentFocusNode:
@@ -4033,7 +4027,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     important: true,
                                     langProvider: langProvider),
 
-                                _scholarshipFormDropdown(
+                                scholarshipFormDropdown(context:context,
                                   controller:
                                       highSchoolInfo.hsCountryController,
                                   currentFocusNode:
@@ -4084,7 +4078,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         false,
                                     langProvider: langProvider),
 
-                                _scholarshipFormDropdown(
+                                scholarshipFormDropdown(context:context,
                                   filled: highSchoolInfo
                                           .schoolStateDropdownMenuItems
                                           ?.isEmpty ??
@@ -4140,7 +4134,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   .hsCountryController.text ==
                                               'ARE',
                                           langProvider: langProvider),
-                                      _scholarshipFormDropdown(
+                                      scholarshipFormDropdown(context:context,
                                         controller:
                                             highSchoolInfo.hsNameController,
                                         currentFocusNode:
@@ -4186,7 +4180,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                               : "School Name",
                                           important: true,
                                           langProvider: langProvider),
-                                      _scholarshipFormTextField(
+                                      scholarshipFormTextField(
                                           currentFocusNode: highSchoolInfo
                                               .otherHsNameFocusNode,
                                           nextFocusNode:
@@ -4245,7 +4239,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     important: true,
                                     langProvider: langProvider),
 
-                                _scholarshipFormDropdown(
+                                scholarshipFormDropdown(context:context,
                                   controller: highSchoolInfo.hsTypeController,
                                   currentFocusNode:
                                       highSchoolInfo.hsTypeFocusNode,
@@ -4288,7 +4282,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     important: true,
                                     langProvider: langProvider),
 
-                                _scholarshipFormDropdown(
+                                scholarshipFormDropdown(context:context,
                                   controller:
                                       highSchoolInfo.curriculumTypeController,
                                   currentFocusNode:
@@ -4319,7 +4313,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     title: "Curriculum Average",
                                     important: true,
                                     langProvider: langProvider),
-                                _scholarshipFormTextField(
+                                scholarshipFormTextField(
                                     currentFocusNode: highSchoolInfo
                                         .curriculumAverageFocusNode,
                                     nextFocusNode:
@@ -4360,7 +4354,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         .text
                                         .isNotEmpty),
                                     langProvider: langProvider),
-                                _scholarshipFormDateField(
+                                scholarshipFormDateField(
                                   // Prevent manual typing
                                   currentFocusNode:
                                       highSchoolInfo.yearOfPassingFocusNode,
@@ -4461,7 +4455,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     color:
                                         AppColors.lightBlue1.withOpacity(0.4),
                                     child: Row(children: [
-                                      _sectionTitle(
+                                      sectionTitle(
                                           title: "Year of Graduation"),
                                       kFormHeight,
                                       Expanded(
@@ -4477,7 +4471,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                 // ****************************************************************************************************************************************************
 
                                 kFormHeight,
-                                _sectionTitle(title: "Subjects"),
+                                sectionTitle(title: "Subjects"),
                                 kFormHeight,
                                 // ****************************************************************************************************************************************************
                                 // regular subjects
@@ -4493,7 +4487,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         _subjectTitle(element
                                             .subjectTypeController.text
                                             .toString()),
-                                        _scholarshipFormTextField(
+                                        scholarshipFormTextField(
                                           currentFocusNode:
                                               element.gradeFocusNode,
                                           nextFocusNode: index + 1 <
@@ -4546,7 +4540,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         _subjectTitle(element.subjectTypeController.text.toString()),
 
                                         // subject Name
-                                        _scholarshipFormTextField(
+                                        scholarshipFormTextField(
                                           currentFocusNode: element.otherSubjectNameFocusNode,
                                           nextFocusNode: element.gradeFocusNode,
                                           controller: element.otherSubjectNameController,
@@ -4568,7 +4562,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                         ),
                                         kFormHeight,
                                         // grade
-                                        _scholarshipFormTextField(
+                                        scholarshipFormTextField(
                                           currentFocusNode:
                                               element.gradeFocusNode,
                                           nextFocusNode: index + 1 <
@@ -4837,7 +4831,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   children: [
                                     // ****************************************************************************************************************************************************
 
-                                    _sectionTitle(
+                                    sectionTitle(
                                         title: _selectedScholarship
                                                     ?.acadmicCareer ==
                                                 'DDS'
@@ -4921,7 +4915,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   title: "Last Term",
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormDropdown(
+                                              scholarshipFormDropdown(context:context,
                                                 controller: graduationInfo
                                                     .lastTermController,
                                                 currentFocusNode: graduationInfo
@@ -5037,7 +5031,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Graduation Level",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormDropdown(
+                  scholarshipFormDropdown(context:context,
                     controller: graduationInfo.levelController,
                     currentFocusNode: graduationInfo.levelFocusNode,
                     menuItemsList: _graduationLevelMenuItems ?? [],
@@ -5095,7 +5089,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "DDS Graduation Level",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormDropdown(
+                  scholarshipFormDropdown(context:context,
                     controller: graduationInfo.levelController,
                     currentFocusNode: graduationInfo.levelFocusNode,
                     menuItemsList: _graduationLevelDDSMenuItems ?? [],
@@ -5140,7 +5134,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         // country
         fieldHeading(
             title: "Country", important: true, langProvider: langProvider),
-        _scholarshipFormDropdown(
+        scholarshipFormDropdown(context:context,
           controller: graduationInfo.countryController,
           currentFocusNode: graduationInfo.countryFocusNode,
           menuItemsList: _nationalityMenuItemsList ?? [],
@@ -5180,7 +5174,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Graduation University",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormDropdown(
+                  scholarshipFormDropdown(context:context,
                     controller: graduationInfo.universityController,
                     currentFocusNode: graduationInfo.universityFocusNode,
                     menuItemsList: graduationInfo.university ?? [],
@@ -5217,7 +5211,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           : 'dds.university',
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       maxLength: 40,
                       currentFocusNode: graduationInfo.otherUniversityFocusNode,
                       nextFocusNode: graduationInfo.majorFocusNode,
@@ -5250,7 +5244,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                 : 'dds.major',
             important: true,
             langProvider: langProvider),
-        _scholarshipFormTextField(
+        scholarshipFormTextField(
             maxLength: 40,
             currentFocusNode: graduationInfo.majorFocusNode,
             nextFocusNode: graduationInfo.cgpaFocusNode,
@@ -5273,7 +5267,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         // cgpa
         fieldHeading(
             title: "CGPA", important: true, langProvider: langProvider),
-        _scholarshipFormTextField(
+        scholarshipFormTextField(
             maxLength: 4,
             currentFocusNode: graduationInfo.cgpaFocusNode,
             nextFocusNode: graduationInfo.graduationStartDateFocusNode,
@@ -5294,7 +5288,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         // start date
         fieldHeading(
             title: "Start Date", important: true, langProvider: langProvider),
-        _scholarshipFormDateField(
+        scholarshipFormDateField(
           currentFocusNode: graduationInfo.graduationStartDateFocusNode,
           controller: graduationInfo.graduationStartDateController,
           hintText: "Select Start Date",
@@ -5352,7 +5346,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             important: (!graduationInfo.currentlyStudying &&
                 graduationInfo.levelController.text.isNotEmpty),
             langProvider: langProvider),
-        _scholarshipFormDateField(
+        scholarshipFormDateField(
           filled: !(!graduationInfo.currentlyStudying &&
               graduationInfo.levelController.text.isNotEmpty),
           currentFocusNode: graduationInfo.graduationEndDateFocusNode,
@@ -5463,7 +5457,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Sponsorship",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       maxLength: 50,
                       currentFocusNode: graduationInfo.sponsorShipFocusNode,
                       nextFocusNode: graduationInfo.caseStudyTitleFocusNode,
@@ -5502,7 +5496,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   kFormHeight,
                   // ****************************************************************************************************************************************************
 
-                  _sectionTitle(title: "Case Study"),
+                  sectionTitle(title: "Case Study"),
                   // ****************************************************************************************************************************************************
 
                   kFormHeight,
@@ -5510,7 +5504,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Title",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       maxLength: 50,
                       currentFocusNode: graduationInfo.caseStudyTitleFocusNode,
                       nextFocusNode: graduationInfo.caseStudyStartYearFocusNode,
@@ -5533,7 +5527,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Start Year",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormDropdown(
+                  scholarshipFormDropdown(context:context,
                     controller: graduationInfo.caseStudyStartYearController,
                     currentFocusNode:
                         graduationInfo.caseStudyStartYearFocusNode,
@@ -5560,7 +5554,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                       title: "Case Study Details",
                       important: true,
                       langProvider: langProvider),
-                  _scholarshipFormTextField(
+                  scholarshipFormTextField(
                       maxLength: 500,
                       maxLines: 5,
                       currentFocusNode:
@@ -5602,7 +5596,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             title: "Graduation Level",
             important: true,
             langProvider: langProvider),
-        _scholarshipFormDropdown(
+        scholarshipFormDropdown(context:context,
           readOnly: true,
           filled: true,
           controller: graduationInfo.levelController,
@@ -5913,7 +5907,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                 important: true,
                                 langProvider: langProvider,
                               ),
-                              _scholarshipFormDropdown(
+                              scholarshipFormDropdown(context:context,
                                 controller: _acadProgramPgrdController,
                                 currentFocusNode: _acadProgramPgrdFocusNode,
                                 menuItemsList: _acadProgramPgrdMenuItemsList,
@@ -5964,7 +5958,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   'DDS' &&
                                               index == 0,
                                       langProvider: langProvider),
-                                  _scholarshipFormDropdown(
+                                  scholarshipFormDropdown(context:context,
                                     controller: majorInfo.majorController,
                                     currentFocusNode: majorInfo.majorFocusNode,
                                     menuItemsList: _majorsMenuItemsList ?? [],
@@ -6023,7 +6017,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                 important: true,
                                 langProvider: langProvider,
                               ),
-                              _scholarshipFormDropdown(
+                              scholarshipFormDropdown(context:context,
                                 controller: _acadProgramDdsController,
                                 currentFocusNode: _acadProgramDdsFocusNode,
                                 menuItemsList: _acadProgramDdsMenuItemsList,
@@ -6071,7 +6065,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                       important: true,
                                       langProvider: langProvider),
 
-                                  _scholarshipFormDropdown(
+                                  scholarshipFormDropdown(context:context,
                                     readOnly: isStudyCountry,
                                     filled: isStudyCountry,
                                     controller:
@@ -6104,7 +6098,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                 title: "Majors",
                                                 important: true,
                                                 langProvider: langProvider),
-                                            _scholarshipFormDropdown(
+                                            scholarshipFormDropdown(context:context,
                                               controller: universityInfo
                                                   .majorsController,
                                               currentFocusNode: universityInfo
@@ -6173,7 +6167,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                         : "dds.major",
                                                 important: _selectedScholarship?.acadmicCareer != 'DDS' && universityInfo.majorsController.text == 'OTH' && (universityInfo.countryIdController.text.isNotEmpty || universityInfo.otherMajorsController.text.isNotEmpty || universityInfo.otherUniversityNameController.text.isNotEmpty || universityInfo.statusController.text.isNotEmpty),
                                                 langProvider: langProvider),
-                                            _scholarshipFormTextField(
+                                            scholarshipFormTextField(
                                                 currentFocusNode: universityInfo.otherMajorsFocusNode,
                                                 nextFocusNode: universityInfo.universityIdFocusNode,
                                                 controller: universityInfo.otherMajorsController,
@@ -6232,7 +6226,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                 title: "University",
                                                 important: true,
                                                 langProvider: langProvider),
-                                            _scholarshipFormDropdown(
+                                            scholarshipFormDropdown(context:context,
                                               controller: universityInfo
                                                   .universityIdController,
                                               currentFocusNode: universityInfo
@@ -6324,7 +6318,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                             .text
                                                             .isNotEmpty)),
                                                 langProvider: langProvider),
-                                            _scholarshipFormTextField(
+                                            scholarshipFormTextField(
                                                 currentFocusNode: universityInfo
                                                     .otherUniversityNameFocusNode,
                                                 nextFocusNode: universityInfo
@@ -6395,7 +6389,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   .text.isNotEmpty),
                                       langProvider: langProvider),
 
-                                  _scholarshipFormDropdown(
+                                  scholarshipFormDropdown(context:context,
                                     controller: universityInfo.statusController,
                                     currentFocusNode: universityInfo.statusFocusNode,
                                     menuItemsList: _universityPriorityStatus ?? [],
@@ -6590,7 +6584,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     title: "Examination",
                                     important: true,
                                     langProvider: langProvider),
-                                _scholarshipFormDropdown(
+                                scholarshipFormDropdown(context:context,
                                   controller:
                                       requiredExamInfo.examinationController,
                                   currentFocusNode:
@@ -6656,7 +6650,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     title: "Examination Type",
                                     important: true,
                                     langProvider: langProvider),
-                                _scholarshipFormDropdown(
+                                scholarshipFormDropdown(context:context,
                                   controller: requiredExamInfo
                                       .examinationTypeIdController,
                                   currentFocusNode: requiredExamInfo
@@ -6703,7 +6697,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                             : 'examination.dds.grade',
                                     important: true,
                                     langProvider: langProvider),
-                                _scholarshipFormTextField(
+                                scholarshipFormTextField(
                                     currentFocusNode: requiredExamInfo.examinationGradeFocusNode,
                                     nextFocusNode: requiredExamInfo.examDateFocusNode,
                                     controller: requiredExamInfo.examinationGradeController,
@@ -6731,7 +6725,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     title: 'Exam Date',
                                     important: true,
                                     langProvider: langProvider),
-                                _scholarshipFormDateField(
+                                scholarshipFormDateField(
                                   currentFocusNode:
                                       requiredExamInfo.examDateFocusNode,
                                   controller:
@@ -6947,7 +6941,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         children: [
                           // ****************************************************************************************************************************************************
                           // previously employed or not be using radio buttons
-                          _sectionTitle(title: "Previously Employed"),
+                          sectionTitle(title: "Previously Employed"),
                           kFormHeight,
                           ListView.builder(
                               shrinkWrap: true,
@@ -7013,7 +7007,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   title: "Employer Name",
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormTextField(
+                                              scholarshipFormTextField(
                                                   currentFocusNode:
                                                       employmentHistInfo
                                                           .employerNameFocusNode,
@@ -7051,7 +7045,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   title: "Designation",
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormTextField(
+                                              scholarshipFormTextField(
                                                   currentFocusNode:
                                                       employmentHistInfo
                                                           .titleFocusNode,
@@ -7089,7 +7083,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   title: 'Occupation',
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormTextField(
+                                              scholarshipFormTextField(
                                                   currentFocusNode:
                                                       employmentHistInfo
                                                           .occupationFocusNode,
@@ -7124,7 +7118,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   title: 'Work Place',
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormTextField(
+                                              scholarshipFormTextField(
                                                   currentFocusNode:
                                                       employmentHistInfo
                                                           .placeFocusNode,
@@ -7163,7 +7157,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                       'Employment Start Date',
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormDateField(
+                                              scholarshipFormDateField(
                                                 currentFocusNode:
                                                     employmentHistInfo
                                                         .startDateFocusNode,
@@ -7251,7 +7245,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   important:
                                                       _employmentStatus == 'P',
                                                   langProvider: langProvider),
-                                              _scholarshipFormDateField(
+                                              scholarshipFormDateField(
                                                 currentFocusNode:
                                                     employmentHistInfo
                                                         .endDateFocusNode,
@@ -7338,7 +7332,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   title: 'Reporting Manager',
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormTextField(
+                                              scholarshipFormTextField(
                                                   currentFocusNode:
                                                       employmentHistInfo
                                                           .reportingManagerFocusNode,
@@ -7374,7 +7368,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   title: 'Contact Number',
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormTextField(
+                                              scholarshipFormTextField(
                                                   currentFocusNode:
                                                       employmentHistInfo
                                                           .contactNumberFocusNode,
@@ -7411,7 +7405,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                   title: 'Contact Email',
                                                   important: true,
                                                   langProvider: langProvider),
-                                              _scholarshipFormTextField(
+                                              scholarshipFormTextField(
                                                   currentFocusNode:
                                                       employmentHistInfo
                                                           .contactEmailFocusNode,
@@ -7509,160 +7503,46 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+
+
                     ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _myAttachmentsList.length,
-                        itemBuilder: (context, index) {
-                          final attachment = _attachmentsList[index];
-                          final myAttachment = _myAttachmentsList[index];
-                          final title = getTextDirection(langProvider) ==
-                                  TextDirection.ltr
-                              ? attachment.value.toString().replaceAll('\n', '')
-                              : attachment.valueArabic
-                                  .toString()
-                                  .replaceAll('\n', '');
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _myAttachmentsList.length,
+                      itemBuilder: (context, index) {
+                        final attachment = _attachmentsList[index];
 
-                          // create file
-                          File? file;
-                          return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // ****************************************************************************************************************************************************
-                                // title name for document
-
-                                RichText(
-                                    text: TextSpan(children: [
-                                  TextSpan(
-                                    text: title,
-                                    style: AppTextStyles.titleBoldTextStyle()
-                                        .copyWith(fontWeight: FontWeight.w600),
-                                  ),
-                                  TextSpan(
-                                    text: (attachment.required.toString() == 'XMRL' || attachment.required.toString() == 'MRL' || attachment.required.toString() == 'NMRL') ? "*" : "",
-                                    style: AppTextStyles.titleBoldTextStyle()
-                                        .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.red),
-                                  ),
-                                ])),
-
-                                kFormHeight,
-                                // container to pick attachment
-                                Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.lightGrey,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        // choose file button
-                                        MaterialButton(
-                                          onPressed: () async {
-                                            // pick file
+                        final myAttachment = _myAttachmentsList[index];
 
 
 
-                                            // available extensions
-                                            // 'jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'
-
-                                            final permissionChecker = PermissionChecker();
-                                            permissionChecker.checkAndRequestPermission(Platform.isIOS ? Permission.storage : Permission.photos, context);
-                                            file = await _mediaServices.getSingleFileFromPicker(allowedExtensions: myAttachment.documentCDController.text.toUpperCase() == 'SEL006' ? ['jpg', 'jpeg'] : ['pdf']);
-
-                                            if (file != null) {
-                                              setState(() {
-                                                myAttachment.userFileNameController.text = file!.path.toString().split('-').last;
-
-                                                // converted and stored in base64 string
-                                                myAttachment.base64StringController.text = base64Encode(file!.readAsBytesSync());
-                                              });
-                                            }
-                                          },
-                                          color: AppColors.scoButtonColor,
-                                          enableFeedback: false,
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          child: Text("Choose File",
-                                            style: AppTextStyles.titleTextStyle().copyWith(color: Colors.white),
-                                          ),
-                                        ),
-
-                                        kFormHeight,
-                                        // file name
-                                        Expanded(
-                                            child: Text(
-                                          myAttachment
-                                              .userFileNameController.text,
-                                          overflow: TextOverflow.ellipsis,
-                                        )),
-                                      ],
-                                    )),
-
-                                // show available file type
-                                Text( myAttachment.documentCDController.text.toUpperCase() == 'SEL006'  ? "Select .jpeg|.jpg|.JPEG|.JPG file type only" : "Select Pdf file only",
-                                    style: AppTextStyles.normalTextStyle()
-                                        .copyWith(
-                                            color: Colors.blueGrey,
-                                            fontSize: 12)),
-                                kFormHeight,
-
-                                // comments
-                                _sectionTitle(title: "Comments"),
-                                // comments box
-                                _scholarshipFormTextField(
-                                    currentFocusNode: FocusNode(),
-                                    controller: myAttachment.commentController,
-                                    maxLines: 3,
-                                    maxLength: 30,
-                                    hintText: "Enter your view",
-                                    onChanged: (value) {}),
-
-                                kFormHeight,
-                                // light grey divider
-                                const MyDivider(
-                                  color: AppColors.lightGrey,
-                                ),
-
-                                kFormHeight,
-                                // Action
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Action",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: AppColors.scoButtonColor),
-                                    ),
-                                    GestureDetector(
-                                        onTap: () {
-                                          // remove the file
-                                          setState(() {
-                                            myAttachment.userFileNameController
-                                                .text = "";
-                                            myAttachment.base64StringController
-                                                .text = "";
-                                            myAttachment
-                                                .commentController.text = '';
-                                            file = null;
-                                          });
-                                        },
-                                        child: SvgPicture.asset(
-                                            "assets/action.svg"))
-                                  ],
-                                ),
-                                kFormHeight,
-                                const MyDivider(),
-                                kFormHeight
-                              ]);
-                        })
+                        // Check if the user is UAE National
+                        if (_passportNationalityController.text == 'ARE') {
+                          if (attachment.required.toString() == 'MRL' || attachment.required.toString() == 'OPL') {
+                            return AttachFile(  attachment: attachment, myAttachment: myAttachment);
+                          }
+                        }
+                        // Check if the user is Non-UAE and not a UAE Mother
+                        if (_passportNationalityController.text != 'ARE' && (_isMotherUAECheckbox == false)) {
+                          if (attachment.required.toString() == 'NMRL' || attachment.required.toString() == 'NOPL') {
+                            return AttachFile(  attachment: attachment, myAttachment: myAttachment);
+                          }
+                        }
+                        // Check if the user is UAE Mother
+                        if (_passportNationalityController.text != 'ARE' && _isMotherUAECheckbox) {
+                          if (attachment.required.toString() == 'XMRL' || attachment.required.toString() == 'XOPL') {
+                            return AttachFile( attachment: attachment, myAttachment: myAttachment);
+                          }
+                        }
+                        return showVoid;
+                      },
+                    )
                   ])),
           draftPrevNextButtons(langProvider)
         ])));
   }
+  
+  
 
   // *--------------------------------------------------------- Attachments Section end ------------------------------------------------------------------------------*
 
@@ -7701,7 +7581,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         ),
           ),
 
-            SizedBox(height: 20),
+            showVoid,
 
             draftPrevNextButtons(langProvider),
 
@@ -8497,7 +8377,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           _acadProgramPgrdErrorText = "Please Enter Your PGRD Program";
           firstErrorFocusNode ??= _acadProgramPgrdFocusNode;
         });
-      }
+      }}
 
 // #################################################################
     // major
@@ -8515,7 +8395,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           firstErrorFocusNode ??= element.majorFocusNode;
         });
       }
-    }}
+    }
 // #################################################################
 
     // academic program dds
@@ -8773,13 +8653,11 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     firstErrorFocusNode = null;
 
 
-    print("validate Attachments section");
     for(var i = 0; i < _myAttachmentsList.length; i++) {
       var element = _myAttachmentsList[i];
 
 
       final code1 = "${element.processCDController.text}:${element.documentCDController.text}";
-      print(code1);
       bool required = false;
       for(var i = 0; i < _attachmentsList.length; i++) {
         var val = _attachmentsList[i];
@@ -8788,9 +8666,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         }
       }
 
-      if(required &&  element.base64StringController.text.isEmpty)
+      if(required &&  element.userFileNameController.text.isEmpty)
       {
-        print("Upload all attachments");
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.red,content: Text("Upload all required attachments")));
         return false;
       }
@@ -8968,105 +8845,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     );
   }
 
-  // to reduce the copy of code we created this where obscure text and border is not copied again and again, and if we need to use more features then we will use CustomTextField
-  dynamic _scholarshipFormTextField({
-    required FocusNode currentFocusNode,
-    FocusNode? nextFocusNode,
-    required TextEditingController controller,
-    required String hintText,
-    String? errorText,
-    int? maxLines,
-    int? maxLength,
-    bool? filled,
-    bool? readOnly,
-    TextInputType? textInputType,
-    List<TextInputFormatter>? inputFormat,
-    required Function(String? value) onChanged,
-  }) {
-    return CustomTextField(
-      readOnly: readOnly,
-      currentFocusNode: currentFocusNode,
-      nextFocusNode: nextFocusNode,
-      controller: controller,
-      filled: filled,
-      obscureText: false,
-      border: Utils.outlinedInputBorder(),
-      hintText: hintText,
-      textStyle: _textFieldTextStyle,
-      maxLines: maxLines,
-      maxLength: maxLength,
-      inputFormat: inputFormat,
-      errorText: errorText,
-      onChanged: onChanged,
-      textInputType: textInputType ?? TextInputType.text,
-    );
-  }
 
-  dynamic _scholarshipFormDateField(
-      {required FocusNode currentFocusNode,
-      required TextEditingController controller,
-      required String hintText,
-      String? errorText,
-      required Function(String? value) onChanged,
-      required Function()? onTap,
-      bool? filled}) {
-    return CustomTextField(
-      readOnly: true,
-      filled: filled,
-      // Prevent manual typing
-      currentFocusNode: currentFocusNode,
-      controller: controller,
-      border: Utils.outlinedInputBorder(),
-      hintText: hintText,
-      textStyle: _textFieldTextStyle,
-      textInputType: TextInputType.datetime,
-      textCapitalization: true,
-      trailing: const Icon(
-        Icons.calendar_month,
-        color: AppColors.scoLightThemeColor,
-        size: 16,
-      ),
-      errorText: errorText,
-      onChanged: onChanged,
-      onTap: onTap,
-    );
-  }
-
-  // dropdown for scholarship form
-  dynamic _scholarshipFormDropdown({
-    bool? readOnly,
-    required TextEditingController controller,
-    required FocusNode currentFocusNode,
-    required dynamic menuItemsList,
-    required String hintText,
-    String? errorText,
-    bool? filled,
-    required void Function(dynamic value) onChanged,
-  }) {
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
-    return CustomDropdown(
-      readOnly: readOnly,
-      value: controller.text.isEmpty ? null : controller.text,
-      currentFocusNode: currentFocusNode,
-      textDirection: getTextDirection(langProvider),
-      menuItemsList: menuItemsList ?? [],
-      hintText: hintText,
-      textColor: AppColors.scoButtonColor,
-      filled: filled,
-      outlinedBorder: true,
-      errorText: errorText,
-      onChanged: onChanged,
-    );
-  }
-
-  // title style which is used to styling Actual Section Heading
-  dynamic _sectionTitle({required String title}) {
-    return Text(
-      title,
-      style: AppTextStyles.titleBoldTextStyle(),
-    );
-  }
 
   // dashed section divider is used to indicate the difference between the sections
   dynamic _sectionDivider() {
@@ -9082,8 +8861,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   // Add Remove more section Button
   dynamic _addRemoveMoreSection(
       {required String title,
-      required bool add,
-      required Function() onChanged}) {
+        required bool add,
+        required Function() onChanged}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -9093,7 +8872,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           color: add ? AppColors.scoThemeColor : AppColors.DANGER,
           height: double.minPositive,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -9123,6 +8902,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       ],
     );
   }
+
+
 
   // *----------------------------------------------------------------------------- Custom Widgets for Scholarship Form only end --------------------------------------------------------------------------------------------------***
 
