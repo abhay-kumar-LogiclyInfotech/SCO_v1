@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/viewModel/account/studentProfileViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
+import 'package:sco_v1/viewModel/apply_scholarship/attach_file_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/deleteDraftViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
@@ -85,6 +86,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => FindDraftByConfigurationKeyViewmodel()),
           // delete Draft
           ChangeNotifierProvider(create: (_) => DeleteDraftViewmodel()),
+          // attachFile
+          ChangeNotifierProvider(create: (_) => AttachFileViewmodel()),
+
 
 
 

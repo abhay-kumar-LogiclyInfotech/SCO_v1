@@ -1,7 +1,7 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 
-class PermissionChecker {
+class PermissionServices {
   /// Check the status of a specific permission.
   Future<PermissionStatus> checkPermission(Permission permission) async {
     return await permission.status;

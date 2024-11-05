@@ -1104,6 +1104,9 @@ class UniversityPriority {
 
 class Attachment {
   // TextEditingControllers for the attachment fields
+
+
+  TextEditingController applictantIdController;
   TextEditingController processCDController;
   TextEditingController documentCDController;
   TextEditingController descriptionController;
@@ -1111,10 +1114,15 @@ class Attachment {
   TextEditingController commentController;
   TextEditingController base64StringController;
   TextEditingController errorMessageController;
+  TextEditingController attachmentNameController;
+
+
 
 
 
   Attachment({
+    required this.applictantIdController,
+    required this.attachmentNameController,
     required this.processCDController,
     required this.documentCDController,
     required this.descriptionController,
@@ -1123,11 +1131,14 @@ class Attachment {
     required this.base64StringController,
     required this.errorMessageController,
 
+
   });
 
   // From JSON
   factory Attachment.fromJson(Map<String, dynamic> json) {
     return Attachment(
+      attachmentNameController:  TextEditingController(text: json['attachmentName'] ?? ''),
+      applictantIdController: TextEditingController(text: json['applictantId'] ?? ''),  // Assuming typo in API
       processCDController: TextEditingController(text: json['processCD'] ?? ''),
       documentCDController: TextEditingController(text: json['documentCD'] ?? ''),
       descriptionController: TextEditingController(text: json['description'] ?? ''),
@@ -1141,16 +1152,28 @@ class Attachment {
   // To JSON
   Map<String, dynamic> toJson() {
     return {
+
+      'applictantId': applictantIdController.text,
       'processCD': processCDController.text,
       'documentCD': documentCDController.text,
+      "attachmentName": attachmentNameController.text,
       'description': descriptionController.text,
       'userFileName': userFileNameController.text,
       'commnet': commentController.text,  // Keeping the typo in "commnet"
       'base64String': base64StringController.text,
       'errorMessage': errorMessageController.text,
+
+
+
+
+
+
+
+
     };
   }
 }
+
 
 
 

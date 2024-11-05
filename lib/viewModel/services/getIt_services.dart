@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services/splash_services.dart';
 
 import 'alert_services.dart';
@@ -38,6 +39,11 @@ Future<bool> registerServices() async {
     getIt.registerSingleton<MediaServices>(MediaServices());
     if (kDebugMode) {
       print("-------------------------------MediaServies Registered");
+    }
+
+    getIt.registerSingleton<PermissionServices>(PermissionServices());
+    if (kDebugMode) {
+      print("-------------------------------Permission Services Registered");
     }
 
     return true;

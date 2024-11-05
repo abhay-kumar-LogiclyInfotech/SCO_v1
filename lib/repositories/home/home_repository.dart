@@ -9,6 +9,7 @@ import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
 import 'package:sco_v1/models/home/HomeSliderModel.dart';
 
 import '../../data/network/NetworkApiServices.dart';
+import '../../models/apply_scholarship/AttachFileModel.dart';
 import '../../models/apply_scholarship/FindDraftByConfigurationKeyModel.dart';
 import '../../resources/app_urls.dart';
 
@@ -102,6 +103,21 @@ class HomeRepository {
     );
     return DeleteDraftModel.fromJson(response);
   }
+
+
+
+  // *------ Fetch Draft By Configuration Key ------*/
+  Future<AttachFileModel> attachFile(
+      {required dynamic userId,required dynamic headers,required dynamic body}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+      url: "https://stg.sco.ae/o/mopa-sco-api/e-services/$userId/attach-file",
+      headers: headers,
+      body: body,
+    );
+    return AttachFileModel.fromJson(response);
+  }
+
+
 
 
 }

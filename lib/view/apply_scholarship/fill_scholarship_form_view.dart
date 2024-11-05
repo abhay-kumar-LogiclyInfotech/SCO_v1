@@ -12,6 +12,7 @@ import 'package:intl/intl.dart' hide TextDirection;
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
@@ -23,7 +24,7 @@ import 'package:sco_v1/resources/components/custom_text_field.dart';
 import 'package:sco_v1/resources/input_formatters/emirates_id_input_formatter.dart';
 import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/apply_scholarship/attachment.dart';
+import 'package:sco_v1/view/apply_scholarship/attach_file.dart';
 import 'package:sco_v1/view/apply_scholarship/steps_progress_view.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
@@ -41,6 +42,7 @@ import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/myDivider.dart';
 import '../../utils/constants.dart';
 import '../../viewModel/account/studentProfileViewmodel.dart';
+import '../../viewModel/apply_scholarship/attach_file_viewmodel.dart';
 import '../../viewModel/apply_scholarship/deleteDraftViewmodel.dart';
 import '../../viewModel/services/alert_services.dart';
 import '../../viewModel/services/navigation_services.dart';
@@ -70,6 +72,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   late NavigationServices _navigationService;
   late MediaServices _mediaServices;
   late AlertServices _alertService;
+  late PermissionServices _permissionServices;
 
   // initialize the services
   void _initializeServices() {
@@ -77,6 +80,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     _navigationService = getIt.get<NavigationServices>();
     _alertService = getIt.get<AlertServices>();
     _mediaServices = getIt.get<MediaServices>();
+    _permissionServices = getIt.get<PermissionServices>();
   }
 
   // Controller for managing the pages
@@ -124,8 +128,12 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // Function to save draft
   void saveDraft() async {
+
+    // using modelProgressHud
+    setProcessingMode(status: true);
+
+
     _finalForm();
-    log(form.toString());
 
 
     final saveDraftProvider = Provider.of<SaveAsDraftViewmodel>(context, listen: false);
@@ -133,6 +141,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     if(saveDraftProvider.apiResponse.status == Status.COMPLETED){
       draftId = saveDraftProvider.apiResponse.data?.data?.applicationNumber ?? '0';
     }
+
+    setProcessingMode(status: false);
   }
 
   // scholarship title
@@ -251,11 +261,9 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   //  Initializer to process initial data
   void _initializer() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      _notifier.value =
-          const AsyncSnapshot.withData(ConnectionState.waiting, null);
+      _notifier.value = const AsyncSnapshot.withData(ConnectionState.waiting, null);
 
-      final langProvider =
-          Provider.of<LanguageChangeViewModel>(context, listen: false);
+      final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
 
       // get selected scholarship
       _getSelectedScholarship();
@@ -430,6 +438,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             final processCD = element.code.toString().split(':').elementAt(0).toString();
             final documentCD = element.code.toString().split(':').last.toString();
             _myAttachmentsList.add(Attachment(
+              attachmentNameController: TextEditingController(text: element.code.toString()),
+              applictantIdController: TextEditingController(),
               processCDController: TextEditingController(text: processCD),
               documentCDController: TextEditingController(text: documentCD),
               descriptionController: TextEditingController(),
@@ -451,6 +461,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
             final processCD = element.code.toString().split(':').elementAt(0).toString();
             final documentCD = element.code.toString().split(':').last.toString();
             _myAttachmentsList.add(Attachment(
+              attachmentNameController: TextEditingController(text: element.code.toString()),
+              applictantIdController: TextEditingController(),
               processCDController: TextEditingController(text: processCD),
               documentCDController: TextEditingController(text: documentCD),
               descriptionController: TextEditingController(),
@@ -460,7 +472,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
               errorMessageController: TextEditingController(),
             ));
           }
-
         }
 
 
@@ -1058,13 +1069,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
               //         if(cleanedDraft['attachments'] is List){
               //         for (int index = 0; index < cleanedDraft['attachments'].length; index++) {
               //           var element = cleanedDraft['attachments'][index];
+              //           print(element);
               //           _myAttachmentsList.add(Attachment.fromJson(element));
               //       }}
               //         else{
               // _myAttachmentsList.add(Attachment.fromJson(cleanedDraft['attachments']));
               // }
-              //
-              //       }
+
+                    // }
 
 
                     _navigationService.goBack();
@@ -1095,186 +1107,199 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // *------------------------- Init State of the form end -----------------------------------------*
 
+  // boolean to save the state of the modelProgressHud
+  bool processing = false;
+
+  setProcessingMode({required bool status}){
+    setState(() {
+      processing = status;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: true);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: true);
 
-    return Scaffold(
-        appBar: CustomSimpleAppBar(
+    return Scaffold(appBar: CustomSimpleAppBar(
             title: Text("Apply Scholarship",
                 style: AppTextStyles.appBarTitleStyle())),
         backgroundColor: Colors.white,
-        body: ValueListenableBuilder(
-            valueListenable: _notifier,
-            builder: (context, snapshot, child) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: Utils.cupertinoLoadingIndicator());
-              }
-              if (snapshot.hasError) {
-                return Utils.showOnError();
-              }
+        body: Utils.modelProgressHud(
+          processing: processing,
+          child: ValueListenableBuilder(
+              valueListenable: _notifier,
+              builder: (context, snapshot, child) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: Utils.cupertinoLoadingIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Utils.showOnError();
+                }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // title and progress section
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: kPadding, vertical: kPadding - 10),
-                    decoration: const BoxDecoration(
-                        color: AppColors.bgColor,
-                        border: Border(
-                            bottom: BorderSide(color: AppColors.darkGrey))),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // scholarship title
-                        Text(
-                          _scholarshipTitle,
-                          style: AppTextStyles.titleBoldTextStyle(),
-                        ),
-                        const SizedBox(height: 8),
-                        const MyDivider(
-                          color: AppColors.hintDarkGrey,
-                        ),
-                        // Progress Indicator for validated steps:
-                        StepsProgressView(
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // title and progress section
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: kPadding, vertical: kPadding - 10),
+                      decoration: const BoxDecoration(
+                          color: AppColors.bgColor,
+                          border: Border(
+                              bottom: BorderSide(color: AppColors.darkGrey))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // scholarship title
+                          Text(
+                            _scholarshipTitle,
+                            style: AppTextStyles.titleBoldTextStyle(),
+                          ),
+                          const SizedBox(height: 8),
+                          const MyDivider(
+                            color: AppColors.hintDarkGrey,
+                          ),
+                          // Progress Indicator for validated steps:
+                          StepsProgressView(
                             totalSections: totalSections,
                             currentSectionIndex: _currentSectionIndex,
-                        selectedScholarship: _selectedScholarship,
-                        ),
-                      ],
+                            selectedScholarship: _selectedScholarship,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
 
-                  // Form Sections with PageView
-                  Expanded(
-                    child: PageView.builder(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        // Disable swipe gestures
-                        itemCount: totalSections,
-                        itemBuilder: (context, index) {
-                          String key = _selectedScholarship?.configurationKey;
-                          String? acadmicCareer =
-                              _selectedScholarship?.acadmicCareer;
+                    // Form Sections with PageView
+                    Expanded(
+                      child: PageView.builder(
+                          controller: _pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          // Disable swipe gestures
+                          itemCount: totalSections,
+                          itemBuilder: (context, index) {
+                            String key = _selectedScholarship?.configurationKey;
+                            String? acadmicCareer =
+                                _selectedScholarship?.acadmicCareer;
 
-                          // Use a helper function to avoid repetition
-                          bool shouldShowHighSchoolDetails() {
-                            return acadmicCareer == 'UG' ||
-                                acadmicCareer == 'UGRD' ||
-                                acadmicCareer == 'SCHL' ||
-                                acadmicCareer == 'HCHL';
-                          }
+                            // Use a helper function to avoid repetition
+                            bool shouldShowHighSchoolDetails() {
+                              return acadmicCareer == 'UG' ||
+                                  acadmicCareer == 'UGRD' ||
+                                  acadmicCareer == 'SCHL' ||
+                                  acadmicCareer == 'HCHL';
+                            }
 
-                          bool isUniversityAndMajorsRequired() {
-                            return acadmicCareer != 'SCHL';
-                          }
+                            bool isUniversityAndMajorsRequired() {
+                              return acadmicCareer != 'SCHL';
+                            }
 
-                          bool isRequiredExaminationDetailsRequired() {
-                            return !(acadmicCareer == 'SCHL' ||
-                                acadmicCareer == 'HCHL');
-                          }
+                            bool isRequiredExaminationDetailsRequired() {
+                              return !(acadmicCareer == 'SCHL' ||
+                                  acadmicCareer == 'HCHL');
+                            }
 
-                          bool isAttachmentSectionForExt() {
-                            return key == 'SCOUPPEXT';
-                          }
+                            bool isAttachmentSectionForExt() {
+                              return key == 'SCOUPPEXT';
+                            }
 
-                          bool shouldDisplayEmploymentHistory() {
-                            return displayEmploymentHistory(); // Assuming this is a helper function
-                          }
+                            bool shouldDisplayEmploymentHistory() {
+                              return displayEmploymentHistory(); // Assuming this is a helper function
+                            }
 
-                          // Switch case handling for index
-                          switch (index) {
-                            case 0:
-                              return _studentUndertakingSection(
-                                  step: index, langProvider: langProvider);
+                            // Switch case handling for index
+                            switch (index) {
+                              case 0:
+                                return _studentUndertakingSection(
+                                    step: index, langProvider: langProvider);
 
-                            case 1:
-                              return _studentDetailsSection(
-                                  step: index, langProvider: langProvider);
+                              case 1:
+                                return _studentDetailsSection(
+                                    step: index, langProvider: langProvider);
 
-                            case 2:
-                              return SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    // High school details section if the condition matches
-                                    shouldShowHighSchoolDetails()
-                                        ? _highSchoolDetailsSection(
-                                            step: index,
-                                            langProvider: langProvider)
-                                        : showVoid,
+                              case 2:
+                                return SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      // High school details section if the condition matches
+                                      shouldShowHighSchoolDetails()
+                                          ? _highSchoolDetailsSection(
+                                          step: index,
+                                          langProvider: langProvider)
+                                          : showVoid,
 
-                                    // Graduation details section
-                                    _graduationDetailsSection(
-                                        step: index,
-                                        langProvider: langProvider),
-                                  ],
-                                ),
-                              );
+                                      // Graduation details section
+                                      _graduationDetailsSection(
+                                          step: index,
+                                          langProvider: langProvider),
+                                    ],
+                                  ),
+                                );
 
-                            case 3:
+                              case 3:
                               // University and majors section if the condition matches
-                              return isUniversityAndMajorsRequired()
-                                  ? _universityAndMajorsDetailsSection(
-                                      step: index, langProvider: langProvider)
-                                  : showVoid;
+                                return isUniversityAndMajorsRequired()
+                                    ? _universityAndMajorsDetailsSection(
+                                    step: index, langProvider: langProvider)
+                                    : showVoid;
 
-                            case 4:
+                              case 4:
                               // Handle based on scholarship type and configuration key
-                              if (isAttachmentSectionForExt()) {
-                                return _attachmentsSection(
-                                    step: index, langProvider: langProvider);
-                              } else {
-                                return isRequiredExaminationDetailsRequired()
-                                    ? _requiredExaminationsDetailsSection(
-                                        step: index, langProvider: langProvider)
-                                    : showVoid;
-                              }
+                                if (isAttachmentSectionForExt()) {
+                                  return _attachmentsSection(
+                                      step: index, langProvider: langProvider);
+                                } else {
+                                  return isRequiredExaminationDetailsRequired()
+                                      ? _requiredExaminationsDetailsSection(
+                                      step: index, langProvider: langProvider)
+                                      : showVoid;
+                                }
 
-                            case 5:
+                              case 5:
                               // Handling based on configuration key for attachments or employment history
-                              if (isAttachmentSectionForExt()) {
-                                return _confirmation();
-                              } else if (key == 'SCOACTUGRD' ||
-                                  key == "SCOUGRDINT" ||
-                                  key == 'SCOMETLOGINT' ||
-                                  key == 'SCOUGRDEXT') {
-                                return _attachmentsSection(
-                                    step: index, langProvider: langProvider);
-                              } else {
-                                return shouldDisplayEmploymentHistory()
-                                    ? _employmentHistoryDetailsSection(
-                                        step: index, langProvider: langProvider)
-                                    : showVoid;
-                              }
+                                if (isAttachmentSectionForExt()) {
+                                  return _confirmation();
+                                } else if (key == 'SCOACTUGRD' ||
+                                    key == "SCOUGRDINT" ||
+                                    key == 'SCOMETLOGINT' ||
+                                    key == 'SCOUGRDEXT') {
+                                  return _attachmentsSection(
+                                      step: index, langProvider: langProvider);
+                                } else {
+                                  return shouldDisplayEmploymentHistory()
+                                      ? _employmentHistoryDetailsSection(
+                                      step: index, langProvider: langProvider)
+                                      : showVoid;
+                                }
 
-                            case 6:
+                              case 6:
                               // Display confirmation based on configuration key
-                              if (key == 'SCOACTUGRD' ||
-                                  key == "SCOUGRDINT" ||
-                                  key == "SCOMETLOGINT" ||
-                                  key == "SCOUGRDEXT") {
-                                return _confirmation();
-                              } else {
-                                return _attachmentsSection(
-                                    step: index, langProvider: langProvider);
-                              }
+                                if (key == 'SCOACTUGRD' ||
+                                    key == "SCOUGRDINT" ||
+                                    key == "SCOMETLOGINT" ||
+                                    key == "SCOUGRDEXT") {
+                                  return _confirmation();
+                                } else {
+                                  return _attachmentsSection(
+                                      step: index, langProvider: langProvider);
+                                }
 
-                            case 7:
+                              case 7:
                               // Confirmation at the end
-                              return _confirmation();
+                                return _confirmation();
 
-                            default:
-                              return Container(); // Fallback for unexpected index values
-                          }
-                        }),
-                  ),
-                ],
-              );
-            }));
+                              default:
+                                return Container(); // Fallback for unexpected index values
+                            }
+                          }),
+                    ),
+                  ],
+                );
+              })
+        )
+
+
+        );
   }
 
   // *--------------------------------------------------------------- Accept terms and conditions start ----------------------------------------------------------------------------*
@@ -1310,11 +1335,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
               isLoading: false,
               textDirection: getTextDirection(langProvider),
               onTap: () {
-                var result =
-                    validateSection(step: 0, langProvider: langProvider);
+
+                setProcessingMode(status: true);
+
+                var result = validateSection(step: 0, langProvider: langProvider);
                 if (result) {
                   nextSection();
+                  setProcessingMode(status: false);
+
                 }
+                setProcessingMode(status: false);
+
               }),
         )
       ],
@@ -7489,6 +7520,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   List<Attachment> _myAttachmentsList = [];
 
+
   Widget _attachmentsSection(
       {required int step, required LanguageChangeViewModel langProvider}) {
     return Container(
@@ -7504,48 +7536,111 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                   mainAxisSize: MainAxisSize.min,
                   children: [
 
+                ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _myAttachmentsList.length,
+                itemBuilder: (context, index) {
+                  final attachment = _attachmentsList[index];
+                  final myAttachment = _myAttachmentsList[index];
+                  File? file;
 
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _myAttachmentsList.length,
-                      itemBuilder: (context, index) {
-                        final attachment = _attachmentsList[index];
+                  // Determine required conditions for each nationality type
+                  bool shouldShowAttachment() {
+                    if (_passportNationalityController.text == 'ARE' && (_isMotherUAECheckbox == false)) {
+                      return attachment.required == 'MRL' || attachment.required == 'OPL';
+                    } else if (_passportNationalityController.text != 'ARE' && (_isMotherUAECheckbox == false)) {
+                      return attachment.required == 'NMRL' || attachment.required == 'NOPL';
+                    } else if (_passportNationalityController.text != 'ARE' && _isMotherUAECheckbox) {
+                      return attachment.required == 'XMRL' || attachment.required == 'XOPL';
+                    }
+                    return false;
+                  }
 
-                        final myAttachment = _myAttachmentsList[index];
+                  // Only show the AttachFile widget if conditions are met
+                  if (shouldShowAttachment()) {
+                    return Consumer<AttachFileViewmodel>(
+                      builder: (context,provider,_){
+                        return  AttachFile(
+                          attachment: attachment,
+                          myAttachment: myAttachment,
+                          onAction: () {
+                            // Reset file and clear fields
+                            setState(() {
+                              myAttachment.userFileNameController.text = "";
+                              myAttachment.base64StringController.text = "";
+                              myAttachment.commentController.text = '';
+                              file = null;
+                            });
+                          },
+                          onPressed: () async {
+                            // Check permission before picking file
+                            final permitted = await _permissionServices.checkAndRequestPermission(Platform.isIOS ? Permission.storage : Permission.photos, context);
+
+                            if (permitted) {
+                              // Define allowed extensions based on document code
+                              final allowedExtensions = myAttachment.documentCDController.text.toUpperCase() == 'SEL006' ? ['jpg', 'jpeg'] : ['pdf'];
+
+                              file = await _mediaServices.getSingleFileFromPicker(allowedExtensions: allowedExtensions);
+
+                              if (file != null) {
+                                setProcessingMode(status: true);
+
+                                // Update filename and base64 content before asynchronous work
+                                myAttachment.userFileNameController.text = file!.path.split('-').last;
+                                myAttachment.base64StringController.text = base64Encode(file!.readAsBytesSync());
+
+                                log(myAttachment.base64StringController.text);
+                                myAttachment.applictantIdController.text = draftId.toString();
+
+                                // Perform asynchronous work outside of setState
+                                final result = await provider.attachFile(file: myAttachment.toJson());
+
+                                if(result){
+                                  // on success don't send the base64String in draft just send this as empty
+                                  myAttachment.base64StringController.clear();
 
 
 
-                        // Check if the user is UAE National
-                        if (_passportNationalityController.text == 'ARE') {
-                          if (attachment.required.toString() == 'MRL' || attachment.required.toString() == 'OPL') {
-                            return AttachFile(  attachment: attachment, myAttachment: myAttachment);
-                          }
-                        }
-                        // Check if the user is Non-UAE and not a UAE Mother
-                        if (_passportNationalityController.text != 'ARE' && (_isMotherUAECheckbox == false)) {
-                          if (attachment.required.toString() == 'NMRL' || attachment.required.toString() == 'NOPL') {
-                            return AttachFile(  attachment: attachment, myAttachment: myAttachment);
-                          }
-                        }
-                        // Check if the user is UAE Mother
-                        if (_passportNationalityController.text != 'ARE' && _isMotherUAECheckbox) {
-                          if (attachment.required.toString() == 'XMRL' || attachment.required.toString() == 'XOPL') {
-                            return AttachFile( attachment: attachment, myAttachment: myAttachment);
-                          }
-                        }
-                        return showVoid;
+                                }
+
+                                // Synchronously update the UI state after async work completes
+                                setState(() {
+                                  setProcessingMode(status: false);
+
+                                  if (!result) {
+                                    // Reset file and clear fields if attachFile fails
+                                    myAttachment.userFileNameController.text = "";
+                                    myAttachment.base64StringController.text = "";
+                                    myAttachment.commentController.text = '';
+                                    file = null;
+                                  }
+                                });
+                              }
+                            }
+                          },
+                        );
                       },
-                    )
-                  ])),
+                    );
+
+
+
+                  }
+                  return const SizedBox(); // Return an empty widget if conditions are not met
+                },
+              )
+
+              ])),
           draftPrevNextButtons(langProvider)
         ])));
   }
-  
-  
+
+
+
+
+
 
   // *--------------------------------------------------------- Attachments Section end ------------------------------------------------------------------------------*
-
 
   Widget _confirmation()
   {
@@ -7590,7 +7685,6 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       ));
   }
 
-
   // *--------------------------------------------------------- validate section in accordance with the steps start ------------------------------------------------------------------------------*
 
   // *--------------------------------------------------------- validate section in accordance with the steps start ------------------------------------------------------------------------------*
@@ -7599,6 +7693,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
   bool validateSection(
       {required int step, required LanguageChangeViewModel langProvider})
   {
+
+
     String? acadmicCareer = _selectedScholarship?.acadmicCareer;
     String key = _selectedScholarship?.configurationKey ?? '';
 
@@ -7678,6 +7774,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       default:
         return true;
     }
+
+
   }
 
 
@@ -7686,6 +7784,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
   // Step 0: Validate "Accept Student Undertaking" section
   bool validateStudentUndertakingSection(langProvider) {
+
     firstErrorFocusNode = null;
 
     // Add validation logic for student details
@@ -7696,6 +7795,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
           provider: langProvider);
       return false;
     }
+
     return true;
   }
 
@@ -8649,37 +8749,104 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
     }
   }
 
+  bool isAttachmentRequiredForUser(dynamic attachment) {
+    if (_passportNationalityController.text == 'ARE' && (_isMotherUAECheckbox == false)) {
+      return attachment.required == 'MRL';
+    } else if (_passportNationalityController.text != 'ARE' && (_isMotherUAECheckbox == false)) {
+      return attachment.required == 'NMRL' ;
+    } else if (_passportNationalityController.text != 'ARE' && _isMotherUAECheckbox) {
+      return attachment.required == 'XMRL';
+    }
+    return false;
+  }
+
   bool validateAttachmentsSection(langProvider) {
     firstErrorFocusNode = null;
 
 
-    for(var i = 0; i < _myAttachmentsList.length; i++) {
-      var element = _myAttachmentsList[i];
+    for(int index = 0; index < _myAttachmentsList.length; index++) {
+      final attachment = _attachmentsList[index];
+      final myAttachment = _myAttachmentsList[index];
 
-
-      final code1 = "${element.processCDController.text}:${element.documentCDController.text}";
-      bool required = false;
-      for(var i = 0; i < _attachmentsList.length; i++) {
-        var val = _attachmentsList[i];
-        if(val.code.toString() == code1){
-          required =  val.required.toString() == 'XMRL' || val.required.toString() == 'MRL' || val.required.toString() == 'NMRL';
+      // Only show the AttachFile widget if conditions are met
+      if (isAttachmentRequiredForUser(attachment)) {
+        if(myAttachment.userFileNameController.text.isEmpty){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: Text("Please Upload: ${attachment.value}"),
+            ),
+          );
+          return false;
         }
-      }
 
-      if(required &&  element.userFileNameController.text.isEmpty)
-      {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.red,content: Text("Upload all required attachments")));
-        return false;
       }
     }
-    for(var ele in _myAttachmentsList){
-      print(ele.toJson());
-    }
-
-    return true;
+    return true; // All required attachments are present
   }
 
-  // *--------------------------------------------------------- validate section in accordance with the steps end ------------------------------------------------------------------------------*
+  // bool validateAttachmentsSection(langProvider) {
+  //   firstErrorFocusNode = null;
+  //
+  //
+  //
+  //   print("MyAttachment list length: ${_myAttachmentsList.length}");
+  //   for(var i = 0; i < _myAttachmentsList.length; i++) {
+  //
+  //
+  //     var element = _myAttachmentsList[i];
+  //
+  //     print("printng the base64String: ${element.userFileNameController.text}");
+  //
+  //
+  //     final code1 = "${element.processCDController.text}:${element.documentCDController.text}";
+  //     bool required = false;
+  //
+  //     // loop through all the attachments once to get that the specific one is required or not
+  //     // required =  val.required.toString() == 'XMRL' || val.required.toString() == 'MRL' || val.required.toString() == 'NMRL';
+  //
+  //     for(var i = 0; i < _attachmentsList.length; i++) {
+  //       var attachment = _attachmentsList[i];
+  //       // Check if the user is UAE National
+  //       if(attachment.code.toString() == code1 && _passportNationalityController.text == 'ARE'){
+  //         debugPrint("Rendering UAE National...");
+  //         required =  attachment.required.toString() == 'MRL';
+  //       }
+  //
+  //       // Check if the user is Non-UAE and not a UAE Mother
+  //       if(attachment.code.toString() == code1 && _passportNationalityController.text != 'ARE' && (_isMotherUAECheckbox == false)){
+  //         debugPrint("Rendering Non-UAE National...");
+  //         required =  attachment.required.toString() == 'NMRL';
+  //       }
+  //
+  //       // Check if the user is UAE Mother
+  //       if(attachment.code.toString() == code1 && _passportNationalityController.text != 'ARE' && _isMotherUAECheckbox){
+  //         debugPrint("Rendering UAE Mother...");
+  //         required =  attachment.required.toString() == 'XMRL';
+  //       }
+  //     }
+  //
+  //
+  //
+  //     print(required.toString());
+  //     print("Inside Description printing: ${element.descriptionController.text}");
+  //
+  //
+  //     if(required &&  element.userFileNameController.text.isEmpty)
+  //     {
+  //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.red,content: Text("Upload all required attachments")));
+  //       return false;
+  //     }
+  //   }
+  //
+  //   return true;
+  // }
+
+
+
+
+
+
 
   @override
   void dispose() {
@@ -8826,11 +8993,17 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
 
       }: () {
+
+        // modelProgressHud
+        setProcessingMode(status: true);
         // run validations function
-        if (validateSection(
-            step: _currentSectionIndex, langProvider: langProvider)) {
+        if (validateSection(step: _currentSectionIndex, langProvider: langProvider)) {
           nextSection(); // Only move to the next section if validation passes
+          // modelProgressHud
+          setProcessingMode(status: false);
         } else {
+          // modelProgressHud
+          setProcessingMode(status: false);
           // Optionally show a validation error message (like a SnackBar)
           _alertService.flushBarErrorMessages(
               message: 'Please complete the required fields.',
@@ -8982,8 +9155,410 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         "requiredExaminationList": _requiredExaminationList.map((element) => element.toJson()).toList(),
         "employmentStatus": _employmentStatus.toString(),
         "emplymentHistory": _employmentHistoryList.map((element) => element.toJson()).toList(),
-        "attachments": _myAttachmentsList.map((element) => element.toJson()).toList(),
-
+        // "attachments": _myAttachmentsList.map((element) => element.toJson()).toList(),
+        "attachments": [
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL073",
+            "userFileName": "test.pdf",
+            "comment": "one mob",
+            "required": "NMRL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL073",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1793619",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL074",
+            "userFileName": "test.pdf",
+            "comment": "two",
+            "required": "NMRL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL074",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1127750",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL006",
+            "userFileName": "8.jpg",
+            "comment": "three",
+            "required": "NMRL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "color": "greenyellow",
+            "errorMessage": "",
+            "supportedFileType": ".jpeg|.jpg|.JPEG|.JPG",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL006",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1838515",
+            "fileType": "1",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL019",
+            "userFileName": "test.pdf",
+            "comment": "four",
+            "required": "NMRL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL019",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1420505",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL023",
+            "userFileName": "test.pdf",
+            "comment": "five",
+            "required": "NMRL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL023",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1018005",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL004",
+            "userFileName": "test.pdf",
+            "comment": "six",
+            "required": "NMRL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL004",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1252242",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL014",
+            "userFileName": "test.pdf",
+            "comment": "seven",
+            "required": "NMRL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL014",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1637071",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL015",
+            "userFileName": "test.pdf",
+            "comment": "eight",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL015",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1622116",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL047",
+            "userFileName": "test.pdf",
+            "comment": "nine",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL047",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1837400",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL001",
+            "userFileName": "test.pdf",
+            "comment": "10",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL001",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1424291",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL053",
+            "userFileName": "test.pdf",
+            "comment": "eleven",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL053",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1465534",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL063",
+            "userFileName": "test.pdf",
+            "comment": "twelev",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL063",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1363065",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL064",
+            "userFileName": "test.pdf",
+            "comment": "Thirteen",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL064",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1750415",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL009",
+            "userFileName": "test.pdf",
+            "comment": "Fourtine",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL009",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1562595",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL058",
+            "userFileName": "test.pdf",
+            "comment": "Fifteen",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL058",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1722847",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL030",
+            "userFileName": "test.pdf",
+            "comment": "Sixteen",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL030",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1649889",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL065",
+            "userFileName": "test.pdf",
+            "comment": "seventeen",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL065",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1822042",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL082",
+            "userFileName": "test.pdf",
+            "comment": "eighteen",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL082",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1943104",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "UNVADM",
+            "userFileName": "test.pdf",
+            "comment": "Nineteen",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:UNVADM",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1001739",
+            "fileType": "2",
+            "newFile": "true"
+          },
+          {
+            "processCD": "UGUAE",
+            "documentCD": "SEL043",
+            "userFileName": "test.pdf",
+            "comment": "Twenty",
+            "required": "NOPL",
+            "fileUploaded": "true",
+            "height": "0",
+            "width": "0",
+            "errorMessage": "",
+            "supportedFileType": ".pdf|.PDF",
+            "maxFileSize": "5242880",
+            "attachmentName": "UGUAE:SEL043",
+            "applictionDetailId": "36807",
+            "emiratesId": "784200479031062",
+            "isApproved": "false",
+            "fileId": "1404959",
+            "fileType": "2",
+            "newFile": "true"
+          }
+        ]
         // Rest of the fields...
       }
     };

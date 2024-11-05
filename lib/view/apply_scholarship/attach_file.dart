@@ -20,11 +20,15 @@ import 'form_view_Utils.dart';
 
 
 class AttachFile extends StatefulWidget {
-  final dynamic attachment;
-  final dynamic myAttachment;
+  final dynamic attachment; // To get the values for specific type of attachment
+  final dynamic myAttachment; // This is the actual attachment which holds the base 64 string and other parameters also
+  final dynamic onPressed;
+  final dynamic onAction;
    AttachFile({super.key,
     required  this.attachment,
     required  this.myAttachment,
+     required this.onPressed,
+     required this.onAction,
  });
 
   @override
@@ -33,21 +37,15 @@ class AttachFile extends StatefulWidget {
 
 class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
 
-  late MediaServices _mediaServices;
+
   @override
   void initState() {
-    final GetIt getIt = GetIt.instance;
-
-    _mediaServices = getIt.get<MediaServices>();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
-    
-    File? file;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       // ****************************************************************************************************************************************************
       // title name for document
@@ -60,15 +58,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
               style: AppTextStyles.titleBoldTextStyle()
                   .copyWith(fontWeight: FontWeight.w600),
             ),
-            TextSpan(
-              text: (widget.attachment.required.toString() == 'XMRL' ||
-                  widget.attachment.required.toString() == 'MRL' ||
-                  widget.attachment.required.toString() == 'NMRL')
-                  ? "*"
-                  : "",
-              style: AppTextStyles.titleBoldTextStyle()
-                  .copyWith(fontWeight: FontWeight.w600, color: Colors.red),
-            ),
+            TextSpan(text: (widget.attachment.required.toString() == 'XMRL' || widget.attachment.required.toString() == 'MRL' || widget.attachment.required.toString() == 'NMRL') ? "*" : "", style: AppTextStyles.titleBoldTextStyle().copyWith(fontWeight: FontWeight.w600, color: Colors.red),),
           ])),
 
       kFormHeight,
@@ -82,32 +72,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
             children: [
               // choose file button
               MaterialButton(
-                onPressed: () async {
-                  // pick file
-
-                  // available extensions
-                  // 'jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'
-
-                  final permissionChecker = PermissionChecker();
-                  permissionChecker.checkAndRequestPermission(
-                      Platform.isIOS ? Permission.storage : Permission.photos,
-                      context);
-                  file = await _mediaServices.getSingleFileFromPicker(
-                      allowedExtensions:
-                      widget.myAttachment.documentCDController.text.toUpperCase() ==
-                          'SEL006'
-                          ? ['jpg', 'jpeg']
-                          : ['pdf']);
-
-                  if (file != null) {
-                    setState(() {
-                      widget.myAttachment.userFileNameController.text = file!.path.toString().split('-').last;
-
-                      // converted and stored in base64 string
-                      // widget.myAttachment.base64StringController.text = base64Encode(file!.readAsBytesSync());
-                    });
-                  }
-                },
+                onPressed: widget.onPressed,
                 color: AppColors.scoButtonColor,
                 enableFeedback: false,
                 shape: RoundedRectangleBorder(
@@ -132,11 +97,8 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
 
       // show available file type
       Text(
-          widget.myAttachment.documentCDController.text.toUpperCase() == 'SEL006'
-              ? "Select .jpeg|.jpg|.JPEG|.JPG file type only"
-              : "Select Pdf file only",
-          style: AppTextStyles.normalTextStyle()
-              .copyWith(color: Colors.blueGrey, fontSize: 12)),
+          widget.myAttachment.documentCDController.text.toUpperCase() == 'SEL006' ? "Select .jpeg|.jpg|.JPEG|.JPG file type only" : "Select Pdf file only",
+          style: AppTextStyles.normalTextStyle().copyWith(color: Colors.blueGrey, fontSize: 12)),
       kFormHeight,
 
       // comments
@@ -167,15 +129,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
             style: TextStyle(fontSize: 14, color: AppColors.scoButtonColor),
           ),
           GestureDetector(
-              onTap: () {
-                // remove the file
-                setState(() {
-                  widget.myAttachment.userFileNameController.text = "";
-                  widget.myAttachment.base64StringController.text = "";
-                  widget.myAttachment.commentController.text = '';
-                  file = null;
-                });
-              },
+              onTap: widget.onAction,
               child: SvgPicture.asset("assets/action.svg"))
         ],
       ),
@@ -185,6 +139,8 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
     ]);
   }
 }
+
+
 
 
 

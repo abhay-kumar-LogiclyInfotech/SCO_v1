@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart' hide TextDirection;
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:xml/xml.dart';
 
@@ -66,18 +68,17 @@ class Utils {
   //*------Common Loading Indicators Start------*/
 
   //*-----Material Loading Indicator-----*/
-  static Widget materialLoadingIndicator() => const Center(
+  static Widget materialLoadingIndicator({dynamic color = Colors.white}) =>  Center(
         child: CircularProgressIndicator(
-          color: Colors.white,
+          color: color,
           strokeWidth: 1.5,
         ),
       );
 
 //*-----Cupertino Loading Indicator-----*/
-  static Widget cupertinoLoadingIndicator() => const Center(
-          child: CupertinoActivityIndicator(
-        color: AppColors.scoButtonColor,
-      ));
+  static Widget cupertinoLoadingIndicator({dynamic color = AppColors.scoButtonColor}) =>  Center(
+          child:   CupertinoActivityIndicator(
+        color: color));
 
   // *-----Show Loading more data from server-----*/
 
@@ -113,6 +114,27 @@ class Utils {
           size: 23,
         ),
       ));
+
+
+
+
+
+  // model progress hud
+
+  static Widget modelProgressHud(
+      {bool processing = false, dynamic child}
+      ){
+   return  ModalProgressHUD(
+       color: Colors.blueGrey,
+       opacity: 0.3,
+       blur: 0.1,
+       dismissible: false,
+       progressIndicator: Platform.isAndroid ? Utils.materialLoadingIndicator(color: AppColors.scoThemeColor) : Utils.cupertinoLoadingIndicator(color: AppColors.scoThemeColor),
+    inAsyncCall: processing,
+    child: child);
+  }
+
+
 }
 
 //Get Text Direction Method:
@@ -521,6 +543,8 @@ String formatDateOnly(String? dateString) {
     return '';
   }
 }
+
+
 
 
 

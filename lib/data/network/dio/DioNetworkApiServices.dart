@@ -208,6 +208,13 @@ class DioNetworkApiServices extends DioBaseApiServices {
         final errorData = response.data;
         final error = errorData['error'];
         final errors = errorData['errors'];
+        final message = errorData['message'];
+
+
+
+        if (message != null) {
+          return message.toString();
+        }
 
         if (error != null) {
           return error.toString();

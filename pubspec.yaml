@@ -45,7 +45,7 @@ dependencies:
   flutter_svg:
   delightful_toast:
   intl_phone_field:
-  modal_progress_hud_nsn:
+  modal_progress_hud_nsn: ^0.5.1
   image_picker:
   path:
   http_parser:
