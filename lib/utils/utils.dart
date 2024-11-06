@@ -80,6 +80,13 @@ class Utils {
           child:   CupertinoActivityIndicator(
         color: color));
 
+
+  //*----- page  Loading Indicator-----*/
+  static Widget pageLoadingIndicator({dynamic color = AppColors.scoButtonColor}) =>  Center(
+      child: Platform.isAndroid ? Utils.materialLoadingIndicator(color: color) : Utils.cupertinoLoadingIndicator(color: color));
+
+
+
   // *-----Show Loading more data from server-----*/
 
   static Widget spinkitThreeBounce() => const Center(

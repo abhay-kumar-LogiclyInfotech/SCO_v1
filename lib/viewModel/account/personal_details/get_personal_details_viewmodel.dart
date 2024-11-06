@@ -3,21 +3,23 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/controller/internet_controller.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
-import 'package:sco_v1/models/account/StudentProfileModel.dart';
+import 'package:sco_v1/models/account/personal_details/PersonalDetailsModel.dart';
 import 'package:sco_v1/repositories/home/home_repository.dart';
 
-import '../../data/response/ApiResponse.dart';
-import '../../utils/constants.dart';
-import '../services/alert_services.dart';
-import '../services/auth_services.dart';
+import '../../../data/response/ApiResponse.dart';
+import '../../../utils/constants.dart';
+import '../../services/alert_services.dart';
+import '../../services/auth_services.dart';
 
 
-class StudentProfileViewmodel with ChangeNotifier {
+
+
+class GetPersonalDetailsViewModel with ChangeNotifier {
 
   late AuthService _authService;
   late AlertServices _alertServices;
 
-  StudentProfileViewmodel()
+  GetPersonalDetailsViewModel()
   {
     final GetIt getIt = GetIt.instance;
     _authService = getIt.get<AuthService>();
@@ -41,16 +43,16 @@ class StudentProfileViewmodel with ChangeNotifier {
 
   final _myRepo = HomeRepository();
 
-  ApiResponse<StudentProfileModel> _apiResponse = ApiResponse.none();
+  ApiResponse<PersonalDetailsModel> _apiResponse = ApiResponse.none();
 
-  ApiResponse<StudentProfileModel> get apiResponse => _apiResponse;
+  ApiResponse<PersonalDetailsModel> get apiResponse => _apiResponse;
 
-  set setUserProfileInfo(ApiResponse<StudentProfileModel> response) {
+  set setUserProfileInfo(ApiResponse<PersonalDetailsModel> response) {
     _apiResponse = response;
     notifyListeners();
   }
 
-  studentProfile() async {
+  getPersonalDetails() async {
 
     final InternetController networkController = Get.find<InternetController>();
 
@@ -69,7 +71,7 @@ class StudentProfileViewmodel with ChangeNotifier {
           'authorization': Constants.basicAuth
         };
 
-        StudentProfileModel response = await _myRepo.studentProfileInformation(userId: _userId ?? '',headers: headers);
+        PersonalDetailsModel response = await _myRepo.getPersonalDetails(userId: _userId ?? '',headers: headers);
 
         setUserProfileInfo = ApiResponse.completed(response);
         setLoading(false);

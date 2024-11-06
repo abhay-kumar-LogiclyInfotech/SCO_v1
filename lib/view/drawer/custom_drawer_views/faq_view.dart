@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
-import 'package:sco_v1/resources/components/custom_expansion_tile.dart';
+import 'package:sco_v1/resources/components/tiles/custom_expansion_tile.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
@@ -25,8 +27,7 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       final provider = Provider.of<FaqViewModel>(context, listen: false);
-      final langProvider =
-          Provider.of<LanguageChangeViewModel>(context, listen: false);
+      final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
       await provider.getFaq(context: context, langProvider: langProvider);
     });
   }
@@ -53,10 +54,8 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
           builder: (context, provider, _) {
             switch (provider.faqResponse.status) {
               case Status.LOADING:
-                return const Center(
-                  child: CupertinoActivityIndicator(
-                    color: AppColors.scoThemeColor,
-                  ),
+                return  Center(
+                  child: Platform.isAndroid ? Utils.materialLoadingIndicator() : Utils.cupertinoLoadingIndicator(),
                 );
 
               case Status.ERROR:

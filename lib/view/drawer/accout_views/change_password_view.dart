@@ -12,7 +12,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomSimpleAppBar(title: Text("Security Question View"),),
+      appBar: CustomSimpleAppBar(title: Text("Change Password View"),),
     );
   }
 }

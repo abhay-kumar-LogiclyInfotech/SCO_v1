@@ -3,13 +3,13 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
-import 'package:sco_v1/resources/components/custom_sco_program_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 import '../../../resources/app_colors.dart';
+import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
 class ScoPrograms extends StatefulWidget {
@@ -53,7 +53,6 @@ class _ScoProgramsState extends State<ScoPrograms>
         itemCount: 10,
         itemBuilder: (context, index) {
           return CustomScoProgramTile(
-              textDirection: getTextDirection(provider),
               imagePath: "assets/sidemenu/distinguished_doctors.jpg",
               title: "Scholarships in Abroad",
               subTitle:

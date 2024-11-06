@@ -13,7 +13,6 @@ import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/user_info_container.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
-import 'package:sco_v1/viewModel/account/studentProfileViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';

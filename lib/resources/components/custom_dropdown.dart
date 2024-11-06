@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:sco_v1/utils/utils.dart';
 
@@ -48,19 +49,32 @@ class CustomDropdown extends StatefulWidget {
   State<CustomDropdown> createState() => _CustomDropdownState();
 }
 
+
+
+
 class _CustomDropdownState extends State<CustomDropdown>
     with MediaQueryMixin<CustomDropdown> {
   @override
   Widget build(BuildContext context) {
+
+
+
+
+
     return Directionality(
       textDirection: widget.textDirection,
       child: IgnorePointer(
         ignoring: widget.readOnly ?? false,
-        child: DropdownButtonFormField(
-          isExpanded: true,
+        child:
+
+        // DropdownButtonFormField(
+        DropdownButtonFormField2(
+
+        isExpanded: true,
           // dropdownColor: AppColors.scoButtonColor,
 
-          dropdownColor: Colors.white,
+          // dropdownColor: Colors.white,
+
           items: widget.menuItemsList,
           value: widget.value,
           onChanged: widget.onChanged,
@@ -104,7 +118,7 @@ class _CustomDropdownState extends State<CustomDropdown>
           style: TextStyle(
             color: widget.textColor ?? AppColors.hintDarkGrey,
           ),
-          padding: EdgeInsets.zero,
+          // padding: EdgeInsets.zero,
           hint: Text(
             widget.hintText ?? widget.menuItemsList[0].value.toString(),
             style: TextStyle(
@@ -114,12 +128,24 @@ class _CustomDropdownState extends State<CustomDropdown>
             ),
             overflow: TextOverflow.ellipsis,
           ),
-          icon: const Icon(
+          iconStyleData: const IconStyleData(icon:  Icon(
             Icons.keyboard_arrow_down_sharp,
             color: AppColors.darkGrey,
           ),
-
-
+          openMenuIcon: Icon(
+            Icons.keyboard_arrow_up_sharp,
+            color: AppColors.darkGrey,
+          ),
+          ),
+          menuItemStyleData: const MenuItemStyleData(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+          ),
+          dropdownStyleData: DropdownStyleData(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
           // keyboardType: widget.textInputType ?? TextInputType.text,
         ),
       ),

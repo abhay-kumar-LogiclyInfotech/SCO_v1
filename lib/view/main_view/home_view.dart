@@ -5,9 +5,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/controller/dependency_injection.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
+import 'package:sco_v1/resources/components/carsousel_slider.dart';
 import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/select_scholarship_type_view.dart';
 import 'package:sco_v1/view/authentication/login/login_view.dart';
@@ -18,7 +21,7 @@ import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../resources/app_colors.dart';
-import '../../resources/components/custom_sco_program_tile.dart';
+import '../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../resources/custom_painters/faq_painters.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../drawer/custom_drawer_views/vision_and_mission_view.dart';
@@ -57,6 +60,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     );
   }
 
+
+  // check for the scholarship status
+  ScholarshipStatus scholarshipStatus = ScholarshipStatus.applyScholarship;
+
   Widget _buildUI() {
     // *-----Initialize the languageProvider-----*
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
@@ -70,17 +77,34 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
               // *-----Client Said he don't need CarouselSlider on the home page----*/
               // _carouselSlider(),
-              _scholarshipAppliedContainer(langProvider: langProvider),
-              kFormHeight,
-              _scholarshipApproved(langProvider: langProvider),
-              kFormHeight,
+            if(scholarshipStatus == ScholarshipStatus.appliedScholarship)
+              Column(
+                children: [
+                  _scholarshipAppliedContainer(langProvider: langProvider),
+                  kFormHeight,
+                ],
+              ),
+
+              if(scholarshipStatus == ScholarshipStatus.approvedScholarship)
+                Column(
+                  children: [
+                    _scholarshipApproved(langProvider: langProvider),
+                    kFormHeight,
+                  ],
+                ),
+
               // _faqContainer(langProvider: langProvider),
+              // kFormHeight,
+              // _aboutOrganization(langProvider: langProvider),
               kFormHeight,
-              _aboutOrganization(langProvider: langProvider),
-              kFormHeight,
-              _applyScholarshipButton(langProvider: langProvider),
-              kFormHeight,
-              _scoPrograms(langProvider: langProvider),
+              if(scholarshipStatus == ScholarshipStatus.applyScholarship) Column(children: [
+                _applyScholarshipButton(langProvider: langProvider),
+                kFormHeight,
+                _scoPrograms(langProvider: langProvider),
+                kFormHeight,
+              ],),
+
+              if(scholarshipStatus == ScholarshipStatus.appliedScholarship || scholarshipStatus == ScholarshipStatus.applyScholarship)   _faqSection(langProvider:langProvider)
             ],
           ),
         ),
@@ -262,7 +286,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         icon: Image.asset("assets/scholarship_office.png"),
         content: Column(
           children: [
-
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -483,111 +506,199 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         langProvider: langProvider,
         title: AppLocalizations.of(context)!.scholarshipOffice,
         icon: Image.asset("assets/scholarship_office.png"),
-        content: CustomButton(
-          buttonName: "Apply Scholarship",
-          isLoading: false,
-          onTap: () {},
-          textDirection: getTextDirection(langProvider),
-          textColor: AppColors.scoThemeColor,
-          borderColor: AppColors.scoThemeColor,
-          buttonColor: Colors.white,
-          fontSize: 16,
-          height: 45,
+        content: Column(
+          children: [
+            kFormHeight,
+            CustomButton(
+              buttonName: "Apply Scholarship",
+              isLoading: false,
+              onTap: () async {
+                // check if user is logged in or not
+                final bool alreadyLoggedIn = await _authService.isLoggedIn();
+                if (!alreadyLoggedIn) {
+                  _navigationServices.goBackUntilFirstScreen();
+                  _navigationServices.pushCupertino(CupertinoPageRoute(
+                      builder: (context) => const LoginView()));
+                } else {
+                  _navigationServices.pushSimpleWithAnimationRoute(
+                      createRoute(const SelectScholarshipTypeView()));
+                }
+              },
+              textDirection: getTextDirection(langProvider),
+              textColor: AppColors.scoThemeColor,
+              borderColor: AppColors.scoThemeColor,
+              buttonColor: Colors.white,
+              fontSize: 16,
+              height: 45,
+            ),
+            kFormHeight,
+          ],
         ));
   }
 
-  // *---- Sco programs ----*
-
+  // *---- Sco programs slider ----*
+  final _scoProgramsList = [
+    CustomScoProgramTile(
+        imagePath: "assets/sidemenu/distinguished_doctors.jpg",
+        title: "Scholarships in UAE",
+        subTitle: "The office, which was establishe in 1999 under the direct..",
+        onTap: () {}),
+    CustomScoProgramTile(
+        imagePath: "assets/sidemenu/distinguished_doctors.jpg",
+        title: "Scholarships in Abroad",
+        subTitle: "The office, which was establishe in 1999 under the direct..",
+        onTap: () {}),
+    CustomScoProgramTile(
+        imagePath: "assets/sidemenu/distinguished_doctors.jpg",
+        title: "Scholarships in Abroad",
+        subTitle: "The office, which was establishe in 1999 under the direct..",
+        onTap: () {}),
+  ];
+  int _scoProgramCurrentIndex = 0;
   Widget _scoPrograms({required LanguageChangeViewModel langProvider}) {
     return Column(
-      crossAxisAlignment:CrossAxisAlignment.start
-      ,children: [
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Row(
           children: [
-
             // title for sco programs
-            Text("SCO Program",style: AppTextStyles.appBarTitleStyle(),textAlign: TextAlign.left,overflow: TextOverflow.ellipsis,),
+            Text(
+              "SCO Program",
+              style: AppTextStyles.appBarTitleStyle(),
+              textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
+            ),
 
             // slider for sco programs
-
-
           ],
         ),
-      CarouselSlider(
-        options: CarouselOptions(
-          // height: orientation == Orientation.portrait ? 190.0 : 210,
-          aspectRatio: 16 / 9,
-          viewportFraction: 1,
-          initialPage: 0,
-          enableInfiniteScroll: true,
-          reverse: false,
-          autoPlay: true,
-          autoPlayInterval: const Duration(seconds: 3),
-          autoPlayAnimationDuration: const Duration(milliseconds: 800),
-          autoPlayCurve: Curves.fastOutSlowIn,
-          enlargeCenterPage: true,
-          enlargeFactor: 0.2,
-          scrollDirection: Axis.horizontal,
-        ),
-        items: [CustomScoProgramTile(
-            textDirection: getTextDirection(langProvider),
-            imagePath: "assets/sidemenu/distinguished_doctors.jpg",
-            title: "Scholarships in Abroad",
-            subTitle:
-            "The office, which was establishe in 1999 under the direct..",
-            onTap: () {})]),
+        Column(
+          children: [
+            // carousel slider
+            CustomCarouselSlider(
+              items: _scoProgramsList,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _scoProgramCurrentIndex = index;
+                });
+              },
+            ),
+            kFormHeight,            // animated moving dots
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _scoProgramsList.asMap().entries.map((entry) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  width: _scoProgramCurrentIndex == entry.key ? 7.0 : 5.0,
+                  height: 7.0,
+                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _scoProgramCurrentIndex == entry.key
+                        ? Colors.black
+                        : Colors.grey,
+                  ),
 
-    ],
+                );
+              }).toList(),
+            )
+          ],
+        )
+      ],
     );
   }
+
+  // &---- FaQ section -----*
+  Widget _faqSection({langProvider})
+  {
+    return _homeViewCard(title: "FAQ", icon: const Icon(Icons.face), content: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text("Frequently Asked Questions",style: AppTextStyles.titleTextStyle(),)
+      ],
+    ), langProvider: langProvider,
+      onTap: (){
+      // Navigate to FAQ page
+        _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const FaqView()));
+
+    }
+
+
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
 
   // main card for home
   Widget _homeViewCard(
       {required String title,
       required Widget icon,
       required Widget content,
-      required LanguageChangeViewModel langProvider}) {
-    return Material(
-      elevation: 1,
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(kCardRadius),
-      child: Directionality(
-        textDirection: getTextDirection(langProvider),
-        child: Padding(
-          padding: EdgeInsets.all(kPadding),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(child: Row(
-                    children: [
-                      icon,
-                      const SizedBox(width: 10),
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: Color(0xff093B59),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+      required LanguageChangeViewModel langProvider,
+      VoidCallback? onTap,
+      }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Material(
+        elevation: 2,
+        color: Colors.white,
+        shadowColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(kCardRadius),
+        child: Directionality(
+          textDirection: getTextDirection(langProvider),
+          child: Padding(
+            padding: EdgeInsets.all(kPadding),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                        child: Row(
+                      children: [
+                        icon,
+                        const SizedBox(width: 10),
+                        Text(
+                          title,
+                          style: AppTextStyles.titleBoldTextStyle(),
                         ),
-                      ),
-                    ],
-                  ))
-                 ,
-                  Icon( getTextDirection(langProvider) == TextDirection.rtl ? Icons.keyboard_arrow_left_outlined : Icons.keyboard_arrow_right_outlined)
-                ],
-              ),
-              kFormHeight,
-              content
-            ],
+                      ],
+                    )),
+                    Icon(getTextDirection(langProvider) == TextDirection.rtl
+                        ? Icons.keyboard_arrow_left_outlined
+                        : Icons.keyboard_arrow_right_outlined,color: Colors.grey,)
+                  ],
+                ),
+                kFormHeight,
+                content
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+
+
+
+
+
+
+
 
   Widget _buildInfoRow1() {
     return Consumer<LanguageChangeViewModel>(
@@ -620,8 +731,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                     _navigationServices.pushCupertino(CupertinoPageRoute(
                         builder: (context) => const LoginView()));
                   } else {
-                    _navigationServices.pushSimpleWithAnimationRoute(
-                        createRoute(const SelectScholarshipTypeView()));
+                    _navigationServices.pushSimpleWithAnimationRoute(createRoute(const SelectScholarshipTypeView()));
                   }
                 },
                 textDirection: getTextDirection(provider),

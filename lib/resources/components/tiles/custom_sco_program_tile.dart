@@ -1,20 +1,23 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../app_text_styles.dart';
+import '../../app_text_styles.dart';
+
 
 class CustomScoProgramTile extends StatefulWidget {
 
-  final TextDirection textDirection;
   final String imagePath;
   final String title;
   final String subTitle;
   final void Function() onTap;
 
   const CustomScoProgramTile({super.key,
-    required this.textDirection,
     required this.imagePath,
     required this.title,
     required this.subTitle,
@@ -28,31 +31,33 @@ class CustomScoProgramTile extends StatefulWidget {
 class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQueryMixin<CustomScoProgramTile> {
   @override
   Widget build(BuildContext context) {
+
+    final langProvider = Provider.of<LanguageChangeViewModel>(context,listen:false);
+
     return   Directionality(
-      textDirection: widget.textDirection,
+      textDirection: getTextDirection(langProvider),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Material(
-            elevation: 1,
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
-            child: Container(
-              padding: const EdgeInsets.only(top: 10,bottom: 10,right: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(flex:4,child: _imageSection()),
-                  Expanded(flex:10,child: _titleSection()),
-                  Expanded(flex:1,child: _endSection())
-                ],
-              ),
+        child: Material(
+          elevation: 5,
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.transparent,
+          shadowColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.only(left:10,top: 10,bottom: 10,right: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(flex:3,child: _imageSection()),
+                Expanded(flex:10,child: _titleSection()),
+                Expanded(flex:1,child: _endSection())
+              ],
             ),
           ),
         ),
@@ -71,6 +76,8 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
             widget.imagePath,
             filterQuality: FilterQuality.high,
             fit: BoxFit.fill,
+            height: 76,
+            width: 76,
             // width: screenWidth / 4,
             // height: screenHeight / 11,
             errorBuilder: (BuildContext context, Object, StackTrace) {
@@ -78,12 +85,15 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
                 "assets/sidemenu/scholarships_uae.jpg",
                 filterQuality: FilterQuality.high,
                 fit: BoxFit.fill,
+                height: 76,
+                width: 76,
                 // width: screenWidth / 4,
                 // height: screenHeight / 11,
               );
             },
           ),
         ),
+        // green tick
         Container(
             height: 17,
             width: 19,
@@ -124,7 +134,7 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
       padding: const EdgeInsets.only(left: 10,right: 20),
       child:  Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //Title
@@ -138,7 +148,9 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
           Text(
             widget.subTitle.length < 50 ? widget.subTitle : "${widget.subTitle.substring(0, 50)}...",
             textAlign: TextAlign.left,
-            style: AppTextStyles.subTitleTextStyle(),
+            style: TextStyle(
+              color: Colors.black,fontSize: 12,height: 1.5
+            ),
           ),
         ],
       ),
@@ -146,17 +158,20 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
   }
 
   Widget _endSection() {
+   final langProvider  = Provider.of<LanguageChangeViewModel>(context,listen: false);
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SvgPicture.asset(
+
+        Transform.rotate(angle: getTextDirection(langProvider) == TextDirection.rtl ? pi : 0,child: SvgPicture.asset(
           "assets/sidemenu/goForward.svg",
           width: 20,
           height: 20,
           fit: BoxFit.fill,
-        ),
+        ),),
+
       ],
     );
   }

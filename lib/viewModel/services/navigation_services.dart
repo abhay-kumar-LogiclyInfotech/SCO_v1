@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 
 import '../../view/authentication/reset_password_view.dart';
 import '../../view/authentication/signup/sign_up_view.dart';
@@ -27,6 +28,8 @@ class NavigationServices {
     "/signUpView": (context) => const SignUpView(),
     "/resetPasswordView": (context) => const ResetPasswordView(),
     "/forgotPasswordView": (context) => const ForgotPasswordView(),
+    "/FaqView": (context) => const FaqView(),
+
     // "/aBriefAboutScoView": (context) => const ABriefAboutScoView(),
     "/scoPrograms": (context) => const ScoPrograms(),
     "/updateSecurityQuestionView": (context) => const UpdateSecurityQuestionView(),

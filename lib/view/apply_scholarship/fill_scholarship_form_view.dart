@@ -15,6 +15,7 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/models/account/personal_details/PersonalDetailsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
@@ -26,6 +27,7 @@ import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/attach_file.dart';
 import 'package:sco_v1/view/apply_scholarship/steps_progress_view.dart';
+import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
@@ -33,7 +35,6 @@ import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 
 import '../../data/response/status.dart';
-import '../../models/account/StudentProfileModel.dart';
 import '../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_styles.dart';
@@ -41,7 +42,6 @@ import '../../resources/components/account/Custom_inforamtion_container.dart';
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/myDivider.dart';
 import '../../utils/constants.dart';
-import '../../viewModel/account/studentProfileViewmodel.dart';
 import '../../viewModel/apply_scholarship/attach_file_viewmodel.dart';
 import '../../viewModel/apply_scholarship/deleteDraftViewmodel.dart';
 import '../../viewModel/services/alert_services.dart';
@@ -649,8 +649,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       }
 
       // fetch student profile Information t prefill the user information
-      final studentProfileProvider = Provider.of<StudentProfileViewmodel>(context, listen: false);
-      await studentProfileProvider.studentProfile();
+      final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
+      await studentProfileProvider.getPersonalDetails();
 
       if (studentProfileProvider.apiResponse.status == Status.COMPLETED) {
         var data = studentProfileProvider.apiResponse.data?.data?.user;

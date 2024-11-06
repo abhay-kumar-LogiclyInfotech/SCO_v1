@@ -8,8 +8,9 @@ import '../app_colors.dart';
 import '../app_text_styles.dart';
 
 class CustomSimpleAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Widget title;
-  const CustomSimpleAppBar({super.key, required this.title});
+   Widget? title;
+  String? titleAsString;
+   CustomSimpleAppBar({super.key,  this.title,this.titleAsString});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,12 @@ class CustomSimpleAppBar extends StatelessWidget implements PreferredSizeWidget 
       textDirection: getTextDirection(provider),
       child: AppBar(
         backgroundColor: Colors.white,
-        title: title,
+        title:
+
+      titleAsString != null ?  Text(titleAsString ?? '',
+            style: AppTextStyles.appBarTitleStyle())
+
+         : title,
 
         automaticallyImplyLeading: false,
         leading: IconButton(

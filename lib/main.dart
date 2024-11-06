@@ -6,7 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/viewModel/account/studentProfileViewmodel.dart';
+import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/attach_file_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/deleteDraftViewmodel.dart';
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
 
           // Account
-          ChangeNotifierProvider(create: (_) => StudentProfileViewmodel()),
+          ChangeNotifierProvider(create: (_) => GetPersonalDetailsViewModel()),
 
 
           // find Draft by Configuration Key

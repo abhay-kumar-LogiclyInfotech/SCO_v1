@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
-import 'package:sco_v1/resources/components/custom_news_and_events_tile.dart';
+import 'package:sco_v1/resources/components/tiles/custom_news_and_events_tile.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_details_view.dart';
@@ -106,6 +106,7 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
                                 .pushCupertino(CupertinoPageRoute(
                               builder: (context) => NewsAndEventsDetailView(
                                   imageId: item.coverImageFileEntryId,
+                                  date: item.getFormattedDate().toString(),
                                   title: item.getTitle(languageId),
                                   subTitle: item.getDescription(languageId),
                                   content: item.getContent(languageId)),

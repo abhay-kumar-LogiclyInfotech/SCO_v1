@@ -4,17 +4,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/main_view/account_view.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/account_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_view.dart';
 import 'package:sco_v1/view/main_view/academic_services_view.dart';
-import 'package:sco_v1/view/main_view/accout_views/addresses_view.dart';
 import 'package:sco_v1/view/main_view/home_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../resources/app_colors.dart';
 import '../resources/components/custom_main_view_app_bar.dart';
 import 'main_view/about_us_view.dart';
-import 'main_view/sco_program_view.dart';
+import 'main_view/support _view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -71,15 +70,15 @@ class _MainViewState extends State<MainView> {
       endDrawerEnableOpenDragGesture:
           provider_1.appLocale == const Locale('ar') ? true : false,
       body: _buildUI(),
-      bottomNavigationBar: SafeArea(
-        child: Material(
-          color: Colors.white,
-          elevation: 0,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 5.0),
+      bottomNavigationBar: Material(
+        color: Colors.white,
+        elevation: 0,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: SafeArea(
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,8 +200,8 @@ class _MainViewState extends State<MainView> {
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

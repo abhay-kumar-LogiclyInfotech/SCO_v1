@@ -1,13 +1,13 @@
 import 'dart:convert';
 /// messageCode : "0000"
 /// message : "Operation Completed Successfully"
-/// data : {"data":null,"userInfoType":"LIFERAY","userInfo":null,"user":{"userId":327478,"firstName":"زايد","lastName":"المزروعي","middleName":"aaa","middleName2":"bbb","emailAddress":"784199068696840@gmail.com","lockout":false,"companyId":20099,"username":"784199068696840","role":null,"birthDate":"1993-07-16","gender":"F","phoneNumber":"055-343-3434","nationality":"ARE","emirateId":"784199068696840","uaePassUuid":""}}
+/// data : {"data":null,"userInfoType":"LIFERAY","userInfo":null,"user":{"userId":969375,"firstName":"Test","lastName":"Test","middleName":"Test","middleName2":"Test","emailAddress":"test1@hotmail.com","lockout":false,"companyId":20099,"username":"784200479031062","role":null,"birthDate":"2012-09-19","gender":"F","phoneNumber":"0123456789","nationality":"","emirateId":"784200479031062","uaePassUuid":""}}
 /// error : false
 
-StudentProfileModel studentProfileModelFromJson(String str) => StudentProfileModel.fromJson(json.decode(str));
-String studentProfileModelToJson(StudentProfileModel data) => json.encode(data.toJson());
-class StudentProfileModel {
-  StudentProfileModel({
+PersonalDetailsModel personalDetailsModelFromJson(String str) => PersonalDetailsModel.fromJson(json.decode(str));
+String personalDetailsModelToJson(PersonalDetailsModel data) => json.encode(data.toJson());
+class PersonalDetailsModel {
+  PersonalDetailsModel({
       String? messageCode, 
       String? message, 
       Data? data, 
@@ -18,7 +18,7 @@ class StudentProfileModel {
     _error = error;
 }
 
-  StudentProfileModel.fromJson(dynamic json) {
+  PersonalDetailsModel.fromJson(dynamic json) {
     _messageCode = json['messageCode'];
     _message = json['message'];
     _data = json['data'] != null ? Data.fromJson(json['data']) : null;
@@ -28,11 +28,11 @@ class StudentProfileModel {
   String? _message;
   Data? _data;
   bool? _error;
-StudentProfileModel copyWith({  String? messageCode,
+PersonalDetailsModel copyWith({  String? messageCode,
   String? message,
   Data? data,
   bool? error,
-}) => StudentProfileModel(  messageCode: messageCode ?? _messageCode,
+}) => PersonalDetailsModel(  messageCode: messageCode ?? _messageCode,
   message: message ?? _message,
   data: data ?? _data,
   error: error ?? _error,
@@ -58,7 +58,7 @@ StudentProfileModel copyWith({  String? messageCode,
 /// data : null
 /// userInfoType : "LIFERAY"
 /// userInfo : null
-/// user : {"userId":327478,"firstName":"زايد","lastName":"المزروعي","middleName":"aaa","middleName2":"bbb","emailAddress":"784199068696840@gmail.com","lockout":false,"companyId":20099,"username":"784199068696840","role":null,"birthDate":"1993-07-16","gender":"F","phoneNumber":"055-343-3434","nationality":"ARE","emirateId":"784199068696840","uaePassUuid":""}
+/// user : {"userId":969375,"firstName":"Test","lastName":"Test","middleName":"Test","middleName2":"Test","emailAddress":"test1@hotmail.com","lockout":false,"companyId":20099,"username":"784200479031062","role":null,"birthDate":"2012-09-19","gender":"F","phoneNumber":"0123456789","nationality":"","emirateId":"784200479031062","uaePassUuid":""}
 
 Data dataFromJson(String str) => Data.fromJson(json.decode(str));
 String dataToJson(Data data) => json.encode(data.toJson());
@@ -111,21 +111,21 @@ Data copyWith({  dynamic data,
 
 }
 
-/// userId : 327478
-/// firstName : "زايد"
-/// lastName : "المزروعي"
-/// middleName : "aaa"
-/// middleName2 : "bbb"
-/// emailAddress : "784199068696840@gmail.com"
+/// userId : 969375
+/// firstName : "Test"
+/// lastName : "Test"
+/// middleName : "Test"
+/// middleName2 : "Test"
+/// emailAddress : "test1@hotmail.com"
 /// lockout : false
 /// companyId : 20099
-/// username : "784199068696840"
+/// username : "784200479031062"
 /// role : null
-/// birthDate : "1993-07-16"
+/// birthDate : "2012-09-19"
 /// gender : "F"
-/// phoneNumber : "055-343-3434"
-/// nationality : "ARE"
-/// emirateId : "784199068696840"
+/// phoneNumber : "0123456789"
+/// nationality : ""
+/// emirateId : "784200479031062"
 /// uaePassUuid : ""
 
 User userFromJson(String str) => User.fromJson(json.decode(str));

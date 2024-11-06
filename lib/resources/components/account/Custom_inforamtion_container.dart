@@ -157,49 +157,40 @@ class DashedBottomBorderPainter extends CustomPainter {
 class CustomInformationContainerField extends StatelessWidget {
   final String title;
   String? description;
-  CustomInformationContainerField({super.key, required this.title, this.description});
+   bool isLastItem;
+  CustomInformationContainerField({super.key, required this.title, this.description,this.isLastItem = false});
 
   @override
   Widget build(BuildContext context) {
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
     return Directionality(
       textDirection: getTextDirection(langProvider),
-      child: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border:
-              Border(bottom: BorderSide(color: AppColors.darkGrey, width: 1.5)),
-        ),
-        child: CustomPaint(
-          painter: DashedLinePainter(),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 13),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
+      child: Padding(
+        padding: !isLastItem ? const  EdgeInsets.only(bottom: 15.0) : EdgeInsets.zero,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.only(bottom: 10),
+          decoration:  BoxDecoration(
+            color: Colors.white,
+            border: !isLastItem ? const Border(bottom: BorderSide(color: AppColors.darkGrey, width: 1.5)) : null,
+          ),
+          child: CustomPaint(
+            painter: DashedLinePainter(),
+            child: Column(
+              // mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    title,
-                    style: description != null
-                        ? AppTextStyles.titleTextStyle()
-                            .copyWith(fontWeight: FontWeight.w500)
-                        : null,
-                    textAlign: TextAlign.justify,
-                  ),
+                Text(
+                  title,
+                  style: AppTextStyles.titleTextStyle().copyWith(fontWeight: FontWeight.w500,fontSize: 12) ,
+                  textAlign: TextAlign.justify,
                 ),
                 description != null
-                    ? Expanded(
-                        flex: 3,
-                        child: Text(
-                          description!,
-                          style: AppTextStyles.normalTextStyle(),
-                          textAlign: TextAlign.justify,
-                        ),
-                      )
+                    ? Text(
+                      description!,
+                      style: AppTextStyles.normalTextStyle().copyWith(fontWeight: FontWeight.w600,fontSize: 14,color: AppColors.scoButtonColor),
+                      textAlign: TextAlign.justify,
+                    )
                     : const SizedBox.shrink()
               ],
             ),
@@ -223,14 +214,14 @@ class DashedLinePainter extends CustomPainter {
     const double dashGap = 4;
     double startX = 5.5;
 
-    while (startX < size.width - 5.5) {
-      canvas.drawLine(
-        Offset(startX, size.height),
-        Offset(startX + dashWidth, size.height),
-        paintWithColor,
-      );
-      startX += dashWidth + dashGap;
-    }
+    // while (startX < size.width - 5.5) {
+    //   canvas.drawLine(
+    //     Offset(startX, size.height),
+    //     Offset(startX + dashWidth, size.height),
+    //     paintWithColor,
+    //   );
+    //   startX += dashWidth + dashGap;
+    // }
   }
 
   @override

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/sco_programs.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/vision_and_mission_view.dart';
+import 'package:sco_v1/view/drawer/custom_drawer_views/account_view.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -48,13 +49,13 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
 
   bool _isArabic = false;
   bool _isLoading = true; // State to track loading
+  bool _toLogin = false;
 
   final _languageController = ValueNotifier<bool>(false);
 
   Future<void> getInitialLanguage() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? language = preferences.getString('language_code');
-    debugPrint(language);
 
     if (language != null && language == 'ar') {
       _isArabic = true;
@@ -63,6 +64,11 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
       _isArabic = false;
       _languageController.value = false;
     }
+
+
+    // check user is logged in or not
+    _toLogin = await _authService.isLoggedIn();
+    print(_toLogin);
 
     setState(() {
       _isLoading = false; // Set loading to false after initialization
@@ -79,8 +85,12 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
 
 
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getInitialLanguage();
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+
+      // getting initial language
+     await getInitialLanguage();
+
+
     });
   }
 
@@ -188,7 +198,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                           
                             //*------Menu Items Section------*/
                             //*------Login------*/
-                            ListTile(
+                          if(!_toLogin)   ListTile(
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
                               title:  Text(
@@ -209,7 +219,27 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
-                            //*------Home------*/
+
+
+                                //*------ Account ------*/
+                             if(_toLogin)   ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title:  Text(AppLocalizations.of(context)!.account, style: const TextStyle(color: Colors.white, fontSize: 14),),
+                                  leading:
+                                  SvgPicture.asset("assets/sidemenu/account.svg"),
+                                  dense: true,
+                                  horizontalTitleGap: 5,
+                                  onTap: () {
+                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const AccountView()));
+                                  },
+                                  shape: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white.withOpacity(0.25))),
+                                ),
+
+
+
+                                //*------Home------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
@@ -229,118 +259,141 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
-                            //*------About Us------*/
-                            ExpansionTile(
-                              dense: true,
-                              shape: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.25))),
-                              collapsedShape: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.25))),
-                              tilePadding: EdgeInsets.zero,
-                              leading: SvgPicture.asset(
-                                  "assets/sidemenu/aboutUs.svg"),
-                              title:  Text(
-                                AppLocalizations.of(context)!.aboutUs,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              ),
-                              iconColor: Colors.white,
-                              collapsedIconColor: Colors.white,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
 
+
+                                //*------About Us------*/
+                                ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title:  Text(
+                                    AppLocalizations.of(context)!.aboutUs,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  ),
+                                  leading:
+                                  SvgPicture.asset("assets/sidemenu/aboutUs.svg"),
+                                  dense: true,
+                                  horizontalTitleGap: 5,
+                                  onTap: () {
                                     _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ABriefAboutScoView(appBar: true,)));
                                   },
-                                  child: Container(
-                                      color: Colors.transparent,
-                                      padding: const EdgeInsets.all(8),
-                                      // width: MediaQuery.sizeOf(context).width * 0.3,
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: SvgPicture.asset(
-                                                "assets/sidemenu/briefAboutSco.svg"),
-                                          ),
-                                           Expanded(
-                                            flex: 2,
-                                            child: Text(
-                                              AppLocalizations.of(context)!.aBriefAboutSCO,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14),
-                                            ),
-                                          )
-                                        ],
-                                      )),
+                                  shape: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white.withOpacity(0.25))),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
 
-                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const VisionAndMissionView()));
 
-                                  },
-                                  child: Container(
-                                    color: Colors.transparent,
-                                    padding: const EdgeInsets.all(8),
-                                    // width: MediaQuery.sizeOf(context).width * 0.3,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: SvgPicture.asset(
-                                              "assets/sidemenu/visionMission.svg"),
-                                        ),
-                                         Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            AppLocalizations.of(context)!.visionMission,
-                          
-                                            style:const  TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const FaqView()));
-                                  },
-                                  child: Container(
-                                      color: Colors.transparent,
-                                      padding: const EdgeInsets.all(8),
-                                      // width: MediaQuery.sizeOf(context).width * 0.3,
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: SvgPicture.asset(
-                                                "assets/sidemenu/faq.svg"),
-                                          ),
-                                           Expanded(
-                                            flex: 2,
-                                            child: Text(
-                                              AppLocalizations.of(context)!.faq,
-                          
-                                              style:const  TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14),
-                                            ),
-                                          )
-                                        ],
-                                      )),
-                                ),
-                              ],
-                            ),
+                                //*------About Us------*/
+                            // ExpansionTile(
+                            //   dense: true,
+                            //   shape: UnderlineInputBorder(
+                            //       borderSide: BorderSide(
+                            //           color: Colors.white.withOpacity(0.25))),
+                            //   collapsedShape: UnderlineInputBorder(
+                            //       borderSide: BorderSide(
+                            //           color: Colors.white.withOpacity(0.25))),
+                            //   tilePadding: EdgeInsets.zero,
+                            //   leading: SvgPicture.asset(
+                            //       "assets/sidemenu/aboutUs.svg"),
+                            //   title:  Text(
+                            //     AppLocalizations.of(context)!.aboutUs,
+                            //     style: const TextStyle(
+                            //         color: Colors.white, fontSize: 14),
+                            //   ),
+                            //   iconColor: Colors.white,
+                            //   collapsedIconColor: Colors.white,
+                            //   children: <Widget>[
+                            //     GestureDetector(
+                            //       onTap: () {
+                            //
+                            //         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ABriefAboutScoView(appBar: true,)));
+                            //       },
+                            //       child: Container(
+                            //           color: Colors.transparent,
+                            //           padding: const EdgeInsets.all(8),
+                            //           // width: MediaQuery.sizeOf(context).width * 0.3,
+                            //           child: Row(
+                            //             mainAxisSize: MainAxisSize.max,
+                            //             children: [
+                            //               Expanded(
+                            //                 flex: 1,
+                            //                 child: SvgPicture.asset(
+                            //                     "assets/sidemenu/briefAboutSco.svg"),
+                            //               ),
+                            //                Expanded(
+                            //                 flex: 2,
+                            //                 child: Text(
+                            //                   AppLocalizations.of(context)!.aBriefAboutSCO,
+                            //                   style: const TextStyle(
+                            //                       color: Colors.white,
+                            //                       fontSize: 14),
+                            //                 ),
+                            //               )
+                            //             ],
+                            //           )),
+                            //     ),
+                            //     GestureDetector(
+                            //       onTap: () {
+                            //
+                            //         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const VisionAndMissionView()));
+                            //
+                            //       },
+                            //       child: Container(
+                            //         color: Colors.transparent,
+                            //         padding: const EdgeInsets.all(8),
+                            //         // width: MediaQuery.sizeOf(context).width * 0.3,
+                            //         child: Row(
+                            //           mainAxisSize: MainAxisSize.max,
+                            //           children: [
+                            //             Expanded(
+                            //               flex: 1,
+                            //               child: SvgPicture.asset(
+                            //                   "assets/sidemenu/visionMission.svg"),
+                            //             ),
+                            //              Expanded(
+                            //               flex: 2,
+                            //               child: Text(
+                            //                 AppLocalizations.of(context)!.visionMission,
+                            //
+                            //                 style:const  TextStyle(
+                            //                     color: Colors.white,
+                            //                     fontSize: 14),
+                            //               ),
+                            //             )
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     GestureDetector(
+                            //       onTap: () {
+                            //         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const FaqView()));
+                            //       },
+                            //       child: Container(
+                            //           color: Colors.transparent,
+                            //           padding: const EdgeInsets.all(8),
+                            //           // width: MediaQuery.sizeOf(context).width * 0.3,
+                            //           child: Row(
+                            //             mainAxisSize: MainAxisSize.max,
+                            //             children: [
+                            //               Expanded(
+                            //                 flex: 1,
+                            //                 child: SvgPicture.asset(
+                            //                     "assets/sidemenu/faq.svg"),
+                            //               ),
+                            //                Expanded(
+                            //                 flex: 2,
+                            //                 child: Text(
+                            //                   AppLocalizations.of(context)!.faq,
+                            //
+                            //                   style:const  TextStyle(
+                            //                       color: Colors.white,
+                            //                       fontSize: 14),
+                            //                 ),
+                            //               )
+                            //             ],
+                            //           )),
+                            //     ),
+                            //   ],
+                            // ),
                             //*------SCO Programs------*/
                             Visibility(
                               visible: true,
@@ -415,7 +468,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                       color: Colors.white.withOpacity(0.25))),
                             ),
                             //*------Logout------*/
-                            ListTile(
+                         if(_toLogin) ListTile(
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
                               title:  Text(

@@ -76,7 +76,7 @@ class _CustomButtonState extends State<CustomButton>
             padding: EdgeInsets.only(
                 top: screenWidth * 0.02, bottom: screenWidth * 0.02),
             decoration: BoxDecoration(
-                color: _isPressed ? AppColors.scoThemeColor : widget.buttonColor ?? Colors.black,
+                color: _isPressed ? AppColors.lightGrey : widget.buttonColor ?? Colors.black,
                 border: Border.all(color: widget.borderColor ?? Colors.black),
                 gradient: widget.gradient,
                 borderRadius: BorderRadius.circular(180)),

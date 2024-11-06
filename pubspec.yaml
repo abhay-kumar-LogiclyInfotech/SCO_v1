@@ -78,6 +78,9 @@ dependencies:
   material_dialogs: ^1.1.5
   logger:
   getwidget: ^4.0.0
+  dropdown_button2: ^2.3.9
+  cached_network_image: ^3.4.1
+  profile_photo: ^1.0.3
   flutter_localizations:
     sdk: flutter
   device_info_plus: ^9.1.2
@@ -113,7 +116,9 @@ flutter:
   assets:
     - assets/
     - assets/sidemenu/
+    - assets/support/
     - assets/myAccount/
+    - assets/personal_details/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

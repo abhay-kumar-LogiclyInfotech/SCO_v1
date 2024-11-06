@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
@@ -19,13 +20,15 @@ class NewsAndEventsDetailView extends StatefulWidget {
   final String title;
   final String subTitle;
   final String content;
+  final String date;
 
   const NewsAndEventsDetailView(
       {super.key,
       required this.imageId,
       required this.title,
       required this.subTitle,
-      required this.content});
+      required this.content,
+      required this.date});
 
   @override
   State<NewsAndEventsDetailView> createState() =>
@@ -88,23 +91,62 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
         Provider.of<LanguageChangeViewModel>(context, listen: false);
 
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 0),
+      padding: EdgeInsets.all(kPadding),
       child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            //Image Section:
-            _imageSection(langProvider), const SizedBox(height: 20),
+        child: Material(
+          color: Colors.white,
+          shadowColor: Colors.transparent,
+          elevation: 3,
+          borderRadius: BorderRadius.circular(kCardRadius),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
 
-            _titleSection(),
-            // const SizedBox(height: 5),
-            //
-            // _descriptionSection(),
-            const SizedBox(height: 10),
+            children: [
+              //Image Section:
+              _imageSection(langProvider), const SizedBox(height: 20),
+              // date
 
-            //About Us Detailed Text Section:
-            _contentSection(), const SizedBox(height: 20),
-          ],
+
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15, bottom: 0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  children:[
+
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset("assets/sidemenu/date_icon.svg",),
+                        const SizedBox(
+                            width: 4.5
+                        ),
+                        Text(
+                          widget.date ?? "Date", // textAlign: TextAlign.justify,
+                          style:  const TextStyle(
+                            color: AppColors.scoThemeColor,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    _titleSection(),
+                    // const SizedBox(height: 5),
+                    //
+                    // _descriptionSection(),
+                    const SizedBox(height: 10),
+
+                    //About Us Detailed Text Section:
+                    _contentSection(), const SizedBox(height: 20),
+                  ]
+                ),
+              )
+
+            ],
+          ),
         ),
       ),
     );
@@ -151,6 +193,24 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
               ),
             );
           case Status.COMPLETED:
+
+            return Container(
+              height: 125,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(kCardRadius),
+
+                  image: DecorationImage(
+                    image: NetworkImage(_imageUrl ?? Constants.newsImageUrl,),
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.fill,
+                  )
+
+
+              ),
+            );
+
+
             return ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(

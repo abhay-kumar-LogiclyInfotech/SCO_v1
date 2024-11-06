@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../app_colors.dart';
+import '../../app_colors.dart';
 
 class CustomExpansionTile extends StatefulWidget {
   final String title;
@@ -35,7 +35,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
   }
 
   @override
@@ -130,18 +130,18 @@ class DashedBottomBorderPainter extends CustomPainter {
       ..color = AppColors.darkGrey
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    const double dashWidth = 4;
-    const double dashGap = 4;
-    double startX = 3;
+    // const double dashWidth = 4;
+    // const double dashGap = 4;
+    // double startX = 3;
 
-    while (startX < size.width-2) {
-      canvas.drawLine(
-        Offset(startX, 0),
-        Offset(startX + dashWidth, 0),
-        paint,
-      );
-      startX += dashWidth + dashGap;
-    }
+    // while (startX < size.width-2) {
+    //   canvas.drawLine(
+    //     Offset(startX, 0),
+    //     Offset(startX + dashWidth, 0),
+    //     paint,
+    //   );
+    //   startX += dashWidth + dashGap;
+    // }
 
     const double radius = 15;
 
