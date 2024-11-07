@@ -836,7 +836,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
 
               print(form);
               final result = await updateProvider.updatePersonalDetails(form: form);
-              print(result);
 
             }
           });

@@ -102,6 +102,28 @@ class DioNetworkApiServices extends DioBaseApiServices {
   }
 
   @override
+  Future<dynamic> dioPatchApiService({
+    required String url,
+    required Map<String, dynamic> headers,
+    required dynamic body,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        url,
+        data: body,
+        options: Options(
+          headers: headers,
+          responseType: ResponseType.json,
+        ),
+      );
+      return _handleResponse(response);
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+
+  @override
   Future<dynamic> dioDeleteApiService({
     required String url,
     required Map<String, dynamic> headers,
