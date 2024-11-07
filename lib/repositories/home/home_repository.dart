@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
+import 'package:sco_v1/models/account/personal_details/UpdatePersonalDetailsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
@@ -120,6 +121,20 @@ class HomeRepository {
     return PersonalDetailsModel.fromJson(response);
   }
 
+
+  // *------ Update User (student) Information Method ------*/
+
+
+
+  Future<UpdatePersonalDetailsModel> updatePersonalDetails(
+      {required String userId,required dynamic body, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioPutApiService(
+      url: '${AppUrls.baseUrl}self-service/personalInformation/$userId',
+      body: body,
+      headers: headers,
+    );
+    return UpdatePersonalDetailsModel.fromJson(response);
+  }
 
 
 }

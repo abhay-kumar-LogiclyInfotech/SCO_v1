@@ -147,7 +147,7 @@ class PhoneNumber {
       countryCodeController: TextEditingController(text: json['countryCode']),
       phoneNumberController: TextEditingController(text: json['phoneNumber']),
       phoneTypeController: TextEditingController(text: json['phoneType']),
-      preferred: json['prefered'] == 'true'  ?  true : false,
+      preferred: json['prefered'] == true || json['prefered'] ==  'true'  ?  true : false,
       countryCodeFocusNode: FocusNode(),
       phoneNumberFocusNode: FocusNode(),
       phoneTypeFocusNode: FocusNode(),
@@ -165,6 +165,59 @@ class PhoneNumber {
     };
   }
 }
+
+// Email
+class EmailDetail {
+  // Controllers
+  TextEditingController emailTypeController;
+  TextEditingController emailIdController;
+
+  // Boolean values for preferred and existing
+  bool prefferd;
+  bool existing;
+
+  // Focus Nodes
+  FocusNode emailTypeFocusNode;
+  FocusNode emailIdFocusNode;
+
+  // Error Text Variables
+  String? emailTypeError;
+  String? emailIdError;
+
+  EmailDetail({
+    required this.emailTypeController,
+    required this.emailIdController,
+    required this.prefferd,
+    required this.existing,
+    required this.emailTypeFocusNode,
+    required this.emailIdFocusNode,
+    this.emailTypeError,
+    this.emailIdError,
+  });
+
+  // From JSON
+  factory EmailDetail.fromJson(Map<String, dynamic> json) {
+    return EmailDetail(
+      emailTypeController: TextEditingController(text: json['emailType']),
+      emailIdController: TextEditingController(text: json['emailId']),
+      prefferd: json['prefferd'] == true || json['prefferd'] == 'true',
+      existing: json['existing'] == true || json['existing'] == 'true',
+      emailTypeFocusNode: FocusNode(),
+      emailIdFocusNode: FocusNode(),
+    );
+  }
+
+  // To JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'emailType': emailTypeController.text,
+      'emailId': emailIdController.text,
+      'prefferd': prefferd,
+      'existing': existing,
+    };
+  }
+}
+
 
 // Address inFormation
 class Address {

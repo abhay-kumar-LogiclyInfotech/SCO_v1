@@ -71,6 +71,7 @@ class _CustomDropdownState extends State<CustomDropdown>
         DropdownButtonFormField2(
 
         isExpanded: true,
+          // isDense: true,
           // dropdownColor: AppColors.scoButtonColor,
 
           // dropdownColor: Colors.white,
@@ -138,9 +139,11 @@ class _CustomDropdownState extends State<CustomDropdown>
           ),
           ),
           menuItemStyleData: const MenuItemStyleData(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+
+            padding: EdgeInsets.symmetric(horizontal: 0)
           ),
           dropdownStyleData: DropdownStyleData(
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),

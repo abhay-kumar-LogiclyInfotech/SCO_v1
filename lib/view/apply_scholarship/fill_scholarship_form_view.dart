@@ -365,23 +365,14 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
       if (Constants.lovCodeMap['BATCH#${_selectedScholarship?.acadmicCareer}']
               ?.values !=
           null) {
-        _caseStudyYearDropdownMenuItems = populateCommonDataDropdown(
-            menuItemsList: Constants
-                .lovCodeMap['BATCH#${_selectedScholarship?.acadmicCareer}']!
-                .values!,
+        _caseStudyYearDropdownMenuItems = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['BATCH#${_selectedScholarship?.acadmicCareer}']!.values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
       }
 
-      if (Constants
-              .lovCodeMap['EXAMINATION#${_selectedScholarship?.acadmicCareer}']
-              ?.values !=
+      if (Constants.lovCodeMap['EXAMINATION#${_selectedScholarship?.acadmicCareer}']?.values !=
           null) {
-        _requiredExaminationDropdownMenuItems = populateCommonDataDropdown(
-            menuItemsList: Constants
-                .lovCodeMap[
-                    'EXAMINATION#${_selectedScholarship?.acadmicCareer}']!
-                .values!,
+        _requiredExaminationDropdownMenuItems = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['EXAMINATION#${_selectedScholarship?.acadmicCareer}']!.values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
       }
@@ -1748,7 +1739,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // *--------------------------------------------------------- Arabic Name Section end ------------------------------------------------------------------------------*/
 
-                    _sectionDivider(),
+                    sectionDivider(),
 
                     // *--------------------------------------------------------- English Name Section Start ------------------------------------------------------------------------------*/
                     // Title for English name same as passport
@@ -1864,7 +1855,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         }),
                     //*--------------------------------------------------------- English Name Section end ------------------------------------------------------------------------------*/
 
-                    _sectionDivider(),
+                    sectionDivider(),
 
                     //*--------------------------------------------------------- Passport Data Section Start ------------------------------------------------------------------------------*/
                     // passport data heading
@@ -2088,7 +2079,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         }),
                     // *--------------------------------------------------------- Passport Data Section end ------------------------------------------------------------------------------*/
 
-                    _sectionDivider(),
+                    sectionDivider(),
 
                     // *--------------------------------------------------------- Personal Details Section start ------------------------------------------------------------------------------*/
                     // personal Details heading
@@ -2361,7 +2352,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                 children: [
                                   // *--------------------------------------------------------- Family Information Section start ------------------------------------------------------------------------------*/
 
-                                  _sectionDivider(),
+                                  sectionDivider(),
 
                                   // *--------------------------------------------------------- Family Information Section end ------------------------------------------------------------------------------*/
                                   // Family Information
@@ -2568,7 +2559,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // *--------------------------------------------------------- Personal Details Section end ------------------------------------------------------------------------------*/
 
-                    _sectionDivider(),
+                    sectionDivider(),
 
                     // *--------------------------------------------------------- Relative Information Section Start ------------------------------------------------------------------------------*/
                     // Relative Information
@@ -2783,7 +2774,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                                       // ****************************************************************************************************************************************************
                                       // remove Relative
-                                      _addRemoveMoreSection(
+                                      addRemoveMoreSection(
                                           title: "Delete Info",
                                           add: false,
                                           onChanged: () {
@@ -2818,7 +2809,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     // ****************************************************************************************************************************************************
                     // Add More Information container
                     _relativeInfoList.isNotEmpty
-                        ? _addRemoveMoreSection(
+                        ? addRemoveMoreSection(
                             title: "Add Relative Info",
                             add: true,
                             onChanged: () {
@@ -2827,7 +2818,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         : showVoid,
 
                     // *--------------------------------------------------------- Relative Information Section end ------------------------------------------------------------------------------*/
-                    _sectionDivider(),
+                    sectionDivider(),
 
                     // *--------------------------------------------------------- Contact Information Section start ------------------------------------------------------------------------------*/
 
@@ -2840,7 +2831,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                     _phoneNumberSection(),
                     // *--------------------------------------------------------- Contact Information Section end ------------------------------------------------------------------------------*/
 
-                    _sectionDivider(),
+                    sectionDivider(),
 
                     // *--------------------------------------------------------- Address Information Section start ------------------------------------------------------------------------------*/
 
@@ -2857,7 +2848,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _sectionDivider(),
+                              sectionDivider(),
 
                               // *--------------------------------------------------------- Military Services Information Section start ------------------------------------------------------------------------------*/
 
@@ -3042,7 +3033,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                   // Add More Information container
                   (_phoneNumberList.isNotEmpty && (index != 0 && index != 1))
-                      ? _addRemoveMoreSection(
+                      ? addRemoveMoreSection(
                           title: "Delete Info",
                           add: false,
                           onChanged: () {
@@ -3064,7 +3055,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         // Add more Phones Numbers
         // Add More Information container
         _phoneNumberList.isNotEmpty
-            ? _addRemoveMoreSection(
+            ? addRemoveMoreSection(
                 title: "Add Phone Number",
                 add: true,
                 onChanged: () {
@@ -3376,7 +3367,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                   // Add More Information container
                   (_addressInformationList.isNotEmpty && (index != 0))
-                      ? _addRemoveMoreSection(
+                      ? addRemoveMoreSection(
                           title: "Delete Address",
                           add: false,
                           onChanged: () {
@@ -3401,7 +3392,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
         // Add more Phones Numbers
         // Add More Information container
         _addressInformationList.isNotEmpty
-            ? _addRemoveMoreSection(
+            ? addRemoveMoreSection(
                 title: "Add Address",
                 add: true,
                 onChanged: () {
@@ -4630,7 +4621,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                 'HCHL' &&
                                             index >= 1) ||
                                         index > 1
-                                    ? _addRemoveMoreSection(
+                                    ? addRemoveMoreSection(
                                         title: "Delete",
                                         add: false,
                                         onChanged: () {
@@ -4649,7 +4640,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
                     // ****************************************************************************************************************************************************
 
-                    _addRemoveMoreSection(
+                    addRemoveMoreSection(
                         title: "Add",
                         add: true,
                         onChanged: () {
@@ -5002,7 +4993,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                                         ?.acadmicCareer ==
                                                     'UGRD') &&
                                             index != 0)
-                                        ? _addRemoveMoreSection(
+                                        ? addRemoveMoreSection(
                                             title: "Delete",
                                             add: false,
                                             onChanged: () {
@@ -5026,7 +5017,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                     _selectedScholarship?.acadmicCareer ==
                                         'UGRD') &&
                                 _selectedScholarship?.acadmicCareer != 'UGRD')
-                            ? _addRemoveMoreSection(
+                            ? addRemoveMoreSection(
                                 title: "Add",
                                 add: true,
                                 onChanged: () {
@@ -6436,7 +6427,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                   ),
 
                                   index != 0
-                                      ? _addRemoveMoreSection(
+                                      ? addRemoveMoreSection(
                                           title: "Delete",
                                           add: false,
                                           onChanged: () {
@@ -6456,7 +6447,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                             })
                         : showVoid,
 
-                    _addRemoveMoreSection(
+                    addRemoveMoreSection(
                         title: "Add",
                         add: true,
                         onChanged: () {
@@ -6829,7 +6820,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                 // ****************************************************************************************************************************************************
                                 // add examination
                                 (index >= 1)
-                                    ? _addRemoveMoreSection(
+                                    ? addRemoveMoreSection(
                                         title: "Delete",
                                         add: false,
                                         onChanged: () {
@@ -6849,7 +6840,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                           }),
                       // ****************************************************************************************************************************************************
                       // add examination
-                      _addRemoveMoreSection(
+                      addRemoveMoreSection(
                           title: "Add",
                           add: true,
                           onChanged: () {
@@ -7473,7 +7464,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                               // ****************************************************************************************************************************************************
 
                                               (index >= 1)
-                                                  ? _addRemoveMoreSection(
+                                                  ? addRemoveMoreSection(
                                                       title: "Delete",
                                                       add: false,
                                                       onChanged: () {
@@ -7493,7 +7484,7 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
                                           );
                                         }),
                                     // ****************************************************************************************************************************************************
-                                    _addRemoveMoreSection(
+                                    addRemoveMoreSection(
                                         title: "Add",
                                         add: true,
                                         onChanged: () {
@@ -9020,61 +9011,8 @@ class _FillScholarshipFormViewState extends State<FillScholarshipFormView>
 
 
 
-  // dashed section divider is used to indicate the difference between the sections
-  dynamic _sectionDivider() {
-    return Column(
-      children: [
-        SizedBox(height: kPadding),
-        const MyDivider(color: AppColors.scoButtonColor),
-        SizedBox(height: kPadding),
-      ],
-    );
-  }
+ 
 
-  // Add Remove more section Button
-  dynamic _addRemoveMoreSection(
-      {required String title,
-        required bool add,
-        required Function() onChanged}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        MaterialButton(
-          onPressed: onChanged,
-          color: add ? AppColors.scoThemeColor : AppColors.DANGER,
-          height: double.minPositive,
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                add ? Icons.add_circle_outline : Icons.remove_circle_outline,
-                size: 12,
-                weight: 20,
-                color: Colors.white,
-              ),
-              const SizedBox(width: 3),
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: screenWidth / 2),
-                // Set maximum width
-                child: Text(
-                  title,
-                  style: AppTextStyles.subTitleTextStyle().copyWith(
-                    color: Colors.white,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  // Adds ellipsis when text overflows
-                  softWrap: false,
-                ),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 
 
 

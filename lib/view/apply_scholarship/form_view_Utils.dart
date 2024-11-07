@@ -7,6 +7,7 @@ import '../../resources/app_colors.dart';
 import '../../resources/app_text_styles.dart';
 import '../../resources/components/custom_dropdown.dart';
 import '../../resources/components/custom_text_field.dart';
+import '../../resources/components/myDivider.dart';
 import '../../utils/utils.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 
@@ -14,11 +15,69 @@ import '../../viewModel/language_change_ViewModel.dart';
   // text field style which is used to styling hint and actual text
   final TextStyle _textFieldTextStyle = AppTextStyles.titleTextStyle().copyWith(
       fontSize: 14,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600,
       color: AppColors.scoButtonColor);
 
 
-  // to reduce the copy of code we created this where obscure text and border is not copied again and again, and if we need to use more features then we will use CustomTextField
+// dashed section divider is used to indicate the difference between the sections
+dynamic sectionDivider() {
+  return const Column(
+    children: [
+      SizedBox(height: 20),
+       MyDivider(color: AppColors.scoButtonColor),
+      SizedBox(height: 20),
+    ],
+  );
+}
+
+// Add Remove more section Button
+dynamic addRemoveMoreSection(
+    {required String title,
+      required bool add,
+      required Function() onChanged}) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      MaterialButton(
+        onPressed: onChanged,
+        color: add ? AppColors.scoThemeColor : AppColors.DANGER,
+        height: double.minPositive,
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              add ? Icons.add_circle_outline : Icons.remove_circle_outline,
+              size: 12,
+              weight: 20,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 3),
+            ConstrainedBox(
+              // constraints: BoxConstraints(maxWidth: screenWidth / 2),
+              constraints: BoxConstraints(maxWidth: 100),
+              // Set maximum width
+              child: Text(
+                title,
+                style: AppTextStyles.subTitleTextStyle().copyWith(
+                  color: Colors.white,
+                ),
+                overflow: TextOverflow.ellipsis,
+                // Adds ellipsis when text overflows
+                softWrap: false,
+              ),
+            )
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+
+// to reduce the copy of code we created this where obscure text and border is not copied again and again, and if we need to use more features then we will use CustomTextField
    dynamic scholarshipFormTextField({
     required FocusNode currentFocusNode,
     FocusNode? nextFocusNode,

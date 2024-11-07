@@ -11,6 +11,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:xml/xml.dart';
 
 import '../resources/app_colors.dart';
+import 'constants.dart';
 
 mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
   double get screenWidth => MediaQuery.of(context).size.width;
@@ -239,7 +240,9 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
   Color? textColor,
-}) {
+})
+{
+
   final textDirection = getTextDirection(provider);
 
   List<String> uniqueKeys = [];
@@ -297,7 +300,8 @@ List<DropdownMenuItem> populateCommonDataDropdown({
 List<DropdownMenuItem> populateNormalDropdownWithValue({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
-}) {
+})
+{
   final textDirection = getTextDirection(provider);
 
   // Add a constant "Select" option at the 0th index
@@ -342,7 +346,8 @@ List<DropdownMenuItem> populateNormalDropdownWithValue({
 List<DropdownMenuItem> populateNormalDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
-}) {
+})
+{
   final textDirection = getTextDirection(provider);
   return menuItemsList.map((element) {
     return DropdownMenuItem(
@@ -531,8 +536,6 @@ bool isEighteenYearsOld(String dob) {
   return age >= 18;
 }
 
-
-
 String formatDateOnly(String? dateString) {
   if (dateString == null || dateString.isEmpty) {
     return ''; // Handle null or empty input
@@ -549,6 +552,30 @@ String formatDateOnly(String? dateString) {
     // Handle invalid date string format
     return '';
   }
+}
+
+
+// get full name from lov Code
+String getFullNameFromLov({ String? lovCode, String? code,required langProvider}){
+
+  if(lovCode == null || code == null || lovCode.isEmpty || code.isEmpty){
+    return '';
+  }
+
+  List lovList = [];
+  if (Constants.lovCodeMap[lovCode]?.values != null) {
+    lovList = populateUniqueSimpleValuesFromLOV(
+        menuItemsList: Constants.lovCodeMap[lovCode]!.values!,
+        provider: langProvider,
+        textColor: AppColors.scoButtonColor);
+  }
+
+  dynamic element = lovList.firstWhere((element){
+    return element.code == code;
+  });
+
+
+  return getTextDirection(langProvider) == TextDirection.rtl ? element.valueArabic : element.value;
 }
 
 

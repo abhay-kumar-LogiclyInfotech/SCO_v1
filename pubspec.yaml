@@ -81,6 +81,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   cached_network_image: ^3.4.1
   profile_photo: ^1.0.3
+  date_picker_plus: ^4.1.0
   flutter_localizations:
     sdk: flutter
   device_info_plus: ^9.1.2
