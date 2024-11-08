@@ -33,31 +33,47 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
     with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
+
+
   @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+  void didChangeDependencies() async{
+    super.didChangeDependencies();
+
+    print("DidChange called");
+    // Fetch or refresh data here
+   await _fetchData();
+  }
+
+
+  Future _fetchData()async{
       // fetch student profile Information t prefill the user information
       final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
       await studentProfileProvider.getPersonalDetails();
 
-      // initialize navigation services
-      GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
+  }
 
-
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+        await _fetchData();
+        // initialize navigation services
+        GetIt getIt = GetIt.instance;
+        _navigationServices = getIt.get<NavigationServices>();
     });
 
-    super.initState();
+      super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(
-        titleAsString: "Personal Details",
+    return PopScope(
+      child: Scaffold(
+        backgroundColor: AppColors.bgColor,
+        appBar: CustomSimpleAppBar(
+          titleAsString: "Personal Details",
+        ),
+        body: _buildUi(),
       ),
-      body: _buildUi(),
     );
   }
 

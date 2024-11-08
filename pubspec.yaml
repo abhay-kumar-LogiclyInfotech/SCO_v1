@@ -82,6 +82,8 @@ dependencies:
   cached_network_image: ^3.4.1
   profile_photo: ^1.0.3
   date_picker_plus: ^4.1.0
+  # To convert the file size
+  filesize: ^2.0.1
   flutter_localizations:
     sdk: flutter
   device_info_plus: ^9.1.2
@@ -120,6 +122,7 @@ flutter:
     - assets/support/
     - assets/myAccount/
     - assets/personal_details/
+    - assets/services/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

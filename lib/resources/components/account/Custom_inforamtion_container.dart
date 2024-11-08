@@ -171,7 +171,7 @@ class CustomInformationContainerField extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.only(bottom: 10),
           decoration:  BoxDecoration(
-            color: Colors.white,
+            color: Colors.transparent,
             border: !isLastItem ? const Border(bottom: BorderSide(color: AppColors.darkGrey, width: 1.5)) : null,
           ),
           child: CustomPaint(

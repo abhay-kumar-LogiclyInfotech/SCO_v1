@@ -132,11 +132,16 @@ class _CustomDropdownState extends State<CustomDropdown>
           iconStyleData: const IconStyleData(icon:  Icon(
             Icons.keyboard_arrow_down_sharp,
             color: AppColors.darkGrey,
+            weight: 10000,
+
           ),
           openMenuIcon: Icon(
             Icons.keyboard_arrow_up_sharp,
             color: AppColors.darkGrey,
+            weight: 10000,
           ),
+            iconSize: 25,
+
           ),
           menuItemStyleData: const MenuItemStyleData(
 

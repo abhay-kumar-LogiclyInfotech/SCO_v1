@@ -70,7 +70,7 @@ class _CustomTextFieldState extends State<CustomTextField>
         enabled: widget.enabled,
         onTap: widget.onTap,
         maxLength: widget.maxLength,
-        // maxLines: widget.maxLines ?? 1,
+        maxLines: widget.maxLines ?? 1,
         readOnly: widget.readOnly ?? false,
         focusNode: widget.currentFocusNode,
         controller: widget.controller,

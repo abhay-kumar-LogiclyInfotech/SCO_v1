@@ -21,6 +21,7 @@ import '../authentication/login/login_view.dart';
 import 'custom_drawer_views/contact_us_view.dart';
 import 'custom_drawer_views/faq_view.dart';
 import 'custom_drawer_views/news_and_events_view.dart';
+import 'custom_drawer_views/services_view.dart';
 
 class CustomDrawerView extends StatefulWidget {
   final String? userName;
@@ -231,6 +232,22 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   horizontalTitleGap: 5,
                                   onTap: () {
                                     _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const AccountView()));
+                                  },
+                                  shape: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white.withOpacity(0.25))),
+                                ),
+
+                                //*------ Services ------*/
+                                if(_toLogin)   ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title:  Text("Services", style: const TextStyle(color: Colors.white, fontSize: 14),),
+                                  leading:
+                                  SvgPicture.asset("assets/sidemenu/account.svg"),
+                                  dense: true,
+                                  horizontalTitleGap: 5,
+                                  onTap: () {
+                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ServicesView()));
                                   },
                                   shape: UnderlineInputBorder(
                                       borderSide: BorderSide(

@@ -12,6 +12,7 @@ class CustomButton extends StatefulWidget {
   Color? buttonColor;
   Color? borderColor;
   Color? textColor;
+  BorderRadius? borderRadius;
   dynamic leadingIcon;
   final TextDirection textDirection;
   final void Function() onTap;
@@ -28,6 +29,7 @@ class CustomButton extends StatefulWidget {
       this.textColor,
       this.leadingIcon,
       this.borderColor,
+        this.borderRadius,
       required this.textDirection,
       required this.onTap});
 
@@ -65,21 +67,20 @@ class _CustomButtonState extends State<CustomButton>
       },
 
       onTap: () {
-       widget.isLoading ? null : widget.onTap();
+       widget.isLoading ? (){} : widget.onTap();
       },
       child: Material(
         elevation: widget.elevation ?? 0,
-        borderRadius: BorderRadius.circular(180),
+        borderRadius: widget.borderRadius ??  BorderRadius.circular(180),
         child: Container(
             // height: widget.height ?? (orientation == Orientation.portrait ? screenHeight * 0.06 : screenHeight * 0.1),
             // width: double.infinity,
-            padding: EdgeInsets.only(
-                top: screenWidth * 0.02, bottom: screenWidth * 0.02),
+            padding: EdgeInsets.all(screenWidth * 0.02),
             decoration: BoxDecoration(
                 color: _isPressed ? AppColors.lightGrey : widget.buttonColor ?? Colors.black,
                 border: Border.all(color: widget.borderColor ?? Colors.black),
                 gradient: widget.gradient,
-                borderRadius: BorderRadius.circular(180)),
+                borderRadius: widget.borderRadius ?? BorderRadius.circular(180)),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,

@@ -823,7 +823,12 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
               createForm(provider: provider);
 
               print(form);
-              final result = await updateProvider.updatePersonalDetails(form: form);
+              bool result = await updateProvider.updatePersonalDetails(form: form);
+              if(result){
+                /// update and refresh the information
+                await _initializeData();
+
+              }
 
             }
           });

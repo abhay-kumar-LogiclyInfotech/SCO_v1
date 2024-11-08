@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/attach_file_viewmodel.dart';
@@ -23,6 +24,7 @@ import 'package:sco_v1/viewModel/home/home_slider_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -84,10 +86,19 @@ class MyApp extends StatelessWidget {
 
           // find Draft by Configuration Key
           ChangeNotifierProvider(create: (_) => FindDraftByConfigurationKeyViewmodel()),
+
+          // find Draft by Draft ID Key
+          ChangeNotifierProvider(create: (_) => FindDraftByConfigurationKeyViewmodel()),
           // delete Draft
           ChangeNotifierProvider(create: (_) => DeleteDraftViewmodel()),
           // attachFile
           ChangeNotifierProvider(create: (_) => AttachFileViewmodel()),
+          // get list of applications with statuses
+          ChangeNotifierProvider(create: (_) => GetListApplicationStatusViewModel()),
+
+          // get My Scholarship
+          ChangeNotifierProvider(create: (_) => MyScholarshipViewModel()),
+
 
 
 

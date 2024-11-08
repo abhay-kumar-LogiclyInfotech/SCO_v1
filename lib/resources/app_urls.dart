@@ -6,6 +6,8 @@ class AppUrls {
 
   //getting the base URL
   static const String baseUrl = _baseUrl;
+  // getting common base URL
+  static const String commonBaseUrl = _commonBaseUrl;
 
   // Static getter for common data endpoint
   static String get commonData => "${_baseUrl}common-data/list-of-values-data";

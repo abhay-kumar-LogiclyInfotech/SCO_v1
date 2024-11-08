@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:filesize/filesize.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -140,6 +141,20 @@ class Utils {
        progressIndicator: Platform.isAndroid ? Utils.materialLoadingIndicator(color: AppColors.scoThemeColor) : Utils.cupertinoLoadingIndicator(color: AppColors.scoThemeColor),
     inAsyncCall: processing,
     child: child);
+  }
+
+
+  /// This methods converts the byte data to MB
+  static Future<String> getFileSize({required file})async{
+    final sizeInBytes = await file.length();
+    final myFileSize = filesize(sizeInBytes);
+    return myFileSize;
+  }
+
+  /// This methods get the file name
+  static String getFileName({required File file}){
+    final fileName =  file.path.split('/').last;
+    return fileName;
   }
 
 

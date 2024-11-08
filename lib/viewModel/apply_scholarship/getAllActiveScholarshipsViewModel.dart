@@ -45,8 +45,7 @@ class GetAllActiveScholarshipsViewModel with ChangeNotifier {
         };
 
         //*-----Calling Api Start-----*
-        final response =
-            await _homeRepository.getAllActiveScholarships(headers: headers);
+        final response = await _homeRepository.getAllActiveScholarships(headers: headers);
         //*-----Calling Api End-----*
 
         _setApiResponse = ApiResponse.completed(response);

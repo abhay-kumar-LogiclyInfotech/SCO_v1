@@ -148,15 +148,10 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                     _selectedAcademicCareer = ''; // Reset the selected academic career
 
                                     // Filter the list of active scholarships based on the selected request type
-                                    academicCareerMenuItemList = provider.apiResponse.data
-                                        ?.where((element) =>
-                                    element.scholarshipType.toString() == value.toString() &&
-                                        element.isActive == true)
-                                        .toList();
+                                    academicCareerMenuItemList = provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == value.toString() && element.isActive == true).toList();
 
                                     // request next focus
-                                    Utils.requestFocus(focusNode: _academicCareerFocusNode
-                                        , context: context);
+                                    Utils.requestFocus(focusNode: _academicCareerFocusNode, context: context);
                                   });
                                 },
                               ),
@@ -205,8 +200,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                             _selectedAcademicCareer.isNotEmpty?_navigationService.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(
                               selectedScholarshipConfigurationKey: _selectedAcademicCareer,
                               getAllActiveScholarships: provider.apiResponse.data,
-
-                            ))) :    _alertService.flushBarErrorMessages(message: "Please select Academic Career", context: context, provider: langProvider);
+                            ))) : _alertService.flushBarErrorMessages(message: "Please select Academic Career", context: context, provider: langProvider);
 
 
 

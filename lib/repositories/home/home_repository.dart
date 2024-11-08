@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
+import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/models/account/personal_details/UpdatePersonalDetailsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
 import 'package:sco_v1/models/home/HomeSliderModel.dart';
+import 'package:sco_v1/models/services/MyScholarshipModel.dart';
 
 import '../../data/network/NetworkApiServices.dart';
 import '../../models/account/personal_details/PersonalDetailsModel.dart';
@@ -87,6 +89,18 @@ class HomeRepository {
     return FindDraftByConfigurationKeyModel.fromJson(response);
   }
 
+  // *------ Fetch Draft By Draft ID ------*/
+  Future<FindDraftByConfigurationKeyModel> findDraftByDraftId(
+      {required dynamic headers,required dynamic draftId}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: "${AppUrls.commonBaseUrl}jsonws/application.applicationdetails/fetch-by-application-id/application-no/$draftId",
+      headers: headers,
+    );
+    return FindDraftByConfigurationKeyModel.fromJson(response);
+  }
+
+
+
   // *------ Delete Draft Method ------*/
   Future<DeleteDraftModel> deleteDraft(
       {required String userId,required String draftId, required dynamic headers}) async {
@@ -123,9 +137,6 @@ class HomeRepository {
 
 
   // *------ Update User (student) Information Method ------*/
-
-
-
   Future<UpdatePersonalDetailsModel> updatePersonalDetails(
       {required String userId,required dynamic body, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
@@ -134,6 +145,29 @@ class HomeRepository {
       headers: headers,
     );
     return UpdatePersonalDetailsModel.fromJson(response);
+  }
+
+
+
+//  *------ Get List of Applications including draft,applied or submitted Method ------*/
+  Future<GetListApplicationStatusModel> getListApplicationStatus(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.baseUrl}e-services/$userId/list-application-status',
+      headers: headers,
+    );
+    return GetListApplicationStatusModel.fromJson(response);
+  }
+
+
+  //  *------ Get List of submitted Application Method ------*/
+  Future<MyScholarshipModel> getMyScholarship(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.baseUrl}self-service/myscholarship/$userId',
+      headers: headers,
+    );
+    return MyScholarshipModel.fromJson(response);
   }
 
 
