@@ -52,13 +52,13 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
   List<EmailDetail> _emailDetailsList = [];
 
   Future _initializeData()async{
-    // fetch student profile Information t prefill the user information
+    /// fetch student profile Information t prefill the user information
     final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context,listen: false);
     await studentProfileProvider.getPersonalDetails();
 
-    // *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
+    /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
     final langProvider = Provider.of<LanguageChangeViewModel>(context,listen: false);
-    // Check and populate dropdowns only if the values exist
+    /// Check and populate dropdowns only if the values exist
     if (Constants.lovCodeMap['COUNTRY']?.values != null) {_nationalityMenuItemsList = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['COUNTRY']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);}
 
     if (Constants.lovCodeMap['GENDER']?.values != null) {_genderMenuItemsList = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['GENDER']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);}
@@ -68,10 +68,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
     if (Constants.lovCodeMap['PHONE_TYPE']?.values != null) {_phoneNumberTypeMenuItemsList = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['PHONE_TYPE']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);}
 
     if (Constants.lovCodeMap['EMAIL_TYPE']?.values != null) {_emailTypeMenuItemsList = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['EMAIL_TYPE']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);}
+    /// *------------------------------------------ Initialize dropdowns end ------------------------------------------------------------------*
 
-    // *------------------------------------------ Initialize dropdowns end ------------------------------------------------------------------*
-
-    // prefill the values of the fields
+    /// prefill the values of the fields
     final user = studentProfileProvider.apiResponse.data?.data?.user;
     final userInfo = studentProfileProvider.apiResponse.data?.data?.userInfo;
 
@@ -86,15 +85,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
     _genderController.text = user?.gender ?? '';
     _maritalStatusController.text = userInfo?.maritalStatus ?? '';
     _dobController.text = user?.birthDate ?? '';
-    // _languageController.text = user?.language ?? '';
+    /// _languageController.text = user?.language ?? '';
 
 
-
-
-
-
-
-    // initialize phone numbers
+    /// initialize phone numbers
       if(userInfo?.phoneNumbers != null)
       {
         for (var element in userInfo!.phoneNumbers!) {
@@ -102,7 +96,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
         }
       }
 
-    // initialize Email Details
+    /// initialize Email Details
     if(userInfo?.emails != null)
     {
       for (var element in userInfo!.emails!) {
@@ -110,22 +104,13 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
       }
     }
 
-
-
-
-
-
-
-
-
-
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
 
-      // initialize navigation services
+      /// initialize navigation services
       GetIt getIt = GetIt.instance;
       _navigationServices = getIt.get<NavigationServices>();
 
@@ -192,19 +177,22 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                           badgeSize: 30,
                           badgeAlignment: Alignment.bottomRight,
                           image: const AssetImage('assets/personal_details/dummy_profile_pic.png'),
-                          // badgeImage: const AssetImage('assets/personal_details/camera_icon.png'),
+                          /// badgeImage: const AssetImage('assets/personal_details/camera_icon.png'),
                           onTap: ()async {
-                            // open profile
+                            /// open profile
                           },
                           onLongPress: () {
-                            // popup to message user
+                            /// popup to message user
                           },
                         ),
 
-                        // ProfilePicture(),
+                        /// ProfilePicture(),
                         kFormHeight,
+
+                        /// Student common information
                         _studentInformationSection(provider: provider,langProvider: langProvider),
 
+                        /// student contact information
                         if(userInfo?.phoneNumbers != null)   Column(
                           children: [
                             kFormHeight,
@@ -213,6 +201,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                           ],
                         ),
 
+                        /// student email contact information
                         if(userInfo?.emails != null)  Column(
                           children: [
                             kFormHeight,
@@ -221,7 +210,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                           ],
                         ),
 
-                        // submit buttons
+                        /// submit buttons
                         _submitAndBackButton(langProvider: langProvider,userInfo: userInfo,provider: provider),
                       ],
                     ),
@@ -241,9 +230,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
 
 
 
-  //*------Student Information Section------*
+  ///*------Student Information Section------*
 
-  // FocusNodes
+  /// FocusNodes
   final FocusNode _firstNameFocusNode = FocusNode();
   final FocusNode _secondNameFocusNode = FocusNode();
   final FocusNode _thirdOrFourthNameFocusNode = FocusNode();
@@ -257,7 +246,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
   final FocusNode _dobFocusNode = FocusNode();
   final FocusNode _languageFocusNode = FocusNode();
 
-// TextEditingControllers
+/// TextEditingControllers
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _secondNameController = TextEditingController();
   final TextEditingController _thirdOrFourthNameController = TextEditingController();
@@ -272,7 +261,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
   final TextEditingController _languageController = TextEditingController();
 
 
-  // Error texts
+  /// Error texts
   String? _firstNameError;
   String? _secondNameError;
   String? _thirdOrFourthNameError;
@@ -393,7 +382,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                   }
                 }),
             /// ****************************************************************
-            /// ****************************************************************
             kFormHeight,
             fieldHeading(title: "Nationality", important: true, langProvider: langProvider),
             scholarshipFormDropdown(
@@ -502,8 +490,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
   }
 
 
-  //*------Student Phone Information Section start ------*
-  // Method to add a new phone number to the contact information list
+  ///*------Student Phone Information Section start ------*
+  /// Method to add a new phone number to the contact information list
   void _addPhoneNumber() {
     setState(() {
       _phoneNumberDetailsList.add(PhoneNumber(
@@ -520,24 +508,24 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
     });
   }
 
-  // Method to add a new phone number to the contact information list
+  /// Method to add a new phone number to the contact information list
   void _removePhoneNumber(int index) {
     if (index >= 2 && index < _phoneNumberDetailsList.length) {
-      // Check if index is valid
+      /// Check if index is valid
       setState(() {
         final phoneNumber = _phoneNumberDetailsList[index];
 
-        phoneNumber.countryCodeController.dispose(); // Dispose the controllers
+        phoneNumber.countryCodeController.dispose(); /// Dispose the controllers
         phoneNumber.phoneNumberController.dispose();
         phoneNumber.phoneTypeController.dispose();
         phoneNumber.preferred = false;
-        phoneNumber.countryCodeFocusNode.dispose(); // Dispose the controllers
+        phoneNumber.countryCodeFocusNode.dispose(); /// Dispose the controllers
         phoneNumber.phoneNumberFocusNode.dispose();
         phoneNumber.phoneTypeFocusNode.dispose();
         _phoneNumberDetailsList.removeAt(index);
       });
     } else {
-      print("Invalid index: $index"); // Debugging print to show invalid index
+      print("Invalid index: $index"); /// Debugging print to show invalid index
     }
   }
 
@@ -557,7 +545,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                  final phoneNumber = _phoneNumberDetailsList[index];
               return Column(
                 children: [
-                  // phone Type
+                  /// phone Type
                   fieldHeading(
                       title: "Phone Type",
                       important: true,
@@ -574,16 +562,16 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                     onChanged: (value) {
                       phoneNumber.phoneTypeError = null;
                       setState(() {
-                        // setting the value for relation type
+                        /// setting the value for relation type
                         phoneNumber.phoneTypeController.text = value!;
-                        //This thing is creating error: don't know how to fix it:
+                        ///This thing is creating error: don't know how to fix it:
                         Utils.requestFocus(
                             focusNode: phoneNumber.phoneNumberFocusNode,
                             context: context);
                       });
                     },
                   ),
-                  // ****************************************************************************************************************************************************
+                  /// ****************************************************************************************************************************************************
                   kFormHeight,
                   fieldHeading(
                       title: "Phone Number",
@@ -596,7 +584,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                       hintText: "Enter Phone Number",
                       errorText: phoneNumber.phoneNumberError,
                       onChanged: (value) {
-                        // no validation has been provided
+                        /// no validation has been provided
                         if (phoneNumber.phoneNumberFocusNode.hasFocus) {
                           setState(() {
                             phoneNumber.phoneNumberError =
@@ -608,7 +596,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                         }
                       }),
 
-                  // ****************************************************************************************************************************************************
+                  /// ****************************************************************************************************************************************************
                   kFormHeight,
                   fieldHeading(
                       title: "Country Code",
@@ -623,7 +611,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                       hintText: "Enter Phone Number",
                       errorText: phoneNumber.countryCodeError,
                       onChanged: (value) {
-                        // no validation has been provided
+                        /// no validation has been provided
                         if (phoneNumber.countryCodeFocusNode.hasFocus) {
                           setState(() {
                             phoneNumber.countryCodeError =
@@ -634,9 +622,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                           });
                         }
                       }),
-                  // ****************************************************************************************************************************************************
+                  /// ****************************************************************************************************************************************************
                   kFormHeight,
-                  // Preferred
+                  /// Preferred
                   CustomGFCheckbox(
                       value: phoneNumber.preferred,
                       onChanged: (onChanged) {
@@ -648,25 +636,25 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
 
 
 
-                  // ****************************************************************************************************************************************************
+                  /// ****************************************************************************************************************************************************
 
-                  // space based on condition
+                  /// space based on condition
                   (index == 0 || index == 1) ? kFormHeight : showVoid,
 
-                  // Add More Information container
+                  /// Add More Information container
                   (_phoneNumberDetailsList.isNotEmpty && (index != 0 && index != 1)) ? addRemoveMoreSection(title: "Delete Info", add: false, onChanged: () {_removePhoneNumber(index);}) : showVoid,
 
                   const MyDivider(color: AppColors.lightGrey),
-                  // ****************************************************************************************************************************************************
+                  /// ****************************************************************************************************************************************************
 
-                  // space based on if not last item
+                  /// space based on if not last item
                   index != _phoneNumberDetailsList.length - 1 ? kFormHeight : showVoid,
 
                 ],
               );
             }),
-            // Add more Phones Numbers
-            // Add More Information container
+            /// Add more Phones Numbers
+            /// Add More Information container
             _phoneNumberDetailsList.isNotEmpty
                 ? addRemoveMoreSection(
                 title: "Add Phone Number",
@@ -682,9 +670,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
   }
 
 
-  //*------Student Phone Information Section end ------*
+  ///*------Student Phone Information Section end ------*
 
-// Method to add a new email to the contact information list
+/// Method to add a new email to the contact information list
   void _addEmail() {
     setState(() {
       _emailDetailsList.add(EmailDetail(
@@ -700,22 +688,22 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
     });
   }
 
-// Method to remove an email from the contact information list
+/// Method to remove an email from the contact information list
   void _removeEmail(int index) {
     if (index >= 0 && index < _emailDetailsList.length) {
-      // Check if index is valid
+      /// Check if index is valid
       setState(() {
         final emailDetail = _emailDetailsList[index];
 
-        emailDetail.emailTypeController.dispose(); // Dispose controllers
+        emailDetail.emailTypeController.dispose(); /// Dispose controllers
         emailDetail.emailIdController.dispose();
-        emailDetail.emailTypeFocusNode.dispose(); // Dispose focus nodes
+        emailDetail.emailTypeFocusNode.dispose(); /// Dispose focus nodes
         emailDetail.emailIdFocusNode.dispose();
 
         _emailDetailsList.removeAt(index);
       });
     } else {
-      print("Invalid index: $index"); // Debugging print to show invalid index
+      print("Invalid index: $index"); /// Debugging print to show invalid index
     }
   }
 
@@ -736,7 +724,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                   return Column(
                     children: [
                       kFormHeight,
-                      // phone Type
+                      /// phone Type
                       fieldHeading(
                           title: "Email Type",
                           important: true,
@@ -753,13 +741,13 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                         onChanged: (value) {
                           email.emailTypeError = null;
                           setState(() {
-                            // setting the value for email type
+                            /// setting the value for email type
                             email.emailTypeController.text = value!;
                             Utils.requestFocus(focusNode: email.emailIdFocusNode, context: context);
                           });
                         },
                       ),
-                      // ****************************************************************************************************************************************************
+                      /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
                           title: "Email Address",
@@ -772,7 +760,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
                           hintText: "Enter Phone Number",
                           errorText: email.emailIdError,
                           onChanged: (value) {
-                            // no validation has been provided
+                            /// no validation has been provided
                             if (email.emailIdFocusNode.hasFocus) {
                               setState(() {
                                 email.emailIdError = ErrorText.getEmailError(email: email.emailIdController.text, context: context);
@@ -782,30 +770,30 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
 
 
 
-                      // ****************************************************************************************************************************************************
+                      /// ****************************************************************************************************************************************************
                       kFormHeight,
-                      // Preferred
+                      /// Preferred
                       CustomGFCheckbox(value: email.prefferd, onChanged: (onChanged) {setState(() {email.prefferd = !email.prefferd;});},text: "Favorite Email"),
 
-                      // ****************************************************************************************************************************************************
+                      /// ****************************************************************************************************************************************************
 
-                      // space based on condition
+                      /// space based on condition
                       (index == 0) ? kFormHeight : showVoid,
 
-                      // Add More Information container
+                      /// Add More Information container
                       (_emailDetailsList.isNotEmpty && (index != 0)) ? addRemoveMoreSection(title: "Delete", add: false, onChanged: () {_removeEmail(index);}) : showVoid,
 
                       const MyDivider(color: AppColors.lightGrey),
-                      // ****************************************************************************************************************************************************
+                      /// ****************************************************************************************************************************************************
 
-                      // space based on if not last item
+                      /// space based on if not last item
                       index != _phoneNumberDetailsList.length - 1 ? kFormHeight : showVoid,
 
                     ],
                   );
                 }),
-            // Add more Phones Numbers
-            // Add More Information container
+            /// Add more Phones Numbers
+            /// Add More Information container
             _phoneNumberDetailsList.isNotEmpty
                 ? addRemoveMoreSection(
                 title: "Add Email",
@@ -831,7 +819,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
               onTap: ()async{
             bool result =  validateForm(langProvider: langProvider, userInfo: userInfo);
             if(result){
-              // Create Form
+              /// Create Form
               createForm(provider: provider);
 
               print(form);
@@ -851,7 +839,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
   }
 
 
-  // To request focus where field needs to adjust:
+  /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode;
 
   bool validateForm({required langProvider,  UserInfo? userInfo}) {
@@ -918,7 +906,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
     }
 
 
-    // validate Phone Number
+    /// validate Phone Number
     if(userInfo?.phoneNumbers != null){
       for (int i = 0; i < _phoneNumberDetailsList.length; i++) {
         var element = _phoneNumberDetailsList[i];
@@ -937,7 +925,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
       }
     }
 
-    // validate Email Details
+    /// validate Email Details
     if(userInfo?.emails != null){
       for (int i = 0; i < _emailDetailsList.length; i++) {
         var element = _emailDetailsList[i];
@@ -956,18 +944,20 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
       }
     }
 
-    // checking for fist error node
+    /// checking for fist error node
     if (firstErrorFocusNode != null) {
       FocusScope.of(context).requestFocus(firstErrorFocusNode);
       return false;
     } else {
-      // No errors found, return true
+      /// No errors found, return true
       return true;
     }
   }
 
-  Map<String,dynamic> form = {};
 
+
+  /// My Final Submission form
+  Map<String,dynamic> form = {};
   void createForm( {GetPersonalDetailsViewModel? provider}) {
     final overAllInfo = provider?.apiResponse.data?.data;
     final user = provider?.apiResponse.data?.data?.user;
@@ -990,14 +980,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
         "username": user?.username
       },
       "userInfo": {
-        // Include emails if the list is not empty
+        /// Include emails if the list is not empty
         if (_emailDetailsList.isNotEmpty)
           "emails": _emailDetailsList.map((element) => element.toJson()).toList(),
 
         "emplId": userInfo?.emplId,
         "name": userInfo?.name,
 
-        // Include phone numbers if the list is not empty
+        /// Include phone numbers if the list is not empty
         if (_phoneNumberDetailsList.isNotEmpty)
           "phoneNumbers": _phoneNumberDetailsList.map((element) => element.toJson()).toList(),
 
