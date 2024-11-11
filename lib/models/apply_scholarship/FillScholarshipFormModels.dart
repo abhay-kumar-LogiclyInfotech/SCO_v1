@@ -1155,78 +1155,284 @@ class UniversityPriority {
 
 
 
+// class Attachment {
+//   // TextEditingControllers for the attachment fields
+//
+//
+//   TextEditingController applictantIdController;
+//   TextEditingController processCDController;
+//   TextEditingController documentCDController;
+//   TextEditingController descriptionController;
+//   TextEditingController userFileNameController;
+//   TextEditingController commentController;
+//   TextEditingController base64StringController;
+//   TextEditingController errorMessageController;
+//   TextEditingController attachmentNameController;
+//
+//
+//
+//
+//
+//   Attachment({
+//     required this.applictantIdController,
+//     required this.attachmentNameController,
+//     required this.processCDController,
+//     required this.documentCDController,
+//     required this.descriptionController,
+//     required this.userFileNameController,
+//     required this.commentController,
+//     required this.base64StringController,
+//     required this.errorMessageController,
+//
+//
+//   });
+//
+//   // From JSON
+//   factory Attachment.fromJson(Map<String, dynamic> json) {
+//     return Attachment(
+//       attachmentNameController:  TextEditingController(text: json['attachmentName'] ?? ''),
+//       applictantIdController: TextEditingController(text: json['applictantId'] ?? ''),  // Assuming typo in API
+//       processCDController: TextEditingController(text: json['processCD'] ?? ''),
+//       documentCDController: TextEditingController(text: json['documentCD'] ?? ''),
+//       descriptionController: TextEditingController(text: json['description'] ?? ''),
+//       userFileNameController: TextEditingController(text: json['userFileName'] ?? ''),
+//       commentController: TextEditingController(text: json['commnet'] ?? ''),  // Assuming typo in API
+//       base64StringController: TextEditingController(text: json['base64String'] ?? ''),
+//       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+//     );
+//   }
+//
+//   // To JSON
+//   Map<String, dynamic> toJson() {
+//     return {
+//
+//       'applictantId': applictantIdController.text,
+//       'processCD': processCDController.text,
+//       'documentCD': documentCDController.text,
+//       "attachmentName": attachmentNameController.text,
+//       'description': descriptionController.text,
+//       'userFileName': userFileNameController.text,
+//       'commnet': commentController.text,  // Keeping the typo in "commnet"
+//       'base64String': base64StringController.text,
+//       'errorMessage': errorMessageController.text,
+//     };
+//   }
+// }
+
+
+
 class Attachment {
   // TextEditingControllers for the attachment fields
+  final TextEditingController processCdController;
+  final TextEditingController documentCdController;
+  final TextEditingController userFileNameController;
+  final TextEditingController commentController;
+  final TextEditingController requiredController;
+  final TextEditingController fileUploadedController;
+  final TextEditingController heightController;
+  final TextEditingController widthController;
+  final TextEditingController errorMessageController;
+  final TextEditingController supportedFileTypeController;
+  final TextEditingController maxFileSizeController;
+  final TextEditingController attachmentNameController;
+  final TextEditingController applicationDetailIdController;
+  final TextEditingController emiratesIdController;
+  final TextEditingController isApprovedController;
+  final TextEditingController fileIdController;
+  final TextEditingController fileTypeController;
+  final TextEditingController newFileController;
+  final TextEditingController applictantIdController;
+  final TextEditingController descriptionController;
+  final TextEditingController base64StringController;
 
+  // Focus Nodes
+  final FocusNode processCdFocusNode;
+  final FocusNode documentCdFocusNode;
+  final FocusNode userFileNameFocusNode;
+  final FocusNode commentFocusNode;
+  final FocusNode requiredFocusNode;
+  final FocusNode fileUploadedFocusNode;
+  final FocusNode heightFocusNode;
+  final FocusNode widthFocusNode;
+  final FocusNode errorMessageFocusNode;
+  final FocusNode supportedFileTypeFocusNode;
+  final FocusNode maxFileSizeFocusNode;
+  final FocusNode attachmentNameFocusNode;
+  final FocusNode applicationDetailIdFocusNode;
+  final FocusNode emiratesIdFocusNode;
+  final FocusNode isApprovedFocusNode;
+  final FocusNode fileIdFocusNode;
+  final FocusNode fileTypeFocusNode;
+  final FocusNode newFileFocusNode;
+  final FocusNode applictantIdFocusNode;
+  final FocusNode descriptionFocusNode;
+  final FocusNode base64StringFocusNode;
 
-  TextEditingController applictantIdController;
-  TextEditingController processCDController;
-  TextEditingController documentCDController;
-  TextEditingController descriptionController;
-  TextEditingController userFileNameController;
-  TextEditingController commentController;
-  TextEditingController base64StringController;
-  TextEditingController errorMessageController;
-  TextEditingController attachmentNameController;
-
-
-
-
+  // Error Text Variables
+  String? processCdError;
+  String? documentCdError;
+  String? userFileNameError;
+  String? commentError;
+  String? requiredError;
+  String? fileUploadedError;
+  String? heightError;
+  String? widthError;
+  String? errorMessageError;
+  String? supportedFileTypeError;
+  String? maxFileSizeError;
+  String? attachmentNameError;
+  String? applicationDetailIdError;
+  String? emiratesIdError;
+  String? isApprovedError;
+  String? fileIdError;
+  String? fileTypeError;
+  String? newFileError;
+  String? applictantIdError;
+  String? descriptionError;
+  String? base64StringError;
 
   Attachment({
-    required this.applictantIdController,
-    required this.attachmentNameController,
-    required this.processCDController,
-    required this.documentCDController,
-    required this.descriptionController,
+    required this.processCdController,
+    required this.documentCdController,
     required this.userFileNameController,
     required this.commentController,
-    required this.base64StringController,
+    required this.requiredController,
+    required this.fileUploadedController,
+    required this.heightController,
+    required this.widthController,
     required this.errorMessageController,
-
-
+    required this.supportedFileTypeController,
+    required this.maxFileSizeController,
+    required this.attachmentNameController,
+    required this.applicationDetailIdController,
+    required this.emiratesIdController,
+    required this.isApprovedController,
+    required this.fileIdController,
+    required this.fileTypeController,
+    required this.newFileController,
+    required this.applictantIdController,
+    required this.descriptionController,
+    required this.base64StringController,
+    required this.processCdFocusNode,
+    required this.documentCdFocusNode,
+    required this.userFileNameFocusNode,
+    required this.commentFocusNode,
+    required this.requiredFocusNode,
+    required this.fileUploadedFocusNode,
+    required this.heightFocusNode,
+    required this.widthFocusNode,
+    required this.errorMessageFocusNode,
+    required this.supportedFileTypeFocusNode,
+    required this.maxFileSizeFocusNode,
+    required this.attachmentNameFocusNode,
+    required this.applicationDetailIdFocusNode,
+    required this.emiratesIdFocusNode,
+    required this.isApprovedFocusNode,
+    required this.fileIdFocusNode,
+    required this.fileTypeFocusNode,
+    required this.newFileFocusNode,
+    required this.applictantIdFocusNode,
+    required this.descriptionFocusNode,
+    required this.base64StringFocusNode,
+    this.processCdError,
+    this.documentCdError,
+    this.userFileNameError,
+    this.commentError,
+    this.requiredError,
+    this.fileUploadedError,
+    this.heightError,
+    this.widthError,
+    this.errorMessageError,
+    this.supportedFileTypeError,
+    this.maxFileSizeError,
+    this.attachmentNameError,
+    this.applicationDetailIdError,
+    this.emiratesIdError,
+    this.isApprovedError,
+    this.fileIdError,
+    this.fileTypeError,
+    this.newFileError,
+    this.applictantIdError,
+    this.descriptionError,
+    this.base64StringError,
   });
 
   // From JSON
   factory Attachment.fromJson(Map<String, dynamic> json) {
     return Attachment(
-      attachmentNameController:  TextEditingController(text: json['attachmentName'] ?? ''),
-      applictantIdController: TextEditingController(text: json['applictantId'] ?? ''),  // Assuming typo in API
-      processCDController: TextEditingController(text: json['processCD'] ?? ''),
-      documentCDController: TextEditingController(text: json['documentCD'] ?? ''),
-      descriptionController: TextEditingController(text: json['description'] ?? ''),
+      processCdController: TextEditingController(text: json['processCD'] ?? ''),
+      documentCdController: TextEditingController(text: json['documentCD'] ?? ''),
       userFileNameController: TextEditingController(text: json['userFileName'] ?? ''),
-      commentController: TextEditingController(text: json['commnet'] ?? ''),  // Assuming typo in API
-      base64StringController: TextEditingController(text: json['base64String'] ?? ''),
+      commentController: TextEditingController(text: json['comment'] ?? ''),
+      requiredController: TextEditingController(text: json['required'] ?? ''),
+      fileUploadedController: TextEditingController(text: json['fileUploaded']?.toString() ?? 'false'),
+      heightController: TextEditingController(text: json['height']?.toString() ?? '0'),
+      widthController: TextEditingController(text: json['width']?.toString() ?? '0'),
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+      supportedFileTypeController: TextEditingController(text: json['supportedFileType'] ?? ''),
+      maxFileSizeController: TextEditingController(text: json['maxFileSize']?.toString() ?? '0'),
+      // attachmentNameController: TextEditingController(text: json['attachmentName'] ?? "" ),
+      attachmentNameController: TextEditingController(text: json['attachmentName'] ?? "${json['processCD'] ?? ''}:${json['documentCD'] ?? ''}"),
+      applicationDetailIdController: TextEditingController(text: json['applicationDetailId'] ?? ''),
+      emiratesIdController: TextEditingController(text: json['emiratesId'] ?? ''),
+      isApprovedController: TextEditingController(text: json['isApproved']?.toString() ?? 'false'),
+      fileIdController: TextEditingController(text: json['fileId'] ?? ''),
+      fileTypeController: TextEditingController(text: json['fileType'] ?? ''),
+      newFileController: TextEditingController(text: json['newFile']?.toString() ?? 'false'),
+      applictantIdController: TextEditingController(text: json['applictantId'] ?? ''),
+      descriptionController: TextEditingController(text: json['description'] ?? ''),
+      base64StringController: TextEditingController(text: json['base64String'] ?? ''),
+      processCdFocusNode: FocusNode(),
+      documentCdFocusNode: FocusNode(),
+      userFileNameFocusNode: FocusNode(),
+      commentFocusNode: FocusNode(),
+      requiredFocusNode: FocusNode(),
+      fileUploadedFocusNode: FocusNode(),
+      heightFocusNode: FocusNode(),
+      widthFocusNode: FocusNode(),
+      errorMessageFocusNode: FocusNode(),
+      supportedFileTypeFocusNode: FocusNode(),
+      maxFileSizeFocusNode: FocusNode(),
+      attachmentNameFocusNode: FocusNode(),
+      applicationDetailIdFocusNode: FocusNode(),
+      emiratesIdFocusNode: FocusNode(),
+      isApprovedFocusNode: FocusNode(),
+      fileIdFocusNode: FocusNode(),
+      fileTypeFocusNode: FocusNode(),
+      newFileFocusNode: FocusNode(),
+      applictantIdFocusNode: FocusNode(),
+      descriptionFocusNode: FocusNode(),
+      base64StringFocusNode: FocusNode(),
     );
   }
 
   // To JSON
   Map<String, dynamic> toJson() {
     return {
-
-      'applictantId': applictantIdController.text,
-      'processCD': processCDController.text,
-      'documentCD': documentCDController.text,
-      "attachmentName": attachmentNameController.text,
-      'description': descriptionController.text,
+      'processCD': processCdController.text,
+      'documentCD': documentCdController.text,
       'userFileName': userFileNameController.text,
-      'commnet': commentController.text,  // Keeping the typo in "commnet"
-      'base64String': base64StringController.text,
+      'comment': commentController.text,
+      'required': requiredController.text,
+      'fileUploaded': fileUploadedController.text,
+      'height': heightController.text,
+      'width': widthController.text,
       'errorMessage': errorMessageController.text,
-
-
-
-
-
-
-
-
+      'supportedFileType': supportedFileTypeController.text,
+      'maxFileSize': maxFileSizeController.text,
+      'attachmentName': attachmentNameController.text,
+      'applicationDetailId': applicationDetailIdController.text,
+      'emiratesId': emiratesIdController.text,
+      'isApproved': isApprovedController.text,
+      'fileId': fileIdController.text,
+      'fileType': fileTypeController.text,
+      'newFile': newFileController.text,
+      'applictantId': applictantIdController.text,
+      'description': descriptionController.text,
+      'base64String': base64StringController.text,
     };
   }
 }
-
 
 
 

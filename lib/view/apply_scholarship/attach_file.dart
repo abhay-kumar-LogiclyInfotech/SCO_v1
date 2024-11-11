@@ -11,6 +11,7 @@ import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 
+import '../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_styles.dart';
 import '../../resources/components/myDivider.dart';
@@ -20,12 +21,15 @@ import 'form_view_Utils.dart';
 
 
 class AttachFile extends StatefulWidget {
-  final dynamic attachment; // To get the values for specific type of attachment
-  final dynamic myAttachment; // This is the actual attachment which holds the base 64 string and other parameters also
+
+  String selectedCheckListCode;
+  final Attachment myAttachment; // This is the actual attachment which holds the base 64 string and other parameters also
   final dynamic onPressed;
   final dynamic onAction;
+   int? attachmentNumber;
    AttachFile({super.key,
-    required  this.attachment,
+     this.attachmentNumber,
+     required this.selectedCheckListCode,
     required  this.myAttachment,
      required this.onPressed,
      required this.onAction,
@@ -46,19 +50,22 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final required = widget.myAttachment.requiredController.text.toString();
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       // ****************************************************************************************************************************************************
       // title name for document
       RichText(
           text: TextSpan(children: [
             TextSpan(
-              text: getTextDirection(langProvider) == TextDirection.ltr
-                  ? widget.attachment.value.toString().replaceAll('\n', '')
-                  : widget.attachment.valueArabic.toString().replaceAll('\n', ''),
+              text:  "${widget.attachmentNumber}) ${getFullNameFromLov(langProvider: langProvider,lovCode: widget.selectedCheckListCode,code: widget.myAttachment.attachmentNameController.text).replaceAll('\n', '')}",
+
+    // getTextDirection(langProvider) == TextDirection.ltr
+    //               ?  widget.attachment.value.toString().replaceAll('\n', '')
+    //               : widget.attachment.valueArabic.toString().replaceAll('\n', ''),
               style: AppTextStyles.titleBoldTextStyle()
                   .copyWith(fontWeight: FontWeight.w600),
             ),
-            TextSpan(text: (widget.attachment.required.toString() == 'XMRL' || widget.attachment.required.toString() == 'MRL' || widget.attachment.required.toString() == 'NMRL') ? "*" : "", style: AppTextStyles.titleBoldTextStyle().copyWith(fontWeight: FontWeight.w600, color: Colors.red),),
+            TextSpan(text: (required == 'XMRL' || required == 'MRL' || required == 'NMRL') ? "*" : "", style: AppTextStyles.titleBoldTextStyle().copyWith(fontWeight: FontWeight.w600, color: Colors.red),),
           ])),
 
       kFormHeight,
@@ -97,7 +104,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
 
       // show available file type
       Text(
-          widget.myAttachment.documentCDController.text.toUpperCase() == 'SEL006' ? "Select .jpeg|.jpg|.JPEG|.JPG file type only" : "Select Pdf file only",
+          widget.myAttachment.documentCdController.text.toUpperCase() == 'SEL006' ? "Select .jpeg|.jpg|.JPEG|.JPG file type only" : "Select Pdf file only",
           style: AppTextStyles.normalTextStyle().copyWith(color: Colors.blueGrey, fontSize: 12)),
       kFormHeight,
 
@@ -106,8 +113,9 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
       // comments box
       scholarshipFormTextField(
           currentFocusNode: FocusNode(),
-          controller: widget.myAttachment.descriptionController,
+          controller: widget.myAttachment.commentController,
           maxLines: 3,
+          textInputType: TextInputType.multiline,
           maxLength: 30,
           hintText: "Enter your view",
           onChanged: (value) {}),

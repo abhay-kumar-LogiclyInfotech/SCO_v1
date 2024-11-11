@@ -13,7 +13,7 @@ import '../../viewModel/language_change_ViewModel.dart';
 
 
   // text field style which is used to styling hint and actual text
-  final TextStyle _textFieldTextStyle = AppTextStyles.titleTextStyle().copyWith(
+  final TextStyle textFieldTextStyle = AppTextStyles.titleTextStyle().copyWith(
       fontSize: 14,
       fontWeight: FontWeight.w600,
       color: AppColors.scoButtonColor);
@@ -101,7 +101,7 @@ dynamic addRemoveMoreSection(
       obscureText: false,
       border: Utils.outlinedInputBorder(),
       hintText: hintText,
-      textStyle: _textFieldTextStyle,
+      textStyle: textFieldTextStyle,
       maxLines: maxLines,
       maxLength: maxLength,
       inputFormat: inputFormat,
@@ -127,7 +127,7 @@ dynamic addRemoveMoreSection(
       controller: controller,
       border: Utils.outlinedInputBorder(),
       hintText: hintText,
-      textStyle: _textFieldTextStyle,
+      textStyle: textFieldTextStyle,
       textInputType: TextInputType.datetime,
       textCapitalization: true,
       trailing: const Icon(

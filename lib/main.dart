@@ -99,14 +99,8 @@ class MyApp extends StatelessWidget {
           // get My Scholarship
           ChangeNotifierProvider(create: (_) => MyScholarshipViewModel()),
 
-
-
-
-
           // save as draft
           ChangeNotifierProvider(create: (_) => SaveAsDraftViewmodel()),
-
-
 
           // find all active scholarships
           ChangeNotifierProvider(create: (_) => GetAllActiveScholarshipsViewModel()),
