@@ -57,7 +57,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
       RichText(
           text: TextSpan(children: [
             TextSpan(
-              text:  "${widget.attachmentNumber}) ${getFullNameFromLov(langProvider: langProvider,lovCode: widget.selectedCheckListCode,code: widget.myAttachment.attachmentNameController.text).replaceAll('\n', '')}",
+              text:  "${widget.attachmentNumber}.  ${getFullNameFromLov(langProvider: langProvider,lovCode: widget.selectedCheckListCode,code: widget.myAttachment.attachmentNameController.text).replaceAll('\n', '')}",
 
     // getTextDirection(langProvider) == TextDirection.ltr
     //               ?  widget.attachment.value.toString().replaceAll('\n', '')

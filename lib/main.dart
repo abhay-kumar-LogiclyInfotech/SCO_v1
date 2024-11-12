@@ -11,6 +11,7 @@ import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_v
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/attach_file_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/deleteDraftViewmodel.dart';
+import 'package:sco_v1/viewModel/apply_scholarship/find_draft_by_draft_id_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
@@ -88,7 +89,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => FindDraftByConfigurationKeyViewmodel()),
 
           // find Draft by Draft ID Key
-          ChangeNotifierProvider(create: (_) => FindDraftByConfigurationKeyViewmodel()),
+          ChangeNotifierProvider(create: (_) => FindDraftByDraftIdViewmodel()),
           // delete Draft
           ChangeNotifierProvider(create: (_) => DeleteDraftViewmodel()),
           // attachFile

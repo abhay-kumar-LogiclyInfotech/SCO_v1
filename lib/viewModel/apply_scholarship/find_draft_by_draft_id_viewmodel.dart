@@ -57,6 +57,7 @@ class FindDraftByDraftIdViewmodel with ChangeNotifier {
 
       try {
 
+        print("Inside FindDraft ViewModel");
 
         setLoading(true);
         setApiResponse = ApiResponse.loading();
@@ -69,7 +70,9 @@ class FindDraftByDraftIdViewmodel with ChangeNotifier {
 
         FindDraftByConfigurationKeyModel response = await _myRepo.findDraftByDraftId(draftId: draftId,headers: headers);
 
+
         setApiResponse = ApiResponse.completed(response);
+        print(apiResponse.data);
         setLoading(false);
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());

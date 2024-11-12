@@ -224,7 +224,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView>
 
                       IconsButton(
                         onPressed: () {
-                          // _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(draftId: application.applicationProgramNumber ?? '')));
+                          _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(draftId: application.applicationProgramNumber ?? '',)));
                         },
                         text: 'Edit',
                         iconData: Icons.arrow_circle_right_outlined,

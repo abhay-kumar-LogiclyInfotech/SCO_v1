@@ -17,6 +17,7 @@ import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
+import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
@@ -45,6 +46,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     _authService = getIt.get<AuthService>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
+
+      final applicationStatusProvider = Provider.of<GetListApplicationStatusViewModel>(context,listen: false);
+      await applicationStatusProvider.getListApplicationStatus();
+
       // final provider = Provider.of<HomeSliderViewModel>(context, listen: false);
       // final langProvider =
       //     Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -509,27 +514,33 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         content: Column(
           children: [
             kFormHeight,
-            CustomButton(
-              buttonName: "Apply Scholarship",
-              isLoading: false,
-              onTap: () async {
-                // check if user is logged in or not
-                final bool alreadyLoggedIn = await _authService.isLoggedIn();
-                if (!alreadyLoggedIn) {
-                  _navigationServices.goBackUntilFirstScreen();
-                  _navigationServices.pushCupertino(CupertinoPageRoute(
-                      builder: (context) => const LoginView()));
-                } else {
-                  _navigationServices.pushSimpleWithAnimationRoute(
-                      createRoute(const SelectScholarshipTypeView()));
-                }
+            Consumer(
+              builder: (context,provider,_){
+                return CustomButton(
+                  buttonName: "Apply Scholarship",
+                  isLoading: false,
+                  onTap: () async {
+                    // check if user is logged in or not
+                    final bool alreadyLoggedIn = await _authService.isLoggedIn();
+                    if (!alreadyLoggedIn) {
+                      _navigationServices.goBackUntilFirstScreen();
+                      _navigationServices.pushCupertino(CupertinoPageRoute(
+                          builder: (context) => const LoginView()));
+                    } else {
+
+
+
+                      _navigationServices.pushSimpleWithAnimationRoute(createRoute(const SelectScholarshipTypeView()));
+                    }
+                  },
+                  textDirection: getTextDirection(langProvider),
+                  textColor: AppColors.scoThemeColor,
+                  borderColor: AppColors.scoThemeColor,
+                  buttonColor: Colors.white,
+                  fontSize: 16,
+                  height: 45,
+                );
               },
-              textDirection: getTextDirection(langProvider),
-              textColor: AppColors.scoThemeColor,
-              borderColor: AppColors.scoThemeColor,
-              buttonColor: Colors.white,
-              fontSize: 16,
-              height: 45,
             ),
             kFormHeight,
           ],

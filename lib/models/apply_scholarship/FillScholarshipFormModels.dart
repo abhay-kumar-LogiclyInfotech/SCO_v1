@@ -965,8 +965,8 @@ class EmploymentHistory {
     return EmploymentHistory(
       employerNameController: TextEditingController(text: json['employerName'] ?? ''),
       designationController: TextEditingController(text: json['designation'] ?? ''),
-      startDateController: TextEditingController(text: json['startDate'] ?? ''),
-      endDateController: TextEditingController(text: json['endDate'] ?? ''),
+      startDateController: TextEditingController(text: formatDateOnly(json['startDate']) ?? ''),
+      endDateController: TextEditingController(text: formatDateOnly(json['endDate']) ?? ''),
       occupationController: TextEditingController(text: json['occupation'] ?? ''),
       titleController: TextEditingController(text: json['title'] ?? ''),
       placeController: TextEditingController(text: json['place'] ?? ''),

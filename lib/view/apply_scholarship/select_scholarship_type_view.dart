@@ -87,9 +87,6 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
       // fetching all active scholarships:
       final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context, listen: false);
       await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
-
-
-
     });
   }
 
@@ -113,7 +110,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
       child: Consumer<GetAllActiveScholarshipsViewModel>(
         builder: (context, provider, _) {
           return provider.apiResponse.status == Status.LOADING
-              ? Utils.cupertinoLoadingIndicator()
+              ? Utils.pageLoadingIndicator()
               : SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
