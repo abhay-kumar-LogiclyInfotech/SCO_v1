@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
+import 'package:sco_v1/models/TestModel.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/models/account/personal_details/UpdatePersonalDetailsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
@@ -169,6 +170,20 @@ class HomeRepository {
     );
     return MyScholarshipModel.fromJson(response);
   }
+
+
+
+  // *------ Fetch Draft By Configuration Key ------*/
+  Future<TestModel> testApi(
+      {required dynamic headers,required dynamic body}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+      url: "https://api.theevents.ae/api/v1/checkout/91aba998b095d59fbe79a5c24530b689/information",
+      headers: headers,
+      body: body,
+    );
+    return TestModel.fromJson(response);
+  }
+
 
 
 }

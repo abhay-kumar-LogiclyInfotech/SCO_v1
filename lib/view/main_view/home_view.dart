@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/Test.dart';
 import 'package:sco_v1/controller/dependency_injection.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/carsousel_slider.dart';
@@ -46,10 +47,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     _authService = getIt.get<AuthService>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-
-      final applicationStatusProvider = Provider.of<GetListApplicationStatusViewModel>(context,listen: false);
-      await applicationStatusProvider.getListApplicationStatus();
-
       // final provider = Provider.of<HomeSliderViewModel>(context, listen: false);
       // final langProvider =
       //     Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -65,24 +62,26 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     );
   }
 
-
   // check for the scholarship status
   ScholarshipStatus scholarshipStatus = ScholarshipStatus.applyScholarship;
 
   Widget _buildUI() {
     // *-----Initialize the languageProvider-----*
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.all(kPadding),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //CarouselSlider:
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: kPadding),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // CustomButton(buttonName: "Test", isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
+            //   final provider = Provider.of<TestApi>(context,listen: false);
+            //   provider.testApi();
+            // }),
 
-              // *-----Client Said he don't need CarouselSlider on the home page----*/
-              // _carouselSlider(),
-            if(scholarshipStatus == ScholarshipStatus.appliedScholarship)
+            //CarouselSlider:
+            // *-----Client Said he don't need CarouselSlider on the home page----*/
+            // _carouselSlider(),
+            if (scholarshipStatus == ScholarshipStatus.appliedScholarship)
               Column(
                 children: [
                   _scholarshipAppliedContainer(langProvider: langProvider),
@@ -90,28 +89,39 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 ],
               ),
 
-              if(scholarshipStatus == ScholarshipStatus.approvedScholarship)
-                Column(
-                  children: [
-                    _scholarshipApproved(langProvider: langProvider),
-                    kFormHeight,
-                  ],
-                ),
+            if (scholarshipStatus == ScholarshipStatus.approvedScholarship)
+              Column(
+                children: [
+                  _scholarshipApproved(langProvider: langProvider),
+                  kFormHeight,
+                ],
+              ),
 
-              // _faqContainer(langProvider: langProvider),
-              // kFormHeight,
-              // _aboutOrganization(langProvider: langProvider),
-              kFormHeight,
-              if(scholarshipStatus == ScholarshipStatus.applyScholarship) Column(children: [
-                _applyScholarshipButton(langProvider: langProvider),
-                kFormHeight,
-                _scoPrograms(langProvider: langProvider),
-                kFormHeight,
-              ],),
+            // _faqContainer(langProvider: langProvider),
+            // kFormHeight,
+            // _aboutOrganization(langProvider: langProvider),
+            kFormHeight,
+            if (scholarshipStatus == ScholarshipStatus.applyScholarship)
+              Column(
+                children: [
+                  _applyScholarshipButton(langProvider: langProvider),
+                  kFormHeight,
+                  _scoPrograms(langProvider: langProvider),
+                  kFormHeight,
+                ],
+              ),
 
-              if(scholarshipStatus == ScholarshipStatus.appliedScholarship || scholarshipStatus == ScholarshipStatus.applyScholarship)   _faqSection(langProvider:langProvider)
-            ],
-          ),
+            _financeView(langProvider: langProvider),
+            kFormHeight,
+            _requestView(langProvider: langProvider),
+            kFormHeight,
+            _talkToMyAdvisor(langProvider: langProvider),
+            kFormHeight,
+
+            if (scholarshipStatus == ScholarshipStatus.appliedScholarship ||
+                scholarshipStatus == ScholarshipStatus.applyScholarship)
+              _faqSection(langProvider: langProvider)
+          ],
         ),
       ),
     );
@@ -484,26 +494,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     );
   }
 
-  Widget _aboutOrganization({required LanguageChangeViewModel langProvider}) {
-    return _homeViewCard(
-        icon: SvgPicture.asset(
-          "assets/aboutTheOrganization.svg",
-          height: 20,
-          width: 20,
-        ),
-        title: AppLocalizations.of(context)!.aboutTheOrganization,
-        langProvider: langProvider,
-        content: Column(
-          children: [
-            const Divider(color: Color(0xffDFDFDF)),
-            const SizedBox(height: 10),
-            _buildInfoRow1(),
-            const SizedBox(height: 10),
-            _buildInfoRow2(),
-          ],
-        ));
-  }
-
   // Apply Scholarship Button
   Widget _applyScholarshipButton(
       {required LanguageChangeViewModel langProvider}) {
@@ -515,22 +505,21 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           children: [
             kFormHeight,
             Consumer(
-              builder: (context,provider,_){
+              builder: (context, provider, _) {
                 return CustomButton(
                   buttonName: "Apply Scholarship",
                   isLoading: false,
                   onTap: () async {
                     // check if user is logged in or not
-                    final bool alreadyLoggedIn = await _authService.isLoggedIn();
+                    final bool alreadyLoggedIn =
+                        await _authService.isLoggedIn();
                     if (!alreadyLoggedIn) {
                       _navigationServices.goBackUntilFirstScreen();
                       _navigationServices.pushCupertino(CupertinoPageRoute(
                           builder: (context) => const LoginView()));
                     } else {
-
-
-
-                      _navigationServices.pushSimpleWithAnimationRoute(createRoute(const SelectScholarshipTypeView()));
+                      _navigationServices.pushSimpleWithAnimationRoute(
+                          createRoute(const SelectScholarshipTypeView()));
                     }
                   },
                   textDirection: getTextDirection(langProvider),
@@ -543,6 +532,55 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               },
             ),
             kFormHeight,
+          ],
+        ));
+  }
+
+  /// Finance View:
+  Widget _financeView({required LanguageChangeViewModel langProvider}) {
+    return _homeViewCard(
+        title: "My Finance",
+        icon: SvgPicture.asset("assets/my_finance.svg"),
+        langProvider: langProvider,
+        content: Column(
+          children: [],
+        ));
+  }
+
+  /// Request View:
+  Widget _requestView({required LanguageChangeViewModel langProvider}) {
+    return _homeViewCard(
+        title: "Requests",
+        icon: SvgPicture.asset("assets/request.svg"),
+        langProvider: langProvider,
+        content: Column(
+          children: [],
+        ));
+  }
+
+  /// Talk to my Advisor View:
+  Widget _talkToMyAdvisor({required LanguageChangeViewModel langProvider}) {
+    return _homeViewCard(
+        title: "Talk to My Advisor",
+        icon: SvgPicture.asset("assets/talk_to_my_advisor.svg"),
+        langProvider: langProvider,
+        contentPadding: EdgeInsets.zero,
+        content: Column(
+          children: [
+            _homeViewCardBottomContainer(
+                child: ListTile(
+              leading: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      image: DecorationImage(
+                          image: AssetImage("assets/login_bg.png")))),
+              title: Text("Carl Driffith"),
+              titleTextStyle:
+                  AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14),
+              subtitle: Text("Carl Driffith"),
+            )),
           ],
         ));
   }
@@ -566,6 +604,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         onTap: () {}),
   ];
   int _scoProgramCurrentIndex = 0;
+
   Widget _scoPrograms({required LanguageChangeViewModel langProvider}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -594,7 +633,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 });
               },
             ),
-            kFormHeight,            // animated moving dots
+            kFormHeight, // animated moving dots
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -610,7 +649,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                         ? Colors.black
                         : Colors.grey,
                   ),
-
                 );
               }).toList(),
             )
@@ -621,80 +659,92 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   }
 
   // &---- FaQ section -----*
-  Widget _faqSection({langProvider})
-  {
-    return _homeViewCard(title: "FAQ", icon: const Icon(Icons.face), content: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text("Frequently Asked Questions",style: AppTextStyles.titleTextStyle(),)
-      ],
-    ), langProvider: langProvider,
-      onTap: (){
-      // Navigate to FAQ page
-        _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const FaqView()));
-
-    }
-
-
-    );
+  Widget _faqSection({langProvider}) {
+    return _homeViewCard(
+        title: "FAQ",
+        icon: const Icon(Icons.face),
+        content: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              "Frequently Asked Questions",
+              style: AppTextStyles.titleTextStyle(),
+            )
+          ],
+        ),
+        langProvider: langProvider,
+        onTap: () {
+          // Navigate to FAQ page
+          _navigationServices.pushCupertino(
+              CupertinoPageRoute(builder: (context) => const FaqView()));
+        });
   }
 
-
-
-
-
-
-
-
-
-
-
-
   // main card for home
-  Widget _homeViewCard(
-      {required String title,
-      required Widget icon,
-      required Widget content,
-      required LanguageChangeViewModel langProvider,
-      VoidCallback? onTap,
-      }) {
+  Widget _homeViewCard({
+    required String title,
+    required Widget icon,
+    required Widget content,
+    required LanguageChangeViewModel langProvider,
+    dynamic contentPadding,
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Material(
-        elevation: 2,
+        elevation: 0.5,
         color: Colors.white,
-        shadowColor: Colors.transparent,
+        shadowColor: Colors.grey.shade400,
         borderRadius: BorderRadius.circular(kCardRadius),
         child: Directionality(
           textDirection: getTextDirection(langProvider),
           child: Padding(
-            padding: EdgeInsets.all(kPadding),
+            padding: EdgeInsets.zero,
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                        child: Row(
-                      children: [
-                        icon,
-                        const SizedBox(width: 10),
-                        Text(
-                          title,
-                          style: AppTextStyles.titleBoldTextStyle(),
-                        ),
-                      ],
-                    )),
-                    Icon(getTextDirection(langProvider) == TextDirection.rtl
-                        ? Icons.keyboard_arrow_left_outlined
-                        : Icons.keyboard_arrow_right_outlined,color: Colors.grey,)
-                  ],
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: kPadding,
+                    left: kPadding,
+                    right: kPadding,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                          child: Row(
+                        children: [
+                          icon,
+                          const SizedBox(width: 10),
+                          Text(
+                            title,
+                            style: AppTextStyles.titleBoldTextStyle()
+                                .copyWith(fontSize: 16),
+                          ),
+                        ],
+                      )),
+                      Icon(
+                        getTextDirection(langProvider) == TextDirection.rtl
+                            ? Icons.keyboard_arrow_left_outlined
+                            : Icons.keyboard_arrow_right_outlined,
+                        color: Colors.grey,
+                      )
+                    ],
+                  ),
                 ),
                 kFormHeight,
-                content
+                Padding(
+                  padding: contentPadding ??
+                      EdgeInsets.only(
+                        bottom: kPadding,
+                        left: kPadding,
+                        right: kPadding,
+                      ),
+                  child: content,
+                )
               ],
             ),
           ),
@@ -703,107 +753,133 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     );
   }
 
-
-
-
-
-
-
-
-
-  Widget _buildInfoRow1() {
-    return Consumer<LanguageChangeViewModel>(
-      builder: (context, provider, _) {
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: CustomAboutOrganizationContainers(
-                assetName: "assets/aboutSco.svg",
-                name: AppLocalizations.of(context)!.aboutSco,
-                onTap: () {
-                  _navigationServices.pushSimpleWithAnimationRoute(
-                      createRoute(const ABriefAboutScoView(
-                    appBar: true,
-                  )));
-                },
-                textDirection: getTextDirection(provider),
-              ),
-            ),
-            Expanded(
-              child: CustomAboutOrganizationContainers(
-                assetName: "assets/scholarships.svg",
-                name: AppLocalizations.of(context)!.scholarship,
-                onTap: () async {
-                  // check if user is logged in or not
-                  final bool alreadyLoggedIn = await _authService.isLoggedIn();
-                  if (!alreadyLoggedIn) {
-                    _navigationServices.goBackUntilFirstScreen();
-                    _navigationServices.pushCupertino(CupertinoPageRoute(
-                        builder: (context) => const LoginView()));
-                  } else {
-                    _navigationServices.pushSimpleWithAnimationRoute(createRoute(const SelectScholarshipTypeView()));
-                  }
-                },
-                textDirection: getTextDirection(provider),
-              ),
-            ),
-            Expanded(
-              child: CustomAboutOrganizationContainers(
-                assetName: "assets/certificates.svg",
-                name: AppLocalizations.of(context)!.certificates,
-                onTap: () {},
-                textDirection: getTextDirection(provider),
-              ),
-            ),
-          ],
-        );
-      },
+  Widget _homeViewCardBottomContainer(
+      {required dynamic child,
+      dynamic backGroundColor = AppColors.lightBlue0}) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+          color: backGroundColor,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(kCardRadius),
+              bottomRight: Radius.circular(kCardRadius))),
+      child: child,
     );
   }
 
-  Widget _buildInfoRow2() {
-    return Consumer<LanguageChangeViewModel>(
-      builder: (context, provider, _) {
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: CustomAboutOrganizationContainers(
-                assetName: "assets/faqs.svg",
-                name: AppLocalizations.of(context)!.faqs,
-                textDirection: getTextDirection(provider),
-                onTap: () {
-                  _navigationServices.pushSimpleWithAnimationRoute(
-                      createRoute(const FaqView()));
-                },
-              ),
-            ),
-            Expanded(
-              child: CustomAboutOrganizationContainers(
-                assetName: "assets/vision_and_mission.svg",
-                name: AppLocalizations.of(context)!.visionAndMission,
-                textDirection: getTextDirection(provider),
-                onTap: () {
-                  _navigationServices.pushSimpleWithAnimationRoute(
-                      createRoute(const VisionAndMissionView()));
-                },
-              ),
-            ),
-            Expanded(
-              child: CustomAboutOrganizationContainers(
-                assetName: "assets/news_and_events.svg",
-                name: AppLocalizations.of(context)!.newsAndEvents,
-                textDirection: getTextDirection(provider),
-                onTap: () {
-                  _navigationServices.pushSimpleWithAnimationRoute(
-                      createRoute(const NewsAndEventsView()));
-                },
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+// Widget _aboutOrganization({required LanguageChangeViewModel langProvider}) {
+//   return _homeViewCard(
+//       icon: SvgPicture.asset(
+//         "assets/aboutTheOrganization.svg",
+//         height: 20,
+//         width: 20,
+//       ),
+//       title: AppLocalizations.of(context)!.aboutTheOrganization,
+//       langProvider: langProvider,
+//       content: Column(
+//         children: [
+//           const Divider(color: Color(0xffDFDFDF)),
+//           const SizedBox(height: 10),
+//           _buildInfoRow1(),
+//           const SizedBox(height: 10),
+//           _buildInfoRow2(),
+//         ],
+//       ));
+// }
+
+// Widget _buildInfoRow1() {
+//   return Consumer<LanguageChangeViewModel>(
+//     builder: (context, provider, _) {
+//       return Row(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           Expanded(
+//             child: CustomAboutOrganizationContainers(
+//               assetName: "assets/aboutSco.svg",
+//               name: AppLocalizations.of(context)!.aboutSco,
+//               onTap: () {
+//                 _navigationServices.pushSimpleWithAnimationRoute(
+//                     createRoute(const ABriefAboutScoView(
+//                   appBar: true,
+//                 )));
+//               },
+//               textDirection: getTextDirection(provider),
+//             ),
+//           ),
+//           Expanded(
+//             child: CustomAboutOrganizationContainers(
+//               assetName: "assets/scholarships.svg",
+//               name: AppLocalizations.of(context)!.scholarship,
+//               onTap: () async {
+//                 // check if user is logged in or not
+//                 final bool alreadyLoggedIn = await _authService.isLoggedIn();
+//                 if (!alreadyLoggedIn) {
+//                   _navigationServices.goBackUntilFirstScreen();
+//                   _navigationServices.pushCupertino(CupertinoPageRoute(
+//                       builder: (context) => const LoginView()));
+//                 } else {
+//                   _navigationServices.pushSimpleWithAnimationRoute(createRoute(const SelectScholarshipTypeView()));
+//                 }
+//               },
+//               textDirection: getTextDirection(provider),
+//             ),
+//           ),
+//           Expanded(
+//             child: CustomAboutOrganizationContainers(
+//               assetName: "assets/certificates.svg",
+//               name: AppLocalizations.of(context)!.certificates,
+//               onTap: () {},
+//               textDirection: getTextDirection(provider),
+//             ),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
+//
+// Widget _buildInfoRow2() {
+//   return Consumer<LanguageChangeViewModel>(
+//     builder: (context, provider, _) {
+//       return Row(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           Expanded(
+//             child: CustomAboutOrganizationContainers(
+//               assetName: "assets/faqs.svg",
+//               name: AppLocalizations.of(context)!.faqs,
+//               textDirection: getTextDirection(provider),
+//               onTap: () {
+//                 _navigationServices.pushSimpleWithAnimationRoute(
+//                     createRoute(const FaqView()));
+//               },
+//             ),
+//           ),
+//           Expanded(
+//             child: CustomAboutOrganizationContainers(
+//               assetName: "assets/vision_and_mission.svg",
+//               name: AppLocalizations.of(context)!.visionAndMission,
+//               textDirection: getTextDirection(provider),
+//               onTap: () {
+//                 _navigationServices.pushSimpleWithAnimationRoute(
+//                     createRoute(const VisionAndMissionView()));
+//               },
+//             ),
+//           ),
+//           Expanded(
+//             child: CustomAboutOrganizationContainers(
+//               assetName: "assets/news_and_events.svg",
+//               name: AppLocalizations.of(context)!.newsAndEvents,
+//               textDirection: getTextDirection(provider),
+//               onTap: () {
+//                 _navigationServices.pushSimpleWithAnimationRoute(
+//                     createRoute(const NewsAndEventsView()));
+//               },
+//             ),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
 }

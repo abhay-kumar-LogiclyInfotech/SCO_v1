@@ -186,11 +186,18 @@ class _SignUpViewState extends State<SignUpView>
   //   ];
   // }
 
+  bool _processing = false;
+  setProcessing(bool processing){
+    setState(() {
+      _processing = processing;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: _buildUI(),
+      body: Utils.modelProgressHud(processing: _processing,child:  _buildUI()),
     );
   }
 
@@ -485,7 +492,7 @@ class _SignUpViewState extends State<SignUpView>
             lastDate: DateTime.now().add(const Duration(days: 365)));
         if (dob != null) {
           _dobController.text =
-              intl.DateFormat('dd-MM-yyyy').format(dob).toString();
+              intl.DateFormat('yyyy-MM-dd').format(dob).toString();
           _dobDayController.text = intl.DateFormat('dd').format(dob).toString();
           _dobMonthController.text =
               intl.DateFormat('MM').format(dob).toString();
@@ -731,14 +738,19 @@ class _SignUpViewState extends State<SignUpView>
             buttonName: AppLocalizations.of(context)!.signUp,
             isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
             onTap: ()async {
-              bool result =
-                  validateForm(langProvider: langProvider, signup: provider);
+              
+              setProcessing(true);
+              
+              bool result = validateForm(langProvider: langProvider, signup: provider);
               if (result) {
               bool signUpResult = await provider.signup(context: context, langProvider: langProvider);
               if(signUpResult){
                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const OtpVerificationView()) );
               }
               }
+              setProcessing(false);
+
+
             },
             fontSize: 16,
             buttonColor: AppColors.scoButtonColor,
@@ -790,7 +802,7 @@ class _SignUpViewState extends State<SignUpView>
       {required LanguageChangeViewModel langProvider,
       required SignupViewModel signup})
   {
-    if (_firstNameController.text.isEmpty) {
+    if (_firstNameController.text.isEmpty || !Validations.isNameValid(_firstNameController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterFirstName,
           context: context,
@@ -814,7 +826,7 @@ class _SignUpViewState extends State<SignUpView>
     signup.setMiddleName2(_thirdFourthNameController.text.trim());
     // }
 
-    if (_familyNameController.text.isEmpty) {
+    if (_familyNameController.text.isEmpty || !Validations.isNameValid(_familyNameController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterFamilyName,
           context: context,
@@ -824,7 +836,7 @@ class _SignUpViewState extends State<SignUpView>
       signup.setLastName(_familyNameController.text.trim());
     }
 
-    if (_dobController.text.isEmpty) {
+    if (_dobController.text.isEmpty || !isEighteenYearsOld(_dobController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterDateOfBirth,
           context: context,
@@ -881,7 +893,7 @@ class _SignUpViewState extends State<SignUpView>
       signup.setIsMale(_genderController.text.trim());
     }
 
-    if (_emailController.text.isEmpty || !_emailController.text.contains('@')) {
+    if (_emailController.text.isEmpty || !_emailController.text.contains('@') || !Validations.isEmailValid(_confirmEmailController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidEmail,
           context: context,
@@ -891,8 +903,7 @@ class _SignUpViewState extends State<SignUpView>
       signup.setEmailAddress(_emailController.text.trim().toLowerCase());
     }
 
-    if (_confirmEmailController.text.isEmpty ||
-        _confirmEmailController.text != _emailController.text) {
+    if (_confirmEmailController.text.isEmpty || _confirmEmailController.text != _emailController.text || !Validations.isEmailValid(_confirmEmailController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.emailsDoNotMatch,
           context: context,
@@ -913,7 +924,7 @@ class _SignUpViewState extends State<SignUpView>
       signup.setCountry(_countryController.text.trim());
     }
 
-    if (_emiratesIdController.text.isEmpty) {
+    if (_emiratesIdController.text.isEmpty || !Validations.isValidEmirateId(_emiratesIdController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidEmiratesId,
           context: context,
@@ -924,7 +935,7 @@ class _SignUpViewState extends State<SignUpView>
           _emiratesIdController.text.replaceAll("-", '').trim().toString());
     }
 
-    if (_studentPhoneNumberController.text.isEmpty) {
+    if (_studentPhoneNumberController.text.isEmpty || !Validations.isPhoneNumberValid(_studentPhoneNumberController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidPhoneNumber,
           context: context,
@@ -934,8 +945,7 @@ class _SignUpViewState extends State<SignUpView>
       signup.setPhoneNo(_studentPhoneNumberController.text.trim());
     }
 
-    if (_passwordController.text.isEmpty ||
-        _passwordController.text.length < 8) {
+    if (_passwordController.text.isEmpty || _passwordController.text.length < 8 || !Validations.isPasswordValid(_passwordController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidPassword,
           context: context,
@@ -945,8 +955,7 @@ class _SignUpViewState extends State<SignUpView>
       signup.setPassword(_passwordController.text.trim());
     }
 
-    if (_confirmPasswordController.text.isEmpty ||
-        _confirmPasswordController.text != _passwordController.text) {
+    if (_confirmPasswordController.text.isEmpty || _confirmPasswordController.text != _passwordController.text || !Validations.isPasswordValid(_confirmPasswordController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.passwordsDoNotMatch,
           context: context,

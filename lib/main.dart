@@ -105,6 +105,11 @@ class MyApp extends StatelessWidget {
 
           // find all active scholarships
           ChangeNotifierProvider(create: (_) => GetAllActiveScholarshipsViewModel()),
+
+
+          // register Test ViewModel
+          ChangeNotifierProvider(create: (_) => TestApi()),
+
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {

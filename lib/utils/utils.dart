@@ -70,22 +70,16 @@ class Utils {
   //*------Common Loading Indicators Start------*/
 
   //*-----Material Loading Indicator-----*/
-  static Widget materialLoadingIndicator({dynamic color = Colors.white}) =>  Center(
-        child: CircularProgressIndicator(
-          color: color,
-          strokeWidth: 1.5,
-        ),
-      );
+  static Widget materialLoadingIndicator({dynamic color = Colors.white}) =>  Center(child: CircularProgressIndicator(color: color, strokeWidth: 1.5));
 
 //*-----Cupertino Loading Indicator-----*/
-  static Widget cupertinoLoadingIndicator({dynamic color = AppColors.scoButtonColor}) =>  Center(
-          child:   CupertinoActivityIndicator(
-        color: color));
-
+  static Widget cupertinoLoadingIndicator({dynamic color = AppColors.scoButtonColor}) =>  Center(child:   CupertinoActivityIndicator(color: color));
 
   //*----- page  Loading Indicator-----*/
-  static Widget pageLoadingIndicator({dynamic color = AppColors.scoButtonColor}) =>  Center(
-      child: Platform.isAndroid ? Utils.materialLoadingIndicator(color: color) : Utils.cupertinoLoadingIndicator(color: color));
+  static Widget pageLoadingIndicator({dynamic color = AppColors.scoButtonColor,required dynamic context}) =>  SizedBox(height: MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,child: Center(child: Platform.isAndroid ? Utils.materialLoadingIndicator(color: color) : Utils.cupertinoLoadingIndicator(color: color)));
+
+  //*----- page  Refresh Indicator-----*/
+  static Widget pageRefreshIndicator({required dynamic child,required dynamic onRefresh}) =>  RefreshIndicator(color: Colors.white,backgroundColor: AppColors.scoThemeColor,onRefresh: onRefresh, child: ListView(children: [child]));
 
 
 
@@ -131,7 +125,7 @@ class Utils {
   // model progress hud
 
   static Widget modelProgressHud(
-      {bool processing = false, dynamic child}
+      {bool processing = true, dynamic child}
       ){
    return  ModalProgressHUD(
        color: Colors.blueGrey,

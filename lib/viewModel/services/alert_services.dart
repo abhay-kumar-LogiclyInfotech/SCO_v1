@@ -210,7 +210,7 @@ class AlertServices {
   void flushBarErrorMessages({
     required String message,
     required BuildContext context,
-    required LanguageChangeViewModel provider,
+     LanguageChangeViewModel? provider,
   }) {
     if (!_isNotificationShowing) {
       _isNotificationShowing = true;
@@ -218,7 +218,7 @@ class AlertServices {
         context: context,
         flushbar: Flushbar(
           backgroundColor: AppColors.scoButtonColor,
-          textDirection: getTextDirection(provider),
+          // textDirection: getTextDirection(provider),
           messageColor: Colors.white,
           message: message,
           duration: const Duration(seconds: 5),

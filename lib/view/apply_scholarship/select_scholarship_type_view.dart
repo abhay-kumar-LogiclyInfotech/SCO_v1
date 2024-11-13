@@ -110,7 +110,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
       child: Consumer<GetAllActiveScholarshipsViewModel>(
         builder: (context, provider, _) {
           return provider.apiResponse.status == Status.LOADING
-              ? Utils.pageLoadingIndicator()
+              ? Utils.pageLoadingIndicator(context: context)
               : SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,

@@ -139,7 +139,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
         builder: (context, provider, _) {
           switch (provider.apiResponse.status) {
             case Status.LOADING:
-              return Utils.pageLoadingIndicator();
+              return Utils.pageLoadingIndicator(context: context);
 
             case Status.ERROR:
               return Center(

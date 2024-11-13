@@ -12,6 +12,10 @@ import '../../utils/utils.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 
 
+
+
+
+
   // text field style which is used to styling hint and actual text
   final TextStyle textFieldTextStyle = AppTextStyles.titleTextStyle().copyWith(
       fontSize: 14,

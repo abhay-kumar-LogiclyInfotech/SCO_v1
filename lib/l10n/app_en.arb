@@ -210,12 +210,14 @@
   "webUrl": "https://www.sco.ae",
   "phoneCallPermissionDenied": "Phone call permission denied",
   "invalidArabicName": "Invalid Arabic name. Please use only Arabic letters.",
-  "invalidEnglishName": "Please enter a valid English name"
-
-
-
-
-
+  "invalidEnglishName": "Please enter a valid English name",
+  "apply_for_scholarship": "Apply for a Scholarship",
+  "my_scholarship": "My Scholarship",
+  "request": "Request",
+  "academic_advisor": "Academic Advisor",
+  "work_status": "Work Status",
+  "finance": "Finance",
+  "guidance_notes": "Guidance Notes"
 }
 
 

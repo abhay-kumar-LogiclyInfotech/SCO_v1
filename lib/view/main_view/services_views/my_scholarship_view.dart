@@ -85,7 +85,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
         builder: (context, provider, _) {
           switch (provider.apiResponse.status) {
             case Status.LOADING:
-              return Utils.pageLoadingIndicator();
+              return Utils.pageLoadingIndicator(context: context);
 
             case Status.ERROR:
               return Center(

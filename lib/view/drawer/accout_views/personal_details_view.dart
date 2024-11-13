@@ -45,7 +45,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
   }
 
 
-  Future _fetchData()async{
+  Future<void> _fetchData()async{
       // fetch student profile Information t prefill the user information
       final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
       await studentProfileProvider.getPersonalDetails();
@@ -72,7 +72,8 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
         appBar: CustomSimpleAppBar(
           titleAsString: "Personal Details",
         ),
-        body: _buildUi(),
+        body: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _fetchData)
+
       ),
     );
   }
@@ -85,7 +86,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
         builder: (context, provider, _) {
       switch (provider.apiResponse.status) {
         case Status.LOADING:
-          return Utils.pageLoadingIndicator();
+          return Utils.pageLoadingIndicator(context: context);
 
         case Status.ERROR:
           return Center(

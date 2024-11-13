@@ -210,12 +210,14 @@
   "webUrl": "https://www.sco.ae",
   "phoneCallPermissionDenied": "تم رفض إذن إجراء المكالمات الهاتفية",
   "invalidArabicName": "الاسم العربي غير صالح. يُرجى استخدام الحروف العربية فقط.",
-  "invalidEnglishName": "يرجى إدخال اسم إنجليزي صالح"
-
-
-
-
-
+  "invalidEnglishName": "يرجى إدخال اسم إنجليزي صالح",
+  "apply_for_scholarship": "التقديم للحصول على منحة دراسية",
+  "my_scholarship": "منحتي الدراسية",
+  "request": "طلب",
+  "academic_advisor": "المستشار الأكاديمي",
+  "work_status": "حالة العمل",
+  "finance": "المالية",
+  "guidance_notes": "ملاحظات التوجيه"
 }
 
 

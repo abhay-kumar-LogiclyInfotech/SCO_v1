@@ -7,6 +7,7 @@ import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart'
 import 'package:sco_v1/view/drawer/custom_drawer_views/sco_programs.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/vision_and_mission_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/account_view.dart';
+import 'package:sco_v1/view/main_view.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,7 +22,7 @@ import '../authentication/login/login_view.dart';
 import 'custom_drawer_views/contact_us_view.dart';
 import 'custom_drawer_views/faq_view.dart';
 import 'custom_drawer_views/news_and_events_view.dart';
-import 'custom_drawer_views/services_view.dart';
+import '../main_view/services_view.dart';
 
 class CustomDrawerView extends StatefulWidget {
   final String? userName;
@@ -238,21 +239,6 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                           color: Colors.white.withOpacity(0.25))),
                                 ),
 
-                                //*------ Services ------*/
-                                if(_toLogin)   ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title:  Text("Services", style: const TextStyle(color: Colors.white, fontSize: 14),),
-                                  leading:
-                                  SvgPicture.asset("assets/sidemenu/account.svg"),
-                                  dense: true,
-                                  horizontalTitleGap: 5,
-                                  onTap: () {
-                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ServicesView()));
-                                  },
-                                  shape: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.white.withOpacity(0.25))),
-                                ),
 
 
 
@@ -270,7 +256,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
-                                _navigationServices.goBack();
+                                _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>MainView()));
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(

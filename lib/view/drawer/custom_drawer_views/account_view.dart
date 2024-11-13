@@ -8,7 +8,7 @@ import 'package:sco_v1/view/drawer/accout_views/addresses_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/application_status_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/employment_status_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/security_questions_view.dart';
-import 'package:sco_v1/view/main_view/academic_services_view.dart';
+import 'package:sco_v1/view/main_view/services_view.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../../models/account/account_grid_container_view_model.dart';

@@ -102,6 +102,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                     width: double.maxFinite,
                     padding: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(
+                      color: AppColors.lightBlue0,
                       borderRadius: BorderRadius.vertical(
                         bottom: Radius.circular(15),
                       ),

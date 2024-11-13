@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/data/response/ApiResponse.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
@@ -166,8 +167,7 @@ class SignupViewModel with ChangeNotifier {
       return true;
     } catch (error) {
       setResponse = ApiResponse.error(error.toString());
-      _alertServices.flushBarErrorMessages(
-          message: error.toString(), context: context, provider: langProvider);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,content: Text(error.toString())));
       return false;
     }
   }
