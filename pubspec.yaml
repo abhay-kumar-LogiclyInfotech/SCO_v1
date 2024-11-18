@@ -88,6 +88,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   device_info_plus: ^9.1.2
+  rename_app: ^1.6.1
 
 
 dev_dependencies:

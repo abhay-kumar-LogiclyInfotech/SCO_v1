@@ -160,7 +160,7 @@ class SignupViewModel with ChangeNotifier {
 
       _alertServices.flushBarErrorMessages(
           message: response.message.toString(),
-          context: context,
+          // context: context,
           provider: langProvider);
 
       //*---------Navigating to Otp Verification View---------*

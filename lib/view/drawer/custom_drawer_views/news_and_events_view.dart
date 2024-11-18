@@ -34,13 +34,20 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
     _navigationServices = getIt.get<NavigationServices>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      final provider =
-          Provider.of<NewsAndEventsViewmodel>(context, listen: false);
-      final langProvider =
-          Provider.of<LanguageChangeViewModel>(context, listen: false);
-      await provider.newsAndEvents(
-          context: context, langProvider: langProvider);
+      await _onRefresh();
     });
+  }
+
+  Future<void> _onRefresh() async {
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+
+      final provider =
+        Provider.of<NewsAndEventsViewmodel>(context, listen: false);
+    final langProvider =
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    await provider.newsAndEvents(context: context, langProvider: langProvider);
+    });
+
   }
 
   @override
@@ -51,78 +58,76 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
         title: Text(AppLocalizations.of(context)!.newsAndEvents,
             style: AppTextStyles.appBarTitleStyle()),
       ),
-      body: _buildUi(context),
+      body: Utils.modelProgressHud(
+          processing: false,
+          child: Utils.pageRefreshIndicator(
+              child: _buildUi(context), onRefresh: _onRefresh)),
     );
   }
 
   Widget _buildUi(context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
-    return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.only(left: 10.0, right: 10),
-        child: Consumer<NewsAndEventsViewmodel>(
-          builder: (context, provider, _) {
-            switch (provider.newsAndEventsResponse.status) {
-              case Status.LOADING:
-                return const Center(
-                  child: CupertinoActivityIndicator(
-                    color: AppColors.scoThemeColor,
-                  ),
-                );
+    return Container(
+      padding: const EdgeInsets.only(left: 10.0, right: 10),
+      child: Consumer<NewsAndEventsViewmodel>(
+        builder: (context, provider, _) {
+          switch (provider.newsAndEventsResponse.status) {
+            case Status.LOADING:
+              return Utils.pageLoadingIndicator(context: context);
 
-              case Status.ERROR:
-                return Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.somethingWentWrong,
-                  ),
-                );
-
-              case Status.COMPLETED:
-                return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: provider.parsedNewsAndEventsModelList.length,
-                    itemBuilder: (context, index) {
-                      bool isLastIndex = (index ==
-                          provider.parsedNewsAndEventsModelList.length -
-                              1); //// Replace 10 with your itemCount if dynamic
-                      final item = provider.parsedNewsAndEventsModelList[index];
-                      final languageId =
-                          getTextDirection(langProvider) == TextDirection.rtl
-                              ? 'ar_SA'
-                              : 'en_US';
-                      return Padding(
-                        padding: index == 0
-                            ? const EdgeInsets.only(top: 30.0, bottom: 15.0)
-                            : isLastIndex
-                                ? const EdgeInsets.only(bottom: 30.0)
-                                : const EdgeInsets.only(bottom: 15.0),
-                        child: CustomNewsAndEventsTile(
-                          title: item.getTitle(languageId),
-                          imageId: item.coverImageFileEntryId,
-                          subTitle: item.getDescription(languageId),
-                          date: item.getFormattedDate(),
-                          onTap: () {
-                            _navigationServices
-                                .pushCupertino(CupertinoPageRoute(
-                              builder: (context) => NewsAndEventsDetailView(
-                                  imageId: item.coverImageFileEntryId,
-                                  date: item.getFormattedDate().toString(),
-                                  title: item.getTitle(languageId),
-                                  subTitle: item.getDescription(languageId),
-                                  content: item.getContent(languageId)),
-                            ));
-                          },
-                        ),
-                      );
-                    });
-
-              default:
-                return Text(
+            case Status.ERROR:
+              return Center(
+                child: Text(
                   AppLocalizations.of(context)!.somethingWentWrong,
-                );
-            }
-          },
-        ),
+                ),
+              );
+
+            case Status.COMPLETED:
+              return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: provider.parsedNewsAndEventsModelList.length,
+                  itemBuilder: (context, index) {
+                    bool isLastIndex = (index ==
+                        provider.parsedNewsAndEventsModelList.length -
+                            1); //// Replace 10 with your itemCount if dynamic
+                    final item = provider.parsedNewsAndEventsModelList[index];
+                    final languageId =
+                        getTextDirection(langProvider) == TextDirection.rtl
+                            ? 'ar_SA'
+                            : 'en_US';
+                    return Padding(
+                      padding: index == 0
+                          ? const EdgeInsets.only(top: 30.0, bottom: 15.0)
+                          : isLastIndex
+                              ? const EdgeInsets.only(bottom: 30.0)
+                              : const EdgeInsets.only(bottom: 15.0),
+                      child: CustomNewsAndEventsTile(
+                        title: item.getTitle(languageId),
+                        imageId: item.coverImageFileEntryId,
+                        subTitle: item.getDescription(languageId),
+                        date: item.getFormattedDate(),
+                        onTap: () {
+                          _navigationServices
+                              .pushCupertino(CupertinoPageRoute(
+                            builder: (context) => NewsAndEventsDetailView(
+                                imageId: item.coverImageFileEntryId,
+                                date: item.getFormattedDate().toString(),
+                                title: item.getTitle(languageId),
+                                subTitle: item.getDescription(languageId),
+                                content: item.getContent(languageId)),
+                          ));
+                        },
+                      ),
+                    );
+                  });
+
+            default:
+              return Text(
+                AppLocalizations.of(context)!.somethingWentWrong,
+              );
+          }
+        },
       ),
     );
   }

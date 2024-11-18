@@ -805,7 +805,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_firstNameController.text.isEmpty || !Validations.isNameValid(_firstNameController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterFirstName,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -829,7 +829,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_familyNameController.text.isEmpty || !Validations.isNameValid(_familyNameController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterFamilyName,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -839,7 +839,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_dobController.text.isEmpty || !isEighteenYearsOld(_dobController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterDateOfBirth,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -852,7 +852,7 @@ class _SignUpViewState extends State<SignUpView>
         int.parse(_dobDayController.text) > 31) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidDay,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -865,7 +865,7 @@ class _SignUpViewState extends State<SignUpView>
         int.parse(_dobMonthController.text) > 12) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidMonth,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -876,7 +876,7 @@ class _SignUpViewState extends State<SignUpView>
         int.tryParse(_dobYearController.text) == null) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidYear,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -886,7 +886,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_genderController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterGender,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -896,7 +896,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_emailController.text.isEmpty || !_emailController.text.contains('@') || !Validations.isEmailValid(_confirmEmailController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidEmail,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -906,7 +906,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_confirmEmailController.text.isEmpty || _confirmEmailController.text != _emailController.text || !Validations.isEmailValid(_confirmEmailController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.emailsDoNotMatch,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -917,7 +917,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_countryController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterCountry,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -927,7 +927,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_emiratesIdController.text.isEmpty || !Validations.isValidEmirateId(_emiratesIdController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidEmiratesId,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -938,7 +938,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_studentPhoneNumberController.text.isEmpty || !Validations.isPhoneNumberValid(_studentPhoneNumberController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidPhoneNumber,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -948,7 +948,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_passwordController.text.isEmpty || _passwordController.text.length < 8 || !Validations.isPasswordValid(_passwordController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.enterValidPassword,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {
@@ -958,7 +958,7 @@ class _SignUpViewState extends State<SignUpView>
     if (_confirmPasswordController.text.isEmpty || _confirmPasswordController.text != _passwordController.text || !Validations.isPasswordValid(_confirmPasswordController.text)) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.passwordsDoNotMatch,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     } else {

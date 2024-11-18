@@ -2,9 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
+import 'package:sco_v1/view/drawer/accout_views/change_password_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 
-import '../../view/authentication/reset_password_view.dart';
 import '../../view/authentication/signup/sign_up_view.dart';
 import '../../view/authentication/signup/update_security_question_view.dart';
 import '../../view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
@@ -26,13 +26,13 @@ class NavigationServices {
     "/splashView": (context) => const SplashView(),
     "/loginView": (context) => const LoginView(),
     "/signUpView": (context) => const SignUpView(),
-    "/resetPasswordView": (context) => const ResetPasswordView(),
+    "/changePasswordView": (context) => const ChangePasswordView(),
     "/forgotPasswordView": (context) => const ForgotPasswordView(),
     "/FaqView": (context) => const FaqView(),
 
     // "/aBriefAboutScoView": (context) => const ABriefAboutScoView(),
     "/scoPrograms": (context) => const ScoPrograms(),
-    "/updateSecurityQuestionView": (context) => const UpdateSecurityQuestionView(),
+    "/updateSecurityQuestionView": (context) =>  UpdateSecurityQuestionView(),
     "/mainView": (context) => const MainView(),
   };
 

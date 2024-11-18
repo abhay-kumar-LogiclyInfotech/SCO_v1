@@ -435,7 +435,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                         if (alreadySelected) {
                           /// If duplicate is found, show an error and clear the controller
                           _alertService.showToast(
-                            context: context,
+                            // context: context,
                             message:
                                 "This level has already been selected. Please choose another one.",
                           );
@@ -497,7 +497,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                         if (alreadySelected) {
                           /// If duplicate is found, show an error and clear the controller
                           _alertService.showToast(
-                            context: context,
+                            // context: context,
                             message:
                                 "This level has already been selected. Please choose another one.",
                           );

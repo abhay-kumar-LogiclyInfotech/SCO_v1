@@ -984,17 +984,16 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView> with 
         "userId": user?.userId,
         "username": user?.username
       },
-      "userInfo": {
+      if (overAllInfo?.userInfoType != null && overAllInfo?.userInfoType != 'LIFERAY') // Condition to include "userInfo"
+        "userInfo": {
         /// Include emails if the list is not empty
-        if (_emailDetailsList.isNotEmpty)
-          "emails": _emailDetailsList.map((element) => element.toJson()).toList(),
+        if (_emailDetailsList.isNotEmpty)"emails": _emailDetailsList.map((element) => element.toJson()).toList(),
 
         "emplId": userInfo?.emplId,
         "name": userInfo?.name,
 
         /// Include phone numbers if the list is not empty
-        if (_phoneNumberDetailsList.isNotEmpty)
-          "phoneNumbers": _phoneNumberDetailsList.map((element) => element.toJson()).toList(),
+        if (_phoneNumberDetailsList.isNotEmpty)"phoneNumbers": _phoneNumberDetailsList.map((element) => element.toJson()).toList(),
 
         "ferpa": userInfo?.ferpa,
         "ftStudent": userInfo?.ftStudent,

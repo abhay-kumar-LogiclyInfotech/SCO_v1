@@ -87,11 +87,7 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
 
       //Message to show status of the operation:
-      _alertServices.flushBarErrorMessages(
-        message: response.message.toString(),
-        context: context,
-        provider: langProvider,
-      );
+      _alertServices.toastMessage(response.message.toString());
       setUpdateSecurityQuestionResponse = ApiResponse.completed(response);
 
       return true;
@@ -99,10 +95,8 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
       debugPrint('Printing Error: $error');
       setUpdateSecurityQuestionResponse = ApiResponse.error(error.toString());
       //Message to show status of the operation:
-      _alertServices.flushBarErrorMessages(
-        message: error.toString(),
-        context: context,
-        provider: langProvider,
+      _alertServices.toastMessage(
+        error.toString()
       );
       return false;
     }

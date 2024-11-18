@@ -18,6 +18,9 @@ class AppUrls {
   //login endpoint
   static String get login => "${_baseUrl}users/login";
 
+  /// change password with mopa-sco-api
+  static String get changePassword => "${_baseUrl}users/updatePassword";
+
 
   //faq's endpoint
   static String get faq =>

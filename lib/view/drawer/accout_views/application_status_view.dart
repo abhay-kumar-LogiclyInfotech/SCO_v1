@@ -4,37 +4,24 @@ import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get_common/get_reset.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:profile_photo/profile_photo.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
-import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
-import 'package:sco_v1/view/apply_scholarship/form_view_Utils.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
-import 'package:sco_v1/viewModel/account/personal_details/update_personal_details_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 
 import '../../../data/response/status.dart';
-import '../../../models/account/personal_details/PersonalDetailsModel.dart';
-import '../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import '../../../resources/app_colors.dart';
-import '../../../resources/cards/picked_attachment_card.dart';
 import '../../../resources/components/account/Custom_inforamtion_container.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
 
 import '../../../utils/utils.dart';
 import '../../../viewModel/apply_scholarship/deleteDraftViewmodel.dart';
-import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -47,35 +34,20 @@ class ApplicationStatusView extends StatefulWidget {
   State<ApplicationStatusView> createState() => _ApplicationStatusViewState();
 }
 
-class _ApplicationStatusViewState extends State<ApplicationStatusView>
-    with MediaQueryMixin {
+class _ApplicationStatusViewState extends State<ApplicationStatusView> with MediaQueryMixin, WidgetsBindingObserver, RouteAware {
   late NavigationServices _navigationServices;
   late PermissionServices _permissionServices;
   late MediaServices _mediaServices;
 
 
-  /// selected value:
-  String _selectedAcademicCareer = '';
-
-  /// Academic career menuItemList
-  List<GetAllActiveScholarshipsModel?>? academicCareerMenuItemList = [];
-
-  Future _initializeData() async {
-
-    WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      // fetching all active scholarships:
-      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context, listen: false);
-      await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
 
 
-    });
 
-    /// fetch list of application status
-    await Provider.of<GetListApplicationStatusViewModel>(context, listen: false).getListApplicationStatus();
-  }
+
 
   @override
   void initState() {
+
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
@@ -83,11 +55,33 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView>
       _permissionServices = getIt.get<PermissionServices>();
       _mediaServices = getIt.get<MediaServices>();
 
-      await _initializeData();
+      await _onRefresh();
     });
-
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
   }
+
+
+
+  /// Route lifecycle changes
+  @override
+  void didPush() {
+    print("Page is now visible");
+    // Logic when the page becomes visible
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print("Printing the states of the page: $state");
+  }
+
+  Future<void> _onRefresh() async {
+    /// fetch list of application status
+    await Provider.of<GetListApplicationStatusViewModel>(context, listen: false).getListApplicationStatus();
+  }
+
 
   bool _isProcessing = false;
   void setProcessing(bool isProcessing) {
@@ -98,16 +92,16 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView>
 
   @override
   Widget build(BuildContext context) {
-    return
 
-      Scaffold(
+
+    return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         titleAsString: "Application Status",
       ),
       body: Utils.modelProgressHud(
         processing: _isProcessing,
-        child: _buildUi()
+        child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _onRefresh)
       )
 
       ,
@@ -213,7 +207,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView>
                               /// delete Draft Permanent
                               await provider.deleteDraft(draftId: application.applicationProgramNumber ?? '');
                               /// refreshing the data
-                              await _initializeData();
+                              await _onRefresh();
                               setProcessing(false);
 
                             },
@@ -224,7 +218,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView>
 
                       IconsButton(
                         onPressed: () {
-                          _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(draftId: application.applicationProgramNumber ?? '',)));
+                          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(draftId: application.applicationProgramNumber ?? '',)));
                         },
                         text: 'Edit',
                         iconData: Icons.arrow_circle_right_outlined,

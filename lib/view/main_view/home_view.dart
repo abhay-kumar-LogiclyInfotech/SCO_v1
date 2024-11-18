@@ -4,13 +4,19 @@ import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/Test.dart';
 import 'package:sco_v1/controller/dependency_injection.dart';
+import 'package:sco_v1/data/response/status.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
+import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/carsousel_slider.dart';
 import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/components/custom_vertical_divider.dart';
+import 'package:sco_v1/resources/components/myDivider.dart';
+import 'package:sco_v1/resources/components/requests_count_container.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/select_scholarship_type_view.dart';
@@ -21,6 +27,7 @@ import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 
 import '../../resources/app_colors.dart';
 import '../../resources/components/tiles/custom_sco_program_tile.dart';
@@ -54,11 +61,16 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     });
   }
 
+ Future _onRefresh()async{
+    final myFinanceProvider =  Provider.of<MyFinanceStatusViewModel>(context, listen: false);
+    await myFinanceProvider.myFinanceStatus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      body: _buildUI(),
+      body: Utils.pageRefreshIndicator(child: _buildUI(), onRefresh: _onRefresh)
     );
   }
 
@@ -73,6 +85,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            kFormHeight,
             // CustomButton(buttonName: "Test", isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
             //   final provider = Provider.of<TestApi>(context,listen: false);
             //   provider.testApi();
@@ -93,6 +106,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               Column(
                 children: [
                   _scholarshipApproved(langProvider: langProvider),
+                  kFormHeight,
+                  _announcements(langProvider: langProvider),
                   kFormHeight,
                 ],
               ),
@@ -120,7 +135,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
             if (scholarshipStatus == ScholarshipStatus.appliedScholarship ||
                 scholarshipStatus == ScholarshipStatus.applyScholarship)
-              _faqSection(langProvider: langProvider)
+              _faqSection(langProvider: langProvider),
+            kFormHeight,
           ],
         ),
       ),
@@ -359,48 +375,34 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         ));
   }
 
-  // *------Faq Container------*
-  // Widget _faqContainer({required LanguageChangeViewModel langProvider}) {
-  //   return Container(
-  //     width: double.infinity,
-  //     height: 170,
-  //     decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(kCardRadius),
-  //         border: Border.all(color: AppColors.hintDarkGrey)),
-  //     child: ClipRRect(
-  //       borderRadius: BorderRadius.circular(kCardRadius - 1),
-  //       child: Stack(
-  //         children: [
-  //           Align(
-  //             alignment: Alignment.bottomCenter,
-  //             child: CustomPaint(
-  //               painter: FaqSmallPainter(),
-  //               size: const Size(double.maxFinite, 90),
-  //             ),
-  //           ),
-  //           Align(
-  //             alignment: Alignment.bottomCenter,
-  //             child: CustomPaint(
-  //               foregroundPainter: FaqBigPainter(),
-  //               size: const Size(double.maxFinite, 120),
-  //             ),
-  //           ),
-  //           Container(
-  //             color: AppColors.lightBlue0.withOpacity(0.3),
-  //           ),
-  //           Positioned(
-  //             top: kPadding,
-  //             bottom: kPadding,
-  //             right: kPadding,
-  //             child: SvgPicture.asset(
-  //               "assets/icon_faq_home.svg",
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _announcements({required LanguageChangeViewModel langProvider}) {
+    return _homeViewCard(
+      title: "Announcement",
+      icon: SvgPicture.asset("assets/announcements.svg"),
+      langProvider: langProvider,
+      content: Column(
+        children: [
+          kFormHeight,
+          Text("Announcing Announcement. Making an announcement is more understated...",style: AppTextStyles.titleTextStyle().copyWith(fontSize: 15),),
+          kFormHeight,
+          const Divider(),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.calendar_month_outlined,color: Colors.grey.shade400,size: 15,),
+              const SizedBox(width: 5),
+              Text("DD-YYYY-MM",style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.bold),),
+              const SizedBox(width: 5),
+              Text("(01:55 PM)",style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.normal),),
+
+            ],
+          )
+        ],
+      ),
+    );
+  }
 
   Widget _buildAmountAndButton(
       {required LanguageChangeViewModel langProvider}) {
@@ -538,13 +540,117 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   /// Finance View:
   Widget _financeView({required LanguageChangeViewModel langProvider}) {
-    return _homeViewCard(
-        title: "My Finance",
-        icon: SvgPicture.asset("assets/my_finance.svg"),
-        langProvider: langProvider,
-        content: Column(
-          children: [],
-        ));
+    return  Consumer<MyFinanceStatusViewModel>(
+        builder: (context,financeStatusProvider,_){
+
+
+          switch(financeStatusProvider.apiResponse.status){
+            case Status.LOADING:
+              return showVoid;
+            case Status.ERROR:
+              return showVoid;
+            case Status.NONE:
+              return showVoid;
+            case Status.COMPLETED:
+              final financeData = financeStatusProvider.apiResponse.data?.data;
+              
+              final salary = financeData?.listSalaryDetials?.isNotEmpty == true
+                  ? financeData?.listSalaryDetials?.first
+                  : null;
+
+              final deduction = financeData?.listDeduction?.isNotEmpty == true
+                  ? financeData?.listDeduction?.first
+                  : null;
+
+              final bonus = financeData?.listBonus?.isNotEmpty == true
+                  ? financeData?.listBonus?.first
+                  : null;
+
+              final warning = financeData?.listWarnings?.isNotEmpty == true
+                  ? financeData?.listWarnings?.first
+                  : null;
+              return _homeViewCard(
+                    title: "My Finance",
+                    icon: SvgPicture.asset("assets/my_finance.svg"),
+                    langProvider: langProvider,
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        kFormHeight,
+                        Center(
+                          child: Wrap(
+                            runSpacing: 20,
+                            spacing: 30,
+                            runAlignment: WrapAlignment.spaceEvenly,
+                            alignment: WrapAlignment.spaceAround,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              _financeAmount(
+                                titleColor: const Color(0xffEC6330),
+                                title: "Salary",
+                                subTitle: salary?.amount.toString() ?? '',
+                              ),
+                              CustomVerticalDivider(),
+                              _financeAmount(
+                                titleColor: const Color(0xff3A82F7),
+                                title: "Deduction",
+                                subTitle: deduction?.totalDeducted.toString() ?? '',
+                              ),
+                              CustomVerticalDivider(),
+                              _financeAmount(
+                                titleColor: const Color(0xff67CE67),
+                                title: "Bonus",
+                                subTitle: bonus?.amount.toString() ?? '',
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const Divider(),
+
+                        // warning
+                        Text(
+                          "Warning",
+                          style: AppTextStyles.subTitleTextStyle()
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          warning?.termDescription ?? '',
+                          style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 18),
+                        ),
+                      ],
+                    ));
+
+            case null:
+              return showVoid;
+          }
+});
+  }
+
+  Widget _financeAmount(
+      {String title = "Title",
+      String subTitle = "250.00",
+      Color titleColor = Colors.black}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+              color: titleColor, fontSize: 12, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          subTitle,
+          style: const TextStyle(
+              color: AppColors.scoButtonColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold),
+        )
+      ],
+    );
   }
 
   /// Request View:
@@ -553,9 +659,66 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         title: "Requests",
         icon: SvgPicture.asset("assets/request.svg"),
         langProvider: langProvider,
+        headerExtraContent:
+            RequestsCountContainer(color: Colors.blue.shade600, count: 0),
+        contentPadding: EdgeInsets.zero,
         content: Column(
-          children: [],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 50.0),
+              child: Text(
+                "Total Number of Requests",
+                style: TextStyle(fontSize: 14, height: 2.5),
+              ),
+            ),
+            kFormHeight,
+            _homeViewCardBottomContainer(
+                padding: const EdgeInsets.all(10),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  runAlignment: WrapAlignment.start,
+                  alignment: WrapAlignment.spaceEvenly,
+                  runSpacing: 10,
+                  children: [
+                    IntrinsicWidth(
+                        child: _requestTypeWithCount(
+                            requestType: "Approved",
+                            count: "0",
+                            color: Colors.green.shade500)),
+                    kFormHeight,
+                    _requestTypeWithCount(
+                        requestType: "Pending",
+                        count: "0",
+                        color: const Color(0xffF4AA73)),
+                    kFormHeight,
+                    _requestTypeWithCount(
+                        requestType: "Rejected",
+                        count: "0",
+                        color: AppColors.DANGER),
+                  ],
+                )),
+          ],
         ));
+  }
+
+  /// Req
+  Widget _requestTypeWithCount(
+      {String requestType = "Request Type",
+      dynamic color = Colors.black,
+      dynamic count = 10}) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(requestType,
+            style: const TextStyle(
+                color: AppColors.scoButtonColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w600)),
+        const SizedBox.square(dimension: 5),
+        RequestsCountContainer(color: color, count: count)
+      ],
+    );
   }
 
   /// Talk to my Advisor View:
@@ -566,21 +729,86 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         langProvider: langProvider,
         contentPadding: EdgeInsets.zero,
         content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 50.0),
+              child: Text(
+                "You can see list of the advisors",
+                style: TextStyle(fontSize: 14, height: 2.5),
+              ),
+            ),
             _homeViewCardBottomContainer(
-                child: ListTile(
-              leading: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                          image: AssetImage("assets/login_bg.png")))),
-              title: Text("Carl Driffith"),
-              titleTextStyle:
-                  AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14),
-              subtitle: Text("Carl Driffith"),
-            )),
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // image of the academic advisor
+                    Row(
+                      children: [
+                        Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                image: const DecorationImage(
+                                    image: AssetImage("assets/login_bg.png")))),
+                        kFormHeight,
+
+                        /// Title and subtitle
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 120),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Abhay Kumar",
+                                style: AppTextStyles.titleBoldTextStyle()
+                                    .copyWith(fontSize: 14, height: 2),
+                              ),
+                              const Text(
+                                  "Professor of Science and Technologies",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      height: 2,
+                                      overflow: TextOverflow.ellipsis)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    /// call and message buttons
+                    Expanded(
+                      child: ConstrainedBox(
+                        constraints:
+                            const BoxConstraints(minWidth: 200, maxWidth: 200),
+                        child: Wrap(
+                          runSpacing: 0,
+                          spacing: -30,
+                          runAlignment: WrapAlignment.end,
+                          alignment: WrapAlignment.end,
+                          children: [
+                            // message Advisor
+                            CustomMaterialButton(
+                                onPressed: () {},
+                                isEnabled: false,
+                                shape: const CircleBorder(),
+                                child: SvgPicture.asset(
+                                    "assets/message_advisor.svg")),
+                            // Call advisor
+                            CustomMaterialButton(
+                                onPressed: () {},
+                                isEnabled: false,
+                                shape: const CircleBorder(),
+                                child: SvgPicture.asset(
+                                    "assets/call_advisor.svg")),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ))
           ],
         ));
   }
@@ -686,6 +914,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     required String title,
     required Widget icon,
     required Widget content,
+    headerExtraContent,
     required LanguageChangeViewModel langProvider,
     dynamic contentPadding,
     VoidCallback? onTap,
@@ -705,10 +934,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                    top: kPadding,
-                    left: kPadding,
-                    right: kPadding,
-                  ),
+                      top: kPadding,
+                      left: kPadding,
+                      right: kPadding,
+                      bottom: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     // crossAxisAlignment: CrossAxisAlignment.center,
@@ -724,6 +953,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                             style: AppTextStyles.titleBoldTextStyle()
                                 .copyWith(fontSize: 16),
                           ),
+                          const SizedBox(width: 5),
+                          headerExtraContent ?? showVoid,
                         ],
                       )),
                       Icon(
@@ -735,7 +966,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                     ],
                   ),
                 ),
-                kFormHeight,
+                // kFormHeight,
                 Padding(
                   padding: contentPadding ??
                       EdgeInsets.only(
@@ -753,10 +984,13 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     );
   }
 
-  Widget _homeViewCardBottomContainer(
-      {required dynamic child,
-      dynamic backGroundColor = AppColors.lightBlue0}) {
+  Widget _homeViewCardBottomContainer({
+    required dynamic child,
+    dynamic backGroundColor = AppColors.lightBlue0,
+    padding = EdgeInsets.zero,
+  }) {
     return Container(
+      padding: padding,
       width: double.infinity,
       decoration: BoxDecoration(
           color: backGroundColor,

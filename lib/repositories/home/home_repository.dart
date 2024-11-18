@@ -3,12 +3,16 @@ import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
 import 'package:sco_v1/models/TestModel.dart';
+import 'package:sco_v1/models/account/GetEmploymentStatusModel.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/models/account/personal_details/UpdatePersonalDetailsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
+import 'package:sco_v1/models/apply_scholarship/SubmitApplicationModel.dart';
 import 'package:sco_v1/models/home/HomeSliderModel.dart';
+import 'package:sco_v1/models/services/GetAllRequestsModel.dart';
+import 'package:sco_v1/models/services/MyFinanceStatusModel.dart';
 import 'package:sco_v1/models/services/MyScholarshipModel.dart';
 
 import '../../data/network/NetworkApiServices.dart';
@@ -137,7 +141,7 @@ class HomeRepository {
   }
 
 
-  // *------ Update User (student) Information Method ------*/
+  // // *------ Update User (student) Information Method ------*/
   Future<UpdatePersonalDetailsModel> updatePersonalDetails(
       {required String userId,required dynamic body, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
@@ -147,6 +151,8 @@ class HomeRepository {
     );
     return UpdatePersonalDetailsModel.fromJson(response);
   }
+
+
 
 
 
@@ -173,7 +179,33 @@ class HomeRepository {
 
 
 
-  // *------ Fetch Draft By Configuration Key ------*/
+
+
+
+
+  // *------ Submit Application Method ------*/
+  Future<SubmitApplicationModel> submitApplication(
+      {required dynamic userId,required dynamic headers,required dynamic body}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+      url: "${AppUrls.baseUrl}e-services/$userId/submit-application",
+      headers: headers,
+      body: body,
+    );
+    return SubmitApplicationModel.fromJson(response);
+  }
+
+
+  // *------ Get Employment Status Method ------*/
+  Future<GetEmploymentStatusModel> getEmploymentStatus(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.baseUrl}e-services/$userId/my-employment-status',
+      headers: headers,
+    );
+    return GetEmploymentStatusModel.fromJson(response);
+  }
+
+  // *------ Test Api ------*/
   Future<TestModel> testApi(
       {required dynamic headers,required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
@@ -182,6 +214,27 @@ class HomeRepository {
       body: body,
     );
     return TestModel.fromJson(response);
+  }
+
+
+  // *------ Get My Finance Status Status Method ------*/
+  Future<MyFinanceStatusModel> myFinanceStatus(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.baseUrl}e-services/$userId/my-finance-status',
+      headers: headers,
+    );
+    return MyFinanceStatusModel.fromJson(response);
+  }
+
+  // *------ Get My Finance Status Status Method ------*/
+  Future<GetAllRequestsModel> getAllRequests(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.baseUrl}self-service/service-request/$userId/get-service-requests',
+      headers: headers,
+    );
+    return GetAllRequestsModel.fromJson(response);
   }
 
 

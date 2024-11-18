@@ -79,7 +79,7 @@ class OtpVerificationViewModel with ChangeNotifier {
           _otp!.isEmpty) {
         _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.error_complete_profile,
-          context: context,
+          // context: context,
           provider: langProvider,
         );
         return false;
@@ -93,7 +93,7 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Message to show status of the operation start----*
       _alertServices.flushBarErrorMessages(
         message: response.message.toString(),
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       //*-----Message to show status of the operation start----*
@@ -107,7 +107,7 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Message to show status of the operation start----*
       _alertServices.flushBarErrorMessages(
         message: error.toString(),
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       //*-----Message to show status of the operation End----*
@@ -154,7 +154,7 @@ class OtpVerificationViewModel with ChangeNotifier {
       if (_userId == null || _userId!.isEmpty) {
         _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.error_complete_profile,
-          context: context,
+          // context: context,
           provider: langProvider,
         );
         return false;
@@ -168,7 +168,7 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Message to show status of the operation start----*
       _alertServices.flushBarErrorMessages(
         message: response.message.toString(),
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       //*-----Message to show status of the operation start----*
@@ -182,7 +182,7 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Message to show status of the operation start----*
       _alertServices.flushBarErrorMessages(
         message: error.toString(),
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       //*-----Message to show status of the operation End----*

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import 'package:sco_v1/viewModel/apply_scholarship/deleteDraftViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/find_draft_by_draft_id_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
+import 'package:sco_v1/viewModel/apply_scholarship/submitApplicationViewmodel.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
@@ -25,6 +27,8 @@ import 'package:sco_v1/viewModel/home/home_slider_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,8 +42,7 @@ Future<void> main() async {
 
   await HiveManager.init();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  final String languageCode =
-      sharedPreferences.getString('language_code') ?? '';
+  final String languageCode = sharedPreferences.getString('language_code') ?? '';
   // SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
@@ -47,8 +50,6 @@ Future<void> main() async {
   DependencyInjection.init();
   await setup();
   runApp(MyApp(locale: languageCode));
-
-
 }
 
 Future<void> setup() async {
@@ -84,7 +85,6 @@ class MyApp extends StatelessWidget {
           // Account
           ChangeNotifierProvider(create: (_) => GetPersonalDetailsViewModel()),
 
-
           // find Draft by Configuration Key
           ChangeNotifierProvider(create: (_) => FindDraftByConfigurationKeyViewmodel()),
 
@@ -106,6 +106,16 @@ class MyApp extends StatelessWidget {
           // find all active scholarships
           ChangeNotifierProvider(create: (_) => GetAllActiveScholarshipsViewModel()),
 
+          // submit application view model registration
+          ChangeNotifierProvider(create: (_) => SubmitApplicationViewmodel()),
+
+
+          // My Finance Status
+          ChangeNotifierProvider(create: (_) => MyFinanceStatusViewModel()),
+
+          // Get All Requests
+          ChangeNotifierProvider(create: (_) => GetAllRequestsViewModel()),
+
 
           // register Test ViewModel
           ChangeNotifierProvider(create: (_) => TestApi()),
@@ -120,7 +130,7 @@ class MyApp extends StatelessWidget {
                 provider.changeLanguage(Locale(locale));
               }
             }
-            return MaterialApp(
+            return GetMaterialApp(
               title: 'SCO',
               // locale: locale == ''
               //     ? const Locale('en')
@@ -145,7 +155,6 @@ class MyApp extends StatelessWidget {
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
               initialRoute: "/splashView",
-
 
             );
           },

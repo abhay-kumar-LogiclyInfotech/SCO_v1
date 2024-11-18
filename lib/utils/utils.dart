@@ -46,6 +46,8 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 }
 
 class Utils {
+
+
   // input borders start
   static InputBorder outlinedInputBorder() {
     return OutlineInputBorder(
@@ -542,7 +544,7 @@ bool isEighteenYearsOld(String dob) {
   }
 
   // Return true if the person is 18 or older
-  return age >= 18;
+  return age >= 14;
 }
 
 String formatDateOnly(String? dateString) {

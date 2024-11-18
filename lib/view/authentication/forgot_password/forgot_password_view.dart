@@ -301,39 +301,16 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
               bool validated = _validateForm(langProvider: langProvider);
 
               if (validated) {
-                bool result = await provider.getSecurityQuestion(
-                    email: _emailController.text,
-                    context: context,
-                    langProvider: langProvider);
+                bool result = await provider.getSecurityQuestion(email: _emailController.text, context: context, langProvider: langProvider);
 
                 if (result) {
-                  final String securityQuestion = provider
-                          .getSecurityQuestionResponse
-                          .data
-                          ?.data
-                          ?.securityQuestion
-                          ?.securityQuestion
-                          .toString() ??
-                      "";
-                  final String securityAnswer = provider
-                          .getSecurityQuestionResponse
-                          .data
-                          ?.data
-                          ?.securityQuestion
-                          ?.securityAnswer
-                          .toString() ??
-                      "";
-                  final String userId = provider.getSecurityQuestionResponse
-                          .data?.data?.securityQuestion?.userId
-                          .toString() ??
-                      "";
+                  final String securityQuestion = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.securityQuestion.toString() ?? "";
+                  final String securityAnswer = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.securityAnswer.toString() ?? "";
+                  final String userId = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.userId.toString() ?? "";
 
-                  if (securityQuestion.isNotEmpty &&
-                      securityAnswer.isNotEmpty &&
-                      userId.isNotEmpty) {
+                  if (securityQuestion.isNotEmpty && securityAnswer.isNotEmpty && userId.isNotEmpty) {
                     _navigationServices.pushReplacementCupertino(
-                        CupertinoPageRoute(
-                            builder: (context) => AnswerSecurityQuestionView(
+                        CupertinoPageRoute(builder: (context) => AnswerSecurityQuestionView(
                                 securityQuestion: securityQuestion,
                                 securityAnswer: securityAnswer,
                                 userId: userId)));
@@ -426,14 +403,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
     if (_emailController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     }
     if (_captchaController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message:AppLocalizations.of(context)!.pleaseEnterCaptcha,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     }
@@ -441,7 +418,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       _rotate();
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.incorrectCaptcha,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     }

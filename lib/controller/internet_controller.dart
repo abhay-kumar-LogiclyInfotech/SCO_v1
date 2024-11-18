@@ -14,9 +14,8 @@ class InternetController extends GetxController {
 
   @override
   void onInit() {
-    _subscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.onInit();
+    _subscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
   void _updateConnectionStatus(List<ConnectivityResult> results) {
@@ -43,7 +42,6 @@ class InternetController extends GetxController {
       }
     }
   }
-
 
   @override
   void onClose() {

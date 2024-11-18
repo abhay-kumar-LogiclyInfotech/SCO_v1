@@ -164,10 +164,10 @@ class AlertServices {
   }
 
   // Show DelightToastBar with flag control
-  void showToast({required String message, required BuildContext context}) {
+  void showToast({required String message}) {
+    dynamic myContext = _navigationServices.navigationStateKey.currentContext;
     if (!_isNotificationShowing) {
       _isNotificationShowing = true;
-
       DelightToastBar(
         autoDismiss: true,
         position: DelightSnackbarPosition.top,
@@ -185,7 +185,7 @@ class AlertServices {
             color: AppColors.scoButtonColor,
           );
         },
-      ).show(context);
+      ).show(myContext);
 
       // Manually reset the flag after a delay
       Future.delayed(const Duration(seconds: 3), _resetNotificationFlag);
@@ -198,10 +198,10 @@ class AlertServices {
       _isNotificationShowing = true;
       Fluttertoast.showToast(
         msg: message,
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.scoThemeColor,
         textColor: Colors.white,
         fontSize: 15,
-        toastLength: Toast.LENGTH_SHORT,
+        toastLength: Toast.LENGTH_LONG,
       ).then((_) => _resetNotificationFlag());
     }
   }
@@ -209,13 +209,14 @@ class AlertServices {
   // FlushBar notification with flag control
   void flushBarErrorMessages({
     required String message,
-    required BuildContext context,
+    // required BuildContext context,
      LanguageChangeViewModel? provider,
   }) {
+    dynamic myContext = _navigationServices.navigationStateKey.currentContext;
     if (!_isNotificationShowing) {
       _isNotificationShowing = true;
       showFlushbar(
-        context: context,
+        context: myContext,
         flushbar: Flushbar(
           backgroundColor: AppColors.scoButtonColor,
           // textDirection: getTextDirection(provider),
@@ -230,16 +231,18 @@ class AlertServices {
           ),
           flushbarPosition: FlushbarPosition.TOP,
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        )..show(context).then((_) => _resetNotificationFlag()),
+        )..show(myContext).then((_) => _resetNotificationFlag()),
       );
     }
   }
 
   // Custom SnackBar with flag control
-  void showCustomSnackBar(String message, BuildContext context) {
+  void showCustomSnackBar(String message) {
+    dynamic myContext = _navigationServices.navigationStateKey.currentContext;
+
     if (!_isNotificationShowing) {
       _isNotificationShowing = true;
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(myContext).showSnackBar(
         SnackBar(
           backgroundColor: Colors.green,
           content: Text(

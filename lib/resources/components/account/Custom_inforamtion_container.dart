@@ -12,12 +12,14 @@ class CustomInformationContainer extends StatefulWidget {
   Widget? leading;
   Widget? trailing;
   final Widget expandedContent;
+  EdgeInsetsGeometry? expandedContentPadding;
 
   CustomInformationContainer({
     required this.title,
     this.leading,
     this.trailing,
     required this.expandedContent,
+    this.expandedContentPadding,
   });
 
   @override
@@ -84,8 +86,7 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
               painter: DashedBottomBorderPainter(),
               child: Container(
                 width: double.maxFinite,
-                padding: const EdgeInsets.only(
-                    left: 15, top: 10, right: 15, bottom: 10),
+                padding: widget.expandedContentPadding ??  const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
                 decoration: const BoxDecoration(
                   // color: Colors.white,
 
@@ -157,8 +158,9 @@ class DashedBottomBorderPainter extends CustomPainter {
 class CustomInformationContainerField extends StatelessWidget {
   final String title;
   String? description;
+  Widget? descriptionAsWidget;
    bool isLastItem;
-  CustomInformationContainerField({super.key, required this.title, this.description,this.isLastItem = false});
+  CustomInformationContainerField({super.key, required this.title, this.description,this.descriptionAsWidget,this.isLastItem = false});
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +193,8 @@ class CustomInformationContainerField extends StatelessWidget {
                       style: AppTextStyles.normalTextStyle().copyWith(fontWeight: FontWeight.w600,fontSize: 14,color: AppColors.scoButtonColor),
                       textAlign: TextAlign.justify,
                     )
-                    : const SizedBox.shrink()
+                    : const SizedBox.shrink(),
+                descriptionAsWidget!= null? descriptionAsWidget! : const SizedBox.shrink(),
               ],
             ),
           ),

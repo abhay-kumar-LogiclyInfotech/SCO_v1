@@ -120,9 +120,12 @@ class LoginViewModel with ChangeNotifier {
 
       return true;
     } catch (error) {
+      debugPrint(error.toString());
       _setResponse = ApiResponse.error(error.toString());
       _alertServices.flushBarErrorMessages(
-          message: error.toString(), context: context, provider: langProvider);
+          message: "${error}Please do check you password",
+          // context: context,
+          provider: langProvider);
       return false;
     }
   }

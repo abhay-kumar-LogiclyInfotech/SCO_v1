@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -74,7 +73,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
       Scaffold(
         backgroundColor: AppColors.bgColor,
         appBar: CustomSimpleAppBar(titleAsString: "My Scholarship"),
-        body: Utils.modelProgressHud(processing: _isProcessing, child: _buildUi()),
+        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
       );
   }
 
@@ -105,8 +104,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         /// Employment status card
-                        _applicationsSection(
-                            provider: provider, langProvider: langProvider),
+                        _applicationsSection(provider: provider, langProvider: langProvider),
                       ],
                     ),
                   ),

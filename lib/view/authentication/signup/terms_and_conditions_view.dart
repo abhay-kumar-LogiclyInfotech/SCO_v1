@@ -327,12 +327,11 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
                   if (result) {
                     _navigationService.pushReplacementCupertino(
                         CupertinoPageRoute(
-                            builder: (context) =>
-                                const UpdateSecurityQuestionView()));
+                            builder: (context) => UpdateSecurityQuestionView()));
                   }
                 } else {
                   _alertServices.flushBarErrorMessages(
-                      context: context,
+                      // context: context,
                       provider: langProvider,
                       message:  AppLocalizations.of(context)!
                           .acceptTermsError,);

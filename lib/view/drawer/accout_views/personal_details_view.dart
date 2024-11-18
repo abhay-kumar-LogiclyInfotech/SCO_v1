@@ -35,14 +35,6 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
 
 
 
-  @override
-  void didChangeDependencies() async{
-    super.didChangeDependencies();
-
-    print("DidChange called");
-    // Fetch or refresh data here
-   await _fetchData();
-  }
 
 
   Future<void> _fetchData()async{
@@ -87,7 +79,6 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
       switch (provider.apiResponse.status) {
         case Status.LOADING:
           return Utils.pageLoadingIndicator(context: context);
-
         case Status.ERROR:
           return Center(
             child: Text(
@@ -95,10 +86,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
             ),
           );
         case Status.COMPLETED:
-
           final userInfo = provider.apiResponse.data?.data?.userInfo;
-
-
           return Directionality(
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
@@ -106,8 +94,6 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-
-
                     // Edit Profile Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,

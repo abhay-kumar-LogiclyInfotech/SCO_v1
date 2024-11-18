@@ -444,14 +444,11 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                 provider.password = _passwordController.text.trim();
                 provider.deviceId = _deviceData['id'].toString().trim();
 
-                bool result = await provider.login(
-                    context: context, langProvider: langProvider);
+                bool result = await provider.login(context: context, langProvider: langProvider);
                 if (result) {
                   //Navigate to MainView after successful login
                   _navigationServices.goBack();
-                  _navigationServices.pushReplacementCupertino(
-                      CupertinoPageRoute(
-                          builder: (context) => const MainView()));
+                  _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => const MainView()));
                 }
               }
             },
@@ -584,7 +581,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     if (_usernameController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: "Username can't be empty ",
-          context: context,
+          // context: context,
           provider: langProvider);
 
       return false;
@@ -593,7 +590,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     if (_passwordController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: "Password can't be empty",
-          context: context,
+          // context: context,
           provider: langProvider);
 
       return false;

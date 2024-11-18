@@ -99,10 +99,7 @@ class _CustomButtonState extends State<CustomButton>
                           ?  SizedBox(
                               height: 23,
                               width: 23,
-                              child: CircularProgressIndicator(
-                                color: widget.textColor ?? Colors.white,
-                                strokeWidth: 1.5,
-                              ),
+                              child: Utils.pageLoadingIndicator(context: context,color: Colors.white)
                             )
                           : Text(
                               widget.buttonName,

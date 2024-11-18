@@ -197,7 +197,9 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                             _selectedAcademicCareer.isNotEmpty?_navigationService.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(
                               selectedScholarshipConfigurationKey: _selectedAcademicCareer,
                               getAllActiveScholarships: provider.apiResponse.data,
-                            ))) : _alertService.flushBarErrorMessages(message: "Please select Academic Career", context: context, provider: langProvider);
+                            ))) : _alertService.flushBarErrorMessages(message: "Please select Academic Career",
+                                // context: context,
+                                provider: langProvider);
 
 
 

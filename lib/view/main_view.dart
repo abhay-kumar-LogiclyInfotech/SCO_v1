@@ -117,7 +117,9 @@ class _MainViewState extends State<MainView> {
                           });
                         }else{
                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                          _alertServices.showCustomSnackBar("Please Login to use services", context);
+                          _alertServices.showCustomSnackBar("Please Login to use services",
+                              // context,
+                          );
                         }
 
                       },

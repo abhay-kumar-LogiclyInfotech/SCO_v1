@@ -2,36 +2,25 @@
 
 import 'dart:io';
 
-import 'package:date_picker_plus/date_picker_plus.dart';
-import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get_common/get_reset.dart';
 import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:profile_photo/profile_photo.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/view/apply_scholarship/form_view_Utils.dart';
 import 'package:sco_v1/viewModel/account/personal_details/update_personal_details_viewmodel.dart';
+import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 
 import '../../../data/response/status.dart';
 import '../../../models/account/personal_details/PersonalDetailsModel.dart';
-import '../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/cards/picked_attachment_card.dart';
-import '../../../resources/components/account/Custom_inforamtion_container.dart';
-import '../../../resources/components/custom_checkbox_tile.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
-import '../../../resources/components/date_picker_dialog.dart';
 import '../../../resources/components/myDivider.dart';
-import '../../../resources/input_formatters/emirates_id_input_formatter.dart';
-import '../../../resources/validations_and_errorText.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
 import '../../../viewModel/account/personal_details/get_personal_details_viewmodel.dart';
@@ -50,6 +39,7 @@ class EmploymentStatusView extends StatefulWidget {
 
 class _EmploymentStatusViewState extends State<EmploymentStatusView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
+  late AuthService _authService;
   late PermissionServices _permissionServices;
   late MediaServices _mediaServices;
 
@@ -60,6 +50,11 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView> with MediaQ
 
 
   Future _initializeData()async{
+    /// Get User id to call the get employment status api
+
+
+
+
     /// fetch student profile Information t prefill the user information
     final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context,listen: false);
     await studentProfileProvider.getPersonalDetails();
@@ -67,7 +62,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView> with MediaQ
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
     final langProvider = Provider.of<LanguageChangeViewModel>(context,listen: false);
     /// Check and populate dropdowns only if the values exist
-    if (Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null) {_employmentStatusMenuItemsList = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['EMPLOYMENT_STATUS']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);}
+    if (Constants.lovCodeMap['EMPLOYMENT_ST']?.values != null) {_employmentStatusMenuItemsList = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['EMPLOYMENT_ST']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);}
 
     if (Constants.lovCodeMap['EMPLOYER']?.values != null) {_employerMenuItemsList = populateCommonDataDropdown(menuItemsList: Constants.lovCodeMap['EMPLOYER']!.values!, provider: langProvider, textColor: AppColors.scoButtonColor);}
  /// *------------------------------------------ Initialize dropdowns end ------------------------------------------------------------------*
@@ -83,6 +78,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView> with MediaQ
       _navigationServices = getIt.get<NavigationServices>();
       _permissionServices = getIt.get<PermissionServices>();
       _mediaServices = getIt.get<MediaServices>();
+      _authService = getIt.get<AuthService>();
 
       await _initializeData();
     });
@@ -315,9 +311,6 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView> with MediaQ
   }
 
 
-
-
-
   /// Function to add Attachment to the list
   _addFile()async
   {
@@ -333,9 +326,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView> with MediaQ
          _attachmentsList.add(file);
          });
      }
-
     }
-
   }
 
 
@@ -373,6 +364,25 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView> with MediaQ
   Map<String,dynamic> form = {};
   void createForm( {GetPersonalDetailsViewModel? provider}) {
     form = {
+      "employmentStatus": {
+        "emplId": "000921",
+        "sequanceNumber": "1",
+        "employmentStatus": "NWR",
+        "university": "00016148",
+        "currentFlag": "Y",
+        "comment": "%COMMENTS%",
+        "listOfFiles": [
+          {
+            "attachmentSeqNumber": "1",
+            "description": "",
+            "date": 1731607771453,
+            "attachSysfileName": "20230110172609443_IRCTC Next Generation eTicketing System.pdf",
+            "attachUserFile": "IRCTC Next Generation eTicketing System.pdf",
+            "base64String": "base64String",
+            "newRecord": false
+          }
+        ]
+      }
     };
   }
 }

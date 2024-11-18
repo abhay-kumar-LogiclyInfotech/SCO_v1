@@ -1,5 +1,7 @@
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/NetworkApiServices.dart';
+import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
+import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
 import 'package:sco_v1/models/authentication/forgot_password/forgot_password_get_Security_question_model.dart';
 import 'package:sco_v1/models/authentication/forgot_password/forgot_security_question_otp_verification_model.dart';
 import 'package:sco_v1/models/authentication/get_security_questions_model.dart';
@@ -9,6 +11,7 @@ import 'package:sco_v1/models/authentication/terms_and_conditions_model.dart';
 import 'package:sco_v1/models/authentication/update_security_question_model.dart';
 import 'package:sco_v1/resources/app_urls.dart';
 
+import '../../models/account/ChangePasswordModel.dart';
 import '../../models/authentication/forgot_password/forgot_password_send_mail_model.dart';
 import '../../models/authentication/login_model.dart';
 import '../../models/authentication/signup_model.dart';
@@ -16,6 +19,7 @@ import '../../models/authentication/signup_model.dart';
 class AuthenticationRepository {
   //*-----Object of Api Services-----*
   final BaseApiServices _apiServices = NetworkApiServices();
+  final DioBaseApiServices _dioBaseApiServices = DioNetworkApiServices();
 
   //*-----Signup Method-----*
   Future<SignupModel> signup(
@@ -115,8 +119,7 @@ class AuthenticationRepository {
   //*-----Forgot Password Methods-----*
 
   //*------Forgot Password Get User Security Question-------*
-  Future<ForgotPasswordGetSecurityQuestionModel>
-      getForgotPasswordSecurityQuestion(
+  Future<ForgotPasswordGetSecurityQuestionModel> getForgotPasswordSecurityQuestionUsingEmail(
           {required String email, required dynamic headers}) async {
     dynamic response = await _apiServices.getGetApiServices(
       url: '${AppUrls.baseUrl}users/$email/security-question',
@@ -148,4 +151,19 @@ class AuthenticationRepository {
     );
     return ForgotSecurityQuestionOtpVerificationModel.fromJson(response);
   }
+
+
+  //*-----Login Method-----*
+  Future<ChangePasswordModel> changePassword(
+      {required dynamic headers, required dynamic formData}) async {
+    dynamic response = await _dioBaseApiServices.dioMultipartApiService(
+      url: AppUrls.changePassword,
+      headers: headers,
+      data: formData,
+      method: 'POST'
+    );
+    return ChangePasswordModel.fromJson(response);
+  }
+
+
 }

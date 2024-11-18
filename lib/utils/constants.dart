@@ -5,9 +5,9 @@ import 'package:pinput/pinput.dart';
 import 'package:sco_v1/models/splash/commonData_model.dart';
 
 class Constants {
-  static const String username = "liferay_access@sco.ae";
-  static const String password = "India@1234";
-  static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('${Constants.username}:${Constants.password}'))}';
+  static const String USERNAME = "liferay_access@sco.ae";
+  static const String PASSWORD = "India@1234";
+  static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('${Constants.USERNAME}:${Constants.PASSWORD}'))}';
   static const String basicAuth = 'Basic bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=';
 
   static Map<String, Response> lovCodeMap = {};

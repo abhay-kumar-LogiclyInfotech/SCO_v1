@@ -608,7 +608,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                 if (result) {
                   _alertServices.flushBarErrorMessages(
                       message: "Your Query Submitted Successfully.",
-                      context: context,
+                      // context: context,
                       provider: langProvider);
 
                   //*-------Clearing all Fields--------*/
@@ -640,7 +640,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     if (_nameController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.nameCantBeEmpty,
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;
@@ -650,7 +650,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     if (_emailController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.emailCantBeEmpty,
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;
@@ -660,7 +660,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     if (_mobileController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.mobileCantBeEmpty,
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;
@@ -670,7 +670,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     if (_inqueryTypeController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.inquiryTypeCantBeEmpty,
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;
@@ -680,7 +680,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     if (_subjectController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.subjectCantBeEmpty,
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;
@@ -690,7 +690,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     if (_messageController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.messageCantBeEmpty,
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;
@@ -700,7 +700,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     if (_captchaController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.captchaCantBeEmpty,
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;
@@ -708,7 +708,7 @@ class _ContactUsViewState extends State<ContactUsView> {
       _rotate();
       _alertServices.flushBarErrorMessages(
         message: AppLocalizations.of(context)!.captchaDoesNotMatch,
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;

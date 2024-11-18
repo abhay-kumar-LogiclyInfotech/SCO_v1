@@ -64,7 +64,9 @@ class SecurityQuestionViewModel with ChangeNotifier {
       debugPrint('Printing Error: $error');
       setGetSecurityQuestionResponse = ApiResponse.error(error.toString());
       _alertServices.flushBarErrorMessages(
-          message: error.toString(), context: context, provider: langProvider);
+          message: error.toString(),
+          // context: context,
+          provider: langProvider);
       return false;
     }
   }

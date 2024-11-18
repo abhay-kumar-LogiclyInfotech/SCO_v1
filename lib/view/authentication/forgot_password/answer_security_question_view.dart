@@ -320,10 +320,13 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
               bool result = validateForm(langProvider: langProvider);
 
               if (result) {
-                if (_answerController.text.trim() !=
-                    widget.securityAnswer.trim()) {
+
+                /// matching the security answer with user entered answer and show popup
+                if (_answerController.text.trim() != widget.securityAnswer.trim()) {
                   _alertServices.toastMessage(AppLocalizations.of(context)!.enter_correct_security_answer);
-                } else {
+                }
+                /// if security answer is matched successfully and send password on email
+                if(_answerController.text.trim() == widget.securityAnswer.trim()) {
                   //*-----Sending password on mail-----*/
                   bool mailSent = await provider.sendForgotPasswordOnMail(
                       userId: widget.userId,
@@ -331,11 +334,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
                       langProvider: langProvider);
 
                   if (mailSent) {
-                    _navigationService
-                        .pushReplacementCupertino(CupertinoPageRoute(
-                            builder: (context) => ConfirmationView(
-                                  isVerified: mailSent,
-                                )));
+                    _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => ConfirmationView(isVerified: mailSent)));
                   }
                 }
               }
@@ -354,14 +353,14 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
     if (_questionController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.selectSecurityQuestion,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     }
     if (_answerController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.writeSecurityAnswer,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     }

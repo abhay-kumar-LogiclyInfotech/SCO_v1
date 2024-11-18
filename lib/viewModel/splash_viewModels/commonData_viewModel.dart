@@ -20,8 +20,7 @@ class CommonDataViewModel with ChangeNotifier {
 
   Future<bool> fetchCommonData() async {
     try {
-      final String basicAuth =
-          'Basic ${base64Encode(utf8.encode('${Constants.username}:${Constants.password}'))}';
+      final String basicAuth = 'Basic ${base64Encode(utf8.encode('${Constants.USERNAME}:${Constants.PASSWORD}'))}';
       final headers = <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'authorization': basicAuth

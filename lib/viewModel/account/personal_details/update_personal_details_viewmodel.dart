@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/controller/internet_controller.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
@@ -75,6 +76,7 @@ class UpdatePersonalDetailsViewModel with ChangeNotifier {
         };
 
         final body = form.toString();
+
 
         UpdatePersonalDetailsModel response = await _myRepo.updatePersonalDetails(userId: _userId ?? '',body: body,headers: headers);
 

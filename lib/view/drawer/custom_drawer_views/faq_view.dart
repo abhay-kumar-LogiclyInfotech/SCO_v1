@@ -25,11 +25,15 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      final provider = Provider.of<FaqViewModel>(context, listen: false);
-      final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
-      await provider.getFaq(context: context, langProvider: langProvider);
+    WidgetsBinding.instance.addPostFrameCallback((callback)async{
+     await _onRefresh();
     });
+  }
+
+  Future<void> _onRefresh()async{
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final provider = Provider.of<FaqViewModel>(context, listen: false);
+      await provider.getFaq(context: context, langProvider: langProvider);
   }
 
   @override
@@ -37,74 +41,66 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomSimpleAppBar(
-        title: Text(
-          "FAQ",
-          style: AppTextStyles.appBarTitleStyle(),
-        ),
+        title: Text("FAQ", style: AppTextStyles.appBarTitleStyle()),
       ),
-      body: _buildUi(context),
+      body: Utils.pageRefreshIndicator(child: _buildUi(context), onRefresh: _onRefresh) ,
     );
   }
 
   Widget _buildUi(context) {
-    return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.only(left: 10.0, right: 10),
-        child: Consumer<FaqViewModel>(
-          builder: (context, provider, _) {
-            switch (provider.faqResponse.status) {
-              case Status.LOADING:
-                return  Center(
-                  child: Platform.isAndroid ? Utils.materialLoadingIndicator() : Utils.cupertinoLoadingIndicator(),
-                );
+    return Padding(
+      padding:  EdgeInsets.only(left: kPadding,right: kPadding),
+      child: Consumer<FaqViewModel>(
+        builder: (context, provider, _) {
+          switch (provider.faqResponse.status) {
+            case Status.LOADING:
+              return  Utils.pageLoadingIndicator(context: context);
+            case Status.ERROR:
+              return Center(
+                child: Text(
+                  AppLocalizations.of(context)!.somethingWentWrong
+                )
+              );
+            case Status.COMPLETED:
+              return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: provider.questionAnswers.length,
+                  itemBuilder: (context, index) {
+                    bool isLastIndex = (index ==
+                        provider.questionAnswers.length -
+                            1); // Replace 10 with your itemCount if dynamic
 
-              case Status.ERROR:
-                return Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.somethingWentWrong,
-                  ),
-                );
+                    final question =
+                        provider.questionAnswers[index].question.toString();
+                    final answer =
+                        provider.questionAnswers[index].answer.toString();
 
-              case Status.COMPLETED:
-                return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: provider.questionAnswers.length,
-                    itemBuilder: (context, index) {
-                      bool isLastIndex = (index ==
-                          provider.questionAnswers.length -
-                              1); // Replace 10 with your itemCount if dynamic
+                    if (question != 'null' && answer != 'null') {
+                      return Padding(
+                        padding: index == 0
+                            ? const EdgeInsets.only(top: 30.0, bottom: 15.0)
+                            : isLastIndex
+                                ? const EdgeInsets.only(bottom: 30.0)
+                                : const EdgeInsets.only(bottom: 15.0),
+                        child: CustomExpansionTile(
+                            title: question,
+                            trailing: const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                            expandedContent: Text(answer)),
+                      );
+                    }
+                  });
 
-                      final question =
-                          provider.questionAnswers[index].question.toString();
-                      final answer =
-                          provider.questionAnswers[index].answer.toString();
-
-                      if (question != 'null' && answer != 'null') {
-                        return Padding(
-                          padding: index == 0
-                              ? const EdgeInsets.only(top: 30.0, bottom: 15.0)
-                              : isLastIndex
-                                  ? const EdgeInsets.only(bottom: 30.0)
-                                  : const EdgeInsets.only(bottom: 15.0),
-                          child: CustomExpansionTile(
-                              title: question,
-                              trailing: const Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                size: 35,
-                                color: Colors.white,
-                              ),
-                              expandedContent: Text(answer)),
-                        );
-                      }
-                    });
-
-              default:
-                return Text(
-                  AppLocalizations.of(context)!.somethingWentWrong,
-                );
-            }
-          },
-        ),
+            default:
+              return Text(
+                AppLocalizations.of(context)!.somethingWentWrong,
+              );
+          }
+        },
       ),
     );
   }

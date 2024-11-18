@@ -46,7 +46,7 @@ class TermsAndConditionsViewModel with ChangeNotifier {
       if (userId.isEmpty) {
         _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.error_complete_profile,
-          context: context,
+          // context: context,
           provider: langProvider,
         );
         return false;
@@ -69,7 +69,7 @@ class TermsAndConditionsViewModel with ChangeNotifier {
       //Message to show status of the operation:
       _alertServices.flushBarErrorMessages(
         message: response.message.toString(),
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       _setTermsAncConditionsResponse = ApiResponse.completed(response);
@@ -81,7 +81,7 @@ class TermsAndConditionsViewModel with ChangeNotifier {
       //Message to show status of the operation:
       _alertServices.flushBarErrorMessages(
         message: error.toString(),
-        context: context,
+        // context: context,
         provider: langProvider,
       );
       return false;

@@ -23,7 +23,8 @@ import '../../../resources/validations_and_errorText.dart';
 import '../../../viewModel/authentication/update_security_question_viewModel.dart';
 
 class UpdateSecurityQuestionView extends StatefulWidget {
-  const UpdateSecurityQuestionView({super.key});
+  bool updatingSecurityQuestion;
+   UpdateSecurityQuestionView({super.key,this.updatingSecurityQuestion = false});
 
   @override
   State<UpdateSecurityQuestionView> createState() =>
@@ -49,19 +50,13 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
 
   // creating and updating the security question setup view
-  Future<void> _initializeData(
-      {required LanguageChangeViewModel langProvider}) async {
-    final provider =
-        Provider.of<SecurityQuestionViewModel>(context, listen: false);
-    await provider.getSecurityQuestions(
-        context: context, langProvider: langProvider, userId: _userId!);
+  /// This is the call to api to get the all security questions and populate dropdown.
+  Future<void> _initializeData({required LanguageChangeViewModel langProvider}) async {
+    final provider = Provider.of<SecurityQuestionViewModel>(context, listen: false);
+    await provider.getSecurityQuestions(context: context, langProvider: langProvider, userId: _userId!);
 
     if (provider.getSecurityQuestionResponse.status == Status.COMPLETED) {
-      _securityQuestionItemsList = populateNormalDropdown(
-          menuItemsList: provider
-                  .getSecurityQuestionResponse.data?.data?.securityQuestions ??
-              [],
-          provider: langProvider);
+      _securityQuestionItemsList = populateNormalDropdown(menuItemsList: provider.getSecurityQuestionResponse.data?.data?.securityQuestions ?? [], provider: langProvider);
       setState(() {});
     }
   }
@@ -76,9 +71,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     _userId = HiveManager.getUserId();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      _initializeData(
-          langProvider:
-              Provider.of<LanguageChangeViewModel>(context, listen: false));
+    await  _initializeData(langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
     });
 
     super.initState();
@@ -95,18 +88,28 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     super.dispose();
   }
 
+
+  bool _processing = false;
+
+  setProcessing(value){
+    setState(() {
+      _processing = value;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-          title: SvgPicture.asset(
+          title: widget.updatingSecurityQuestion ? Text("Security Question",style: AppTextStyles.appBarTitleStyle(),) : SvgPicture.asset(
         "assets/sco_logo.svg",
         fit: BoxFit.fill,
         height: 35,
         width: 110,
       )),
-      body: _buildUI(context: context),
+      body: Utils.modelProgressHud(child:  _buildUI(context: context),processing: _processing),
     );
   }
 
@@ -158,12 +161,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
                   builder: (context, provider, _) {
                     switch (provider.getSecurityQuestionResponse.status) {
                       case Status.LOADING:
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.black,
-                            strokeWidth: 1.5,
-                          ),
-                        );
+                        return Utils.pageLoadingIndicator(context: context);
                       case Status.ERROR:
                         return Text(
                           AppLocalizations.of(context)!.somethingWentWrong,
@@ -217,7 +215,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     return Padding(
       padding: const EdgeInsets.all(50.0),
       child: SvgPicture.asset(
-        "assets/security_question_bg.svg",
+        "assets/security_question_bg1.svg",
         // fit: BoxFit.fill,
       ),
     );
@@ -283,13 +281,14 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
           return CustomButton(
             textDirection: getTextDirection(langProvider),
             buttonName: AppLocalizations.of(context)!.submit,
-            isLoading:
-                provider.updateSecurityQuestionResponse.status == Status.LOADING
+            isLoading: provider.updateSecurityQuestionResponse.status == Status.LOADING
                     ? true
                     : false,
             onTap: () async {
-              bool result = validateForm(langProvider: langProvider);
 
+              setProcessing(true);
+
+              bool result = validateForm(langProvider: langProvider);
               if (result) {
                 provider.setSecurityQuestion(_questionController.text);
                 provider.setSecurityAnswer(_answerController.text);
@@ -299,13 +298,18 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
                   userId: _userId!,
                   // userId: "962229",
                 );
-               if(updateResult){
+
+               /// checking updating security question because we are using this screen twice
+               if(updateResult && !widget.updatingSecurityQuestion){
                  _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
                }
               }
+              setProcessing(false);
+
             },
             fontSize: 16,
-            buttonColor: AppColors.scoButtonColor,
+            buttonColor: AppColors.scoThemeColor,
+            borderColor: Colors.transparent,
             elevation: 1,
           );
         },
@@ -318,14 +322,14 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     if (_questionController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.selectSecurityQuestion,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     }
     if (_answerController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
           message: AppLocalizations.of(context)!.writeSecurityAnswer,
-          context: context,
+          // context: context,
           provider: langProvider);
       return false;
     }

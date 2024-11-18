@@ -15,6 +15,7 @@ class CustomTextField extends StatefulWidget {
   bool? textCapitalization;
   Widget? icon;
   bool? filled;
+  Color? fillColor;
   bool? readOnly;
   TextInputType? textInputType;
   dynamic leading;
@@ -27,6 +28,7 @@ class CustomTextField extends StatefulWidget {
   int? maxLines;
   int? maxLength;
   bool? enabled;
+  dynamic validator;
 TextStyle? textStyle;
    CustomTextField(
       {super.key,
@@ -36,6 +38,7 @@ TextStyle? textStyle;
       this.autofocus,
       required this.controller,
         this.obscureText,
+        this.fillColor,
       required this.hintText,
       this.textCapitalization,
       this.icon,
@@ -51,7 +54,8 @@ TextStyle? textStyle;
       this.maxLines,
         this.maxLength,
       this.textStyle,
-        this.enabled
+        this.enabled,
+        this.validator,
       });
 
   @override
@@ -121,7 +125,7 @@ class _CustomTextFieldState extends State<CustomTextField>
           focusedErrorBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
               Utils.underLinedInputBorder(),
           filled: widget.filled,
-          fillColor: Colors.grey.shade200,
+          fillColor: widget.fillColor ?? Colors.grey.shade200,
         ),
         inputFormatters: widget.inputFormat,
         cursorColor: AppColors.hintDarkGrey,
@@ -135,6 +139,7 @@ class _CustomTextFieldState extends State<CustomTextField>
         onChanged: (value) {
           widget.onChanged(value.trim());
         },
+
       ),
     );
   }

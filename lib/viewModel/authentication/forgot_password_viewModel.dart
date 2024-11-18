@@ -57,8 +57,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
       }
 
       //*-----Calling Api Start-----*
-      final response = await _authenticationRepository
-          .getForgotPasswordSecurityQuestion(email: email, headers: headers);
+      final response = await _authenticationRepository.getForgotPasswordSecurityQuestionUsingEmail(email: email, headers: headers);
 
       //*-----Calling Api End-----*
 
