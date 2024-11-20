@@ -89,6 +89,8 @@ dependencies:
     sdk: flutter
   device_info_plus: ^9.1.2
   rename_app: ^1.6.1
+  open_file: ^3.5.9
+
 
 
 dev_dependencies:

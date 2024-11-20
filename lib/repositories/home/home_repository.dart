@@ -12,6 +12,7 @@ import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SubmitApplicationModel.dart';
 import 'package:sco_v1/models/home/HomeSliderModel.dart';
 import 'package:sco_v1/models/services/GetAllRequestsModel.dart';
+import 'package:sco_v1/models/services/GetMyAdvisorModel.dart';
 import 'package:sco_v1/models/services/MyFinanceStatusModel.dart';
 import 'package:sco_v1/models/services/MyScholarshipModel.dart';
 
@@ -249,5 +250,14 @@ class HomeRepository {
   }
 
 
+  // *------ Get My Advisor's Method ------*/
+  Future<GetMyAdvisorModel> getMyAdvisor(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.baseUrl}e-services/my-advisor/$userId',
+      headers: headers,
+    );
+    return GetMyAdvisorModel.fromJson(response);
+  }
 
 }

@@ -8,6 +8,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:xml/xml.dart';
 
@@ -154,7 +156,39 @@ class Utils {
   }
 
 
+  // Method to open pdf
+  static Future<void> openFile(File file)async{
+// fetching the path
+    final path =  file.path;
+// open the pdf
+    await OpenFile.open(path);
+  }
+
 }
+
+
+Future<File> convertBase64ToFile(String base64String, String fileName) async {
+  try {
+    // Decode the Base64 string
+    final decodedBytes = base64Decode(base64String);
+
+    // Get the temporary directory of the app
+    final tempDir = await getTemporaryDirectory();
+
+    // Define the file path
+    final filePath = '${tempDir.path}/$fileName';
+
+    // Write the decoded bytes to the file
+    final file = File(filePath);
+    await file.writeAsBytes(decodedBytes);
+
+    return file; // Return the file instance
+  } catch (e) {
+    throw Exception("Error converting Base64 string to file: $e");
+  }
+}
+
+
 
 //Get Text Direction Method:
 TextDirection getTextDirection(LanguageChangeViewModel langProvider) {

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
@@ -28,6 +29,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
@@ -115,6 +117,12 @@ class MyApp extends StatelessWidget {
 
           // Get All Requests
           ChangeNotifierProvider(create: (_) => GetAllRequestsViewModel()),
+
+          // Get All Academic Advisor's
+          ChangeNotifierProvider(create: (_) => GetMyAdvisorViewModel()),
+
+          // Get Employment Status
+          ChangeNotifierProvider(create: (_) => GetEmploymentStatusViewModel()),
 
 
           // register Test ViewModel
