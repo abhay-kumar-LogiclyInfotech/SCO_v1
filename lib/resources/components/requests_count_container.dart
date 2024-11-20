@@ -15,7 +15,8 @@ class RequestsCountContainer extends StatefulWidget {
 class _RequestsCountContainerState extends State<RequestsCountContainer> with MediaQueryMixin{
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(seconds: 2),
         constraints:  const BoxConstraints(minWidth: 22,minHeight: 22,maxHeight: 22),
         padding: const EdgeInsets.all(0.5),
         decoration: BoxDecoration(

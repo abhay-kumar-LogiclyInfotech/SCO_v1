@@ -34,13 +34,13 @@ class _MainViewState extends State<MainView> {
   bool home = true;
   bool support = false;
 
-  List<dynamic> screens = [
+  List<Widget> screens = [
     const ServicesView(),
     const HomeView(),
     const SupportView(),
   ];
 
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   final GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -93,149 +93,179 @@ class _MainViewState extends State<MainView> {
       drawerEnableOpenDragGesture: provider_1.appLocale == const Locale('en') ? true : false,
       endDrawer: CustomDrawerView(textDirection: getTextDirection(provider_1), scaffoldState: scaffoldState),
       endDrawerEnableOpenDragGesture: provider_1.appLocale == const Locale('ar') ? true : false,
-      body: _buildUI(),
-      bottomNavigationBar: Material(
-        color: Colors.white,
-        elevation: 0.3,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: SafeArea(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if(_isLoggedIn){
-                          setState(() {
-                            services = true;
-                            home = false;
-                            support = false;
-                          });
-                        }else{
-                          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                          _alertServices.showCustomSnackBar("Please Login to use services",
-                              // context,
-                          );
-                        }
+      body:  IndexedStack(index: currentIndex,children: screens) ,
+      // body:_buildUI(),
+      // bottomNavigationBar: Material(
+      //   color: Colors.white,
+      //   elevation: 0.3,
+      //   child: Column(
+      //     mainAxisSize: MainAxisSize.min,
+      //     children: [
+      //       Padding(
+      //         padding: const EdgeInsets.only(top: 20.0),
+      //         child: SafeArea(
+      //           child: Row(
+      //             mainAxisSize: MainAxisSize.max,
+      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //             children: [
+      //               GestureDetector(
+      //                 onTap: () {
+      //                   if(_isLoggedIn){
+      //                     setState(() {
+      //                       services = true;
+      //                       home = false;
+      //                       support = false;
+      //                     });
+      //                   }else{
+      //                     _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+      //                     _alertServices.showCustomSnackBar("Please Login to use services",
+      //                         // context,
+      //                     );
+      //                   }
+      //
+      //                 },
+      //                 child: Container(
+      //                   color: Colors.transparent,
+      //                   width: MediaQuery.sizeOf(context).width * .25,
+      //                   child: Column(
+      //                     mainAxisSize: MainAxisSize.max,
+      //                     mainAxisAlignment: MainAxisAlignment.center,
+      //                     children: [
+      //                       SizedBox(
+      //                           height: 30,
+      //                           child: SvgPicture.asset(
+      //                             services
+      //                                 ? "assets/services_selected.svg"
+      //                                 : "assets/services.svg",
+      //                           )),
+      //                       Text(
+      //                         // AppLocalizations.of(context)!.services,
+      //                         "Services",
+      //                         style: TextStyle(
+      //                             color: services
+      //                                 ? Colors.black
+      //                                 : const Color(0xfff9AA6B2),
+      //                             fontSize: 12,
+      //                             fontWeight: services
+      //                                 ? FontWeight.w900
+      //                                 : FontWeight.w900),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //               ),
+      //               GestureDetector(
+      //                 onTap: () {
+      //                   setState(() {
+      //                     services = false;
+      //                     home = true;
+      //                     support = false;
+      //                   });
+      //                 },
+      //                 child: Container(
+      //                   color: Colors.transparent,
+      //                   width: MediaQuery.sizeOf(context).width * .25,
+      //                   child: Column(
+      //                     mainAxisSize: MainAxisSize.max,
+      //                     mainAxisAlignment: MainAxisAlignment.center,
+      //                     children: [
+      //                       SizedBox(
+      //                           height: 30,
+      //                           child: SvgPicture.asset(
+      //                             home
+      //                                 ? "assets/home_selected.svg"
+      //                                 : "assets/home.svg",
+      //                           )),
+      //                       Text(
+      //                         AppLocalizations.of(context)!.home,
+      //                         style: TextStyle(
+      //                             color: home
+      //                                 ? Colors.black
+      //                                 : const Color(0xfff9AA6B2),
+      //                             fontSize: 12,
+      //                             fontWeight: home
+      //                                 ? FontWeight.w900
+      //                                 : FontWeight.w900),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //               ),
+      //               GestureDetector(
+      //                 onTap: () {
+      //                   setState(() {
+      //                     services = false;
+      //                     home = false;
+      //                     support = true;
+      //                   });
+      //                 },
+      //                 child: Container(
+      //                   color: Colors.transparent,
+      //                   width: MediaQuery.sizeOf(context).width * .25,
+      //                   child: Column(
+      //                     mainAxisSize: MainAxisSize.max,
+      //                     mainAxisAlignment: MainAxisAlignment.center,
+      //                     children: [
+      //                       SizedBox(
+      //                           height: 30,
+      //                           child: SvgPicture.asset(
+      //                             support
+      //                                 ? "assets/support_selected.svg"
+      //                                 : "assets/support.svg",
+      //                           )),
+      //                       Text(
+      //                         // AppLocalizations.of(context)!.support,
+      //                         "Support",
+      //                         style: TextStyle(
+      //                             color: support
+      //                                 ? Colors.black
+      //                                 : const Color(0xfff9AA6B2),
+      //                             fontSize: 12,
+      //                             fontWeight:
+      //                             support ? FontWeight.w900 : FontWeight.w900),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
+            currentIndex: currentIndex,
+            onTap: (index) {
 
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        width: MediaQuery.sizeOf(context).width * .25,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                height: 30,
-                                child: SvgPicture.asset(
-                                  services
-                                      ? "assets/services_selected.svg"
-                                      : "assets/services.svg",
-                                )),
-                            Text(
-                              // AppLocalizations.of(context)!.services,
-                              "Services",
-                              style: TextStyle(
-                                  color: services
-                                      ? Colors.black
-                                      : const Color(0xfff9AA6B2),
-                                  fontSize: 12,
-                                  fontWeight: services
-                                      ? FontWeight.w900
-                                      : FontWeight.w900),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          services = false;
-                          home = true;
-                          support = false;
-                        });
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        width: MediaQuery.sizeOf(context).width * .25,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                height: 30,
-                                child: SvgPicture.asset(
-                                  home
-                                      ? "assets/home_selected.svg"
-                                      : "assets/home.svg",
-                                )),
-                            Text(
-                              AppLocalizations.of(context)!.home,
-                              style: TextStyle(
-                                  color: home
-                                      ? Colors.black
-                                      : const Color(0xfff9AA6B2),
-                                  fontSize: 12,
-                                  fontWeight: home
-                                      ? FontWeight.w900
-                                      : FontWeight.w900),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          services = false;
-                          home = false;
-                          support = true;
-                        });
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        width: MediaQuery.sizeOf(context).width * .25,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                height: 30,
-                                child: SvgPicture.asset(
-                                  support
-                                      ? "assets/support_selected.svg"
-                                      : "assets/support.svg",
-                                )),
-                            Text(
-                              // AppLocalizations.of(context)!.support,
-                              "Support",
-                              style: TextStyle(
-                                  color: support
-                                      ? Colors.black
-                                      : const Color(0xfff9AA6B2),
-                                  fontSize: 12,
-                                  fontWeight:
-                                  support ? FontWeight.w900 : FontWeight.w900),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+            if(index == 0){
+              if(_isLoggedIn){
+                setState(() {
+                  currentIndex = index;
+                });
+              }else{
+                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+                _alertServices.showCustomSnackBar("Please Login to use services",
+                  // context,
+                );
+              }
+            }
+            else{
+              setState(() {
+                currentIndex = index;
+              });
+            }
 
+            },
+            items: [
+              BottomNavigationBarItem(icon:  SvgPicture.asset("assets/services.svg"),activeIcon:SvgPicture.asset("assets/services_selected.svg"),label: "services"),
 
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+              BottomNavigationBarItem(icon:  SvgPicture.asset("assets/home.svg"),activeIcon:SvgPicture.asset("assets/home_selected.svg"),label: "Home"),
+
+          BottomNavigationBarItem(icon:  SvgPicture.asset("assets/support.svg"),activeIcon:SvgPicture.asset("assets/support_selected.svg"),label: "Support"),
+        ])
     );
   }
 

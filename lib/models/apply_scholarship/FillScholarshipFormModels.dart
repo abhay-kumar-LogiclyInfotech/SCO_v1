@@ -110,13 +110,69 @@ class PersonName {
 }
 
 // phone number
+// class PhoneNumber {
+//   TextEditingController countryCodeController;
+//   TextEditingController phoneNumberController;
+//   TextEditingController phoneTypeController;
+//
+//   // Boolean value for preferred
+//   bool preferred;
+//
+//   // Focus Nodes
+//   FocusNode countryCodeFocusNode;
+//   FocusNode phoneNumberFocusNode;
+//   FocusNode phoneTypeFocusNode;
+//
+//   // Error Text Variables
+//   String? countryCodeError;
+//   String? phoneNumberError;
+//   String? phoneTypeError;
+//
+//   PhoneNumber({
+//     required this.countryCodeController,
+//     required this.phoneNumberController,
+//     required this.phoneTypeController,
+//     required this.preferred,
+//     required this.countryCodeFocusNode,
+//     required this.phoneNumberFocusNode,
+//     required this.phoneTypeFocusNode,
+//     this.countryCodeError,
+//     this.phoneNumberError,
+//     this.phoneTypeError,
+//   });
+//
+//   // From JSON
+//   factory PhoneNumber.fromJson(Map<String, dynamic> json) {
+//     return PhoneNumber(
+//       countryCodeController: TextEditingController(text: json['countryCode']),
+//       phoneNumberController: TextEditingController(text: json['phoneNumber']),
+//       phoneTypeController: TextEditingController(text: json['phoneType']),
+//       preferred: json['prefered'] == true || json['prefered'] ==  'true'  ?  true : false,
+//       countryCodeFocusNode: FocusNode(),
+//       phoneNumberFocusNode: FocusNode(),
+//       phoneTypeFocusNode: FocusNode(),
+//     );
+//   }
+//
+//   // To JSON
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'countryCode': countryCodeController.text,
+//       'phoneNumber': phoneNumberController.text,
+//       'phoneType': phoneTypeController.text,
+//       'prefered': preferred,
+//       'isExisting' : "false"
+//     };
+//   }
+// }
 class PhoneNumber {
   TextEditingController countryCodeController;
   TextEditingController phoneNumberController;
   TextEditingController phoneTypeController;
 
-  // Boolean value for preferred
+  // Boolean values for preferred and isExisting
   bool preferred;
+  bool isExisting;
 
   // Focus Nodes
   FocusNode countryCodeFocusNode;
@@ -133,6 +189,7 @@ class PhoneNumber {
     required this.phoneNumberController,
     required this.phoneTypeController,
     required this.preferred,
+    required this.isExisting,
     required this.countryCodeFocusNode,
     required this.phoneNumberFocusNode,
     required this.phoneTypeFocusNode,
@@ -147,7 +204,8 @@ class PhoneNumber {
       countryCodeController: TextEditingController(text: json['countryCode']),
       phoneNumberController: TextEditingController(text: json['phoneNumber']),
       phoneTypeController: TextEditingController(text: json['phoneType']),
-      preferred: json['prefered'] == true || json['prefered'] ==  'true'  ?  true : false,
+      preferred: json['prefered'] == true || json['prefered'] == 'true' ? true : false,
+      isExisting: json['isExisting'] == true || json['isExisting']  == 'true' || json['existing'] == true || json['existing']  == 'true' ? true : false,
       countryCodeFocusNode: FocusNode(),
       phoneNumberFocusNode: FocusNode(),
       phoneTypeFocusNode: FocusNode(),
@@ -161,7 +219,8 @@ class PhoneNumber {
       'phoneNumber': phoneNumberController.text,
       'phoneType': phoneTypeController.text,
       'prefered': preferred,
-      'isExisting' : "false"
+      'isExisting': isExisting,
+      "existing":isExisting
     };
   }
 }
@@ -220,6 +279,97 @@ class EmailDetail {
 
 
 // Address inFormation
+// class Address {
+//   // Text Editing Controllers for form fields
+//   TextEditingController addressTypeController;
+//   TextEditingController addressLine1Controller;
+//   TextEditingController addressLine2Controller;
+//   TextEditingController cityController;
+//   TextEditingController countryController;
+//   TextEditingController postalCodeController;
+//   TextEditingController stateController;
+//
+//   // Focus Nodes
+//   FocusNode addressTypeFocusNode;
+//   FocusNode addressLine1FocusNode;
+//   FocusNode addressLine2FocusNode;
+//   FocusNode cityFocusNode;
+//   FocusNode countryFocusNode;
+//   FocusNode postalCodeFocusNode;
+//   FocusNode stateFocusNode;
+//
+//   // Error Text Variables
+//   String? addressTypeError;
+//   String? addressLine1Error;
+//   String? addressLine2Error;
+//   String? cityError;
+//   String? countryError;
+//   String? postalCodeError;
+//   String? stateError;
+//
+//   List<DropdownMenuItem>? countryDropdownMenuItems;
+//   List<DropdownMenuItem>? stateDropdownMenuItems;
+//
+//   Address({
+//     required this.addressTypeController,
+//     required this.addressLine1Controller,
+//     required this.addressLine2Controller,
+//     required this.cityController,
+//     required this.countryController,
+//     required this.postalCodeController,
+//     required this.stateController,
+//     required this.addressTypeFocusNode,
+//     required this.addressLine1FocusNode,
+//     required this.addressLine2FocusNode,
+//     required this.cityFocusNode,
+//     required this.countryFocusNode,
+//     required this.postalCodeFocusNode,
+//     required this.stateFocusNode,
+//     this.addressTypeError,
+//     this.addressLine1Error,
+//     this.addressLine2Error,
+//     this.cityError,
+//     this.countryError,
+//     this.postalCodeError,
+//     this.stateError,
+//     this.countryDropdownMenuItems,
+//     this.stateDropdownMenuItems,
+//   });
+//
+//   // From JSON
+//   factory Address.fromJson(Map<String, dynamic> json) {
+//     return Address(
+//       addressTypeController: TextEditingController(text: json['addressType']),
+//       addressLine1Controller: TextEditingController(text: json['addressLine1']),
+//       addressLine2Controller: TextEditingController(text: json['addressLine2']),
+//       cityController: TextEditingController(text: json['city']),
+//       countryController: TextEditingController(text: json['country']),
+//       postalCodeController: TextEditingController(text: json['postalCode']),
+//       stateController: TextEditingController(text: json['state']),
+//       addressTypeFocusNode: FocusNode(),
+//       addressLine1FocusNode: FocusNode(),
+//       addressLine2FocusNode: FocusNode(),
+//       cityFocusNode: FocusNode(),
+//       countryFocusNode: FocusNode(),
+//       postalCodeFocusNode: FocusNode(),
+//       stateFocusNode: FocusNode(),
+//     );
+//   }
+//
+//   // To JSON
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'addressType': addressTypeController.text,
+//       'addressLine1': addressLine1Controller.text,
+//       'addressLine2': addressLine2Controller.text,
+//       'city': cityController.text,
+//       'country': countryController.text,
+//       'postalCode': postalCodeController.text,
+//       'state': stateController.text,
+//     };
+//   }
+// }
+
 class Address {
   // Text Editing Controllers for form fields
   TextEditingController addressTypeController;
@@ -251,6 +401,10 @@ class Address {
   List<DropdownMenuItem>? countryDropdownMenuItems;
   List<DropdownMenuItem>? stateDropdownMenuItems;
 
+  // Additional Fields
+  bool disableState;
+  bool isExisting;
+
   Address({
     required this.addressTypeController,
     required this.addressLine1Controller,
@@ -275,6 +429,8 @@ class Address {
     this.stateError,
     this.countryDropdownMenuItems,
     this.stateDropdownMenuItems,
+    this.disableState = false,
+    this.isExisting = false,
   });
 
   // From JSON
@@ -294,6 +450,8 @@ class Address {
       countryFocusNode: FocusNode(),
       postalCodeFocusNode: FocusNode(),
       stateFocusNode: FocusNode(),
+      disableState: json['disableState'] == 'true' || json['disableState'] == true ? true :false,
+      isExisting: json['isExisting'] == 'true' || json['isExisting'] == true || json['existing'] == true || json['existing'] == 'true'  ? true : false,
     );
   }
 
@@ -307,9 +465,13 @@ class Address {
       'country': countryController.text,
       'postalCode': postalCodeController.text,
       'state': stateController.text,
+      'disableState': disableState.toString(),
+      'isExisting': isExisting.toString(),
+      'existing': isExisting.toString()
     };
   }
 }
+
 
 // HighSchool model
 class HighSchool {

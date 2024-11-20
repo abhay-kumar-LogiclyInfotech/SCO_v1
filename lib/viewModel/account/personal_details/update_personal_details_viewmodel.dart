@@ -56,7 +56,6 @@ class UpdatePersonalDetailsViewModel with ChangeNotifier {
   }
 
   Future<bool> updatePersonalDetails({required dynamic form}) async {
-
     final InternetController networkController = Get.find<InternetController>();
 
     // Check if the network is connected
@@ -75,7 +74,8 @@ class UpdatePersonalDetailsViewModel with ChangeNotifier {
           'authorization': Constants.basicAuth
         };
 
-        final body = form.toString();
+        final body = jsonEncode(form);
+        // final body = FormData.fromMap(form);
 
 
         UpdatePersonalDetailsModel response = await _myRepo.updatePersonalDetails(userId: _userId ?? '',body: body,headers: headers);

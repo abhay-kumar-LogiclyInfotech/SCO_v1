@@ -11,7 +11,7 @@ import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/finance.dart';
 import 'package:sco_v1/view/main_view/services_views/guidance_notes.dart';
 import 'package:sco_v1/view/main_view/services_views/my_scholarship_view.dart';
-import 'package:sco_v1/view/main_view/services_views/request.dart';
+import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/view/main_view/services_views/work_status.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';

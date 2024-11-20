@@ -24,9 +24,11 @@ import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
+import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 
 import '../../resources/app_colors.dart';
@@ -58,12 +60,20 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       // final langProvider =
       //     Provider.of<LanguageChangeViewModel>(context, listen: false);
       // await provider.homeSlider(context: context, langProvider: langProvider);
+      await _onRefresh();
     });
   }
 
+
  Future _onRefresh()async{
     final myFinanceProvider =  Provider.of<MyFinanceStatusViewModel>(context, listen: false);
-    await myFinanceProvider.myFinanceStatus();
+    final requestsProvider = Provider.of<GetAllRequestsViewModel>(context,listen: false);
+
+    await Future.wait<dynamic>(
+    [
+     myFinanceProvider.myFinanceStatus(),
+     requestsProvider.getAllRequests(),
+   ]);
   }
 
   @override
@@ -308,72 +318,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         ));
   }
 
-  // *----Scholarship applied container----*
-  Widget _scholarshipAppliedContainer(
-      {required LanguageChangeViewModel langProvider}) {
-    return _homeViewCard(
-        langProvider: langProvider,
-        title: AppLocalizations.of(context)!.scholarshipOffice,
-        icon: Image.asset("assets/scholarship_office.png"),
-        content: Column(
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Scholarship status:
-                const Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Scholarship Status",
-                        style: TextStyle(
-                            fontSize: 12, color: AppColors.hintDarkGrey),
-                        textAlign: TextAlign.start,
-                      ),
-                      Text("Scholarship Applied",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.greenColor,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.start)
-                    ],
-                  ),
-                ),
-
-                // read more button
-                SizedBox(
-                  width: screenWidth * 0.35,
-                  child: CustomButton(
-                    buttonName: AppLocalizations.of(context)!.readMore,
-                    isLoading: false,
-                    onTap: () {},
-                    textDirection: getTextDirection(langProvider),
-                    textColor: const Color(0xffAD8138),
-                    borderColor: const Color(0xffAD8138),
-                    buttonColor: Colors.white,
-                    fontSize: 14,
-                    height: 40,
-                  ),
-                ),
-              ],
-            ),
-            kFormHeight,
-
-            // divider
-            const Divider(color: AppColors.lightGrey),
-            const SizedBox.square(
-              dimension: 5,
-            ),
-
-            // date
-            _buildDateInfo(langProvider: langProvider, date: "DD/MM/YYYY"),
-          ],
-        ));
-  }
 
   Widget _announcements({required LanguageChangeViewModel langProvider}) {
     return _homeViewCard(
@@ -496,6 +440,76 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     );
   }
 
+
+  // *----Scholarship applied container----*
+  Widget _scholarshipAppliedContainer(
+      {required LanguageChangeViewModel langProvider}) {
+    return _homeViewCard(
+        langProvider: langProvider,
+        title: AppLocalizations.of(context)!.scholarshipOffice,
+        icon: Image.asset("assets/scholarship_office.png"),
+        content: Column(
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Scholarship status:
+                const Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Scholarship Status",
+                        style: TextStyle(
+                            fontSize: 12, color: AppColors.hintDarkGrey),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text("Scholarship Applied",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: AppColors.greenColor,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.start)
+                    ],
+                  ),
+                ),
+
+                // read more button
+                SizedBox(
+                  width: screenWidth * 0.35,
+                  child: CustomButton(
+                    buttonName: AppLocalizations.of(context)!.readMore,
+                    isLoading: false,
+                    onTap: () {},
+                    textDirection: getTextDirection(langProvider),
+                    textColor: const Color(0xffAD8138),
+                    borderColor: const Color(0xffAD8138),
+                    buttonColor: Colors.white,
+                    fontSize: 14,
+                    height: 40,
+                  ),
+                ),
+              ],
+            ),
+            kFormHeight,
+
+            // divider
+            const Divider(color: AppColors.lightGrey),
+            const SizedBox.square(
+              dimension: 5,
+            ),
+
+            // date
+            _buildDateInfo(langProvider: langProvider, date: "DD/MM/YYYY"),
+          ],
+        ));
+  }
+
+
+
   // Apply Scholarship Button
   Widget _applyScholarshipButton(
       {required LanguageChangeViewModel langProvider}) {
@@ -554,21 +568,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             case Status.COMPLETED:
               final financeData = financeStatusProvider.apiResponse.data?.data;
               
-              final salary = financeData?.listSalaryDetials?.isNotEmpty == true
-                  ? financeData?.listSalaryDetials?.first
-                  : null;
-
-              final deduction = financeData?.listDeduction?.isNotEmpty == true
-                  ? financeData?.listDeduction?.first
-                  : null;
-
-              final bonus = financeData?.listBonus?.isNotEmpty == true
-                  ? financeData?.listBonus?.first
-                  : null;
-
-              final warning = financeData?.listWarnings?.isNotEmpty == true
-                  ? financeData?.listWarnings?.first
-                  : null;
+              final salary = financeData?.listSalaryDetials?.isNotEmpty == true ? financeData?.listSalaryDetials?.first : null;
+              final deduction = financeData?.listDeduction?.isNotEmpty == true ? financeData?.listDeduction?.first : null;
+              final bonus = financeData?.listBonus?.isNotEmpty == true ? financeData?.listBonus?.first : null;
+              final warning = financeData?.listWarnings?.isNotEmpty == true ? financeData?.listWarnings?.first : null;
               return _homeViewCard(
                     title: "My Finance",
                     icon: SvgPicture.asset("assets/my_finance.svg"),
@@ -606,9 +609,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                             ],
                           ),
                         ),
-
                         const Divider(),
-
                         // warning
                         Text(
                           "Warning",
@@ -621,7 +622,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                         ),
                       ],
                     ));
-
             case null:
               return showVoid;
           }
@@ -655,51 +655,71 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   /// Request View:
   Widget _requestView({required LanguageChangeViewModel langProvider}) {
-    return _homeViewCard(
-        title: "Requests",
-        icon: SvgPicture.asset("assets/request.svg"),
-        langProvider: langProvider,
-        headerExtraContent:
-            RequestsCountContainer(color: Colors.blue.shade600, count: 0),
-        contentPadding: EdgeInsets.zero,
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 50.0),
-              child: Text(
-                "Total Number of Requests",
-                style: TextStyle(fontSize: 14, height: 2.5),
-              ),
-            ),
-            kFormHeight,
-            _homeViewCardBottomContainer(
-                padding: const EdgeInsets.all(10),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  runAlignment: WrapAlignment.start,
-                  alignment: WrapAlignment.spaceEvenly,
-                  runSpacing: 10,
-                  children: [
-                    IntrinsicWidth(
-                        child: _requestTypeWithCount(
-                            requestType: "Approved",
-                            count: "0",
-                            color: Colors.green.shade500)),
-                    kFormHeight,
-                    _requestTypeWithCount(
-                        requestType: "Pending",
-                        count: "0",
-                        color: const Color(0xffF4AA73)),
-                    kFormHeight,
-                    _requestTypeWithCount(
-                        requestType: "Rejected",
-                        count: "0",
-                        color: AppColors.DANGER),
-                  ],
-                )),
-          ],
-        ));
+    return Consumer<GetAllRequestsViewModel>(
+      builder: (context, requestsProvider, _) {
+        switch(requestsProvider.apiResponse.status){
+          case Status.LOADING:
+            return showVoid;
+          case Status.ERROR:
+            return showVoid;
+          case Status.NONE:
+            return showVoid;
+          case Status.COMPLETED:
+            final requests = requestsProvider.apiResponse.data?.data?.listOfRequest;
+            final totalRequests = requestsProvider.apiResponse.data?.data?.listOfRequest?.length;
+            final approvedRequests = requests?.where((r) => r.status == "APPROV")?.length?? 0;
+            final pendingRequests = requests?.where((r) => r.status == "RECVD")?.length?? 0;
+            final rejectedRequests = requests?.where((r) => r.status == "DENY")?.length?? 0;
+            return _homeViewCard(
+            title: "Requests",
+            icon: SvgPicture.asset("assets/request.svg"),
+            langProvider: langProvider,
+            headerExtraContent: RequestsCountContainer(color: Colors.blue.shade600, count: totalRequests),
+            contentPadding: EdgeInsets.zero,
+            onTap: (){_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const RequestView()));},
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 50.0),
+                  child: Text(
+                    "Total Number of Requests",
+                    style: TextStyle(fontSize: 14, height: 2.5),
+                  ),
+                ),
+                kFormHeight,
+                _homeViewCardBottomContainer(
+                    padding: const EdgeInsets.all(10),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      runAlignment: WrapAlignment.start,
+                      alignment: WrapAlignment.spaceEvenly,
+                      runSpacing: 10,
+                      children: [
+                        IntrinsicWidth(
+                            child: _requestTypeWithCount(
+                                requestType: "Approved",
+                                count: approvedRequests,
+                                color: Colors.green.shade500)),
+                        kFormHeight,
+                        _requestTypeWithCount(
+                            requestType: "Pending",
+                            count: pendingRequests,
+                            color: const Color(0xffF4AA73)),
+                        kFormHeight,
+                        _requestTypeWithCount(
+                            requestType: "Rejected",
+                            count: rejectedRequests,
+                            color: AppColors.DANGER),
+                      ],
+                    )),
+              ],
+            ));
+          case null:
+            return showVoid;
+        }
+      }
+    );
   }
 
   /// Req

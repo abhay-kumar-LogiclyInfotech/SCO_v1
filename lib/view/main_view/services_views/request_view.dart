@@ -209,9 +209,9 @@ bool isSearching = false;
              if (_searchController.text.isNotEmpty)
                ListView.builder(
                  shrinkWrap: true,
+                 reverse: true,
                  physics: const NeverScrollableScrollPhysics(),
-                 itemCount: provider.apiResponse.data?.data?.listOfRequest
-                     ?.where((element) {
+                 itemCount: provider.apiResponse.data?.data?.listOfRequest?.where((element) {
                    // Convert the object to a JSON map
                    final jsonMap = element.toJson();
 
@@ -221,8 +221,7 @@ bool isSearching = false;
                      return value != null &&
                          value.toString().toLowerCase().contains(_searchController.text.toLowerCase());
                    });
-                 })
-                     .length,
+                 }).length,
                  itemBuilder: (context, index) {
                    final filteredList = provider.apiResponse.data?.data?.listOfRequest
                        ?.where((element) {
@@ -247,11 +246,11 @@ bool isSearching = false;
              if (_searchController.text.isEmpty)
                ListView.builder(
                  shrinkWrap: true,
+                 reverse: true,
                  physics: const NeverScrollableScrollPhysics(),
                  itemCount: provider.apiResponse.data?.data?.listOfRequest?.length ?? 0,
                  itemBuilder: (context, index) {
-                   final element =
-                   provider.apiResponse.data?.data?.listOfRequest?[index];
+                   final element = provider.apiResponse.data?.data?.listOfRequest?[index];
                    return _requestCard(langProvider: langProvider, element: element);
                  },
                ),
@@ -268,8 +267,7 @@ bool isSearching = false;
     return Padding(
       padding: EdgeInsets.only(bottom: kPadding),
       child: SimpleCard(
-          expandedContent:
-          Column(mainAxisSize: MainAxisSize.max, children: [
+          expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
             CustomInformationContainerField(
                 title: "S. No.",
                 description: element.serviceRequestId.toString()),

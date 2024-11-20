@@ -168,6 +168,10 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
   {
     final user = provider.apiResponse.data?.data?.user;
     final userInfo = provider.apiResponse.data?.data?.userInfo;
+    final userInfoType = provider.apiResponse.data?.data?.userInfoType;
+
+    bool lifeRay = userInfoType != null && userInfoType == 'LIFERAY';
+    bool peopleSoft = userInfoType != null && userInfoType != 'LIFERAY';
     return CustomInformationContainer(
         title: "Student Information",
         leading:
@@ -183,9 +187,17 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
               title: "Emirates ID",
               description: user?.emirateId,
             ),
+           if(lifeRay) CustomInformationContainerField(
+              title: "Email Address",
+              description: user?.emailAddress,
+            ),
             CustomInformationContainerField(
               title: "Date of Birth",
               description: user?.birthDate,
+            ),
+           if(lifeRay) CustomInformationContainerField(
+              title: "Phone Number",
+              description: user?.phoneNumber,
             ),
             CustomInformationContainerField(
               title: "Nationality",
@@ -193,16 +205,17 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
             ),
             CustomInformationContainerField(
               title: "Gender",
-              description: getFullNameFromLov(lovCode: 'GENDER',code:  user?.gender , langProvider: langProvider ),
+              description: getFullNameFromLov(lovCode: 'GENDER',code:  user?.gender , langProvider: langProvider ),isLastItem: lifeRay,
             ),
-            CustomInformationContainerField(
+            peopleSoft ? CustomInformationContainerField(
               title: "Marital Status",
-              description: getFullNameFromLov(lovCode: 'MARITAL_STATUS',code:  userInfo?.maritalStatus , langProvider: langProvider ),
-            ),
-            CustomInformationContainerField(
-                title: "Default Interface Language",
-                description: userInfo?.languageId ?? '',
-                isLastItem: true),
+              description: getFullNameFromLov(lovCode: 'MARITAL_STATUS',code:  userInfo?.maritalStatus , langProvider: langProvider ),isLastItem: peopleSoft,
+            ) : showVoid,
+            /// Backend Developer has not provided this in api..
+            // CustomInformationContainerField(
+            //     title: "Default Interface Language",
+            //     description: userInfo?.languageId ?? '',
+            //     isLastItem: true),
           ],
         ));
   }

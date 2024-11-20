@@ -151,6 +151,17 @@ class HomeRepository {
     );
     return UpdatePersonalDetailsModel.fromJson(response);
   }
+  // // *------ Update User (student) Information Method ------*/
+  // Future<UpdatePersonalDetailsModel> updatePersonalDetails(
+  //     {required String userId,required dynamic body, required dynamic headers}) async {
+  //   dynamic response = await _dioBaseApiServices.dioMultipartApiService(
+  //     url: '${AppUrls.baseUrl}self-service/personalInformation/$userId',
+  //     data: body,
+  //     method: 'PUT',
+  //     headers: headers,
+  //   );
+  //   return UpdatePersonalDetailsModel.fromJson(response);
+  // }
 
 
 

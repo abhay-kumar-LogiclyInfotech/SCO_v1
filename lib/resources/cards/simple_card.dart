@@ -11,9 +11,7 @@ class SimpleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: cardColor ?? Colors.white,
-      borderRadius: const BorderRadius.all(
-     Radius.circular(15),
-      ),
+      borderRadius: const BorderRadius.all(Radius.circular(15)),
       child: Container(
         width: double.maxFinite,
         padding: const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
@@ -27,6 +25,5 @@ class SimpleCard extends StatelessWidget {
         child: expandedContent,
       ),
     );
-
   }
 }
