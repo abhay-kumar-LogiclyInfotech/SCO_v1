@@ -10,7 +10,10 @@ import 'package:intl/intl.dart' hide TextDirection;
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:xml/xml.dart';
 
 import '../resources/app_colors.dart';
@@ -50,6 +53,51 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 class Utils {
 
 
+
+  static  launchUrl(dynamic url) async {
+    // Check if the URL is a Uri object and convert it to a string
+    if (url is Uri) {
+      url = url.toString();
+    }
+
+    // Continue with the URL launching logic
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  static Future<void> launchEmail(String emailAddress) async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: emailAddress,
+    );
+
+    if (await canLaunchUrl(emailLaunchUri)) {
+      await launchUrl(emailLaunchUri);
+    } else {
+      debugPrint('Could not launch email client.');
+    }
+  }
+
+
+  static Future<void> makePhoneCall({required String phoneNumber,required BuildContext context}) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+
+    // Check permission before making a call
+    final permissionService = PermissionServices();
+    final status = await permissionService.checkAndRequestPermission(Permission.phone,context);
+    if (status) {
+      await launchUrl(launchUri);
+    }
+  }
+
+
+
   // input borders start
   static InputBorder outlinedInputBorder() {
     return OutlineInputBorder(
@@ -80,7 +128,7 @@ class Utils {
   static Widget cupertinoLoadingIndicator({dynamic color = AppColors.scoButtonColor}) =>  Center(child:   CupertinoActivityIndicator(color: color));
 
   //*----- page  Loading Indicator-----*/
-  static Widget pageLoadingIndicator({dynamic color = AppColors.scoButtonColor,required dynamic context}) =>  SizedBox(height: MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width,child: Center(child: Platform.isAndroid ? Utils.materialLoadingIndicator(color: color) : Utils.cupertinoLoadingIndicator(color: color)));
+  static Widget pageLoadingIndicator({dynamic color = AppColors.scoButtonColor,required dynamic context}) =>  SizedBox(height: MediaQuery.of(context).size.height-(kToolbarHeight*1.62),width: MediaQuery.of(context).size.width,child: Center(child: Platform.isAndroid ? Utils.materialLoadingIndicator(color: color) : Utils.cupertinoLoadingIndicator(color: color)));
 
   //*----- page  Refresh Indicator-----*/
   static Widget pageRefreshIndicator({required dynamic child,required dynamic onRefresh}) =>  RefreshIndicator(color: Colors.white,backgroundColor: AppColors.scoThemeColor,onRefresh: onRefresh, child: ListView(children: [child]));

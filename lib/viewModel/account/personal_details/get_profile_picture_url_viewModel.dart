@@ -6,21 +6,21 @@ import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/repositories/home/home_repository.dart';
 
 import '../../../data/response/ApiResponse.dart';
+import '../../../models/account/personal_details/GetProfilePictureUrlModel.dart';
 import '../../../utils/constants.dart';
-import '../../models/account/GetEmploymentStatusModel.dart';
-import '../services/alert_services.dart';
-import '../services/auth_services.dart';
+import '../../services/alert_services.dart';
+import '../../services/auth_services.dart';
 
 
 
 
 
-class GetEmploymentStatusViewModel with ChangeNotifier {
+class GetProfilePictureUrlViewModel with ChangeNotifier {
 
   late AuthService _authService;
   late AlertServices _alertServices;
 
-  GetEmploymentStatusViewModel()
+  GetProfilePictureUrlViewModel()
   {
     final GetIt getIt = GetIt.instance;
     _authService = getIt.get<AuthService>();
@@ -44,16 +44,16 @@ class GetEmploymentStatusViewModel with ChangeNotifier {
 
   final _myRepo = HomeRepository();
 
-  ApiResponse<GetEmploymentStatusModel> _apiResponse = ApiResponse.none();
+  ApiResponse<GetProfilePictureUrlModel> _apiResponse = ApiResponse.none();
 
-  ApiResponse<GetEmploymentStatusModel> get apiResponse => _apiResponse;
+  ApiResponse<GetProfilePictureUrlModel> get apiResponse => _apiResponse;
 
-  set setApiResponse(ApiResponse<GetEmploymentStatusModel> response) {
+  set setApiResponse(ApiResponse<GetProfilePictureUrlModel> response) {
     _apiResponse = response;
     notifyListeners();
   }
 
-  getEmploymentStatus() async {
+  getProfilePictureUrl() async {
 
     final InternetController networkController = Get.find<InternetController>();
 
@@ -70,7 +70,7 @@ class GetEmploymentStatusViewModel with ChangeNotifier {
           'authorization': Constants.basicAuth
         };
 
-        GetEmploymentStatusModel response = await _myRepo.getEmploymentStatus(userId: _userId ?? '',headers: headers);
+        GetProfilePictureUrlModel response = await _myRepo.getProfilePictureUrl(userId: _userId ?? '',headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);

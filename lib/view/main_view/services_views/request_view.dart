@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
 import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/custom_text_field.dart';
+import 'package:sco_v1/view/main_view/services_views/request_details_view.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
@@ -39,13 +40,14 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
   Future _initializeData() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// fetch my application with approved
-      await Provider.of<GetAllRequestsViewModel>(context, listen: false)
-          .getAllRequests();
+      await Provider.of<GetAllRequestsViewModel>(context, listen: false).getAllRequests();
     });
   }
 
   @override
   void initState() {
+    super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
@@ -53,11 +55,12 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
       _permissionServices = getIt.get<PermissionServices>();
       _mediaServices = getIt.get<MediaServices>();
 
-      await _initializeData();
-    });
+       await _initializeData();
 
-    super.initState();
+    });
   }
+
+
 
   bool _isProcessing = false;
 
@@ -267,6 +270,9 @@ bool isSearching = false;
     return Padding(
       padding: EdgeInsets.only(bottom: kPadding),
       child: SimpleCard(
+        onTap: (){
+          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> RequestDetailsView(request: element)));
+        },
           expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
             CustomInformationContainerField(
                 title: "S. No.",

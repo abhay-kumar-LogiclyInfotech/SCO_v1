@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -7,7 +9,7 @@ import 'package:sco_v1/repositories/home/home_repository.dart';
 
 import '../../../data/response/ApiResponse.dart';
 import '../../../utils/constants.dart';
-import '../../models/account/GetEmploymentStatusModel.dart';
+import '../../models/account/GetBase64StringModel.dart';
 import '../services/alert_services.dart';
 import '../services/auth_services.dart';
 
@@ -15,12 +17,12 @@ import '../services/auth_services.dart';
 
 
 
-class GetEmploymentStatusViewModel with ChangeNotifier {
+class GetBase64StringViewModel with ChangeNotifier {
 
   late AuthService _authService;
   late AlertServices _alertServices;
 
-  GetEmploymentStatusViewModel()
+  GetBase64StringViewModel()
   {
     final GetIt getIt = GetIt.instance;
     _authService = getIt.get<AuthService>();
@@ -44,16 +46,16 @@ class GetEmploymentStatusViewModel with ChangeNotifier {
 
   final _myRepo = HomeRepository();
 
-  ApiResponse<GetEmploymentStatusModel> _apiResponse = ApiResponse.none();
+  ApiResponse<GetBase64StringModel> _apiResponse = ApiResponse.none();
 
-  ApiResponse<GetEmploymentStatusModel> get apiResponse => _apiResponse;
+  ApiResponse<GetBase64StringModel> get apiResponse => _apiResponse;
 
-  set setApiResponse(ApiResponse<GetEmploymentStatusModel> response) {
+  set setApiResponse(ApiResponse<GetBase64StringModel> response) {
     _apiResponse = response;
     notifyListeners();
   }
 
-  getEmploymentStatus() async {
+  getBase64String({required dynamic form,required AttachmentType attachmentType}) async {
 
     final InternetController networkController = Get.find<InternetController>();
 
@@ -66,11 +68,13 @@ class GetEmploymentStatusViewModel with ChangeNotifier {
         await setUserId();
 
         final headers = {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'authorization': Constants.basicAuth
         };
 
-        GetEmploymentStatusModel response = await _myRepo.getEmploymentStatus(userId: _userId ?? '',headers: headers);
+        final body = jsonEncode(form);
+
+        GetBase64StringModel response = await _myRepo.getBase64String(body: body,headers: headers,attachmentType:attachmentType);
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);
@@ -79,7 +83,6 @@ class GetEmploymentStatusViewModel with ChangeNotifier {
         setLoading(false);
       }}
     else{
-
       _alertServices.toastMessage("No Internet Connection is available");
       setLoading(false);
     }

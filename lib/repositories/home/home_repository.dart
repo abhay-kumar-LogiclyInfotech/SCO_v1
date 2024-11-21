@@ -3,8 +3,10 @@ import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
 import 'package:sco_v1/models/TestModel.dart';
+import 'package:sco_v1/models/account/GetBase64StringModel.dart';
 import 'package:sco_v1/models/account/GetEmploymentStatusModel.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
+import 'package:sco_v1/models/account/personal_details/GetProfilePictureUrlModel.dart';
 import 'package:sco_v1/models/account/personal_details/UpdatePersonalDetailsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
@@ -17,10 +19,12 @@ import 'package:sco_v1/models/services/MyFinanceStatusModel.dart';
 import 'package:sco_v1/models/services/MyScholarshipModel.dart';
 
 import '../../data/network/NetworkApiServices.dart';
+import '../../models/account/CreateUpdateEmploymentStatusModel.dart';
 import '../../models/account/personal_details/PersonalDetailsModel.dart';
 import '../../models/apply_scholarship/AttachFileModel.dart';
 import '../../models/apply_scholarship/FindDraftByConfigurationKeyModel.dart';
 import '../../resources/app_urls.dart';
+import '../../utils/constants.dart';
 
 class HomeRepository {
   final BaseApiServices _apiServices = NetworkApiServices();
@@ -199,7 +203,7 @@ class HomeRepository {
   Future<SubmitApplicationModel> submitApplication(
       {required dynamic userId,required dynamic headers,required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: "${AppUrls.baseUrl}e-services/$userId/submit-application",
+      url: "${AppUrls.baseUrl}e-services/977040/submit-application",
       headers: headers,
       body: body,
     );
@@ -216,6 +220,38 @@ class HomeRepository {
     );
     return GetEmploymentStatusModel.fromJson(response);
   }
+
+
+  // *------ Get Employment Status Method ------*/
+  Future<CreateUpdateEmploymentStatusModel> createUpdateEmploymentStatus(
+      {required String userId, required dynamic headers,required dynamic body,required bool updating}) async {
+    dynamic response =
+    updating ?
+    await _dioBaseApiServices.dioPutApiService(url: '${AppUrls.baseUrl}e-services/$userId/update-employment-status', headers: headers, body: body)
+    :
+    /// If not updating which means we are creating new employment status
+    await _dioBaseApiServices.dioPostApiService(
+      url: '${AppUrls.baseUrl}e-services/$userId/create-employment-status',
+      headers: headers,
+      body: body
+    );
+    return CreateUpdateEmploymentStatusModel.fromJson(response);
+  }
+
+
+
+  // *------ Get Employment Status base64String Method ------*/
+  Future<GetBase64StringModel> getBase64String(
+      {required dynamic headers,required dynamic body,required AttachmentType attachmentType}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+      url: attachmentType == AttachmentType.employment ? AppUrls.getEmploymentStatusFileContent : attachmentType == AttachmentType.request ? AppUrls.getRequestFileContent : "",
+      headers: headers,
+      body: body,
+    );
+    return GetBase64StringModel.fromJson(response);
+  }
+
+
 
   // *------ Test Api ------*/
   Future<TestModel> testApi(
@@ -258,6 +294,16 @@ class HomeRepository {
       headers: headers,
     );
     return GetMyAdvisorModel.fromJson(response);
+  }
+
+  // *------ Get profile picture url method Method ------*/
+  Future<GetProfilePictureUrlModel> getProfilePictureUrl(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/$userId',
+      headers: headers,
+    );
+    return GetProfilePictureUrlModel.fromJson(response);
   }
 
 }

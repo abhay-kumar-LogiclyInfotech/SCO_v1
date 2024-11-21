@@ -24,11 +24,13 @@ import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
+import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 
 import '../../resources/app_colors.dart';
@@ -68,11 +70,13 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
  Future _onRefresh()async{
     final myFinanceProvider =  Provider.of<MyFinanceStatusViewModel>(context, listen: false);
     final requestsProvider = Provider.of<GetAllRequestsViewModel>(context,listen: false);
+    final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context,listen: false);
 
     await Future.wait<dynamic>(
     [
      myFinanceProvider.myFinanceStatus(),
      requestsProvider.getAllRequests(),
+      talkToMyAdvisor.getMyAdvisor(),
    ]);
   }
 
@@ -104,7 +108,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             //CarouselSlider:
             // *-----Client Said he don't need CarouselSlider on the home page----*/
             // _carouselSlider(),
-            if (scholarshipStatus == ScholarshipStatus.appliedScholarship)
               Column(
                 children: [
                   _scholarshipAppliedContainer(langProvider: langProvider),
@@ -112,7 +115,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 ],
               ),
 
-            if (scholarshipStatus == ScholarshipStatus.approvedScholarship)
               Column(
                 children: [
                   _scholarshipApproved(langProvider: langProvider),
@@ -126,8 +128,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             // kFormHeight,
             // _aboutOrganization(langProvider: langProvider),
             kFormHeight,
-            if (scholarshipStatus == ScholarshipStatus.applyScholarship)
-              Column(
+            Column(
                 children: [
                   _applyScholarshipButton(langProvider: langProvider),
                   kFormHeight,
@@ -135,17 +136,13 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                   kFormHeight,
                 ],
               ),
-
             _financeView(langProvider: langProvider),
             kFormHeight,
             _requestView(langProvider: langProvider),
             kFormHeight,
             _talkToMyAdvisor(langProvider: langProvider),
             kFormHeight,
-
-            if (scholarshipStatus == ScholarshipStatus.appliedScholarship ||
-                scholarshipStatus == ScholarshipStatus.applyScholarship)
-              _faqSection(langProvider: langProvider),
+            _faqSection(langProvider: langProvider),
             kFormHeight,
           ],
         ),
@@ -743,94 +740,124 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   /// Talk to my Advisor View:
   Widget _talkToMyAdvisor({required LanguageChangeViewModel langProvider}) {
-    return _homeViewCard(
-        title: "Talk to My Advisor",
-        icon: SvgPicture.asset("assets/talk_to_my_advisor.svg"),
-        langProvider: langProvider,
-        contentPadding: EdgeInsets.zero,
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 50.0),
-              child: Text(
-                "You can see list of the advisors",
-                style: TextStyle(fontSize: 14, height: 2.5),
-              ),
-            ),
-            _homeViewCardBottomContainer(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+    return Consumer<GetMyAdvisorViewModel>(
+      builder: (context,provider,_)
+      {
+        switch(provider.apiResponse.status){
+          case Status.LOADING:
+            return showVoid;
+          case Status.ERROR:
+            return showVoid;
+          case Status.NONE:
+            return showVoid;
+          case Status.COMPLETED:
+
+           final topAdvisor =  provider.apiResponse.data?.data?.listOfAdvisor?[0];
+
+            return _homeViewCard(
+              onTap: (){
+                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const AcademicAdvisorView()));
+              },
+                title: "Talk to My Advisor",
+                icon: SvgPicture.asset("assets/talk_to_my_advisor.svg"),
+                langProvider: langProvider,
+                contentPadding: EdgeInsets.zero,
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // image of the academic advisor
-                    Row(
-                      children: [
-                        Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                image: const DecorationImage(
-                                    image: AssetImage("assets/login_bg.png")))),
-                        kFormHeight,
-
-                        /// Title and subtitle
-                        Container(
-                          constraints: const BoxConstraints(maxWidth: 120),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Abhay Kumar",
-                                style: AppTextStyles.titleBoldTextStyle()
-                                    .copyWith(fontSize: 14, height: 2),
-                              ),
-                              const Text(
-                                  "Professor of Science and Technologies",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      height: 2,
-                                      overflow: TextOverflow.ellipsis)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    /// call and message buttons
-                    Expanded(
-                      child: ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(minWidth: 200, maxWidth: 200),
-                        child: Wrap(
-                          runSpacing: 0,
-                          spacing: -30,
-                          runAlignment: WrapAlignment.end,
-                          alignment: WrapAlignment.end,
-                          children: [
-                            // message Advisor
-                            CustomMaterialButton(
-                                onPressed: () {},
-                                isEnabled: false,
-                                shape: const CircleBorder(),
-                                child: SvgPicture.asset(
-                                    "assets/message_advisor.svg")),
-                            // Call advisor
-                            CustomMaterialButton(
-                                onPressed: () {},
-                                isEnabled: false,
-                                shape: const CircleBorder(),
-                                child: SvgPicture.asset(
-                                    "assets/call_advisor.svg")),
-                          ],
-                        ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 50.0),
+                      child: Text(
+                        "You can see list of the advisors",
+                        style: TextStyle(fontSize: 14, height: 2.5),
                       ),
-                    )
+                    ),
+                    kFormHeight,
+                    _homeViewCardBottomContainer(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // image of the academic advisor
+                            Row(
+                              children: [
+                                Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        image: const DecorationImage(
+                                            image: AssetImage("assets/login_bg.png")))),
+                                kFormHeight,
+                                /// Title and subtitle
+                                Container(
+                                  constraints: const BoxConstraints(maxWidth: 120),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        topAdvisor?.advisorName ?? '',
+                                        style: AppTextStyles.titleBoldTextStyle()
+                                            .copyWith(fontSize: 14, height: 1.3),
+                                      ),
+                                       Text(
+                                        topAdvisor?.advisorRoleDescription?.toString() ?? '' ,
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              height: 2,
+                                              overflow: TextOverflow.ellipsis)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            /// call and message buttons
+                            Expanded(
+                              child: ConstrainedBox(
+                                constraints:
+                                const BoxConstraints(minWidth: 200, maxWidth: 200),
+                                child: Wrap(
+                                  runSpacing: 0,
+                                  spacing: -30,
+                                  runAlignment: WrapAlignment.end,
+                                  alignment: WrapAlignment.end,
+                                  children: [
+                                    // message Advisor
+                                    CustomMaterialButton(
+                                        onPressed: () {
+                                          Utils.launchEmail(topAdvisor?.email ?? '');
+                                        },
+                                        isEnabled: false,
+                                        shape: const CircleBorder(),
+                                        child: SvgPicture.asset(
+                                            "assets/message_advisor.svg")),
+                                    // Call advisor
+                                    CustomMaterialButton(
+                                        onPressed: () {
+                                          Utils.makePhoneCall(phoneNumber: topAdvisor?.phoneNo ?? '', context: context);},
+                                        isEnabled: false,
+                                        shape: const CircleBorder(),
+                                        child: SvgPicture.asset("assets/call_advisor.svg")),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ))
                   ],
-                ))
-          ],
-        ));
+                ));
+          case null:
+            return showVoid;
+        }
+
+
+
+      },
+    );
+
+
+
   }
 
   // *---- Sco programs slider ----*

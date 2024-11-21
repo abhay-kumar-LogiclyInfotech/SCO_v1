@@ -30,6 +30,17 @@ class MediaServices {
     }
   }
 
+  Future<File?> getSingleImageFromCamera() async {
+    final XFile? file = await _imagePicker.pickImage(source: ImageSource.camera);
+
+    if (file != null && _isAllowedExtension(file.path, _allowedImageExtensions)) {
+      return File(file.path);
+    } else {
+      // Handle unsupported file type
+      return null;
+    }
+  }
+
   Future<File?> getSingleFileFromPicker({List<String>? allowedExtensions}) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(

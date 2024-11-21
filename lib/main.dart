@@ -7,9 +7,11 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_viewmodel.dart';
+import 'package:sco_v1/viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/FetchDraftByConfigurationKeyViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/attach_file_viewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/deleteDraftViewmodel.dart';
@@ -123,6 +125,15 @@ class MyApp extends StatelessWidget {
 
           // Get Employment Status
           ChangeNotifierProvider(create: (_) => GetEmploymentStatusViewModel()),
+
+          // GetEmployment Status base64String
+          ChangeNotifierProvider(create: (_) => GetBase64StringViewModel()),
+
+
+          // Get profile picture url
+          ChangeNotifierProvider(create: (_) => GetProfilePictureUrlViewModel()),
+
+
 
 
           // register Test ViewModel

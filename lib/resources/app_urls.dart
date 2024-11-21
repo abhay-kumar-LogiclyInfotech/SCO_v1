@@ -56,4 +56,15 @@ class AppUrls {
   static String get findDraftByConfigurationKey   => "https://stg.sco.ae/api/jsonws/application.applicationdetails/find-draft-by-emirate-id-and-config-key";
 
 
+
+  // get File content of the employment status files
+  static String get getEmploymentStatusFileContent   => "https://stg.sco.ae/o/mopa-sco-api/e-services/employment-status-file-content";
+
+
+  // get File content of the Request files
+  static String get getRequestFileContent   => "https://stg.sco.ae/o/mopa-sco-api/self-service/service-request-file-content";
+
+
+
+
 }

@@ -6,12 +6,14 @@ import 'package:profile_photo/profile_photo.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/FillScholarshipFormModels.dart';
 import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
+import 'package:sco_v1/resources/components/account/profile_with_camera_button.dart';
 import 'package:sco_v1/resources/components/custom_checkbox_tile.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/resources/components/profile_picture/profile_picture.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_viewmodel.dart';
+import 'package:sco_v1/viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -33,44 +35,53 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
     with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
+  String _profilePictureUrl = '';
 
+  Future<void> _fetchData() async {
+    // fetch student profile Information t prefill the user information
+    final studentProfileProvider =
+        Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
+    final studentProfilePictureProvider =
+        Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
 
+    await Future.wait<dynamic>([
+      studentProfileProvider.getPersonalDetails(),
+      studentProfilePictureProvider.getProfilePictureUrl()
+    ]);
 
-
-  Future<void> _fetchData()async{
-      // fetch student profile Information t prefill the user information
-      final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
-      await studentProfileProvider.getPersonalDetails();
-
+    if (studentProfilePictureProvider.apiResponse.status == Status.COMPLETED) {
+      setState(() {
+        _profilePictureUrl =
+            studentProfilePictureProvider.apiResponse.data?.url?.toString() ??
+                '';
+      });
+    }
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-        await _fetchData();
-        // initialize navigation services
-        GetIt getIt = GetIt.instance;
-        _navigationServices = getIt.get<NavigationServices>();
+      await _fetchData();
+      // initialize navigation services
+      GetIt getIt = GetIt.instance;
+      _navigationServices = getIt.get<NavigationServices>();
     });
 
-      super.initState();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       child: Scaffold(
-        backgroundColor: AppColors.bgColor,
-        appBar: CustomSimpleAppBar(
-          titleAsString: "Personal Details",
-        ),
-        body: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _fetchData)
-
-      ),
+          backgroundColor: AppColors.bgColor,
+          appBar: CustomSimpleAppBar(
+            titleAsString: "Personal Details",
+          ),
+          body: Utils.pageRefreshIndicator(
+              child: _buildUi(), onRefresh: _fetchData)),
     );
   }
-
-
 
   Widget _buildUi() {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
@@ -100,54 +111,55 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                       children: [
                         GestureDetector(
                             onTap: () {
-                              _navigationServices.pushSimpleWithAnimationRoute(CupertinoPageRoute(builder: (context) => const EditPersonalDetailsView()));
+                              _navigationServices.pushSimpleWithAnimationRoute(
+                                  CupertinoPageRoute(
+                                      builder: (context) =>
+                                          const EditPersonalDetailsView()));
                             },
-                            child: SvgPicture.asset("assets/personal_details/edit_profile.svg")),
+                            child: SvgPicture.asset(
+                                "assets/personal_details/edit_profile.svg")),
                       ],
                     ),
 
-                    ProfilePhoto(
-                      totalWidth: 80,
-                      cornerRadius: 80,
-                      color: Colors.blue,
-                      outlineColor: Colors.transparent,
-                      outlineWidth: 5,
-                      textPadding: 0,
-                      name: 'Brad V',
-                      fontColor: Colors.white,
-                      nameDisplayOption: NameDisplayOptions.initials,
-                      fontWeight: FontWeight.w100,
-                      badgeSize: 30,
-                      badgeAlignment: Alignment.bottomRight,
-                      image: const AssetImage('assets/personal_details/dummy_profile_pic.png'),
-                      // badgeImage: const AssetImage('assets/personal_details/camera_icon.png'),
-                      onTap: () {
-                        // open profile
-                      },
-                      onLongPress: () {
-                        // popup to message user
-                      },
-                    ),
+
+                    /// User profile picture without camera button
+                    ProfileWithCameraButton(
+                      cameraEnabled: false,
+                        profileImage: _profilePictureUrl.isNotEmpty
+                            ? NetworkImage(_profilePictureUrl)
+                            : const AssetImage(
+                                'assets/personal_details/dummy_profile_pic.png'),
+                        onTap: () {},
+                        onLongPress: () {}),
 
                     // ProfilePicture(),
                     kFormHeight,
-                    _studentInformationSection(provider: provider,langProvider: langProvider),
+                    _studentInformationSection(
+                        provider: provider, langProvider: langProvider),
 
-                    userInfo?.phoneNumbers != null ?   Column(
-                      children: [
-                        kFormHeight,
-                        kFormHeight,
-                        _studentPhoneInformationSection(provider: provider,langProvider: langProvider),
-                      ],
-                    ) : showVoid,
+                    userInfo?.phoneNumbers != null
+                        ? Column(
+                            children: [
+                              kFormHeight,
+                              kFormHeight,
+                              _studentPhoneInformationSection(
+                                  provider: provider,
+                                  langProvider: langProvider),
+                            ],
+                          )
+                        : showVoid,
 
-                    userInfo?.phoneNumbers != null ? Column(
-                      children: [
-                        kFormHeight,
-                        kFormHeight,
-                        _studentEmailInformationSection(provider: provider,langProvider: langProvider),
-                      ],
-                    ) : showVoid,
+                    userInfo?.phoneNumbers != null
+                        ? Column(
+                            children: [
+                              kFormHeight,
+                              kFormHeight,
+                              _studentEmailInformationSection(
+                                  provider: provider,
+                                  langProvider: langProvider),
+                            ],
+                          )
+                        : showVoid,
                   ],
                 ),
               ),
@@ -164,8 +176,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
 
   //*------Student Information Section------*
   Widget _studentInformationSection(
-      {required GetPersonalDetailsViewModel provider,required langProvider})
-  {
+      {required GetPersonalDetailsViewModel provider, required langProvider}) {
     final user = provider.apiResponse.data?.data?.user;
     final userInfo = provider.apiResponse.data?.data?.userInfo;
     final userInfoType = provider.apiResponse.data?.data?.userInfoType;
@@ -187,30 +198,46 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
               title: "Emirates ID",
               description: user?.emirateId,
             ),
-           if(lifeRay) CustomInformationContainerField(
-              title: "Email Address",
-              description: user?.emailAddress,
-            ),
+            if (lifeRay)
+              CustomInformationContainerField(
+                title: "Email Address",
+                description: user?.emailAddress,
+              ),
             CustomInformationContainerField(
               title: "Date of Birth",
               description: user?.birthDate,
             ),
-           if(lifeRay) CustomInformationContainerField(
-              title: "Phone Number",
-              description: user?.phoneNumber,
-            ),
+            if (lifeRay)
+              CustomInformationContainerField(
+                title: "Phone Number",
+                description: user?.phoneNumber,
+              ),
             CustomInformationContainerField(
               title: "Nationality",
-              description:  getFullNameFromLov(lovCode: 'COUNTRY',code: user?.nationality , langProvider: langProvider ),
+              description: getFullNameFromLov(
+                  lovCode: 'COUNTRY',
+                  code: user?.nationality,
+                  langProvider: langProvider),
             ),
             CustomInformationContainerField(
               title: "Gender",
-              description: getFullNameFromLov(lovCode: 'GENDER',code:  user?.gender , langProvider: langProvider ),isLastItem: lifeRay,
+              description: getFullNameFromLov(
+                  lovCode: 'GENDER',
+                  code: user?.gender,
+                  langProvider: langProvider),
+              isLastItem: lifeRay,
             ),
-            peopleSoft ? CustomInformationContainerField(
-              title: "Marital Status",
-              description: getFullNameFromLov(lovCode: 'MARITAL_STATUS',code:  userInfo?.maritalStatus , langProvider: langProvider ),isLastItem: peopleSoft,
-            ) : showVoid,
+            peopleSoft
+                ? CustomInformationContainerField(
+                    title: "Marital Status",
+                    description: getFullNameFromLov(
+                        lovCode: 'MARITAL_STATUS',
+                        code: userInfo?.maritalStatus,
+                        langProvider: langProvider),
+                    isLastItem: peopleSoft,
+                  )
+                : showVoid,
+
             /// Backend Developer has not provided this in api..
             // CustomInformationContainerField(
             //     title: "Default Interface Language",
@@ -222,11 +249,10 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
 
   //*------Student Phone Information Section------*
   Widget _studentPhoneInformationSection(
-      {required GetPersonalDetailsViewModel provider,required langProvider})
-  {
+      {required GetPersonalDetailsViewModel provider, required langProvider}) {
     final userInfo = provider.apiResponse.data?.data?.userInfo;
-     List<PhoneNumbers> phoneNumbers = [];
-    userInfo?.phoneNumbers?.forEach((element){
+    List<PhoneNumbers> phoneNumbers = [];
+    userInfo?.phoneNumbers?.forEach((element) {
       phoneNumbers.add(element);
     });
 
@@ -247,7 +273,10 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                 ),
                 CustomInformationContainerField(
                   title: "Phone Type",
-                  description: getFullNameFromLov(lovCode: 'PHONE_TYPE',code:  phoneDetail.phoneType , langProvider: langProvider ),
+                  description: getFullNameFromLov(
+                      lovCode: 'PHONE_TYPE',
+                      code: phoneDetail.phoneType,
+                      langProvider: langProvider),
                 ),
                 CustomInformationContainerField(
                   title: "Preferred",
@@ -258,9 +287,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                   onChanged: (value) {},
                   text: "",
                 ),
-
                 kFormHeight,
-
                 if (!isLastItem) ...[
                   const MyDivider(color: AppColors.lightGrey),
                   kFormHeight,
@@ -268,15 +295,15 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
               ],
             );
           }).toList(),
-        )
-    );
+        ));
   }
 
   //*------Student Email Information Section------*
-  Widget _studentEmailInformationSection({required GetPersonalDetailsViewModel provider,required langProvider}) {
+  Widget _studentEmailInformationSection(
+      {required GetPersonalDetailsViewModel provider, required langProvider}) {
     final userInfo = provider.apiResponse.data?.data?.userInfo;
     List<Emails> emails = [];
-    userInfo?.emails?.forEach((element){
+    userInfo?.emails?.forEach((element) {
       emails.add(element);
     });
 
@@ -297,12 +324,17 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                 ),
                 CustomInformationContainerField(
                   title: "Email Type",
-                  description: getFullNameFromLov(lovCode: 'EMAIL_TYPE',code:  email.emailType , langProvider: langProvider ),
+                  description: getFullNameFromLov(
+                      lovCode: 'EMAIL_TYPE',
+                      code: email.emailType,
+                      langProvider: langProvider),
                 ),
                 CustomInformationContainerField(
-                    title: "Preferred",
-                    isLastItem: true),
-                CustomGFCheckbox(value: email.prefferd ?? false, onChanged: (value) {}, text: ""),
+                    title: "Preferred", isLastItem: true),
+                CustomGFCheckbox(
+                    value: email.prefferd ?? false,
+                    onChanged: (value) {},
+                    text: ""),
                 kFormHeight,
                 if (!isLastItem) ...[
                   const MyDivider(color: AppColors.lightGrey),
@@ -311,11 +343,6 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
               ],
             );
           }).toList(),
-        )
-
-    );
+        ));
   }
-
 }
-
-

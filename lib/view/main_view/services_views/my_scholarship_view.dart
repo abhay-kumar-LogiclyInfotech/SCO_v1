@@ -142,7 +142,6 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
         return SimpleCard(expandedContent: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-
             /// ------------ MY SCHOLARSHIP (APPROVED SCHOLARSHIP) DETAILS ------------
           CustomInformationContainerField(title: "Scholarship Name", description: "SCO${element.academicCareer}${element.scholarshipType}"),
           CustomInformationContainerField(title: "Country-University", description:  getFullNameFromLov(lovCode: 'EXT_ORG_ID',code: '${element.university}',langProvider: langProvider)     ),

@@ -228,6 +228,8 @@ class ListOfFiles {
 
   // Additional Fields
   bool newRecord;
+  bool newlyAded;
+  bool isLoading;
 
   ListOfFiles({
     required this.attachmentSeqNumberController,
@@ -249,6 +251,8 @@ class ListOfFiles {
     this.attachUserFileError,
     this.base64StringError,
     this.newRecord = false,
+    this.isLoading = false,
+    this.newlyAded = false,
   });
 
   // From JSON

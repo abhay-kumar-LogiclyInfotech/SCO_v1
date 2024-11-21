@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -21,10 +22,12 @@ import '../../../data/response/status.dart';
 import '../../../models/account/personal_details/PersonalDetailsModel.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/cards/picked_attachment_card.dart';
+import '../../../resources/components/attachment_add_file_button.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../resources/components/myDivider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
+import '../../../viewModel/account/create_update_employment_status_viewModel.dart';
 import '../../../viewModel/account/personal_details/get_personal_details_viewmodel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -54,8 +57,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
     // await studentProfileProvider.getPersonalDetails();
 
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
 
     /// Check and populate dropdowns only if the values exist
     if (Constants.lovCodeMap['EMPLOYMENT_ST']?.values != null) {
@@ -74,18 +76,24 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
 
     /// *------------------------------------------ Initialize dropdowns end ------------------------------------------------------------------*
 
-    final getEmploymentStatusProvider =
-        Provider.of<GetEmploymentStatusViewModel>(context, listen: false);
+    final getEmploymentStatusProvider = Provider.of<GetEmploymentStatusViewModel>(context, listen: false);
     await getEmploymentStatusProvider.getEmploymentStatus();
 
     if (getEmploymentStatusProvider.apiResponse.status == Status.COMPLETED) {
-      final status =
-          getEmploymentStatusProvider.apiResponse.data?.data?.employmentStatus;
+      final status = getEmploymentStatusProvider.apiResponse.data?.data?.employmentStatus;
 
       /// prefilling the form
       _employmentStatusController.text = status?.employmentStatus ?? '';
       _employerController.text = status?.employerName ?? '';
       _commentsController.text = status?.comment ?? '';
+
+
+      if(status?.listOfFiles != null && status?.listOfFiles != []){
+        _attachmentsList.clear();
+        for(int i =0;i< status!.listOfFiles!.length;i++){
+          _attachmentsList.add(ListOfFiles.fromJson(status!.listOfFiles![i].toJson()));
+        }
+      }
 
       /// To refresh the page
       setState(() {});
@@ -108,6 +116,15 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
     super.initState();
   }
 
+  bool _isProcesing = false;
+
+  setProcessing(bool value)
+  {
+    setState(() {
+      _isProcesing = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,7 +132,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
       appBar: CustomSimpleAppBar(
         titleAsString: "Employment Status",
       ),
-      body: _buildUi(),
+      body: Utils.modelProgressHud(processing: _isProcesing,child: Utils.pageRefreshIndicator(child:  _buildUi(), onRefresh: _initializeData)),
     );
   }
 
@@ -150,7 +167,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
 
                     /// submit buttons
                     _submitAndBackButton(
-                        langProvider: langProvider, provider: provider),
+                        langProvider: langProvider, employmentStatusProvider: provider),
                   ],
                 ),
               ),
@@ -213,8 +230,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
 
         /// ****************************************************************
         kFormHeight,
-        fieldHeading(
-            title: "Employer", important: true, langProvider: langProvider),
+        fieldHeading(title: "Employer", important: false, langProvider: langProvider),
         scholarshipFormDropdown(
             currentFocusNode: _employerFocusNode,
             controller: _employerController,
@@ -256,19 +272,11 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
           color: AppColors.lightGrey,
         ),
 
+
         // This section is to add file
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("Attachments"),
-            addRemoveMoreSection(
-                title: "Add File",
-                add: true,
-                onChanged: () async {
-                  await _addFile();
-                })
-          ],
-        ),
+        AttachmentAddFileButton(addFile:() async {
+          await _addFile();
+        }),
 
         /// attachments
         _attachmentsUploadSection(),
@@ -283,12 +291,15 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _attachmentsList.length,
         shrinkWrap: true,
+        reverse: true,
         itemBuilder: (context, index) {
           final attachment = _attachmentsList[index];
           return Column(
             children: [
               /// to show the card and also remove function is implemented
               PickedAttachmentCard(
+                index:index,
+                  attachmentType: AttachmentType.employment,
                   attachment: attachment,
                   onRemoveAttachment: () {
                     setState(() {
@@ -312,36 +323,44 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
   Widget _submitAndBackButton(
       {required langProvider,
       UserInfo? userInfo,
-      GetEmploymentStatusViewModel? provider}) {
+      GetEmploymentStatusViewModel? employmentStatusProvider}) {
     return Column(
       children: [
         kFormHeight,
         kFormHeight,
         ChangeNotifierProvider(
-          create: (context) => UpdatePersonalDetailsViewModel(),
-          child: Consumer<UpdatePersonalDetailsViewModel>(
-              builder: (context, updateProvider, _) {
+          create: (context) => CreateUpdateEmploymentStatusViewModel(),
+          child: Consumer<CreateUpdateEmploymentStatusViewModel>(
+              builder: (context, createUpdateProvider, _) {
             return CustomButton(
-                buttonName: "Update",
-                isLoading: updateProvider?.apiResponse.status == Status.LOADING,
+                buttonName: "Update" ,
+                isLoading: createUpdateProvider.apiResponse.status == Status.LOADING,
                 borderColor: Colors.transparent,
                 buttonColor: AppColors.scoThemeColor,
                 textDirection: getTextDirection(langProvider),
                 onTap: () async {
-                  bool result = validateForm(
-                      langProvider: langProvider, userInfo: userInfo);
+
+                  setProcessing(true);
+
+                  bool result = validateForm(langProvider: langProvider, userInfo: userInfo);
                   if (result) {
                     /// Create Form
-                    createForm(provider: provider);
+                    createForm(provider: employmentStatusProvider);
 
-                    print(form);
-                    bool result =
-                        await updateProvider.updatePersonalDetails(form: form);
+                    // log(createEmploymentStatusForm.toString());
+                    log(updateEmploymentStatusForm.toString());
+                    bool result = employmentStatusProvider?.apiResponse?.data?.data?.employmentStatus != null
+                        ?
+                    await createUpdateProvider.createUpdateEmploymentStatus(form: updateEmploymentStatusForm,updating: true)
+                        :
+                    await createUpdateProvider.createUpdateEmploymentStatus(form: createEmploymentStatusForm,updating: false);
                     if (result) {
                       /// update and refresh the information
                       await _initializeData();
                     }
                   }
+                  setProcessing(false);
+
                 });
           }),
         ),
@@ -352,8 +371,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
   /// Function to add Attachment to the list
   _addFile() async {
     /// kindly check for permissions
-    final permitted = await _permissionServices.checkAndRequestPermission(
-        Platform.isIOS ? Permission.storage : Permission.photos, context);
+    final permitted = await _permissionServices.checkAndRequestPermission(Platform.isIOS ? Permission.storage : Permission.manageExternalStorage, context);
     if (permitted) {
       /// TODO: PLEASE ADD ALLOWED EXTENSIONS
       final file = await _mediaServices.getSingleFileFromPicker();
@@ -373,8 +391,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
               attachSysfileNameFocusNode: FocusNode(),
               attachUserFileFocusNode: FocusNode(),
               base64StringFocusNode: FocusNode(),
-              newRecord: false,
-
+              newRecord: true,
           ));
         });
       }
@@ -394,12 +411,13 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
       });
     }
 
-    if (_employerController.text.isEmpty) {
-      setState(() {
-        _employerError = "Please Select Employer";
-        firstErrorFocusNode ??= _employerFocusNode;
-      });
-    }
+    // if (_employerController.text.isEmpty) {
+    //   setState(() {
+    //     _employerError = "Please Select Employer";
+    //     firstErrorFocusNode ??= _employerFocusNode;
+    //   });
+    // }
+    //
 
     /// checking for fist error node
     if (firstErrorFocusNode != null) {
@@ -412,29 +430,30 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
   }
 
   /// My Final Submission form
-  Map<String, dynamic> form = {};
-  void createForm({GetEmploymentStatusViewModel? provider}) {
-    form = {
-      "employmentStatus": {
-        "emplId": "000921",
-        "sequanceNumber": "1",
-        "employmentStatus": "NWR",
-        "university": "00016148",
-        "currentFlag": "Y",
-        "comment": "%COMMENTS%",
-        "listOfFiles": [
-          {
-            "attachmentSeqNumber": "1",
-            "description": "",
-            "date": 1731607771453,
-            "attachSysfileName":
-                "20230110172609443_IRCTC Next Generation eTicketing System.pdf",
-            "attachUserFile": "IRCTC Next Generation eTicketing System.pdf",
-            "base64String": "base64String",
-            "newRecord": false
-          }
-        ]
-      }
+  Map<String, dynamic> createEmploymentStatusForm = {};
+  Map<String, dynamic> updateEmploymentStatusForm = {};
+  void createForm({GetEmploymentStatusViewModel? provider,GetPersonalDetailsViewModel? personalDetails}) {
+
+    /// create Employment status form it uses post method
+    createEmploymentStatusForm = {
+      // "sequanceNumber": "2",
+      "employmentStatus": _employmentStatusController.text,
+      "employerName": _employerController.text,
+      "currentFlag": "Y",
+      "comment": _commentsController.text
+    };
+
+
+
+    /// update Employment status form it uses put method
+    updateEmploymentStatusForm = {
+      "emplId": provider?.apiResponse?.data?.data?.employmentStatus?.emplId,
+      "sequanceNumber": provider?.apiResponse?.data?.data?.employmentStatus?.sequanceNumber,
+      "employmentStatus": _employmentStatusController.text,
+      "employerName": _employerController.text,
+      "currentFlag": "N",
+      "comment": _commentsController.text,
+      "listOfFiles":_attachmentsList.map((element){return element.toJson();}).toList()
     };
   }
 }

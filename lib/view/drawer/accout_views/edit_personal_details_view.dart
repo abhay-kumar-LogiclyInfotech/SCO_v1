@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/material.dart';
@@ -6,17 +8,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_common/get_reset.dart';
 import 'package:get_it/get_it.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/bottom_sheets/storage_or_camera_destination.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/view/apply_scholarship/form_view_Utils.dart';
 import 'package:sco_v1/viewModel/account/personal_details/update_personal_details_viewmodel.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
+import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 
 import '../../../data/response/status.dart';
 import '../../../models/account/personal_details/PersonalDetailsModel.dart';
 import '../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/account/Custom_inforamtion_container.dart';
+import '../../../resources/components/account/profile_with_camera_button.dart';
 import '../../../resources/components/custom_checkbox_tile.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../resources/components/date_picker_dialog.dart';
@@ -26,9 +34,11 @@ import '../../../resources/validations_and_errorText.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
 import '../../../viewModel/account/personal_details/get_personal_details_viewmodel.dart';
+import '../../../viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../viewModel/services/media_services.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
 class EditPersonalDetailsView extends StatefulWidget {
@@ -42,6 +52,9 @@ class EditPersonalDetailsView extends StatefulWidget {
 class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     with MediaQueryMixin {
   late NavigationServices _navigationServices;
+  late PermissionServices _permissionServices;
+  late AlertServices _alertServices;
+  late MediaServices _mediaServices;
 
   List<DropdownMenuItem> _nationalityMenuItemsList = [];
   List<DropdownMenuItem> _genderMenuItemsList = [];
@@ -54,9 +67,22 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
   Future _initializeData() async {
     /// fetch student profile Information t prefill the user information
-    final studentProfileProvider =
-        Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
-    await studentProfileProvider.getPersonalDetails();
+    // fetch student profile Information t prefill the user information
+    final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
+    final studentProfilePictureProvider = Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
+
+    await Future.wait<dynamic>([
+      studentProfileProvider.getPersonalDetails(),
+      studentProfilePictureProvider.getProfilePictureUrl()
+    ]);
+
+
+    /// Fetching the Profile picture.....
+    if (studentProfilePictureProvider.apiResponse.status == Status.COMPLETED) {
+      setState(() {
+        _profilePictureUrl = studentProfilePictureProvider.apiResponse.data?.url?.toString() ?? '';
+      });
+    }
 
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
     final langProvider =
@@ -141,10 +167,11 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
       _navigationServices = getIt.get<NavigationServices>();
-
+      _permissionServices = getIt.get<PermissionServices>();
+      _alertServices = getIt.get<AlertServices>();
+      _mediaServices = getIt.get<MediaServices>();
       await _initializeData();
     });
-
     super.initState();
   }
 
@@ -154,6 +181,23 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     setState(() {
       _isProcessing = value;
     });
+  }
+
+
+  String _profilePictureUrl = '';
+  File? _profileImageFile ;
+
+
+  setProfilePictureFile(File? file)async{
+    if(file != null){
+        _profileImageFile = file;
+
+        final base64String =  base64Encode(file.readAsBytesSync());
+
+        log(base64String);
+        setState(() {
+        });
+    }
   }
 
 
@@ -167,7 +211,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
       body: Utils.modelProgressHud(processing: _isProcessing,child:  _buildUi()),
     );
   }
-
   Widget _buildUi() {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Consumer<GetPersonalDetailsViewModel>(
@@ -196,37 +239,35 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ProfilePhoto(
-                      totalWidth: 80,
-                      cornerRadius: 80,
-                      color: Colors.blue,
-                      outlineColor: Colors.transparent,
-                      outlineWidth: 5,
-                      textPadding: 0,
-                      name: 'Brad V',
-                      fontColor: Colors.white,
-                      nameDisplayOption: NameDisplayOptions.initials,
-                      fontWeight: FontWeight.w100,
-                      badgeSize: 30,
-                      badgeAlignment: Alignment.bottomRight,
-                      image: const AssetImage(
-                          'assets/personal_details/dummy_profile_pic.png'),
+                    ProfileWithCameraButton(
+                        profileImage: _profileImageFile != null ? FileImage(_profileImageFile!) :  _profilePictureUrl.isNotEmpty
+                            ? NetworkImage(_profilePictureUrl)
+                            : const AssetImage(
+                            'assets/personal_details/dummy_profile_pic.png'),
+                        onTap: () async{
 
-                      /// badgeImage: const AssetImage('assets/personal_details/camera_icon.png'),
-                      onTap: () async {
-                        /// open profile
-                      },
-                      onLongPress: () {
-                        /// popup to message user
-                      },
-                    ),
+                         Destination.chooseFilePickerDestination(context: context, onCameraTap: ()async{
+                           bool cameraPermission =  await _permissionServices.checkAndRequestPermission(Permission.camera, context);
+                           if(cameraPermission)
+                             {
+                                 File? file =  await _mediaServices.getSingleImageFromCamera();
+                                setProfilePictureFile(file);
+                             }
+                         }, onStorageTap: ()async{
+                           bool storagePermission =  await _permissionServices.checkAndRequestPermission(Platform.isAndroid ? Permission.manageExternalStorage : Permission.storage, context);
+                           if(storagePermission){
+                             File? file =  await _mediaServices.getSingleImageFromGallery();
+                             setProfilePictureFile(file);
+                           }
+                         });
+                        },
+                        onLongPress: () {}),
 
                     /// ProfilePicture(),
                     kFormHeight,
 
                     /// Student common information
-                    _studentInformationSection(
-                        provider: provider, langProvider: langProvider),
+                    _studentInformationSection(provider: provider, langProvider: langProvider),
 
                     /// student contact information
                     if (userInfo?.phoneNumbers != null)

@@ -167,8 +167,11 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
                     child: Column(
                       children: [
                         CustomInformationContainerField(
+                          title: "Advisor Id",
+                          description: element?.advisorId ?? ''),
+                        CustomInformationContainerField(
                             title: "Role",
-                            description: element?.advisorRole ?? ''),
+                            description: element?.advisorRoleDescription ?? ''),
                         CustomInformationContainerField(
                             title: "Contact Number",
                             description: element?.phoneNo ?? ''),
