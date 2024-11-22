@@ -60,9 +60,11 @@ class AppUrls {
   // get File content of the employment status files
   static String get getEmploymentStatusFileContent   => "https://stg.sco.ae/o/mopa-sco-api/e-services/employment-status-file-content";
 
-
   // get File content of the Request files
   static String get getRequestFileContent   => "https://stg.sco.ae/o/mopa-sco-api/self-service/service-request-file-content";
+
+  // Update profile image size must be less then 200kb
+  static String get updateProfilePicture   => "https://stg.sco.ae/api/jsonws/userext.userextension/update-user-portrait";
 
 
 

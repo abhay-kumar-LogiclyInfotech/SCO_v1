@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double height;
@@ -31,12 +33,13 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
     with MediaQueryMixin<CustomTopAppBar> {
   @override
   Widget build(BuildContext context) {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Material(
       color: Colors.white,
       elevation: 0.3,
       child: SafeArea(
         child: Directionality(
-          textDirection: widget.textDirection,
+          textDirection: getTextDirection(langProvider) ,
           child: Container(
             color: Colors.white,
             height: widget.height,

@@ -8,9 +8,10 @@ import 'package:sco_v1/resources/components/tiles/simple_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/contact_us_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
+import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
-import '../../models/account/account_grid_container_view_model.dart';
+import '../../models/account/simple_tile_model.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/components/custom_simple_app_bar.dart';
 import '../../resources/components/tiles/custom_sco_program_tile.dart';
@@ -63,7 +64,7 @@ class _SupportViewState extends State<SupportView> with MediaQueryMixin {
         'title': "Advisor Contact Details",
         'assetAddress': "assets/support/advisor_contact_details.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
-            createRoute(const FaqView()))
+            createRoute(const AcademicAdvisorView()))
       },
     ];
 

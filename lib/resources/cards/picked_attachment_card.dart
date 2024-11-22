@@ -165,7 +165,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> {
       if (base64String.isNotEmpty) {
         file = await convertBase64ToFile(base64String, widget.attachment.attachSysfileNameController.text);
       } else {
-        _alertServices.showCustomSnackBar("Invalid file data received for employment attachment.");
+        // _alertServices.showCustomSnackBar("Invalid file data received for employment attachment.");
       }
     } else if (provider.apiResponse.status == Status.ERROR) {
       _alertServices.showCustomSnackBar(provider.apiResponse.message ?? "Error fetching employment file.");

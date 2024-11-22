@@ -245,6 +245,10 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
+
+
     if (_isLoading) {
       return const Scaffold(
         resizeToAvoidBottomInset: false,
@@ -260,11 +264,14 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
       body: Stack(
         alignment: Alignment.topLeft,
         children: [
-          SizedBox(
-            width: double.infinity,
+          Container(color: AppColors.darkGrey,),
+          SafeArea(
+            // width: double.infinity,
             child: Image.asset(
               'assets/login_bg.png',
-              fit: BoxFit.fill,
+              fit: BoxFit.contain,
+              // height: double.infinity,
+              width: double.infinity,
             ),
           ),
           Container(
@@ -272,7 +279,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             height: double.infinity,
             margin: EdgeInsets.only(
               top: orientation == Orientation.portrait
-                  ? screenHeight / 3
+                  ? screenHeight / 2.5
                   : screenHeight / 3,
             ),
             padding: EdgeInsets.only(
@@ -291,8 +298,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             ),
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius:
-                  BorderRadius.vertical(top: Radius.elliptical(60, 60)),
+              borderRadius: BorderRadius.vertical(top: Radius.elliptical(60, 60)),
             ),
             child: Column(
               children: [
@@ -334,9 +340,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                             const SizedBox(height: 16),
                             //sign up link:
                             _signUpLink(provider),
-                            const SizedBox(height: 23),
-                            //Change Language:
-                            _selectLanguage(),
                           ],
                         ),
                       );
@@ -346,6 +349,9 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
               ],
             ),
           ),
+          Positioned(
+              left: kPadding,
+              child: SafeArea(child: _selectLanguage(langProvider)))
         ],
       ),
     );
@@ -543,7 +549,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     );
   }
 
-  Widget _selectLanguage() {
+  Widget _selectLanguage(langProvider) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,

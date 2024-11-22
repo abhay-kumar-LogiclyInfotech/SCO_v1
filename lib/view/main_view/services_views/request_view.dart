@@ -112,8 +112,7 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
                     kFormHeight,
 
                     /// Request status card
-                    _requestsSection(
-                        provider: provider, langProvider: langProvider),
+                    _requestsSection(provider: provider, langProvider: langProvider),
                   ],
                 ),
               ),

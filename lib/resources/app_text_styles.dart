@@ -55,6 +55,15 @@ class AppTextStyles {
     );
   }
 
+  static TextStyle bold15ScoButtonColorTextStyle() {
+    return const TextStyle(
+      color: AppColors.scoButtonColor,
+      fontWeight: FontWeight.bold,
+      fontSize: 15,
+      height: 1.5
+    );
+  }
+
 
 
 

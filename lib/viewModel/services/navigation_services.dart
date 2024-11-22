@@ -65,6 +65,7 @@ class NavigationServices {
   void goBack() {
     if (_navigationStateKey.currentState!.canPop() == true) {
       _navigationStateKey.currentState?.pop();
+
     }
   }
   // Method to pop all screens until the first screen

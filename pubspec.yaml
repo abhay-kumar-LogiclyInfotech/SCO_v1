@@ -90,6 +90,7 @@ dependencies:
   device_info_plus: ^9.1.2
   rename_app: ^1.6.1
   open_file: ^3.5.9
+  flutter_widget_from_html: ^0.15.3
 
 
 

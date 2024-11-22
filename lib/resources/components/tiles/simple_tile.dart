@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/models/account/account_grid_container_view_model.dart';
+import 'package:sco_v1/models/account/simple_tile_model.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 

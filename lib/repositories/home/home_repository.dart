@@ -17,6 +17,7 @@ import 'package:sco_v1/models/services/GetAllRequestsModel.dart';
 import 'package:sco_v1/models/services/GetMyAdvisorModel.dart';
 import 'package:sco_v1/models/services/MyFinanceStatusModel.dart';
 import 'package:sco_v1/models/services/MyScholarshipModel.dart';
+import 'package:sco_v1/models/services/UpdateRequestModel.dart';
 
 import '../../data/network/NetworkApiServices.dart';
 import '../../models/account/CreateUpdateEmploymentStatusModel.dart';
@@ -252,19 +253,6 @@ class HomeRepository {
   }
 
 
-
-  // *------ Test Api ------*/
-  Future<TestModel> testApi(
-      {required dynamic headers,required dynamic body}) async {
-    dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: "https://api.theevents.ae/api/v1/checkout/91aba998b095d59fbe79a5c24530b689/information",
-      headers: headers,
-      body: body,
-    );
-    return TestModel.fromJson(response);
-  }
-
-
   // *------ Get My Finance Status Status Method ------*/
   Future<MyFinanceStatusModel> myFinanceStatus(
       {required String userId, required dynamic headers}) async {
@@ -275,7 +263,7 @@ class HomeRepository {
     return MyFinanceStatusModel.fromJson(response);
   }
 
-  // *------ Get My Finance Status Status Method ------*/
+  // *------ Get All Requests Method ------*/
   Future<GetAllRequestsModel> getAllRequests(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
@@ -283,6 +271,17 @@ class HomeRepository {
       headers: headers,
     );
     return GetAllRequestsModel.fromJson(response);
+  }
+
+  // *------ Get My Finance Status Status Method ------*/
+  Future<UpdateRequestModel> updateRequest(
+      {required dynamic userId,required dynamic headers,required dynamic body}) async {
+    dynamic response = await _dioBaseApiServices.dioPutApiService(
+      url: '${AppUrls.baseUrl}self-service/service-request/$userId/add-comment-exiting-request',
+      headers: headers,
+      body: body,
+    );
+    return UpdateRequestModel.fromJson(response);
   }
 
 
@@ -302,6 +301,18 @@ class HomeRepository {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
       url: '${AppUrls.commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/$userId',
       headers: headers,
+    );
+    return GetProfilePictureUrlModel.fromJson(response);
+  }
+
+
+  // *------ UPDATE PROFILE PICTURE METHOD ------*/
+  Future<GetProfilePictureUrlModel> updateProfilePicture(
+      {required dynamic userId,required dynamic headers,required dynamic body}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+      url: AppUrls.updateProfilePicture,
+      headers: headers,
+      body: body,
     );
     return GetProfilePictureUrlModel.fromJson(response);
   }

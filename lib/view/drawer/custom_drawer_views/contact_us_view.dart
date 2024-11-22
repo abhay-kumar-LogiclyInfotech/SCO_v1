@@ -228,7 +228,7 @@ class _ContactUsViewState extends State<ContactUsView> {
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               decoration: const BoxDecoration(
                 color: AppColors.scoButtonColor,
                 borderRadius: BorderRadius.only(
@@ -245,7 +245,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                   RichText(
                     text: TextSpan(
                       text: unitedArabEmirates,
-                      style: AppTextStyles.titleBoldThemeColorTextStyle(),
+                      style: AppTextStyles.titleBoldThemeColorTextStyle().copyWith(color: Colors.white),
                     ),
                   ),
                   const SizedBox(height: 7),
@@ -254,7 +254,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                     children: [
                       Text(
                         poBox,
-                        style: AppTextStyles.normalThemeColorTextStyle(),
+                        style: AppTextStyles.normalThemeColorTextStyle().copyWith(color: Colors.white),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -280,7 +280,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                   Row(
                     children: [
                       Text(phoneNo,
-                          style: AppTextStyles.normalThemeColorTextStyle()),
+                          style: AppTextStyles.normalThemeColorTextStyle().copyWith(color: Colors.white)),
                       Flexible(
                         child: GestureDetector(
                           onTap: () {
@@ -318,7 +318,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                     children: [
                       Text(
                         website,
-                        style: AppTextStyles.normalThemeColorTextStyle(),
+                        style: AppTextStyles.normalThemeColorTextStyle().copyWith(color: Colors.white),
                       ),
                       GestureDetector(
                         onTap: () => _launchUrl(webUrl),

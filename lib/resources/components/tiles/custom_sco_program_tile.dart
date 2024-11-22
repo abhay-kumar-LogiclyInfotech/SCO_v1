@@ -39,10 +39,10 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
       child: GestureDetector(
         onTap: widget.onTap,
         child: Material(
-          elevation: 5,
+          elevation: 7,
           borderRadius: BorderRadius.circular(10),
           color: Colors.transparent,
-          shadowColor: Colors.transparent,
+          shadowColor: Colors.black.withOpacity(0.2),
           child: Container(
             padding: const EdgeInsets.only(left:10,top: 10,bottom: 10,right: 10),
             decoration: BoxDecoration(

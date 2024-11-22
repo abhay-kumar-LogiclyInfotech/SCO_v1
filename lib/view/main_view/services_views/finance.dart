@@ -126,8 +126,10 @@ class _FinanceViewState extends State<FinanceView>
   ///*------ Applications Section------*
   Widget _salaryDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
 
-    final listOfSalaries = provider.apiResponse.data?.data?.listSalaryDetials;
-    final topSalaryDetails = listOfSalaries?[0];
+    final listOfSalaries = provider.apiResponse.data?.data?.listSalaryDetials ?? [];
+
+    final topSalaryDetails = listOfSalaries.isNotEmpty ? listOfSalaries[0] : null;
+
     return CustomInformationContainer(
       title: 'Salary Details',
       leading: SvgPicture.asset("assets/services/salary_details.svg"),
@@ -149,8 +151,8 @@ class _FinanceViewState extends State<FinanceView>
   ///*------ Applications Section------*
   Widget _deductionDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
 
-    final listOfDeduction = provider.apiResponse.data?.data?.listDeduction;
-    final topDeduction = listOfDeduction?[0];
+    final listOfDeduction = provider.apiResponse.data?.data?.listDeduction ?? [];
+    final topDeduction = listOfDeduction.isNotEmpty  ? listOfDeduction[0] : null;
     return CustomInformationContainer(
       title: 'Deduction Details',
       leading: SvgPicture.asset("assets/services/deduction_details.svg"),
@@ -170,8 +172,8 @@ class _FinanceViewState extends State<FinanceView>
 
   ///*------ Applications Section------*
   Widget _bonusDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
-    final listOfBonus = provider.apiResponse.data?.data?.listBonus;
-    final topBonus = listOfBonus?[0];
+    final listOfBonus = provider.apiResponse.data?.data?.listBonus ?? [];
+    final topBonus = listOfBonus.isNotEmpty ? listOfBonus[0] : null;
     return CustomInformationContainer(
       title: 'Bonus Details',
       leading: SvgPicture.asset("assets/services/bonus_details.svg"),
@@ -190,8 +192,8 @@ class _FinanceViewState extends State<FinanceView>
 
   ///*------ Applications Section------*
   Widget  _warningDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
-    final listOfWarnings = provider.apiResponse.data?.data?.listWarnings;
-    final topWarning = listOfWarnings?[0];
+    final listOfWarnings = provider.apiResponse.data?.data?.listWarnings ?? [];
+    final topWarning = listOfWarnings.isNotEmpty ? listOfWarnings[0] : null;
     return CustomInformationContainer(
       title: 'Warning Details',
       leading: SvgPicture.asset("assets/services/warning_details.svg"),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/sco_programs.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/vision_and_mission_view.dart';
@@ -98,6 +99,8 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
 
   @override
   Widget build(BuildContext context) {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
+
     return Drawer(
       shape: const RoundedRectangleBorder(),
       backgroundColor: AppColors.scoButtonColor,
@@ -125,11 +128,10 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                   [
                     Expanded(
                       child: Directionality(
-                        textDirection: widget.textDirection ?? TextDirection.ltr,
+                        textDirection: getTextDirection(langProvider),
                         child: SingleChildScrollView(
                           child: Column(
                               children: [
-                          
                             //*------User Profile Section------*/
                             Row(
                               mainAxisSize: MainAxisSize.max,
@@ -213,9 +215,10 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
-                          
+
+                                _navigationServices.goBack();
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                          
+
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -541,13 +544,11 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             }
                           },
                         ),
-                        const Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: Text(
-                              "عربي",
-                              style: TextStyle(
-                                  color: AppColors.scoLightThemeColor),
-                            )),
+                        const Text(
+                          "عربي",
+                          style: TextStyle(
+                              color: AppColors.scoLightThemeColor),
+                        ),
                       ],
                     ),
                   ],

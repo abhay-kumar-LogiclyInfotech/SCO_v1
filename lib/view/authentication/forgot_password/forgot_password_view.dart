@@ -15,6 +15,7 @@ import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../data/response/status.dart';
+import '../../../resources/components/change_language_button.dart';
 import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/validations_and_errorText.dart';
 import '../../../viewModel/services/alert_services.dart';
@@ -95,11 +96,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       body: Stack(
         alignment: Alignment.topLeft,
         children: [
-          SizedBox(
-            width: double.infinity,
+          Container(color: AppColors.darkGrey,),
+          SafeArea(
+            // width: double.infinity,
             child: Image.asset(
               'assets/login_bg.png',
-              fit: BoxFit.fill,
+              fit: BoxFit.contain,
+              // height: double.infinity,
+              width: double.infinity,
             ),
           ),
           Container(
@@ -107,7 +111,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
             height: double.infinity,
             margin: EdgeInsets.only(
               top: orientation == Orientation.portrait
-                  ? screenHeight / 3
+                  ? screenHeight / 2.5
                   : screenHeight / 3,
             ),
             padding: EdgeInsets.only(

@@ -43,6 +43,7 @@ static  Future chooseFilePickerDestination({required context,required dynamic on
                     color: AppColors.scoButtonColor
                 ),
               ),
+              const Text("Image size must be within 200kb",style: TextStyle(fontSize: 10),),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

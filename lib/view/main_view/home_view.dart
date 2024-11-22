@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/Test.dart';
 import 'package:sco_v1/controller/dependency_injection.dart';
 import 'package:sco_v1/data/response/status.dart';
+import 'package:sco_v1/models/home/ScoProgramsTileModel.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/carsousel_slider.dart';
@@ -24,6 +25,8 @@ import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_abroad/scholarship_in_abroad_view.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_uae/scholarship_in_uae_view.dart';
 import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
@@ -68,7 +71,13 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
 
  Future _onRefresh()async{
-    final myFinanceProvider =  Provider.of<MyFinanceStatusViewModel>(context, listen: false);
+
+
+    /// initialize the sco programs carousel slider
+   _scoProgramsModelsList.clear();
+_scoProgramsList.clear();
+   _initializeScoPrograms();
+   final myFinanceProvider =  Provider.of<MyFinanceStatusViewModel>(context, listen: false);
     final requestsProvider = Provider.of<GetAllRequestsViewModel>(context,listen: false);
     final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context,listen: false);
 
@@ -314,6 +323,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           ],
         ));
   }
+
 
 
   Widget _announcements({required LanguageChangeViewModel langProvider}) {
@@ -861,24 +871,55 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   }
 
   // *---- Sco programs slider ----*
-  final _scoProgramsList = [
-    CustomScoProgramTile(
-        imagePath: "assets/sidemenu/distinguished_doctors.jpg",
-        title: "Scholarships in UAE",
-        subTitle: "The office, which was establishe in 1999 under the direct..",
-        onTap: () {}),
-    CustomScoProgramTile(
-        imagePath: "assets/sidemenu/distinguished_doctors.jpg",
-        title: "Scholarships in Abroad",
-        subTitle: "The office, which was establishe in 1999 under the direct..",
-        onTap: () {}),
-    CustomScoProgramTile(
-        imagePath: "assets/sidemenu/distinguished_doctors.jpg",
-        title: "Scholarships in Abroad",
-        subTitle: "The office, which was establishe in 1999 under the direct..",
-        onTap: () {}),
-  ];
+
+
+
+
+
+
   int _scoProgramCurrentIndex = 0;
+
+  final List<Widget> _scoProgramsList = [];
+  final List<ScoProgramTileModel> _scoProgramsModelsList = [];
+
+  void _initializeScoPrograms() {
+    final scoProgramsMapList = [
+      {
+        'title': "Scholarships In Uae",
+        'subTitle': "This is Subtitle 1",
+        'imagePath': "assets/sidemenu/scholarships_uae.jpg",
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ScholarshipsInUaeView()),
+        ),
+      },
+      {
+        'title': "Scholarships In Abroad",
+        'subTitle': "This is Subtitle 2",
+        'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ScholarshipInAboardView()),
+        ),
+      },
+    ];
+
+    // Map JSON data to models
+    for (var map in scoProgramsMapList) {
+      _scoProgramsModelsList.add(ScoProgramTileModel.fromJson(map));
+    }
+
+    // Create widgets based on models
+    for (var model in _scoProgramsModelsList) {
+      _scoProgramsList.add(
+        CustomScoProgramTile(
+          imagePath: model.imagePath!,
+          title: model.title!,
+          subTitle: model.subTitle!,
+          onTap: model.onTap!,
+        ),
+      );
+    }
+  }
+
+
+
 
   Widget _scoPrograms({required LanguageChangeViewModel langProvider}) {
     return Column(

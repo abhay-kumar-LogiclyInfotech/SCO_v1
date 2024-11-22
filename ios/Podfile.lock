@@ -1,4 +1,6 @@
 PODS:
+  - audio_session (0.0.1):
+    - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -46,7 +48,11 @@ PODS:
     - Toast
   - image_picker_ios (0.0.1):
     - Flutter
+  - just_audio (0.0.1):
+    - Flutter
   - open_file_ios (0.0.1):
+    - Flutter
+  - package_info_plus (0.4.5):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -70,8 +76,17 @@ PODS:
   - Toast (4.1.1)
   - url_launcher_ios (0.0.1):
     - Flutter
+  - video_player_avfoundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - wakelock_plus (0.0.1):
+    - Flutter
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -79,13 +94,18 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - open_file_ios (from `.symlinks/plugins/open_file_ios/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - razorpay_flutter (from `.symlinks/plugins/razorpay_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
+  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -97,6 +117,8 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/darwin"
   device_info_plus:
@@ -111,8 +133,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  just_audio:
+    :path: ".symlinks/plugins/just_audio/ios"
   open_file_ios:
     :path: ".symlinks/plugins/open_file_ios/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
@@ -125,8 +151,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/darwin"
+  wakelock_plus:
+    :path: ".symlinks/plugins/wakelock_plus/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
+  audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
@@ -136,7 +169,9 @@ SPEC CHECKSUMS:
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
+  just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   open_file_ios: 461db5853723763573e140de3193656f91990d9e
+  package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   razorpay-pod: c7064a37dd15fbc0e5f26776314c9a8842df1269
@@ -147,6 +182,9 @@ SPEC CHECKSUMS:
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
+  wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
+  webview_flutter_wkwebview: 0982481e3d9c78fd5c6f62a002fcd24fc791f1e4
 
 PODFILE CHECKSUM: 038b1f10d62257b2a68f543c592816a0dae49fc9
 

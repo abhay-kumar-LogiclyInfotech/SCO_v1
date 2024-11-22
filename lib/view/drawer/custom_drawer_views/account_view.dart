@@ -11,7 +11,7 @@ import 'package:sco_v1/view/drawer/accout_views/security_questions_view.dart';
 import 'package:sco_v1/view/main_view/services_view.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
-import '../../../models/account/account_grid_container_view_model.dart';
+import '../../../models/account/simple_tile_model.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/tiles/simple_tile.dart';
 import '../../../viewModel/language_change_ViewModel.dart';

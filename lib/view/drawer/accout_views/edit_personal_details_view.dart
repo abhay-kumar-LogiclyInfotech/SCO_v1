@@ -16,6 +16,7 @@ import 'package:sco_v1/resources/bottom_sheets/storage_or_camera_destination.dar
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/view/apply_scholarship/form_view_Utils.dart';
 import 'package:sco_v1/viewModel/account/personal_details/update_personal_details_viewmodel.dart';
+import 'package:sco_v1/viewModel/account/personal_details/update_profile_picture_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 
@@ -188,17 +189,40 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   File? _profileImageFile ;
 
 
-  setProfilePictureFile(File? file)async{
-    if(file != null){
-        _profileImageFile = file;
+  setProfilePictureFile(File? file) async {
+    if (file != null) {
+      try {
 
-        final base64String =  base64Encode(file.readAsBytesSync());
+        /// close the choose option sheet
+        _navigationServices.goBack();
 
-        log(base64String);
-        setState(() {
-        });
+       setIsProcessing(true);
+
+     bool canUpload =   await Utils.compareFileSize(file: file, maxSizeInBytes: 200);
+
+     if(canUpload) {
+       _profileImageFile = file;
+       final myFile = await Utils.saveFileToLocal(file);
+       final base64String = base64Encode(myFile.readAsBytesSync());
+
+       final updateProfilePictureProvider = Provider.of<UpdateProfilePictureViewModel>(context, listen: false);
+       await updateProfilePictureProvider.updateProfilePicture(base64String: base64String);
+       await _initializeData();
+       setState(() {});
+       setIsProcessing(false);
+     }
+     else{
+       _alertServices.showCustomSnackBar("File Size must be under 200KB");
+       setIsProcessing(false);
+     }
+      } catch (e) {
+        log("Error converting file to Base64: $e");
+      }
+    } else {
+      log("No file provided.");
     }
   }
+
 
 
   @override
@@ -226,7 +250,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             ),
           );
         case Status.COMPLETED:
-          final user = provider.apiResponse.data?.data?.user;
           final userInfo = provider.apiResponse.data?.data?.userInfo;
 
           return Directionality(

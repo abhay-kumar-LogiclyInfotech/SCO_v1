@@ -96,6 +96,37 @@ class Utils {
     }
   }
 
+  /// Saves the given file to a local directory.
+  static Future<File> saveFileToLocal(File myFile) async {
+    try {
+      // Get the appropriate directory for the platform
+      Directory appDocDir = Platform.isAndroid
+          ? await getApplicationDocumentsDirectory()
+          : await getApplicationCacheDirectory();
+
+      // Define the sub-directory and ensure it exists
+      String folderPath = "${appDocDir.path}/profile_image";
+      Directory folder = Directory(folderPath);
+      if (!await folder.exists()) {
+        await folder.create(recursive: true);
+      }
+
+      // Extract the file name and create the save path
+      String fileName = myFile.path.split('/').last; // Extracts the file name
+      String savePath = "$folderPath/$fileName";
+
+      // Write the file to the save path
+      File savedFile = File(savePath);
+      await savedFile.writeAsBytes(await myFile.readAsBytes());
+
+      print("File saved at: ${savedFile.path}");
+      return savedFile;
+    } catch (e) {
+      print("Error saving file: $e");
+      rethrow;
+    }
+  }
+
 
 
   // input borders start
@@ -195,6 +226,22 @@ class Utils {
     final sizeInBytes = await file.length();
     final myFileSize = filesize(sizeInBytes);
     return myFileSize;
+  }
+
+  /// This method checks if the file size is less than 200KB
+  static Future<bool> compareFileSize({required file,required int maxSizeInBytes})async{
+    int fileSizeInBytes = await file.length();
+
+    // 200KB in bytes (1KB = 1024 bytes)
+    int maxSizeInBytes0 = maxSizeInBytes * 1024; // 200KB = 204,800 bytes
+
+    // Check if the file size is greater than 200KB
+    if (fileSizeInBytes > maxSizeInBytes0) {
+      return false;
+    } else {
+      // Proceed with saving or uploading the file
+      return true;
+    }
   }
 
   /// This methods get the file name
