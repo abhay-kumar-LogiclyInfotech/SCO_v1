@@ -71,7 +71,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
             height: double.infinity,
             margin: EdgeInsets.only(
               top: orientation == Orientation.portrait
-                  ? screenHeight / 3
+                  ? screenHeight / 2.5
                   : screenHeight / 3,
             ),
             padding: EdgeInsets.only(
