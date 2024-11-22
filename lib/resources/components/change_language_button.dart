@@ -16,89 +16,78 @@ class ChangeLanguageButton extends StatefulWidget {
 }
 
 class _ChangeLanguageButtonState extends State<ChangeLanguageButton> with MediaQueryMixin {
+  //
+  // bool _isArabic = false;
+  // final _languageController = ValueNotifier<bool>(false);
+  // bool _isLoading = false;
+  // setIsLoading(isLoading){
+  //   setState(() {
+  //     _isLoading = isLoading;
+  //   });
+  // }
 
-  bool _isArabic = false;
-  final _languageController = ValueNotifier<bool>(false);
-  bool _isLoading = false;
-  setIsLoading(isLoading){
-    setState(() {
-      _isLoading = isLoading;
-    });
-  }
-
-  Future<void> getInitialLanguage() async {
-
-    setIsLoading(true);
-
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final String? language = preferences.getString('language_code');
-
-    if (language != null && language == 'ar') {
-      _isArabic = true;
-      _languageController.value = true;
-    } else {
-      _isArabic = false;
-      _languageController.value = false;
-    }
-    setState(() {
-      _isLoading = false; // Set loading to false after initialization
-    });
-  }
+  // Future<void> getInitialLanguage() async {
+  //
+  //   setIsLoading(true);
+  //
+  //   final SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   final String? language = preferences.getString('language_code');
+  //
+  //   if (language != null && language == 'ar') {
+  //     _isArabic = true;
+  //     _languageController.value = true;
+  //   } else {
+  //     _isArabic = false;
+  //     _languageController.value = false;
+  //   }
+  //   setState(() {
+  //     _isLoading = false; // Set loading to false after initialization
+  //   });
+  // }
 
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_)async {
-     await getInitialLanguage();
-    });    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_)async {
+    //  await getInitialLanguage();
+    // });    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
-    return  Utils.modelProgressHud(processing: _isLoading,child:  Positioned(
-      left: kPadding,
-      child: SafeArea(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text("English"),
-            const SizedBox(
-              width: 10,
-            ),
-
-            Consumer<LanguageChangeViewModel>(
-              builder: (context,provider,_){
-                return CustomAdvancedSwitch(
-                  controller: _languageController,
-                  activeColor: AppColors.scoThemeColor,
-                  inactiveColor: Colors.grey,
-                  initialValue: _isArabic,
-                  onChanged: (value) async{
-                    if (value) {
-                      Provider.of<LanguageChangeViewModel>(context, listen: false).changeLanguage(const Locale('ar'));
-                      await getInitialLanguage();
-                      setState(() {
-                      });
-                    } else {
-                      Provider.of<LanguageChangeViewModel>(context, listen: false).changeLanguage(const Locale('en'));
-                      await getInitialLanguage();
-                      setState(() {
-                      });
-                    }
-                  },
-                );
-              },
-            )
-            ,
-            const SizedBox(width: 10
-            ),
-            const Directionality(textDirection: TextDirection.rtl, child: Text("عربي")),
-          ],
+    return  Utils.modelProgressHud(processing: false,child:  Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text("English"),
+        const SizedBox(
+          width: 10,
         ),
-      ),
+
+        Consumer<LanguageChangeViewModel>(
+          builder: (context,provider,_){
+            return CustomAdvancedSwitch(
+              controller: provider.languageController,
+              activeColor: AppColors.scoThemeColor,
+              inactiveColor: Colors.grey,
+              initialValue: provider.languageController.value,
+              onChanged: (value) async{
+                if (value) {
+                  Provider.of<LanguageChangeViewModel>(context, listen: false).changeLanguage(const Locale('ar'));
+                } else {
+                  Provider.of<LanguageChangeViewModel>(context, listen: false).changeLanguage(const Locale('en'));
+                }
+              },
+            );
+          },
+        )
+        ,
+        const SizedBox(width: 10
+        ),
+        const Directionality(textDirection: TextDirection.rtl, child: Text("عربي")),
+      ],
     ));
 
   }

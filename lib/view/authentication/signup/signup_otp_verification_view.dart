@@ -9,12 +9,14 @@ import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/kBackgrounds/kLoginSignUpBg.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/signup/terms_and_conditions_view.dart';
 import 'package:sco_v1/viewModel/authentication/otp_verification_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../data/response/status.dart';
+import '../../../resources/components/change_language_button.dart';
 import '../../../utils/constants.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
@@ -63,13 +65,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
       body: Stack(
         alignment: Alignment.topLeft,
         children: [
-          SizedBox(
-            width: double.infinity,
-            child: Image.asset(
-              'assets/login_bg.png',
-              fit: BoxFit.fill,
-            ),
-          ),
+         const  KLoginSignupBg(),
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -149,6 +145,8 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
               ],
             ),
           ),
+          Positioned(left: 10,child: SafeArea(child: ChangeLanguageButton())),
+
         ],
       ),
     );

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
 import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
@@ -77,8 +78,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
+          /// Always register language viewmodel first
           ChangeNotifierProvider(create: (_) => LanguageChangeViewModel()),
+          ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
           ChangeNotifierProvider(create: (_) => SignupViewModel()),
           ChangeNotifierProvider(create: (_) => SecurityQuestionViewModel()),
           ChangeNotifierProvider(create: (_) => FaqViewModel()),
@@ -177,7 +179,8 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              initialRoute: "/splashView",
+              // initialRoute: "/splashView",
+              home: OtpVerificationView(),
             );
           },
         ));

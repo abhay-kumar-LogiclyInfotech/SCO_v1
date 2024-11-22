@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/kBackgrounds/kLoginSignUpBg.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/forgot_password/answer_security_question_view.dart';
 import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
@@ -96,16 +97,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       body: Stack(
         alignment: Alignment.topLeft,
         children: [
-          Container(color: AppColors.darkGrey,),
-          SafeArea(
-            // width: double.infinity,
-            child: Image.asset(
-              'assets/login_bg.png',
-              fit: BoxFit.contain,
-              // height: double.infinity,
-              width: double.infinity,
-            ),
-          ),
+          const KLoginSignupBg(),
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -190,6 +182,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
               ],
             ),
           ),
+          Positioned(left: 10,child: SafeArea(child: ChangeLanguageButton())),
+
         ],
       ),
     );

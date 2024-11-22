@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/kBackgrounds/kLoginSignUpBg.dart';
 import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
@@ -16,6 +17,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../../data/response/status.dart';
+import '../../../resources/components/change_language_button.dart';
 import '../../../resources/components/custom_dropdown.dart';
 import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/input_formatters/emirates_id_input_formatter.dart';
@@ -205,19 +207,15 @@ class _SignUpViewState extends State<SignUpView>
     return Stack(
       alignment: Alignment.topLeft,
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: Image.asset(
-            'assets/login_bg.png',
-            fit: BoxFit.fill,
-          ),
-        ),
+
+
+        const KLoginSignupBg(),
         Container(
           width: double.infinity,
           height: double.infinity,
           margin: EdgeInsets.only(
             top: orientation == Orientation.portrait
-                ? screenHeight / 3
+                ? screenHeight / 2.5
                 : screenHeight / 3,
           ),
           padding: EdgeInsets.only(
@@ -322,6 +320,8 @@ class _SignUpViewState extends State<SignUpView>
             ],
           ),
         ),
+        Positioned(left: 10,child: SafeArea(child: ChangeLanguageButton())),
+
       ],
     );
   }

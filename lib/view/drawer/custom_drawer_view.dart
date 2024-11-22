@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/components/change_language_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/sco_programs.dart';
@@ -57,22 +58,20 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
   final _languageController = ValueNotifier<bool>(false);
 
   Future<void> getInitialLanguage() async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final String? language = preferences.getString('language_code');
-
-    if (language != null && language == 'ar') {
-      _isArabic = true;
-      _languageController.value = true;
-    } else {
-      _isArabic = false;
-      _languageController.value = false;
-    }
+    // final SharedPreferences preferences = await SharedPreferences.getInstance();
+    // final String? language = preferences.getString('language_code');
+    //
+    // if (language != null && language == 'ar') {
+    //   _isArabic = true;
+    //   _languageController.value = true;
+    // } else {
+    //   _isArabic = false;
+    //   _languageController.value = false;
+    // }
 
 
     // check user is logged in or not
     _toLogin = await _authService.isLoggedIn();
-    print(_toLogin);
-
     setState(() {
       _isLoading = false; // Set loading to false after initialization
     });
@@ -216,7 +215,6 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               horizontalTitleGap: 5,
                               onTap: () {
 
-                                _navigationServices.goBack();
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
 
                               },
@@ -524,24 +522,24 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                           "English",
                           style: TextStyle(color: AppColors.scoLightThemeColor),
                         ),
-                        CustomAdvancedSwitch(
-                          controller: _languageController,
-                          activeColor: AppColors.scoThemeColor,
-                          inactiveColor: Colors.grey,
-                          initialValue: _isArabic,
-                          onChanged: (value)async {
-                            if (value) {
-                              await Provider.of<LanguageChangeViewModel>(context,listen: false)
-                                  .changeLanguage(const Locale('ar'));
-
-                              widget.scaffoldState.currentState!
-                                  .openEndDrawer();
-                            } else {
-                             await Provider.of<LanguageChangeViewModel>(context,
-                                      listen: false)
-                                  .changeLanguage(const Locale('en'));
-                              widget.scaffoldState.currentState!.openDrawer();
-                            }
+                        Consumer<LanguageChangeViewModel>(
+                          builder: (context,provider,_)
+                          {
+                            return CustomAdvancedSwitch(
+                              controller: provider.languageController,
+                              activeColor: AppColors.scoThemeColor,
+                              inactiveColor: Colors.grey,
+                              initialValue: provider.languageController.value,
+                              onChanged: (value)async {
+                                if (value) {
+                                  await Provider.of<LanguageChangeViewModel>(context,listen: false).changeLanguage(const Locale('ar'));
+                                  widget.scaffoldState.currentState!.openEndDrawer();
+                                } else {
+                                  await Provider.of<LanguageChangeViewModel>(context, listen: false).changeLanguage(const Locale('en'));
+                                  widget.scaffoldState.currentState!.openDrawer();
+                                }
+                              },
+                            );
                           },
                         ),
                         const Text(
