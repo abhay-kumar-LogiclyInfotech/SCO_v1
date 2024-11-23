@@ -4,6 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
+import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/components/myDivider.dart';
+import 'package:sco_v1/view/main_view/services_views/finance_details_views/bonusDetailsView.dart';
+import 'package:sco_v1/view/main_view/services_views/finance_details_views/deductionDetailsView.dart';
+import 'package:sco_v1/view/main_view/services_views/finance_details_views/salaryDetailsView.dart';
+import 'package:sco_v1/view/main_view/services_views/finance_details_views/warningDetailsView.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
@@ -24,10 +30,12 @@ class FinanceView extends StatefulWidget {
 
   @override
   State<FinanceView> createState() => _FinanceViewState();
+
+
 }
 
-class _FinanceViewState extends State<FinanceView>
-    with MediaQueryMixin {
+class _FinanceViewState extends State<FinanceView> with MediaQueryMixin
+{
   late NavigationServices _navigationServices;
   late PermissionServices _permissionServices;
   late MediaServices _mediaServices;
@@ -123,7 +131,7 @@ class _FinanceViewState extends State<FinanceView>
         });
   }
 
-  ///*------ Applications Section------*
+  ///*------ Top Salary Section------*
   Widget _salaryDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
 
     final listOfSalaries = provider.apiResponse.data?.data?.listSalaryDetials ?? [];
@@ -133,77 +141,100 @@ class _FinanceViewState extends State<FinanceView>
     return CustomInformationContainer(
       title: 'Salary Details',
       leading: SvgPicture.asset("assets/services/salary_details.svg"),
-
-
-      expandedContent: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          CustomInformationContainerField(title: "Bank Name", description: topSalaryDetails?.bankName),
-          CustomInformationContainerField(title: "Amount", description: topSalaryDetails?.amount.toString()),
-          CustomInformationContainerField(title: "Currency", description: topSalaryDetails?.currency),
-          CustomInformationContainerField(title: "The Month", description: topSalaryDetails?.salaryMonth),
-          CustomInformationContainerField(title: "Status", description: topSalaryDetails?.status ,isLastItem: true),
-        ]
-    ),);
-
+      expandedContentPadding: EdgeInsets.zero,
+      expandedContent: financeCard(content:  [
+        CustomInformationContainerField(title: "Bank Name", description: topSalaryDetails?.bankName.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Amount", description: topSalaryDetails?.amount.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Currency", description: topSalaryDetails?.currency.toString() ?? '- -'),
+        CustomInformationContainerField(title: "The Month", description: topSalaryDetails?.salaryMonth.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Status", description: topSalaryDetails?.status.toString() ?? '- -' ,isLastItem: true),
+      ],  langProvider: langProvider,onTapViewAll: (){
+        _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const SalaryDetailsView()));
+      })
+    );
   }
 
-  ///*------ Applications Section------*
+
+
+
+  ///*------  Top Deduction Section------*
   Widget _deductionDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
 
     final listOfDeduction = provider.apiResponse.data?.data?.listDeduction ?? [];
     final topDeduction = listOfDeduction.isNotEmpty  ? listOfDeduction[0] : null;
     return CustomInformationContainer(
       title: 'Deduction Details',
+      expandedContentPadding: EdgeInsets.zero,
       leading: SvgPicture.asset("assets/services/deduction_details.svg"),
+      expandedContent: financeCard(content: [
+        CustomInformationContainerField(title: "Total Deduction", description: topDeduction?.totalDeduction.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Total Deducted", description: topDeduction?.totalDeducted.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Deduction Pending", description: topDeduction?.deductionPending.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Currency", description: topDeduction?.currencyCode.toString() ?? '- -' ,isLastItem: true),
+      ], onTapViewAll: (){
+        _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const DeductionDetailsView()));
 
-
-      expandedContent: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            CustomInformationContainerField(title: "Total Deduction", description: topDeduction?.totalDeduction.toString()),
-            CustomInformationContainerField(title: "Total Deducted", description: topDeduction?.totalDeducted.toString()),
-            CustomInformationContainerField(title: "Deduction Pending", description: topDeduction?.deductionPending.toString()),
-            CustomInformationContainerField(title: "Currency", description: topDeduction?.currencyCode ,isLastItem: true),
-          ]
-      ),);
-
+      }, langProvider: langProvider));
   }
 
-  ///*------ Applications Section------*
+  ///*------ Top Bonus Section------*
   Widget _bonusDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
     final listOfBonus = provider.apiResponse.data?.data?.listBonus ?? [];
     final topBonus = listOfBonus.isNotEmpty ? listOfBonus[0] : null;
     return CustomInformationContainer(
       title: 'Bonus Details',
-      leading: SvgPicture.asset("assets/services/bonus_details.svg"),
+        expandedContentPadding: EdgeInsets.zero,
+        leading: SvgPicture.asset("assets/services/bonus_details.svg"),
+      expandedContent: financeCard(content: [
+        CustomInformationContainerField(title: "Period", description: topBonus?.periodIdDescription.toString() ?? '- -' ?? '- -'),
+        CustomInformationContainerField(title: "Term", description: topBonus?.termDescription.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Amount", description: topBonus?.amount.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Currency", description: topBonus?.currencyCode.toString() ?? '- -' ,isLastItem: true),
+      ], onTapViewAll: (){
+        _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const BonusDetailsView()));
 
-      expandedContent: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            CustomInformationContainerField(title: "Period", description: topBonus?.periodIdDescription.toString()),
-            CustomInformationContainerField(title: "Term", description: topBonus?.termDescription.toString()),
-            CustomInformationContainerField(title: "Amount", description: topBonus?.amount.toString()),
-            CustomInformationContainerField(title: "Currency", description: topBonus?.currencyCode ,isLastItem: true),
-          ]
-      ),);
-
+      }, langProvider: langProvider));
   }
 
-  ///*------ Applications Section------*
+  ///*------ Top Warning Section------*
   Widget  _warningDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
     final listOfWarnings = provider.apiResponse.data?.data?.listWarnings ?? [];
     final topWarning = listOfWarnings.isNotEmpty ? listOfWarnings[0] : null;
     return CustomInformationContainer(
       title: 'Warning Details',
+      expandedContentPadding: EdgeInsets.zero,
       leading: SvgPicture.asset("assets/services/warning_details.svg"),
-      expandedContent: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            CustomInformationContainerField(title: "Term", description: topWarning?.termDescription.toString()),
-            CustomInformationContainerField(title: "Certificate Description", description: topWarning?.warningCertificate.toString() ,isLastItem: true),
-          ]
-      ),);
+      expandedContent: financeCard(
+          content: [
+        CustomInformationContainerField(title: "Term", description: topWarning?.termDescription.toString() ?? '- -'),
+        CustomInformationContainerField(title: "Certificate Description", description: topWarning?.warningCertificate.toString() ?? '- -' ,isLastItem: true),
+          ],
+          onTapViewAll: (){
+            _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const WarningDetailsView()));
+          },
+          langProvider: langProvider));
 
+  }
+
+
+  Widget financeCard({required List<Widget> content,required onTapViewAll,required langProvider})
+  {
+    return Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Padding(
+            padding:  EdgeInsets.only(left: kPadding,right: kPadding,top: kPadding),
+            child: Column(
+              children: content,
+            ),
+          ),
+          const MyDivider(color: AppColors.darkGrey),
+          kFormHeight,
+          Padding(
+            padding:  EdgeInsets.only(left: kPadding,right: kPadding,bottom: kPadding),
+            child: CustomButton(buttonName: "View All", isLoading: false,buttonColor:AppColors.scoThemeColor,borderColor:Colors.transparent,textDirection: getTextDirection(langProvider), onTap: onTapViewAll),
+          )
+        ]
+    );
   }
 }

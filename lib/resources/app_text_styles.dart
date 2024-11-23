@@ -63,6 +63,13 @@ class AppTextStyles {
       height: 1.5
     );
   }
+  static TextStyle myApplicationsEditButton() {
+    return const TextStyle(
+      color: Colors.white,
+      fontSize: 10,
+      fontWeight: FontWeight.w500
+    );
+  }
 
 
 

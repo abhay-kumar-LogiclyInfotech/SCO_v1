@@ -94,6 +94,7 @@ dynamic addRemoveMoreSection(
     bool? readOnly,
     TextInputType? textInputType,
     List<TextInputFormatter>? inputFormat,
+     InputBorder? border,
     required Function(String? value) onChanged,
   }) {
     return CustomTextField(
@@ -103,7 +104,7 @@ dynamic addRemoveMoreSection(
       controller: controller,
       filled: filled,
       obscureText: false,
-      border: Utils.outlinedInputBorder(),
+      border: border ?? Utils.outlinedInputBorder(),
       hintText: hintText,
       textStyle: textFieldTextStyle,
       maxLines: maxLines,

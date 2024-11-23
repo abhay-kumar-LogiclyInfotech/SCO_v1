@@ -84,7 +84,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         _profilePictureUrl = studentProfilePictureProvider.apiResponse.data?.url?.toString() ?? '';
       });
     }
-
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
     final langProvider =
         Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -1136,7 +1135,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                     }
                   }
                 setIsProcessing(false);
-
                 });
           }),
         ),

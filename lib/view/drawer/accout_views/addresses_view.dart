@@ -156,13 +156,13 @@ physics: const NeverScrollableScrollPhysics(),    itemCount: provider.apiRespons
             mainAxisSize: MainAxisSize.max,
             children: [
               /// ------------ Addresses Section ------------
-              CustomInformationContainerField(title: "Address Line 1", description: element?.addressLine1 ??''),
-              CustomInformationContainerField(title: "Address Line 2", description: element?.addressLine2 ??''),
-              CustomInformationContainerField(title: "Address Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ADDRESS_TYPE',code: element?.addressType ??'') ),
-              CustomInformationContainerField(title: "City", description: element?.city ??''),
-              CustomInformationContainerField(title: "Country", description: getFullNameFromLov(langProvider: langProvider,lovCode: "COUNTRY",code:  element?.country ??'') ),
-              CustomInformationContainerField(title: "PO Box", description: element?.postalCode ??''),
-              CustomInformationContainerField(title: "Emirates/States", description: getFullNameFromLov(langProvider: langProvider,lovCode: "STATE#${element?.country ??''}",code: element?.state ??'')  , isLastItem: true),
+              CustomInformationContainerField(title: "Address Line 1", description: element?.addressLine1 ??'- -'),
+              CustomInformationContainerField(title: "Address Line 2", description: element?.addressLine2 ?? '- -'),
+              CustomInformationContainerField(title: "Address Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ADDRESS_TYPE',code: element?.addressType ?? '- -') ),
+              CustomInformationContainerField(title: "City", description: element?.city ?? '- -'),
+              CustomInformationContainerField(title: "Country", description: getFullNameFromLov(langProvider: langProvider,lovCode: "COUNTRY",code:  element?.country ?? '- -') ),
+              CustomInformationContainerField(title: "PO Box", description: element?.postalCode ?? '- -'),
+              CustomInformationContainerField(title: "Emirates/States", description: getFullNameFromLov(langProvider: langProvider,lovCode: "STATE#${element?.country ?? '- -'}",code: element?.state ?? '- -')  , isLastItem: true),
             ]
         )),
       );

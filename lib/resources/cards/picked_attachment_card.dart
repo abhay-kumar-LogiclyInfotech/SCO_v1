@@ -7,12 +7,14 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/models/account/GetEmploymentStatusModel.dart';
 import 'package:sco_v1/models/apply_scholarship/AttachFileModel.dart';
 import 'package:sco_v1/models/services/GetAllRequestsModel.dart';
+import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../data/response/status.dart';
 import '../../utils/utils.dart';
+import '../../view/apply_scholarship/form_view_Utils.dart';
 import '../app_colors.dart';
 
 class PickedAttachmentCard extends StatefulWidget {
@@ -32,7 +34,7 @@ class PickedAttachmentCard extends StatefulWidget {
   State<PickedAttachmentCard> createState() => _PickedAttachmentCardState();
 }
 
-class _PickedAttachmentCardState extends State<PickedAttachmentCard> {
+class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQueryMixin {
 
   late AlertServices _alertServices;
 
@@ -90,33 +92,8 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> {
       }
       setState(() {});
     }
-
-
   }
 
-  // Future<void> _fetchFileFromApi() async {
-  //
-  //   /// Maintaining the state separately
-  //   setState(() {
-  //     widget.attachment.isLoading = true;
-  //   });
-  //   final provider = Provider.of<GetBase64StringViewModel>(context, listen: false);
-  //   final form = {
-  //     "uniqueFileName": widget.attachment.attachSysfileNameController.text,
-  //     "userFileName": widget.attachment.attachUserFileController.text,
-  //   };
-  //
-  //   await provider.getEmploymentStatusBase64String(form: form);
-  //
-  //   if (provider.apiResponse.status == Status.COMPLETED) {
-  //     file = await convertBase64ToFile(
-  //         provider.apiResponse.data?.data?.fileData?.base64String ?? '',
-  //         widget.attachment.attachSysfileNameController.text);
-  //   }
-  //   setState(() {
-  //     widget.attachment.isLoading = false;
-  //   });
-  // }
 
   Future<void> _fetchFileFromApi() async {
     try {
@@ -201,12 +178,12 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
+      elevation: 0.2,
       borderRadius: const BorderRadius.all(
         Radius.circular(15),
       ),
       child: Container(
         width: double.maxFinite,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           // color: Colors.white,
           border: Border.all(color: AppColors.lightGrey),
@@ -214,31 +191,58 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> {
         ),
         child: Consumer<GetBase64StringViewModel>(
           builder: (context, provider, _) {
-            return ListTile(
-              onTap: () async {
-                if (file != null) {
-                  await Utils.openFile(file!);
-                } else {
-                  _alertServices.showCustomSnackBar("File not available to open.");
-                }
-              },
-              leading: Image.asset("assets/document.png"),
-              contentPadding: EdgeInsets.zero,
-              title: widget.attachment.isLoading
-                  ? const Text("loading...")
-                  : Text(
-                "${widget.index}) ${fileName.split('_').last}",
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-              ),
-              subtitle: fileSize.isNotEmpty
-                  ? Text(fileSize, style: const TextStyle(fontSize: 12))
-                  : const Text("Fetching file size..."),
-              trailing: widget.attachment.newRecord || widget.attachment.newlyAded
-                  ? IconButton(
-                onPressed: widget.onRemoveAttachment,
-                icon: const Icon(Icons.cancel_outlined, color: AppColors.scoButtonColor),
-              )
-                  : null,
+            return Column(
+              children: [
+                ListTile(
+                  onTap: () async {
+                    if (file != null) {
+                      await Utils.openFile(file!);
+                    } else {
+                      _alertServices.showCustomSnackBar("File not available to open.");
+                    }
+                  },
+                  leading: Image.asset("assets/document.png"),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  title: widget.attachment.isLoading
+                      ? const Text("loading...")
+                      : Text(
+                    "${widget.index}) ${fileName.split('_').last}",
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: fileSize.isNotEmpty
+                      ? Text(fileSize, style: const TextStyle(fontSize: 12))
+                      : const Text("Fetching file size..."),
+                  trailing: widget.attachment.newRecord || widget.attachment.newlyAded
+                      ? IconButton(
+                    onPressed: widget.onRemoveAttachment,
+                    icon: const Icon(Icons.cancel_outlined, color: AppColors.scoButtonColor),
+                  )
+                      : null,
+                ),
+                const Divider()
+,
+                Padding(
+                  padding:  const EdgeInsets.only(left: 15,right: 15,bottom: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Comment",
+                        style: AppTextStyles.subTitleTextStyle().copyWith(height: 2,fontSize: 14,fontWeight: FontWeight.w500),
+                      ),
+                      // SizedBox(height: 8.0),
+                      scholarshipFormTextField(
+                          maxLines: 3,
+                          textInputType: TextInputType.multiline,
+                          currentFocusNode: widget.attachmentType == AttachmentType.request ?  widget.attachment.fileDescriptionFocusNode : widget.attachmentType == AttachmentType.employment ? widget.attachment.attachUserFileFocusNode : FocusNode() ,
+                          controller: widget.attachmentType == AttachmentType.request ?  widget.attachment.fileDescriptionController : widget.attachmentType == AttachmentType.employment ? widget.attachment.attachUserFileController : TextEditingController(),
+                          hintText: "Write your comment here...",
+                          onChanged: (value) {})
+                    ],
+                  ),
+                )
+                ,
+              ],
             );
           },
         ),

@@ -204,7 +204,7 @@ class HomeRepository {
   Future<SubmitApplicationModel> submitApplication(
       {required dynamic userId,required dynamic headers,required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: "${AppUrls.baseUrl}e-services/977040/submit-application",
+      url: "${AppUrls.baseUrl}e-services/$userId/submit-application",
       headers: headers,
       body: body,
     );

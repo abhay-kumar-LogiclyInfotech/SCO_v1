@@ -337,19 +337,19 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
                       _attachmentsList.removeAt(index);
                     });
                   }),
-              const SizedBox.square(dimension: 5),
-              scholarshipFormTextField(
-                  maxLines: 2,
-                  textInputType: TextInputType.multiline,
-                  currentFocusNode: attachment.fileDescriptionFocusNode,
-                  controller: attachment.fileDescriptionController,
-                  hintText: "Comment",
-                  onChanged: (value) {}),
-              kFormHeight,
-              const MyDivider(
-                color: AppColors.lightGrey,
-              ),
-              kFormHeight,
+               SizedBox.square(dimension: kPadding),
+              // scholarshipFormTextField(
+              //     maxLines: 2,
+              //     textInputType: TextInputType.multiline,
+              //     currentFocusNode: attachment.fileDescriptionFocusNode,
+              //     controller: attachment.fileDescriptionController,
+              //     hintText: "Comment",
+              //     onChanged: (value) {}),
+              // kFormHeight,
+              // const MyDivider(
+              //   color: AppColors.lightGrey,
+              // ),
+              // kFormHeight,
             ],
           );
         });

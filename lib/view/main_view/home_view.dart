@@ -28,6 +28,7 @@ import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart
 import 'package:sco_v1/view/main_view/scholarship_in_abroad/scholarship_in_abroad_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/scholarship_in_uae_view.dart';
 import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
+import 'package:sco_v1/view/main_view/services_views/finance.dart';
 import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/auth_services.dart';
@@ -100,7 +101,7 @@ _scoProgramsList.clear();
   // check for the scholarship status
   ScholarshipStatus scholarshipStatus = ScholarshipStatus.applyScholarship;
 
-  Widget _buildUI() {
+  Widget _buildUI()  {
     // *-----Initialize the languageProvider-----*
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Padding(
@@ -574,12 +575,15 @@ _scoProgramsList.clear();
               return showVoid;
             case Status.COMPLETED:
               final financeData = financeStatusProvider.apiResponse.data?.data;
-              
               final salary = financeData?.listSalaryDetials?.isNotEmpty == true ? financeData?.listSalaryDetials?.first : null;
               final deduction = financeData?.listDeduction?.isNotEmpty == true ? financeData?.listDeduction?.first : null;
               final bonus = financeData?.listBonus?.isNotEmpty == true ? financeData?.listBonus?.first : null;
               final warning = financeData?.listWarnings?.isNotEmpty == true ? financeData?.listWarnings?.first : null;
               return _homeViewCard(
+                onTap: ()
+                {
+                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const FinanceView()));
+                },
                     title: "My Finance",
                     icon: SvgPicture.asset("assets/my_finance.svg"),
                     langProvider: langProvider,
@@ -761,8 +765,8 @@ _scoProgramsList.clear();
           case Status.NONE:
             return showVoid;
           case Status.COMPLETED:
-
-           final topAdvisor =  provider.apiResponse.data?.data?.listOfAdvisor?[0];
+            final listOfAdvisors = provider.apiResponse.data?.data?.listOfAdvisor ?? [];
+           final topAdvisor =  listOfAdvisors.isNotEmpty ?  listOfAdvisors[0] : null;
 
             return _homeViewCard(
               onTap: (){
@@ -871,12 +875,6 @@ _scoProgramsList.clear();
   }
 
   // *---- Sco programs slider ----*
-
-
-
-
-
-
   int _scoProgramCurrentIndex = 0;
 
   final List<Widget> _scoProgramsList = [];

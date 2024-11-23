@@ -20,23 +20,49 @@ import '../resources/app_colors.dart';
 import 'constants.dart';
 
 mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
-  double get screenWidth => MediaQuery.of(context).size.width;
+  double get screenWidth =>
+      MediaQuery
+          .of(context)
+          .size
+          .width;
 
-  double get screenHeight => MediaQuery.of(context).size.height;
+  double get screenHeight =>
+      MediaQuery
+          .of(context)
+          .size
+          .height;
 
-  Orientation get orientation => MediaQuery.of(context).orientation;
+  Orientation get orientation =>
+      MediaQuery
+          .of(context)
+          .orientation;
 
-  EdgeInsets get padding => MediaQuery.of(context).padding;
+  EdgeInsets get padding =>
+      MediaQuery
+          .of(context)
+          .padding;
 
-  EdgeInsets get viewInsets => MediaQuery.of(context).viewInsets;
+  EdgeInsets get viewInsets =>
+      MediaQuery
+          .of(context)
+          .viewInsets;
 
-  double get horizontalPadding => MediaQuery.of(context).padding.horizontal;
+  double get horizontalPadding =>
+      MediaQuery
+          .of(context)
+          .padding
+          .horizontal;
 
-  double get verticalPadding => MediaQuery.of(context).padding.vertical;
+  double get verticalPadding =>
+      MediaQuery
+          .of(context)
+          .padding
+          .vertical;
 
   double get kPadding => 20;
 
-  Widget get kFormHeight => const SizedBox.square(
+  Widget get kFormHeight =>
+      const SizedBox.square(
         dimension: 15,
       );
 
@@ -45,7 +71,8 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 
   double get kCardRadius => 15;
 
-  Widget get kSubmitButtonHeight => const SizedBox.square(
+  Widget get kSubmitButtonHeight =>
+      const SizedBox.square(
         dimension: 30,
       );
 }
@@ -53,8 +80,7 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 class Utils {
 
 
-
-  static  launchUrl(dynamic url) async {
+  static launchUrl(dynamic url) async {
     // Check if the URL is a Uri object and convert it to a string
     if (url is Uri) {
       url = url.toString();
@@ -82,7 +108,8 @@ class Utils {
   }
 
 
-  static Future<void> makePhoneCall({required String phoneNumber,required BuildContext context}) async {
+  static Future<void> makePhoneCall(
+      {required String phoneNumber, required BuildContext context}) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
@@ -90,7 +117,8 @@ class Utils {
 
     // Check permission before making a call
     final permissionService = PermissionServices();
-    final status = await permissionService.checkAndRequestPermission(Permission.phone,context);
+    final status = await permissionService.checkAndRequestPermission(
+        Permission.phone, context);
     if (status) {
       await launchUrl(launchUri);
     }
@@ -112,7 +140,9 @@ class Utils {
       }
 
       // Extract the file name and create the save path
-      String fileName = myFile.path.split('/').last; // Extracts the file name
+      String fileName = myFile.path
+          .split('/')
+          .last; // Extracts the file name
       String savePath = "$folderPath/$fileName";
 
       // Write the file to the save path
@@ -126,7 +156,6 @@ class Utils {
       rethrow;
     }
   }
-
 
 
   // input borders start
@@ -153,83 +182,119 @@ class Utils {
   //*------Common Loading Indicators Start------*/
 
   //*-----Material Loading Indicator-----*/
-  static Widget materialLoadingIndicator({dynamic color = Colors.white}) =>  Center(child: CircularProgressIndicator(color: color, strokeWidth: 1.5));
+  static Widget materialLoadingIndicator({dynamic color = Colors.white}) =>
+      Center(child: CircularProgressIndicator(color: color, strokeWidth: 1.5));
 
 //*-----Cupertino Loading Indicator-----*/
-  static Widget cupertinoLoadingIndicator({dynamic color = AppColors.scoButtonColor}) =>  Center(child:   CupertinoActivityIndicator(color: color));
+  static Widget cupertinoLoadingIndicator(
+      {dynamic color = AppColors.scoButtonColor}) =>
+      Center(child: CupertinoActivityIndicator(color: color));
 
   //*----- page  Loading Indicator-----*/
-  static Widget pageLoadingIndicator({dynamic color = AppColors.scoButtonColor,required dynamic context}) =>  SizedBox(height: MediaQuery.of(context).size.height-(kToolbarHeight*1.62),width: MediaQuery.of(context).size.width,child: Center(child: Platform.isAndroid ? Utils.materialLoadingIndicator(color: color) : Utils.cupertinoLoadingIndicator(color: color)));
+  static Widget pageLoadingIndicator(
+      {dynamic color = AppColors.scoButtonColor, required dynamic context}) =>
+      SizedBox(height: MediaQuery
+          .of(context)
+          .size
+          .height - (kToolbarHeight * 1.62),
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          child: Center(
+              child: Platform.isAndroid ? Utils.materialLoadingIndicator(
+                  color: color) : Utils.cupertinoLoadingIndicator(
+                  color: color)));
 
   //*----- page  Refresh Indicator-----*/
-  static Widget pageRefreshIndicator({required dynamic child,required dynamic onRefresh}) =>  RefreshIndicator(color: Colors.white,backgroundColor: AppColors.scoThemeColor,onRefresh: onRefresh, child: ListView(children: [child]));
-
+  static Widget pageRefreshIndicator(
+      {required dynamic child, required dynamic onRefresh}) => RefreshIndicator(
+      color: Colors.white,
+      backgroundColor: AppColors.scoThemeColor,
+      onRefresh: onRefresh,
+      child: ListView(children: [child]));
 
 
   // *-----Show Loading more data from server-----*/
 
-  static Widget spinkitThreeBounce() => const Center(
+  static Widget spinkitThreeBounce() =>
+      const Center(
           child: Padding(
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
-        child: SpinKitThreeBounce(
-          color: Colors.black,
-          size: 23,
-        ),
-      ));
+            padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
+            child: SpinKitThreeBounce(
+              color: Colors.black,
+              size: 23,
+            ),
+          ));
 
 //*------Common Loading Indicators End------*/
 
 //*------Common Error Text Start------*/
-  static Widget showOnError() => const Center(
+  static Widget showOnError() =>
+      const Center(
         child: Text("Something went Wrong"),
       );
 
-  static Widget showOnNone() => const Center(
+  static Widget showOnNone() =>
+      const Center(
         child: Text("Something went Wrong"),
       );
 
-  static Widget showOnNull() => const Center(
+  static Widget showOnNull() =>
+      const Center(
         child: Text("Something went Wrong"),
       );
 
-  static Widget showOnNoDataAvailable() => const Center(
+  static Widget showOnNoLoadingMoreData() =>
+      const Center(
           child: Padding(
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
-        child: SpinKitThreeBounce(
-          color: Colors.white,
-          size: 23,
-        ),
-      ));
+            padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
+            child: SpinKitThreeBounce(
+              color: AppColors.WARNING,
+              size: 23,
+            ),
+          ));
 
-
-
+  static Widget showOnNoDataAvailable() =>
+      Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset("assets/no_data_found.svg"),
+          const Text(
+            'No Data Available.', // Fallback for no applications
+            style: TextStyle(fontSize: 16,color: AppColors.scoThemeColor),
+          ),
+        ],
+      );
 
 
   // model progress hud
 
-  static Widget modelProgressHud(
-      {bool processing = true, dynamic child}
-      ){
-   return  ModalProgressHUD(
-       color: Colors.blueGrey,
-       opacity: 0.3,
-       blur: 0.1,
-       dismissible: false,
-       progressIndicator: Platform.isAndroid ? Utils.materialLoadingIndicator(color: AppColors.scoThemeColor) : Utils.cupertinoLoadingIndicator(color: AppColors.scoThemeColor),
-    inAsyncCall: processing,
-    child: child);
+  static Widget modelProgressHud({bool processing = true, dynamic child}) {
+    return ModalProgressHUD(
+        color: Colors.blueGrey,
+        opacity: 0.3,
+        blur: 0.1,
+        dismissible: false,
+        progressIndicator: Platform.isAndroid ? Utils.materialLoadingIndicator(
+            color: AppColors.scoThemeColor) : Utils.cupertinoLoadingIndicator(
+            color: AppColors.scoThemeColor),
+        inAsyncCall: processing,
+        child: child);
   }
 
 
   /// This methods converts the byte data to MB
-  static Future<String> getFileSize({required file})async{
+  static Future<String> getFileSize({required file}) async {
     final sizeInBytes = await file.length();
     final myFileSize = filesize(sizeInBytes);
     return myFileSize;
   }
 
   /// This method checks if the file size is less than 200KB
-  static Future<bool> compareFileSize({required file,required int maxSizeInBytes})async{
+  static Future<bool> compareFileSize(
+      {required file, required int maxSizeInBytes}) async {
     int fileSizeInBytes = await file.length();
 
     // 200KB in bytes (1KB = 1024 bytes)
@@ -245,16 +310,18 @@ class Utils {
   }
 
   /// This methods get the file name
-  static String getFileName({required File file}){
-    final fileName =  file.path.split('/').last;
+  static String getFileName({required File file}) {
+    final fileName = file.path
+        .split('/')
+        .last;
     return fileName;
   }
 
 
   // Method to open pdf
-  static Future<void> openFile(File file)async{
+  static Future<void> openFile(File file) async {
 // fetching the path
-    final path =  file.path;
+    final path = file.path;
 // open the pdf
     await OpenFile.open(path);
   }
@@ -284,20 +351,18 @@ Future<File> convertBase64ToFile(String base64String, String fileName) async {
 }
 
 
-
 //Get Text Direction Method:
 TextDirection getTextDirection(LanguageChangeViewModel langProvider) {
   return langProvider.appLocale == const Locale('en') ||
-          langProvider.appLocale == null
+      langProvider.appLocale == null
       ? TextDirection.ltr
       : TextDirection.rtl;
 }
 
 //TextField Heading Text with importance indicator:
-fieldHeading(
-    {required String title,
-    required bool important,
-    required LanguageChangeViewModel langProvider}) {
+fieldHeading({required String title,
+  required bool important,
+  required LanguageChangeViewModel langProvider}) {
   return Directionality(
     textDirection: getTextDirection(langProvider),
     child: Padding(
@@ -314,14 +379,14 @@ fieldHeading(
                         fontWeight: FontWeight.w500,
                         color: AppColors.fieldTitleDarkGrey),
                     children: <TextSpan>[
-                  TextSpan(
-                    text: title,
-                  ),
-                  important
-                      ? const TextSpan(
+                      TextSpan(
+                        text: title,
+                      ),
+                      important
+                          ? const TextSpan(
                           text: " *", style: TextStyle(color: Colors.red))
-                      : const TextSpan()
-                ])),
+                          : const TextSpan()
+                    ])),
           ),
         ],
       ),
@@ -335,7 +400,6 @@ List<dynamic> populateUniqueSimpleValuesFromLOV({
   required LanguageChangeViewModel provider,
   Color? textColor,
 }) {
-
   List<String> uniqueKeys = [];
 
   List uniqueItemsList = [];
@@ -360,16 +424,13 @@ List<dynamic> populateSimpleValuesFromLOV({
   required LanguageChangeViewModel provider,
   Color? textColor,
 }) {
-
   final List<dynamic> finalList = [];
 
 
   for (var element in menuItemsList) {
-
-      if (element.hide == false) {
-        finalList.add(element);
-      }
-
+    if (element.hide == false) {
+      finalList.add(element);
+    }
   }
 
   return finalList;
@@ -380,9 +441,7 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
   Color? textColor,
-})
-{
-
+}) {
   final textDirection = getTextDirection(provider);
 
   List<String> uniqueKeys = [];
@@ -399,9 +458,10 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   // Add the constant "Select" option at the 0th index
   List<DropdownMenuItem> dropdownItems = [
     DropdownMenuItem(
-      value: '',  // Empty value for the default option
+      value: '', // Empty value for the default option
       child: Text(
-        textDirection == TextDirection.ltr ? 'Select' : 'اختر',  // 'Select' in both languages
+        textDirection == TextDirection.ltr ? 'Select' : 'اختر',
+        // 'Select' in both languages
         style: TextStyle(
           color: textColor ?? AppColors.hintDarkGrey,
           fontSize: 14,
@@ -414,7 +474,7 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   // Add filtered and unique items (excluding hidden ones)
   dropdownItems.addAll(
     uniqueMenuItemsList
-        .where((element) => element.hide == false)  // Filter out hidden elements
+        .where((element) => element.hide == false) // Filter out hidden elements
         .map((element) {
       return DropdownMenuItem(
         value: element.code.toString(),
@@ -440,16 +500,16 @@ List<DropdownMenuItem> populateCommonDataDropdown({
 List<DropdownMenuItem> populateNormalDropdownWithValue({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
-})
-{
+}) {
   final textDirection = getTextDirection(provider);
 
   // Add a constant "Select" option at the 0th index
   List<DropdownMenuItem> dropdownItems = [
     DropdownMenuItem(
-      value: '',  // Empty value
+      value: '', // Empty value
       child: Text(
-        textDirection == TextDirection.ltr ? 'Select' : 'اختر',  // 'Select' in both languages
+        textDirection == TextDirection.ltr ? 'Select' : 'اختر',
+        // 'Select' in both languages
         style: const TextStyle(
           color: AppColors.scoButtonColor,
           fontSize: 14,
@@ -486,8 +546,7 @@ List<DropdownMenuItem> populateNormalDropdownWithValue({
 List<DropdownMenuItem> populateNormalDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
-})
-{
+}) {
   final textDirection = getTextDirection(provider);
   return menuItemsList.map((element) {
     return DropdownMenuItem(
@@ -683,7 +742,8 @@ String formatDateOnly(String? dateString) {
 
   try {
     // Preprocess to make it ISO 8601 compatible
-    String processedDateString = dateString.replaceFirst(' ', 'T').replaceFirst(' UTC', 'Z');
+    String processedDateString = dateString.replaceFirst(' ', 'T').replaceFirst(
+        ' UTC', 'Z');
     // Parse the input date string to DateTime
     DateTime parsedDate = DateTime.parse(processedDateString);
     // Format to date-only string
@@ -696,9 +756,9 @@ String formatDateOnly(String? dateString) {
 
 
 // get full name from lov Code
-String getFullNameFromLov({ String? lovCode, String? code,required langProvider}){
-
-  if(lovCode == null || code == null || lovCode.isEmpty || code.isEmpty){
+String getFullNameFromLov(
+    { String? lovCode, String? code, required langProvider}) {
+  if (lovCode == null || code == null || lovCode.isEmpty || code.isEmpty) {
     return '';
   }
 
@@ -710,12 +770,13 @@ String getFullNameFromLov({ String? lovCode, String? code,required langProvider}
         textColor: AppColors.scoButtonColor);
   }
 
-  dynamic element = lovList.firstWhere((element){
+  dynamic element = lovList.firstWhere((element) {
     return element.code == code;
   });
 
 
-  return getTextDirection(langProvider) == TextDirection.rtl ? element.valueArabic : element.value;
+  return getTextDirection(langProvider) == TextDirection.rtl ? element
+      .valueArabic : element.value;
 }
 
 

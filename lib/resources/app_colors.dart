@@ -6,6 +6,7 @@ class AppColors {
   static const Color lightGrey = Color(0xffDFDFDF);
   static const Color scoButtonColor = Color(0xff093B59);
   static const Color scoThemeColor = Color(0xff9A6F32);
+  static const Color scoMidThemeColor = Color(0xffCC9240);
   static const Color scoLightThemeColor = Color(0xffCDB383);
   static const Color bgColor = Color(0xffF5F5F5);
   static const Color greenColor = Color(0xff0B9967);
@@ -18,7 +19,7 @@ class AppColors {
 
   static const Color PRIMARY = Color(0xff3880FF);
   static const Color SECONDARY = Color(0xffAA66CC);
-  static const Color SUCCESS = Color(0xff10DC60);
+  static const Color SUCCESS = Color(0xff1BC352);
   static const Color INFO = Color(0xff33B5E5);
   static const Color WARNING = Color(0xffFFBB33);
   static const Color DANGER = Color(0xffF04141);

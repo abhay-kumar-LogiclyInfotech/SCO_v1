@@ -18,11 +18,12 @@ class CustomSimpleAppBar extends StatelessWidget implements PreferredSizeWidget 
     return Directionality(
       textDirection: getTextDirection(provider),
       child: AppBar(
-        elevation: 0.3,
+        elevation: 0.2,
         shadowColor: Colors.grey,
         backgroundColor: Colors.white,
+        foregroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         title:
-
       titleAsString != null ?  Text(titleAsString ?? '',
             style: AppTextStyles.appBarTitleStyle())
 
