@@ -98,6 +98,7 @@ class _WarningDetailsViewState extends State<WarningDetailsView> with MediaQuery
                 ),
               );
             case Status.COMPLETED:
+              final listOfWarnings = provider.apiResponse.data?.data?.listWarnings ?? [];
               return Directionality(
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
@@ -108,7 +109,10 @@ class _WarningDetailsViewState extends State<WarningDetailsView> with MediaQuery
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _warningDetails(provider: provider, langProvider: langProvider),
+                        listOfWarnings.isNotEmpty ?
+                        _warningDetails(provider: provider, langProvider: langProvider)
+                            : Utils.showOnNoDataAvailable()
+                        ,
                       ],
                     ),
                   ),

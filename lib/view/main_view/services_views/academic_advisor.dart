@@ -93,6 +93,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
             ),
           );
         case Status.COMPLETED:
+      final listOfAdvisors =   provider.apiResponse.data?.data?.listOfAdvisor ?? [];
           return Directionality(
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
@@ -103,7 +104,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    (provider.apiResponse.data?.data?.listOfAdvisor != null)
+                    listOfAdvisors.isNotEmpty
                         ? Column(
                             children: [
                               /// Advisor's list section
@@ -117,7 +118,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
                                   langProvider: langProvider),
                             ],
                           )
-                        : const Text("No Data Found")
+                        : Utils.showOnNoDataAvailable()
                   ],
                 ),
               ),

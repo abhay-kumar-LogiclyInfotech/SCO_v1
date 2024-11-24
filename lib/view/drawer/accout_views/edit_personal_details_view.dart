@@ -78,15 +78,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     ]);
 
 
-    /// Fetching the Profile picture.....
-    if (studentProfilePictureProvider.apiResponse.status == Status.COMPLETED) {
-      setState(() {
-        _profilePictureUrl = studentProfilePictureProvider.apiResponse.data?.url?.toString() ?? '';
-      });
-    }
+    // /// Fetching the Profile picture.....
+    // if (studentProfilePictureProvider.apiResponse.status == Status.COMPLETED) {
+    //   setState(() {
+    //     _profilePictureUrl = studentProfilePictureProvider.apiResponse.data?.url?.toString() ?? '';
+    //   });
+    // }
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
 
     /// Check and populate dropdowns only if the values exist
     if (Constants.lovCodeMap['COUNTRY']?.values != null) {
@@ -261,13 +260,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ProfileWithCameraButton(
-                        profileImage: _profileImageFile != null ? FileImage(_profileImageFile!) :  _profilePictureUrl.isNotEmpty
-                            ? NetworkImage(_profilePictureUrl)
+                    Consumer<GetProfilePictureUrlViewModel>(
+                      builder: (context,provider,_){
+                        return ProfileWithCameraButton(
+                        profileImage: _profileImageFile != null ? FileImage(_profileImageFile!) :  provider.apiResponse.data?.url != null
+                            ? NetworkImage(provider.apiResponse.data!.url!.toString())
                             : const AssetImage(
                             'assets/personal_details/dummy_profile_pic.png'),
                         onTap: () async{
-
                          Destination.chooseFilePickerDestination(context: context, onCameraTap: ()async{
                            bool cameraPermission =  await _permissionServices.checkAndRequestPermission(Permission.camera, context);
                            if(cameraPermission)
@@ -283,7 +283,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                            }
                          });
                         },
-                        onLongPress: () {}),
+                        onLongPress: () {});}),
 
                     /// ProfilePicture(),
                     kFormHeight,

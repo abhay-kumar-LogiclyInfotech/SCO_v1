@@ -121,8 +121,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
 
   ///*------ Applications Section------*
 
-  Widget _applicationsSection(
-      {required MyScholarshipViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _applicationsSection({required MyScholarshipViewModel provider, required LanguageChangeViewModel langProvider}) {
     // return Column(
     //   children: provider.apiResponse.data!.data!.scholarships!.map((Scholarships element)
     //   {
@@ -137,25 +136,94 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
     // );
     final studentId = provider.apiResponse.data?.data?.dataDetails?.emplId ?? '';
 
-    return Column(
-      children: provider.apiResponse.data?.data?.dataDetails?.scholarships?.map((element) {
-        return SimpleCard(expandedContent: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            /// ------------ MY SCHOLARSHIP (APPROVED SCHOLARSHIP) DETAILS ------------
-          CustomInformationContainerField(title: "Scholarship Name", description: "SCO${element.academicCareer}${element.scholarshipType}"),
-          CustomInformationContainerField(title: "Country-University", description:  getFullNameFromLov(lovCode: 'EXT_ORG_ID',code: '${element.university}',langProvider: langProvider)     ),
-          CustomInformationContainerField(title: "Country", description: getFullNameFromLov(lovCode: 'COUNTRY',code: '${element.country}',langProvider: langProvider)  ),
-          CustomInformationContainerField(title: "Major", description: element.academicCareer),
-          CustomInformationContainerField(title: "Program Duration", description: element.numberOfYears),
-          CustomInformationContainerField(title: "Approved Date", description: element.scholarshipApprovedDate),
-          CustomInformationContainerField(title: "Scholarship Start Date", description: element.studyStartDate),
-          CustomInformationContainerField(title: "Scholarship End Date", description: element.scholarshipEndDate),
-          CustomInformationContainerField(title: "Application Number", description: element.applicationNo),
-          CustomInformationContainerField(title: "Student Id", description: studentId,isLastItem: true),
-          ]
-        ));
-      }).toList() ?? [],
-    );
+   final listOfScholarships =  provider.apiResponse.data?.data?.dataDetails?.scholarships ?? [];
+    return
+    (listOfScholarships.isNotEmpty)?
+     ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: listOfScholarships.length,
+      itemBuilder: (context, index) {
+        final element = listOfScholarships[index];
+        return SimpleCard(
+          expandedContent: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              /// ------------ MY SCHOLARSHIP (APPROVED SCHOLARSHIP) DETAILS ------------
+              CustomInformationContainerField(
+                title: "Scholarship Name",
+                description: "SCO${element.academicCareer}${element.scholarshipType}",
+              ),
+              CustomInformationContainerField(
+                title: "Country-University",
+                description: getFullNameFromLov(
+                  lovCode: 'EXT_ORG_ID',
+                  code: '${element.university}',
+                  langProvider: langProvider,
+                ) ,
+              ),
+              CustomInformationContainerField(
+                title: "Country",
+                description: getFullNameFromLov(
+                  lovCode: 'COUNTRY',
+                  code: '${element.country}',
+                  langProvider: langProvider,
+                ),
+              ),
+              CustomInformationContainerField(
+                title: "Major",
+                description: element.academicCareer ?? '- -',
+              ),
+              CustomInformationContainerField(
+                title: "Program Duration",
+                description: element.numberOfYears ?? '- -',
+              ),
+              CustomInformationContainerField(
+                title: "Approved Date",
+                description: element.scholarshipApprovedDate ?? '- -',
+              ),
+              CustomInformationContainerField(
+                title: "Scholarship Start Date",
+                description: element.studyStartDate ?? '- -',
+              ),
+              CustomInformationContainerField(
+                title: "Scholarship End Date",
+                description: element.scholarshipEndDate ?? '- -',
+              ),
+              CustomInformationContainerField(
+                title: "Application Number",
+                description: element.applicationNo ?? '- -',
+              ),
+              CustomInformationContainerField(
+                title: "Student Id",
+                description: studentId,
+                isLastItem: true,
+              ),
+            ],
+          ),
+        );
+      },
+    ) : Utils.showOnNoDataAvailable();
+
+    // return Column(
+    //   children: provider.apiResponse.data?.data?.dataDetails?.scholarships?.map((element) {
+    //     return SimpleCard(expandedContent: Column(
+    //       mainAxisSize: MainAxisSize.max,
+    //       children: [
+    //         /// ------------ MY SCHOLARSHIP (APPROVED SCHOLARSHIP) DETAILS ------------
+    //       CustomInformationContainerField(title: "Scholarship Name", description: "SCO${element.academicCareer}${element.scholarshipType}"),
+    //       CustomInformationContainerField(title: "Country-University", description:  getFullNameFromLov(lovCode: 'EXT_ORG_ID',code: '${element.university}',langProvider: langProvider)     ),
+    //       CustomInformationContainerField(title: "Country", description: getFullNameFromLov(lovCode: 'COUNTRY',code: '${element.country}',langProvider: langProvider)  ),
+    //       CustomInformationContainerField(title: "Major", description: element.academicCareer),
+    //       CustomInformationContainerField(title: "Program Duration", description: element.numberOfYears),
+    //       CustomInformationContainerField(title: "Approved Date", description: element.scholarshipApprovedDate),
+    //       CustomInformationContainerField(title: "Scholarship Start Date", description: element.studyStartDate),
+    //       CustomInformationContainerField(title: "Scholarship End Date", description: element.scholarshipEndDate),
+    //       CustomInformationContainerField(title: "Application Number", description: element.applicationNo),
+    //       CustomInformationContainerField(title: "Student Id", description: studentId,isLastItem: true),
+    //       ]
+    //     ));
+    //   }).toList() ?? [],
+    // );
   }
 }

@@ -189,7 +189,7 @@ class CustomInformationContainerField extends StatelessWidget {
                 ),
                 description != null
                     ? Text(
-                     description?.toString() ?? '--',
+                  description!.isEmpty ? "- -"  :  description?.toString() ?? '- -',
                       style: AppTextStyles.normalTextStyle().copyWith(fontWeight: FontWeight.w600,fontSize: 14,color: AppColors.scoButtonColor),
                       textAlign: TextAlign.justify,
                     )

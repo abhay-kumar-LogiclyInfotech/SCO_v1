@@ -98,6 +98,7 @@ class _BonusDetailsViewState extends State<BonusDetailsView> with MediaQueryMixi
                 ),
               );
             case Status.COMPLETED:
+              final listOfBonus = provider.apiResponse.data?.data?.listBonus ?? [];
               return Directionality(
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
@@ -108,7 +109,10 @@ class _BonusDetailsViewState extends State<BonusDetailsView> with MediaQueryMixi
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _bonusDetails(provider: provider, langProvider: langProvider),
+                        listOfBonus.isNotEmpty ?
+                        _bonusDetails(provider: provider, langProvider: langProvider)
+                            : Utils.showOnNoDataAvailable()
+                        ,
                       ],
                     ),
                   ),

@@ -98,6 +98,7 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
                 ),
               );
             case Status.COMPLETED:
+              final listOfSalaries = provider.apiResponse.data?.data?.listSalaryDetials ?? [];
               return Directionality(
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
@@ -108,7 +109,11 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _salaryDetails(provider: provider, langProvider: langProvider),
+
+                        listOfSalaries.isNotEmpty ?
+                        _salaryDetails(provider: provider, langProvider: langProvider)
+                        : Utils.showOnNoDataAvailable()
+                        ,
                       ],
                     ),
                   ),

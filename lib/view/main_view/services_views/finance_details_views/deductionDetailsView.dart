@@ -98,6 +98,7 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
                 ),
               );
             case Status.COMPLETED:
+              final listOfDeduction = provider.apiResponse.data?.data?.listDeduction ?? [];
               return Directionality(
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
@@ -108,7 +109,10 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _deductionDetails(provider: provider, langProvider: langProvider),
+                        listOfDeduction.isNotEmpty ?
+                        _deductionDetails(provider: provider, langProvider: langProvider)
+                            : Utils.showOnNoDataAvailable()
+                        ,
                       ],
                     ),
                   ),

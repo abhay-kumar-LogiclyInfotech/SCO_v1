@@ -48,12 +48,11 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
       studentProfileProvider.getPersonalDetails(),
       studentProfilePictureProvider.getProfilePictureUrl()
     ]);
-
     if (studentProfilePictureProvider.apiResponse.status == Status.COMPLETED) {
       setState(() {
-        _profilePictureUrl =
-            studentProfilePictureProvider.apiResponse.data?.url?.toString() ??
-                '';
+        // _profilePictureUrl =
+        //     studentProfilePictureProvider.apiResponse.data?.url?.toString() ??
+        //         '';
       });
     }
   }
@@ -123,14 +122,19 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
 
 
                     /// User profile picture without camera button
-                    ProfileWithCameraButton(
-                      cameraEnabled: false,
-                        profileImage: _profilePictureUrl.isNotEmpty
-                            ? NetworkImage(_profilePictureUrl)
-                            : const AssetImage(
+                    Consumer<GetProfilePictureUrlViewModel>(
+                      builder: (context,provider,_){
+                        return ProfileWithCameraButton(
+                            cameraEnabled: false,
+                            profileImage: provider.apiResponse.data?.url != null
+                                ? NetworkImage(provider.apiResponse.data!.url!.toString())
+                                : const AssetImage(
                                 'assets/personal_details/dummy_profile_pic.png'),
-                        onTap: () {},
-                        onLongPress: () {}),
+                            onTap: () {},
+                            onLongPress: () {});
+                      },
+                    )
+                    ,
 
                     // ProfilePicture(),
                     kFormHeight,
