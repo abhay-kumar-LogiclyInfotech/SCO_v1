@@ -240,8 +240,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
 
         /// ****************************************************************
         kFormHeight,
-        fieldHeading(
-            title: "Employer", important: false, langProvider: langProvider),
+        fieldHeading(title: "Employer", important: false, langProvider: langProvider),
         scholarshipFormDropdown(
             currentFocusNode: _employerFocusNode,
             controller: _employerController,

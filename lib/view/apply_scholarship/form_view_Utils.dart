@@ -146,6 +146,36 @@ dynamic addRemoveMoreSection(
     );
   }
 
+dynamic scholarshipFormTimeField(
+    {required FocusNode currentFocusNode,
+      required TextEditingController controller,
+      required String hintText,
+      String? errorText,
+      required Function(String? value) onChanged,
+      required Function()? onTap,
+      bool? filled}) {
+  return CustomTextField(
+    readOnly: true,
+    filled: filled,
+    // Prevent manual typing
+    currentFocusNode: currentFocusNode,
+    controller: controller,
+    border: Utils.outlinedInputBorder(),
+    hintText: hintText,
+    textStyle: textFieldTextStyle,
+    textInputType: TextInputType.datetime,
+    textCapitalization: true,
+    trailing: const Icon(
+      Icons.watch_later_rounded,
+      color: AppColors.scoLightThemeColor,
+      size: 16,
+    ),
+    errorText: errorText,
+    onChanged: onChanged,
+    onTap: onTap,
+  );
+}
+
   // dropdown for scholarship form
   dynamic scholarshipFormDropdown({
     bool? readOnly,

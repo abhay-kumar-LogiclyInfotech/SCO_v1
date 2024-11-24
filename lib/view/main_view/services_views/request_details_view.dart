@@ -264,7 +264,8 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
         width: double.infinity,
         padding: EdgeInsets.all(kPadding - 10),
         decoration: const BoxDecoration(color: AppColors.lightBlue0),
-        child: Column(children: [
+        child: Column(
+            children: [
           ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -272,12 +273,14 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
               itemBuilder: (context, index) {
                 final comment = request?.details![index];
                 return Text(
-                  comment?.ssrRsDescription
-                      .toString()
-                      .replaceAll('<br/>', '\n') ??
+                  // "${(index+1).toString()}) "
+                      "${comment?.ssrRsDescription
+                            .toString()
+                            .replaceAll('<br/>', '')
+                      }" ??
                       '',
                   style: AppTextStyles.bold15ScoButtonColorTextStyle(),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                 );
               }),
         ]));

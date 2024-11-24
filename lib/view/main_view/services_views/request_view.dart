@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
 import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/custom_text_field.dart';
+import 'package:sco_v1/view/main_view/services_views/create_request_view.dart';
 import 'package:sco_v1/view/main_view/services_views/request_details_view.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
@@ -135,7 +136,9 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
       leading: SvgPicture.asset("assets/services/request_list.svg"),
       expandedContent: const SizedBox.shrink(),
       trailing: CustomMaterialButton(
-        onPressed: () {},
+        onPressed: () {
+          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const CreateRequestView()));
+        },
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kCardRadius)),
         visualDensity: VisualDensity.compact,
