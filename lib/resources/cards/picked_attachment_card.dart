@@ -206,7 +206,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                   title: widget.attachment.isLoading
                       ? const Text("loading...")
                       : Text(
-                    "${widget.index}) ${fileName.split('_').last}",
+                    "${widget.index+1}) ${fileName.split('_').last}",
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   subtitle: fileSize.isNotEmpty

@@ -52,6 +52,73 @@ class Constants {
   ];
 
 
+
+
+
+
+// "SERVICE_TYPE#AA": [
+// {"code": "AA", "value": "Academic Advisement", "valueArabic": "الإرشاد الأكاديمي"},
+// {"code": "FR", "value": "Financial Requests", "valueArabic": "الطلبات المالية"},
+// {"code": "OL", "value": "Official Letter Request", "valueArabic": "طلب رسالة رسمية"}
+// ],
+// "SERVICE_TYPE#AL": [
+// {"code": "AR", "value": "Administrative requests", "valueArabic": "Administrative requests"},
+// {"code": "FR2", "value": "Financial Requests", "valueArabic": "Financial Requests"}
+// ],
+// "SERVICE_TYPE#EI": [
+// {"code": "AA1", "value": "Academic Advisement", "valueArabic": "تسجيل ساعات أقل من المطلوب"},
+// {"code": "FR1", "value": "Financial Requests", "valueArabic": "Financial Requests"}
+// ]
+
+
+// "SERVICE_CATEGORY": [
+// {"code": "AA", "value": "Academic Advisement", "valueArabic": "الإرشاد الأكاديمي"},
+// {"code": "AL", "value": "Alumni", "valueArabic": "شؤون الخريجين"},
+// {"code": "EI", "value": "Educational initiatives", "valueArabic": "المبادرات التعليمية"}
+// ]
+
+// final serviceSubType ={
+// "SERVICE_SUBTYPE#FR": [
+// {"code": "1", "value": "Compensation for companion allowance", "valueArabic": "تعويض بدل مرافق"},
+// {"code": "2", "value": "Tuition fee compensation", "valueArabic": "تعويض رسوم دراسية"},
+// {"code": "3", "value": "Medical treatment compensation", "valueArabic": "تعويض علاجي"},
+// {"code": "4", "value": "Compensation for study visit allowance (Part Time)", "valueArabic": "تعويض بدل زيارة دراسية (الطلبة الدارسين بالنظام ال"},
+// {"code": "5", "value": "Payment of a marriage allowance", "valueArabic": "صرف علاوة زواج"}
+// ],
+// "SERVICE_SUBTYPE#AA1": [
+// {"code": "1", "value": "Logging hours less than required", "valueArabic": "تسجيل ساعات أقل من المطلوب"},
+// {"code": "2", "value": "Permission to travel/leave to the country of schl", "valueArabic": "Permission to travel/leave to the country of schl"}
+// ],
+// "SERVICE_SUBTYPE#OL": [
+// {"code": "1", "value": "Student visa request letter", "valueArabic": "رسالة طلب تأشيرة دراسية visa Request letter"},
+// {"code": "2", "value": "Financial guarantee letter", "valueArabic": "رسالة ضمان مالي"},
+// {"code": "3", "value": "National service letter", "valueArabic": "رسالة خدمة وطنية"},
+// {"code": "4", "value": "to whom it may concern letter", "valueArabic": "رسالة الى من يهمه الامر"}
+// ],
+// "SERVICE_SUBTYPE#FR1": [
+// {"code": "1", "value": "Request to issue a ticket / exchange a cash ticket", "valueArabic": "طلب اصدار تذكرة / صرف بدل تذكرة نقدي"},
+// {"code": "2", "value": "Add / change the bank account number", "valueArabic": "إضافة / تغيير رقم الحساب البنكي"}
+// ],
+// "SERVICE_SUBTYPE#FR2": [
+// {"code": "1", "value": "Cert equivalency letter from higher education", "valueArabic": "رسالة معادلة الشهادة من التعليم العالي"},
+// {"code": "2", "value": "Graduation award payment", "valueArabic": "صرف مكافأة التخرج"}
+// ],
+// "SERVICE_SUBTYPE#AA": [
+// {"code": "1", "value": "Suspension from a semester", "valueArabic": "ايقاف من فصل دراسي"},
+// {"code": "10", "value": "Meeting Request", "valueArabic": "طلب اجتماع"}, ///TODO: Add one by default from your side: Added by me
+// {"code": "2", "value": "Academic extension", "valueArabic": "تمديد دراسي"},
+// {"code": "3", "value": "Permission to travel/leave to the country of schl", "valueArabic": "إذن سفر/المغادرة الى بلد الابتعاث"},
+// {"code": "4", "value": "Postpone a semester", "valueArabic": "تأجيل فصل دراسي"},
+// {"code": "5", "value": "Withdrawing from the scholarship", "valueArabic": "انسحاب من البعثة/المنحة"},
+// {"code": "6", "value": "University change", "valueArabic": "تغيير جامعة"},
+// {"code": "7", "value": "major change", "valueArabic": "تغيير تخصص"},
+// {"code": "8", "value": "Change major and university", "valueArabic": "تغيير التخصص والجامعة"},
+// {"code": "9", "value": "Study subjects at another university", "valueArabic": "دراسة مواد دراسية بجامعة أخرى"}
+// ],
+// "SERVICE_SUBTYPE#AR": [
+// {"code": "1", "value": "Assistance in finding job", "valueArabic": "طلب مساعدة للحصول على وظيفة"}
+// ]
+// }
   /// All types of combinations are available now for Creating request
  static final requestStructureList = [
     {
@@ -59,10 +126,11 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "1",
       "fields": [
-        {"title": "Suspension semester:", "type": "text", "required": true},
-        {"title": "GPA:", "type": "number", "required": true},
-        {"title": "Attach the last academic record:", "type": "file", "required": true},
-        {"title": "Reason for suspension:", "type": "textArea", "required": true},
+        {"title": "Suspension semester:","titleAr":"فصل الايقاف:", "type": "text", "required": true},
+        {"title": "GPA:","titleAr":"المعدل التراكمي:", "type": "number", "required": true},
+        {"title": "Reason for suspension:","titleAr":"سبب الايقاف:", "type": "textArea", "required": true},
+        {"title": "Attach the last academic record:", "type": "file", "required": true,"titleAr":"ارفاق آخر سجل دراسي:"},
+
       ],
       "conditions": [
         "الحصول على موافقة مسبقة من المكتب",
@@ -74,10 +142,11 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "2",
       "fields": [
-        {"title": "Academic extension period:", "type": "text", "required": true},
-        {"title": "GPA:", "type": "number", "required": true},
-        {"title": "Attach the last academic record:", "type": "file", "required": true},
-        {"title": "Reason for academic extension:", "type": "textArea", "required": true},
+        {"title": "Academic extension period:", "type": "text", "required": true,"titleAr":"مدة التمديد الدراسي:"},
+        {"title": "GPA:", "type": "number", "required": true,"titleAr":"المعدل التراكمي:"},
+        {"title": "Reason for academic extension:", "type": "textArea", "required": true,"titleAr":"سبب التمديد الدراسي:"},
+        {"title": "Attach the last academic record:", "type": "file", "required": true,"titleAr":"ارفاق آخر سجل دراسي:"},
+
       ],
       "conditions": []
     },
@@ -86,12 +155,12 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "3",
       "fields": [
-        {"title": "Destination:", "type": "text", "required": true},
-        {"title": "Travel date:", "type": "date", "required": true},
-        {"title": "Return date:", "type": "date", "required": true},
-        {"title": "Emergency phone number:", "type": "text", "required": true},
-        {"title": "Inform the academic advisor in case of changes in information", "type": "text", "required": true},
-        {"title": "The reason:", "type": "textArea", "required": true},
+        {"title": "Destination:", "type": "text", "required": true,"titleAr":"الوجهة:"},
+        {"title": "Travel date:", "type": "date", "required": true,"titleAr":"تاريخ السفر:"},
+        {"title": "Return date:", "type": "date", "required": true,"titleAr":"تاريخ العودة:"},
+        {"title": "Emergency phone number:", "type": "text", "required": true,"titleAr":"رقم هاتف الطوارئ:"},
+        // {"title": "Inform the academic advisor in case of changes in information", "type": "text", "required": true,"titleAr":""},
+        {"title": "The reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": [
@@ -104,9 +173,9 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "4",
       "fields": [
-        {"title": "Postpone semester:", "type": "text", "required": true},
-        {"title": "Reason for requesting postponement:", "type": "textArea", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
+        {"title": "Postpone semester:", "type": "text", "required": true,"titleAr":"الفصل الدراسي للتأجيل :"},
+        {"title": "Reason for requesting postponement:", "type": "textArea", "required": true,"titleAr":"سبب طلب فصل التأجيل:"},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
       ],
       "conditions": [
         "الحصول على موافقة مسبقة",
@@ -118,9 +187,9 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "5",
       "fields": [
-        {"title": "Withdrawal season:", "type": "text", "required": true},
-        {"title": "Reason for withdrawing from the semester/scholarship:", "type": "textArea", "required": true},
-        {"title": "Attach a document supporting the application:", "type": "file", "required": true},
+        {"title": "Withdrawal semester:", "type": "text", "required": true,"titleAr":"فصل الانسحاب:"},
+        {"title": "Reason for withdrawing from the semester/scholarship:", "type": "textArea", "required": true,"titleAr":"سبب الانسحاب من البعثة/المنحة:"},
+        {"title": "Attach a document supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
       ],
       "conditions": []
     },
@@ -129,11 +198,11 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "6",
       "fields": [
-        {"title": "Name of the university to which you want to transfer:", "type": "text", "required": true},
-        {"title": "The number of credited hours in the new university:", "type": "number", "required": true},
-        {"title": "The cost of the number of non-accounted hours at the university:", "type": "number", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Name of the university to which you want to transfer:", "type": "text", "required": true,"titleAr":"اسم الجامعة المراد الانتقال لها: "},
+        {"title": "The number of credited hours in the new university:", "type": "number", "required": true,"titleAr":"عدد الساعات المحتسبة في الجامعة الجديدة:"},
+        {"title": "The cost of the number of non-accounted hours at the university:", "type": "number", "required": true,"titleAr":"تكلفة عدد الساعات الغير المحتسبة في الجامعة:"},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
       ],
       "conditions": [
         "الحصول على موافقة مسبقة من المكتب",
@@ -148,11 +217,11 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "7",
       "fields": [
-        {"title": "The name of the specialization to be changed:", "type": "text", "required": true},
-        {"title": "The number of hours credited in the new specialization:", "type": "number", "required": true},
-        {"title": "The cost of the number of unaccounted hours:", "type": "number", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "The name of the specialization to be changed:", "type": "text", "required": true,"titleAr":"اسم التخصص المراد تغييره:"},
+        {"title": "The number of hours credited in the new specialization:", "type": "number", "required": true,"titleAr":"عدد الساعات المحتسبة في التخصص الجديدة: "},
+        {"title": "The cost of the number of unaccounted hours:", "type": "number", "required": true,"titleAr":"تكلفة عدد الساعات الغير المحتسبة:"},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": [
@@ -168,12 +237,12 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "8",
       "fields": [
-        {"title": "Name of the university to which you want to transfer:", "type": "text", "required": true},
-        {"title": "The number of credited hours in the new university:", "type": "number", "required": true},
-        {"title": "The name of the specialization to be changed:", "type": "text", "required": true},
-        {"title": "The cost of the number of unaccounted hours:", "type": "number", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Name of the university to which you want to transfer:", "type": "text", "required": true,"titleAr":"اسم الجامعة المراد الانتقال لها:"},
+        {"title": "The number of credited hours in the new university:", "type": "number", "required": true,"titleAr":"عدد الساعات المحتسبة في الجامعة الجديدة:"},
+        {"title": "The name of the specialization to be changed:", "type": "text", "required": true,"titleAr":"اسم التخصص المراد تغييره:"},
+        {"title": "The cost of the number of unaccounted hours:", "type": "number", "required": true,"titleAr":"تكلفة عدد الساعات الغير المحتسبة: "},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب: "},
 
       ],
       "conditions": [
@@ -189,10 +258,10 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "9",
       "fields": [
-        {"title": "Name of the university to study courses in:", "type": "text", "required": true},
-        {"title": "Semester:", "type": "text", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Name of the university to study courses in:", "type": "text", "required": true,"titleAr":"اسم الجامعة لدراسة مواد فيها:"},
+        {"title": "Semester:", "type": "text", "required": true,"titleAr":"الفصل الدراسي:"},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": [
@@ -208,9 +277,9 @@ class Constants {
       "requestType": "AA",
       "requestSubType": "10",
       "fields": [
-        {"title": "Date:", "type": "date", "required": true},
-        {"title": "Time:", "type": "time", "required": true},
-        {"title": "Reason:", "type": "textArea", "required": true}
+        {"title": "Date:", "type": "date", "required": true,"titleAr":"التاريخ:"},
+        {"title": "Time:", "type": "time", "required": true,"titleAr":"الساعة:"},
+        {"title": "Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"}
       ],
       "conditions": [
         "إدخال سبب طلب الاجتماع مع تحديد اليوم والساعة."
@@ -221,10 +290,10 @@ class Constants {
       "requestType": "FR",
       "requestSubType": "1",
       "fields": [
-        {"title": "Date of enrollment of the escort to the mission headquarters:", "type": "date", "required": true},
-        {"title": "Date of return of the escort to the mission headquarters:", "type": "date", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Date of enrollment of the escort to the mission headquarters:", "type": "date", "required": true,"titleAr":"تاريخ التحاق المرافق لمقر البعثة:"},
+        {"title": "Date of return of the escort to the mission headquarters:", "type": "date", "required": true,"titleAr":"تاريخ عودة المرافق لمقر البعثة: "},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": [
@@ -237,10 +306,10 @@ class Constants {
       "requestType": "FR",
       "requestSubType": "2",
       "fields": [
-        {"title": "Compensation chapter:", "type": "text", "required": true},
-        {"title": "The cost of tuition fees", "type": "number", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Compensation chapter:", "type": "text", "required": true,"titleAr":"فصل التعويض: "},
+        {"title": "The cost of tuition fees", "type": "number", "required": true,"titleAr":"تكلفة الرسوم الدراسية:"},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": []
@@ -250,10 +319,10 @@ class Constants {
       "requestType": "FR",
       "requestSubType": "3",
       "fields": [
-        {"title": "The value of medical compensation", "type": "number", "required": true},
-        {"title": "Treatment type:", "type": "text", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "The value of medical compensation", "type": "number", "required": true,"titleAr":"قيمة التعويض العلاجي:"},
+        {"title": "Treatment type:", "type": "text", "required": true,"titleAr":"نوع العلاج: "},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":" السبب: "},
 
       ],
       "conditions": [
@@ -271,10 +340,10 @@ class Constants {
       "requestType": "FR",
       "requestSubType": "4",
       "fields": [
-        {"title": "Date of joining the mission headquarters:", "type": "date", "required": true},
-        {"title": "Date of departure from the mission headquarters:", "type": "date", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Date of joining the mission headquarters:", "type": "date", "required": true,"titleAr":"تاريخ الالتحاق بمقر البعثة: "},
+        {"title": "Date of departure from the mission headquarters:", "type": "date", "required": true,"titleAr":"تاريخ مغادرة مقر البعثة:"},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": [
@@ -287,9 +356,9 @@ class Constants {
       "requestType": "FR",
       "requestSubType": "5",
       "fields": [
-        {"title": "Date of joining the husband/wife to the place of dispatch:", "type": "date", "required": true},
-        {"title": "Attach documents supporting the application:", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Date of joining the husband/wife to the place of dispatch:", "type": "date", "required": true,"titleAr":"تاريخ التحاق الزوج/الزوجة لمقر الايفاد:"},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": [
@@ -304,7 +373,7 @@ class Constants {
       "requestType": "OL",
       "requestSubType": "1",
       "fields": [
-        {"title": "The reason for issuing the message", "type": "textArea", "required": true}
+        {"title": "The reason for issuing the message", "type": "textArea", "required": true,"titleAr":"سبب اصدار الرسالة: "}
       ],
       "conditions": []
     },
@@ -313,7 +382,7 @@ class Constants {
       "requestType": "OL",
       "requestSubType": "2",
       "fields": [
-        {"title": "The reason for issuing the message", "type": "textArea", "required": true}
+        {"title": "The reason for issuing the message", "type": "textArea", "required": true,"titleAr":"سبب اصدار الرسالة:"}
       ],
       "conditions": []
     },
@@ -322,7 +391,7 @@ class Constants {
       "requestType": "OL",
       "requestSubType": "3",
       "fields": [
-        {"title": "The reason for issuing the message", "type": "textArea", "required": true}
+        {"title": "The reason for issuing the message", "type": "textArea", "required": true,"titleAr":"سبب اصدار الرسالة: "}
       ],
       "conditions": []
     },
@@ -331,8 +400,8 @@ class Constants {
       "requestType": "OL",
       "requestSubType": "4",
       "fields": [
-        {"title": "The entity", "type": "text", "required": true},
-        {"title": "The reason for issuing the message", "type": "textArea", "required": true}
+        {"title": "The entity", "type": "text", "required": true,"titleAr":"الجهة:"},
+        {"title": "The reason for issuing the message", "type": "textArea", "required": true,"titleAr":"الأسباب: "}
       ],
       "conditions": []
     },
@@ -341,8 +410,8 @@ class Constants {
       "requestType": "AA1",
       "requestSubType": "1",
       "fields": [
-        {"title": "University approval", "type": "text", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        // {"title": "University approval", "type": "text", "required": true,"titleAr":""},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"الأسباب: "},
 
       ],
       "conditions": []
@@ -352,25 +421,27 @@ class Constants {
       "requestType": "FR1",
       "requestSubType": "1",
       "fields": [
-        {"title": "Departure Date", "type": "date", "required": true},
-        {"title": "Return Date", "type": "date", "required": true},
-        {"title": "Destination", "type": "text", "required": true},
-        {"title": "Declaration of not changing the request type (either ticket or cash allowance), Declaration of not changing the destination", "type": "text", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Departure Date", "type": "date", "required": true,"titleAr":"الذهاب: "},
+        {"title": "Return Date", "type": "date", "required": true,"titleAr":"العودة:"},
+        {"title": "Destination", "type": "text", "required": true,"titleAr":"الوجهة:"},
+        // {"title": "Declaration of not changing the request type (either ticket or cash allowance), Declaration of not changing the destination", "type": "text", "required": true,"titleAr":""},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": []
     },
+
+   /// Take care of this: this is missing in given response by backend
     {
       "requestCategory": "EI",
       "requestType": "AA1",
       "requestSubType": "2",
       "fields": [
-        {"title": "Destination:", "type": "text", "required": true},
-        {"title": "Travel date:", "type": "date", "required": true},
-        {"title": "Return date:", "type": "date", "required": true},
-        {"title": "Emergency phone number:", "type": "text", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Destination:", "type": "text", "required": true,"titleAr":"الوجهة:"},
+        {"title": "Travel date:", "type": "date", "required": true,"titleAr":"تاريخ السفر: "},
+        {"title": "Return date:", "type": "date", "required": true,"titleAr":"   تاريخ العودة:  "},
+        {"title": "Emergency phone number:", "type": "text", "required": true,"titleAr":"رقم هاتف الطوارئ:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": [
@@ -383,8 +454,8 @@ class Constants {
       "requestType": "FR1",
       "requestSubType": "2",
       "fields": [
-        {"title": "Attach a letter from the bank (showing IBAN number, bank account number, and bank name)", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
       ],
       "conditions": []
     },
@@ -393,8 +464,8 @@ class Constants {
       "requestType": "FR2",
       "requestSubType": "1",
       "fields": [
-        {"title": "The reason:", "type": "textArea", "required": true},
-        {"title": "Send final academic record – diploma certificate", "type": "file", "required": true}
+        {"title": "The reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
+        {"title": "Send final academic record – diploma certificate", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"}
       ],
       "conditions": []
     },
@@ -403,9 +474,9 @@ class Constants {
       "requestType": "FR2",
       "requestSubType": "2",
       "fields": [
-        {"title": "The reason:", "type": "textArea", "required": true},
-        {"title": "Attach exit and entry stamp for passport:", "type": "file", "required": true},
-        {"title": "Attach a letter from the bank (showing IBAN number, bank account number, and bank name)", "type": "file", "required": true}
+        {"title": "The reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
+        {"title": "Attach exit and entry stamp for passport:", "type": "file", "required": true,"titleAr":"(ختم الدخول لجواز السفر –التأشيرة الدراسية – عقد الزواج)"},
+        {"title": "Attach documents supporting the application:", "type": "file", "required": true,"titleAr":"ارفاق مستندات تدعم الطلب:"}
       ],
       "conditions": []
     },
@@ -414,9 +485,9 @@ class Constants {
       "requestType": "AR",
       "requestSubType": "1",
       "fields": [
-        {"title": "Determine the entities to which the graduate has previously applied", "type": "text", "required": true},
-        {"title": "Register in employment platforms in the country (mention the platforms) and send CV", "type": "file", "required": true},
-        {"title": "The Reason:", "type": "textArea", "required": true},
+        {"title": "Determine the entities to which the graduate has previously applied", "type": "text", "required": true,"titleAr":"تحديد الجهات التي تقدم لها الخريج سابقا: "},
+        // {"title": "Register in employment platforms in the country (mention the platforms) and send CV", "type": "file", "required": true,"titleAr":""},
+        {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
 
       ],
       "conditions": []
@@ -424,10 +495,11 @@ class Constants {
     {
       "requestCategory": "AL",
       "requestType": "AR",
-      "requestSubType": "Adding / changing the job status of the graduate",
+      "requestSubType": "2",
       "fields": [
-        {"title": "Add the employer", "type": "text", "required": false},
-        {"title": "If not working, specify the entities applied to and the employment platforms registered in, reason for not wanting to work, national service start and end dates, postgraduate studies (name of the institution)", "type": "text", "required": false}
+        // {"title": "Add the employer", "type": "text", "required": false},
+        // {"title": "If not working, specify the entities applied to and the employment platforms registered in, reason for not wanting to work, national service start and end dates, postgraduate studies (name of the institution)", "type": "text", "required": false}
+        {"title": "Reason", "type": "textArea", "required": false,"titleAr":"السبب:"}
       ],
       "conditions": []
     } /// This is not available more and no lov code available for this

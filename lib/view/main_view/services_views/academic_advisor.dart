@@ -5,9 +5,11 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/view/main_view/services_views/create_request_view.dart';
 import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/create_request_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
 
@@ -199,6 +201,12 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
         isLoading: false,
         buttonColor: AppColors.scoButtonColor,
         textDirection: getTextDirection(langProvider),
-        onTap: () {});
+        onTap: () {
+          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>CreateRequestView(
+            requestCategory: "AA",
+            requestType: "AA",
+            requestSubType: "10",
+          )));
+        });
   }
 }

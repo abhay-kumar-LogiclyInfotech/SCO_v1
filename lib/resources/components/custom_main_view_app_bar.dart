@@ -1,10 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:sco_v1/view/main_view/notifications_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
+import 'package:sco_v1/viewModel/services/navigation_services.dart';
+
+import '../../data/response/status.dart';
 
 class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double height;
@@ -26,11 +34,22 @@ class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 
-// total notifications
-int totalNotifications = 10;
 
 class _CustomTopAppBarState extends State<CustomTopAppBar>
     with MediaQueryMixin<CustomTopAppBar> {
+
+  late NavigationServices _navigationServices;
+
+  @override
+  void initState() {
+
+    final GetIt getIt  = GetIt.instance;
+    _navigationServices = getIt.get<NavigationServices>();
+    super.initState();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
@@ -84,24 +103,25 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
                         children: [
 
                           //*------Notifications Bell Deprecated by Designer-----*/
-                          GestureDetector(
-                            onTap: () {},
-                            child:
 
-                            badges.Badge(badgeContent: Text(     totalNotifications > 9 ? '9+' : totalNotifications.toString()
-                                ,overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.bold),),
-                              position: badges.BadgePosition.bottomEnd(end: -8,bottom: -6),
-                              badgeStyle: badges.BadgeStyle(badgeColor: AppColors.scoThemeColor,borderSide: BorderSide(color: AppColors.scoButtonColor)),
-                              ignorePointer: true,
-                              child: SvgPicture.asset(
-                              "assets/notification_bell.svg",
-                              height: 20,
-                              width: 20,
-                            ),
+                          Consumer<GetNotificationsCountViewModel>(
+                            builder: (context,provider,_){
 
-                            )
-                            ,
+                              switch(provider.apiResponse.status){
+                                case Status.LOADING:
+                                  return ringBell(totalNotifications,_navigationServices);
+                                case Status.ERROR:
+                                  return ringBell(totalNotifications,_navigationServices);
+                                case Status.COMPLETED:
+                                  return ringBell(provider.apiResponse.data.toString(),_navigationServices);
+                                case Status.NONE:
+                                  return ringBell(totalNotifications,_navigationServices);
+                                case null:
+                                  return ringBell(totalNotifications,_navigationServices);
+                              }
+                              },
                           ),
+
                           const SizedBox(
                             width: 30,
                           ),
@@ -125,4 +145,29 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
       ),
     );
   }
+}
+
+// total notifications
+int totalNotifications = 0;
+
+Widget ringBell(count,NavigationServices navigationServices){
+  totalNotifications = int.tryParse(count.toString()) ?? 0;
+  return GestureDetector(
+    onTap: () {
+navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NotificationsView()));
+    },
+    child: badges.Badge(badgeContent: Text(     totalNotifications > 9 ? '9+' : totalNotifications.toString()
+      ,overflow: TextOverflow.ellipsis,style: const TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.bold),),
+      position: badges.BadgePosition.bottomEnd(end: -8,bottom: -6),
+      badgeStyle: const badges.BadgeStyle(badgeColor: AppColors.scoThemeColor,borderSide: BorderSide(color: AppColors.scoButtonColor)),
+      ignorePointer: true,
+      child: SvgPicture.asset(
+        "assets/notification_bell.svg",
+        height: 20,
+        width: 20,
+      ),
+
+    )
+    ,
+  );
 }

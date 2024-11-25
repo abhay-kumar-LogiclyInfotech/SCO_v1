@@ -137,7 +137,7 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
       expandedContent: const SizedBox.shrink(),
       trailing: CustomMaterialButton(
         onPressed: () {
-          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const CreateRequestView()));
+          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> CreateRequestView()));
         },
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kCardRadius)),

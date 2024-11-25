@@ -123,7 +123,7 @@ class _AddressesViewState extends State<AddressesView>
                               /// Addresses list section
                               _addressesSection(provider: provider, langProvider: langProvider),
                             ],
-                          ) : const Text("No Data Found")
+                          ) : Utils.showOnNoDataAvailable()
                       ],
                     ),
                   ),

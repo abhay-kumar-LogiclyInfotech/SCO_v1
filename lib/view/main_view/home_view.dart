@@ -22,6 +22,7 @@ import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/select_scholarship_type_view.dart';
 import 'package:sco_v1/view/authentication/login/login_view.dart';
+import 'package:sco_v1/view/drawer/accout_views/application_status_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
@@ -31,6 +32,7 @@ import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/finance.dart';
 import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
+import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
 import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
@@ -71,23 +73,38 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   }
 
 
- Future _onRefresh()async{
+  Future<void> _onRefresh() async {
+    try {
+      /// Check if the user is logged in
+      final isLoggedIn = await _authService.isLoggedIn();
 
+      /// Initialize the SCO programs carousel slider
+      _scoProgramsModelsList.clear();
+      _scoProgramsList.clear();
+      _initializeScoPrograms();
 
-    /// initialize the sco programs carousel slider
-   _scoProgramsModelsList.clear();
-_scoProgramsList.clear();
-   _initializeScoPrograms();
-   final myFinanceProvider =  Provider.of<MyFinanceStatusViewModel>(context, listen: false);
-    final requestsProvider = Provider.of<GetAllRequestsViewModel>(context,listen: false);
-    final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context,listen: false);
+      /// Fetch data from providers
+      final myFinanceProvider = Provider.of<MyFinanceStatusViewModel>(context, listen: false);
+      final requestsProvider = Provider.of<GetAllRequestsViewModel>(context, listen: false);
+      final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context, listen: false);
+      final getNotificationsCount = Provider.of<GetNotificationsCountViewModel>(context, listen: false);
 
-    await Future.wait<dynamic>(
-    [
-     myFinanceProvider.myFinanceStatus(),
-     requestsProvider.getAllRequests(),
-      talkToMyAdvisor.getMyAdvisor(),
-   ]);
+      /// Fetch notifications count
+      await getNotificationsCount.getNotificationsCount();
+
+      /// Fetch other data concurrently
+      await Future.wait<dynamic>([
+        myFinanceProvider.myFinanceStatus(),
+        requestsProvider.getAllRequests(),
+        talkToMyAdvisor.getMyAdvisor(),
+      ]);
+
+      /// Refresh the UI
+      setState(() {});
+    } catch (error) {
+      /// Handle any errors
+      print('Error during refresh: $error');
+    }
   }
 
   @override
@@ -491,7 +508,9 @@ _scoProgramsList.clear();
                   child: CustomButton(
                     buttonName: AppLocalizations.of(context)!.readMore,
                     isLoading: false,
-                    onTap: () {},
+                    onTap: () {
+                      _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const ApplicationStatusView()));
+                    },
                     textDirection: getTextDirection(langProvider),
                     textColor: const Color(0xffAD8138),
                     borderColor: const Color(0xffAD8138),

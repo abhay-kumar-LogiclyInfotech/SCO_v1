@@ -2,7 +2,7 @@ import 'dart:convert';
 /// requestCategory : "AA"
 /// requestType : "AA"
 /// requestSubType : "1"
-/// fields : [{"title":"Suspension semester:","type":"text","required":true},{"title":"Reason for suspension:","type":"text","required":true},{"title":"GPA:","type":"number","required":true},{"title":"Attach the last academic record:","type":"file","required":true},null]
+/// fields : [{"title":"Suspension semester:","titleAr":"فصل الايقاف:","type":"text","required":true},{"title":"GPA:","titleAr":"المعدل التراكمي:","type":"number","required":true},{"title":"Reason for suspension:","titleAr":"سبب الايقاف:","type":"textArea","required":true},{"title":"Attach the last academic record:","type":"file","required":true,"titleAr":"ارفاق آخر سجل دراسي:"},null]
 /// conditions : ["الحصول على موافقة مسبقة من المكتب","أن لا يؤثر الإيقاف بالانسحاب من مواد وسداد رسوم دراسية"]
 
 RequestStructureModel requestStructureModelFromJson(String str) => RequestStructureModel.fromJson(json.decode(str));
@@ -70,6 +70,7 @@ RequestStructureModel copyWith({  String? requestCategory,
 }
 
 /// title : "Suspension semester:"
+/// titleAr : "فصل الايقاف:"
 /// type : "text"
 /// required : true
 
@@ -78,35 +79,43 @@ String fieldsToJson(Fields data) => json.encode(data.toJson());
 class Fields {
   Fields({
       String? title, 
+      String? titleAr, 
       String? type, 
       bool? required,}){
     _title = title;
+    _titleAr = titleAr;
     _type = type;
     _required = required;
 }
 
   Fields.fromJson(dynamic json) {
     _title = json['title'];
+    _titleAr = json['titleAr'];
     _type = json['type'];
     _required = json['required'];
   }
   String? _title;
+  String? _titleAr;
   String? _type;
   bool? _required;
 Fields copyWith({  String? title,
+  String? titleAr,
   String? type,
   bool? required,
 }) => Fields(  title: title ?? _title,
+  titleAr: titleAr ?? _titleAr,
   type: type ?? _type,
   required: required ?? _required,
 );
   String? get title => _title;
+  String? get titleAr => _titleAr;
   String? get type => _type;
   bool? get required => _required;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['title'] = _title;
+    map['titleAr'] = _titleAr;
     map['type'] = _type;
     map['required'] = _required;
     return map;

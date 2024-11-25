@@ -620,7 +620,7 @@ Widget bgSecurityLogo() {
   return Padding(
     padding: const EdgeInsets.all(50.0),
     child: SvgPicture.asset(
-      "assets/security_question_bg.svg",
+      "assets/security_question_bg1.svg",
       // fit: BoxFit.fill,
     ),
   );

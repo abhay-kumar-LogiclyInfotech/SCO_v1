@@ -7,7 +7,10 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/view/authentication/forgot_password/forgot_security_question_otp_verification_view.dart';
 import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
+import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
+import 'package:sco_v1/view/drawer/accout_views/security_questions_view.dart';
 import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
@@ -31,8 +34,10 @@ import 'package:sco_v1/viewModel/drawer/news_and_events_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/vision_and_mission_viewModel.dart';
 import 'package:sco_v1/viewModel/home/home_slider_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/create_request_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
@@ -124,6 +129,9 @@ class MyApp extends StatelessWidget {
           // Get All Requests
           ChangeNotifierProvider(create: (_) => GetAllRequestsViewModel()),
 
+          // create service Requests
+          ChangeNotifierProvider(create: (_) => CreateRequestViewModel()),
+
           // Get All Academic Advisor's
           ChangeNotifierProvider(create: (_) => GetMyAdvisorViewModel()),
 
@@ -141,6 +149,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => UpdateProfilePictureViewModel()),
 
 
+          // get Notifications count
+          ChangeNotifierProvider(create: (_) => GetNotificationsCountViewModel()),
 
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),

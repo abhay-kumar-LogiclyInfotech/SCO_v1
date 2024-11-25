@@ -260,30 +260,40 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
   //// *----------------------- EXISTING COMMENTS SECTION START ------------------------*
   Widget _existingComments(
       {ListOfRequest? request, required LanguageChangeViewModel langProvider}) {
-    return Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(kPadding - 10),
-        decoration: const BoxDecoration(color: AppColors.lightBlue0),
-        child: Column(
-            children: [
-          ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: request?.details?.length ?? 0,
-              itemBuilder: (context, index) {
-                final comment = request?.details![index];
-                return Text(
-                  // "${(index+1).toString()}) "
-                      "${comment?.ssrRsDescription
-                            .toString()
-                            .replaceAll('<br/>', '')
-                      }" ??
-                      '',
-                  style: AppTextStyles.bold15ScoButtonColorTextStyle(),
-                  textAlign: TextAlign.start,
-                );
-              }),
-        ]));
+    return Directionality(
+      textDirection: getTextDirection(langProvider),
+      child: Container(
+          width: double.infinity,
+          // padding: EdgeInsets.all(kPadding - 10),
+          decoration: const BoxDecoration(color: AppColors.lightBlue0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+            ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: request?.details?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final comment = request?.details![index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(kPadding - 10),
+                        child: Text(
+                          // "${(index+1).toString()}) "
+                              "${comment?.ssrRsDescription.toString().replaceAll('<br/>', '\n')}" ??
+                              '',
+                          style: AppTextStyles.bold15ScoButtonColorTextStyle(),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                     if(index < request!.details!.length -1 ) const MyDivider(color: AppColors.darkGrey,),
+                    ],
+                  );
+                }),
+          ])),
+    );
   }
 
 //// *----------------------- EXISTING COMMENTS SECTION END ------------------------*
@@ -373,14 +383,10 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
           _attachmentsList.add(ListAttachment(
               attachmentSeqNumberController: TextEditingController(),
               fileDescriptionController: TextEditingController(),
-              userAttachmentFileController: TextEditingController(),
-              attachmentSysFileNameController:
-              TextEditingController(text: file.path
-                  .split('/')
-                  .last),
-              base64StringController: TextEditingController(
-                  text: base64Encode(file.readAsBytesSync())),
-              viewByAdviseeController: TextEditingController(),
+              userAttachmentFileController:    TextEditingController(text: file.path.split('/').last),
+              attachmentSysFileNameController: TextEditingController(text: file.path.split('/').last),
+              base64StringController: TextEditingController(text: base64Encode(file.readAsBytesSync())),
+              viewByAdviseeController: TextEditingController(text: 'Y'),
               attachmentSeqNumberFocusNode: FocusNode(),
               fileDescriptionFocusNode: FocusNode(),
               userAttachmentFileFocusNode: FocusNode(),
@@ -474,6 +480,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
   }
 
   void createForm({required ListOfRequest? request}) {
+    form.clear();
 
     //// USING LOGIC TO ADD AND REMOVE LAST ITEM:
    final newComment = _newCommentController.text.trim();

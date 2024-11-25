@@ -59,12 +59,12 @@ class _MainViewState extends State<MainView> {
     _alertServices = getIt.get<AlertServices>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback)async{
-
       /// On the very first check that user is logged in or not. If not then move to the login view directly.
       final isLoggedIn = await _authService.isLoggedIn();
         setState(() {
           _isLoggedIn = isLoggedIn;
         });
+
 
 
     });

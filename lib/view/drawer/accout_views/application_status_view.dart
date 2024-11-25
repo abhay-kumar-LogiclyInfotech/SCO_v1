@@ -147,13 +147,12 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
           // dividerColor: Colors.black,
           indicatorColor: AppColors.scoButtonColor,
           labelColor: AppColors.scoButtonColor,
-          // indicatorWeight: 0,
           indicatorSize: TabBarIndicatorSize.tab,
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           indicatorPadding: const EdgeInsets.symmetric(horizontal: 0),
           labelStyle: AppTextStyles.bold15ScoButtonColorTextStyle(),
           unselectedLabelStyle: AppTextStyles.bold15ScoButtonColorTextStyle().copyWith(fontSize: 13),
-          unselectedLabelColor: AppColors.darkGrey,
+          unselectedLabelColor: AppColors.scoButtonColor,
           dragStartBehavior: DragStartBehavior.down,
           overlayColor: WidgetStateProperty.resolveWith((state){
             if(state.contains(WidgetState.selected)){
@@ -176,8 +175,14 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
             }
 
           }),
+          indicator: const BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              bottom: BorderSide(color: AppColors.scoButtonColor, width: 1.5), // Bottom border only
+            ),
+          ),
           tabs: [
-            Tab(icon: SvgPicture.asset("assets/myAccount/completed_applications.svg",height: 14,width: 14,),iconMargin: const EdgeInsets.all(8),child: const Text("Completed"),),
+            Tab(icon: SvgPicture.asset("assets/myAccount/com""pleted_applications.svg",height: 14,width: 14,),iconMargin: const EdgeInsets.all(8),child: const Text("Completed"),),
             Tab(icon: SvgPicture.asset("assets/myAccount/draft_applications.svg",height: 14,width: 14,),iconMargin: const EdgeInsets.all(8),child: const Text("Draft"),),
           ],
         ),
@@ -358,7 +363,12 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
     required LanguageChangeViewModel langProvider,
     required bool draftTab
   }) {
-    return Utils.pageRefreshIndicator(onRefresh: _onRefresh,child: CustomInformationContainer(
+    return Utils.pageRefreshIndicator(onRefresh: _onRefresh,child:
+    _draftApplicationStatus.isEmpty ?? true
+        ?  Utils.showOnNoDataAvailable()
+    :
+
+    CustomInformationContainer(
       title: "Application Status",
       expandedContentPadding: EdgeInsets.zero,
       expandedContent: ListView.builder(

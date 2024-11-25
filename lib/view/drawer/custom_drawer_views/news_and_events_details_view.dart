@@ -91,62 +91,68 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
         Provider.of<LanguageChangeViewModel>(context, listen: false);
 
     return Padding(
-      padding: EdgeInsets.all(kPadding),
+      padding: EdgeInsets.symmetric(horizontal: kPadding),
       child: SingleChildScrollView(
-        child: Material(
-          color: Colors.white,
-          shadowColor: Colors.transparent,
-          elevation: 3,
-          borderRadius: BorderRadius.circular(kCardRadius),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
+        child: Column(
+          children: [
+            kFormHeight,
+            Material(
+              color: Colors.white,
+              shadowColor: Colors.transparent,
+              elevation: 3,
+              borderRadius: BorderRadius.circular(kCardRadius),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
 
-            children: [
-              //Image Section:
-              _imageSection(langProvider), const SizedBox(height: 20),
-              // date
+                children: [
+                  //Image Section:
+                  _imageSection(langProvider), const SizedBox(height: 20),
+                  // date
 
 
-              Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, bottom: 0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15, bottom: 0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      children:[
 
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset("assets/sidemenu/date_icon.svg",),
-                        const SizedBox(
-                            width: 4.5
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset("assets/sidemenu/date_icon.svg",),
+                            const SizedBox(
+                                width: 4.5
+                            ),
+                            Text(
+                              widget.date ?? "Date", // textAlign: TextAlign.justify,
+                              style:  const TextStyle(
+                                color: AppColors.scoThemeColor,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          widget.date ?? "Date", // textAlign: TextAlign.justify,
-                          style:  const TextStyle(
-                            color: AppColors.scoThemeColor,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
+                        const SizedBox(height: 10),
+
+                        _titleSection(),
+                        // const SizedBox(height: 5),
+                        //
+                        // _descriptionSection(),
+                        const SizedBox(height: 10),
+
+                        //About Us Detailed Text Section:
+                        _contentSection(), const SizedBox(height: 20),
+                      ]
                     ),
-                    const SizedBox(height: 10),
+                  )
 
-                    _titleSection(),
-                    // const SizedBox(height: 5),
-                    //
-                    // _descriptionSection(),
-                    const SizedBox(height: 10),
-
-                    //About Us Detailed Text Section:
-                    _contentSection(), const SizedBox(height: 20),
-                  ]
-                ),
-              )
-
-            ],
-          ),
+                ],
+              ),
+            ),
+            kFormHeight,
+          ],
         ),
       ),
     );
@@ -193,7 +199,6 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
               ),
             );
           case Status.COMPLETED:
-
             return Container(
               height: 125,
               width: double.infinity,

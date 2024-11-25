@@ -273,7 +273,18 @@ class HomeRepository {
     return GetAllRequestsModel.fromJson(response);
   }
 
-  // *------ Get My Finance Status Status Method ------*/
+  // *------ CREATE REQUEST  Method ------*/
+  Future<UpdateRequestModel> createRequest(
+      {required dynamic userId,required dynamic headers,required dynamic body}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+      url: '${AppUrls.baseUrl}self-service/service-request/$userId/add-service-request',
+      headers: headers,
+      body: body,
+    );
+    return UpdateRequestModel.fromJson(response);
+  }
+
+  // *------ UPDATE REQUEST  Method ------*/
   Future<UpdateRequestModel> updateRequest(
       {required dynamic userId,required dynamic headers,required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
@@ -316,5 +327,16 @@ class HomeRepository {
     );
     return GetProfilePictureUrlModel.fromJson(response);
   }
+
+   // *------ Get  Notifications count Method ------*/
+  Future<dynamic> getNotificationsCount(
+      {required String userEmiratesId, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.commonBaseUrl}jsonws/mopanotification.mopanotification/get-notification-new-count-for-user/user-name/$userEmiratesId',
+      headers: headers,
+    );
+    return response;
+  }
+
 
 }

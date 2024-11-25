@@ -3,77 +3,6 @@
 import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-
-
-// "SERVICE_TYPE#AA": [
-// {"code": "AA", "value": "Academic Advisement", "valueArabic": "الإرشاد الأكاديمي"},
-// {"code": "FR", "value": "Financial Requests", "valueArabic": "الطلبات المالية"},
-// {"code": "OL", "value": "Official Letter Request", "valueArabic": "طلب رسالة رسمية"}
-// ],
-// "SERVICE_TYPE#AL": [
-// {"code": "AR", "value": "Administrative requests", "valueArabic": "Administrative requests"},
-// {"code": "FR2", "value": "Financial Requests", "valueArabic": "Financial Requests"}
-// ],
-// "SERVICE_TYPE#EI": [
-// {"code": "AA1", "value": "Academic Advisement", "valueArabic": "تسجيل ساعات أقل من المطلوب"},
-// {"code": "FR1", "value": "Financial Requests", "valueArabic": "Financial Requests"}
-// ]
-
-
-// "SERVICE_CATEGORY": [
-// {"code": "AA", "value": "Academic Advisement", "valueArabic": "الإرشاد الأكاديمي"},
-// {"code": "AL", "value": "Alumni", "valueArabic": "شؤون الخريجين"},
-// {"code": "EI", "value": "Educational initiatives", "valueArabic": "المبادرات التعليمية"}
-// ]
-
-// final serviceSubType ={
-// "SERVICE_SUBTYPE#FR": [
-// {"code": "1", "value": "Compensation for companion allowance", "valueArabic": "تعويض بدل مرافق"},
-// {"code": "2", "value": "Tuition fee compensation", "valueArabic": "تعويض رسوم دراسية"},
-// {"code": "3", "value": "Medical treatment compensation", "valueArabic": "تعويض علاجي"},
-// {"code": "4", "value": "Compensation for study visit allowance (Part Time)", "valueArabic": "تعويض بدل زيارة دراسية (الطلبة الدارسين بالنظام ال"},
-// {"code": "5", "value": "Payment of a marriage allowance", "valueArabic": "صرف علاوة زواج"}
-// ],
-// "SERVICE_SUBTYPE#AA1": [
-// {"code": "1", "value": "Logging hours less than required", "valueArabic": "تسجيل ساعات أقل من المطلوب"},
-// {"code": "2", "value": "Permission to travel/leave to the country of schl", "valueArabic": "Permission to travel/leave to the country of schl"}
-// ],
-// "SERVICE_SUBTYPE#OL": [
-// {"code": "1", "value": "Student visa request letter", "valueArabic": "رسالة طلب تأشيرة دراسية visa Request letter"},
-// {"code": "2", "value": "Financial guarantee letter", "valueArabic": "رسالة ضمان مالي"},
-// {"code": "3", "value": "National service letter", "valueArabic": "رسالة خدمة وطنية"},
-// {"code": "4", "value": "to whom it may concern letter", "valueArabic": "رسالة الى من يهمه الامر"}
-// ],
-// "SERVICE_SUBTYPE#FR1": [
-// {"code": "1", "value": "Request to issue a ticket / exchange a cash ticket", "valueArabic": "طلب اصدار تذكرة / صرف بدل تذكرة نقدي"},
-// {"code": "2", "value": "Add / change the bank account number", "valueArabic": "إضافة / تغيير رقم الحساب البنكي"}
-// ],
-// "SERVICE_SUBTYPE#FR2": [
-// {"code": "1", "value": "Cert equivalency letter from higher education", "valueArabic": "رسالة معادلة الشهادة من التعليم العالي"},
-// {"code": "2", "value": "Graduation award payment", "valueArabic": "صرف مكافأة التخرج"}
-// ],
-// "SERVICE_SUBTYPE#AA": [
-// {"code": "1", "value": "Suspension from a semester", "valueArabic": "ايقاف من فصل دراسي"},
-// {"code": "10", "value": "Meeting Request", "valueArabic": "طلب اجتماع"}, ///TODO: Add one by default from your side: Added by me
-// {"code": "2", "value": "Academic extension", "valueArabic": "تمديد دراسي"},
-// {"code": "3", "value": "Permission to travel/leave to the country of schl", "valueArabic": "إذن سفر/المغادرة الى بلد الابتعاث"},
-// {"code": "4", "value": "Postpone a semester", "valueArabic": "تأجيل فصل دراسي"},
-// {"code": "5", "value": "Withdrawing from the scholarship", "valueArabic": "انسحاب من البعثة/المنحة"},
-// {"code": "6", "value": "University change", "valueArabic": "تغيير جامعة"},
-// {"code": "7", "value": "major change", "valueArabic": "تغيير تخصص"},
-// {"code": "8", "value": "Change major and university", "valueArabic": "تغيير التخصص والجامعة"},
-// {"code": "9", "value": "Study subjects at another university", "valueArabic": "دراسة مواد دراسية بجامعة أخرى"}
-// ],
-// "SERVICE_SUBTYPE#AR": [
-// {"code": "1", "value": "Assistance in finding job", "valueArabic": "طلب مساعدة للحصول على وظيفة"}
-// ]
-// }
-
-
-
-
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -82,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/account/GetEmploymentStatusModel.dart';
@@ -96,6 +26,8 @@ import 'package:sco_v1/viewModel/account/personal_details/update_personal_detail
 import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/create_request_viewModel.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
 
 import '../../../data/response/status.dart';
 import '../../../models/account/personal_details/PersonalDetailsModel.dart';
@@ -104,6 +36,7 @@ import '../../../resources/app_colors.dart';
 import '../../../resources/cards/picked_attachment_card.dart';
 import '../../../resources/components/attachment_add_file_button.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
+import '../../../resources/components/kButtons/kReturnButton.dart';
 import '../../../resources/components/myDivider.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
@@ -112,10 +45,12 @@ import '../../../viewModel/account/personal_details/get_personal_details_viewmod
 import '../../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../viewModel/services/alert_services.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
 class CreateRequestView extends StatefulWidget {
-  const CreateRequestView({super.key});
+ String? requestCategory,requestType,requestSubType;
+   CreateRequestView({super.key,this.requestCategory,this.requestType,this.requestSubType});
 
   @override
   State<CreateRequestView> createState() => _CreateRequestViewState();
@@ -131,6 +66,7 @@ class _CreateRequestViewState extends State<CreateRequestView>
   late AuthService _authService;
   late PermissionServices _permissionServices;
   late MediaServices _mediaServices;
+  late AlertServices _alertServices;
 
  List<RequestStructureModel> _requestStructureList = [];
 
@@ -158,32 +94,24 @@ class _CreateRequestViewState extends State<CreateRequestView>
           provider: langProvider,
           textColor: AppColors.scoButtonColor);
     }
-
-
     /// *------------------------------------------ Initialize dropdowns end ------------------------------------------------------------------*
 
-    final getEmploymentStatusProvider = Provider.of<GetEmploymentStatusViewModel>(context, listen: false);
-    await getEmploymentStatusProvider.getEmploymentStatus();
+    /// If user is asking for meeting request then
+    if(widget.requestCategory !=null && widget.requestType != null && widget.requestSubType != null)
+{
 
-    if (getEmploymentStatusProvider.apiResponse.status == Status.COMPLETED) {
-      final status = getEmploymentStatusProvider.apiResponse.data?.data?.employmentStatus;
+  _requestCategoryController.text = widget.requestCategory!.toUpperCase();
+  _populateRequestType(langProvider);
+  _requestTypeController.text = widget.requestType!.toUpperCase();
+  _populateRequestSubType(langProvider);
+  _requestSubtypeController.text = widget.requestSubType!.toUpperCase();
+  _populateAllFields();
+}
 
-      /// prefilling the form
-      // _employmentStatusController.text = status?.employmentStatus ?? '';
-      // _employerController.text = status?.employerName ?? '';
-      // _commentsController.text = status?.comment ?? '';
-
-      // if (status?.listOfFiles != null && status?.listOfFiles != []) {
-      //   _attachmentsList.clear();
-      //   for (int i = 0; i < status!.listOfFiles!.length; i++) {
-      //     _attachmentsList
-      //         .add(ListOfFiles.fromJson(status!.listOfFiles![i].toJson()));
-      //   }
-      // }
 
       /// To refresh the page
       setState(() {});
-    }
+
   }
 
   @override
@@ -195,6 +123,7 @@ class _CreateRequestViewState extends State<CreateRequestView>
       _permissionServices = getIt.get<PermissionServices>();
       _mediaServices = getIt.get<MediaServices>();
       _authService = getIt.get<AuthService>();
+      _alertServices = getIt.get<AlertServices>();
 
       await _initializeData();
     });
@@ -214,7 +143,7 @@ void dispose(){
     _requestSubtypeFocusNode.dispose();
 
     _requestStructureList.clear();
-    showDataControllers.clear();
+    showDataRecordList.clear();
     focusNodes.clear();
 
     super.dispose();
@@ -245,48 +174,27 @@ void dispose(){
 
   Widget _buildUi() {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
-    return Consumer<GetEmploymentStatusViewModel>(
-        builder: (context, provider, _) {
-          switch (provider.apiResponse.status) {
-            case Status.LOADING:
-              return Utils.pageLoadingIndicator(context: context);
+    return Directionality(
+      textDirection: getTextDirection(langProvider),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ///  create request card
+              _createRequestCard(langProvider: langProvider),
 
-            case Status.ERROR:
-              return Center(
-                child: Text(
-                  AppLocalizations.of(context)!.somethingWentWrong,
-                ),
-              );
-            case Status.COMPLETED:
-              return Directionality(
-                textDirection: getTextDirection(langProvider),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ///  create request card
-                        _createRequestCard(provider: provider, langProvider: langProvider),
-
-                        /// submit buttons
-                        _submitAndBackButton(
-                            langProvider: langProvider,
-                            employmentStatusProvider: provider),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-
-            case Status.NONE:
-              return showVoid;
-            case null:
-              return showVoid;
-          }
-        });
+              /// submit buttons
+              _submitAndBackButton(
+                  langProvider: langProvider),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
 
@@ -337,10 +245,16 @@ void dispose(){
 
   /// This is my model which holds the values which we have to show to the end user
   RequestStructureModel? showData;
+  _populateAllFields(){
+  showData = _requestStructureList.firstWhere((element) {
+  return element.requestCategory == _requestCategoryController.text.trim() &&
+  element.requestType == _requestTypeController.text.trim() &&
+  element.requestSubType == _requestSubtypeController.text.trim();
+  });
+}
 
   Widget _createRequestCard(
-      {required GetEmploymentStatusViewModel provider,
-        required LanguageChangeViewModel langProvider}) {
+      {required LanguageChangeViewModel langProvider}) {
     return CustomInformationContainer(
         leading: SvgPicture.asset("assets/services/request_list.svg"),
         title: "Create Request",
@@ -369,7 +283,7 @@ void dispose(){
                     /// clear the dropdowns list
                     _requestTypeMenuItemsList.clear();
                     _requestSubTypeMenuItemsList.clear();
-                    showDataControllers.clear();
+                    showDataRecordList.clear();
                     showData = null;
 
 
@@ -399,7 +313,7 @@ void dispose(){
                     /// CLEAR THE DEPENDENT REQUEST SUB-TYPE DROPDOWN
                     _requestSubtypeController.clear();
                     _requestSubTypeMenuItemsList.clear();
-                    showDataControllers.clear();
+                    showDataRecordList.clear();
                     showData = null;
 
 
@@ -432,12 +346,8 @@ void dispose(){
                     ///  "requestCategory": "AA",
                     //       "requestType": "AA",
                     //       "requestSubType": "1",
-                    showDataControllers.clear();
-                     showData = _requestStructureList.firstWhere((element) {
-                      return element.requestCategory == _requestCategoryController.text.trim() &&
-                          element.requestType == _requestTypeController.text.trim() &&
-                          element.requestSubType == _requestSubtypeController.text.trim();
-                    });
+                    showDataRecordList.clear();
+                     _populateAllFields();
 
                     // Utils.requestFocus(focusNode: _requestSubtypeFocusNode, context: context);
                   });
@@ -498,7 +408,7 @@ void dispose(){
   /// *-------------------------------- THIS IS SECTION WHERE WE SHOWS THE FIELDS BASED ON THE USER SELECTIONS START --------------------------------*
 
   /// LIST TO HOLD THE TEXT EDITING CONTROLLERS
-  List<TextEditingController> showDataControllers = [];
+  List<ShowDataRecord> showDataRecordList = [];
   List<FocusNode> focusNodes = [];
 
 
@@ -507,14 +417,27 @@ void dispose(){
     if (showData == null) {
       return const Center(child: Text('')); // Fallback if `showData` is null
     }
-
     // Initialize controllers for each field
-    if (showDataControllers.isEmpty && showData?.fields != null) {
-      for (var _ in showData!.fields!) {
-        showDataControllers.add(TextEditingController());
+    /// With the help of model given below we will convert our user response to the api request response
+    if (showDataRecordList.isEmpty && showData?.fields != null) {
+      for (var field in showData!.fields!) {
+        showDataRecordList.add(
+          ShowDataRecord(
+            titleController: TextEditingController(text: field.title),
+            titleArController: TextEditingController(text: field.titleAr),
+            valueController: TextEditingController(), // Assuming field.title exists and is the field name
+            typeController: TextEditingController(text: field.type?.trim() ??''),
+            required: field.required ?? false,
+            index: showData!.fields!.indexOf(field), // Get the index of the current field
+          ),
+        );
         focusNodes.add(FocusNode());
       }
+
     }
+
+    /// getting the textDirection
+   bool ltrDirection = getTextDirection(langProvider) == TextDirection.ltr;
 
     return ListView.builder(
       shrinkWrap: true, // To wrap content if inside another scrollable widget
@@ -522,7 +445,7 @@ void dispose(){
       itemCount: showData?.fields?.length ?? 0,
       itemBuilder: (context, index) {
         final element = showData!.fields![index];
-        final controller = showDataControllers[index];
+        final controllers = showDataRecordList[index];
         final focusNode = focusNodes[index];
         // Determine the next focus node
         final nextFocusNode = index < (showData?.fields?.length ?? 0) - 1 ? focusNodes[index + 1] // Assign the next focus node
@@ -536,7 +459,7 @@ void dispose(){
           children: [
             kFormHeight,
             fieldHeading(
-              title: element.title ?? '',
+              title: ltrDirection ? element.title ?? '' : element.titleAr ??'',
               important: element.required ?? false,
               langProvider: langProvider,
             ),
@@ -544,14 +467,14 @@ void dispose(){
               scholarshipFormTextField(
                 currentFocusNode: focusNode,
                 nextFocusNode: nextFocusNode,
-                controller: controller, // Assign the appropriate controller
+                controller: controllers.valueController, // Assign the appropriate controller
                 textInputType: element.type == "textArea"
                     ? TextInputType.multiline
                     : element.type == "number"
                     ? TextInputType.number
                     : TextInputType.text,
                 maxLines: element.type == "textArea" ? 3 : null,
-                hintText: "Enter ${element.title}",
+                hintText: ltrDirection ? element.title ?? '' : element.titleAr ??'',
                 onChanged: (value) {
                   // Optionally handle the text change
 
@@ -560,8 +483,8 @@ void dispose(){
             if (element.type == "date")
               scholarshipFormDateField(
                 currentFocusNode: focusNode,
-                controller: controller, // Assign the appropriate controller
-                hintText: "Enter ${element.title}",
+                controller: controllers.valueController, // Assign the appropriate controller
+                hintText: ltrDirection ? element.title ?? '' : element.titleAr ??'',
                 onChanged: (value) {
                   // Optionally handle the date change
                 },
@@ -572,7 +495,7 @@ void dispose(){
                    final selectedDate =   await showDatePickerDialog(context: context, maxDate: DateTime(2099), minDate: DateTime(1930));
                     if (selectedDate != null) {
                       // Do something with the selected date
-                      controller.text = formatDateOnly(selectedDate.toString());
+                      controllers.valueController.text = formatDateOnly(selectedDate.toString());
                       setState(() {
                         Utils.requestFocus(focusNode: focusNode, context: context);
                       });
@@ -584,8 +507,8 @@ void dispose(){
             if (element.type == "time")
               scholarshipFormTimeField(
                 currentFocusNode: focusNode,
-                controller: controller, // Assign the appropriate controller
-                hintText: "Enter ${element.title}",
+                controller: controllers.valueController, // Assign the appropriate controller
+                hintText: ltrDirection ? element.title ?? '' : element.titleAr ??'',
                 onChanged: (value) {
                   // Optionally handle the time change
                 },
@@ -594,7 +517,7 @@ void dispose(){
                   final selectedTime =   await showTimePicker(context: context, initialTime: TimeOfDay.now());
                   if (selectedTime != null) {
                     // Do something with the selected date
-                    controller.text =selectedTime.format(context).toString();
+                    controllers.valueController.text =selectedTime.format(context).toString();
                     setState(() {
                       Utils.requestFocus(focusNode: focusNode, context: context);
                     });
@@ -607,7 +530,6 @@ void dispose(){
       },
     );
   }
-
   /// *-------------------------------- THIS IS SECTION WHERE WE SHOWS THE FIELDS BASED ON THE USER SELECTIONS END --------------------------------*
 
 
@@ -629,6 +551,8 @@ void dispose(){
   /// *-------------------------------- SHOW BULLETS TO USER END --------------------------------*
 
   Widget _showRequiredAttachmentTitle(langProvider){
+    bool ltrDirection = getTextDirection(langProvider) == TextDirection.ltr;
+
     return   ListView.builder(
         shrinkWrap: true, // To wrap content if inside another scrollable widget
         physics: const NeverScrollableScrollPhysics(),
@@ -637,7 +561,8 @@ void dispose(){
           final element = showData!.fields![index];
 
           if(element.type == "file") {
-            return bulletTermsText(text: element.title ?? '');
+            /// getting the textDirection
+            return bulletTermsText(text: ltrDirection ? element.title ?? '' : element.titleAr ?? '');
           }else{
             return const SizedBox.shrink();
           }
@@ -647,9 +572,7 @@ void dispose(){
 
 
 
-  //// *-------------------------------- ATTACHMENTS SECTION IF NEEDED THEN SHOW TO THE USER TO UPLOAD ATTACHMENT --------------------------------*
-
-
+  //// *-------------------------------- ATTACHMENTS SECTION IF NEEDED THEN SHOW TO THE USER TO UPLOAD ATTACHMENT START --------------------------------*
   final List<ListAttachment> _attachmentsList = [];
 
   Widget _attachmentsUploadSection() {
@@ -706,13 +629,9 @@ void dispose(){
           _attachmentsList.add(ListAttachment(
               attachmentSeqNumberController: TextEditingController(),
               fileDescriptionController: TextEditingController(),
-              userAttachmentFileController: TextEditingController(),
-              attachmentSysFileNameController:
-              TextEditingController(text: file.path
-                  .split('/')
-                  .last),
-              base64StringController: TextEditingController(
-                  text: base64Encode(file.readAsBytesSync())),
+              userAttachmentFileController: TextEditingController(text: file.path.split('/').last),
+              attachmentSysFileNameController: TextEditingController(text: file.path.split('/').last),
+              base64StringController: TextEditingController(text: base64Encode(file.readAsBytesSync())),
               viewByAdviseeController: TextEditingController(text: 'Y'),
               attachmentSeqNumberFocusNode: FocusNode(),
               fileDescriptionFocusNode: FocusNode(),
@@ -726,7 +645,12 @@ void dispose(){
       }
     }
   }
+  //// *-------------------------------- ATTACHMENTS SECTION IF NEEDED THEN SHOW TO THE USER TO UPLOAD ATTACHMENT END --------------------------------*
 
+
+
+  String enData = "";
+  String arData = "";
   Widget _submitAndBackButton(
       {required langProvider,
         UserInfo? userInfo,
@@ -736,55 +660,65 @@ void dispose(){
         kFormHeight,
         kFormHeight,
         ChangeNotifierProvider(
-          create: (context) => CreateUpdateEmploymentStatusViewModel(),
-          child: Consumer<CreateUpdateEmploymentStatusViewModel>(
-              builder: (context, createUpdateProvider, _) {
+          create: (context) => CreateRequestViewModel(),
+          child: Consumer<CreateRequestViewModel>(
+              builder: (context, createRequestProvider, _) {
                 return CustomButton(
-                    buttonName: "Update",
-                    isLoading:
-                    createUpdateProvider.apiResponse.status == Status.LOADING,
+                    buttonName: "Create",
+                    isLoading: createRequestProvider.apiResponse.status == Status.LOADING,
                     borderColor: Colors.transparent,
                     buttonColor: AppColors.scoThemeColor,
                     textDirection: getTextDirection(langProvider),
                     onTap: () async {
                       setProcessing(true);
 
-                      bool result = validateForm(langProvider: langProvider, userInfo: userInfo);
+                      bool result = validateForm(langProvider: langProvider);
 
-                      print(result);
-
-                      // for(var ele in showDataControllers){
-                      //   print(ele.text);
-                      // }
                       // for(var ele in _attachmentsList){
                       //   log(ele.toJson().toString());
                       // }
                       if (result) {
-                        // /// Create Form
-                        // // createForm(provider: employmentStatusProvider);
-                        //
-                        // // log(createEmploymentStatusForm.toString());
-                        // log(updateEmploymentStatusForm.toString());
-                        // bool result = employmentStatusProvider
-                        //     ?.apiResponse?.data?.data?.employmentStatus !=
-                        //     null
-                        //     ? await createUpdateProvider
-                        //     .createUpdateEmploymentStatus(
-                        //     form: updateEmploymentStatusForm,
-                        //     updating: true)
-                        //     : await createUpdateProvider
-                        //     .createUpdateEmploymentStatus(
-                        //     form: createEmploymentStatusForm,
-                        //     updating: false);
-                        // if (result) {
-                        //   /// update and refresh the information
-                        //   await _initializeData();
-                        // }
+                        for(var ele in showDataRecordList){
+                          // print(ele.collectedDataEn);
+                          if(ele.typeController.text != "file"){
+                            enData += ele.collectedDataEn;
+                            arData += ele.collectedDataAr;
+                          }
+
+                        }
+
+                        print(enData);
+                        print(arData);
+
+
+                        /// Create Form
+                        createForm();
+
+                        // log(createEmploymentStatusForm.toString());
+                        log(form.toString());
+                        try {
+                          bool apiResult = await createRequestProvider.createRequest(form: form);
+                          if (apiResult) {
+                            /// Update and refresh the information
+                            // await _initializeData();
+                            ///calling get all requests and navigate back to all requests screen
+                           Provider.of<GetAllRequestsViewModel>(context,listen: false).getAllRequests();
+                           _navigationServices.goBack();
+
+                          } else {
+                            log("API call failed: No data returned or request unsuccessful.");
+                          }
+                        } catch (error) {
+                          log("Error during API call: $error");
+                        }
                       }
                       setProcessing(false);
                     });
               }),
         ),
+        kFormHeight,
+        const KReturnButton(),
+
       ],
     );
   }
@@ -794,8 +728,10 @@ void dispose(){
   /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode ;
 
-  bool validateForm({required langProvider, UserInfo? userInfo}) {
+  bool validateForm({required langProvider}) {
     firstErrorFocusNode = null;
+    enData = '';
+    arData = '';
 
     if (_requestCategoryController.text.isEmpty) {
       setState(() {
@@ -817,6 +753,20 @@ void dispose(){
       });
     }
 
+    /// Validations based on conditions Not available on web but implemented in mobile
+    if(showData != null){
+      for(var showFields in showDataRecordList){
+        if(showFields.valueController.text.isEmpty && showFields.typeController.text.trim() != 'file' && showFields.required){
+          final index = showDataRecordList.indexOf(showFields);
+          setState(() {
+            firstErrorFocusNode = focusNodes[index];
+            _alertServices.toastMessage("Please fill required fields");
+          });
+          break;
+        }
+      }
+    }
+
 
     /// checking for fist error node
     if (firstErrorFocusNode != null) {
@@ -831,35 +781,74 @@ void dispose(){
   /// My Final Submission form
   Map<String, dynamic> form = {};
 
-  // void createForm(
-  //     {GetEmploymentStatusViewModel? provider,
-  //       GetPersonalDetailsViewModel? personalDetails}) {
-  //   /// create Employment status form it uses post method
-  //   createEmploymentStatusForm = {
-  //     // "sequanceNumber": "2",
-  //     "employmentStatus": _employmentStatusController.text,
-  //     "employerName": _employerController.text,
-  //     "currentFlag": "Y",
-  //     "comment": _commentsController.text
-  //   };
-  //
-  //   /// update Employment status form it uses put method
-  //   updateEmploymentStatusForm = {
-  //     "emplId": provider?.apiResponse?.data?.data?.employmentStatus?.emplId,
-  //     "sequanceNumber":
-  //     provider?.apiResponse?.data?.data?.employmentStatus?.sequanceNumber,
-  //     "employmentStatus": _employmentStatusController.text,
-  //     "employerName": _employerController.text,
-  //     "currentFlag": "N",
-  //     "comment": _commentsController.text,
-  //     "listOfFiles": _attachmentsList.map((element) {
-  //       return element.toJson();
-  //     }).toList()
-  //   };
-  // }
+  void createForm() async{
+    final currentDate = DateTime.now();
+
+    // Example formats
+    String formattedDate1 = DateFormat('yyyy-MM-dd').format(currentDate); // 2024-11-24
+
+   form = {
+      "requestCategory": _requestCategoryController.text.trim(),
+    "requestType": _requestTypeController.text.trim(),
+    "requestSubType": _requestSubtypeController.text,
+    "ssrRsReqSeqHeader": 0,
+    "serviceRequestId": 0,
+    "requestDate": formattedDate1.toString(),
+    "status": null,
+    "details": [
+  {
+    "ssrRsReqSeq": null,
+    "ssrRsDescription": arData.trim(),
+    "displayToUser": "Y",
+    "newlyAded": true
+  }
+    ],
+    "listAttachment": _attachmentsList.map((element){return element.toJson();}).toList()
+  };
+  }
 }
 
 
+
+
+
+
+/// This model has been created to let append all the information in one section i.e. ssrDescription
+class ShowDataRecord {
+  final TextEditingController titleController;
+  final TextEditingController titleArController;
+  final TextEditingController typeController;
+  final TextEditingController valueController;
+  final bool required;
+  final int index;
+
+  ShowDataRecord({
+    required this.titleController,
+    required this.titleArController,
+    required this.typeController,
+    required this.valueController,
+    required this.required,
+    required this.index,
+  });
+
+  /// Converts object to a JSON-like map.
+  Map<String, dynamic> toJson() {
+    return {
+      'title': titleController.text,
+      'titleAr': titleArController.text,
+      'type': typeController.text,
+      'value': valueController.text,
+      'required': required,
+      'index': index,
+    };
+  }
+
+  /// Collects data in English format.
+  String get collectedDataEn => "${titleController.text} ${valueController.text}<br/>";
+
+  /// Collects data in Arabic format.
+  String get collectedDataAr => "${titleArController.text}${valueController.text}<br/>";
+}
 
 
 

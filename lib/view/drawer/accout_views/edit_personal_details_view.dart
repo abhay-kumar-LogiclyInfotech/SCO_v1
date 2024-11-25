@@ -14,6 +14,7 @@ import 'package:profile_photo/profile_photo.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/bottom_sheets/storage_or_camera_destination.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/components/kButtons/kReturnButton.dart';
 import 'package:sco_v1/view/apply_scholarship/form_view_Utils.dart';
 import 'package:sco_v1/viewModel/account/personal_details/update_personal_details_viewmodel.dart';
 import 'package:sco_v1/viewModel/account/personal_details/update_profile_picture_viewModel.dart';
@@ -1139,16 +1140,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
           }),
         ),
         kFormHeight,
-        CustomButton(
-            buttonName: "Go Back",
-            isLoading: false,
-            borderColor: AppColors.scoThemeColor,
-            buttonColor: Colors.white,
-            textDirection: getTextDirection(langProvider),
-            textColor: AppColors.scoThemeColor,
-            onTap: () async {
-              _navigationServices.goBack();
-            }),
+        const KReturnButton(),
       ],
     );
   }
