@@ -7,11 +7,6 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/view/authentication/forgot_password/forgot_security_question_otp_verification_view.dart';
-import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
-import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
-import 'package:sco_v1/view/drawer/accout_views/security_questions_view.dart';
-import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
@@ -32,6 +27,7 @@ import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/individual_image_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/news_and_events_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/vision_and_mission_viewModel.dart';
+import 'package:sco_v1/viewModel/get_page_content_by_urls_viewModels/Internal/get_page_content_by_url_viewModel.dart';
 import 'package:sco_v1/viewModel/home/home_slider_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
@@ -42,6 +38,9 @@ import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.d
 import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/get_all_notes_viewModel.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/get_specific_note_details_view_Model.dart';
+import 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/upload_attachment_to_note_viewModel.dart';
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -152,6 +151,17 @@ class MyApp extends StatelessWidget {
           // get Notifications count
           ChangeNotifierProvider(create: (_) => GetNotificationsCountViewModel()),
 
+          // get Page content by url
+          ChangeNotifierProvider(create: (_) => GetPageContentByUrlViewModel()),
+
+          // get All Notes
+          ChangeNotifierProvider(create: (_) => GetAllNotesViewModel()),
+
+          // get Specific Note Details
+          ChangeNotifierProvider(create: (_) => GetSpecificNoteDetailsViewModel()),
+
+          // upload attachment to Note
+          ChangeNotifierProvider(create: (_) => UploadAttachmentToNoteViewModel()),
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),
 

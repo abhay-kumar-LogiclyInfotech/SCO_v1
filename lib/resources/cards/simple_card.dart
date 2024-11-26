@@ -19,7 +19,7 @@ class SimpleCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(15)),
         child: Container(
           width: double.maxFinite,
-          padding: contentPadding ??  const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
+          padding: contentPadding ??  const EdgeInsets.all(20),
           decoration:  BoxDecoration(
             // color: Colors.white,
             border: Border.all(color: AppColors.lightGrey),

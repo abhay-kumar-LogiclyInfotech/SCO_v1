@@ -511,4 +511,4 @@ class Constants {
 
 enum MilitaryStatus { yes, no, postponed, exemption }
 enum ScholarshipStatus{applyScholarship,appliedScholarship,approvedScholarship}
-enum AttachmentType {request,employment}
+enum AttachmentType {request,employment,updateNote}

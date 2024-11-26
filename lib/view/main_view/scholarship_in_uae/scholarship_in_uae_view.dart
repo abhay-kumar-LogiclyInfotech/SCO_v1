@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_uae/bachelors_degree_scholarhip_view.dart';
+import 'package:sco_v1/viewModel/get_page_content_by_urls_viewModels/Internal/get_page_content_by_url_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:xml/xml.dart';
 
 
 import '../../../models/home/ScoProgramsTileModel.dart';
@@ -29,6 +33,16 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
     _initializeScoPrograms();
+
+
+
+    WidgetsBinding.instance.addPostFrameCallback((callback)async{
+      /// pinging the api for get page content by url testing
+      final provider = Provider.of<GetPageContentByUrlViewModel>(context,listen: false);
+      await provider.getPageContentByUrl();
+
+    });
+
     super.initState();
   }
 
@@ -52,7 +66,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
         'title': "Bachelors Degree Scholarship",
         'subTitle': "This is Subtitle 1",
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
-        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ScholarshipsInUaeView()),
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const BachelorsDegreeScholarshipView()),
         ),
       },
       {

@@ -9,20 +9,17 @@ import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/repositories/home/home_repository.dart';
 
 import '../../../data/response/ApiResponse.dart';
-import '../../../models/account/personal_details/UpdatePersonalDetailsModel.dart';
+import '../../../models/services/notes_models/UploadAttachmentToNoteModel.dart';
 import '../../../utils/constants.dart';
 import '../../services/alert_services.dart';
 import '../../services/auth_services.dart';
 
-
-
-
-class UpdatePersonalDetailsViewModel with ChangeNotifier {
+class UploadAttachmentToNoteViewModel with ChangeNotifier {
 
   late AuthService _authService;
   late AlertServices _alertServices;
 
-  UpdatePersonalDetailsViewModel()
+  UploadAttachmentToNoteViewModel()
   {
     final GetIt getIt = GetIt.instance;
     _authService = getIt.get<AuthService>();
@@ -46,16 +43,16 @@ class UpdatePersonalDetailsViewModel with ChangeNotifier {
 
   final _myRepo = HomeRepository();
 
-  ApiResponse<UpdatePersonalDetailsModel> _apiResponse = ApiResponse.none();
+  ApiResponse<UploadAttachmentToNoteModel> _apiResponse = ApiResponse.none();
 
-  ApiResponse<UpdatePersonalDetailsModel> get apiResponse => _apiResponse;
+  ApiResponse<UploadAttachmentToNoteModel> get apiResponse => _apiResponse;
 
-  set setApiResponse(ApiResponse<UpdatePersonalDetailsModel> response) {
+  set setApiResponse(ApiResponse<UploadAttachmentToNoteModel> response) {
     _apiResponse = response;
     notifyListeners();
   }
 
-  Future<bool> updatePersonalDetails({required dynamic form}) async {
+  Future<bool> uploadAttachmentToNote({required dynamic form,required dynamic noteId}) async {
     final InternetController networkController = Get.find<InternetController>();
 
     // Check if the network is connected
@@ -75,10 +72,8 @@ class UpdatePersonalDetailsViewModel with ChangeNotifier {
         };
 
         final body = jsonEncode(form);
-        // final body = FormData.fromMap(form);
 
-
-        UpdatePersonalDetailsModel response = await _myRepo.updatePersonalDetails(userId: _userId ?? '',body: body,headers: headers);
+        UploadAttachmentToNoteModel response = await _myRepo.uploadAttachmentToNote(userId: _userId ?? '',noteId:noteId,body: body,headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);

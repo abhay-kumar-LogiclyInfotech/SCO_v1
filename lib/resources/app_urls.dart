@@ -27,8 +27,7 @@ class AppUrls {
       "${_commonBaseUrl}jsonws/journal.journalarticle/get-latest-article";
 
   //vision and mission endpoint
-  static String get visionAndMission =>
-      "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
+  static String get getPageContentByUrl => "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
 
   //contact us endpoint
   static String get contactUs =>
@@ -62,6 +61,12 @@ class AppUrls {
 
   // get File content of the Request files
   static String get getRequestFileContent   => "https://stg.sco.ae/o/mopa-sco-api/self-service/service-request-file-content";
+
+  // get File content of the Notes Attachment files
+  static String get getUpdateNoteFileContent   => "https://stg.sco.ae/o/mopa-sco-api/self-service/notes-file-content";
+
+
+
 
   // Update profile image size must be less then 200kb
   static String get updateProfilePicture   => "https://stg.sco.ae/api/jsonws/userext.userextension/update-user-portrait";

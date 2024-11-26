@@ -23,11 +23,11 @@ class DrawerRepository {
     return FaqModel.fromJson(response);
   }
 
-  //*------Faq's API method------*/
+  //*------ vision and mission -----*/
   Future<VisionAndMissionModel> visionAndMission(
       {required dynamic headers, required dynamic body}) async {
     dynamic response = await _apiServices.getPostApiServices(
-      url: AppUrls.visionAndMission,
+      url: AppUrls.getPageContentByUrl,
       headers: headers,
       body: body,
     );

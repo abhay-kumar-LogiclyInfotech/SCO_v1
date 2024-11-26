@@ -61,7 +61,7 @@ dynamic addRemoveMoreSection(
             const SizedBox(width: 3),
             ConstrainedBox(
               // constraints: BoxConstraints(maxWidth: screenWidth / 2),
-              constraints: BoxConstraints(maxWidth: 100),
+              constraints: const BoxConstraints(maxWidth: 100),
               // Set maximum width
               child: Text(
                 title,

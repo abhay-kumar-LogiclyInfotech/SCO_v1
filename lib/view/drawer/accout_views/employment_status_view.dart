@@ -198,8 +198,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
   final FocusNode _commentsFocusNode = FocusNode();
 
   /// TextEditingControllers
-  final TextEditingController _employmentStatusController =
-      TextEditingController();
+  final TextEditingController _employmentStatusController = TextEditingController();
   final TextEditingController _employerController = TextEditingController();
   final TextEditingController _commentsController = TextEditingController();
 
@@ -332,7 +331,35 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
           );
         });
   }
+  /// Function to add Attachment to the list
+  _addFile() async {
+    /// kindly check for permissions
+    final permitted = await _permissionServices.checkAndRequestPermission(Platform.isIOS ? Permission.storage : Permission.manageExternalStorage, context);
+    if (permitted) {
+      /// TODO: PLEASE ADD ALLOWED EXTENSIONS
+      final file = await _mediaServices.getSingleFileFromPicker();
 
+      if (file != null) {
+        setState(() {
+          _attachmentsList.add(ListOfFiles(
+            attachmentSeqNumberController: TextEditingController(),
+            descriptionController: TextEditingController(),
+            dateController: TextEditingController(),
+            attachSysfileNameController: TextEditingController(text: file.path.split('/').last),
+            attachUserFileController: TextEditingController(text: file.path.split('/').last),
+            base64StringController: TextEditingController(text: base64Encode(file.readAsBytesSync())),
+            attachmentSeqNumberFocusNode: FocusNode(),
+            descriptionFocusNode: FocusNode(),
+            dateFocusNode: FocusNode(),
+            attachSysfileNameFocusNode: FocusNode(),
+            attachUserFileFocusNode: FocusNode(),
+            base64StringFocusNode: FocusNode(),
+            newRecord: true,
+          ));
+        });
+      }
+    }
+  }
   Widget _submitAndBackButton(
       {required langProvider,
       UserInfo? userInfo,
@@ -387,39 +414,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
     );
   }
 
-  /// Function to add Attachment to the list
-  _addFile() async {
-    /// kindly check for permissions
-    final permitted = await _permissionServices.checkAndRequestPermission(
-        Platform.isIOS ? Permission.storage : Permission.manageExternalStorage,
-        context);
-    if (permitted) {
-      /// TODO: PLEASE ADD ALLOWED EXTENSIONS
-      final file = await _mediaServices.getSingleFileFromPicker();
 
-      if (file != null) {
-        setState(() {
-          _attachmentsList.add(ListOfFiles(
-            attachmentSeqNumberController: TextEditingController(),
-            descriptionController: TextEditingController(),
-            dateController: TextEditingController(),
-            attachSysfileNameController:
-                TextEditingController(text: file.path.split('/').last),
-            attachUserFileController: TextEditingController(),
-            base64StringController: TextEditingController(
-                text: base64Encode(file.readAsBytesSync())),
-            attachmentSeqNumberFocusNode: FocusNode(),
-            descriptionFocusNode: FocusNode(),
-            dateFocusNode: FocusNode(),
-            attachSysfileNameFocusNode: FocusNode(),
-            attachUserFileFocusNode: FocusNode(),
-            base64StringFocusNode: FocusNode(),
-            newRecord: true,
-          ));
-        });
-      }
-    }
-  }
 
   /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode;

@@ -184,7 +184,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   }
 
 
-  String _profilePictureUrl = '';
   File? _profileImageFile ;
 
 

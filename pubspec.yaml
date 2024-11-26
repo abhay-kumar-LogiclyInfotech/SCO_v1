@@ -91,6 +91,7 @@ dependencies:
   rename_app: ^1.6.1
   open_file: ^3.5.9
   flutter_widget_from_html: ^0.15.3
+  flutter_html:
 
 
 

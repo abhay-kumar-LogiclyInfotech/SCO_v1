@@ -25,7 +25,7 @@ class PickedAttachmentCard extends StatefulWidget {
 
   const PickedAttachmentCard(
       {super.key,
-       required this.attachmentType,
+      required this.attachmentType,
       required this.index,
       required this.attachment,
       required this.onRemoveAttachment});
@@ -34,8 +34,8 @@ class PickedAttachmentCard extends StatefulWidget {
   State<PickedAttachmentCard> createState() => _PickedAttachmentCardState();
 }
 
-class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQueryMixin {
-
+class _PickedAttachmentCardState extends State<PickedAttachmentCard>
+    with MediaQueryMixin {
   late AlertServices _alertServices;
 
   File? file;
@@ -54,10 +54,9 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
   }
 
   Future<void> _initializeFile() async {
-
     /// Handling attachments types because the models are varying
-    if(widget.attachmentType == AttachmentType.employment)
-    {
+    if (widget.attachmentType == AttachmentType.employment ||
+        widget.attachmentType == AttachmentType.updateNote) {
       if (widget.attachment.base64StringController.text.isNotEmpty) {
         file = await convertBase64ToFile(
           widget.attachment.base64StringController.text,
@@ -75,7 +74,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
       setState(() {});
     }
 
-    if(widget.attachmentType == AttachmentType.request){
+    if (widget.attachmentType == AttachmentType.request) {
       if (widget.attachment.base64StringController.text.isNotEmpty) {
         file = await convertBase64ToFile(
           widget.attachment.base64StringController.text,
@@ -94,7 +93,6 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
     }
   }
 
-
   Future<void> _fetchFileFromApi() async {
     try {
       /// Show loading state
@@ -105,7 +103,10 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
       /// Handle API calls based on the attachment type
       switch (widget.attachmentType) {
         case AttachmentType.employment:
-          await _fetchEmploymentFile();
+          await _fetchEmploymentFile(attachmentType: AttachmentType.employment);
+          break;
+        case AttachmentType.updateNote:
+          await _fetchEmploymentFile(attachmentType: AttachmentType.updateNote);
           break;
         case AttachmentType.request:
           await _fetchRequestFile();
@@ -126,53 +127,90 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
     }
   }
 
-
-  Future<void> _fetchEmploymentFile() async {
-    final provider = Provider.of<GetBase64StringViewModel>(context, listen: false);
+  Future<void> _fetchEmploymentFile(
+      {required AttachmentType attachmentType}) async {
+    final provider =
+        Provider.of<GetBase64StringViewModel>(context, listen: false);
 
     final form = {
       "uniqueFileName": widget.attachment.attachSysfileNameController.text,
       "userFileName": widget.attachment.attachUserFileController.text,
     };
 
-    await provider.getBase64String(form: form,attachmentType: AttachmentType.employment );
+    await provider.getBase64String(form: form, attachmentType: attachmentType);
 
     if (provider.apiResponse.status == Status.COMPLETED) {
-      final base64String = provider.apiResponse.data?.data?.fileData?.base64String ?? '';
+      final base64String =
+          provider.apiResponse.data?.data?.fileData?.base64String ?? '';
       if (base64String.isNotEmpty) {
-        file = await convertBase64ToFile(base64String, widget.attachment.attachSysfileNameController.text);
+        file = await convertBase64ToFile(
+            base64String, widget.attachment.attachSysfileNameController.text);
       } else {
         // _alertServices.showCustomSnackBar("Invalid file data received for employment attachment.");
       }
     } else if (provider.apiResponse.status == Status.ERROR) {
-      _alertServices.showCustomSnackBar(provider.apiResponse.message ?? "Error fetching employment file.");
+      _alertServices.showCustomSnackBar(
+          provider.apiResponse.message ?? "Error fetching employment file.");
     }
   }
 
-
   Future<void> _fetchRequestFile() async {
-    final provider = Provider.of<GetBase64StringViewModel>(context, listen: false);
+    final provider =
+        Provider.of<GetBase64StringViewModel>(context, listen: false);
 
     final form = {
       "uniqueFileName": widget.attachment.attachmentSysFileNameController.text,
       "userFileName": widget.attachment.userAttachmentFileController.text,
     };
 
-    await provider.getBase64String(form: form,attachmentType: AttachmentType.request);
+    await provider.getBase64String(
+        form: form, attachmentType: AttachmentType.request);
 
     if (provider.apiResponse.status == Status.COMPLETED) {
-      final base64String = provider.apiResponse.data?.data?.fileData?.base64String ?? '';
+      final base64String =
+          provider.apiResponse.data?.data?.fileData?.base64String ?? '';
       if (base64String.isNotEmpty) {
-        file = await convertBase64ToFile(base64String, widget.attachment.attachmentSysFileNameController.text);
+        file = await convertBase64ToFile(base64String,
+            widget.attachment.attachmentSysFileNameController.text);
       } else {
         debugPrint("Invalid file data received for request attachment.");
       }
     } else if (provider.apiResponse.status == Status.ERROR) {
-      debugPrint(provider.apiResponse.message ?? "Error fetching request file.");
+      debugPrint(
+          provider.apiResponse.message ?? "Error fetching request file.");
     }
   }
 
 
+
+
+// Helper Functions
+  FocusNode _getFocusNodeBasedOnAttachmentType(AttachmentType attachmentType) {
+    switch (attachmentType) {
+      case AttachmentType.request:
+        return widget.attachment.fileDescriptionFocusNode;
+      case AttachmentType.employment:
+        return widget.attachment.descriptionFocusNode;
+      case AttachmentType.updateNote:
+        return widget.attachment.descriptionFocusNode;
+      default:
+        return FocusNode();
+    }
+  }
+
+  TextEditingController _getControllerBasedOnAttachmentType(
+      AttachmentType attachmentType) {
+    switch (attachmentType) {
+      case AttachmentType.request:
+        return widget.attachment.fileDescriptionController;
+      case AttachmentType.employment:
+        return widget.attachment.descriptionController;
+      case AttachmentType.updateNote:
+        return widget.attachment.descriptionController;
+      default:
+        return TextEditingController();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +236,8 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                     if (file != null) {
                       await Utils.openFile(file!);
                     } else {
-                      _alertServices.showCustomSnackBar("File not available to open.");
+                      _alertServices
+                          .showCustomSnackBar("File not available to open.");
                     }
                   },
                   leading: Image.asset("assets/document.png"),
@@ -206,42 +245,65 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                   title: widget.attachment.isLoading
                       ? const Text("loading...")
                       : Text(
-                    "${widget.index+1}) ${fileName.split('_').last}",
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                  ),
+                          "${widget.index + 1}) ${fileName.split('_').last}",
+                          style: const TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
                   subtitle: fileSize.isNotEmpty
                       ? Text(fileSize, style: const TextStyle(fontSize: 12))
                       : const Text("Fetching file size..."),
-                  trailing: widget.attachment.newRecord || widget.attachment.newlyAded
-                      ? IconButton(
-                    onPressed: widget.onRemoveAttachment,
-                    icon: const Icon(Icons.cancel_outlined, color: AppColors.scoButtonColor),
-                  )
-                      : null,
+                  trailing:
+                      widget.attachment.newRecord || widget.attachment.newlyAded
+                          ? IconButton(
+                              onPressed: widget.onRemoveAttachment,
+                              icon: const Icon(Icons.cancel_outlined,
+                                  color: AppColors.scoButtonColor),
+                            )
+                          : null,
                 ),
-                const Divider()
-,
+                const Divider(),
                 Padding(
-                  padding:  const EdgeInsets.only(left: 15,right: 15,bottom: 15),
+                  padding:
+                      const EdgeInsets.only(left: 15, right: 15, bottom: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Comment",
-                        style: AppTextStyles.subTitleTextStyle().copyWith(height: 2,fontSize: 14,fontWeight: FontWeight.w500),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Comment",
+                            style: AppTextStyles.subTitleTextStyle().copyWith(
+                                height: 2,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          if(widget.attachmentType == AttachmentType.updateNote)  Text(
+                          convertTimestampToDate(int.tryParse( widget.attachment.dateController.text ?? "") ?? 0),
+                            style: AppTextStyles.subTitleTextStyle().copyWith(
+                                height: 2,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
                       // SizedBox(height: 8.0),
-                      scholarshipFormTextField(
-                          maxLines: 3,
-                          textInputType: TextInputType.multiline,
-                          currentFocusNode: widget.attachmentType == AttachmentType.request ?  widget.attachment.fileDescriptionFocusNode : widget.attachmentType == AttachmentType.employment ? widget.attachment.attachUserFileFocusNode : FocusNode() ,
-                          controller: widget.attachmentType == AttachmentType.request ?  widget.attachment.fileDescriptionController : widget.attachmentType == AttachmentType.employment ? widget.attachment.attachUserFileController : TextEditingController(),
-                          hintText: "Write your comment here...",
-                          onChanged: (value) {})
-                    ],
+                    scholarshipFormTextField(
+                      maxLines: 3,
+                      readOnly: widget.attachmentType == AttachmentType.updateNote && !widget.attachment.newRecord,
+                      filled: widget.attachmentType == AttachmentType.updateNote && !widget.attachment.newRecord,
+                      // filled: true,
+                      textInputType: TextInputType.multiline,
+                      currentFocusNode: _getFocusNodeBasedOnAttachmentType(widget.attachmentType),
+                      controller: _getControllerBasedOnAttachmentType(widget.attachmentType),
+                      hintText: "Write your comment here...",
+                      onChanged: (value) {},
+                    )
+
+
+              ],
                   ),
-                )
-                ,
+                ),
               ],
             );
           },

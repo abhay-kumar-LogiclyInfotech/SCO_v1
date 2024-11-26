@@ -15,6 +15,9 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xml/xml.dart';
+import 'dart:convert';
+import 'package:xml/xml.dart' as xml;
+import 'package:html/parser.dart' as html;
 
 import '../resources/app_colors.dart';
 import 'constants.dart';
@@ -753,6 +756,20 @@ String formatDateOnly(String? dateString) {
     return '';
   }
 }
+String convertTimestampToDate(int timestamp) {
+
+  if(timestamp == 0){
+    return '';
+  }
+  // Convert timestamp to DateTime
+  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+  // Format the DateTime to a string (e.g., "yyyy-MM-dd HH:mm:ss")
+  // String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+  String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+
+  return formattedDate;
+}
 
 
 // get full name from lov Code
@@ -777,6 +794,57 @@ String getFullNameFromLov(
 
   return getTextDirection(langProvider) == TextDirection.rtl ? element
       .valueArabic : element.value;
+}
+
+String xmlToJson(String xmlContent) {
+  // Parse the XML content
+  final document = xml.XmlDocument.parse(xmlContent);
+
+  // Convert the XML to a Map
+  final Map<String, dynamic> jsonMap = _convertXmlToMap(document.rootElement);
+
+  // Return the JSON string
+  return jsonEncode(jsonMap);
+}
+
+Map<String, dynamic> _convertXmlToMap(xml.XmlElement element) {
+  final Map<String, dynamic> map = {};
+
+  // Add attributes
+  element.attributes.forEach((attribute) {
+    map[attribute.name.local] = attribute.value;
+  });
+
+  // Parse child nodes
+  element.children.forEach((node) {
+    if (node is xml.XmlElement) {
+      final childMap = _convertXmlToMap(node);
+
+      // Handle multiple nodes with the same name
+      if (map.containsKey(node.name.local)) {
+        if (map[node.name.local] is List) {
+          (map[node.name.local] as List).add(childMap);
+        } else {
+          map[node.name.local] = [map[node.name.local], childMap];
+        }
+      } else {
+        map[node.name.local] = childMap;
+      }
+    } else if (node is xml.XmlText) {
+      // Clean up and decode the text content
+      final cleanedText = decodeHtmlEntities(node.text.trim());
+      if (cleanedText.isNotEmpty) {
+        map['text'] = cleanedText;
+      }
+    }
+  });
+
+  return map;
+}
+
+String decodeHtmlEntities(String text) {
+  // Decode HTML entities (e.g., &lt;, &gt;)
+  return html.parse(text).body?.text ?? text;
 }
 
 

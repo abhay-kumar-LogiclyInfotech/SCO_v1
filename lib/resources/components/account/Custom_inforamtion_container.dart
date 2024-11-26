@@ -86,7 +86,7 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
               painter: DashedBottomBorderPainter(),
               child: Container(
                 width: double.maxFinite,
-                padding: widget.expandedContentPadding ??  const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
+                padding: widget.expandedContentPadding ??  const EdgeInsets.symmetric(vertical: 15,horizontal: 20),
                 decoration: const BoxDecoration(
                   // color: Colors.white,
 
@@ -159,8 +159,9 @@ class CustomInformationContainerField extends StatelessWidget {
   final String title;
   String? description;
   Widget? descriptionAsWidget;
+  EdgeInsetsGeometry? bottomPadding;
    bool isLastItem;
-  CustomInformationContainerField({super.key, required this.title, this.description,this.descriptionAsWidget,this.isLastItem = false});
+  CustomInformationContainerField({super.key, required this.title, this.description,this.descriptionAsWidget,this.isLastItem = false,this.bottomPadding});
 
   @override
   Widget build(BuildContext context) {
@@ -168,13 +169,13 @@ class CustomInformationContainerField extends StatelessWidget {
     return Directionality(
       textDirection: getTextDirection(langProvider),
       child: Padding(
-        padding: !isLastItem ? const  EdgeInsets.only(bottom: 15.0) : EdgeInsets.zero,
+        padding: !isLastItem ? bottomPadding ?? const  EdgeInsets.only(bottom: 15.0) : EdgeInsets.zero,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.only(bottom: 10),
           decoration:  BoxDecoration(
             color: Colors.transparent,
-            border: !isLastItem ? const Border(bottom: BorderSide(color: AppColors.darkGrey, width: 1.5)) : null,
+            border: !isLastItem ? const Border(bottom: BorderSide(color: AppColors.darkGrey, width: 1)) : null,
           ),
           child: CustomPaint(
             painter: DashedLinePainter(),
@@ -184,7 +185,7 @@ class CustomInformationContainerField extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.titleTextStyle().copyWith(fontWeight: FontWeight.w500,fontSize: 12) ,
+                  style: AppTextStyles.titleTextStyle().copyWith(fontWeight: FontWeight.w500,fontSize: 12,color: const Color(0xff8591A9)) ,
                   textAlign: TextAlign.justify,
                 ),
                 description != null
