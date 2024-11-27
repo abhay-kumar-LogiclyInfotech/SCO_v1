@@ -1,25 +1,22 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart' hide FormData;
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/controller/internet_controller.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/repositories/home/home_repository.dart';
 
 import '../../../data/response/ApiResponse.dart';
-import '../../../models/services/notes_models/AddCommentToNoteModel.dart';
 import '../../../utils/constants.dart';
-import '../../services/alert_services.dart';
-import '../../services/auth_services.dart';
+import '../../models/notifications/GetAllNotificationsModel.dart';
+import '../services/alert_services.dart';
+import '../services/auth_services.dart';
 
-class AddCommentToNoteViewModel with ChangeNotifier {
+class GetAllNotificationsViewModel with ChangeNotifier {
 
   late AuthService _authService;
   late AlertServices _alertServices;
 
-  AddCommentToNoteViewModel()
+  GetAllNotificationsViewModel()
   {
     final GetIt getIt = GetIt.instance;
     _authService = getIt.get<AuthService>();
@@ -27,7 +24,7 @@ class AddCommentToNoteViewModel with ChangeNotifier {
   }
   String? _userId;
 
-  setUserId() async {
+  setEmiratesId() async {
     _userId =  HiveManager.getUserId();
   }
 
@@ -43,53 +40,44 @@ class AddCommentToNoteViewModel with ChangeNotifier {
 
   final _myRepo = HomeRepository();
 
-  ApiResponse<AddCommentToNoteModel> _apiResponse = ApiResponse.none();
+  ApiResponse<List<GetAllNotificationsModel> > _apiResponse = ApiResponse.none();
 
-  ApiResponse<AddCommentToNoteModel> get apiResponse => _apiResponse;
+  ApiResponse<List<GetAllNotificationsModel> > get apiResponse => _apiResponse;
 
-  set setApiResponse(ApiResponse<AddCommentToNoteModel> response) {
+  set setApiResponse(ApiResponse<List<GetAllNotificationsModel> > response) {
     _apiResponse = response;
     notifyListeners();
   }
 
-  Future<bool> addCommentToNote({required dynamic form,required dynamic noteId}) async {
+  getAllNotifications() async {
+
     final InternetController networkController = Get.find<InternetController>();
 
     // Check if the network is connected
     if (networkController.isConnected.value) {
 
       try {
-
-
         setLoading(true);
         setApiResponse = ApiResponse.loading();
-        await setUserId();
+        await setEmiratesId();
 
         final headers = {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'authorization': Constants.basicAuth
         };
 
-        final body = jsonEncode(form);
-
-        AddCommentToNoteModel response = await _myRepo.addCommentToNote(userId: _userId ?? '',noteId:noteId,body: body,headers: headers);
+        List<GetAllNotificationsModel> response = await _myRepo.getAllNotifications(userId: _userId ?? '',headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);
-        _alertServices.toastMessage(response.message ?? '');
-        return true;
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
         setLoading(false);
-        return false;
-
       }}
     else{
+
       _alertServices.toastMessage("No Internet Connection is available");
       setLoading(false);
-      return false;
-
     }
   }
 }

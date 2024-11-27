@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
@@ -30,6 +31,8 @@ import 'package:sco_v1/viewModel/drawer/vision_and_mission_viewModel.dart';
 import 'package:sco_v1/viewModel/get_page_content_by_urls_viewModels/Internal/get_page_content_by_url_viewModel.dart';
 import 'package:sco_v1/viewModel/home/home_slider_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/notifications_view_models/decrease_notification_count_viewModel.dart';
+import 'package:sco_v1/viewModel/notifications_view_models/get_all_notifications_viewModel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
 import 'package:sco_v1/viewModel/services/getIt_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
@@ -162,6 +165,13 @@ class MyApp extends StatelessWidget {
 
           // upload attachment to Note
           ChangeNotifierProvider(create: (_) => UploadAttachmentToNoteViewModel()),
+
+          // get all notifications
+          ChangeNotifierProvider(create: (_) => GetAllNotificationsViewModel()),
+
+          // decrease notification count
+          ChangeNotifierProvider(create: (_) => DecreaseNotificationCountViewModel()),
+
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),
 

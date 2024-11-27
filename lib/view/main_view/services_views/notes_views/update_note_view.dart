@@ -41,44 +41,38 @@ import '../../../../viewModel/account/personal_details/update_personal_details_v
 import '../../../../viewModel/language_change_ViewModel.dart';
 import '../../../../viewModel/services/navigation_services.dart';
 
-
 class UpdateNoteView extends StatefulWidget {
   final String noteId;
-  const UpdateNoteView({super.key,required this.noteId});
+
+  const UpdateNoteView({super.key, required this.noteId});
 
   @override
   State<UpdateNoteView> createState() => _UpdateNoteViewState();
-
-
 }
 
-class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin
-{
+class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
   late PermissionServices _permissionServices;
   late MediaServices _mediaServices;
 
-
-
   Future _initializeData() async {
-
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-
       /// fetch my application with approved
-      final provider =  Provider.of<GetSpecificNoteDetailsViewModel>(context, listen: false);
-       await provider.getSpecificNoteDetails(noteId: widget.noteId);
+      final provider =
+          Provider.of<GetSpecificNoteDetailsViewModel>(context, listen: false);
+      await provider.getSpecificNoteDetails(noteId: widget.noteId);
 
-      final commentsList = provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ?? [];
-      if(commentsList.isNotEmpty){
+      final commentsList =
+          provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ?? [];
+      if (commentsList.isNotEmpty) {
         _commentsDetailsList.clear();
-        for(var element in commentsList){
+        for (var element in commentsList) {
           _commentsDetailsList.add(NoteDetailList.fromJson(element.toJson()));
         }
       }
 
-
-      final attachmentsList = provider.apiResponse.data?.data?.adviseeNote?.listOfAttachments ?? [];
-
+      final attachmentsList =
+          provider.apiResponse.data?.data?.adviseeNote?.listOfAttachments ?? [];
 
       /// Fetching the list of attachments and initializing the mh list:
       if (attachmentsList.isNotEmpty) {
@@ -89,18 +83,13 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin
         }
       }
 
-      setState(() {
-      });
-
-
+      setState(() {});
     });
-
   }
 
   @override
   void dispose() {
-
-_commentsDetailsList.clear();
+    _commentsDetailsList.clear();
     super.dispose();
   }
 
@@ -119,21 +108,23 @@ _commentsDetailsList.clear();
     super.initState();
   }
 
-
   bool _isProcessing = false;
-  setIsProcessing(bool value){
+
+  setIsProcessing(bool value) {
     setState(() {
       _isProcessing = value;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: "Update Advisor Note"),
-      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+      body: Utils.modelProgressHud(
+          processing: _isProcessing,
+          child: Utils.pageRefreshIndicator(
+              child: _buildUi(), onRefresh: _initializeData)),
     );
   }
 
@@ -142,189 +133,266 @@ _commentsDetailsList.clear();
 
     return Consumer<GetSpecificNoteDetailsViewModel>(
         builder: (context, provider, _) {
-          switch (provider.apiResponse.status) {
-            case Status.LOADING:
-              return Utils.pageLoadingIndicator(context: context);
+      switch (provider.apiResponse.status) {
+        case Status.LOADING:
+          return Utils.pageLoadingIndicator(context: context);
 
-            case Status.ERROR:
-              return Center(
-                child: Text(
-                  AppLocalizations.of(context)!.somethingWentWrong,
-                ),
-              );
-            case Status.COMPLETED:
-              final listDetails = provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ?? [];
-              return Directionality(
-                textDirection: getTextDirection(langProvider),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+        case Status.ERROR:
+          return Center(
+            child: Text(
+              AppLocalizations.of(context)!.somethingWentWrong,
+            ),
+          );
+        case Status.COMPLETED:
+          final listDetails =
+              provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ??
+                  [];
+          return Directionality(
+            textDirection: getTextDirection(langProvider),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    listDetails.isNotEmpty
+                        ? _listDetails(
+                            provider: provider, langProvider: langProvider)
+                        : Utils.showOnNoDataAvailable(),
+                    kFormHeight,
+                    _listComments(langProvider: langProvider),
+                    kFormHeight,
+                    SimpleCard(
+                        expandedContent: Column(
                       children: [
-                        listDetails.isNotEmpty ?
-                        _listDetails(provider: provider, langProvider: langProvider) : Utils.showOnNoDataAvailable()
-                        ,
+                        _attachmentsUploadSection(),
+
+                        /// ****************************************************************
                         kFormHeight,
-                        _listComments(langProvider: langProvider),
-                        kFormHeight,
-                        SimpleCard(expandedContent:  Column(
-                          children: [
-                            _attachmentsUploadSection(),
-                            /// ****************************************************************
-                            kFormHeight,
 
-                            /// ****************************************************************
-                            const MyDivider(
-                              color: AppColors.lightGrey,
-                            ),
-                            // This section is to add file
-                            AttachmentAddFileButton(addFile: () async {
-                              await _addFile();
-                            }),
-                          ],
-                        )),
-
-                        kFormHeight,
-                        _submitAndBackButton(langProvider: langProvider, getSpecificNoteDetailsProvider: provider),
-
-
-
-
-
+                        /// ****************************************************************
+                        const MyDivider(
+                          color: AppColors.lightGrey,
+                        ),
+                        // This section is to add file
+                        AttachmentAddFileButton(addFile: () async {
+                          await _addFile();
+                        }),
                       ],
-                    ),
-                  ),
+                    )),
+                    kFormHeight,
+                    _submitAndBackButton(
+                        langProvider: langProvider,
+                        getSpecificNoteDetailsProvider: provider),
+                  ],
                 ),
-              );
+              ),
+            ),
+          );
 
-            case Status.NONE:
-              return showVoid;
-            case null:
-              return showVoid;
-          }
-        });
+        case Status.NONE:
+          return showVoid;
+        case null:
+          return showVoid;
+      }
+    });
   }
 
   //// *----------------------- BASIC INFO SECTION START ------------------------*
-  Widget _listDetails({required GetSpecificNoteDetailsViewModel provider, required LanguageChangeViewModel langProvider}) {
-    final noteInfo =  provider.apiResponse.data?.data?.adviseeNote;
+  Widget _listDetails(
+      {required GetSpecificNoteDetailsViewModel provider,
+      required LanguageChangeViewModel langProvider}) {
+    final noteInfo = provider.apiResponse.data?.data?.adviseeNote;
     return CustomInformationContainer(
         title: 'Note Details',
         leading: SvgPicture.asset("assets/services/request_details.svg"),
         expandedContent: Column(
           children: [
-            CustomInformationContainerField(title: "Institution", description: noteInfo?.institution ?? '- -'),
-            CustomInformationContainerField(title: "Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: "CATEGORY",code:  noteInfo?.noteType ?? '- -' )),
-            CustomInformationContainerField(title: "Sub Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: 'SUB_CATEGORY#${noteInfo?.noteType}',code: noteInfo?.noteSubType ?? '- -') ),
-            CustomInformationContainerField(title: "Contact Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: "CONTACT_TYPE",code:  noteInfo?.contactType )),
-            CustomInformationContainerField(title: "Note Status", description: getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_STATUS",code:  noteInfo?.noteStatus )),
-            CustomInformationContainerField(title: "Can Advisee View", description:  getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_ACCESS",code:  noteInfo?.access )),
-            CustomInformationContainerField(title: "Created On", description: convertTimestampToDate(int.parse(noteInfo?.createdOn?.toString() ?? '- -'))),
-            CustomInformationContainerField(title: "Subject", description: noteInfo?.subject ?? '- -',isLastItem: true),
+            CustomInformationContainerField(
+                title: "Institution",
+                description: noteInfo?.institution ?? '- -'),
+            CustomInformationContainerField(
+                title: "Type",
+                description: getFullNameFromLov(
+                    langProvider: langProvider,
+                    lovCode: "CATEGORY",
+                    code: noteInfo?.noteType ?? '- -')),
+            CustomInformationContainerField(
+                title: "Sub Type",
+                description: getFullNameFromLov(
+                    langProvider: langProvider,
+                    lovCode: 'SUB_CATEGORY#${noteInfo?.noteType}',
+                    code: noteInfo?.noteSubType ?? '- -')),
+            CustomInformationContainerField(
+                title: "Contact Type",
+                description: getFullNameFromLov(
+                    langProvider: langProvider,
+                    lovCode: "CONTACT_TYPE",
+                    code: noteInfo?.contactType)),
+            CustomInformationContainerField(
+                title: "Note Status",
+                description: getFullNameFromLov(
+                    langProvider: langProvider,
+                    lovCode: "NOTE_STATUS",
+                    code: noteInfo?.noteStatus)),
+            CustomInformationContainerField(
+                title: "Can Advisee View",
+                description: getFullNameFromLov(
+                    langProvider: langProvider,
+                    lovCode: "NOTE_ACCESS",
+                    code: noteInfo?.access)),
+            CustomInformationContainerField(
+                title: "Created On",
+                description: convertTimestampToDate(
+                    int.parse(noteInfo?.createdOn?.toString() ?? '- -'))),
+            CustomInformationContainerField(
+                title: "Subject",
+                description: noteInfo?.subject ?? '- -',
+                isLastItem: true),
           ],
-        )
-    );
-
+        ));
   }
+
   //// *----------------------- BASIC INFO SECTION END ------------------------*
-
-
 
   //// *----------------------- COMMENTS SECTION START ------------------------*
   /// Comments Details Sections and also option to add comment
   final List<NoteDetailList> _commentsDetailsList = [];
-  _addComment(){
 
+  _addComment() {
     final date = DateTime.now().millisecondsSinceEpoch;
 
-    _commentsDetailsList.add(
-      NoteDetailList(itemSeqController: TextEditingController(),
-          noteItemLongTextController: TextEditingController(),
-          craetedOnController: TextEditingController(text: date.toString()),
-          desc2Controller: TextEditingController(),
-          itemSeqFocusNode: FocusNode(),
-          noteItemLongTextFocusNode:  FocusNode(),
-          craetedOnFocusNode:  FocusNode(),
-          desc2FocusNode:  FocusNode(),
-          newRecord: true,
-          isLoading: false
-      )
-    );
-    setState(() {
-
-    });
+    _commentsDetailsList.add(NoteDetailList(
+        itemSeqController: TextEditingController(),
+        noteItemLongTextController: TextEditingController(),
+        craetedOnController: TextEditingController(text: date.toString()),
+        desc2Controller: TextEditingController(),
+        itemSeqFocusNode: FocusNode(),
+        noteItemLongTextFocusNode: FocusNode(),
+        craetedOnFocusNode: FocusNode(),
+        desc2FocusNode: FocusNode(),
+        newRecord: true,
+        isLoading: false));
+    setState(() {});
   }
-  _deleteComment(index){
-    if(_commentsDetailsList.isNotEmpty){
+
+  _deleteComment(index) {
+    if (_commentsDetailsList.isNotEmpty) {
       _commentsDetailsList.removeAt(index);
     }
   }
-  Widget _listComments({required LanguageChangeViewModel langProvider}) {
 
-    return  SimpleCard(
-        expandedContent:  _commentsDetailsList.isNotEmpty ?  ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _commentsDetailsList.length,
-            itemBuilder: (context,index){
-              final comment = _commentsDetailsList[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomInformationContainerField(title: "S.No", description: (index+1).toString() ?? '- -'),
-                  CustomInformationContainerField(title: "Created By", description: comment.desc2Controller.text ?? '- -'),
-                  CustomInformationContainerField(title: "Created On",description:  convertTimestampToDate(int.tryParse(comment.craetedOnController.text.toString() ?? '- -') ?? 0),bottomPadding:const  EdgeInsets.only(bottom: 10),),
-                  Text("Comment",style: AppTextStyles.subTitleTextStyle()),
-                  const SizedBox(height: 5,),
-                  scholarshipFormTextField(readOnly: !(comment.newRecord ?? false),filled: !(comment.newRecord ?? false),maxLines: 2,currentFocusNode: comment.noteItemLongTextFocusNode, controller: comment.noteItemLongTextController, hintText: "write your comment here..", onChanged: (value){}),
-                  const SizedBox(height: 5,),
-                  if(comment.newRecord) Column(
+  Widget _listComments({required LanguageChangeViewModel langProvider}) {
+    return SimpleCard(
+        expandedContent: _commentsDetailsList.isNotEmpty
+            ? ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _commentsDetailsList.length,
+                itemBuilder: (context, index) {
+                  final comment = _commentsDetailsList[index];
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Divider(),
-                      Text("Action",style: AppTextStyles.subTitleTextStyle().copyWith(height: 2),),
-                      // kFormHeight,
+                      CustomInformationContainerField(
+                          title: "S.No",
+                          description: (index + 1).toString() ?? '- -'),
+                      CustomInformationContainerField(
+                          title: "Created By",
+                          description: comment.desc2Controller.text ?? '- -'),
+                      CustomInformationContainerField(
+                        title: "Created On",
+                        description: convertTimestampToDate(int.tryParse(
+                                comment.craetedOnController.text.toString() ??
+                                    '- -') ??
+                            0),
+                        bottomPadding: const EdgeInsets.only(bottom: 10),
+                      ),
+                      !(comment.newRecord ?? false)
+                          ? CustomInformationContainerField(
+                              title: "Comment",
+                              description:
+                                  comment.noteItemLongTextController.text ??
+                                      '- -',
+                              isLastItem: true,
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Comment",
+                                    style: AppTextStyles.subTitleTextStyle()),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                scholarshipFormTextField(
+                                    readOnly: !(comment.newRecord ?? false),
+                                    filled: !(comment.newRecord ?? false),
+                                    maxLines: 2,
+                                    currentFocusNode:
+                                        comment.noteItemLongTextFocusNode,
+                                    controller:
+                                        comment.noteItemLongTextController,
+                                    hintText: "write your comment here..",
+                                    onChanged: (value) {}),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                              ],
+                            ),
+                      if (comment.newRecord)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Divider(),
+                            Text(
+                              "Action",
+                              style: AppTextStyles.subTitleTextStyle()
+                                  .copyWith(height: 2),
+                            ),
+                            // kFormHeight,
 
-                      //// Add new comment button
-                      actionButton(assetAddress: "assets/services/bin.svg", text: "Delete", onTap: (){
-                        setState(() {
-                          _deleteComment(index);
-                        });
-                      }),
+                            //// Add new comment button
+                            actionButton(
+                                assetAddress: "assets/services/bin.svg",
+                                text: "Delete",
+                                onTap: () {
+                                  setState(() {
+                                    _deleteComment(index);
+                                  });
+                                }),
+                          ],
+                        ),
+                      Column(
+                        children: [
+                          kFormHeight,
+                          const MyDivider(
+                            color: AppColors.darkGrey,
+                          ),
+                          kFormHeight,
+                        ],
+                      ),
+                      if (index == _commentsDetailsList.length - 1)
+                        addRemoveMoreSection(
+                            title: "Add Comment",
+                            add: true,
+                            onChanged: () {
+                              setState(() {
+                                _addComment();
+                              });
+                            })
                     ],
-                  ),
-                  Column(
-                    children: [
-                      kFormHeight,
-                      const MyDivider(color: AppColors.darkGrey,),
-                      kFormHeight,
-                    ],
-                  ),
-
-                if(index == _commentsDetailsList.length -1)
-                  addRemoveMoreSection(title: "Add Comment", add: true, onChanged: (){
-                    setState(() {
-                      _addComment();
-                    });
-                  })
-                ],
-              );
-
-
-            }) : Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 50),
-          child: Utils.showOnNoDataAvailable(),
-        )
-    );
-
+                  );
+                })
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50),
+                child: Utils.showOnNoDataAvailable(),
+              ));
   }
+
   //// *----------------------- COMMENTS SECTION END ------------------------*
-
-
-
 
   //// *----------------------- ADD ATTACHMENTS SECTION START ------------------------*
   final List<ListOfFiles> _attachmentsList = [];
@@ -384,9 +452,12 @@ _commentsDetailsList.clear();
             attachmentSeqNumberController: TextEditingController(),
             descriptionController: TextEditingController(),
             dateController: TextEditingController(text: date.toString()),
-            attachSysfileNameController: TextEditingController(text: file.path.split('/').last),
-            attachUserFileController: TextEditingController(text: file.path.split('/').last),
-            base64StringController: TextEditingController(text: base64Encode(file.readAsBytesSync())),
+            attachSysfileNameController:
+                TextEditingController(text: file.path.split('/').last),
+            attachUserFileController:
+                TextEditingController(text: file.path.split('/').last),
+            base64StringController: TextEditingController(
+                text: base64Encode(file.readAsBytesSync())),
             attachmentSeqNumberFocusNode: FocusNode(),
             descriptionFocusNode: FocusNode(),
             dateFocusNode: FocusNode(),
@@ -399,14 +470,15 @@ _commentsDetailsList.clear();
       }
     }
   }
-//// *----------------------- ADD ATTACHMENTS SECTION END ------------------------*
 
+//// *----------------------- ADD ATTACHMENTS SECTION END ------------------------*
 
   Widget _submitAndBackButton({
     required langProvider,
     required GetSpecificNoteDetailsViewModel getSpecificNoteDetailsProvider,
   }) {
-    final uploadAttachmentProvider = Provider.of<UploadAttachmentToNoteViewModel>(context, listen: false);
+    final uploadAttachmentProvider =
+        Provider.of<UploadAttachmentToNoteViewModel>(context, listen: false);
 
     return Column(
       children: [
@@ -429,10 +501,14 @@ _commentsDetailsList.clear();
 
                     // Upload comments
                     for (var comment in _commentsDetailsList) {
-                      if (comment.newRecord && comment.noteItemLongTextController.text.trim().isNotEmpty) {
+                      if (comment.newRecord &&
+                          comment.noteItemLongTextController.text
+                              .trim()
+                              .isNotEmpty) {
                         hasUpdates = true;
                         createCommentForm(
-                          getSpecificNoteDetailsProvider: getSpecificNoteDetailsProvider,
+                          getSpecificNoteDetailsProvider:
+                              getSpecificNoteDetailsProvider,
                           description: comment.noteItemLongTextController.text,
                         );
                         await updateProvider.addCommentToNote(
@@ -446,15 +522,16 @@ _commentsDetailsList.clear();
                     for (var attachment in _attachmentsList) {
                       if (attachment.newRecord) {
                         hasUpdates = true;
-                        createAttachmentForm(getSpecificNoteDetailsProvider: getSpecificNoteDetailsProvider,attachment: attachment);
+                        createAttachmentForm(
+                            getSpecificNoteDetailsProvider:
+                                getSpecificNoteDetailsProvider,
+                            attachment: attachment);
                         await uploadAttachmentProvider.uploadAttachmentToNote(
                           form: updateAttachmentForm,
                           noteId: widget.noteId,
                         );
                       }
                     }
-
-                    print(updateAttachmentForm);
 
                     // Reinitialize data if updates were made
                     if (hasUpdates) {
@@ -477,116 +554,41 @@ _commentsDetailsList.clear();
     );
   }
 
-
-
-
-  // Widget _submitAndBackButton(
-  //     {required langProvider,required GetSpecificNoteDetailsViewModel getSpecificNoteDetailsProvider}) {
-  //
-  //   final uploadAttachmentProvider = Provider.of<UploadAttachmentToNoteViewModel>(context,listen: false);
-  //   return Column(
-  //     children: [
-  //       kFormHeight,
-  //       kFormHeight,
-  //       ChangeNotifierProvider(
-  //         create: (context) => AddCommentToNoteViewModel(),
-  //         child: Consumer<AddCommentToNoteViewModel>(
-  //             builder: (context, updateProvider, _) {
-  //               return CustomButton(
-  //                   buttonName: "Update",
-  //                   // isLoading: updateProvider?.apiResponse.status == Status.LOADING,
-  //                   isLoading: _isProcessing,
-  //                   borderColor: Colors.transparent,
-  //                   buttonColor: AppColors.scoThemeColor,
-  //                   textDirection: getTextDirection(langProvider),
-  //                   onTap: () async {
-  //                     bool hasUpdates = false; // Track if any updates are made
-  //
-  //
-  //                     /// uploading comments
-  //                     for (var element in _commentsDetailsList) {
-  //                       if (element.newRecord && element.noteItemLongTextController.text.trim().isNotEmpty) {
-  //                         hasUpdates = true; // Mark updates as made
-  //                         setIsProcessing(true);
-  //                         createUpdateForm(
-  //                           getSpecificNoteDetailsProvider: getSpecificNoteDetailsProvider,
-  //                           description: element.noteItemLongTextController.text,
-  //                         );
-  //                         await updateProvider.addCommentToNote(
-  //                           form: updateCommentForm,
-  //                           noteId: widget.noteId,
-  //                         );
-  //                       }
-  //                     }
-  //
-  //
-  //                     /// uploading attachments
-  //                     for (var element in _attachmentsList) {
-  //                       if (element.newRecord) {
-  //                         hasUpdates = true; // Mark updates as made
-  //                         setIsProcessing(true);
-  //                         createUpdateForm(
-  //                           getSpecificNoteDetailsProvider: getSpecificNoteDetailsProvider,
-  //                         );
-  //                         await uploadAttachmentProvider.uploadAttachmentToNote(
-  //                           form: updateAttachmentForm,
-  //                           noteId: widget.noteId,
-  //                         );
-  //                       }
-  //                     }
-  //
-  //
-  //                     if (hasUpdates) {
-  //                       await _initializeData();
-  //                     }
-  //
-  //                     setIsProcessing(false); // Stop processing regardless of updates
-  //                   }
-  //
-  //                   );
-  //             }),
-  //       ),
-  //       kFormHeight,
-  //       const KReturnButton(),
-  //     ],
-  //   );
-  // }
-
-
-
   var updateCommentForm = {};
   var updateAttachmentForm = {};
-  createCommentForm({required GetSpecificNoteDetailsViewModel getSpecificNoteDetailsProvider,dynamic description,ListOfFiles? attachment}){
-    final noteInfo = getSpecificNoteDetailsProvider.apiResponse.data?.data?.adviseeNote;
+
+  createCommentForm(
+      {required GetSpecificNoteDetailsViewModel getSpecificNoteDetailsProvider,
+      dynamic description,
+      ListOfFiles? attachment}) {
+    final noteInfo =
+        getSpecificNoteDetailsProvider.apiResponse.data?.data?.adviseeNote;
     updateCommentForm = {
-      "emplId":  noteInfo?.emplId,
+      "emplId": noteInfo?.emplId,
       "institution": noteInfo?.institution,
       "access": noteInfo?.access,
-      "noteId":  noteInfo?.noteId,
+      "noteId": noteInfo?.noteId,
       "noteType": noteInfo?.noteType,
-      "noteSubType":noteInfo?.noteSubType,
+      "noteSubType": noteInfo?.noteSubType,
       "advisorId": noteInfo?.advisorId,
       "noteStatus": noteInfo?.noteStatus,
       "contactType": noteInfo?.contactType,
       "subject": noteInfo?.subject,
       "description": description,
     };
-
-
-
   }
 
-  createAttachmentForm({required GetSpecificNoteDetailsViewModel getSpecificNoteDetailsProvider,ListOfFiles? attachment}){
-    final noteInfo = getSpecificNoteDetailsProvider.apiResponse.data?.data?.adviseeNote;
+  createAttachmentForm(
+      {required GetSpecificNoteDetailsViewModel getSpecificNoteDetailsProvider,
+      ListOfFiles? attachment}) {
+    final noteInfo =
+        getSpecificNoteDetailsProvider.apiResponse.data?.data?.adviseeNote;
 
     updateAttachmentForm = {
-      "emplId":  noteInfo?.emplId,
+      "emplId": noteInfo?.emplId,
       "institution": noteInfo?.institution,
-      "noteId":  noteInfo?.noteId,
+      "noteId": noteInfo?.noteId,
       "listOfAttachments": attachment?.toJson()
     };
   }
-
-
-
 }

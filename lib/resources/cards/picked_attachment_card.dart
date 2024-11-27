@@ -34,8 +34,7 @@ class PickedAttachmentCard extends StatefulWidget {
   State<PickedAttachmentCard> createState() => _PickedAttachmentCardState();
 }
 
-class _PickedAttachmentCardState extends State<PickedAttachmentCard>
-    with MediaQueryMixin {
+class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQueryMixin {
   late AlertServices _alertServices;
 
   File? file;
@@ -240,7 +239,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard>
                           .showCustomSnackBar("File not available to open.");
                     }
                   },
-                  leading: Image.asset("assets/document.png"),
+                  leading: SvgPicture.asset("assets/services/file_icon.svg"),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   title: widget.attachment.isLoading
                       ? const Text("loading...")
@@ -288,17 +287,21 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard>
                         ],
                       ),
                       // SizedBox(height: 8.0),
-                    scholarshipFormTextField(
+
+
+                      !((widget.attachmentType == AttachmentType.updateNote || widget.attachmentType == AttachmentType.employment) && !widget.attachment.newRecord ) ? scholarshipFormTextField(
                       maxLines: 3,
-                      readOnly: widget.attachmentType == AttachmentType.updateNote && !widget.attachment.newRecord,
-                      filled: widget.attachmentType == AttachmentType.updateNote && !widget.attachment.newRecord,
+                      // readOnly: widget.attachmentType == AttachmentType.updateNote && !widget.attachment.newRecord,
+                      // filled: widget.attachmentType == AttachmentType.updateNote && !widget.attachment.newRecord,
                       // filled: true,
                       textInputType: TextInputType.multiline,
                       currentFocusNode: _getFocusNodeBasedOnAttachmentType(widget.attachmentType),
                       controller: _getControllerBasedOnAttachmentType(widget.attachmentType),
                       hintText: "Write your comment here...",
                       onChanged: (value) {},
-                    )
+                    ) : Text(
+                          _getControllerBasedOnAttachmentType(widget.attachmentType).text,style: textFieldTextStyle,
+                      )
 
 
               ],

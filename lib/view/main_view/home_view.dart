@@ -26,12 +26,15 @@ import 'package:sco_v1/view/drawer/accout_views/application_status_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
+import 'package:sco_v1/view/main_view/notifications/notifications_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_abroad/scholarship_in_abroad_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/scholarship_in_uae_view.dart';
 import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/finance.dart';
+import 'package:sco_v1/view/main_view/services_views/finance_details_views/salaryDetailsView.dart';
 import 'package:sco_v1/view/main_view/services_views/request_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
+import 'package:sco_v1/viewModel/notifications_view_models/get_all_notifications_viewModel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
 import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
@@ -39,6 +42,7 @@ import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.d
 import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 
+import '../../models/services/MyFinanceStatusModel.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../resources/custom_painters/faq_painters.dart';
@@ -72,7 +76,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     });
   }
 
-
   Future<void> _onRefresh() async {
     try {
       /// Check if the user is logged in
@@ -84,16 +87,23 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       _initializeScoPrograms();
 
       /// Fetch data from providers
-      final myFinanceProvider = Provider.of<MyFinanceStatusViewModel>(context, listen: false);
-      final requestsProvider = Provider.of<GetAllRequestsViewModel>(context, listen: false);
-      final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context, listen: false);
-      final getNotificationsCount = Provider.of<GetNotificationsCountViewModel>(context, listen: false);
+      final myFinanceProvider =
+          Provider.of<MyFinanceStatusViewModel>(context, listen: false);
+      final requestsProvider =
+          Provider.of<GetAllRequestsViewModel>(context, listen: false);
+      final talkToMyAdvisor =
+          Provider.of<GetMyAdvisorViewModel>(context, listen: false);
+      final getNotificationsCount =
+          Provider.of<GetNotificationsCountViewModel>(context, listen: false);
+      final getAllNotificationProvider = Provider.of<GetAllNotificationsViewModel>(context, listen: false);
 
       /// Fetch notifications count
       await getNotificationsCount.getNotificationsCount();
 
+
       /// Fetch other data concurrently
       await Future.wait<dynamic>([
+        getAllNotificationProvider.getAllNotifications(),
         myFinanceProvider.myFinanceStatus(),
         requestsProvider.getAllRequests(),
         talkToMyAdvisor.getMyAdvisor(),
@@ -110,15 +120,15 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      body: Utils.pageRefreshIndicator(child: _buildUI(), onRefresh: _onRefresh)
-    );
+        backgroundColor: AppColors.bgColor,
+        body: Utils.pageRefreshIndicator(
+            child: _buildUI(), onRefresh: _onRefresh));
   }
 
   // check for the scholarship status
   ScholarshipStatus scholarshipStatus = ScholarshipStatus.applyScholarship;
 
-  Widget _buildUI()  {
+  Widget _buildUI() {
     // *-----Initialize the languageProvider-----*
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Padding(
@@ -135,34 +145,34 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             //CarouselSlider:
             // *-----Client Said he don't need CarouselSlider on the home page----*/
             // _carouselSlider(),
-              Column(
-                children: [
-                  _scholarshipAppliedContainer(langProvider: langProvider),
-                  kFormHeight,
-                ],
-              ),
+            Column(
+              children: [
+                _scholarshipAppliedContainer(langProvider: langProvider),
+                kFormHeight,
+              ],
+            ),
 
-              Column(
-                children: [
-                  _scholarshipApproved(langProvider: langProvider),
-                  kFormHeight,
-                  _announcements(langProvider: langProvider),
-                  kFormHeight,
-                ],
-              ),
+            Column(
+              children: [
+                _scholarshipApproved(langProvider: langProvider),
+                kFormHeight,
+                _announcements(langProvider: langProvider),
+                kFormHeight,
+              ],
+            ),
 
             // _faqContainer(langProvider: langProvider),
             // kFormHeight,
             // _aboutOrganization(langProvider: langProvider),
             kFormHeight,
             Column(
-                children: [
-                  _applyScholarshipButton(langProvider: langProvider),
-                  kFormHeight,
-                  _scoPrograms(langProvider: langProvider),
-                  kFormHeight,
-                ],
-              ),
+              children: [
+                _applyScholarshipButton(langProvider: langProvider),
+                kFormHeight,
+                _scoPrograms(langProvider: langProvider),
+                kFormHeight,
+              ],
+            ),
             _financeView(langProvider: langProvider),
             kFormHeight,
             _requestView(langProvider: langProvider),
@@ -321,60 +331,117 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
 // *---Container for approved scholarships-----*
   Widget _scholarshipApproved({required LanguageChangeViewModel langProvider}) {
-    return _homeViewCard(
-        langProvider: langProvider,
-        title: AppLocalizations.of(context)!.scholarshipOffice,
-        icon: Image.asset("assets/scholarship_office.png"),
-        content: Column(
-          children: [
-            // Amount and Read More Button
-            _buildAmountAndButton(langProvider: langProvider),
+    return Consumer<MyFinanceStatusViewModel>(
+        builder: (context, financeStatusProvider, _) {
+      switch (financeStatusProvider.apiResponse.status) {
+        case Status.LOADING:
+          return showVoid;
+        case Status.ERROR:
+          return showVoid;
+        case Status.COMPLETED:
+          final listOfSalaries =
+              financeStatusProvider.apiResponse.data?.data?.listSalaryDetials ??
+                  [];
 
-            const SizedBox(height: 10),
+          final topSalaryDetails =
+              listOfSalaries.isNotEmpty ? listOfSalaries[0] : null;
 
-            const Divider(color: Color(0xffDFDFDF)),
+          return _homeViewCard(
+              langProvider: langProvider,
+              title: AppLocalizations.of(context)!.scholarshipOffice,
+              icon: Image.asset("assets/scholarship_office.png"),
+              content: Column(
+                children: [
+                  // Amount and Read More Button
+                  _buildAmountAndButton(
+                      langProvider: langProvider, topSalary: topSalaryDetails),
 
-            const SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-            // Date Information
-            _buildDateInfo(langProvider: langProvider, date: null),
-          ],
-        ));
+                  const Divider(color: Color(0xffDFDFDF)),
+
+                  const SizedBox(height: 10),
+                  // Date Information
+                  _buildDateInfo(
+                      langProvider: langProvider,
+                      date: topSalaryDetails?.salaryMonth),
+                ],
+              ));
+        case Status.NONE:
+          return showVoid;
+        case null:
+          showVoid;
+      }
+      return showVoid;
+    });
   }
-
-
 
   Widget _announcements({required LanguageChangeViewModel langProvider}) {
-    return _homeViewCard(
-      title: "Announcement",
-      icon: SvgPicture.asset("assets/announcements.svg"),
-      langProvider: langProvider,
-      content: Column(
-        children: [
-          kFormHeight,
-          Text("Announcing Announcement. Making an announcement is more understated...",style: AppTextStyles.titleTextStyle().copyWith(fontSize: 15),),
-          kFormHeight,
-          const Divider(),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.calendar_month_outlined,color: Colors.grey.shade400,size: 15,),
-              const SizedBox(width: 5),
-              Text("DD-YYYY-MM",style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.bold),),
-              const SizedBox(width: 5),
-              Text("(01:55 PM)",style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.normal),),
-
-            ],
-          )
-        ],
-      ),
-    );
+    return Consumer<GetAllNotificationsViewModel>(
+        builder: (context, allNotificationsProvider, _) {
+      switch (allNotificationsProvider.apiResponse.status) {
+        case Status.LOADING:
+          return showVoid;
+        case Status.ERROR:
+          return showVoid;
+        case Status.COMPLETED:
+          final firstNotification = allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?  allNotificationsProvider.apiResponse.data?.first : null;
+         return allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?   _homeViewCard(
+            onTap: (){
+              _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NotificationsView() ));
+            },
+            title: "Announcement",
+            icon: SvgPicture.asset("assets/announcements.svg"),
+            langProvider: langProvider,
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                kFormHeight,
+                Text(
+                 firstNotification?.subject ?? '',
+                  style: AppTextStyles.titleTextStyle().copyWith(fontSize: 15),
+                ),
+                kFormHeight,
+                const Divider(),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.calendar_month_outlined,
+                      color: Colors.grey.shade400,
+                      size: 15,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      convertTimestampToDate(firstNotification?.createDate ?? 0),
+                      style: AppTextStyles.subTitleTextStyle()
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      convertTimestampToTime(firstNotification?.createDate ?? 0),
+                      style: AppTextStyles.subTitleTextStyle()
+                          .copyWith(fontWeight: FontWeight.normal),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ) : showVoid;
+        case Status.NONE:
+          return showVoid;
+        case null:
+          return showVoid;
+      }
+    });
   }
 
+  /// Tile to show this month salary and will be shown only when student is scholar
   Widget _buildAmountAndButton(
-      {required LanguageChangeViewModel langProvider}) {
+      {required LanguageChangeViewModel langProvider,
+      required ListSalaryDetials? topSalary}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -386,18 +453,18 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             children: [
               Row(
                 children: [
-                  const Text(
-                    "300",
-                    style: TextStyle(
+                  Text(
+                    topSalary?.amount.toString() ?? "",
+                    style: const TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.w700,
                       color: Color(0xff0B9967),
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Text(
-                    "AED",
-                    style: TextStyle(
+                  Text(
+                    topSalary?.currency.toString() ?? "",
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Color(0xff0B9967),
                       fontWeight: FontWeight.w400,
@@ -405,9 +472,9 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                   ),
                 ],
               ),
-              const Text(
-                "02/09/2023",
-                style: TextStyle(
+              Text(
+                topSalary?.status.toString() ?? "",
+                style: const TextStyle(
                   color: Color(0xff9AA6B2),
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
@@ -416,22 +483,13 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             ],
           ),
         ),
-
         // Read More Button
-        SizedBox(
-          width: screenWidth * 0.35,
-          child: CustomButton(
-            buttonName: AppLocalizations.of(context)!.readMore,
-            isLoading: false,
-            onTap: () {},
-            textDirection: getTextDirection(langProvider),
-            textColor: const Color(0xffAD8138),
-            borderColor: const Color(0xffAD8138),
-            buttonColor: Colors.white,
-            fontSize: 14,
-            height: 40,
-          ),
-        ),
+        readMoreButton(
+            langProvider: langProvider,
+            onTap: () {
+              _navigationServices.pushCupertino(CupertinoPageRoute(
+                  builder: (context) => const SalaryDetailsView()));
+            }),
       ],
     );
   }
@@ -445,7 +503,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         const Icon(Icons.calendar_month_outlined, color: Color(0xffA7B0C1)),
         const SizedBox(width: 5),
         Text(
-          date ?? "01/09/2023 - 01/09/2024",
+          date ?? "",
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
@@ -465,8 +523,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     );
   }
 
-
-  // *----Scholarship applied container----*
+  // *---- Scholarship applied container If a user is Applicant then show this and move the user to application statuses view ----*
   Widget _scholarshipAppliedContainer(
       {required LanguageChangeViewModel langProvider}) {
     return _homeViewCard(
@@ -497,28 +554,17 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                               fontSize: 14,
                               color: AppColors.greenColor,
                               fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.start)
+                          textAlign: TextAlign.start),
                     ],
                   ),
                 ),
-
-                // read more button
-                SizedBox(
-                  width: screenWidth * 0.35,
-                  child: CustomButton(
-                    buttonName: AppLocalizations.of(context)!.readMore,
-                    isLoading: false,
-                    onTap: () {
-                      _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const ApplicationStatusView()));
-                    },
-                    textDirection: getTextDirection(langProvider),
-                    textColor: const Color(0xffAD8138),
-                    borderColor: const Color(0xffAD8138),
-                    buttonColor: Colors.white,
-                    fontSize: 14,
-                    height: 40,
-                  ),
-                ),
+                readMoreButton(
+                  langProvider: langProvider,
+                  onTap: () {
+                    _navigationServices.pushCupertino(CupertinoPageRoute(
+                        builder: (context) => const ApplicationStatusView()));
+                  },
+                )
               ],
             ),
             kFormHeight,
@@ -535,7 +581,20 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         ));
   }
 
-
+  Widget readMoreButton({required langProvider, required onTap}) => SizedBox(
+        width: screenWidth * 0.35,
+        child: CustomButton(
+          buttonName: AppLocalizations.of(context)!.readMore,
+          isLoading: false,
+          onTap: onTap,
+          textDirection: getTextDirection(langProvider),
+          textColor: const Color(0xffAD8138),
+          borderColor: const Color(0xffAD8138),
+          buttonColor: Colors.white,
+          fontSize: 14,
+          height: 40,
+        ),
+      );
 
   // Apply Scholarship Button
   Widget _applyScholarshipButton(
@@ -581,81 +640,88 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   /// Finance View:
   Widget _financeView({required LanguageChangeViewModel langProvider}) {
-    return  Consumer<MyFinanceStatusViewModel>(
-        builder: (context,financeStatusProvider,_){
-
-
-          switch(financeStatusProvider.apiResponse.status){
-            case Status.LOADING:
-              return showVoid;
-            case Status.ERROR:
-              return showVoid;
-            case Status.NONE:
-              return showVoid;
-            case Status.COMPLETED:
-              final financeData = financeStatusProvider.apiResponse.data?.data;
-              final salary = financeData?.listSalaryDetials?.isNotEmpty == true ? financeData?.listSalaryDetials?.first : null;
-              final deduction = financeData?.listDeduction?.isNotEmpty == true ? financeData?.listDeduction?.first : null;
-              final bonus = financeData?.listBonus?.isNotEmpty == true ? financeData?.listBonus?.first : null;
-              final warning = financeData?.listWarnings?.isNotEmpty == true ? financeData?.listWarnings?.first : null;
-              return _homeViewCard(
-                onTap: ()
-                {
-                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const FinanceView()));
-                },
-                    title: "My Finance",
-                    icon: SvgPicture.asset("assets/my_finance.svg"),
-                    langProvider: langProvider,
-                    content: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
+    return Consumer<MyFinanceStatusViewModel>(
+        builder: (context, financeStatusProvider, _) {
+      switch (financeStatusProvider.apiResponse.status) {
+        case Status.LOADING:
+          return showVoid;
+        case Status.ERROR:
+          return showVoid;
+        case Status.NONE:
+          return showVoid;
+        case Status.COMPLETED:
+          final financeData = financeStatusProvider.apiResponse.data?.data;
+          final salary = financeData?.listSalaryDetials?.isNotEmpty == true
+              ? financeData?.listSalaryDetials?.first
+              : null;
+          final deduction = financeData?.listDeduction?.isNotEmpty == true
+              ? financeData?.listDeduction?.first
+              : null;
+          final bonus = financeData?.listBonus?.isNotEmpty == true
+              ? financeData?.listBonus?.first
+              : null;
+          final warning = financeData?.listWarnings?.isNotEmpty == true
+              ? financeData?.listWarnings?.first
+              : null;
+          return _homeViewCard(
+              onTap: () {
+                _navigationServices.pushCupertino(CupertinoPageRoute(
+                    builder: (context) => const FinanceView()));
+              },
+              title: "My Finance",
+              icon: SvgPicture.asset("assets/my_finance.svg"),
+              langProvider: langProvider,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  kFormHeight,
+                  Center(
+                    child: Wrap(
+                      runSpacing: 20,
+                      spacing: 30,
+                      runAlignment: WrapAlignment.spaceEvenly,
+                      alignment: WrapAlignment.spaceAround,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        kFormHeight,
-                        Center(
-                          child: Wrap(
-                            runSpacing: 20,
-                            spacing: 30,
-                            runAlignment: WrapAlignment.spaceEvenly,
-                            alignment: WrapAlignment.spaceAround,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              _financeAmount(
-                                titleColor: const Color(0xffEC6330),
-                                title: "Salary",
-                                subTitle: salary?.amount.toString() ?? '',
-                              ),
-                              CustomVerticalDivider(),
-                              _financeAmount(
-                                titleColor: const Color(0xff3A82F7),
-                                title: "Deduction",
-                                subTitle: deduction?.totalDeducted.toString() ?? '',
-                              ),
-                              CustomVerticalDivider(),
-                              _financeAmount(
-                                titleColor: const Color(0xff67CE67),
-                                title: "Bonus",
-                                subTitle: bonus?.amount.toString() ?? '',
-                              ),
-                            ],
-                          ),
+                        _financeAmount(
+                          titleColor: const Color(0xffEC6330),
+                          title: "Salary",
+                          subTitle: salary?.amount.toString() ?? '',
                         ),
-                        const Divider(),
-                        // warning
-                        Text(
-                          "Warning",
-                          style: AppTextStyles.subTitleTextStyle()
-                              .copyWith(fontWeight: FontWeight.bold),
+                        CustomVerticalDivider(),
+                        _financeAmount(
+                          titleColor: const Color(0xff3A82F7),
+                          title: "Deduction",
+                          subTitle: deduction?.totalDeducted.toString() ?? '',
                         ),
-                        Text(
-                          warning?.termDescription ?? '',
-                          style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 18),
+                        CustomVerticalDivider(),
+                        _financeAmount(
+                          titleColor: const Color(0xff67CE67),
+                          title: "Bonus",
+                          subTitle: bonus?.amount.toString() ?? '',
                         ),
                       ],
-                    ));
-            case null:
-              return showVoid;
-          }
-});
+                    ),
+                  ),
+                  const Divider(),
+                  // warning
+                  Text(
+                    "Warning",
+                    style: AppTextStyles.subTitleTextStyle()
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    warning?.termDescription ?? '',
+                    style: AppTextStyles.titleBoldTextStyle()
+                        .copyWith(fontSize: 18),
+                  ),
+                ],
+              ));
+        case null:
+          return showVoid;
+      }
+    });
   }
 
   Widget _financeAmount(
@@ -686,70 +752,78 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   /// Request View:
   Widget _requestView({required LanguageChangeViewModel langProvider}) {
     return Consumer<GetAllRequestsViewModel>(
-      builder: (context, requestsProvider, _) {
-        switch(requestsProvider.apiResponse.status){
-          case Status.LOADING:
-            return showVoid;
-          case Status.ERROR:
-            return showVoid;
-          case Status.NONE:
-            return showVoid;
-          case Status.COMPLETED:
-            final requests = requestsProvider.apiResponse.data?.data?.listOfRequest;
-            final totalRequests = requestsProvider.apiResponse.data?.data?.listOfRequest?.length;
-            final approvedRequests = requests?.where((r) => r.status == "APPROV")?.length?? 0;
-            final pendingRequests = requests?.where((r) => r.status == "RECVD")?.length?? 0;
-            final rejectedRequests = requests?.where((r) => r.status == "DENY")?.length?? 0;
-            return _homeViewCard(
-            title: "Requests",
-            icon: SvgPicture.asset("assets/request.svg"),
-            langProvider: langProvider,
-            headerExtraContent: RequestsCountContainer(color: Colors.blue.shade600, count: totalRequests),
-            contentPadding: EdgeInsets.zero,
-            onTap: (){_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const RequestView()));},
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 50.0),
-                  child: Text(
-                    "Total Number of Requests",
-                    style: TextStyle(fontSize: 14, height: 2.5),
+        builder: (context, requestsProvider, _) {
+      switch (requestsProvider.apiResponse.status) {
+        case Status.LOADING:
+          return showVoid;
+        case Status.ERROR:
+          return showVoid;
+        case Status.NONE:
+          return showVoid;
+        case Status.COMPLETED:
+          final requests =
+              requestsProvider.apiResponse.data?.data?.listOfRequest;
+          final totalRequests =
+              requestsProvider.apiResponse.data?.data?.listOfRequest?.length;
+          final approvedRequests =
+              requests?.where((r) => r.status == "APPROV")?.length ?? 0;
+          final pendingRequests =
+              requests?.where((r) => r.status == "RECVD")?.length ?? 0;
+          final rejectedRequests =
+              requests?.where((r) => r.status == "DENY")?.length ?? 0;
+          return _homeViewCard(
+              title: "Requests",
+              icon: SvgPicture.asset("assets/request.svg"),
+              langProvider: langProvider,
+              headerExtraContent: RequestsCountContainer(
+                  color: Colors.blue.shade600, count: totalRequests),
+              contentPadding: EdgeInsets.zero,
+              onTap: () {
+                _navigationServices.pushCupertino(CupertinoPageRoute(
+                    builder: (context) => const RequestView()));
+              },
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 50.0),
+                    child: Text(
+                      "Total Number of Requests",
+                      style: TextStyle(fontSize: 14, height: 2.5),
+                    ),
                   ),
-                ),
-                kFormHeight,
-                _homeViewCardBottomContainer(
-                    padding: const EdgeInsets.all(10),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      runAlignment: WrapAlignment.start,
-                      alignment: WrapAlignment.spaceEvenly,
-                      runSpacing: 10,
-                      children: [
-                        IntrinsicWidth(
-                            child: _requestTypeWithCount(
-                                requestType: "Approved",
-                                count: approvedRequests,
-                                color: Colors.green.shade500)),
-                        kFormHeight,
-                        _requestTypeWithCount(
-                            requestType: "Pending",
-                            count: pendingRequests,
-                            color: const Color(0xffF4AA73)),
-                        kFormHeight,
-                        _requestTypeWithCount(
-                            requestType: "Rejected",
-                            count: rejectedRequests,
-                            color: AppColors.DANGER),
-                      ],
-                    )),
-              ],
-            ));
-          case null:
-            return showVoid;
-        }
+                  kFormHeight,
+                  _homeViewCardBottomContainer(
+                      padding: const EdgeInsets.all(10),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runAlignment: WrapAlignment.start,
+                        alignment: WrapAlignment.spaceEvenly,
+                        runSpacing: 10,
+                        children: [
+                          IntrinsicWidth(
+                              child: _requestTypeWithCount(
+                                  requestType: "Approved",
+                                  count: approvedRequests,
+                                  color: Colors.green.shade500)),
+                          kFormHeight,
+                          _requestTypeWithCount(
+                              requestType: "Pending",
+                              count: pendingRequests,
+                              color: const Color(0xffF4AA73)),
+                          kFormHeight,
+                          _requestTypeWithCount(
+                              requestType: "Rejected",
+                              count: rejectedRequests,
+                              color: AppColors.DANGER),
+                        ],
+                      )),
+                ],
+              ));
+        case null:
+          return showVoid;
       }
-    );
+    });
   }
 
   /// Req
@@ -774,9 +848,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   /// Talk to my Advisor View:
   Widget _talkToMyAdvisor({required LanguageChangeViewModel langProvider}) {
     return Consumer<GetMyAdvisorViewModel>(
-      builder: (context,provider,_)
-      {
-        switch(provider.apiResponse.status){
+      builder: (context, provider, _) {
+        switch (provider.apiResponse.status) {
           case Status.LOADING:
             return showVoid;
           case Status.ERROR:
@@ -784,13 +857,16 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           case Status.NONE:
             return showVoid;
           case Status.COMPLETED:
-            final listOfAdvisors = provider.apiResponse.data?.data?.listOfAdvisor ?? [];
-           final topAdvisor =  listOfAdvisors.isNotEmpty ?  listOfAdvisors[0] : null;
+            final listOfAdvisors =
+                provider.apiResponse.data?.data?.listOfAdvisor ?? [];
+            final topAdvisor =
+                listOfAdvisors.isNotEmpty ? listOfAdvisors[0] : null;
 
             return _homeViewCard(
-              onTap: (){
-                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const AcademicAdvisorView()));
-              },
+                onTap: () {
+                  _navigationServices.pushCupertino(CupertinoPageRoute(
+                      builder: (context) => const AcademicAdvisorView()));
+                },
                 title: "Talk to My Advisor",
                 icon: SvgPicture.asset("assets/talk_to_my_advisor.svg"),
                 langProvider: langProvider,
@@ -820,21 +896,29 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(8),
                                         image: const DecorationImage(
-                                            image: AssetImage("assets/login_bg.png")))),
+                                            image: AssetImage(
+                                                "assets/login_bg.png")))),
                                 kFormHeight,
+
                                 /// Title and subtitle
                                 Container(
-                                  constraints: const BoxConstraints(maxWidth: 120),
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 120),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         topAdvisor?.advisorName ?? '',
-                                        style: AppTextStyles.titleBoldTextStyle()
-                                            .copyWith(fontSize: 14, height: 1.3),
+                                        style:
+                                            AppTextStyles.titleBoldTextStyle()
+                                                .copyWith(
+                                                    fontSize: 14, height: 1.3),
                                       ),
-                                       Text(
-                                        topAdvisor?.advisorRoleDescription?.toString() ?? '' ,
+                                      Text(
+                                          topAdvisor?.advisorRoleDescription
+                                                  ?.toString() ??
+                                              '',
                                           style: const TextStyle(
                                               fontSize: 12,
                                               height: 2,
@@ -848,8 +932,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                             /// call and message buttons
                             Expanded(
                               child: ConstrainedBox(
-                                constraints:
-                                const BoxConstraints(minWidth: 200, maxWidth: 200),
+                                constraints: const BoxConstraints(
+                                    minWidth: 200, maxWidth: 200),
                                 child: Wrap(
                                   runSpacing: 0,
                                   spacing: -30,
@@ -859,7 +943,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                                     // message Advisor
                                     CustomMaterialButton(
                                         onPressed: () {
-                                          Utils.launchEmail(topAdvisor?.email ?? '');
+                                          Utils.launchEmail(
+                                              topAdvisor?.email ?? '');
                                         },
                                         isEnabled: false,
                                         shape: const CircleBorder(),
@@ -868,10 +953,15 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                                     // Call advisor
                                     CustomMaterialButton(
                                         onPressed: () {
-                                          Utils.makePhoneCall(phoneNumber: topAdvisor?.phoneNo ?? '', context: context);},
+                                          Utils.makePhoneCall(
+                                              phoneNumber:
+                                                  topAdvisor?.phoneNo ?? '',
+                                              context: context);
+                                        },
                                         isEnabled: false,
                                         shape: const CircleBorder(),
-                                        child: SvgPicture.asset("assets/call_advisor.svg")),
+                                        child: SvgPicture.asset(
+                                            "assets/call_advisor.svg")),
                                   ],
                                 ),
                               ),
@@ -883,14 +973,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           case null:
             return showVoid;
         }
-
-
-
       },
     );
-
-
-
   }
 
   // *---- Sco programs slider ----*
@@ -905,15 +989,17 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         'title': "Scholarships In Uae",
         'subTitle': "This is Subtitle 1",
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
-        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ScholarshipsInUaeView()),
-        ),
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
+              createRoute(const ScholarshipsInUaeView()),
+            ),
       },
       {
         'title': "Scholarships In Abroad",
         'subTitle': "This is Subtitle 2",
         'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
-        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ScholarshipInAboardView()),
-        ),
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
+              createRoute(const ScholarshipInAbroadView()),
+            ),
       },
     ];
 
@@ -934,9 +1020,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       );
     }
   }
-
-
-
 
   Widget _scoPrograms({required LanguageChangeViewModel langProvider}) {
     return Column(

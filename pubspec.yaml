@@ -92,6 +92,8 @@ dependencies:
   open_file: ^3.5.9
   flutter_widget_from_html: ^0.15.3
   flutter_html:
+  webview_flutter:
+
 
 
 

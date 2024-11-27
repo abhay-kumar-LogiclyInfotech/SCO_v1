@@ -150,8 +150,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
             padding: EdgeInsets.only(bottom: kPadding),
             child: SimpleCard(
                 contentPadding: EdgeInsets.zero,
-                expandedContent:
-                    Column(mainAxisSize: MainAxisSize.max, children: [
+                expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
                   /// ------------ Advisor's Section ------------
                   CustomInformationContainerField(
                       title: "",

@@ -771,6 +771,35 @@ String convertTimestampToDate(int timestamp) {
   return formattedDate;
 }
 
+String convertTimestampToTime(int timestamp) {
+
+  if(timestamp == 0){
+    return '';
+  }
+  // Convert timestamp to DateTime
+  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+  // Format the DateTime to a string (e.g., "yyyy-MM-dd HH:mm:ss")
+  // String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+  String formattedDate = DateFormat('HH:mm:ss').format(dateTime);
+
+  return formattedDate;
+}
+
+String convertTimestampToDateTime(int timestamp) {
+
+  if(timestamp == 0){
+    return '';
+  }
+  // Convert timestamp to DateTime
+  DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+  // Format the DateTime to a string (e.g., "yyyy-MM-dd HH:mm:ss")
+  String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+
+  return formattedDate;
+}
+
 
 // get full name from lov Code
 String getFullNameFromLov(

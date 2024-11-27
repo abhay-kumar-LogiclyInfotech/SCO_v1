@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:badges/badges.dart' as badges;
-import 'package:sco_v1/view/main_view/notifications_view.dart';
+import 'package:sco_v1/view/main_view/notifications/notifications_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';

@@ -13,6 +13,7 @@ import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.da
 import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SubmitApplicationModel.dart';
 import 'package:sco_v1/models/home/HomeSliderModel.dart';
+import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
 import 'package:sco_v1/models/services/notes_models/AddCommentToNoteModel.dart';
 import 'package:sco_v1/models/services/notes_models/GetAllNotesModel.dart';
 import 'package:sco_v1/models/services/GetAllRequestsModel.dart';
@@ -29,6 +30,7 @@ import '../../models/account/personal_details/PersonalDetailsModel.dart';
 import '../../models/apply_scholarship/AttachFileModel.dart';
 import '../../models/apply_scholarship/FindDraftByConfigurationKeyModel.dart';
 import '../../models/drawer/vision_and_mission_model.dart';
+import '../../models/notifications/DecreaseNotificationCountModel.dart';
 import '../../resources/app_urls.dart';
 import '../../utils/constants.dart';
 
@@ -426,5 +428,36 @@ class HomeRepository {
         body: body
     );
     return UploadAttachmentToNoteModel.fromJson(response);
+  }
+
+  // get all Notifications Model
+  Future<List<GetAllNotificationsModel>> getAllNotifications(
+      {required String userId, required dynamic headers}) async {
+
+    final List<GetAllNotificationsModel> listOfNotifications = [];
+
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.commonBaseUrl}jsonws/mopanotification.mopanotification/get-all-notification-for-user/user-id/$userId',
+      headers: headers,
+    );
+
+    if(response.isNotEmpty){
+      for(var element in response){
+        listOfNotifications.add(GetAllNotificationsModel.fromJson(element));
+      }
+    }
+
+    return listOfNotifications;
+  }
+
+  /// add attachment to note
+  Future<DecreaseNotificationCountModel> decreaseNotificationCount(
+      {required dynamic body, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
+        url: AppUrls.decreaseNotificationCount,
+        headers: headers,
+        body: body
+    );
+    return DecreaseNotificationCountModel.fromJson(response);
   }
 }

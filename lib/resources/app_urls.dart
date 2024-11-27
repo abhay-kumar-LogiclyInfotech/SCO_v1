@@ -54,8 +54,6 @@ class AppUrls {
   // find-draft-by-emirate-id-and-config-key
   static String get findDraftByConfigurationKey   => "https://stg.sco.ae/api/jsonws/application.applicationdetails/find-draft-by-emirate-id-and-config-key";
 
-
-
   // get File content of the employment status files
   static String get getEmploymentStatusFileContent   => "https://stg.sco.ae/o/mopa-sco-api/e-services/employment-status-file-content";
 
@@ -65,13 +63,11 @@ class AppUrls {
   // get File content of the Notes Attachment files
   static String get getUpdateNoteFileContent   => "https://stg.sco.ae/o/mopa-sco-api/self-service/notes-file-content";
 
-
-
-
   // Update profile image size must be less then 200kb
   static String get updateProfilePicture   => "https://stg.sco.ae/api/jsonws/userext.userextension/update-user-portrait";
 
 
+  ///  DECREASE NOTIFICATIONS COUNT
 
-
+static String get decreaseNotificationCount => "https://stg.sco.ae/api/jsonws/mopanotification.mopanotification/maked-as-view";
 }

@@ -79,8 +79,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
 
     /// *------------------------------------------ Initialize dropdowns end ------------------------------------------------------------------*
 
-    final getEmploymentStatusProvider =
-        Provider.of<GetEmploymentStatusViewModel>(context, listen: false);
+    final getEmploymentStatusProvider = Provider.of<GetEmploymentStatusViewModel>(context, listen: false);
     await getEmploymentStatusProvider.getEmploymentStatus();
 
     if (getEmploymentStatusProvider.apiResponse.status == Status.COMPLETED) {
@@ -121,11 +120,35 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
     super.initState();
   }
 
-  bool _isProcesing = false;
+  @override
+  void dispose() {
+    // Dispose FocusNodes
+    _employmentStatusFocusNode.dispose();
+    _employerFocusNode.dispose();
+    _commentsFocusNode.dispose();
+
+    // Dispose TextEditingControllers
+    _employmentStatusController.dispose();
+    _employerController.dispose();
+    _commentsController.dispose();
+
+    // Clear the dropdown menu item lists
+    _employmentStatusMenuItemsList.clear();
+    _employerMenuItemsList.clear();
+
+    // Clear the attachments list
+    _attachmentsList.clear();
+
+    // Call super.dispose()
+    super.dispose();
+  }
+
+
+  bool _isProcessing = false;
 
   setProcessing(bool value) {
     setState(() {
-      _isProcesing = value;
+      _isProcessing = value;
     });
   }
 
@@ -137,7 +160,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
         titleAsString: "Employment Status",
       ),
       body: Utils.modelProgressHud(
-          processing: _isProcesing,
+          processing: _isProcessing,
           child: Utils.pageRefreshIndicator(
               child: _buildUi(), onRefresh: _initializeData)),
     );

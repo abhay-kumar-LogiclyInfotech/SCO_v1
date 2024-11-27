@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
+import 'package:sco_v1/view/drawer/accout_views/employment_status_view.dart';
 
 class WorkStatusView extends StatefulWidget {
   const WorkStatusView({super.key});
@@ -11,8 +12,6 @@ class WorkStatusView extends StatefulWidget {
 class _WorkStatusViewState extends State<WorkStatusView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomSimpleAppBar(title: Text("Work Status"),),
-    );
+    return const EmploymentStatusView();
   }
 }
