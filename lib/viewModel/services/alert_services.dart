@@ -148,13 +148,13 @@ import 'navigation_services.dart';
 // import 'language_change_viewModel.dart';
 
 class AlertServices {
-  final GetIt _getIt = GetIt.instance;
   late NavigationServices _navigationServices;
 
   // Flag to track if a notification is being shown
   bool _isNotificationShowing = false;
 
   AlertServices() {
+    final GetIt _getIt = GetIt.instance;
     _navigationServices = _getIt.get<NavigationServices>();
   }
 

@@ -69,7 +69,7 @@ class DeleteDraftViewmodel with ChangeNotifier {
         await setUserId();
 
         final headers = {
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
           'authorization': Constants.basicAuthWithUsernamePassword
         };
 

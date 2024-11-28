@@ -421,6 +421,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                           builder: (context, provider, _) {
                             return actionButton(backgroundColor: AppColors.DANGER, text: "Delete", onPressed: () async {
                               setProcessing(true);
+                              print( application.applicationProgramNumber ?? '');
                               await provider.deleteDraft(
                                 draftId: application.applicationProgramNumber ?? '',
                               );

@@ -476,8 +476,8 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               contentPadding: EdgeInsets.zero,
                               // minTileHeight: MediaQuery.of(context).size.width * 0.12,
                               title:  Text(
-                                AppLocalizations.of(context)!.logout,
-                          
+                                AppLocalizations.of(context)!.language,
+
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 14),
                               ),
@@ -486,7 +486,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () async{
-                          
+
                                 await _authService.clearAllUserData();
                                 await _authService.clearCounter();
                                 _navigationServices.goBack();

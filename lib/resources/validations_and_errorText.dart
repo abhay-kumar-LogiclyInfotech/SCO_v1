@@ -66,7 +66,7 @@ class Validations {
   // arabic name validation
   static bool isArabicNameValid(String name) {
     // Regex to allow only Arabic letters and spaces
-    final regex = RegExp(r'^[\u0600-\u06FF\s]+$');
+    final regex = RegExp(r'^[\u0621-\u064A.]+(?: [\u0621-\u064A.]+){0,29}$');
 
     // Check if the name matches the regex
     return regex.hasMatch(name);
@@ -75,7 +75,7 @@ class Validations {
   // English name validation
   static bool isEnglishNameValid(String name) {
     // Regex to allow only English letters and spaces
-    final regex = RegExp(r'^[a-zA-Z\s]+$');
+    final regex = RegExp(r'^[a-zA-Z]+(?: [a-zA-Z]+)*$');
 
     // Check if the name matches the regex
     return regex.hasMatch(name);
@@ -187,7 +187,7 @@ class Validations {
     }
 
     // Check if it contains only alphanumeric characters (no spaces or special characters)
-    final RegExp passportRegex = RegExp(r'^[a-zA-Z0-9]+$');
+    final RegExp passportRegex = RegExp(r'^[\u0621-\u064AA-Za-z0-9]+(?: [\u0621-\u064AA-Za-z0-9]+)*$');
     return passportRegex.hasMatch(passportNumber);
   }
 
@@ -304,9 +304,9 @@ class ErrorText {
     required BuildContext context,
   }) {
     if (name.isEmpty) {
-      return AppLocalizations.of(context)!.nameCantBeEmpty;
+      return AppLocalizations.of(context)!.studentNameArabicRequired;
     } else if (!Validations.isArabicNameValid(name)) {
-      return AppLocalizations.of(context)!.invalidArabicName; // Adjust this key to match your localization
+      return AppLocalizations.of(context)!.onlyArabicChar; // Adjust this key to match your localization
     }
     return null;
   }
@@ -317,9 +317,9 @@ class ErrorText {
     required BuildContext context,
   }) {
     if (name.isEmpty) {
-      return AppLocalizations.of(context)!.nameCantBeEmpty;
+      return AppLocalizations.of(context)!.studentNameEnglishRequired;
     } else if (!Validations.isEnglishNameValid(name)) {
-      return AppLocalizations.of(context)!.invalidEnglishName; // Adjust this key to match your localization
+      return AppLocalizations.of(context)!.onlyEnglishChar; // Adjust this key to match your localization
     }
     return null;
   }
@@ -329,9 +329,9 @@ class ErrorText {
   //Email error:
   static String? getEmailError({required String email, required BuildContext context}) {
     if (email.isEmpty) {
-      return AppLocalizations.of(context)!.emailCantBeEmpty;
+      return AppLocalizations.of(context)!.emailAddressRequired;
     } else if (!Validations.isEmailValid(email)) {
-      return AppLocalizations.of(context)!.invalidEmailAddress;
+      return AppLocalizations.of(context)!.emailAddressValidate;
     }
     return null;
   }
@@ -369,7 +369,7 @@ class ErrorText {
     if (phoneNumber.isEmpty) {
       return AppLocalizations.of(context)!.phoneNumberCantBeEmpty;
     } else if (!Validations.isPhoneNumberValid(phoneNumber)) {
-      return AppLocalizations.of(context)!.invalidPhoneNumber;
+      return AppLocalizations.of(context)!.phoneNumberOnly;
     }
     return null;
   }
@@ -400,9 +400,9 @@ class ErrorText {
     required String passportNumber, required BuildContext context
   }) {
     if (passportNumber.isEmpty) {
-      return 'Passport number cannot be empty.';
+      return AppLocalizations.of(context)!.passportNumberRequired;
     } else if (!Validations.isPassportNumberValid(passportNumber)) {
-      return 'Invalid passport number. Must be 6-9 characters long and contain only letters and numbers.';
+      return AppLocalizations.of(context)!.passportNumberValidate;
     }
     return null;
   }
@@ -412,9 +412,9 @@ class ErrorText {
   required String unifiedNumber,required BuildContext context
   }) {
   if (unifiedNumber.isEmpty) {
-  return 'Unified number cannot be empty.';
+  return AppLocalizations.of(context)!.unifiedNumberRequired;
   } else if (!Validations.isUnifiedNumberValid(unifiedNumber)) {
-  return 'Unified number must be exactly 12 digits.';
+  return AppLocalizations.of(context)!.numberOnly;
   }
   return null;
   }
@@ -441,7 +441,7 @@ class ErrorText {
     if (name.isEmpty) {
       return null; // No error if the name is empty
     } else if (!Validations.isNameArabicEnglishValid(name)) {
-      return 'Only Arabic and English characters are allowed.';
+      return AppLocalizations.of(context)!.onlyArabicOrEnglishChar;
     }
     return null; // Return null if validation passes
   }

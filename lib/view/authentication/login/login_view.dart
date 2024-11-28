@@ -434,7 +434,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           return CustomButton(
             fontSize: 16,
             textDirection: getTextDirection(langProvider),
-            buttonName: AppLocalizations.of(context)!.login,
+            buttonName: AppLocalizations.of(context)!.step,
             isLoading:
                 provider.apiResponse.status == Status.LOADING ? true : false,
             onTap: () async {
