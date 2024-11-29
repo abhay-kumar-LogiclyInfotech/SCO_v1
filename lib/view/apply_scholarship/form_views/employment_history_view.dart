@@ -388,45 +388,36 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                 important: widget.employmentStatus == 'P',
                                                 langProvider: langProvider),
                                             scholarshipFormDateField(
-                                              currentFocusNode:
-                                              employmentHistInfo
-                                                  .endDateFocusNode,
-                                              controller: employmentHistInfo
-                                                  .endDateController,
+                                              currentFocusNode: employmentHistInfo.endDateFocusNode,
+                                              controller: employmentHistInfo.endDateController,
                                               hintText: localization.employmentEndDateWatermark,
                                               errorText: employmentHistInfo.endDateError,
                                               onChanged: (value) {
                                                 setState(() {
-                                                  if (employmentHistInfo
-                                                      .endDateFocusNode
-                                                      .hasFocus) {
-                                                    employmentHistInfo
-                                                        .endDateError =
-                                                        ErrorText
-                                                            .getEmptyFieldError(
-                                                          name: employmentHistInfo
-                                                              .endDateController
-                                                              .text,
-                                                          context: context,
-                                                        );
+                                                  if (employmentHistInfo.endDateFocusNode.hasFocus) {
+                                                    employmentHistInfo.endDateError = ErrorText.getEmptyFieldError(name: employmentHistInfo.endDateController.text, context: context);
                                                   }
                                                 });
                                               },
                                               onTap: () async {
                                                 /// Clear the error message when a date is selected
-                                                employmentHistInfo
-                                                    .endDateError = null;
+                                                employmentHistInfo.endDateError = null;
 
-                                                /// Define the initial date as today's date (for year selection)
                                                 /// Define the initial date (current date)
                                                 final DateTime initialDate = DateTime.now();
+
+                                                /// Define the maximum date (today's date)
                                                 final DateTime maxDate = DateTime.now();
 
                                                 /// Define the first date (10 years ago from today)
                                                 final DateTime firstDate = maxDate.subtract(const Duration(days: 10 * 365));
 
-                                                /// Get the minDate from your application (replace with actual value from your model/controller)
-                                                final DateTime minDate = DateTime.parse('YYYY-MM-DD'); // Replace 'YYYY-MM-DD' with actual date
+                                                /// Define a fallback minimum date if no specific value is available
+                                                /// For example, 20 years ago from today
+                                                final DateTime fallbackMinDate = DateTime.now().subtract(const Duration(days: 20 * 365));
+
+                                                /// If you don't know the minDate, use the fallback or a default value
+                                                final DateTime minDate = /* Retrieve from model/controller if available, otherwise */ fallbackMinDate;
 
                                                 /// Show the date picker
                                                 DateTime? date = await showDatePicker(
@@ -435,13 +426,14 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                   barrierDismissible: false,
                                                   locale: Provider.of<LanguageChangeViewModel>(context, listen: false).appLocale,
                                                   initialDate: initialDate,
-                                                  firstDate: firstDate, // Limit to the last 10 years
-                                                  lastDate: maxDate,   // Limit up to today's date
+                                                  firstDate: minDate.isBefore(firstDate) ? firstDate : minDate, // Ensure minDate does not go beyond 10 years
+                                                  lastDate: maxDate, // Limit up to today's date
                                                   selectableDayPredicate: (DateTime day) {
-                                                    // You can add a condition to limit the days based on 'minDate' if required
-                                                    return day.isAfter(minDate); // e.g., block days before the minDate
+                                                    // Only allow days after the minimum date
+                                                    return day.isAfter(minDate.subtract(const Duration(days: 1)));
                                                   },
                                                 );
+
 
 
                                                 if (date != null) {

@@ -659,7 +659,7 @@
   "forgotPassword": "Forgot Password",
   "submissionConfigTitle": "Submission Configuration",
   "submissionformInvalidAccess": "The page you are trying to access is invalid.",
-  "submissionformApplicaClosed": "Applications for the academic year (2023-2024) is currently closed, and the registration date for the next batch will be announced on the website",
+  "submissionformApplicaClosed": "Applications for the academic year is currently closed, and the registration date for the next batch will be announced on the website",
   "submissionformApplicaClosed2": "Start from",
   "submissionformApplicaClosed3": "to",
   "submissionConfigurationKey": "Configuration Key",

@@ -28,17 +28,18 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
 
  String  getStudentGuidLine()
   {
+    final localization = AppLocalizations.of(context)!;
     final selectedScholarship = widget.selectedScholarship;
     final admitType = selectedScholarship?.admitType;
     final academicCareer = selectedScholarship?.acadmicCareer;
     if(admitType != 'INT' && academicCareer != 'HCHL') {
-      return AppLocalizations.of(context)!.studentGuideline;
+      return localization.studentGuideline;
     }
     if(academicCareer == 'HCHL'){
-      return AppLocalizations.of(context)!.studentGuidelineHchl;
+      return localization.studentGuidelineHchl;
     }
     if(admitType == 'INT' && academicCareer != 'HCHL'){
-      return AppLocalizations.of(context)!.studentGuidelineInternational;
+      return localization.studentGuidelineInternational;
     }
     return '';
   }
@@ -46,6 +47,7 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return SingleChildScrollView(
       child: Padding(
@@ -65,13 +67,13 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
             CustomGFCheckbox(
               value: widget.acceptStudentUndertaking,
               onChanged: widget.onAcceptTerms,
-              text: AppLocalizations.of(context)!.studentUndertaking,
+              text: localization.studentUndertaking,
             ),
 
             Padding(
               padding: EdgeInsets.all(kPadding),
               child: CustomButton(
-                  buttonName: "Submit",
+                  buttonName: localization.submit,
                   buttonColor: AppColors.scoThemeColor,
                   borderColor: Colors.transparent,
                   isLoading: false,
