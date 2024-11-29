@@ -1006,7 +1006,9 @@
 
   "motherName": "اسم الأم",
   "motherNameWatermMark": "أدخل اسم الأم",
-  "motherNameValidate": "اسم الأم مطلوب"
+  "motherNameValidate": "اسم الأم مطلوب",
+  "action": "الإجراء"
+
 
 }
 

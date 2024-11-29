@@ -15,6 +15,8 @@ import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../form_view_Utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class GraduationInformationView extends StatefulWidget {
   dynamic graduationDetailsList;
@@ -169,6 +171,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
     return Container(
         padding: EdgeInsets.symmetric(horizontal: kPadding),
         color: Colors.grey.shade200,
@@ -179,12 +182,11 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
           kFormHeight,
 
           /// if selected scholarship matches the condition then high school details section else don't
-          (widget.selectedScholarship?.acadmicCareer != 'SCHL' &&
-                  widget.selectedScholarship?.acadmicCareer != 'HCHL')
+          (widget.selectedScholarship?.acadmicCareer != 'SCHL' && widget.selectedScholarship?.acadmicCareer != 'HCHL')
               ? CustomInformationContainer(
                   title: widget.selectedScholarship?.acadmicCareer == 'DDS'
-                      ? 'dds.graduation.title'
-                      : "Graduation Details",
+                      ? localization.ddsGraduationTitle
+                      : localization.graduationDetails,
                   expandedContent: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -206,19 +208,14 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                     /// ****************************************************************************************************************************************************
 
                                     sectionTitle(
-                                        title: widget.selectedScholarship
-                                                    ?.acadmicCareer ==
-                                                'DDS'
-                                            ? 'dds.graduation.title ${index + 1}'
-                                            : "Graduation Detail ${index + 1}"),
+                                        title: widget.selectedScholarship?.acadmicCareer == 'DDS' ? '${localization.ddsGraduationTitle} ${index + 1}' : "${localization.graduationDetails} ${index + 1}"),
 
                                     graduationInfo.showCurrentlyStudying
                                         ? Column(children: [
                                             kFormHeight,
-
                                             /// title
                                             fieldHeading(
-                                                title: "Currently Studying",
+                                                title: localization.currentlyStudying,
                                                 important: true,
                                                 langProvider: langProvider),
 
@@ -227,25 +224,17 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                             /// Yes or no : Show round radio
                                             CustomRadioListTile(
                                               value: true,
-                                              groupValue: graduationInfo
-                                                  .currentlyStudying,
+                                              groupValue: graduationInfo.currentlyStudying,
                                               onChanged: (value) {
                                                 setState(() {
                                                   /// graduationInfo.showCurrentlyStudying = value;
-                                                  graduationInfo
-                                                          .currentlyStudying =
-                                                      value;
-                                                  _updateShowCurrentlyStudyingWithYes(
-                                                      graduationInfo);
-
+                                                  graduationInfo.currentlyStudying = value;
+                                                  _updateShowCurrentlyStudyingWithYes(graduationInfo);
                                                   /// populate LAST term
-                                                  _populateGraduationLastTermMenuItemsList(
-                                                      langProvider:
-                                                          langProvider,
-                                                      index: index);
+                                                  _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: index);
                                                 });
                                               },
-                                              title: "Yes",
+                                              title: localization.yes,
                                               textStyle: textFieldTextStyle,
                                             ),
 
@@ -257,25 +246,15 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                                 onChanged: (value) {
                                                   setState(() {
                                                     /// graduationInfo.showCurrentlyStudying = value;
-                                                    graduationInfo
-                                                            .currentlyStudying =
-                                                        value;
+                                                    graduationInfo.currentlyStudying = value;
 
                                                     /// showing selection option that you are currently doing this course or not
-                                                    _updateShowCurrentlyStudyingWithFalse(
-                                                        graduationInfo);
-                                                    graduationInfo
-                                                        .graduationEndDateController
-                                                        .clear();
-                                                    graduationInfo
-                                                        .lastTermController
-                                                        .clear();
-
-                                                    /// clear the relatives list
-                                                    /// _relativeInfoList.clear();
+                                                    _updateShowCurrentlyStudyingWithFalse(graduationInfo);
+                                                    graduationInfo.graduationEndDateController.clear();
+                                                    graduationInfo.lastTermController.clear();
                                                   });
                                                 },
-                                                title: "No",
+                                                title: localization.no,
                                                 textStyle: textFieldTextStyle),
                                           ])
                                         : showVoid,
@@ -285,57 +264,42 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                     kFormHeight,
 
                                     /// last term
-                                    graduationInfo.currentlyStudying &&
-                                            graduationInfo.showCurrentlyStudying
+                                    graduationInfo.currentlyStudying && graduationInfo.showCurrentlyStudying
                                         ? Column(
                                             children: [
                                               fieldHeading(
-                                                  title: "Last Term",
-                                                  important: true,
+                                                  title: localization.lastTerm,
+                                                  important: graduationInfo.currentlyStudying,
                                                   langProvider: langProvider),
                                               scholarshipFormDropdown(
                                                 context: context,
-                                                controller: graduationInfo
-                                                    .lastTermController,
-                                                currentFocusNode: graduationInfo
-                                                    .lastTermFocusNode,
-                                                menuItemsList:
-                                                    graduationInfo.lastTerm ??
-                                                        [],
-                                                hintText: "Select Last Term",
-                                                errorText: graduationInfo
-                                                    .lastTermError,
+                                                controller: graduationInfo.lastTermController,
+                                                currentFocusNode: graduationInfo.lastTermFocusNode,
+                                                menuItemsList: graduationInfo.lastTerm ?? [],
+                                                hintText: localization.lastTermRequired,
+                                                errorText: graduationInfo.lastTermError,
                                                 onChanged: (value) {
-                                                  graduationInfo.lastTermError =
-                                                      null;
+                                                  graduationInfo.lastTermError = null;
                                                   setState(() {
                                                     /// setting the value for address type
-                                                    graduationInfo
-                                                        .lastTermController
-                                                        .text = value!;
+                                                    graduationInfo.lastTermController.text = value!;
 
                                                     ///This thing is creating error: don't know how to fix it:
-                                                    Utils.requestFocus(
-                                                        focusNode:
-                                                            graduationInfo
-                                                                .levelFocusNode,
-                                                        context: context);
+                                                    Utils.requestFocus(focusNode: graduationInfo.levelFocusNode, context: context);
                                                   });
                                                 },
                                               ),
+                                              kFormHeight,
                                             ],
                                           )
                                         : showVoid,
 
                                     /// ****************************************************************************************************************************************************
 
-                                    (widget.selectedScholarship
-                                                ?.acadmicCareer ==
-                                            'UGRD')
-                                        ? (graduationInfo.currentlyStudying
-                                            ?
+                                    (widget.selectedScholarship?.acadmicCareer == 'UGRD') ? (graduationInfo.currentlyStudying ?
 
                                             /// copy paste full below code
+                                           /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
                                             _graduationInformation(
                                                 index: index,
                                                 langProvider: langProvider,
@@ -348,15 +312,9 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
                                     /// ****************************************************************************************************************************************************
 
-                                    (!(widget.selectedScholarship
-                                                        ?.scholarshipType ==
-                                                    'INT' &&
-                                                widget.selectedScholarship
-                                                        ?.acadmicCareer ==
-                                                    'UGRD') &&
-                                            index != 0)
+                                    (!(widget.selectedScholarship?.scholarshipType == 'INT' && widget.selectedScholarship?.acadmicCareer == 'UGRD') && index != 0)
                                         ? addRemoveMoreSection(
-                                            title: "Delete",
+                                            title: localization.deleteRowGraduation,
                                             add: false,
                                             onChanged: () {
                                               setState(() {
@@ -375,14 +333,9 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                     /// ****************************************************************************************************************************************************
                                   ]);
                             }),
-                        (!(widget.selectedScholarship?.scholarshipType ==
-                                        'INT' &&
-                                    widget.selectedScholarship?.acadmicCareer ==
-                                        'UGRD') &&
-                                widget.selectedScholarship?.acadmicCareer !=
-                                    'UGRD')
+                        (!(widget.selectedScholarship?.scholarshipType == 'INT' && widget.selectedScholarship?.acadmicCareer == 'UGRD') && widget.selectedScholarship?.acadmicCareer != 'UGRD')
                             ? addRemoveMoreSection(
-                                title: "Add",
+                                title: localization.addRowGraduation,
                                 add: true,
                                 onChanged: () {
                                   setState(() {
@@ -402,18 +355,18 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
       {required int index,
       required LanguageChangeViewModel langProvider,
       required GraduationInfo graduationInfo}) {
+    final localization = AppLocalizations.of(context)!;
     return Column(
       children: [
         /// ****************************************************************************************************************************************************
         /// graduation level
-        (index > 0 &&
-                widget.selectedScholarship?.acadmicCareer != 'UGRD' &&
-                widget.selectedScholarship?.acadmicCareer != 'DDS')
+        /// For student who are not applying ug scholarship will see options as editable to they can edit them to select graduation level
+        (index > 0 && widget.selectedScholarship?.acadmicCareer != 'UGRD' && widget.selectedScholarship?.acadmicCareer != 'DDS')
             ? Column(
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: "Graduation Level",
+                      title: localization.hsGraduationLevel,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormDropdown(
@@ -421,34 +374,27 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                     controller: graduationInfo.levelController,
                     currentFocusNode: graduationInfo.levelFocusNode,
                     menuItemsList: widget.graduationLevelMenuItems ?? [],
-                    hintText: "Select Graduation Level",
+                    hintText: localization.hsGraduationLevelWatermark,
                     errorText: graduationInfo.levelError,
                     onChanged: (value) {
                       graduationInfo.levelError = null;
 
                       setState(() {
-                        bool alreadySelected =
-                            widget.graduationDetailsList.any((info) {
-                          return info != graduationInfo &&
-                              info.levelController.text == value!;
+                        bool alreadySelected = widget.graduationDetailsList.any((info) {
+                          return info != graduationInfo && info.levelController.text == value!;
                         });
                         if (alreadySelected) {
                           /// If duplicate is found, show an error and clear the controller
                           _alertService.showToast(
                             // context: context,
-                            message:
-                                "This level has already been selected. Please choose another one.",
+                            message: "This level has already been selected. Please choose another one.",
                           );
-                          graduationInfo.levelError = "Please choose another";
+                          graduationInfo.levelError = localization.hsGraduationLevelValidate;
                         } else {
                           /// Assign the value only if it's not already selected
                           graduationInfo.levelController.text = value!;
-
                           /// Move focus to the next field
-                          Utils.requestFocus(
-                            focusNode: graduationInfo.countryFocusNode,
-                            context: context,
-                          );
+                          Utils.requestFocus(focusNode: graduationInfo.countryFocusNode, context: context,);
                         }
                       });
                     },
@@ -457,8 +403,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
               )
             :
 
-            /// for UGRD Specially
-
+            /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
             /// ****************************************************************************************************************************************************
             /// show static bachelor graduation level
             (index == 0 || widget.selectedScholarship?.acadmicCareer == 'UGRD')
@@ -475,7 +420,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
             ? Column(
                 children: [
                   fieldHeading(
-                      title: "DDS Graduation Level",
+                      title: localization.ddsGraduationTitle2,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormDropdown(
@@ -483,33 +428,28 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                     controller: graduationInfo.levelController,
                     currentFocusNode: graduationInfo.levelFocusNode,
                     menuItemsList: widget.graduationLevelDDSMenuItems ?? [],
-                    hintText: "Select DDS Graduation Level",
+                    hintText: localization.hsGraduationLevelWatermark,
                     errorText: graduationInfo.levelError,
                     onChanged: (value) {
                       graduationInfo.levelError = null;
 
                       setState(() {
-                        bool alreadySelected =
-                            widget.graduationDetailsList.any((info) {
-                          return info != graduationInfo &&
-                              info.levelController.text == value!;
+                        bool alreadySelected = widget.graduationDetailsList.any((info) {
+                          return info != graduationInfo && info.levelController.text == value!;
                         });
                         if (alreadySelected) {
                           /// If duplicate is found, show an error and clear the controller
                           _alertService.showToast(
                             // context: context,
-                            message:
-                                "This level has already been selected. Please choose another one.",
+                            message: "This level has already been selected. Please choose another one.",
                           );
-                          graduationInfo.levelError = "Please choose another";
+                          graduationInfo.levelError = localization.hsGraduationLevelValidate;
                         } else {
                           /// Assign the value only if it's not already selected
                           graduationInfo.levelController.text = value!;
 
                           /// Move focus to the next field
-                          Utils.requestFocus(
-                            focusNode: graduationInfo.countryFocusNode,
-                            context: context,
+                          Utils.requestFocus(focusNode: graduationInfo.countryFocusNode, context: context,
                           );
                         }
                       });
@@ -524,13 +464,13 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
         /// country
         fieldHeading(
-            title: "Country", important: true, langProvider: langProvider),
+            title: localization.country, important: true, langProvider: langProvider),
         scholarshipFormDropdown(
           context: context,
           controller: graduationInfo.countryController,
           currentFocusNode: graduationInfo.countryFocusNode,
           menuItemsList: widget.nationalityMenuItemsList ?? [],
-          hintText: "Select Country",
+          hintText: localization.countryWatermark,
           errorText: graduationInfo.countryError,
           onChanged: (value) {
             graduationInfo.countryError = null;
@@ -544,13 +484,10 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
               graduationInfo.otherUniversityController.clear();
 
               /// populate dropdowns
-              _populateUniversityMenuItemsList(
-                  langProvider: langProvider, index: index);
+              _populateUniversityMenuItemsList(langProvider: langProvider, index: index);
 
               ///This thing is creating error: don't know how to fix it:
-              Utils.requestFocus(
-                  focusNode: graduationInfo.universityFocusNode,
-                  context: context);
+              Utils.requestFocus(focusNode: graduationInfo.universityFocusNode, context: context);
             });
           },
         ),
@@ -563,15 +500,16 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: "Graduation University",
+                      title: localization.hsUniversity,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormDropdown(
                     context: context,
+                    filled:(graduationInfo.university?.isEmpty ?? false),
                     controller: graduationInfo.universityController,
                     currentFocusNode: graduationInfo.universityFocusNode,
                     menuItemsList: graduationInfo.university ?? [],
-                    hintText: "Select Grad University",
+                    hintText: localization.hsUniversityWatermark,
                     errorText: graduationInfo.universityError,
                     onChanged: (value) {
                       graduationInfo.universityError = null;
@@ -600,8 +538,8 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                   kFormHeight,
                   fieldHeading(
                       title: widget.selectedScholarship?.acadmicCareer != 'DDS'
-                          ? "Other University"
-                          : 'dds.university',
+                          ? localization.hsOtherUniversity
+                          : localization.ddsUniversity,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormTextField(
@@ -611,14 +549,14 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                       controller: graduationInfo.otherUniversityController,
                       hintText:
                           widget.selectedScholarship?.acadmicCareer != 'DDS'
-                              ? "Enter Other University"
-                              : 'Enter dds.university',
+                              ? localization.hsOtherUniversityWatermark
+                              : localization.ddsUniversityWatermark,
                       errorText: graduationInfo.otherUniversityError,
                       onChanged: (value) {
                         if (graduationInfo.otherUniversityFocusNode.hasFocus) {
                           setState(() {
                             graduationInfo.otherUniversityError =
-                                ErrorText.getNameArabicEnglishValidationError(
+                                ErrorText.getEmptyFieldError(
                                     name: graduationInfo
                                         .otherUniversityController.text,
                                     context: context);
@@ -634,8 +572,8 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         kFormHeight,
         fieldHeading(
             title: widget.selectedScholarship?.acadmicCareer != 'DDS'
-                ? 'hs.major'
-                : 'dds.major',
+                ? localization.hsMajor
+                : localization.ddsMajor,
             important: true,
             langProvider: langProvider),
         scholarshipFormTextField(
@@ -644,14 +582,14 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
             nextFocusNode: graduationInfo.cgpaFocusNode,
             controller: graduationInfo.majorController,
             hintText: widget.selectedScholarship?.acadmicCareer != 'DDS'
-                ? 'Enter hs.major'
-                : 'Enter dds.major',
+                ? localization.hsMajorWatermark
+                : localization.ddsMajorWatermark,
             errorText: graduationInfo.majorError,
             onChanged: (value) {
               if (graduationInfo.majorFocusNode.hasFocus) {
                 setState(() {
                   graduationInfo.majorError =
-                      ErrorText.getNameArabicEnglishValidationError(
+                      ErrorText.getEmptyFieldError(
                           name: graduationInfo.majorController.text,
                           context: context);
                 });
@@ -660,20 +598,19 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
         /// ****************************************************************************************************************************************************
         /// cgpa
-        fieldHeading(
-            title: "CGPA", important: true, langProvider: langProvider),
+        fieldHeading(title: localization.cgpa, important: true, langProvider: langProvider),
         scholarshipFormTextField(
             maxLength: 4,
             currentFocusNode: graduationInfo.cgpaFocusNode,
             nextFocusNode: graduationInfo.graduationStartDateFocusNode,
             controller: graduationInfo.cgpaController,
-            hintText: 'Enter CGPA',
+            hintText: localization.cgpaWatermark,
             errorText: graduationInfo.cgpaError,
             onChanged: (value) {
               if (graduationInfo.cgpaFocusNode.hasFocus) {
                 setState(() {
-                  graduationInfo.cgpaError = ErrorText.getCGPAValidationError(
-                      cgpa: graduationInfo.cgpaController.text,
+                  graduationInfo.cgpaError = ErrorText.getEmptyFieldError(
+                      name: graduationInfo.cgpaController.text,
                       context: context);
                 });
               }
@@ -682,11 +619,11 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
         /// start date
         fieldHeading(
-            title: "Start Date", important: true, langProvider: langProvider),
+            title: localization.hsGraducationStartDate, important: true, langProvider: langProvider),
         scholarshipFormDateField(
           currentFocusNode: graduationInfo.graduationStartDateFocusNode,
           controller: graduationInfo.graduationStartDateController,
-          hintText: "Select Start Date",
+          hintText: localization.hsGraducationStartDateWatermark,
           errorText: graduationInfo.graduationStartDateError,
           onChanged: (value) async {
             setState(() {
@@ -701,25 +638,25 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
           onTap: () async {
             /// Clear the error if a date is selected
             graduationInfo.graduationStartDateError = null;
-
-            /// Define the initial date (e.g., today's date)
+            /// Define the current date as the initial date
             final DateTime initialDate = DateTime.now();
 
-            /// Define the start date (100 years ago from today)
-            final DateTime firstDate =
-                DateTime.now().subtract(const Duration(days: 100 * 365));
+            /// Define the first selectable date (20 years ago from today)
+            final DateTime firstDate = initialDate.subtract(const Duration(days: 20 * 365));
+
+            /// Define the last selectable date (current date)
+            final DateTime lastDate = initialDate;
 
             DateTime? date = await showDatePicker(
               context: context,
               barrierColor: AppColors.scoButtonColor.withOpacity(0.1),
               barrierDismissible: false,
-              locale:
-                  Provider.of<LanguageChangeViewModel>(context, listen: false)
-                      .appLocale,
-              initialDate: initialDate,
-              firstDate: firstDate,
-              lastDate: initialDate,
+              locale: Provider.of<LanguageChangeViewModel>(context, listen: false).appLocale,
+              initialDate: initialDate, // Start at today's date
+              firstDate: firstDate,     // Limit to 20 years ago
+              lastDate: lastDate,       // Limit to today
             );
+
             if (date != null) {
               setState(() {
                 Utils.requestFocus(
@@ -737,7 +674,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// start date
         kFormHeight,
         fieldHeading(
-            title: "End Date",
+            title:  localization.hsGraducationEndDate,
             important: (!graduationInfo.currentlyStudying &&
                 graduationInfo.levelController.text.isNotEmpty),
             langProvider: langProvider),
@@ -746,7 +683,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
               graduationInfo.levelController.text.isNotEmpty),
           currentFocusNode: graduationInfo.graduationEndDateFocusNode,
           controller: graduationInfo.graduationEndDateController,
-          hintText: "Select End Date",
+          hintText: localization.hsGraducationEndDateWatermark,
           errorText: graduationInfo.graduationEndDateError,
           onChanged: (value) async {
             setState(() {
@@ -764,24 +701,25 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
               /// Clear the error if a date is selected
               graduationInfo.graduationEndDateError = null;
 
-              /// Define the initial date (e.g., today's date)
+              /// Define the current date as the initial date
               final DateTime initialDate = DateTime.now();
 
-              /// Define the start date (100 years ago from today)
-              final DateTime firstDate =
-                  DateTime.now().subtract(const Duration(days: 100 * 365));
+              /// Define the first selectable date (20 years ago from today)
+              final DateTime firstDate = initialDate.subtract(const Duration(days: 20 * 365));
+
+              /// Define the last selectable date (current date)
+              final DateTime lastDate = initialDate;
 
               DateTime? date = await showDatePicker(
                 context: context,
                 barrierColor: AppColors.scoButtonColor.withOpacity(0.1),
                 barrierDismissible: false,
-                locale:
-                    Provider.of<LanguageChangeViewModel>(context, listen: false)
-                        .appLocale,
-                initialDate: initialDate,
-                firstDate: firstDate,
-                lastDate: initialDate,
+                locale: Provider.of<LanguageChangeViewModel>(context, listen: false).appLocale,
+                initialDate: initialDate, // Default selection is today's date
+                firstDate: firstDate,     // Range starts 20 years ago
+                lastDate: lastDate,       // Range ends at today's date
               );
+
               if (date != null) {
                 setState(() {
                   Utils.requestFocus(
@@ -804,8 +742,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
                   /// check if dds then only ask question if only dds scholarship
                   fieldHeading(
-                      title:
-                          "Are you currently receiving a scholarship or grant from another party?",
+                      title: localization.ddsGradQuestion,
                       important: true,
                       langProvider: langProvider),
 
@@ -816,10 +753,9 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                     value: 'Y',
                     groupValue: widget.havingSponsor,
                     onChanged: (value) {
-                      widget.onUpdateHavingSponsor(
-                          value); // Notify parent of the change
+                      widget.onUpdateHavingSponsor(value); // Notify parent of the change
                     },
-                    title: "Yes",
+                    title: localization.yes,
                     textStyle: textFieldTextStyle,
                   ),
 
@@ -828,12 +764,10 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                       value: "N",
                       groupValue: widget.havingSponsor,
                       onChanged: (value) {
-                        widget.onUpdateHavingSponsor(
-                            value); // Notify parent of the change
-                        graduationInfo.sponsorShipController
-                            .clear(); // Clear controller when "No" is selected
+                        widget.onUpdateHavingSponsor(value); // Notify parent of the change
+                        graduationInfo.sponsorShipController.clear(); // Clear controller when "No" is selected
                       },
-                      title: "No",
+                      title: localization.no,
                       textStyle: textFieldTextStyle),
                 ],
               )
@@ -842,14 +776,12 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
 
         /// SPONSORSHIP
-        /// TODO: Need havingSponsor  key from fetch all scholarships
-        ((widget.havingSponsor == 'Y') ||
-                widget.selectedScholarship?.acadmicCareer != 'DDS')
+        ((widget.havingSponsor == 'Y') || widget.selectedScholarship?.acadmicCareer != 'DDS')
             ? Column(
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: "Sponsorship",
+                      title: localization.hsSponsorship,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormTextField(
@@ -857,16 +789,12 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                       currentFocusNode: graduationInfo.sponsorShipFocusNode,
                       nextFocusNode: graduationInfo.caseStudyTitleFocusNode,
                       controller: graduationInfo.sponsorShipController,
-                      hintText: 'Enter Sponsorship',
+                      hintText: localization.hsSponsorshipWatermark,
                       errorText: graduationInfo.sponsorShipError,
                       onChanged: (value) {
                         if (graduationInfo.sponsorShipFocusNode.hasFocus) {
                           setState(() {
-                            graduationInfo.sponsorShipError =
-                                ErrorText.getEmptyFieldError(
-                                    name: graduationInfo
-                                        .sponsorShipController.text,
-                                    context: context);
+                            graduationInfo.sponsorShipError = ErrorText.getEmptyFieldError(name: graduationInfo.sponsorShipController.text, context: context);
                           });
                         }
                       }),
@@ -876,30 +804,25 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
         /// ****************************************************************************************************************************************************
         /// case study
-        (graduationInfo.levelController.text == 'PGRD' ||
-                graduationInfo.levelController.text == 'PG' ||
-                graduationInfo.levelController.text == 'DDS')
+        (graduationInfo.levelController.text == 'PGRD' || graduationInfo.levelController.text == 'PG' || graduationInfo.levelController.text == 'DDS')
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   kFormHeight,
-
                   /// ****************************************************************************************************************************************************
 
-                  const MyDivider(
-                    color: AppColors.lightGrey,
-                  ),
+                  const MyDivider(color: AppColors.lightGrey),
                   kFormHeight,
 
                   /// ****************************************************************************************************************************************************
 
-                  sectionTitle(title: "Case Study"),
+                  sectionTitle(title: localization.caseStudy),
 
                   /// ****************************************************************************************************************************************************
 
                   kFormHeight,
                   fieldHeading(
-                      title: "Title",
+                      title:localization.caseStudyTitle,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormTextField(
@@ -907,7 +830,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                       currentFocusNode: graduationInfo.caseStudyTitleFocusNode,
                       nextFocusNode: graduationInfo.caseStudyStartYearFocusNode,
                       controller: graduationInfo.caseStudyTitleController,
-                      hintText: 'Enter Case Study Title',
+                      hintText: localization.caseStudyTitleWatermark,
                       errorText: graduationInfo.caseStudyTitleError,
                       onChanged: (value) {
                         if (graduationInfo.caseStudyTitleFocusNode.hasFocus) {
@@ -923,7 +846,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
                   /// ****************************************************************************************************************************************************
                   fieldHeading(
-                      title: "Start Year",
+                      title: localization.caseStudyStartYear,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormDropdown(
@@ -932,19 +855,15 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                     currentFocusNode:
                         graduationInfo.caseStudyStartYearFocusNode,
                     menuItemsList: widget.caseStudyYearDropdownMenuItems ?? [],
-                    hintText: "Select Start Year",
+                    hintText: localization.caseStudyStartYearWatermark,
                     errorText: graduationInfo.caseStudyStartYearError,
                     onChanged: (value) {
                       graduationInfo.caseStudyStartYearError = null;
                       setState(() {
                         /// setting the value for address type
-                        graduationInfo.caseStudyStartYearController.text =
-                            value!;
+                        graduationInfo.caseStudyStartYearController.text = value!;
 
-                        Utils.requestFocus(
-                            focusNode:
-                                graduationInfo.caseStudyDescriptionFocusNode,
-                            context: context);
+                        Utils.requestFocus(focusNode: graduationInfo.caseStudyDescriptionFocusNode, context: context);
                       });
                     },
                   ),
@@ -952,26 +871,20 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                   /// ****************************************************************************************************************************************************
                   kFormHeight,
                   fieldHeading(
-                      title: "Case Study Details",
+                      title: localization.caseStudyDescription,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormTextField(
                       maxLength: 500,
                       maxLines: 5,
-                      currentFocusNode:
-                          graduationInfo.caseStudyDescriptionFocusNode,
+                      currentFocusNode: graduationInfo.caseStudyDescriptionFocusNode,
                       controller: graduationInfo.caseStudyDescriptionController,
-                      hintText: 'Enter Case Study Description',
+                      hintText: localization.caseStudyDescriptionWatermark,
                       errorText: graduationInfo.caseStudyDescriptionError,
                       onChanged: (value) {
-                        if (graduationInfo
-                            .caseStudyDescriptionFocusNode.hasFocus) {
+                        if (graduationInfo.caseStudyDescriptionFocusNode.hasFocus) {
                           setState(() {
-                            graduationInfo.caseStudyDescriptionError =
-                                ErrorText.getNameArabicEnglishValidationError(
-                                    name: graduationInfo
-                                        .caseStudyDescriptionController.text,
-                                    context: context);
+                            graduationInfo.caseStudyDescriptionError = ErrorText.getNameArabicEnglishValidationError(name: graduationInfo.caseStudyDescriptionController.text, context: context);
                           });
                         }
                       }),
@@ -984,17 +897,18 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
     );
   }
 
-  /// this is made separate because we have to show bachelor by default for graduation level at index 1
+  /// this is made separate because we have to show bachelor by default for graduation level at index 0
   Widget _showBachelorScholarshipByDefault(
       {required int index,
       required LanguageChangeViewModel langProvider,
       required GraduationInfo graduationInfo}) {
+    final localization = AppLocalizations.of(context)!;
     /// setting bachelor by default
     graduationInfo.levelController.text = 'UG';
     return Column(
       children: [
         fieldHeading(
-            title: "Graduation Level",
+            title: localization.hsGraduationLevel,
             important: true,
             langProvider: langProvider),
         scholarshipFormDropdown(
@@ -1004,7 +918,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
           controller: graduationInfo.levelController,
           currentFocusNode: graduationInfo.levelFocusNode,
           menuItemsList: widget.graduationLevelMenuItems ?? [],
-          hintText: "Select Graduation Level",
+          hintText: localization.hsGraduationLevelWatermark,
           errorText: graduationInfo.levelError,
           onChanged: (value) {
             graduationInfo.levelError = null;
@@ -1013,8 +927,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
               graduationInfo.levelController.text = value!;
 
               ///This thing is creating error: don't know how to fix it:
-              Utils.requestFocus(
-                  focusNode: graduationInfo.countryFocusNode, context: context);
+              Utils.requestFocus(focusNode: graduationInfo.countryFocusNode, context: context);
             });
           },
         ),

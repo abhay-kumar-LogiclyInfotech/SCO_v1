@@ -289,7 +289,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                       // SizedBox(height: 8.0),
 
 
-                      !((widget.attachmentType == AttachmentType.updateNote || widget.attachmentType == AttachmentType.employment) && !widget.attachment.newRecord ) ? scholarshipFormTextField(
+                      !(((widget.attachmentType == AttachmentType.updateNote || widget.attachmentType == AttachmentType.employment) && !widget.attachment.newRecord) || (widget.attachmentType == AttachmentType.request && !widget.attachment.newlyAded) ) ? scholarshipFormTextField(
                       maxLines: 3,
                       // readOnly: widget.attachmentType == AttachmentType.updateNote && !widget.attachment.newRecord,
                       // filled: widget.attachmentType == AttachmentType.updateNote && !widget.attachment.newRecord,

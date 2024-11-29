@@ -3,6 +3,7 @@ import 'package:intl/intl.dart' hide TextDirection;
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../resources/app_colors.dart';
@@ -100,6 +101,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
     return Container(
         padding: EdgeInsets.symmetric(horizontal: kPadding),
         color: Colors.grey.shade200,
@@ -107,7 +109,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
             child: Column(children: [
               widget.draftPrevNextButtons,
               CustomInformationContainer(
-                  title: "Employment History",
+                  title: localization.employmentHistory,
                   expandedContent: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -117,7 +119,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                             children: [
                               /// ****************************************************************************************************************************************************
                               /// previously employed or not be using radio buttons
-                              sectionTitle(title: "Previously Employed"),
+                              sectionTitle(title: localization.previouslyEmployed,),
                               kFormHeight,
                               ListView.builder(
                                   shrinkWrap: true,
@@ -162,24 +164,18 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                           children: [
                                             /// ****************************************************************************************************************************************************
 
+                                            kFormHeight,
                                             /// Employer name
                                             fieldHeading(
-                                                title: "Employer Name",
+                                                title: localization.emphistEmployerName,
                                                 important: true,
                                                 langProvider: langProvider),
                                             scholarshipFormTextField(
-                                                currentFocusNode:
-                                                employmentHistInfo
-                                                    .employerNameFocusNode,
-                                                nextFocusNode:
-                                                employmentHistInfo
-                                                    .designationFocusNode,
-                                                controller: employmentHistInfo
-                                                    .employerNameController,
-                                                hintText:
-                                                'Enter Employer Name',
-                                                errorText: employmentHistInfo
-                                                    .employerNameError,
+                                                currentFocusNode: employmentHistInfo.employerNameFocusNode,
+                                                nextFocusNode: employmentHistInfo.designationFocusNode,
+                                                controller: employmentHistInfo.employerNameController,
+                                                hintText: localization.emphistEmployerNameWatermark,
+                                                errorText: employmentHistInfo.employerNameError,
                                                 onChanged: (value) {
                                                   if (employmentHistInfo
                                                       .employerNameFocusNode
@@ -187,7 +183,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                     setState(() {
                                                       employmentHistInfo
                                                           .employerNameError =
-                                                          ErrorText.getNameArabicEnglishValidationError(
+                                                          ErrorText.getEmptyFieldError(
                                                               name: employmentHistInfo
                                                                   .employerNameController
                                                                   .text,
@@ -202,7 +198,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             kFormHeight,
                                             /// Designation
                                             fieldHeading(
-                                                title: "Designation",
+                                                title: localization.emphistTitleName,
                                                 important: true,
                                                 langProvider: langProvider),
                                             scholarshipFormTextField(
@@ -214,7 +210,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                     .occupationFocusNode,
                                                 controller: employmentHistInfo
                                                     .titleController,
-                                                hintText: 'Enter Designation',
+                                                hintText: localization.emphistTitleNameWatermark,
                                                 errorText: employmentHistInfo
                                                     .titleError,
                                                 onChanged: (value) {
@@ -240,7 +236,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             kFormHeight,
                                             /// occupation
                                             fieldHeading(
-                                                title: 'Occupation',
+                                                title: localization.emphistOccupationName,
                                                 important: true,
                                                 langProvider: langProvider),
                                             scholarshipFormTextField(
@@ -252,7 +248,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                     .placeFocusNode,
                                                 controller: employmentHistInfo
                                                     .occupationController,
-                                                hintText: 'Enter Occupation',
+                                                hintText: localization.emphistOccupationNameWatermark,
                                                 errorText: employmentHistInfo
                                                     .occupationError,
                                                 onChanged: (value) {
@@ -262,7 +258,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                     setState(() {
                                                       employmentHistInfo
                                                           .occupationError =
-                                                          ErrorText.getEmptyFieldError(
+                                                          ErrorText.getNameArabicEnglishValidationError(
                                                               name: employmentHistInfo
                                                                   .occupationController
                                                                   .text,
@@ -275,7 +271,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             kFormHeight,
                                             /// work place
                                             fieldHeading(
-                                                title: 'Work Place',
+                                                title: localization.emphistPlace,
                                                 important: true,
                                                 langProvider: langProvider),
                                             scholarshipFormTextField(
@@ -287,7 +283,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                     .startDateFocusNode,
                                                 controller: employmentHistInfo
                                                     .placeController,
-                                                hintText: 'Enter Work Place',
+                                                hintText: localization.emphistPlaceWatermark,
                                                 errorText: employmentHistInfo
                                                     .placeError,
                                                 onChanged: (value) {
@@ -297,8 +293,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                     setState(() {
                                                       employmentHistInfo
                                                           .placeError =
-                                                          ErrorText
-                                                              .getEmptyFieldError(
+                                                          ErrorText.getNameArabicEnglishValidationError(
                                                               name: employmentHistInfo
                                                                   .placeController
                                                                   .text,
@@ -313,8 +308,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             kFormHeight,
                                             /// start date
                                             fieldHeading(
-                                                title:
-                                                'Employment Start Date',
+                                                title: localization.employmentStartDate,
                                                 important: true,
                                                 langProvider: langProvider),
                                             scholarshipFormDateField(
@@ -323,10 +317,8 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                   .startDateFocusNode,
                                               controller: employmentHistInfo
                                                   .startDateController,
-                                              hintText:
-                                              "Select Employment Start Date",
-                                              errorText: employmentHistInfo
-                                                  .startDateError,
+                                              hintText: localization.employmentStartDateWatermark,
+                                              errorText: employmentHistInfo.startDateError,
                                               onChanged: (value) {
                                                 setState(() {
                                                   if (employmentHistInfo
@@ -348,35 +340,26 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                 /// Clear the error message when a date is selected
                                                 employmentHistInfo
                                                     .startDateError = null;
+                                                /// Define the initial date as today's date
+                                                final DateTime initialDate = DateTime.now();
 
-                                                /// Define the initial date as today's date (for year selection)
-                                                final DateTime initialDate =
-                                                DateTime.now();
-                                                final DateTime maxDate =
-                                                DateTime.now();
+                                                /// Define the maximum date as today
+                                                final DateTime maxDate = DateTime.now();
 
-                                                final DateTime firstDate =
-                                                maxDate.subtract(
-                                                    const Duration(
-                                                        days: 10 * 365));
-                                                DateTime? date =
-                                                await showDatePicker(
+                                                /// Define the first date as 10 years before today
+                                                final DateTime firstDate = maxDate.subtract(const Duration(days: 10 * 365));
+
+                                                /// Show the date picker
+                                                DateTime? date = await showDatePicker(
                                                   context: context,
-                                                  barrierColor: AppColors
-                                                      .scoButtonColor
-                                                      .withOpacity(0.1),
+                                                  barrierColor: AppColors.scoButtonColor.withOpacity(0.1),
                                                   barrierDismissible: false,
-                                                  locale: Provider.of<
-                                                      LanguageChangeViewModel>(
-                                                      context,
-                                                      listen: false)
-                                                      .appLocale,
+                                                  locale: Provider.of<LanguageChangeViewModel>(context, listen: false).appLocale,
                                                   initialDate: initialDate,
-                                                  firstDate: firstDate,
-                                                  /// Limit to the last 10 years
-                                                  lastDate:
-                                                  initialDate, /// Limit up to the maxDate or current year
+                                                  firstDate: firstDate, // Limit to the last 10 years
+                                                  lastDate: maxDate,   // Limit up to today's date
                                                 );
+
 
                                                 if (date != null) {
                                                   setState(() {
@@ -401,7 +384,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             kFormHeight,
                                             /// end date
                                             fieldHeading(
-                                                title: 'Employment End Date',
+                                                title: localization.employmentEndDate,
                                                 important: widget.employmentStatus == 'P',
                                                 langProvider: langProvider),
                                             scholarshipFormDateField(
@@ -410,10 +393,8 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                   .endDateFocusNode,
                                               controller: employmentHistInfo
                                                   .endDateController,
-                                              hintText:
-                                              "Select Employment End Date",
-                                              errorText: employmentHistInfo
-                                                  .endDateError,
+                                              hintText: localization.employmentEndDateWatermark,
+                                              errorText: employmentHistInfo.endDateError,
                                               onChanged: (value) {
                                                 setState(() {
                                                   if (employmentHistInfo
@@ -437,33 +418,31 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                     .endDateError = null;
 
                                                 /// Define the initial date as today's date (for year selection)
-                                                final DateTime initialDate =
-                                                DateTime.now();
-                                                final DateTime maxDate =
-                                                DateTime.now();
+                                                /// Define the initial date (current date)
+                                                final DateTime initialDate = DateTime.now();
+                                                final DateTime maxDate = DateTime.now();
 
-                                                final DateTime firstDate =
-                                                maxDate.subtract(
-                                                    const Duration(
-                                                        days: 10 * 365));
-                                                DateTime? date =
-                                                await showDatePicker(
+                                                /// Define the first date (10 years ago from today)
+                                                final DateTime firstDate = maxDate.subtract(const Duration(days: 10 * 365));
+
+                                                /// Get the minDate from your application (replace with actual value from your model/controller)
+                                                final DateTime minDate = DateTime.parse('YYYY-MM-DD'); // Replace 'YYYY-MM-DD' with actual date
+
+                                                /// Show the date picker
+                                                DateTime? date = await showDatePicker(
                                                   context: context,
-                                                  barrierColor: AppColors
-                                                      .scoButtonColor
-                                                      .withOpacity(0.1),
+                                                  barrierColor: AppColors.scoButtonColor.withOpacity(0.1),
                                                   barrierDismissible: false,
-                                                  locale: Provider.of<
-                                                      LanguageChangeViewModel>(
-                                                      context,
-                                                      listen: false)
-                                                      .appLocale,
+                                                  locale: Provider.of<LanguageChangeViewModel>(context, listen: false).appLocale,
                                                   initialDate: initialDate,
-                                                  firstDate: firstDate,
-                                                  /// Limit to the last 10 years
-                                                  lastDate:
-                                                  initialDate, /// Limit up to the maxDate or current year
+                                                  firstDate: firstDate, // Limit to the last 10 years
+                                                  lastDate: maxDate,   // Limit up to today's date
+                                                  selectableDayPredicate: (DateTime day) {
+                                                    // You can add a condition to limit the days based on 'minDate' if required
+                                                    return day.isAfter(minDate); // e.g., block days before the minDate
+                                                  },
                                                 );
+
 
                                                 if (date != null) {
                                                   setState(() {
@@ -488,7 +467,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             kFormHeight,
                                             /// reporting manager
                                             fieldHeading(
-                                                title: 'Reporting Manager',
+                                                title: localization.emphistReportingManager,
                                                 important: true,
                                                 langProvider: langProvider),
                                             scholarshipFormTextField(
@@ -500,10 +479,8 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                     .contactNumberFocusNode,
                                                 controller: employmentHistInfo
                                                     .reportingManagerController,
-                                                hintText:
-                                                'Enter Reporting Manager',
-                                                errorText: employmentHistInfo
-                                                    .reportingManagerError,
+                                                hintText:localization.emphistReportingManagerWatermark,
+                                                errorText: employmentHistInfo.reportingManagerError,
                                                 onChanged: (value) {
                                                   if (employmentHistInfo
                                                       .reportingManagerFocusNode
@@ -524,20 +501,16 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             kFormHeight,
                                             /// contact number
                                             fieldHeading(
-                                                title: 'Contact Number',
+                                                title: localization.emphistMgrContactNo,
                                                 important: true,
                                                 langProvider: langProvider),
                                             scholarshipFormTextField(
                                                 currentFocusNode:
-                                                employmentHistInfo
-                                                    .contactNumberFocusNode,
+                                                employmentHistInfo.contactNumberFocusNode,
                                                 nextFocusNode:
-                                                employmentHistInfo
-                                                    .contactEmailFocusNode,
-                                                controller: employmentHistInfo
-                                                    .contactNumberController,
-                                                hintText:
-                                                'Enter Contact Number',
+                                                employmentHistInfo.contactEmailFocusNode,
+                                                controller: employmentHistInfo.contactNumberController,
+                                                hintText: localization.emphistMgrContactNoWatermark,
                                                 errorText: employmentHistInfo
                                                     .contactNumberError,
                                                 onChanged: (value) {
@@ -561,7 +534,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             kFormHeight,
                                             /// contact email
                                             fieldHeading(
-                                                title: 'Contact Email',
+                                                title: localization.managerEmail,
                                                 important: true,
                                                 langProvider: langProvider),
                                             scholarshipFormTextField(
@@ -571,10 +544,8 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                                 controller: employmentHistInfo
                                                     .contactEmailController,
                                                 nextFocusNode: index < widget.employmentHistoryList.length - 1 ? widget.employmentHistoryList[index + 1].employerNameFocusNode : null,
-                                                hintText:
-                                                'Enter Manager Email',
-                                                errorText: employmentHistInfo
-                                                    .contactEmailError,
+                                                hintText: localization.registrationEmailAddressWatermark,
+                                                errorText: employmentHistInfo.contactEmailError,
                                                 onChanged: (value) {
                                                   if (employmentHistInfo
                                                       .contactEmailFocusNode
@@ -595,7 +566,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
 
                                             (index >= 1)
                                                 ? addRemoveMoreSection(
-                                                title: "Delete",
+                                                title: localization.deleteRow,
                                                 add: false,
                                                 onChanged: () {
                                                   setState(() {
@@ -615,7 +586,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                       }),
                                   /// ****************************************************************************************************************************************************
                                   addRemoveMoreSection(
-                                      title: "Add",
+                                      title:localization.addRow,
                                       add: true,
                                       onChanged: () {
                                         setState(() {

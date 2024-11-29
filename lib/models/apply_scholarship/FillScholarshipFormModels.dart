@@ -657,6 +657,8 @@ class HSDetails {
   String? gradeError;
   String? otherSubjectNameError;
 
+  bool required = false;
+
   HSDetails({
     required this.subjectTypeController,
     required this.gradeController,
@@ -667,13 +669,13 @@ class HSDetails {
     this.subjectTypeError,
     this.gradeError,
     this.otherSubjectNameError,
+    this.required  = false,
   });
 
   // From JSON
   factory HSDetails.fromJson(Map<String, dynamic> json) {
     return HSDetails(
-      subjectTypeController:
-          TextEditingController(text: json['subjectType'].toString()),
+      subjectTypeController: TextEditingController(text: json['subjectType'].toString()),
       gradeController: TextEditingController(text: json['grade'].toString()),
       otherSubjectNameController: json['otherSubjectName'] != null ? TextEditingController(text: json['otherSubjectName'].toString()) : TextEditingController(),
       subjectTypeFocusNode: FocusNode(),
@@ -1173,38 +1175,47 @@ class EmploymentHistory {
 class MajorWishList {
   // TextEditingControllers for the major wishlist fields
   TextEditingController majorController;
+  TextEditingController otherMajorController;
   TextEditingController errorMessageController;
   TextEditingController isNewController;
 
   // Focus Nodes
   FocusNode majorFocusNode;
+  FocusNode otherMajorFocusNode;
   FocusNode errorMessageFocusNode;
   FocusNode isNewFocusNode;
 
   // Error Text Variables
   String? majorError;
+  String? otherMajorError;
   String? errorMessageError;
   String? isNewError;
 
   MajorWishList({
     required this.majorController,
+    required this.otherMajorController,
     required this.errorMessageController,
     required this.isNewController,
     required this.majorFocusNode,
+    required this.otherMajorFocusNode,
     required this.errorMessageFocusNode,
     required this.isNewFocusNode,
     this.majorError,
+    this.otherMajorError,
     this.errorMessageError,
     this.isNewError,
+
   });
 
   // From JSON
   factory MajorWishList.fromJson(Map<String, dynamic> json) {
     return MajorWishList(
       majorController: TextEditingController(text: json['major'] ?? ''),
+      otherMajorController: TextEditingController(text: json['otherMajor'] ?? ''),
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
       isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
       majorFocusNode: FocusNode(),
+      otherMajorFocusNode: FocusNode(),
       errorMessageFocusNode: FocusNode(),
       isNewFocusNode: FocusNode(),
     );
@@ -1214,6 +1225,7 @@ class MajorWishList {
   Map<String, dynamic> toJson() {
     return {
       'major': majorController.text,
+      'otherMajor': otherMajorController.text,
       'errorMessage': errorMessageController.text,
       'isNew': isNewController.text,
     };

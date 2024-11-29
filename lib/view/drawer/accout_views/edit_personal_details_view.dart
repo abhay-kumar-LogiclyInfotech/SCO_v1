@@ -809,7 +809,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           controller: phoneNumber.phoneNumberController,
                           hintText: "Enter Phone Number",
                           errorText: phoneNumber.phoneNumberError,
-                          onChanged: (value) {
+                          onChanged: (value)
+                          {
                             /// no validation has been provided
                             if (phoneNumber.phoneNumberFocusNode.hasFocus) {
                               setState(() {
@@ -828,7 +829,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
                               });
                             }
-                          }),
+                          }
+                          ),
 
                       /// ****************************************************************************************************************************************************
                       kFormHeight,

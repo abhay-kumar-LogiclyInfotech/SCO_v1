@@ -175,7 +175,7 @@ class _StepsProgressViewState extends State<StepsProgressView> with MediaQueryMi
                     width: 80,
           child: Text(
             getTextForSection(step: index),  // Use a helper function to handle all conditions
-          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
           textAlign: TextAlign.center,
           ),)
 

@@ -17,6 +17,7 @@ import '../../resources/app_text_styles.dart';
 import '../../resources/components/myDivider.dart';
 import '../../viewModel/services/permission_checker_service.dart';
 import 'form_view_Utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 
@@ -51,6 +52,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     final required = widget.myAttachment.requiredController.text.toString();
+    final localization = AppLocalizations.of(context)!;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       // ****************************************************************************************************************************************************
       // title name for document
@@ -86,7 +88,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
                     borderRadius: BorderRadius.circular(5)),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 child: Text(
-                  "Choose File",
+                  localization.chooseFile,
                   style: AppTextStyles.titleTextStyle()
                       .copyWith(color: Colors.white),
                 ),
@@ -104,12 +106,13 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
 
       // show available file type
       Text(
-          widget.myAttachment.documentCdController.text.toUpperCase() == 'SEL006' ? "Select .jpeg|.jpg|.JPEG|.JPG file type only" : "Select Pdf file only",
+        /// For SEL0006 document code we use images and for other then this we use pdf
+          widget.myAttachment.documentCdController.text.toUpperCase() == 'SEL006' ? localization.allowedFileTypeImage : localization.allowedFileTypePdf,
           style: AppTextStyles.normalTextStyle().copyWith(color: Colors.blueGrey, fontSize: 12)),
       kFormHeight,
 
       // comments
-      sectionTitle(title: "Comments"),
+      sectionTitle(title: localization.comments),
       // comments box
       scholarshipFormTextField(
           currentFocusNode: FocusNode(),
@@ -117,7 +120,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
           maxLines: 3,
           textInputType: TextInputType.multiline,
           maxLength: 30,
-          hintText: "Enter your view",
+          hintText: localization.commentsWatermark,
           onChanged: (value) {}),
 
       kFormHeight,
@@ -132,9 +135,9 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            "Action",
-            style: TextStyle(fontSize: 14, color: AppColors.scoButtonColor),
+           Text(
+            localization.action,
+            style: const TextStyle(fontSize: 14, color: AppColors.scoButtonColor),
           ),
           GestureDetector(
               onTap: widget.onAction,
