@@ -199,19 +199,26 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
               ),
             );
           case Status.COMPLETED:
-            return Container(
-              height: 125,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(kCardRadius),
-
-                  image: DecorationImage(
-                    image: NetworkImage(_imageUrl ?? Constants.newsImageUrl,),
-                    filterQuality: FilterQuality.high,
-                    fit: BoxFit.fill,
-                  )
-
-
+            return AspectRatio(
+              aspectRatio: 4/2,
+              child:
+              Stack(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 2000),
+                    curve: Curves.easeInOut,
+                    // height: 95,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(kCardRadius),
+                        image: DecorationImage(
+                          image: NetworkImage(_imageUrl ?? Constants.newsImageUrl,),
+                          filterQuality: FilterQuality.high,
+                          fit: BoxFit.fill,
+                        )
+                    ),
+                  ),
+                ],
               ),
             );
 

@@ -112,8 +112,22 @@ class LoginViewModel with ChangeNotifier {
 
       _setResponse = ApiResponse.completed(response);
 
-     await  HiveManager.storeUserId(response.data!.user!.userId.toString());
-     await  HiveManager.storeEmiratesId(response.data!.user!.emirateId.toString());
+      final data = response.data!;
+      final userData = response.data!.user!;
+
+     await  HiveManager.storeUserId(userData.userId.toString());
+     await  HiveManager.storeEmiratesId(userData.emirateId.toString());
+      await HiveManager.storeName(
+          [
+            userData.firstName?.trim() ?? '',  // Trim and handle null
+            userData.middleName?.trim() ?? '',
+            userData.middleName2?.trim() ?? '',
+            userData.lastName?.trim() ?? ''
+          ]
+              .where((name) => name.isNotEmpty) // Exclude empty strings
+              .join(' ') // Join the remaining names with a space
+      );
+    await  HiveManager.storeRole(data.roles ?? []);
      await  _authService.saveAuthState(true);
 
      _alertServices.toastMessage(response.message.toString(),);

@@ -70,7 +70,11 @@ class AppTextStyles {
       fontWeight: FontWeight.w500
     );
   }
-
+  static TextStyle drawerButtonsStyle() {
+    return const TextStyle(
+        color: Colors.white,
+        fontSize: 14);
+  }
 
 
 

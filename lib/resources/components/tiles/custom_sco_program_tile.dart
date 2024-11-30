@@ -139,7 +139,8 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
         children: [
           //Title
           Text(
-            widget.title.length < 30 ? widget.title : "${widget.title.substring(0, 30)}...",
+            // widget.title.length < 30 ? widget.title : "${widget.title.substring(0, 30)}...",
+            widget.title ?? '',
             textAlign: TextAlign.left,
             style: AppTextStyles.titleTextStyle(),
 
@@ -148,7 +149,7 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
           Text(
             widget.subTitle.length < 50 ? widget.subTitle : "${widget.subTitle.substring(0, 50)}...",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,fontSize: 12,height: 1.5
             ),
           ),

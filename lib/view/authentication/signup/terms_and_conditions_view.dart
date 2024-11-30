@@ -318,6 +318,11 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
               buttonColor: AppColors.scoButtonColor,
               elevation: 1,
               onTap: () async {
+                if(!isChecked) {
+                  // _alertServices.showCustomSnackBar(AppLocalizations.of(context)!
+                  //       .acceptTermsAndConditions,);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.acceptTermsAndConditions)));
+                }
                 if (isChecked && _userId != null) {
                   bool result = await provider.updateTermsAndConditions(
                       context: context,
@@ -329,13 +334,8 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
                         CupertinoPageRoute(
                             builder: (context) => UpdateSecurityQuestionView()));
                   }
-                } else {
-                  _alertServices.flushBarErrorMessages(
-                      // context: context,
-                      provider: langProvider,
-                      message:  AppLocalizations.of(context)!
-                          .acceptTermsError,);
                 }
+
               });
         }),
       ),

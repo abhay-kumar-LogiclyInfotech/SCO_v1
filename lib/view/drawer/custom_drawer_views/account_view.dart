@@ -11,9 +11,11 @@ import 'package:sco_v1/view/drawer/accout_views/security_questions_view.dart';
 import 'package:sco_v1/view/main_view/services_view.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
+import '../../../hive/hive_manager.dart';
 import '../../../models/account/simple_tile_model.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/tiles/simple_tile.dart';
+import '../../../resources/getRoles.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../accout_views/change_password_view.dart';
 import '../accout_views/personal_details_view.dart';
@@ -28,12 +30,19 @@ class AccountView extends StatefulWidget {
 class _AccountViewState extends State<AccountView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
+
+
+  /// Get Roles
+   UserRole? role;
+
   @override
   void initState() {
     super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    role = getRoleFromList(HiveManager.getRole());
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +62,8 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
         'assetAddress': "assets/myAccount/personal_details.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const PersonalDetailsView()))
       },
-      {
+      if(role == UserRole.scholarStudent)
+        {
         'title': "Employment Status",
         'assetAddress': "assets/myAccount/employment_status.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const EmploymentStatusView()))
@@ -68,7 +78,8 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
         'assetAddress': "assets/myAccount/change_password.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ChangePasswordView()))
       },
-      {
+      if(role == UserRole.scholarStudent || role == UserRole.applicants)
+        {
         'title': "Addresses",
         'assetAddress': "assets/myAccount/addresses.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const AddressesView()))

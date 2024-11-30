@@ -1215,7 +1215,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
       });
     }
 
-    if (_dobController.text.isEmpty || !isEighteenYearsOld(_dobController.text)) {
+    if (_dobController.text.isEmpty || !isFourteenYearsOld(_dobController.text)) {
       setState(() {
         _dobError = "Please Select Valid Date of Birth";
         firstErrorFocusNode ??= _dobFocusNode;

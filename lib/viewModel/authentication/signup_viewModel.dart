@@ -113,9 +113,7 @@ class SignupViewModel with ChangeNotifier {
   }
 
   //signup Function
-  Future<bool> signup(
-      {required BuildContext context,
-      required LanguageChangeViewModel langProvider}) async {
+  Future<bool> signup({required LanguageChangeViewModel langProvider}) async {
     try {
       setResponse = ApiResponse.loading();
 
@@ -140,8 +138,8 @@ class SignupViewModel with ChangeNotifier {
         "month": _month,
         "year": _year,
         "emirateId": _emirateId,
-        "isMale": _isMale,
-        "country": _country,
+        "isMale": (_isMale?.toUpperCase() == 'M').toString(),
+        "country": _country?.trim().toUpperCase(),
         "phoneNo": _phoneNo,
         "password": _password,
         "confirmPassword": _confirmPassword
@@ -157,17 +155,12 @@ class SignupViewModel with ChangeNotifier {
 
       setResponse = ApiResponse.completed(response);
       HiveManager.storeUserId(response.data!.user!.userId.toString());
-
-      _alertServices.flushBarErrorMessages(
-          message: response.message.toString(),
-          // context: context,
-          provider: langProvider);
-
-      //*---------Navigating to Otp Verification View---------*
+      _alertServices.flushBarErrorMessages(message: response.message.toString(), provider: langProvider);
       return true;
     } catch (error) {
       setResponse = ApiResponse.error(error.toString());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,content: Text(error.toString())));
+      _alertServices.flushBarErrorMessages(message: error.toString(), provider: langProvider);
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,content: Text(error.toString())));
       return false;
     }
   }

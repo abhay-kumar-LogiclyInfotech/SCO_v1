@@ -31,8 +31,7 @@ class SignUpView extends StatefulWidget {
   State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignUpViewState extends State<SignUpView>
-    with MediaQueryMixin<SignUpView> {
+class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView> {
   late NavigationServices _navigationServices;
   late AlertServices _alertServices;
 
@@ -68,27 +67,29 @@ class _SignUpViewState extends State<SignUpView>
   late FocusNode _studentPhoneNumberFocusNode;
 
   final ValueNotifier<bool> _passwordVisibility = ValueNotifier<bool>(true);
-  final ValueNotifier<bool> _confirmPasswordVisibility =
-      ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _confirmPasswordVisibility = ValueNotifier<bool>(true);
 
   List<DropdownMenuItem> _genderMenuItemsList = [];
   List<DropdownMenuItem> _countryMenuItemsList = [];
 
   // Validations error Texts:
   String? _firstNameError;
+  String? _secondNameError;
+  String? _thirdNameError;
   String? _familyNameError;
+  String? _dobError;
+  String? _genderError;
   String? _emailError;
   String? _confirmEmailError;
   String? _passwordError;
   String? _confirmPasswordError;
+  String? _countryError;
   String? _emiratesError;
   String? _studentPhoneNumberError;
 
   @override
   void initState() {
-    final GetIt getIt = GetIt.instance;
-    _navigationServices = getIt.get<NavigationServices>();
-    _alertServices = getIt.get<AlertServices>();
+
 
     _firstNameController = TextEditingController();
     _secondNameController = TextEditingController();
@@ -121,8 +122,7 @@ class _SignUpViewState extends State<SignUpView>
     _emiratesIdFocusNode = FocusNode();
     _studentPhoneNumberFocusNode = FocusNode();
 
-    final provider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final provider = Provider.of<LanguageChangeViewModel>(context, listen: false);
     _genderMenuItemsList = populateCommonDataDropdown(
         menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
         provider: provider);
@@ -141,6 +141,14 @@ class _SignUpViewState extends State<SignUpView>
     _confirmPasswordError = null; // or _confirmPasswordError = '';
     _emiratesError = null; // or _emiratesError = '';
     _studentPhoneNumberError = null; // or _studentPhoneNumberError = '';
+
+
+    WidgetsBinding.instance.addPostFrameCallback((callback)async{
+      final GetIt getIt = GetIt.instance;
+      _navigationServices = getIt.get<NavigationServices>();
+      _alertServices = getIt.get<AlertServices>();
+    });
+
   }
 
   @override
@@ -247,7 +255,8 @@ class _SignUpViewState extends State<SignUpView>
               )),
               Expanded(
                 child: Consumer<LanguageChangeViewModel>(
-                  builder: (context, provider, _) {
+                  builder: (context, langProvider, _) {
+                    final localization = AppLocalizations.of(context)!;
                     return SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
@@ -256,57 +265,58 @@ class _SignUpViewState extends State<SignUpView>
                         children: [
                           const SizedBox(height: 30),
                           //sign Up with UAE Pass;
-                          _signUpWithUaePassButton(provider),
+                          _signUpWithUaePassButton(langProvider: langProvider,localization: localization),
                           const SizedBox(height: 20),
                           //or
                           _or(),
-                          const SizedBox(height: 10),
+                          kFormHeight,
 
-                          _firstName(provider),
-                          const SizedBox(height: 10),
+                          _firstName(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _secondName(provider),
-                          const SizedBox(height: 10),
+                          _secondName(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _thirdFourthName(provider),
-                          const SizedBox(height: 10),
+                          _thirdFourthName(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _familyName(provider),
-                          const SizedBox(height: 10),
+                          _familyName(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _dateOfBirth(provider),
-                          const SizedBox(height: 10),
+                          _dateOfBirth(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _gender(provider),
-                          const SizedBox(height: 10),
+                          _gender(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _emailAddress(provider),
-                          const SizedBox(height: 10),
+                          _emailAddress(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _confirmEmailAddress(provider),
-                          const SizedBox(height: 10),
+                          _confirmEmailAddress(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _password(provider),
-                          const SizedBox(height: 10),
+                          _country(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _confirmPassword(provider),
-                          const SizedBox(height: 10),
+                          _emiratesId(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _country(provider),
-                          const SizedBox(height: 10),
+                          _studentPhoneNumber(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _emiratesId(provider),
-                          const SizedBox(height: 10),
+                          _password(langProvider: langProvider,localization: localization),
+                          kFormHeight,
 
-                          _studentPhoneNumber(provider),
+                          _confirmPassword(langProvider: langProvider,localization: localization),
+
                           const SizedBox(height: 30),
 
                           //Sign Up Button:
-                          _signUpButton(provider),
+                          _signUpButton(langProvider: langProvider,localization: localization),
                           const SizedBox(height: 15),
 
                           //Already have account sign in link:
-                          _signInLink(provider),
+                          _signInLink(langProvider: langProvider,localization: localization),
 
                           const SizedBox(
                             height: 20,
@@ -326,12 +336,14 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-  Widget _signUpWithUaePassButton(LanguageChangeViewModel provider) {
+  Widget _signUpWithUaePassButton({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomButton(
-      textDirection: getTextDirection(provider),
+      textDirection: getTextDirection(langProvider),
       buttonName: "Sign up with UAE PASS",
       isLoading: false,
-      onTap: () {},
+      onTap: () {
+        _alertServices.toastMessage("coming soon...");
+      },
       fontSize: 15,
       buttonColor: Colors.white,
       borderColor: Colors.black,
@@ -375,13 +387,13 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-  Widget _firstName(LanguageChangeViewModel provider) {
+  Widget _firstName({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _firstNameFocusNode,
       nextFocusNode: _secondNameFocusNode,
       controller: _firstNameController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.firstName,
+      hintText: localization.registrationFirstNameWatermark,
       textInputType: TextInputType.text,
       textCapitalization: true,
       leading: SvgPicture.asset(
@@ -394,40 +406,45 @@ class _SignUpViewState extends State<SignUpView>
         if (_firstNameFocusNode.hasFocus) {
           setState(() {
             _firstNameError =
-                ErrorText.getNameError(name: value!, context: context);
+                ErrorText.getNameArabicEnglishValidationError(name: value!, context: context);
           });
         }
       },
     );
   }
 
-  Widget _secondName(LanguageChangeViewModel provider) {
+  Widget _secondName({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _secondNameFocusNode,
       nextFocusNode: _thirdFourthNameFocusNode,
       controller: _secondNameController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.secondName,
+      hintText: localization.registrationMiddleNameWatermark,
       textInputType: TextInputType.text,
       textCapitalization: true,
+      errorText: _secondNameError,
       leading: SvgPicture.asset(
         "assets/name.svg",
         // height: 18,
         // width: 18,
       ),
       onChanged: (value) {
-        _secondNameController.text = value!;
+        if (_secondNameFocusNode.hasFocus) {
+          setState(() {
+            _secondNameError = ErrorText.getNameArabicEnglishValidationError(name: value!, context: context);
+          });
+        }
       },
     );
   }
 
-  Widget _thirdFourthName(LanguageChangeViewModel provider) {
+  Widget _thirdFourthName({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _thirdFourthNameFocusNode,
       nextFocusNode: _familyNameFocusNode,
       controller: _thirdFourthNameController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.thirdFourthName,
+      hintText: localization.registrationThirdNameWatermark,
       textInputType: TextInputType.text,
       textCapitalization: true,
       leading: SvgPicture.asset(
@@ -435,19 +452,25 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
+      errorText: _thirdNameError,
       onChanged: (value) {
+        if (_thirdFourthNameFocusNode.hasFocus) {
+          setState(() {
+            _thirdNameError = ErrorText.getNameArabicEnglishValidationError(name: value!, context: context);
+          });
+        }
         _thirdFourthNameController.text = value!;
       },
     );
   }
 
-  Widget _familyName(LanguageChangeViewModel provider) {
+  Widget _familyName({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _familyNameFocusNode,
       nextFocusNode: _dobFocusNode,
       controller: _familyNameController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.familyName,
+      hintText: localization.registrationLastNameWatermark,
       textInputType: TextInputType.text,
       textCapitalization: true,
       leading: SvgPicture.asset(
@@ -460,22 +483,21 @@ class _SignUpViewState extends State<SignUpView>
         // Validate only when user interacts with the field
         if (_familyNameFocusNode.hasFocus) {
           setState(() {
-            _familyNameError =
-                ErrorText.getNameError(name: value!, context: context);
+            _familyNameError = ErrorText.getNameArabicEnglishValidationError(name: value!, context: context);
           });
         }
       },
     );
   }
 
-  Widget _dateOfBirth(LanguageChangeViewModel provider) {
+  Widget _dateOfBirth({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       readOnly: true,
       currentFocusNode: _dobFocusNode,
       nextFocusNode: _genderFocusNode,
       controller: _dobController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.dob,
+      hintText: localization.brithDateWatermark,
       textInputType: TextInputType.datetime,
       textCapitalization: true,
       leading: SvgPicture.asset(
@@ -483,8 +505,12 @@ class _SignUpViewState extends State<SignUpView>
         // height: 18,
         // width: 18,
       ),
+      errorText: _dobError,
       onChanged: (value) async {},
       onTap: () async {
+        setState(() {
+          _dobError = null;
+        });
         DateTime? dob = await showDatePicker(
             context: context,
             initialDate: DateTime.now(),
@@ -504,29 +530,32 @@ class _SignUpViewState extends State<SignUpView>
   }
 
   //Gender DropDown:
-  Widget _gender(LanguageChangeViewModel provider) {
+  Widget _gender({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomDropdown(
       leading: SvgPicture.asset("assets/gender.svg"),
-      textDirection: getTextDirection(provider),
+      textDirection: getTextDirection(langProvider),
       menuItemsList: _genderMenuItemsList,
-      onChanged: (value) {
-        debugPrint(value.toString());
-        _genderController.text = value!;
-
-        FocusScope.of(context).requestFocus(_emailFocusNode);
-      },
       currentFocusNode: _genderFocusNode,
-      hintText: AppLocalizations.of(context)!.gender,
+      hintText: localization.genderWatermark,
+      errorText: _genderError,
+      onChanged: (value) {
+        setState(() {
+          _genderError = null;
+          _genderController.text = value!;
+          FocusScope.of(context).requestFocus(_emailFocusNode);
+        });
+
+      },
     );
   }
 
-  Widget _emailAddress(LanguageChangeViewModel provider) {
+  Widget _emailAddress({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _emailFocusNode,
       nextFocusNode: _confirmEmailFocusNode,
       controller: _emailController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.emailAddress,
+      hintText: localization.registrationEmailAddressWatermark,
       textInputType: TextInputType.emailAddress,
       textCapitalization: true,
       leading: SvgPicture.asset(
@@ -539,21 +568,20 @@ class _SignUpViewState extends State<SignUpView>
         // Validate only when user interacts with the field
         if (_emailFocusNode.hasFocus) {
           setState(() {
-            _emailError =
-                ErrorText.getEmailError(email: value!, context: context);
+            _emailError = ErrorText.getEmailError(email: value!, context: context);
           });
         }
       },
     );
   }
 
-  Widget _confirmEmailAddress(LanguageChangeViewModel provider) {
+  Widget _confirmEmailAddress({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
         currentFocusNode: _confirmEmailFocusNode,
         nextFocusNode: _passwordFocusNode,
         controller: _confirmEmailController,
         obscureText: false,
-        hintText: AppLocalizations.of(context)!.confirmEmailAddress,
+        hintText: localization.registrationConfEmailAddress,
         textInputType: TextInputType.emailAddress,
         textCapitalization: true,
         leading: SvgPicture.asset(
@@ -566,14 +594,13 @@ class _SignUpViewState extends State<SignUpView>
           // Validate only when user interacts with the field
           if (_confirmEmailFocusNode.hasFocus) {
             setState(() {
-              _confirmEmailError =
-                  ErrorText.getEmailError(email: value!, context: context);
+              _confirmEmailError = ErrorText.getEmailError(email: value!, context: context);
             });
           }
         });
   }
 
-  Widget _password(LanguageChangeViewModel provider) {
+  Widget _password({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return ValueListenableBuilder(
         valueListenable: _passwordVisibility,
         builder: (context, obscurePassword, child) {
@@ -581,7 +608,7 @@ class _SignUpViewState extends State<SignUpView>
               currentFocusNode: _passwordFocusNode,
               nextFocusNode: _confirmPasswordFocusNode,
               controller: _passwordController,
-              hintText: AppLocalizations.of(context)!.password,
+              hintText: localization.registrationPassword,
               textInputType: TextInputType.visiblePassword,
               leading: SvgPicture.asset(
                 "assets/lock.svg",
@@ -615,7 +642,7 @@ class _SignUpViewState extends State<SignUpView>
         });
   }
 
-  Widget _confirmPassword(LanguageChangeViewModel provider) {
+  Widget _confirmPassword({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return ValueListenableBuilder(
         valueListenable: _confirmPasswordVisibility,
         builder: (context, obscurePassword, child) {
@@ -623,7 +650,7 @@ class _SignUpViewState extends State<SignUpView>
             currentFocusNode: _confirmPasswordFocusNode,
             nextFocusNode: _countryFocusNode,
             controller: _confirmPasswordController,
-            hintText: AppLocalizations.of(context)!.confirmPassword,
+            hintText: localization.registrationConfPassword,
             textInputType: TextInputType.text,
             leading: SvgPicture.asset(
               "assets/lock.svg",
@@ -659,30 +686,32 @@ class _SignUpViewState extends State<SignUpView>
         });
   }
 
-  Widget _country(LanguageChangeViewModel provider) {
+  Widget _country({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomDropdown(
       leading: SvgPicture.asset("assets/country.svg"),
-      textDirection: getTextDirection(provider),
+      textDirection: getTextDirection(langProvider),
       menuItemsList: _countryMenuItemsList,
+      currentFocusNode: _countryFocusNode,
+      hintText: localization.country,
+      errorText: _countryError,
       onChanged: (value) {
         setState(() {
+          _countryError = null;
           _countryController.text = value!;
           //This thing is creating error: don't know how to fix it:
           FocusScope.of(context).requestFocus(_emiratesIdFocusNode);
         });
       },
-      currentFocusNode: _countryFocusNode,
-      hintText: AppLocalizations.of(context)!.country,
     );
   }
 
-  Widget _emiratesId(LanguageChangeViewModel provider) {
+  Widget _emiratesId({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _emiratesIdFocusNode,
       nextFocusNode: _studentPhoneNumberFocusNode,
       controller: _emiratesIdController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.emiratesId,
+      hintText: localization.emiratesId,
       textInputType: TextInputType.datetime,
       inputFormat: [EmiratesIDFormatter()],
       textCapitalization: true,
@@ -704,12 +733,12 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-  Widget _studentPhoneNumber(LanguageChangeViewModel provider) {
+  Widget _studentPhoneNumber({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _studentPhoneNumberFocusNode,
       controller: _studentPhoneNumberController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.studentMobileNumber,
+      hintText:  localization.registrationMobileNumber,
       textInputType: TextInputType.phone,
       textCapitalization: true,
       leading: SvgPicture.asset(
@@ -729,21 +758,21 @@ class _SignUpViewState extends State<SignUpView>
     );
   }
 
-  Widget _signUpButton(LanguageChangeViewModel langProvider) {
+  Widget _signUpButton({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return ChangeNotifierProvider(
         create: (context) => SignupViewModel(),
         child: Consumer<SignupViewModel>(builder: (context, provider, _) {
           return CustomButton(
             textDirection: getTextDirection(langProvider),
-            buttonName: AppLocalizations.of(context)!.signUp,
+            buttonName: localization.signUp,
             isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
             onTap: ()async {
               
               setProcessing(true);
               
-              bool result = validateForm(langProvider: langProvider, signup: provider);
+              bool result = validateForm(langProvider: langProvider, signup: provider,localization:localization);
               if (result) {
-              bool signUpResult = await provider.signup(context: context, langProvider: langProvider);
+              bool signUpResult = await provider.signup( langProvider: langProvider);
               if(signUpResult){
                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const OtpVerificationView()) );
               }
@@ -759,16 +788,16 @@ class _SignUpViewState extends State<SignUpView>
         }));
   }
 
-  Widget _signInLink(LanguageChangeViewModel provider) {
+  Widget _signInLink({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return Directionality(
-      textDirection: getTextDirection(provider),
+      textDirection: getTextDirection(langProvider),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            AppLocalizations.of(context)!.alreadyHaveAccount,
+            localization.alreadyHaveAccount,
             style: const TextStyle(
                 color: AppColors.scoButtonColor,
                 fontSize: 16,
@@ -784,7 +813,7 @@ class _SignUpViewState extends State<SignUpView>
               _navigationServices.pushNamed("/loginView");
             },
             child: Text(
-              AppLocalizations.of(context)!.signIn,
+              localization.signIn,
               style: const TextStyle(
                   color: AppColors.scoThemeColor,
                   fontSize: 16,
@@ -800,47 +829,88 @@ class _SignUpViewState extends State<SignUpView>
   //form extra validations:
   bool validateForm(
       {required LanguageChangeViewModel langProvider,
-      required SignupViewModel signup})
+      required SignupViewModel signup,
+      required AppLocalizations localization})
   {
-    if (_firstNameController.text.isEmpty || !Validations.isNameValid(_firstNameController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterFirstName,
-          // context: context,
-          provider: langProvider);
+
+    requestFocus(focusNode){
+      setState(() {
+        Utils.requestFocus(focusNode: focusNode, context: context);
+      });
+    }
+
+
+    if (_firstNameController.text.isEmpty || _firstNameError != null) {
+      setState(() {
+        _firstNameError =  localization.registrationFirstNameValidate;
+        requestFocus(_firstNameFocusNode);
+        _alertServices.showToast(
+            message: localization.registrationFirstNameValidate);
+      });
       return false;
     } else {
       signup.setFirstName(_firstNameController.text.trim());
     }
 
-    // if (_secondNameController.text.isEmpty) {
-    //   _alertServices.flushBarErrorMessages(message: AppLocalizations.of(context)!.enterSecondName, context: context, provider: langProvider);
+
+
+    if (_secondNameController.text.isNotEmpty && _secondNameError != null) {
+      setState(() {
+        _secondNameError = localization.registrationMiddleNameValidate;
+        requestFocus(_secondNameFocusNode);
+        _alertServices.showToast(message: localization.registrationMiddleNameValidate);
+      });
+      return false;
+    }
+
+
+      // if (_secondNameController.text.isEmpty) {
+    //   _alertServices.showToast(message: localization.enterSecondName, context: context, provider: langProvider);
     //   return false;
     // } else {
     signup.setMiddleName(_secondNameController.text.trim());
     // }
 
+
+    if (_thirdFourthNameController.text.isNotEmpty && _thirdNameError != null) {
+      setState(() {
+        _thirdNameError = localization.registrationThirdNameValidate;
+        requestFocus(_thirdFourthNameFocusNode);
+        _alertServices.showToast(
+            message: localization.registrationThirdNameValidate);
+      });
+
+      return false;
+    }
+
     // if (_thirdFourthNameController.text.isEmpty) {
-    //   _alertServices.flushBarErrorMessages(message: AppLocalizations.of(context)!.enterThirdFourthName, context: context, provider: langProvider);
+    //   _alertServices.showToast(message: localization.enterThirdFourthName, context: context, provider: langProvider);
     //   return false;
     // } else {
     signup.setMiddleName2(_thirdFourthNameController.text.trim());
     // }
 
-    if (_familyNameController.text.isEmpty || !Validations.isNameValid(_familyNameController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterFamilyName,
-          // context: context,
-          provider: langProvider);
+    if (_familyNameController.text.isEmpty || _familyNameError != null) {
+      setState(() {
+
+        _familyNameError = localization.registrationLastNameValidate;
+        requestFocus(_familyNameFocusNode);
+        _alertServices.showToast(
+            message: localization.registrationLastNameValidate);
+      });
+
       return false;
     } else {
       signup.setLastName(_familyNameController.text.trim());
     }
 
-    if (_dobController.text.isEmpty || !isEighteenYearsOld(_dobController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterDateOfBirth,
-          // context: context,
-          provider: langProvider);
+    if (_dobController.text.isEmpty || !isFourteenYearsOld(_dobController.text)) {
+      setState(() {
+        _dobError = localization.brithDateValidate;
+        requestFocus(_dobFocusNode);
+      });
+      _alertServices.showToast(
+          message: localization.brithDateValidate);
       return false;
     } else {
       // signup.setDob(_dobController.text);
@@ -850,10 +920,8 @@ class _SignUpViewState extends State<SignUpView>
         int.tryParse(_dobDayController.text) == null ||
         int.parse(_dobDayController.text) < 1 ||
         int.parse(_dobDayController.text) > 31) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterValidDay,
-          // context: context,
-          provider: langProvider);
+      _alertServices.showToast(
+          message: localization.enterValidDay,);
       return false;
     } else {
       signup.setDay(_dobDayController.text.trim());
@@ -863,10 +931,9 @@ class _SignUpViewState extends State<SignUpView>
         int.tryParse(_dobMonthController.text) == null ||
         int.parse(_dobMonthController.text) < 1 ||
         int.parse(_dobMonthController.text) > 12) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterValidMonth,
-          // context: context,
-          provider: langProvider);
+      _alertServices.showToast(
+          message: localization.enterValidMonth,
+    );
       return false;
     } else {
       signup.setMonth(_dobMonthController.text.trim());
@@ -874,92 +941,122 @@ class _SignUpViewState extends State<SignUpView>
 
     if (_dobYearController.text.isEmpty ||
         int.tryParse(_dobYearController.text) == null) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterValidYear,
-          // context: context,
-          provider: langProvider);
+      _alertServices.showToast(
+          message: localization.enterValidYear,
+      );
       return false;
     } else {
       signup.setYear(_dobYearController.text.trim());
     }
 
-    if (_genderController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterGender,
-          // context: context,
-          provider: langProvider);
+    if (_genderController.text.isEmpty || _genderError != null) {
+      setState(() {
+
+        _genderError = localization.genderValidate;
+        requestFocus(_genderFocusNode);
+        _alertServices.showToast(
+            message: localization.enterGender,
+       );
+      });
       return false;
     } else {
       signup.setIsMale(_genderController.text.trim());
     }
 
-    if (_emailController.text.isEmpty || !_emailController.text.contains('@') || !Validations.isEmailValid(_confirmEmailController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterValidEmail,
-          // context: context,
-          provider: langProvider);
+    if (_emailController.text.isEmpty ||  !Validations.isEmailValid(_emailController.text) || _emailError != null) {
+      setState(() {
+        _emailError = localization.registrationEmailAddressValidate;
+        requestFocus(_emailFocusNode);
+        _alertServices.showToast(
+            message: localization.enterValidEmail,
+        );
+      });
+
       return false;
     } else {
       signup.setEmailAddress(_emailController.text.trim().toLowerCase());
     }
 
-    if (_confirmEmailController.text.isEmpty || _confirmEmailController.text != _emailController.text || !Validations.isEmailValid(_confirmEmailController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.emailsDoNotMatch,
-          // context: context,
-          provider: langProvider);
+    if (_confirmEmailController.text.isEmpty || _confirmEmailController.text != _emailController.text || !Validations.isEmailValid(_confirmEmailController.text) || _confirmEmailError != null) {
+
+      setState(() {
+        _confirmEmailError = localization.emailsDoNotMatch;
+        requestFocus(_confirmEmailFocusNode);
+        _alertServices.showToast(message: localization.emailsDoNotMatch);
+      });
+
       return false;
     } else {
       signup.setConfirmEmailAddress(
           _confirmEmailController.text.trim().toLowerCase());
     }
 
-    if (_countryController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterCountry,
-          // context: context,
-          provider: langProvider);
+    if (_countryController.text.isEmpty || _countryError != null) {
+      setState(() {
+
+        _countryError = localization.countryValidate;
+        requestFocus(_countryFocusNode);
+        _alertServices.showToast(
+            message: localization.enterCountry,);
+      });
+
       return false;
     } else {
       signup.setCountry(_countryController.text.trim());
     }
 
     if (_emiratesIdController.text.isEmpty || !Validations.isValidEmirateId(_emiratesIdController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterValidEmiratesId,
-          // context: context,
-          provider: langProvider);
+      setState(() {
+
+        _emiratesError = localization.emiratesIdValidate;
+        requestFocus(_emiratesIdFocusNode);
+        _alertServices.showToast(
+            message: localization.enterValidEmiratesId,
+  );
+      });
+
       return false;
     } else {
       signup.setEmirateId(
           _emiratesIdController.text.replaceAll("-", '').trim().toString());
     }
 
-    if (_studentPhoneNumberController.text.isEmpty || !Validations.isPhoneNumberValid(_studentPhoneNumberController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterValidPhoneNumber,
-          // context: context,
-          provider: langProvider);
+    if (_studentPhoneNumberController.text.isEmpty || !Validations.isPhoneNumberValid(_studentPhoneNumberController.text) || _studentPhoneNumberError != null) {
+      setState(() {
+        _studentPhoneNumberError = localization.registrationMobileNumberValidate;
+        requestFocus(_studentPhoneNumberFocusNode);
+        _alertServices.showToast(
+            message: localization.enterValidPhoneNumber,
+        );
+      });
+
       return false;
     } else {
       signup.setPhoneNo(_studentPhoneNumberController.text.trim());
     }
 
-    if (_passwordController.text.isEmpty || _passwordController.text.length < 8 || !Validations.isPasswordValid(_passwordController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.enterValidPassword,
-          // context: context,
-          provider: langProvider);
+    if (_passwordController.text.isEmpty || _passwordController.text.length < 8 || !Validations.isPasswordValid(_passwordController.text) || _passwordError != null) {
+      setState(() {
+        _passwordError = localization.registrationPasswordValidate;
+        requestFocus(_passwordFocusNode);
+        _alertServices.showToast(
+            message: localization.enterValidPassword,
+        );
+      });
       return false;
     } else {
       signup.setPassword(_passwordController.text.trim());
     }
 
-    if (_confirmPasswordController.text.isEmpty || _confirmPasswordController.text != _passwordController.text || !Validations.isPasswordValid(_confirmPasswordController.text)) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.passwordsDoNotMatch,
-          // context: context,
-          provider: langProvider);
+    if (_confirmPasswordController.text.isEmpty || _confirmPasswordController.text != _passwordController.text || !Validations.isPasswordValid(_confirmPasswordController.text) || _confirmPasswordError != null) {
+
+        setState(() {
+        _confirmPasswordError = localization.passwordsDoNotMatch;
+          requestFocus(_confirmPasswordFocusNode);
+       _alertServices.showToast(
+           message: localization.passwordsDoNotMatch,
+      );
+     });
       return false;
     } else {
       signup.setConfirmPassword(_confirmPasswordController.text.trim());

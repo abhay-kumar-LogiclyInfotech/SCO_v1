@@ -19,9 +19,11 @@ import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../data/response/status.dart';
+import '../../hive/hive_manager.dart';
 import '../../models/account/simple_tile_model.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/components/tiles/simple_tile.dart';
+import '../../resources/getRoles.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -38,6 +40,10 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
   late AuthService _authService;
   late AlertServices _alertServices;
 
+  bool isLogged = false;
+  /// Get Roles
+  UserRole? role ;
+
   @override
   void initState() {
     super.initState();
@@ -47,30 +53,32 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
     _alertServices = getIt.get<AlertServices>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback)async{
-
-        await _getAllApplicationStatus();
-
+     await _onRefresh();
 
     });
   }
 
-  /// method to ping the get all application status and update the screen as per condition given below.
-  /// checking for the application is applied if applied then only show the services to the user.
-  _getAllApplicationStatus()async{
-    final applicationStatusProvider = Provider.of<GetListApplicationStatusViewModel>(context,listen:false);
-    await applicationStatusProvider.getListApplicationStatus();
-  }
+
 
 
  Future<void> _onRefresh()async{
-   await _getAllApplicationStatus();
+     isLogged = await _authService.isLoggedIn();
+     if(isLogged){
+       role = getRoleFromList(HiveManager.getRole());
+       print(role.toString());
+     }
    setState(() {
       // update the state of the application status
+     /// to update the roles we are calling setState
     });
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       // appBar: CustomSimpleAppBar(titleAsString: "Services"),
@@ -83,6 +91,7 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
   }
 
   Widget _buildUi() {
+
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
    final appLocalizations =  AppLocalizations.of(context);
 
@@ -130,50 +139,32 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
       itemsList.add(SimpleTileModel.fromJson(element));
     }
 
-    return Consumer<GetListApplicationStatusViewModel>(builder: (context,applicationStatusProvider,_){
-
-      switch(applicationStatusProvider.apiResponse.status){
-        case Status.LOADING:
-          return Utils.pageLoadingIndicator(context: context);
-        case Status.ERROR:
-          return Utils.showOnError();
-        case Status.COMPLETED:
-          bool? alreadyAppliedResult =  applicationStatusProvider.apiResponse.data?.data?.applicationStatus.any((element){return element.applicationStatus.programAction != 'DRAFT';});
-          if(alreadyAppliedResult != null && alreadyAppliedResult){
+    if(role == UserRole.scholarStudent && isLogged){
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: kPadding),
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: itemsList.length,
+          itemBuilder: (context, index) {
+            final item = itemsList[index];
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: kPadding),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: itemsList.length,
-                itemBuilder: (context, index) {
-                  final item = itemsList[index];
-                  return Padding(
-                    padding: (index < itemsList.length - 1)
-                        ? const EdgeInsets.only(top: 20.0)
-                        : (index == itemsList.length - 1)
-                        ? EdgeInsets.only(top: kPadding,bottom: kPadding)
-                        : EdgeInsets.zero,
-                    child: SimpleTile(item: item),
-                  );
-                },
-              ),
+              padding: (index < itemsList.length - 1)
+                  ? const EdgeInsets.only(top: 20.0)
+                  : (index == itemsList.length - 1)
+                  ? EdgeInsets.only(top: kPadding,bottom: kPadding)
+                  : EdgeInsets.zero,
+              child: SimpleTile(item: item),
             );
-          }
-          else{
-            return Padding(
-              padding:  EdgeInsets.all(kPadding),
-              child: SimpleCard(expandedContent: const Column(children: [Text("You have not applied for any scholarship yet. Please apply for scholarship to see services.")],)),
-            ) ;}
-
-        case Status.NONE:
-          return Utils.showOnNone();
-        case null:
-          return Utils.showOnNull();
-      }
-
-
-
-    });
+          },
+        ),
+      );
+    }
+    else{
+      return Padding(
+        padding:  EdgeInsets.all(kPadding),
+        child: SimpleCard(expandedContent: const Column(children: [Text("You are not awarded with any scholarship yet. Apply for scholarship and  pull down to refresh.")],)),
+      );
+    }
   }
 }

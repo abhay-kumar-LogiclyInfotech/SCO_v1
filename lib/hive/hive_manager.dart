@@ -46,8 +46,8 @@ class HiveManager {
   }
 
   //when we logout clear Data:
-  static void clearData() {
-    Boxes.getCommonDataBox().delete('commonData');
+  static Future<void> clearData() async{
+   await Boxes.getCommonDataBox().delete('commonData');
     debugPrint('Data cleared');
   }
 
@@ -72,16 +72,16 @@ class HiveManager {
   }
 
   //when we logout clear Data:
-  static void clearUserId() {
-    Boxes.getUserDataBox().delete('userID');
+  static Future<void> clearUserId() async{
+    await Boxes.getUserDataBox().delete('userID');
     debugPrint('Data cleared');
   }
 //*-------storing the UserID End--------*
 
 
   //*-------storing the Emirates Start--------*
-  static Future<void> storeEmiratesId(String userId) async {
-    await Boxes.getUserDataBox().put("emiratesID", userId);
+  static Future<void> storeEmiratesId(String emiratesId) async {
+    await Boxes.getUserDataBox().put("emiratesID", emiratesId);
   }
 
   static bool isEmiratesIdStored() {
@@ -96,12 +96,58 @@ class HiveManager {
   }
 
   //when we logout clear Data:
-  static void clearEmiratesId() {
-    Boxes.getUserDataBox().delete('emiratesID');
+  static Future<void> clearEmiratesId() async{
+   await Boxes.getUserDataBox().delete('emiratesID');
     debugPrint('emiratesID Data cleared');
   }
 //*-------storing the Emirates End--------*
 
+
+  //*-------storing the Name Start--------*
+  static Future<void> storeName(String name) async {
+    await Boxes.getUserDataBox().put("name", name);
+  }
+
+  static bool isNameStored() {
+    return Boxes.getUserDataBox().containsKey('name');
+  }
+
+  static String? getName() {
+    if (isUserIdStored()) {
+      return Boxes.getUserDataBox().get("name");
+    }
+    return null;
+  }
+
+  //when we logout clear Data:
+  static Future<void> clearName() async{
+   await  Boxes.getUserDataBox().delete('name');
+    debugPrint('Name cleared');
+  }
+//*-------storing the Name End--------*
+
+  //*-------storing the Roles Start--------*
+  static Future<void> storeRole(List<String> name) async {
+    await Boxes.getUserDataBox().put("role", name);
+  }
+
+  static bool isRoleStored() {
+    return Boxes.getUserDataBox().containsKey('role');
+  }
+
+  static List<String> getRole() {
+    if (isUserIdStored()) {
+      return Boxes.getUserDataBox().get("role");
+    }
+    return [];
+  }
+
+  //when we logout clear Data:
+  static Future<void> clearRole() async{
+    await Boxes.getUserDataBox().delete('role');
+    debugPrint('Roles cleared');
+  }
+//*-------storing the Roles End--------*
 
 
 

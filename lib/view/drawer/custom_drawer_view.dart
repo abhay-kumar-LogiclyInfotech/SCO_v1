@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/hive/hive_manager.dart';
+import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/change_language_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
@@ -10,6 +12,7 @@ import 'package:sco_v1/view/drawer/custom_drawer_views/sco_programs.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/vision_and_mission_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/account_view.dart';
 import 'package:sco_v1/view/main_view.dart';
+import 'package:sco_v1/viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,6 +20,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../resources/app_colors.dart';
 import '../../resources/components/custom_advanced_switch.dart';
+import '../../resources/getRoles.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/auth_services.dart';
 import '../../viewModel/services/navigation_services.dart';
@@ -27,17 +31,10 @@ import 'custom_drawer_views/news_and_events_view.dart';
 import '../main_view/services_view.dart';
 
 class CustomDrawerView extends StatefulWidget {
-  final String? userName;
-  final String? userEmail;
-  final String? userProfileImageLink;
   final TextDirection? textDirection;
   dynamic scaffoldState;
-
   CustomDrawerView({
     super.key,
-    this.userName,
-    this.userEmail,
-    this.userProfileImageLink,
     this.textDirection,
     this.scaffoldState,
   });
@@ -46,7 +43,16 @@ class CustomDrawerView extends StatefulWidget {
   State<CustomDrawerView> createState() => _CustomDrawerViewState();
 }
 
+
+
+
 class _CustomDrawerViewState extends State<CustomDrawerView> {
+
+
+  String _name =  "User Name";
+  List<String> _roles = ["User Type"];
+
+
   late NavigationServices _navigationServices;
   late AuthService _authService;
   late AlertServices _alertServices;
@@ -92,13 +98,34 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
       // getting initial language
      await getInitialLanguage();
 
+     /// Getting profile picture and  name and userTypes
+      if(_toLogin){
+
+        // SETTING USERNAME AND ROLES
+        _name = HiveManager.getName() ?? 'User Name';
+        _roles = HiveManager.getRole()?? [];
+
+        final profilePictureProvider  = Provider.of<GetProfilePictureUrlViewModel>(context,listen: false);
+        await profilePictureProvider.getProfilePictureUrl();
+
+
+      }
 
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
+
+
+
+
+
+
 
     return Drawer(
       shape: const RoundedRectangleBorder(),
@@ -137,26 +164,27 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                ClipRRect(
+
+                                Consumer<GetProfilePictureUrlViewModel>(builder: (context,profilePicProvider,_){
+                                  return ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
+                                child: AnimatedContainer(
+                                  duration: const Duration(seconds: 3),
+                                  curve: Curves.easeIn,
                                   child: Image.network(
-                                    // "images/images_user_sidebar/Ellipse 28.png",
-                                    widget.userProfileImageLink ??
-                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                                    fit: BoxFit.cover,
-                                    height: MediaQuery.sizeOf(context).width / 8,
-                                    width: MediaQuery.sizeOf(context).width / 8,
-                                    errorBuilder: (context, object, _) {
-                                      return SvgPicture.asset(
-                                        "images/images_user_sidebar/profile.svg",
-                                        fit: BoxFit.cover,
-                                        height:
-                                            MediaQuery.sizeOf(context).width / 7,
-                                        width: MediaQuery.sizeOf(context).width / 7,
-                                      );
-                                    },
-                                  ),
+                                      profilePicProvider.apiResponse.data?.url ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                                      fit: BoxFit.cover,
+                                       height: MediaQuery.sizeOf(context).width / 8,
+                                      width: MediaQuery.sizeOf(context).width / 8,
+                                      errorBuilder: (context, object, _) {
+                                      return SvgPicture.asset("images/images_user_sidebar/profile.svg",
+                                              fit: BoxFit.cover,
+                                             height: MediaQuery.sizeOf(context).width / 7, width: MediaQuery.sizeOf(context).width / 7,);},
+                                                          ),
                                 ),
+                        );
+                                }),
+
                                 SizedBox(
                                   width: MediaQuery.sizeOf(context).width / 24,
                                 ),
@@ -175,7 +203,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              widget.userName ?? AppLocalizations.of(context)!.userName,
+                                             _name,
                                               style: const TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w500,
@@ -184,7 +212,9 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                           ),
                                           Expanded(
                                             child: SelectableText(
-                                              widget.userEmail ?? AppLocalizations.of(context)!.userType,
+                                              _roles.where((role){
+                                               return role.isNotEmpty;
+                                              }).join(', ') ,
                                               style: TextStyle(
                                                   color: Colors.white
                                                       .withOpacity(0.65)),
@@ -203,11 +233,9 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //*------Login------*/
                           if(!_toLogin)   ListTile(
                               contentPadding: EdgeInsets.zero,
-                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
                               title:  Text(
-                                AppLocalizations.of(context)!.login,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
+                                localization.login,
+                                style: AppTextStyles.drawerButtonsStyle(),
                               ),
                               leading:
                                   SvgPicture.asset("assets/sidemenu/login.svg"),
@@ -227,7 +255,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 //*------ Account ------*/
                              if(_toLogin)   ListTile(
                                   contentPadding: EdgeInsets.zero,
-                                  title:  Text(AppLocalizations.of(context)!.account, style: const TextStyle(color: Colors.white, fontSize: 14),),
+                                  title:  Text(localization.myAccount, style: AppTextStyles.drawerButtonsStyle()),
                                   leading:
                                   SvgPicture.asset("assets/sidemenu/account.svg"),
                                   dense: true,
@@ -246,12 +274,8 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 //*------Home------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                              title:  Text(
-                                AppLocalizations.of(context)!.home,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              ),
+                                title:  Text(localization.home, style: AppTextStyles.drawerButtonsStyle()),
+
                               leading:
                                   SvgPicture.asset("assets/sidemenu/home.svg"),
                               dense: true,
@@ -269,7 +293,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 ListTile(
                                   contentPadding: EdgeInsets.zero,
                                   title:  Text(
-                                    AppLocalizations.of(context)!.aboutUs,
+                                    localization.aboutSco,
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 14),
                                   ),
@@ -299,7 +323,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //   leading: SvgPicture.asset(
                             //       "assets/sidemenu/aboutUs.svg"),
                             //   title:  Text(
-                            //     AppLocalizations.of(context)!.aboutUs,
+                            //     localization.aboutUs,
                             //     style: const TextStyle(
                             //         color: Colors.white, fontSize: 14),
                             //   ),
@@ -326,7 +350,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //                Expanded(
                             //                 flex: 2,
                             //                 child: Text(
-                            //                   AppLocalizations.of(context)!.aBriefAboutSCO,
+                            //                   localization.aBriefAboutSCO,
                             //                   style: const TextStyle(
                             //                       color: Colors.white,
                             //                       fontSize: 14),
@@ -356,7 +380,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //              Expanded(
                             //               flex: 2,
                             //               child: Text(
-                            //                 AppLocalizations.of(context)!.visionMission,
+                            //                 localization.visionMission,
                             //
                             //                 style:const  TextStyle(
                             //                     color: Colors.white,
@@ -386,7 +410,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //                Expanded(
                             //                 flex: 2,
                             //                 child: Text(
-                            //                   AppLocalizations.of(context)!.faq,
+                            //                   localization.faq,
                             //
                             //                   style:const  TextStyle(
                             //                       color: Colors.white,
@@ -403,21 +427,12 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               visible: true,
                               child: ListTile(
                                 contentPadding: EdgeInsets.zero,
-                                title:  Text(
-                                    AppLocalizations.of(context)!.scoPrograms
-                                    ,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                ),
-                                leading: SvgPicture.asset(
-                                    "assets/sidemenu/scoProgram.svg"),
+                                title:  Text(localization.scoPrograms, style: AppTextStyles.drawerButtonsStyle()),
+                                leading: SvgPicture.asset("assets/sidemenu/scoProgram.svg"),
                                 dense: true,
                                 horizontalTitleGap: 5,
                                 onTap: () {
-
                                   _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ScoPrograms()));
-
-
                                 },
                                 shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -429,20 +444,12 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //*------News------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                              title:  Text(
-                                  AppLocalizations.of(context)!.news,
-                          
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              ),
-                              leading:
-                                  SvgPicture.asset("assets/sidemenu/news.svg"),
+                              title:  Text(localization.newsAndEvents, style: AppTextStyles.drawerButtonsStyle()),
+                              leading: SvgPicture.asset("assets/sidemenu/news.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NewsAndEventsView()));
-
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -451,51 +458,38 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //*------Contact Us------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                              title:  Text(
-                                AppLocalizations.of(context)!.contact,
-                          
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              ),
-                              leading: SvgPicture.asset(
-                                  "assets/sidemenu/contactUs.svg"),
+                              title:  Text(localization.contactUs, style: AppTextStyles.drawerButtonsStyle()),
+                              leading: SvgPicture.asset("assets/sidemenu/contactUs.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () async {
-
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ContactUsView()));
-
                               },
-                              shape: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.25))),
+                              shape: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white.withOpacity(0.25))),
                             ),
                             //*------Logout------*/
                          if(_toLogin) ListTile(
                               contentPadding: EdgeInsets.zero,
-                              // minTileHeight: MediaQuery.of(context).size.width * 0.12,
-                              title:  Text(
-                                AppLocalizations.of(context)!.language,
-
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              ),
-                              leading: SvgPicture.asset(
-                                  "assets/sidemenu/logout.svg"),
+                           title:  Text(localization.logout, style: AppTextStyles.drawerButtonsStyle()),
+                           leading: SvgPicture.asset("assets/sidemenu/logout.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () async{
-
                                 await _authService.clearAllUserData();
                                 await _authService.clearCounter();
+
+                                /// Clearing all data from hive database
+                                await HiveManager.clearData();
+                                await  HiveManager.clearEmiratesId();
+                                await  HiveManager.clearUserId();
+                                await HiveManager.clearName();
+                                await HiveManager.clearRole();
+
                                 _navigationServices.goBack();
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                                _alertServices.toastMessage(AppLocalizations.of(context)!.logout_success);
+                                _alertServices.toastMessage(localization.logout_success);
                               },
-                              shape: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.25))),
+                              shape: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white.withOpacity(0.25))),
                             ),
                                 const SizedBox(height: 50,),
 
@@ -514,7 +508,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                       children: [
                         SvgPicture.asset("assets/sidemenu/language.svg"),
                          Text(
-                           AppLocalizations.of(context)!.language,
+                           localization.language,
 
                            style: const TextStyle(color: Colors.white, fontSize: 16),
                         ),

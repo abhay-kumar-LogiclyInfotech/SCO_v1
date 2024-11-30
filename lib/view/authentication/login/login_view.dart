@@ -244,12 +244,20 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     super.dispose();
   }
 
+  bool _isProcessing = false;
+  setProcessing(value)
+  {
+    setState(() {
+      _isProcessing = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
-
+/// Currently i don't know why implemented this but i think to load language.
     if (_isLoading) {
       return const Scaffold(
         resizeToAvoidBottomInset: false,
@@ -262,7 +270,9 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Stack(
+      body: Utils.modelProgressHud(
+        processing: _isProcessing,
+        child:  Stack(
         alignment: Alignment.topLeft,
         children: [
 
@@ -347,7 +357,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           //     left: kPadding,
           //     child: SafeArea(child: _selectLanguage(langProvider)))
         ],
-      ),
+      ),)
     );
   }
 
@@ -357,7 +367,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
       nextFocusNode: _passwordFocusNode,
       controller: _usernameController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.idEmailOrMobile,
+      hintText: AppLocalizations.of(context)!.loginUsernameWatermark,
       textInputType: TextInputType.emailAddress,
       leading: SvgPicture.asset(
         "assets/email.svg",
@@ -375,7 +385,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           return CustomTextField(
             currentFocusNode: _passwordFocusNode,
             controller: _passwordController,
-            hintText: AppLocalizations.of(context)!.password,
+            hintText: AppLocalizations.of(context)!.registrationPasswordWatermark,
             textInputType: TextInputType.text,
             leading: SvgPicture.asset(
               "assets/lock.svg",
@@ -416,7 +426,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                     builder: (context) => const ForgotPasswordView()));
               },
               child: Text(
-                AppLocalizations.of(context)!.forgotPassword,
+                AppLocalizations.of(context)!.forgotPasswordTitle,
                 style: const TextStyle(
                   color: AppColors.scoButtonColor,
                   fontSize: 14,
@@ -434,10 +444,11 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           return CustomButton(
             fontSize: 16,
             textDirection: getTextDirection(langProvider),
-            buttonName: AppLocalizations.of(context)!.step,
+            buttonName: AppLocalizations.of(context)!.signIn,
             isLoading:
                 provider.apiResponse.status == Status.LOADING ? true : false,
             onTap: () async {
+              setProcessing(true);
               bool validateFields = _validateFields(langProvider: langProvider);
               if (validateFields) {
                 provider.username = _usernameController.text.trim();
@@ -447,10 +458,12 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                 bool result = await provider.login(context: context, langProvider: langProvider);
                 if (result) {
                   //Navigate to MainView after successful login
-                  _navigationServices.goBack();
+                  // _navigationServices.goBack();
+                  _navigationServices.goBackUntilFirstScreen();
                   _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => const MainView()));
                 }
               }
+              setProcessing(false);
             },
             buttonColor: AppColors.scoButtonColor,
             elevation: 1,
@@ -493,11 +506,14 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   }
 
   Widget _signInWithUaePassButton(LanguageChangeViewModel provider) {
+    final localization = AppLocalizations.of(context)!;
     return CustomButton(
       textDirection: getTextDirection(provider),
-      buttonName: "Sign in with UAE PASS",
+      buttonName: localization.signInWithUaePass,
       isLoading: false,
-      onTap: () {},
+      onTap: () {
+        _alertServices.toastMessage( "coming soon...");
+      },
       fontSize: 16,
       buttonColor: Colors.white,
       borderColor: Colors.black,
@@ -578,9 +594,10 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   }
 
   bool _validateFields({required LanguageChangeViewModel langProvider}) {
+    final localization = AppLocalizations.of(context)!;
     if (_usernameController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Username can't be empty ",
+          message: localization.loginUsernameRequired,
           // context: context,
           provider: langProvider);
 
@@ -589,10 +606,9 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
     if (_passwordController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-          message: "Password can't be empty",
+          message: localization.registrationPasswordValidate,
           // context: context,
           provider: langProvider);
-
       return false;
     }
     return true;

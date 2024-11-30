@@ -124,6 +124,7 @@ class _StepsProgressViewState extends State<StepsProgressView> with MediaQueryMi
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
     return
       Directionality(
         textDirection: getTextDirection(langProvider),
@@ -156,7 +157,7 @@ class _StepsProgressViewState extends State<StepsProgressView> with MediaQueryMi
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Step ${index+1}",style: const TextStyle(fontSize: 8),),
+                              Text("${localization.step} ${index+1}",style: const TextStyle(fontSize: 8),),
                               Container(
                                 width: 20,
                                 height: 20,

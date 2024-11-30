@@ -12,6 +12,7 @@ import 'package:sco_v1/data/response/status.dart';
 import 'package:sco_v1/models/home/ScoProgramsTileModel.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
+import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
 import 'package:sco_v1/resources/components/carsousel_slider.dart';
 import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
@@ -42,11 +43,14 @@ import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.d
 import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 
+import '../../hive/hive_manager.dart';
 import '../../models/services/MyFinanceStatusModel.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../resources/custom_painters/faq_painters.dart';
+import '../../resources/getRoles.dart';
 import '../../viewModel/language_change_ViewModel.dart';
+import '../../viewModel/services/alert_services.dart';
 import '../drawer/custom_drawer_views/vision_and_mission_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -59,6 +63,11 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   late NavigationServices _navigationServices;
   late AuthService _authService;
+  late AlertServices _alertServices;
+
+  bool isLogged = false;
+  /// Get Roles
+  UserRole? role ;
 
   @override
   void initState() {
@@ -66,6 +75,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
     _authService = getIt.get<AuthService>();
+    _alertServices = getIt.get<AlertServices>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       // final provider = Provider.of<HomeSliderViewModel>(context, listen: false);
@@ -78,8 +88,15 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   Future<void> _onRefresh() async {
     try {
+
+      setProcessing(true);
+
       /// Check if the user is logged in
-      final isLoggedIn = await _authService.isLoggedIn();
+      isLogged = await _authService.isLoggedIn();
+      if(isLogged){
+        role = getRoleFromList(HiveManager.getRole());
+        print(role.toString());
+      }
 
       /// Initialize the SCO programs carousel slider
       _scoProgramsModelsList.clear();
@@ -87,42 +104,78 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       _initializeScoPrograms();
 
       /// Fetch data from providers
-      final myFinanceProvider =
-          Provider.of<MyFinanceStatusViewModel>(context, listen: false);
-      final requestsProvider =
-          Provider.of<GetAllRequestsViewModel>(context, listen: false);
-      final talkToMyAdvisor =
-          Provider.of<GetMyAdvisorViewModel>(context, listen: false);
-      final getNotificationsCount =
-          Provider.of<GetNotificationsCountViewModel>(context, listen: false);
+      final myFinanceProvider = Provider.of<MyFinanceStatusViewModel>(context, listen: false);
+      final requestsProvider = Provider.of<GetAllRequestsViewModel>(context, listen: false);
+      final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context, listen: false);
+      final getNotificationsCount = Provider.of<GetNotificationsCountViewModel>(context, listen: false);
       final getAllNotificationProvider = Provider.of<GetAllNotificationsViewModel>(context, listen: false);
 
-      /// Fetch notifications count
-      await getNotificationsCount.getNotificationsCount();
+      try
+      {
+
+        // Fetch notifications count
+        await getNotificationsCount.getNotificationsCount();
+        setState(() {
+          // Update state to reflect that notifications count is loaded
+        });
+
+        // Fetch finance status
+        await myFinanceProvider.myFinanceStatus();
+        setState(() {
+          // Update state to reflect that finance status is loaded
+        });
+
+        // Fetch requests
+        await requestsProvider.getAllRequests();
+        setState(() {
+          // Update state to reflect that requests are loaded
+        });
+
+        // Fetch advisor data
+        await talkToMyAdvisor.getMyAdvisor();
+        setState(() {
+          // Update state to reflect that advisor data is loaded
+        });
 
 
-      /// Fetch other data concurrently
-      await Future.wait<dynamic>([
-        getAllNotificationProvider.getAllNotifications(),
-        myFinanceProvider.myFinanceStatus(),
-        requestsProvider.getAllRequests(),
-        talkToMyAdvisor.getMyAdvisor(),
-      ]);
+        // Fetch all notifications
+        await getAllNotificationProvider.getAllNotifications();
+        setState(() {
+          // Update state to reflect that all notifications are loaded
+        });
 
-      /// Refresh the UI
-      setState(() {});
+
+      } catch (e) {
+        // Handle exceptions for individual tasks or overall process
+        print("Error fetching data: $e");
+      } finally {
+        setProcessing(false);
+        setState(() {
+          // Final UI refresh to ensure everything is up-to-date
+        });
+      }
     } catch (error) {
+      setProcessing(false);
       /// Handle any errors
       print('Error during refresh: $error');
     }
+  }
+
+
+
+  bool isProcessing = false;
+  setProcessing(value){
+    setState(() {
+      isProcessing = value;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.bgColor,
-        body: Utils.pageRefreshIndicator(
-            child: _buildUI(), onRefresh: _onRefresh));
+        body: Utils.modelProgressHud(processing: isProcessing,child:  Utils.pageRefreshIndicator(
+            child: _buildUI(), onRefresh: _onRefresh)));
   }
 
   // check for the scholarship status
@@ -145,18 +198,13 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             //CarouselSlider:
             // *-----Client Said he don't need CarouselSlider on the home page----*/
             // _carouselSlider(),
-            Column(
+            if(isLogged && role == UserRole.applicants) Column(
               children: [
                 _scholarshipAppliedContainer(langProvider: langProvider),
                 kFormHeight,
-              ],
-            ),
-
-            Column(
-              children: [
-                _scholarshipApproved(langProvider: langProvider),
+                _uploadDocumentsSection(langProvider: langProvider),
                 kFormHeight,
-                _announcements(langProvider: langProvider),
+                _faqSection(langProvider: langProvider),
                 kFormHeight,
               ],
             ),
@@ -164,23 +212,32 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             // _faqContainer(langProvider: langProvider),
             // kFormHeight,
             // _aboutOrganization(langProvider: langProvider),
-            kFormHeight,
-            Column(
+          (isLogged && (role == UserRole.applicants || role == UserRole.scholarStudent)) ? showVoid : Column(
               children: [
                 _applyScholarshipButton(langProvider: langProvider),
                 kFormHeight,
                 _scoPrograms(langProvider: langProvider),
                 kFormHeight,
+                _faqSection(langProvider: langProvider),
+                kFormHeight,
               ],
             ),
-            _financeView(langProvider: langProvider),
-            kFormHeight,
-            _requestView(langProvider: langProvider),
-            kFormHeight,
-            _talkToMyAdvisor(langProvider: langProvider),
-            kFormHeight,
-            _faqSection(langProvider: langProvider),
-            kFormHeight,
+            if (isLogged && role == UserRole.scholarStudent)  Column(
+              children: [
+                //// This will show the top salary only
+                _scholarshipApproved(langProvider: langProvider),
+                kFormHeight,
+                _announcements(langProvider: langProvider),
+                kFormHeight,
+                _financeView(langProvider: langProvider),
+                kFormHeight,
+                _requestView(langProvider: langProvider),
+                kFormHeight,
+                _talkToMyAdvisor(langProvider: langProvider),
+                kFormHeight,
+              ],
+            ),
+
           ],
         ),
       ),
@@ -339,12 +396,9 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         case Status.ERROR:
           return showVoid;
         case Status.COMPLETED:
-          final listOfSalaries =
-              financeStatusProvider.apiResponse.data?.data?.listSalaryDetials ??
-                  [];
+          final listOfSalaries = financeStatusProvider.apiResponse.data?.data?.listSalaryDetials ?? [];
 
-          final topSalaryDetails =
-              listOfSalaries.isNotEmpty ? listOfSalaries[0] : null;
+          final topSalaryDetails = listOfSalaries.isNotEmpty ? listOfSalaries[0] : null;
 
           return _homeViewCard(
               langProvider: langProvider,
@@ -386,7 +440,9 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           return showVoid;
         case Status.COMPLETED:
           final firstNotification = allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?  allNotificationsProvider.apiResponse.data?.first : null;
-         return allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?   _homeViewCard(
+         return
+           allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?
+         _homeViewCard(
             onTap: (){
               _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NotificationsView() ));
             },
@@ -574,11 +630,28 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             const SizedBox.square(
               dimension: 5,
             ),
-
             // date
-            _buildDateInfo(langProvider: langProvider, date: "DD/MM/YYYY"),
+            // _buildDateInfo(langProvider: langProvider, date: "DD/MM/YYYY"),
           ],
         ));
+  }
+
+  Widget _uploadDocumentsSection({required LanguageChangeViewModel langProvider}){
+    return CustomInformationContainer(leading: SvgPicture.asset("assets/myDocuments.svg"),title: "Upload Documents", expandedContent: Column(
+      children: [
+
+        const SizedBox(height: 25),
+        Text("My Documents",style: AppTextStyles.titleBoldTextStyle().copyWith(height: 1.9)),
+        const Text("Click Below to Upload Documents",style: TextStyle(height: 1.5),),
+        const SizedBox(height: 25),
+        const MyDivider(color: AppColors.darkGrey),
+        const SizedBox(height: 30),
+        CustomButton(buttonName: "Click Here", isLoading: false,buttonColor: AppColors.scoButtonColor, textDirection: getTextDirection(langProvider), onTap: (){
+          _alertServices.toastMessage("Coming soon...");
+        }),
+        const SizedBox(height: 30),
+      ],
+    ));
   }
 
   Widget readMoreButton({required langProvider, required onTap}) => SizedBox(
@@ -987,7 +1060,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     final scoProgramsMapList = [
       {
         'title': "Scholarships In Uae",
-        'subTitle': "This is Subtitle 1",
+        'subTitle': " ",
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
               createRoute(const ScholarshipsInUaeView()),
@@ -995,7 +1068,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       },
       {
         'title': "Scholarships In Abroad",
-        'subTitle': "This is Subtitle 2",
+        'subTitle': "",
         'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
               createRoute(const ScholarshipInAbroadView()),

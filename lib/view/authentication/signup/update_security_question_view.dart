@@ -72,7 +72,10 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
     await  _initializeData(langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
+    setState(() {
     });
+    });
+
 
     super.initState();
     _answerError = null;
@@ -252,7 +255,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         currentFocusNode: _answerFocusNode,
         controller: _answerController,
         obscureText: false,
-        hintText: AppLocalizations.of(context)!.writeAnswer,
+        hintText: AppLocalizations.of(context)!.answerSecurityQuestion,
         textInputType: TextInputType.emailAddress,
         textCapitalization: true,
         maxLines: 1,
@@ -298,10 +301,10 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
                   userId: _userId!,
                   // userId: "962229",
                 );
-
                /// checking updating security question because we are using this screen twice
                if(updateResult && !widget.updatingSecurityQuestion){
                  _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+                 _alertServices.showCustomSnackBar(AppLocalizations.of(context)!.registrationSuccess);
                }
               }
               setProcessing(false);
@@ -320,17 +323,18 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {
     if (_questionController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.selectSecurityQuestion,
-          // context: context,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message: AppLocalizations.of(context)!.selectSecurityQuestion,
+      //     provider: langProvider);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.selectSecurityQuestion)));
       return false;
     }
     if (_answerController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.writeSecurityAnswer,
-          // context: context,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message: AppLocalizations.of(context)!.writeSecurityAnswer,
+      //     provider: langProvider);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.answerSecurityQuestion)));
+
       return false;
     }
 

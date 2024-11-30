@@ -8,9 +8,12 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
+import '../../../models/home/ScoProgramsTileModel.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import '../../main_view/scholarship_in_abroad/scholarship_in_abroad_view.dart';
+import '../../main_view/scholarship_in_uae/scholarship_in_uae_view.dart';
 
 class ScoPrograms extends StatefulWidget {
   const ScoPrograms({super.key});
@@ -21,12 +24,17 @@ class ScoPrograms extends StatefulWidget {
 
 class _ScoProgramsState extends State<ScoPrograms>
     with MediaQueryMixin<ScoPrograms> {
-  late NavigationServices _navigationService;
+  late NavigationServices _navigationServices;
 
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
-    _navigationService = getIt.get<NavigationServices>();
+    _navigationServices = getIt.get<NavigationServices>();
+
+    /// Initialize the SCO programs carousel slider
+    _scoProgramsModelsList.clear();
+    _scoProgramsList.clear();
+    _initializeScoPrograms();
 
     super.initState();
   }
@@ -44,20 +52,59 @@ class _ScoProgramsState extends State<ScoPrograms>
     );
   }
 
+  final List<Widget> _scoProgramsList = [];
+  final List<ScoProgramTileModel> _scoProgramsModelsList = [];
+
+  void _initializeScoPrograms() {
+    final scoProgramsMapList = [
+      {
+        'title': "Scholarships In Uae",
+        'subTitle': "",
+        'imagePath': "assets/sidemenu/scholarships_uae.jpg",
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
+          createRoute(const ScholarshipsInUaeView()),
+        ),
+      },
+      {
+        'title': "Scholarships In Abroad",
+        'subTitle': "",
+        'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
+          createRoute(const ScholarshipInAbroadView()),
+        ),
+      },
+    ];
+
+    // Map JSON data to models
+    for (var map in scoProgramsMapList) {
+      _scoProgramsModelsList.add(ScoProgramTileModel.fromJson(map));
+    }
+
+    // Create widgets based on models
+    for (var model in _scoProgramsModelsList) {
+      _scoProgramsList.add(
+        CustomScoProgramTile(
+          imagePath: model.imagePath!,
+          title: model.title!,
+          subTitle: model.subTitle!,
+          onTap: model.onTap!,
+        ),
+      );
+    }
+  }
+
   Widget _buildUI() {
     final provider = Provider.of<LanguageChangeViewModel>(context);
 
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
       child: ListView.builder(
-        itemCount: 10,
+        itemCount: _scoProgramsList.length,
         itemBuilder: (context, index) {
-          return CustomScoProgramTile(
-              imagePath: "assets/sidemenu/distinguished_doctors.jpg",
-              title: "Scholarships in Abroad",
-              subTitle:
-                  "The office, which was establishe in 1999 under the direct..",
-              onTap: () {});
+          return Padding(
+            padding:  EdgeInsets.only(bottom: kPadding),
+            child: _scoProgramsList[index],
+          );
         },
       ),
     );

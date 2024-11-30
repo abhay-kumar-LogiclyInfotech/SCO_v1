@@ -709,7 +709,7 @@ String cleanDraftXmlToJson(String xmlString) {
   return jsonString;
 }
 
-bool isEighteenYearsOld(String dob) {
+bool isFourteenYearsOld(String dob) {
   DateTime birthDate;
 
   // Normalize the string to ISO 8601 format if it contains a timezone like 'UTC'
@@ -734,9 +734,10 @@ bool isEighteenYearsOld(String dob) {
     age--;
   }
 
-  // Return true if the person is 18 or older
+  // Return true if the person is 14 or older
   return age >= 14;
 }
+
 
 String formatDateOnly(String? dateString) {
   if (dateString == null || dateString.isEmpty) {

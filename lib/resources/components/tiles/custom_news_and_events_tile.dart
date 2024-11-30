@@ -149,19 +149,27 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with 
               ),
             );
           case Status.COMPLETED:
-            return Container(
-              height: 95,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(kCardRadius),
+            return AspectRatio(
+              aspectRatio: 4/1.7,
+              child:
+              Stack(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 2000),
+                    curve: Curves.easeInOut,
+                    // height: 95,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(kCardRadius),
+                        image: DecorationImage(
+                            image: NetworkImage(_imageUrl ?? Constants.newsImageUrl,),
+                            filterQuality: FilterQuality.high,
+                            fit: BoxFit.fill,
+                           )
+                    ),
+                  ),
 
-                  image: DecorationImage(
-                      image: NetworkImage(_imageUrl ?? Constants.newsImageUrl,),
-                      filterQuality: FilterQuality.high,
-                      fit: BoxFit.fill,
-                     )
-
-
+                ],
               ),
             );
 
