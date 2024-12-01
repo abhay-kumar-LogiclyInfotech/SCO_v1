@@ -24,6 +24,7 @@ import '../../models/account/simple_tile_model.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/components/tiles/simple_tile.dart';
 import '../../resources/getRoles.dart';
+import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -64,6 +65,10 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
  Future<void> _onRefresh()async{
      isLogged = await _authService.isLoggedIn();
      if(isLogged){
+       // Getting Fresh Roles
+       final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
+       await getRolesProvider.getRoles();
+
        role = getRoleFromList(HiveManager.getRole());
        print(role.toString());
      }

@@ -30,6 +30,8 @@ class ContactUsView extends StatefulWidget {
 }
 
 class _ContactUsViewState extends State<ContactUsView> {
+
+
   late AlertServices _alertServices;
 
   //webUrl:
@@ -50,7 +52,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     }
   }
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
+  Future<void> _makePhoneCall({required String phoneNumber, required AppLocalizations localization}) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
@@ -67,9 +69,7 @@ class _ContactUsViewState extends State<ContactUsView> {
       } else {
         // Handle the case where permission is not granted
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-                  AppLocalizations.of(context)!.phoneCallPermissionDenied)),
+          SnackBar(content: Text(localization.phoneCallPermissionDenied)),
         );
       }
     }
@@ -166,21 +166,21 @@ class _ContactUsViewState extends State<ContactUsView> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomSimpleAppBar(
         title: Text(
-          AppLocalizations.of(context)!.contactUs,
+          localization.contactUs,
           style: AppTextStyles.appBarTitleStyle(),
         ),
       ),
-      body: SafeArea(child: _buildUi()),
+      body: SafeArea(child: _buildUi(localization: localization)),
     );
   }
 
-  Widget _buildUi() {
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+  Widget _buildUi({required localization}) {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -189,16 +189,16 @@ class _ContactUsViewState extends State<ContactUsView> {
             children: [
               const SizedBox(height: 20),
               //*----Common Contact Details Section-----*/
-              _commonContactDetailsSection(langProvider: langProvider),
+              _commonContactDetailsSection(langProvider: langProvider ,localization: localization),
 
               const SizedBox(height: 30),
 
               //*-----Static Text (Write To US)-----*/
-              _writeToUs(langProvider: langProvider),
+              _writeToUs(langProvider: langProvider ,localization: localization),
               const SizedBox(height: 30),
 
               //*----Inquery Form------*/
-              _inqueryForm(langProvider: langProvider),
+              _inqueryForm(langProvider: langProvider ,localization: localization),
               const SizedBox(height: 20),
             ],
           ),
@@ -208,16 +208,13 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
   //*----Common Contact Details-----*
-  Widget _commonContactDetailsSection(
-      {required LanguageChangeViewModel langProvider}) {
-    final String poBox = AppLocalizations.of(context)!.poBox;
-    final String phoneNo = AppLocalizations.of(context)!.phoneNo;
-    final String website = AppLocalizations.of(context)!.website;
-    final String unitedArabEmirates =
-        AppLocalizations.of(context)!.unitedArabEmirates;
-    final String poBoxTapMessage =
-        AppLocalizations.of(context)!.poBoxTapMessage;
-    final String webUrl = AppLocalizations.of(context)!.webUrl;
+  Widget _commonContactDetailsSection({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
+    final String poBox = localization.poBox;
+    final String phoneNo = localization.phoneNo;
+    final String website = localization.website;
+    final String unitedArabEmirates = localization.unitedArabEmirates;
+    final String poBoxTapMessage = localization.poBoxTapMessage;
+    final String webUrl = localization.webUrl;
 
     return Directionality(
       textDirection: getTextDirection(langProvider),
@@ -284,7 +281,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                       Flexible(
                         child: GestureDetector(
                           onTap: () {
-                            _makePhoneCall(phoneNo1);
+                            _makePhoneCall(phoneNumber:phoneNo1,localization: localization);
                           },
                           child: Text(
                             phoneNo1,
@@ -300,7 +297,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                       Flexible(
                         child: GestureDetector(
                           onTap: () {
-                            _makePhoneCall(phoneNo2);
+                            _makePhoneCall(phoneNumber: phoneNo2,localization: localization);
                           },
                           child: Text(
                             phoneNo2,
@@ -358,51 +355,51 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
   //*----Write To Us Section-----*
-  Widget _writeToUs({required LanguageChangeViewModel langProvider}) {
+  Widget _writeToUs({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return Directionality(
         textDirection: getTextDirection(langProvider),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              AppLocalizations.of(context)!.writeToUs,
+              localization.writeToUs,
               style: AppTextStyles.titleBoldTextStyle(),
             )
           ],
         ));
   }
 
-  Widget _inqueryForm({required LanguageChangeViewModel langProvider}) {
+  Widget _inqueryForm({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return Column(
       children: [
-        _nameSection(langProvider: langProvider),
+        _nameSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 10),
-        _emailSection(langProvider: langProvider),
+        _emailSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 10),
-        _mobileSection(langProvider: langProvider),
+        _mobileSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 10),
-        _inqueryTypeSection(langProvider: langProvider),
+        _inqueryTypeSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 10),
-        _subjectSection(langProvider: langProvider),
+        _subjectSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 10),
-        _messageSection(langProvider: langProvider),
+        _messageSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 10),
         _createCaptchaSection(),
-        _captchaSection(langProvider: langProvider),
+        _captchaSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 30),
-        _submitButton(langProvider: langProvider),
+        _submitButton(langProvider: langProvider ,localization: localization),
       ],
     );
   }
 
 //*----Name Section-----*
-  Widget _nameSection({required LanguageChangeViewModel langProvider}) {
+  Widget _nameSection({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _nameFocusNode,
       nextFocusNode: _emailFocusNode,
       controller: _nameController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.fullName,
+      hintText: localization.fullName,
       textInputType: TextInputType.text,
       textCapitalization: true,
       leading: SvgPicture.asset(
@@ -423,13 +420,13 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
 //*-----Email Section-----*
-  Widget _emailSection({required LanguageChangeViewModel langProvider}) {
+  Widget _emailSection({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _emailFocusNode,
       nextFocusNode: _mobileFocusNode,
       controller: _emailController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.emailAddress,
+      hintText: localization.emailAddress,
       textInputType: TextInputType.text,
       textCapitalization: false,
       leading: SvgPicture.asset(
@@ -450,13 +447,13 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
 //*-----Mobile Section-----*
-  Widget _mobileSection({required LanguageChangeViewModel langProvider}) {
+  Widget _mobileSection({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _mobileFocusNode,
       nextFocusNode: _inquiryTypeFocusNode,
       controller: _mobileController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.mobile,
+      hintText: localization.mobile,
       textInputType: TextInputType.phone,
       textCapitalization: true,
       leading: SvgPicture.asset("assets/phoneNumber.svg"),
@@ -473,7 +470,7 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
 //*------inquery Section-----*
-  Widget _inqueryTypeSection({required LanguageChangeViewModel langProvider}) {
+  Widget _inqueryTypeSection({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomDropdown(
       leading: SvgPicture.asset("assets/inquiry_type.svg"),
       textDirection: getTextDirection(langProvider),
@@ -484,18 +481,18 @@ class _ContactUsViewState extends State<ContactUsView> {
         FocusScope.of(context).requestFocus(_subjectFocusNode);
       },
       currentFocusNode: _inquiryTypeFocusNode,
-      hintText: AppLocalizations.of(context)!.selectInquiryType,
+      hintText: localization.selectInquiryType,
     );
   }
 
 //*------subject Section-----*
-  Widget _subjectSection({required LanguageChangeViewModel langProvider}) {
+  Widget _subjectSection({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _subjectFocusNode,
       nextFocusNode: _messageFocusNode,
       controller: _subjectController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.subject,
+      hintText: localization.subject,
       textInputType: TextInputType.text,
       textCapitalization: true,
       leading: SvgPicture.asset("assets/subject.svg"),
@@ -513,13 +510,13 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
 //*------message Section-----*
-  Widget _messageSection({required LanguageChangeViewModel langProvider}) {
+  Widget _messageSection({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _messageFocusNode,
       nextFocusNode: _captchaFocusNode,
       controller: _messageController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.message,
+      hintText: localization.message,
       textInputType: TextInputType.multiline,
       textCapitalization: true,
       leading: SvgPicture.asset("assets/email.svg"),
@@ -565,12 +562,12 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
 //*------Captcha Section-----*
-  Widget _captchaSection({required LanguageChangeViewModel langProvider}) {
+  Widget _captchaSection({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomTextField(
       currentFocusNode: _captchaFocusNode,
       controller: _captchaController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.enterCaptcha,
+      hintText: localization.enterCaptcha,
       textInputType: TextInputType.number,
       leading: SvgPicture.asset(
         "assets/captcha.svg",
@@ -582,17 +579,17 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
 //*------Submit Section-----*
-  Widget _submitButton({required LanguageChangeViewModel langProvider}) {
+  Widget _submitButton({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return ChangeNotifierProvider(
       create: (context) => ContactUsViewModel(),
       child: Consumer<ContactUsViewModel>(
         builder: (context, provider, child) {
           return CustomButton(
             textDirection: getTextDirection(langProvider),
-            buttonName: AppLocalizations.of(context)!.send,
+            buttonName: localization.send,
             isLoading: provider.contactUsResponse.status == Status.LOADING ? true : false,
             onTap: () async {
-              bool validated = _validateForm(langProvider: langProvider);
+              bool validated = _validateForm(langProvider: langProvider,localization: localization);
 
               if (validated) {
                 provider.fullName = _nameController.text.toString();
@@ -635,11 +632,11 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
   //Extra validations for better user Experience:
-  bool _validateForm({required LanguageChangeViewModel langProvider}) {
+  bool _validateForm({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     // Validate Full Name
     if (_nameController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-        message: AppLocalizations.of(context)!.nameCantBeEmpty,
+        message: localization.nameCantBeEmpty,
         // context: context,
         provider: langProvider,
       );
@@ -649,7 +646,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     // Validate Email Id
     if (_emailController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-        message: AppLocalizations.of(context)!.emailCantBeEmpty,
+        message: localization.emailCantBeEmpty,
         // context: context,
         provider: langProvider,
       );
@@ -659,7 +656,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     // Validate Phone Number
     if (_mobileController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-        message: AppLocalizations.of(context)!.mobileCantBeEmpty,
+        message: localization.mobileCantBeEmpty,
         // context: context,
         provider: langProvider,
       );
@@ -669,7 +666,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     // Validate Inquiry Type
     if (_inqueryTypeController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-        message: AppLocalizations.of(context)!.inquiryTypeCantBeEmpty,
+        message: localization.inquiryTypeCantBeEmpty,
         // context: context,
         provider: langProvider,
       );
@@ -679,7 +676,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     // Validate Subject
     if (_subjectController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-        message: AppLocalizations.of(context)!.subjectCantBeEmpty,
+        message: localization.subjectCantBeEmpty,
         // context: context,
         provider: langProvider,
       );
@@ -689,7 +686,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     // Validate Message
     if (_messageController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-        message: AppLocalizations.of(context)!.messageCantBeEmpty,
+        message: localization.messageCantBeEmpty,
         // context: context,
         provider: langProvider,
       );
@@ -699,7 +696,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     // Validate Captcha
     if (_captchaController.text.isEmpty) {
       _alertServices.flushBarErrorMessages(
-        message: AppLocalizations.of(context)!.captchaCantBeEmpty,
+        message: localization.captchaCantBeEmpty,
         // context: context,
         provider: langProvider,
       );
@@ -707,7 +704,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     } else if (_captchaController.text != _captchaText) {
       _rotate();
       _alertServices.flushBarErrorMessages(
-        message: AppLocalizations.of(context)!.captchaDoesNotMatch,
+        message: localization.captchaDoesNotMatch,
         // context: context,
         provider: langProvider,
       );

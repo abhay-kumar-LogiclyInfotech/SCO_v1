@@ -118,17 +118,19 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "Update Advisor Note"),
+      appBar: CustomSimpleAppBar(titleAsString: localization.updateAdvisorNote),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
           child: Utils.pageRefreshIndicator(
-              child: _buildUi(), onRefresh: _initializeData)),
+              child: _buildUi(localization), onRefresh: _initializeData)),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<GetSpecificNoteDetailsViewModel>(
@@ -159,10 +161,10 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                   children: [
                     listDetails.isNotEmpty
                         ? _listDetails(
-                            provider: provider, langProvider: langProvider)
+                            provider: provider, langProvider: langProvider,localization: localization)
                         : Utils.showOnNoDataAvailable(),
                     kFormHeight,
-                    _listComments(langProvider: langProvider),
+                    _listComments(langProvider: langProvider,localization: localization),
                     kFormHeight,
                     SimpleCard(
                         expandedContent: Column(
@@ -185,7 +187,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                     kFormHeight,
                     _submitAndBackButton(
                         langProvider: langProvider,
-                        getSpecificNoteDetailsProvider: provider),
+                        getSpecificNoteDetailsProvider: provider,localization: localization),
                   ],
                 ),
               ),
@@ -203,52 +205,52 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
   //// *----------------------- BASIC INFO SECTION START ------------------------*
   Widget _listDetails(
       {required GetSpecificNoteDetailsViewModel provider,
-      required LanguageChangeViewModel langProvider}) {
+      required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     final noteInfo = provider.apiResponse.data?.data?.adviseeNote;
     return CustomInformationContainer(
-        title: 'Note Details',
+        title: localization.noteDetails,
         leading: SvgPicture.asset("assets/services/request_details.svg"),
         expandedContent: Column(
           children: [
             CustomInformationContainerField(
-                title: "Institution",
+                title: localization.institution,
                 description: noteInfo?.institution ?? '- -'),
             CustomInformationContainerField(
-                title: "Type",
+                title: localization.type,
                 description: getFullNameFromLov(
                     langProvider: langProvider,
                     lovCode: "CATEGORY",
                     code: noteInfo?.noteType ?? '- -')),
             CustomInformationContainerField(
-                title: "Sub Type",
+                title: localization.subType,
                 description: getFullNameFromLov(
                     langProvider: langProvider,
                     lovCode: 'SUB_CATEGORY#${noteInfo?.noteType}',
                     code: noteInfo?.noteSubType ?? '- -')),
             CustomInformationContainerField(
-                title: "Contact Type",
+                title: localization.contactType,
                 description: getFullNameFromLov(
                     langProvider: langProvider,
                     lovCode: "CONTACT_TYPE",
                     code: noteInfo?.contactType)),
             CustomInformationContainerField(
-                title: "Note Status",
+                title:localization.noteStatus,
                 description: getFullNameFromLov(
                     langProvider: langProvider,
                     lovCode: "NOTE_STATUS",
                     code: noteInfo?.noteStatus)),
             CustomInformationContainerField(
-                title: "Can Advisee View",
+                title: localization.canAdviseeView,
                 description: getFullNameFromLov(
                     langProvider: langProvider,
                     lovCode: "NOTE_ACCESS",
                     code: noteInfo?.access)),
             CustomInformationContainerField(
-                title: "Created On",
+                title: localization.createdOn,
                 description: convertTimestampToDate(
                     int.parse(noteInfo?.createdOn?.toString() ?? '- -'))),
             CustomInformationContainerField(
-                title: "Subject",
+                title: localization.subject,
                 description: noteInfo?.subject ?? '- -',
                 isLastItem: true),
           ],
@@ -284,7 +286,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
     }
   }
 
-  Widget _listComments({required LanguageChangeViewModel langProvider}) {
+  Widget _listComments({required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     return SimpleCard(
         expandedContent: _commentsDetailsList.isNotEmpty
             ? ListView.builder(
@@ -297,13 +299,13 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomInformationContainerField(
-                          title: "S.No",
+                          title: localization.sr,
                           description: (index + 1).toString() ?? '- -'),
                       CustomInformationContainerField(
-                          title: "Created By",
+                          title: localization.createdBy,
                           description: comment.desc2Controller.text ?? '- -'),
                       CustomInformationContainerField(
-                        title: "Created On",
+                        title: localization.createdOn,
                         description: convertTimestampToDate(int.tryParse(
                                 comment.craetedOnController.text.toString() ??
                                     '- -') ??
@@ -312,7 +314,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                       ),
                       !(comment.newRecord ?? false)
                           ? CustomInformationContainerField(
-                              title: "Comment",
+                              title: localization.comment,
                               description:
                                   comment.noteItemLongTextController.text ??
                                       '- -',
@@ -321,7 +323,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Comment",
+                                Text(localization.comment,
                                     style: AppTextStyles.subTitleTextStyle()),
                                 const SizedBox(
                                   height: 5,
@@ -334,7 +336,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                                         comment.noteItemLongTextFocusNode,
                                     controller:
                                         comment.noteItemLongTextController,
-                                    hintText: "write your comment here..",
+                                    hintText: localization.commentsWatermark,
                                     onChanged: (value) {}),
                                 const SizedBox(
                                   height: 5,
@@ -347,7 +349,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                           children: [
                             const Divider(),
                             Text(
-                              "Action",
+                              localization.actions,
                               style: AppTextStyles.subTitleTextStyle()
                                   .copyWith(height: 2),
                             ),
@@ -356,7 +358,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                             //// Add new comment button
                             actionButton(
                                 assetAddress: "assets/services/bin.svg",
-                                text: "Delete",
+                                text: localization.delete,
                                 onTap: () {
                                   setState(() {
                                     _deleteComment(index);
@@ -375,7 +377,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                       ),
                       if (index == _commentsDetailsList.length - 1)
                         addRemoveMoreSection(
-                            title: "Add Comment",
+                            title: localization.addComment,
                             add: true,
                             onChanged: () {
                               setState(() {
@@ -476,6 +478,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
   Widget _submitAndBackButton({
     required langProvider,
     required GetSpecificNoteDetailsViewModel getSpecificNoteDetailsProvider,
+    required AppLocalizations localization
   }) {
     final uploadAttachmentProvider =
         Provider.of<UploadAttachmentToNoteViewModel>(context, listen: false);
@@ -489,7 +492,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
           child: Consumer<AddCommentToNoteViewModel>(
             builder: (context, updateProvider, _) {
               return CustomButton(
-                buttonName: "Update",
+                buttonName: localization.update,
                 isLoading: _isProcessing,
                 borderColor: Colors.transparent,
                 buttonColor: AppColors.scoThemeColor,

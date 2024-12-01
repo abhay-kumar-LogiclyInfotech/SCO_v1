@@ -103,10 +103,11 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-          title: widget.updatingSecurityQuestion ? Text("Security Question",style: AppTextStyles.appBarTitleStyle(),) : SvgPicture.asset(
+          title: widget.updatingSecurityQuestion ? Text(localization.securityQuestion,style: AppTextStyles.appBarTitleStyle(),) : SvgPicture.asset(
         "assets/sco_logo.svg",
         fit: BoxFit.fill,
         height: 35,

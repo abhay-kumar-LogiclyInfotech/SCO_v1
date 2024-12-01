@@ -151,6 +151,137 @@ class Details {
   }
 }
 
+// class ListAttachment {
+//   // Text Editing Controllers for form fields
+//   TextEditingController attachmentSeqNumberController;
+//   TextEditingController fileDescriptionController;
+//   TextEditingController userAttachmentFileController;
+//   TextEditingController attachmentSysFileNameController;
+//   TextEditingController base64StringController;
+//   TextEditingController viewByAdviseeController;
+//
+//   // Focus Nodes
+//   FocusNode attachmentSeqNumberFocusNode;
+//   FocusNode fileDescriptionFocusNode;
+//   FocusNode userAttachmentFileFocusNode;
+//   FocusNode attachmentSysFileNameFocusNode;
+//   FocusNode base64StringFocusNode;
+//   FocusNode viewByAdviseeFocusNode;
+//
+//   // Error Text Variables
+//   String? attachmentSeqNumberError;
+//   String? fileDescriptionError;
+//   String? userAttachmentFileError;
+//   String? attachmentSysFileNameError;
+//   String? base64StringError;
+//   String? viewByAdviseeError;
+//
+//   // Additional Fields
+//   bool newlyAded;
+//   bool newRecord;
+//   bool isLoading;
+//
+//   ListAttachment({
+//     required this.attachmentSeqNumberController,
+//     required this.fileDescriptionController,
+//     required this.userAttachmentFileController,
+//     required this.attachmentSysFileNameController,
+//     required this.base64StringController,
+//     required this.viewByAdviseeController,
+//     required this.attachmentSeqNumberFocusNode,
+//     required this.fileDescriptionFocusNode,
+//     required this.userAttachmentFileFocusNode,
+//     required this.attachmentSysFileNameFocusNode,
+//     required this.base64StringFocusNode,
+//     required this.viewByAdviseeFocusNode,
+//     this.attachmentSeqNumberError,
+//     this.fileDescriptionError,
+//     this.userAttachmentFileError,
+//     this.attachmentSysFileNameError,
+//     this.base64StringError,
+//     this.viewByAdviseeError,
+//     this.newlyAded = false,
+//     this.isLoading = false,
+//     this.newRecord = false,
+//   });
+//
+//   // From JSON
+//   factory ListAttachment.fromJson(Map<String, dynamic> json) => ListAttachment(
+//     attachmentSeqNumberController: TextEditingController(text: json['attachmentSeqNumber']),
+//     fileDescriptionController: TextEditingController(text: json['fileDescription']),
+//     userAttachmentFileController: TextEditingController(text: json['userAttachmentFile']),
+//     attachmentSysFileNameController: TextEditingController(text: json['attachmentSysFileName']),
+//     base64StringController: TextEditingController(text: json['base64String'] ?? ''),
+//     viewByAdviseeController: TextEditingController(text: json['viewByAdvisee']),
+//     attachmentSeqNumberFocusNode: FocusNode(),
+//     fileDescriptionFocusNode: FocusNode(),
+//     userAttachmentFileFocusNode: FocusNode(),
+//     attachmentSysFileNameFocusNode: FocusNode(),
+//     base64StringFocusNode: FocusNode(),
+//     viewByAdviseeFocusNode: FocusNode(),
+//     newlyAded: json['newlyAded'] ?? false,
+//   );
+//
+//   // To JSON
+//   Map<String, dynamic> toJson() => {
+//     'attachmentSeqNumber': attachmentSeqNumberController.text,
+//     'fileDescription': fileDescriptionController.text,
+//     'userAttachmentFile': userAttachmentFileController.text,
+//     'attachmentSysFileName': attachmentSysFileNameController.text,
+//     'base64String': base64StringController.text.isEmpty ? "" : base64StringController.text,
+//     'viewByAdvisee': viewByAdviseeController.text,
+//     'newlyAded': newlyAded,
+//   };
+//
+//
+//
+//   // Copy With
+//   ListAttachment copyWith({
+//     TextEditingController? attachmentSeqNumberController,
+//     TextEditingController? fileDescriptionController,
+//     TextEditingController? userAttachmentFileController,
+//     TextEditingController? attachmentSysFileNameController,
+//     TextEditingController? base64StringController,
+//     TextEditingController? viewByAdviseeController,
+//     FocusNode? attachmentSeqNumberFocusNode,
+//     FocusNode? fileDescriptionFocusNode,
+//     FocusNode? userAttachmentFileFocusNode,
+//     FocusNode? attachmentSysFileNameFocusNode,
+//     FocusNode? base64StringFocusNode,
+//     FocusNode? viewByAdviseeFocusNode,
+//     String? attachmentSeqNumberError,
+//     String? fileDescriptionError,
+//     String? userAttachmentFileError,
+//     String? attachmentSysFileNameError,
+//     String? base64StringError,
+//     String? viewByAdviseeError,
+//     bool? newlyAded,
+//     bool? isLoading,
+//   }) =>
+//       ListAttachment(
+//         attachmentSeqNumberController: attachmentSeqNumberController ?? this.attachmentSeqNumberController,
+//         fileDescriptionController: fileDescriptionController ?? this.fileDescriptionController,
+//         userAttachmentFileController: userAttachmentFileController ?? this.userAttachmentFileController,
+//         attachmentSysFileNameController: attachmentSysFileNameController ?? this.attachmentSysFileNameController,
+//         base64StringController: base64StringController ?? this.base64StringController,
+//         viewByAdviseeController: viewByAdviseeController ?? this.viewByAdviseeController,
+//         attachmentSeqNumberFocusNode: attachmentSeqNumberFocusNode ?? this.attachmentSeqNumberFocusNode,
+//         fileDescriptionFocusNode: fileDescriptionFocusNode ?? this.fileDescriptionFocusNode,
+//         userAttachmentFileFocusNode: userAttachmentFileFocusNode ?? this.userAttachmentFileFocusNode,
+//         attachmentSysFileNameFocusNode: attachmentSysFileNameFocusNode ?? this.attachmentSysFileNameFocusNode,
+//         base64StringFocusNode: base64StringFocusNode ?? this.base64StringFocusNode,
+//         viewByAdviseeFocusNode: viewByAdviseeFocusNode ?? this.viewByAdviseeFocusNode,
+//         attachmentSeqNumberError: attachmentSeqNumberError ?? this.attachmentSeqNumberError,
+//         fileDescriptionError: fileDescriptionError ?? this.fileDescriptionError,
+//         userAttachmentFileError: userAttachmentFileError ?? this.userAttachmentFileError,
+//         attachmentSysFileNameError: attachmentSysFileNameError ?? this.attachmentSysFileNameError,
+//         base64StringError: base64StringError ?? this.base64StringError,
+//         viewByAdviseeError: viewByAdviseeError ?? this.viewByAdviseeError,
+//         newlyAded: newlyAded ?? this.newlyAded,
+//         isLoading: isLoading ?? this.isLoading,
+//       );
+// }
+
 class ListAttachment {
   // Text Editing Controllers for form fields
   TextEditingController attachmentSeqNumberController;
@@ -207,12 +338,18 @@ class ListAttachment {
 
   // From JSON
   factory ListAttachment.fromJson(Map<String, dynamic> json) => ListAttachment(
-    attachmentSeqNumberController: TextEditingController(text: json['attachmentSeqNumber']),
-    fileDescriptionController: TextEditingController(text: json['fileDescription']),
-    userAttachmentFileController: TextEditingController(text: json['userAttachmentFile']),
-    attachmentSysFileNameController: TextEditingController(text: json['attachmentSysFileName']),
-    base64StringController: TextEditingController(text: json['base64String'] ?? ''),
-    viewByAdviseeController: TextEditingController(text: json['viewByAdvisee']),
+    attachmentSeqNumberController:
+    TextEditingController(text: json['attachmentSeqNumber']),
+    fileDescriptionController:
+    TextEditingController(text: json['fileDescription']),
+    userAttachmentFileController:
+    TextEditingController(text: json['userAttachmentFile']),
+    attachmentSysFileNameController:
+    TextEditingController(text: json['attachmentSysFileName']),
+    base64StringController:
+    TextEditingController(text: json['base64String'] ?? ''),
+    viewByAdviseeController:
+    TextEditingController(text: json['viewByAdvisee']),
     attachmentSeqNumberFocusNode: FocusNode(),
     fileDescriptionFocusNode: FocusNode(),
     userAttachmentFileFocusNode: FocusNode(),
@@ -228,54 +365,9 @@ class ListAttachment {
     'fileDescription': fileDescriptionController.text,
     'userAttachmentFile': userAttachmentFileController.text,
     'attachmentSysFileName': attachmentSysFileNameController.text,
-    'base64String': base64StringController.text.isEmpty ? null : base64StringController.text,
+    'base64String':
+    base64StringController.text.isEmpty ? "" : base64StringController.text,
     'viewByAdvisee': viewByAdviseeController.text,
     'newlyAded': newlyAded,
   };
-
-  // Copy With
-  ListAttachment copyWith({
-    TextEditingController? attachmentSeqNumberController,
-    TextEditingController? fileDescriptionController,
-    TextEditingController? userAttachmentFileController,
-    TextEditingController? attachmentSysFileNameController,
-    TextEditingController? base64StringController,
-    TextEditingController? viewByAdviseeController,
-    FocusNode? attachmentSeqNumberFocusNode,
-    FocusNode? fileDescriptionFocusNode,
-    FocusNode? userAttachmentFileFocusNode,
-    FocusNode? attachmentSysFileNameFocusNode,
-    FocusNode? base64StringFocusNode,
-    FocusNode? viewByAdviseeFocusNode,
-    String? attachmentSeqNumberError,
-    String? fileDescriptionError,
-    String? userAttachmentFileError,
-    String? attachmentSysFileNameError,
-    String? base64StringError,
-    String? viewByAdviseeError,
-    bool? newlyAded,
-    bool? isLoading,
-  }) =>
-      ListAttachment(
-        attachmentSeqNumberController: attachmentSeqNumberController ?? this.attachmentSeqNumberController,
-        fileDescriptionController: fileDescriptionController ?? this.fileDescriptionController,
-        userAttachmentFileController: userAttachmentFileController ?? this.userAttachmentFileController,
-        attachmentSysFileNameController: attachmentSysFileNameController ?? this.attachmentSysFileNameController,
-        base64StringController: base64StringController ?? this.base64StringController,
-        viewByAdviseeController: viewByAdviseeController ?? this.viewByAdviseeController,
-        attachmentSeqNumberFocusNode: attachmentSeqNumberFocusNode ?? this.attachmentSeqNumberFocusNode,
-        fileDescriptionFocusNode: fileDescriptionFocusNode ?? this.fileDescriptionFocusNode,
-        userAttachmentFileFocusNode: userAttachmentFileFocusNode ?? this.userAttachmentFileFocusNode,
-        attachmentSysFileNameFocusNode: attachmentSysFileNameFocusNode ?? this.attachmentSysFileNameFocusNode,
-        base64StringFocusNode: base64StringFocusNode ?? this.base64StringFocusNode,
-        viewByAdviseeFocusNode: viewByAdviseeFocusNode ?? this.viewByAdviseeFocusNode,
-        attachmentSeqNumberError: attachmentSeqNumberError ?? this.attachmentSeqNumberError,
-        fileDescriptionError: fileDescriptionError ?? this.fileDescriptionError,
-        userAttachmentFileError: userAttachmentFileError ?? this.userAttachmentFileError,
-        attachmentSysFileNameError: attachmentSysFileNameError ?? this.attachmentSysFileNameError,
-        base64StringError: base64StringError ?? this.base64StringError,
-        viewByAdviseeError: viewByAdviseeError ?? this.viewByAdviseeError,
-        newlyAded: newlyAded ?? this.newlyAded,
-        isLoading: isLoading ?? this.isLoading,
-      );
 }

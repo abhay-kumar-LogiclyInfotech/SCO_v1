@@ -11,6 +11,8 @@ import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import '../../data/response/status.dart';
 import '../../utils/utils.dart';
@@ -115,9 +117,9 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
       }
     } catch (e, stackTrace) {
       // Log the error and show user feedback
-      debugPrint("Error in _fetchFileFromApi: $e");
+      // debugPrint("Error in _fetchFileFromApi: $e");
       debugPrintStack(stackTrace: stackTrace);
-      debugPrint("An unexpected error occurred. Please try again later.");
+      // debugPrint("An unexpected error occurred. Please try again later.");
     } finally {
       // Hide loading state
       setState(() {
@@ -128,8 +130,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
 
   Future<void> _fetchEmploymentFile(
       {required AttachmentType attachmentType}) async {
-    final provider =
-        Provider.of<GetBase64StringViewModel>(context, listen: false);
+    final provider = Provider.of<GetBase64StringViewModel>(context, listen: false);
 
     final form = {
       "uniqueFileName": widget.attachment.attachSysfileNameController.text,
@@ -148,8 +149,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
         // _alertServices.showCustomSnackBar("Invalid file data received for employment attachment.");
       }
     } else if (provider.apiResponse.status == Status.ERROR) {
-      _alertServices.showCustomSnackBar(
-          provider.apiResponse.message ?? "Error fetching employment file.");
+      _alertServices.showCustomSnackBar(provider.apiResponse.message ?? "Error fetching employment file.");
     }
   }
 
@@ -162,8 +162,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
       "userFileName": widget.attachment.userAttachmentFileController.text,
     };
 
-    await provider.getBase64String(
-        form: form, attachmentType: AttachmentType.request);
+    await provider.getBase64String(form: form, attachmentType: AttachmentType.request);
 
     if (provider.apiResponse.status == Status.COMPLETED) {
       final base64String =
@@ -184,7 +183,8 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
 
 
 // Helper Functions
-  FocusNode _getFocusNodeBasedOnAttachmentType(AttachmentType attachmentType) {
+  FocusNode _getFocusNodeBasedOnAttachmentType(AttachmentType attachmentType)
+  {
     switch (attachmentType) {
       case AttachmentType.request:
         return widget.attachment.fileDescriptionFocusNode;
@@ -198,7 +198,8 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
   }
 
   TextEditingController _getControllerBasedOnAttachmentType(
-      AttachmentType attachmentType) {
+      AttachmentType attachmentType)
+  {
     switch (attachmentType) {
       case AttachmentType.request:
         return widget.attachment.fileDescriptionController;
@@ -213,6 +214,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Material(
       color: Colors.white,
       elevation: 0.2,
@@ -242,7 +244,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                   leading: SvgPicture.asset("assets/services/file_icon.svg"),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   title: widget.attachment.isLoading
-                      ? const Text("loading...")
+                      ?  Text(localization.loading)
                       : Text(
                           "${widget.index + 1}) ${fileName.split('_').last}",
                           style: const TextStyle(
@@ -250,7 +252,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                         ),
                   subtitle: fileSize.isNotEmpty
                       ? Text(fileSize, style: const TextStyle(fontSize: 12))
-                      : const Text("Fetching file size..."),
+                      :  Text(localization.fetchingFileSize),
                   trailing:
                       widget.attachment.newRecord || widget.attachment.newlyAded
                           ? IconButton(
@@ -271,7 +273,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Comment",
+                            localization.comments,
                             style: AppTextStyles.subTitleTextStyle().copyWith(
                                 height: 2,
                                 fontSize: 14,
@@ -297,13 +299,11 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                       textInputType: TextInputType.multiline,
                       currentFocusNode: _getFocusNodeBasedOnAttachmentType(widget.attachmentType),
                       controller: _getControllerBasedOnAttachmentType(widget.attachmentType),
-                      hintText: "Write your comment here...",
+                      hintText: localization.commentsWatermark,
                       onChanged: (value) {},
                     ) : Text(
                           _getControllerBasedOnAttachmentType(widget.attachmentType).text,style: textFieldTextStyle,
                       )
-
-
               ],
                   ),
                 ),

@@ -8,6 +8,7 @@ import 'package:sco_v1/resources/cards/simple_card.dart';
 import 'package:sco_v1/viewModel/account/personal_details/get_personal_details_viewmodel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/decrease_notification_count_viewModel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/get_all_notifications_viewModel.dart';
+import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
@@ -51,7 +52,6 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
 
       try
       {
-
         /// Decrease the notification count:
         final decreaseCountProvider = Provider.of<DecreaseNotificationCountViewModel>(context,listen: false);
         final _notification = widget.notification;
@@ -63,8 +63,12 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
 
         /// Calling decrease count api
         await decreaseCountProvider.decreaseNotificationCount(form:form);
-      }
 
+        /// Refreshing the notifications now
+        /// get all notifications
+        await Provider.of<GetNotificationsCountViewModel>(context,listen: false).getNotificationsCount();
+        // await Provider.of<GetAllNotificationsViewModel>(context, listen: false).getAllNotifications();
+      }
       catch(e){
         print(e.toString());
       }
@@ -95,16 +99,19 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
 
   @override
   Widget build(BuildContext context) {
-    return
+    final localization = AppLocalizations.of(context)!;
 
+    return
       Scaffold(
         backgroundColor: AppColors.bgColor,
-        appBar: CustomSimpleAppBar(titleAsString: "Notification Details",inNotifications: true,),
-        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+        appBar: CustomSimpleAppBar(titleAsString: localization.notificationDetails,inNotifications: true,),
+        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization: localization), onRefresh: _initializeData) ),
       );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi({
+    required AppLocalizations localization
+}) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<DecreaseNotificationCountViewModel>(
@@ -131,7 +138,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // See Full notification details
-                        _notificationDetailsSection(provider: widget.notification,langProvider: langProvider)
+                        _notificationDetailsSection(provider: widget.notification,langProvider: langProvider,localization:localization)
                       ],
                     ),
                   ),
@@ -150,7 +157,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
   ///*------ Applications Section------*
 
   Widget _notificationDetailsSection(
-      {required GetAllNotificationsModel provider, required LanguageChangeViewModel langProvider}) {
+      {required GetAllNotificationsModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
 
 
     return SimpleCard(
@@ -162,7 +169,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
               padding: EdgeInsets.symmetric(horizontal: kPadding),
               child: Row(
                 children: [
-                  SvgPicture.asset("assets/bell.svg"),
+                  provider.isNew ?? false ? SvgPicture.asset("assets/bell.svg") : SvgPicture.asset("assets/message_seen_bell.svg")  ,
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -183,24 +190,24 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomInformationContainerField(
-                  title: "From",
+                  title: localization.from,
                   description: provider?.from ?? ''),
               CustomInformationContainerField(
-                  title: "Created On",
+                  title: localization.createdOn,
                   description: convertTimestampToDateTime(provider?.createDate ?? 0)),
               CustomInformationContainerField(
-                  title: "Status",
+                  title: localization.status,
                   description:  getFullNameFromLov(langProvider: langProvider,lovCode: 'NOTIFICATION_STS',code: provider?.status ?? '') ),
               CustomInformationContainerField(
-                  title: "Notification Type",
+                  title: localization.notificationType,
                   description: getFullNameFromLov(langProvider: langProvider,lovCode: 'NOTIFICATION_TYPE',code: provider?.notificationType ?? '') ),
               CustomInformationContainerField(
-                  title: "Importance",
+                  title: localization.importance,
                   description: getFullNameFromLov(langProvider: langProvider,lovCode: 'NOTIF_IMPORTANCE',code: provider?.importance ?? '') ),
               CustomInformationContainerField(
-                  title: "Subject",
+                  title: localization.subject,
                   description: provider?.subject ?? ''),
-               Text("Message",style: AppTextStyles.subTitleTextStyle(),),
+               Text(localization.message,style: AppTextStyles.subTitleTextStyle(),),
               Html(
                 data: provider.messageText ?? '',
                 onAnchorTap: (a,b,c)async{

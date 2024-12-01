@@ -290,9 +290,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
   }
 
   Widget _cancelButton(LanguageChangeViewModel provider) {
+    final localization = AppLocalizations.of(context)!;
+
     return CustomButton(
       textDirection: getTextDirection(provider),
-      buttonName: "Cancel",
+      buttonName: localization.back,
       isLoading: false,
       onTap: () {
         _navigationServices.goBack();
@@ -307,6 +309,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
 
 
   bool _validateFields(){
+    final localization = AppLocalizations.of(context)!;
 
     confirmPasswordErrorText = null;
     newPasswordErrorText = null;
@@ -315,11 +318,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
     firstErrorFocusNode = null;
 
     if(_newPasswordController.text.isEmpty || newPasswordErrorText != null){
-        newPasswordErrorText = "new password is required.*";
+        newPasswordErrorText = "${localization.registrationPasswordValidate}.*";
         firstErrorFocusNode = _newPasswordFocusNode;
     }
     if(_confirmPasswordController.text.isEmpty || confirmPasswordErrorText != null || _newPasswordController.text != _confirmPasswordController.text){
-        confirmPasswordErrorText = "Confirm password be same as new password.*";
+        confirmPasswordErrorText = "${localization.passwordsDoNotMatch}.*";
         firstErrorFocusNode = _confirmPasswordFocusNode;
     }
 

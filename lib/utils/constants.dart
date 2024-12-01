@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sco_v1/models/splash/commonData_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class Constants {
   static const String USERNAME = "liferay_access@sco.ae";
@@ -426,7 +428,6 @@ class Constants {
         {"title": "Destination", "type": "text", "required": true,"titleAr":"الوجهة:"},
         // {"title": "Declaration of not changing the request type (either ticket or cash allowance), Declaration of not changing the destination", "type": "text", "required": true,"titleAr":""},
         {"title": "The Reason:", "type": "textArea", "required": true,"titleAr":"السبب:"},
-
       ],
       "conditions": []
     },
@@ -504,6 +505,41 @@ class Constants {
       "conditions": []
     } /// This is not available more and no lov code available for this
   ];
+
+
+static String getNameOfScholarshipByConfigurationKey({required AppLocalizations localization, required String configurationKey }){
+    var scholarshipName = '';
+   switch(configurationKey){
+     case 'SCOUGRDINT':
+       scholarshipName = localization.internalBachelor;
+       break;
+     case 'SCOUGRDEXT':
+       scholarshipName = localization.externalBachelor;
+       break;
+     case 'SCOPGRDINT':
+       scholarshipName = localization.internalPostgraduate;
+       break;
+     case 'SCOPGRDEXT':
+       scholarshipName = localization.externalPostgraduate;
+       break;
+     case 'SCOMETLOGINT':
+       scholarshipName = localization.internalMeterological;
+       break;
+     case 'SCOACTUGRD':
+       scholarshipName = localization.actuarialScience;
+       break;
+     case 'SCOUPPEXT':
+       scholarshipName = localization.universityPreparationProgram;
+       break;
+     case 'SCODDSEXT':
+       scholarshipName = localization.externalDoctors;
+       break;
+   default:
+         scholarshipName = '- -';
+
+   }
+   return scholarshipName;
+ }
 
 
 

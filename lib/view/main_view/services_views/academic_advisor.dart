@@ -70,9 +70,10 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "Academic Advisor"),
+      appBar: CustomSimpleAppBar(titleAsString: localization.academic_advisor),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
           child: Utils.pageRefreshIndicator(
@@ -139,6 +140,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
   Widget _advisorsList(
       {required GetMyAdvisorViewModel provider,
       required LanguageChangeViewModel langProvider}) {
+    final localization = AppLocalizations.of(context)!;
     return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -169,16 +171,16 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
                     child: Column(
                       children: [
                         CustomInformationContainerField(
-                          title: "Advisor Id",
+                          title: localization.advisorId,
                           description: element?.advisorId ?? ''),
                         CustomInformationContainerField(
-                            title: "Role",
+                            title: localization.role,
                             description: element?.advisorRoleDescription ?? ''),
                         CustomInformationContainerField(
-                            title: "Contact Number",
+                            title: localization.contactNumber,
                             description: element?.phoneNo ?? ''),
                         CustomInformationContainerField(
-                            title: "Email",
+                            title: localization.email,
                             description: element?.email ?? '',
                             isLastItem: true),
                         kFormHeight,
@@ -195,8 +197,10 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
   Widget _meetingRequestButton(
       {required GetMyAdvisorViewModel provider,
       required LanguageChangeViewModel langProvider}) {
+    final localization = AppLocalizations.of(context)!;
+
     return CustomButton(
-        buttonName: "MEETING REQUEST",
+        buttonName: localization.meetingRequestButton,
         isLoading: false,
         buttonColor: AppColors.scoButtonColor,
         textDirection: getTextDirection(langProvider),

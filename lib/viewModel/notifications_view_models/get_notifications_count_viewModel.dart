@@ -59,7 +59,7 @@ class GetNotificationsCountViewModel with ChangeNotifier {
         setLoading(true);
         setApiResponse = ApiResponse.loading();
         await setEmiratesId();
-
+        print(_userEmiratesId);
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'authorization': Constants.basicAuth

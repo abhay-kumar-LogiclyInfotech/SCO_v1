@@ -77,17 +77,18 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "Guidance Notes"),
+      appBar: CustomSimpleAppBar(titleAsString: localization.guidance_notes),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
           child: Utils.pageRefreshIndicator(
-              child: _buildUi(), onRefresh: _initializeData)),
+              child: _buildUi(localization), onRefresh: _initializeData)),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<GetAllNotesViewModel>(builder: (context, provider, _) {
@@ -113,11 +114,11 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     /// Header to show create request button
-                    _createRequestButton(langProvider: langProvider),
+                    _createRequestButton(langProvider: langProvider,localization: localization),
                     kFormHeight,
 
                     /// _notesSection
-                    _notesSection(provider: provider, langProvider: langProvider),
+                    _notesSection(provider: provider, langProvider: langProvider,localization:localization),
                   ],
                 ),
               ),
@@ -133,10 +134,11 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
   }
 
   /// *----- header section ------*
-  Widget _createRequestButton({required LanguageChangeViewModel langProvider}) {
+  Widget _createRequestButton({required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     return CustomInformationContainer(
-      title: "Advisor Notes List",
+      title: localization.advisorsNotesList,
       expandedContentPadding: EdgeInsets.zero,
+      showExpandedContent: false,
       leading: SvgPicture.asset("assets/services/request_details.svg"),
       expandedContent: const SizedBox.shrink(),
     );
@@ -157,14 +159,15 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
   ///*------ Requests Section------*
   Widget _notesSection(
       {required GetAllNotesViewModel provider,
-        required LanguageChangeViewModel langProvider}) {
+        required LanguageChangeViewModel langProvider
+  ,required AppLocalizations localization}) {
     return Column(
       children: [
         /// *----- Search bar section ------*
         CustomTextField(
           currentFocusNode: _searchFocusNode,
           controller: _searchController,
-          hintText: "Search..",
+          hintText: localization.searchHere,
           filled: true,
           fillColor: Colors.white,
           border:  const OutlineInputBorder(borderSide: BorderSide(color: AppColors.lightGrey)),
@@ -185,7 +188,7 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
 
         /// Searched Results will get shown here
         (isSearching) ?
-        const Text("searching..")
+         Text(localization.searching)
             :
         Column(
           children: [
@@ -224,7 +227,7 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
                       .toList();
 
                   final element = filteredList?[index];
-                  return _noteCard(langProvider: langProvider, element: element,index: index);
+                  return _noteCard(langProvider: langProvider, element: element,index: index,localization: localization);
                 },
               ),
 
@@ -237,7 +240,7 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
                 itemCount: provider.apiResponse.data?.data?.adviseeNotes?.length ?? 0,
                 itemBuilder: (context, index) {
                   final element = provider.apiResponse.data?.data?.adviseeNotes?[index];
-                  return _noteCard(langProvider: langProvider, element: element,index: index);
+                  return _noteCard(langProvider: langProvider, element: element,index: index,localization: localization);
                 },
               ),
           ],
@@ -248,25 +251,25 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
   }
 
 
-  Widget _noteCard({required langProvider,required element,required index})
+  Widget _noteCard({required langProvider,required element,required index,required AppLocalizations localization})
   {
     return Padding(
       padding: EdgeInsets.only(bottom: kPadding),
       child: SimpleCard(
           expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
-            CustomInformationContainerField(title: "S. No.", description: (index+1).toString()),
-            CustomInformationContainerField(title: "Note Id", description: element.noteId.toString()),
-            CustomInformationContainerField(title: "Subject", description: element.subject.toString()),
-            CustomInformationContainerField(title: "Created On", description: convertTimestampToDate(element.createdOn)),
+            CustomInformationContainerField(title: localization.sr, description: (index+1).toString()),
+            CustomInformationContainerField(title: localization.noteId, description: element.noteId.toString()),
+            CustomInformationContainerField(title: localization.subject,description: element.subject.toString()),
+            CustomInformationContainerField(title: localization.createdOn, description: convertTimestampToDate(element.createdOn)),
             CustomInformationContainerField(
-                title: "Actions",
+                title: localization.actions,
                 descriptionAsWidget: Row(
                   children: [
-                    actionButton(text: "View",assetAddress: "assets/services/status.svg",onTap: (){
+                    actionButton(text: localization.view,assetAddress: "assets/services/status.svg",onTap: (){
                       _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> SpecificNoteDetailsView(noteId: element.noteId.toString())));
                     }),
                     kFormHeight,
-                    actionButton(text: "Update",assetAddress: "assets/services/update_note.svg",onTap: (){
+                    actionButton(text:localization.update,assetAddress: "assets/services/update_note.svg",onTap: (){
                       _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> UpdateNoteView(noteId: element.noteId.toString())));
 
                     }),

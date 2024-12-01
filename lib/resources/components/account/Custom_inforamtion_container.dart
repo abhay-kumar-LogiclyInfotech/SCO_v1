@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/account/change_password_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../app_colors.dart';
@@ -13,12 +14,14 @@ class CustomInformationContainer extends StatefulWidget {
   Widget? trailing;
   final Widget expandedContent;
   EdgeInsetsGeometry? expandedContentPadding;
+  bool? showExpandedContent;
 
   CustomInformationContainer({
     required this.title,
     this.leading,
     this.trailing,
     required this.expandedContent,
+    this.showExpandedContent,
     this.expandedContentPadding,
   });
 
@@ -77,7 +80,7 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
           ),
           // SizeTransition(
 
-          Material(
+        widget.showExpandedContent ?? true ?  Material(
             color: Colors.white,
             borderRadius: const BorderRadius.vertical(
               bottom: Radius.circular(15),
@@ -97,7 +100,7 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
                 child: widget.expandedContent,
               ),
             ),
-          ),
+          ) : showVoid,
         ],
       ),
     );
@@ -190,7 +193,7 @@ class CustomInformationContainerField extends StatelessWidget {
                 ),
                 description != null
                     ? Text(
-                  description!.isEmpty ? "- -"  :  description?.toString() ?? '- -',
+                  description!.trim().isEmpty ? "- -"  :  description?.toString() ?? '- -',
                       style: AppTextStyles.normalTextStyle().copyWith(fontWeight: FontWeight.w600,fontSize: 14,color: AppColors.scoButtonColor),
                       textAlign: TextAlign.justify,
                     )

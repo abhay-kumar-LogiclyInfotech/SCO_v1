@@ -73,9 +73,11 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "Request"),
+      appBar: CustomSimpleAppBar(titleAsString: localization.request),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
           child: Utils.pageRefreshIndicator(
@@ -85,12 +87,12 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
 
   Widget _buildUi() {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
 
     return Consumer<GetAllRequestsViewModel>(builder: (context, provider, _) {
       switch (provider.apiResponse.status) {
         case Status.LOADING:
           return Utils.pageLoadingIndicator(context: context);
-
         case Status.ERROR:
           return Center(
             child: Text(
@@ -109,11 +111,11 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     /// Header to show create request button
-                    _createRequestButton(langProvider: langProvider),
+                    _createRequestButton(langProvider: langProvider,localization: localization),
                     kFormHeight,
 
                     /// Request status card
-                    _requestsSection(provider: provider, langProvider: langProvider),
+                    _requestsSection(provider: provider, langProvider: langProvider,localization: localization),
                   ],
                 ),
               ),
@@ -129,11 +131,12 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
   }
 
   /// *----- header section ------*
-  Widget _createRequestButton({required LanguageChangeViewModel langProvider}) {
+  Widget _createRequestButton({required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     return CustomInformationContainer(
-      title: "Create Request",
+      title: localization.createRequest,
       expandedContentPadding: EdgeInsets.zero,
       leading: SvgPicture.asset("assets/services/request_list.svg"),
+      showExpandedContent: false,
       expandedContent: const SizedBox.shrink(),
       trailing: CustomMaterialButton(
         onPressed: () {
@@ -142,15 +145,15 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kCardRadius)),
         visualDensity: VisualDensity.compact,
-        child: const Row(
+        child:  Row(
           children: [
-            Icon(
+           const  Icon(
               Icons.add_circle_outline,
               size: 15,
             ),
             Text(
-              " CREATE REQUEST",
-              style: TextStyle(
+              " ${localization.createRequestUpperCase}",
+              style: const TextStyle(
                   color: AppColors.scoButtonColor,
                   fontSize: 12,
                   fontWeight: FontWeight.w600),
@@ -176,14 +179,15 @@ bool isSearching = false;
   ///*------ Requests Section------*
   Widget _requestsSection(
       {required GetAllRequestsViewModel provider,
-      required LanguageChangeViewModel langProvider}) {
+      required LanguageChangeViewModel langProvider,
+      required AppLocalizations localization}) {
     return Column(
       children: [
         /// *----- Search bar section ------*
         CustomTextField(
             currentFocusNode: _searchFocusNode,
             controller: _searchController,
-            hintText: "Search..",
+            hintText: localization.searchHere,
             filled: true,
             fillColor: Colors.white,
             border:  const OutlineInputBorder(borderSide: BorderSide(color: AppColors.lightGrey)),
@@ -204,7 +208,7 @@ bool isSearching = false;
 
       /// Searched Results will get shown here
          (isSearching) ?
-             const Text("searching..")
+              Text(localization.searching)
         :
          Column(
            children: [
@@ -243,7 +247,7 @@ bool isSearching = false;
                        .toList();
 
                    final element = filteredList?[index];
-                   return _requestCard(langProvider: langProvider, element: element);
+                   return _requestCard(langProvider: langProvider, element: element,localization: localization);
                  },
                ),
 
@@ -256,7 +260,7 @@ bool isSearching = false;
                  itemCount: provider.apiResponse.data?.data?.listOfRequest?.length ?? 0,
                  itemBuilder: (context, index) {
                    final element = provider.apiResponse.data?.data?.listOfRequest?[index];
-                   return _requestCard(langProvider: langProvider, element: element);
+                   return _requestCard(langProvider: langProvider, element: element,localization: localization);
                  },
                ),
            ],
@@ -267,7 +271,7 @@ bool isSearching = false;
   }
 
 
-  Widget _requestCard({required langProvider,required element})
+  Widget _requestCard({required langProvider,required element,required AppLocalizations localization})
   {
     return Padding(
       padding: EdgeInsets.only(bottom: kPadding),
@@ -277,36 +281,36 @@ bool isSearching = false;
         },
           expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
             CustomInformationContainerField(
-                title: "S. No.",
+                title: localization.sr,
                 description: element.serviceRequestId.toString()),
             CustomInformationContainerField(
-                title: "Request Id",
+                title: localization.requestId,
                 description: element.ssrRsReqSeqHeader.toString()),
             CustomInformationContainerField(
-                title: "Category",
+                title: localization.category,
                 description: getFullNameFromLov(
                     langProvider: langProvider,
                     lovCode: "SERVICE_CATEGORY",
                     code: element.requestCategory.toString())),
             CustomInformationContainerField(
-                title: "Request Type",
+                title: localization.requestType,
                 description: getFullNameFromLov(
                     langProvider: langProvider,
                     lovCode:
                     'SERVICE_TYPE#${element.requestCategory.toString()}',
                     code: element.requestType.toString())),
             CustomInformationContainerField(
-                title: "Request Sub Type",
+                title: localization.requestSubType,
                 description: getFullNameFromLov(
                     langProvider: langProvider,
                     lovCode:
                     'SERVICE_SUBTYPE#${element.requestType.toString()}',
                     code: element.requestSubType.toString())),
             CustomInformationContainerField(
-                title: "Request Date",
+                title: localization.requestDate,
                 description: element.requestDate ?? ''),
             CustomInformationContainerField(
-                title: "Status",
+                title: localization.status,
                 descriptionAsWidget: Row(
                   children: [
                     SvgPicture.asset("assets/services/status.svg"),

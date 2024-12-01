@@ -225,16 +225,18 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        titleAsString: "Personal Details",
+        titleAsString: localization.personalDetails,
       ),
       body: Utils.modelProgressHud(processing: _isProcessing,child:  _buildUi()),
     );
   }
   Widget _buildUi() {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
     return Consumer<GetPersonalDetailsViewModel>(
         builder: (context, provider, _) {
       switch (provider.apiResponse.status) {
@@ -289,7 +291,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                     kFormHeight,
 
                     /// Student common information
-                    _studentInformationSection(provider: provider, langProvider: langProvider),
+                    _studentInformationSection(provider: provider, langProvider: langProvider,localization: localization),
 
                     /// student contact information
                     if (userInfo?.phoneNumbers != null)
@@ -298,7 +300,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           kFormHeight,
                           kFormHeight,
                           _studentPhoneInformationSection(
-                              provider: provider, langProvider: langProvider),
+                              provider: provider, langProvider: langProvider,localization: localization),
                         ],
                       ),
 
@@ -309,7 +311,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           kFormHeight,
                           kFormHeight,
                           _studentEmailInformationSection(
-                              provider: provider, langProvider: langProvider),
+                              provider: provider, langProvider: langProvider,localization: localization),
                         ],
                       ),
 
@@ -317,7 +319,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                     _submitAndBackButton(
                         langProvider: langProvider,
                         userInfo: userInfo,
-                        provider: provider),
+                        provider: provider,
+                    localization: localization),
                   ],
                 ),
               ),
@@ -380,7 +383,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
   Widget _studentInformationSection(
       {required GetPersonalDetailsViewModel provider,
-      required LanguageChangeViewModel langProvider})
+      required LanguageChangeViewModel langProvider,
+      required AppLocalizations localization
+      })
   {
     final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
     final userInfoType = studentProfileProvider.apiResponse.data?.data?.userInfoType;
@@ -396,7 +401,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
           children: [
             /// First name
             fieldHeading(
-                title: "First Name",
+                title: localization.registrationFirstName,
                 important: true,
                 langProvider: langProvider),
             scholarshipFormTextField(
@@ -405,7 +410,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 currentFocusNode: _firstNameFocusNode,
                 nextFocusNode: _secondNameFocusNode,
                 controller: _firstNameController,
-                hintText: "Enter Your First Name",
+                hintText: localization.registrationFirstNameWatermark,
                 errorText: _firstNameError,
                 onChanged: (value) {
                   if (_firstNameFocusNode.hasFocus) {
@@ -421,7 +426,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: "Second Name",
+                title: localization.registrationMiddleName,
                 important: false,
                 langProvider: langProvider),
             scholarshipFormTextField(
@@ -430,7 +435,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 currentFocusNode: _secondNameFocusNode,
                 nextFocusNode: _thirdOrFourthNameFocusNode,
                 controller: _secondNameController,
-                hintText: "Enter Your Second Name",
+                hintText: localization.registrationMiddleNameWatermark,
                 errorText: _secondNameError,
                 onChanged: (value) {
                   if (_secondNameFocusNode.hasFocus) {
@@ -446,7 +451,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: "Third/Fourth Name",
+                title: localization.thirdFourthName,
                 important: false,
                 langProvider: langProvider),
             scholarshipFormTextField(
@@ -455,7 +460,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 currentFocusNode: _thirdOrFourthNameFocusNode,
                 nextFocusNode: _familyNameFocusNode,
                 controller: _thirdOrFourthNameController,
-                hintText: "Enter Your Third/Fourth Name",
+                hintText: localization.registrationThirdNameWatermark,
                 errorText: _thirdOrFourthNameError,
                 onChanged: (value) {
                   if (_thirdOrFourthNameFocusNode.hasFocus) {
@@ -471,7 +476,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: "Family Name",
+                title: localization.registrationLastName,
                 important: true,
                 langProvider: langProvider),
             scholarshipFormTextField(
@@ -480,7 +485,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 currentFocusNode: _familyNameFocusNode,
                 nextFocusNode: _emailFocusNode,
                 controller: _familyNameController,
-                hintText: "Enter Your Family Name",
+                hintText: localization.registrationLastNameWatermark,
                 errorText: _familyNameError,
                 onChanged: (value) {
                   if (_familyNameFocusNode.hasFocus) {
@@ -496,7 +501,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: "Emirates ID",
+                title: localization.emiratesId,
                 important: false,
                 langProvider: langProvider),
             scholarshipFormTextField(
@@ -505,7 +510,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 currentFocusNode: _emiratesIdFocusNode,
                 nextFocusNode: _emailFocusNode,
                 controller: _emiratesIdController,
-                hintText: "Enter Your Emirates ID",
+                hintText: localization.emiratesIdWatermark,
                 errorText: _emiratesIdError,
                 inputFormat: [EmiratesIDFormatter()],
                 onChanged: (value) {
@@ -524,14 +529,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: "Email Address",
+                      title: localization.emailAddress,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormTextField(
                       currentFocusNode: _emailFocusNode,
                       nextFocusNode: _nationalityFocusNode,
                       controller: _emailController,
-                      hintText: "Enter Your Email Address",
+                      hintText: localization.emailAddressWatermark,
                       textInputType: TextInputType.emailAddress,
                       errorText: _emailError,
                       onChanged: (value) {
@@ -548,14 +553,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: "Nationality",
+                title: localization.country,
                 important: true,
                 langProvider: langProvider),
             scholarshipFormDropdown(
                 currentFocusNode: _nationalityFocusNode,
                 controller: _nationalityController,
                 menuItemsList: _nationalityMenuItemsList,
-                hintText: "Enter Your Nationality",
+                hintText: localization.countryWatermark,
                 errorText: _nationalityError,
                 onChanged: (value) {
                   setState(() {
@@ -573,14 +578,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: "Phone Number",
+                      title: localization.phoneNo,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormTextField(
                       currentFocusNode: _mobileNumberFocusNode,
                       nextFocusNode: _genderFocusNode,
                       controller: _mobileNumberController,
-                      hintText: "Enter Your Phone Number",
+                      hintText: localization.registrationMobileNumberWatermark,
                       textInputType: TextInputType.phone,
                       errorText: _mobileNumberError,
                       onChanged: (value) {
@@ -598,12 +603,12 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: "Gender", important: true, langProvider: langProvider),
+                title: localization.gender, important: true, langProvider: langProvider),
             scholarshipFormDropdown(
                 currentFocusNode: _genderFocusNode,
                 controller: _genderController,
                 menuItemsList: _genderMenuItemsList,
-                hintText: "Enter Your Gender",
+                hintText: localization.genderWatermark,
                 errorText: _genderError,
                 onChanged: (value) {
                   setState(() {
@@ -621,14 +626,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: "Marital Status",
+                      title: localization.maritalStatus,
                       important: true,
                       langProvider: langProvider),
                   scholarshipFormDropdown(
                       currentFocusNode: _maritalStatusFocusNode,
                       controller: _maritalStatusController,
                       menuItemsList: _maritalStatusMenuItemsList,
-                      hintText: "Enter Your Marital Status",
+                      hintText: localization.maritalStatusWatermark,
                       errorText: _maritalStatusError,
                       onChanged: (value) {
                         setState(() {
@@ -645,13 +650,13 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: "Date of Birth",
+                title: localization.brithDate,
                 important: true,
                 langProvider: langProvider),
             scholarshipFormDateField(
                 currentFocusNode: _dobFocusNode,
                 controller: _dobController,
-                hintText: "Enter Your Date of Birth",
+                hintText: localization.brithDateWatermark,
                 errorText: _dobError,
                 onChanged: (value) {
                   setState(() {
@@ -744,9 +749,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   }
 
   Widget _studentPhoneInformationSection(
-      {required GetPersonalDetailsViewModel provider, required langProvider}) {
+      {required GetPersonalDetailsViewModel provider, required langProvider,required AppLocalizations localization}) {
     return CustomInformationContainer(
-        title: "Phone Details",
+        title:localization.contactInformation,
         leading: SvgPicture.asset("assets/personal_details/phone_details.svg"),
         expandedContent: Column(
           children: [
@@ -760,7 +765,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                     children: [
                       /// phone Type
                       fieldHeading(
-                          title: "Phone Type",
+                          title: localization.submissionPhoneType,
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormDropdown(
@@ -770,7 +775,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                         controller: phoneNumber.phoneTypeController,
                         currentFocusNode: phoneNumber.phoneTypeFocusNode,
                         menuItemsList: _phoneNumberTypeMenuItemsList,
-                        hintText: "Select Phone Type",
+                        hintText: localization.select,
                         errorText: phoneNumber.phoneTypeError,
                         onChanged: (value) {
                           setState(() {
@@ -800,14 +805,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: "Phone Number",
+                          title: localization.studentMobileNumber,
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormTextField(
                           currentFocusNode: phoneNumber.phoneNumberFocusNode,
                           nextFocusNode: phoneNumber.countryCodeFocusNode,
                           controller: phoneNumber.phoneNumberController,
-                          hintText: "Enter Phone Number",
+                          hintText: localization.registrationMobileNumberWatermark,
                           errorText: phoneNumber.phoneNumberError,
                           onChanged: (value)
                           {
@@ -835,7 +840,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: "Country Code",
+                          title: localization.countryCode,
                           important: false,
                           langProvider: langProvider),
                       scholarshipFormTextField(
@@ -846,7 +851,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                                       .phoneTypeFocusNode
                                   : null,
                           controller: phoneNumber.countryCodeController,
-                          hintText: "Enter Phone Number",
+                          hintText: localization.submissionCountryCode,
                           errorText: phoneNumber.countryCodeError,
                           onChanged: (value) {
                             /// no validation has been provided
@@ -872,7 +877,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                               phoneNumber.preferred = !phoneNumber.preferred;
                             });
                           },
-                          text: "Favorite Phone"),
+                          text: localization.submissionPreferred),
 
                       /// ****************************************************************************************************************************************************
 
@@ -882,7 +887,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       /// Add More Information container
                       (_phoneNumberDetailsList.isNotEmpty && !phoneNumber.isExisting)
                           ? addRemoveMoreSection(
-                              title: "Delete Info",
+                              title: localization.deleteRowPhone,
                               add: false,
                               onChanged: () {
                                 _removePhoneNumber(index);
@@ -905,7 +910,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// Add More Information container
             _phoneNumberDetailsList.isNotEmpty
                 ? addRemoveMoreSection(
-                    title: "Add Phone Number",
+                    title: localization.addRowPhone,
                     add: true,
                     onChanged: () {
                       _addPhoneNumber();
@@ -959,9 +964,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   }
 
   Widget _studentEmailInformationSection(
-      {required GetPersonalDetailsViewModel provider, required langProvider}) {
+      {required GetPersonalDetailsViewModel provider, required langProvider, required AppLocalizations localization}) {
     return CustomInformationContainer(
-        title: "Email Details",
+        title: localization.emailInformation,
         leading: SvgPicture.asset("assets/personal_details/email.svg"),
         expandedContent: Column(
           children: [
@@ -976,7 +981,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       kFormHeight,
                       /// phone Type
                       fieldHeading(
-                          title: "Email Type",
+                          title: localization.emailType,
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormDropdown(
@@ -986,7 +991,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                         controller: email.emailTypeController,
                         currentFocusNode: email.emailTypeFocusNode,
                         menuItemsList: _emailTypeMenuItemsList,
-                        hintText: "Select Email Type",
+                        hintText: localization.select,
                         errorText: email.emailTypeError,
                         onChanged: (value) {
                           setState(() {
@@ -999,7 +1004,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
                             if (isDuplicate) {
                               // Display an error if the email type is already selected
-                              email.emailTypeError = "Email Type is already selected";
+                              email.emailTypeError = "Email Type already selected";
                             } else {
                               // Update the email type and request focus for the next field
                               email.emailTypeController.text = value!;
@@ -1012,7 +1017,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: "Email Address",
+                          title: localization.emailAddress,
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormTextField(
@@ -1021,7 +1026,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                               ? email.emailTypeFocusNode
                               : null,
                           controller: email.emailIdController,
-                          hintText: "Enter Email Address",
+                          hintText: localization.emailAddressWatermark,
                           errorText: email.emailIdError,
                         onChanged: (value) {
                           setState(() {
@@ -1034,7 +1039,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
                             if (isDuplicate) {
                               // Display an error if the email ID is already in use
-                              email.emailIdError = "This email ID is already in use.";
+                              email.emailIdError = localization.emailAddressExists;
                             } else {
                               // Validate the email format only if no duplicates are found
                               email.emailIdController.text = value!.trim();
@@ -1060,7 +1065,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                               email.prefferd = !email.prefferd;
                             });
                           },
-                          text: "Favorite Email"),
+                          text: localization.submissionPreferred),
 
                       /// ****************************************************************************************************************************************************
 
@@ -1070,7 +1075,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       /// Add More Information container
                       (_emailDetailsList.isNotEmpty && (index != 0) && !email.existing)
                           ? addRemoveMoreSection(
-                              title: "Delete",
+                              title: localization.deleteRow,
                               add: false,
                               onChanged: () {
                                 _removeEmail(index);
@@ -1093,7 +1098,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// Add More Information container
             _phoneNumberDetailsList.isNotEmpty
                 ? addRemoveMoreSection(
-                    title: "Add Email",
+                    title: localization.addEmail,
                     add: true,
                     onChanged: () {
                       _addEmail();
@@ -1106,7 +1111,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   Widget _submitAndBackButton(
       {required langProvider,
       UserInfo? userInfo,
-      GetPersonalDetailsViewModel? provider}) {
+      GetPersonalDetailsViewModel? provider,
+      required AppLocalizations localization}) {
     return Column(
       children: [
         kFormHeight,
@@ -1116,7 +1122,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
           child: Consumer<UpdatePersonalDetailsViewModel>(
               builder: (context, updateProvider, _) {
             return CustomButton(
-                buttonName: "Update",
+                buttonName: localization.updateProfile,
                 isLoading: updateProvider?.apiResponse.status == Status.LOADING,
                 borderColor: Colors.transparent,
                 buttonColor: AppColors.scoThemeColor,
@@ -1124,7 +1130,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 onTap: () async {
                 setIsProcessing(true);
                   bool result = validateForm(
-                      langProvider: langProvider, userInfo: userInfo);
+                      langProvider: langProvider, userInfo: userInfo,localization: localization);
                   if (result) {
                     /// Create Form
                     createForm(provider: provider);
@@ -1153,7 +1159,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   //// VALIDATION FUNCTION FOR THE FORM
   /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode;
-  bool validateForm({required langProvider, UserInfo? userInfo}) {
+  bool validateForm({required langProvider, UserInfo? userInfo,required AppLocalizations localization}) {
     final studentProfileProvider =
         Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
     final user = studentProfileProvider.apiResponse.data?.data?.user;
@@ -1167,7 +1173,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
     if (_firstNameController.text.isEmpty || !Validations.isNameArabicEnglishValid(_firstNameController.text)) {
       setState(() {
-        _firstNameError = "Please Enter first name";
+        _firstNameError = localization.registrationFirstNameValidate;
         firstErrorFocusNode ??= _firstNameFocusNode;
       });
     }
@@ -1175,7 +1181,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     if (_familyNameController.text.isEmpty ||
         !Validations.isNameArabicEnglishValid(_familyNameController.text)) {
       setState(() {
-        _familyNameError = "Please Enter family name";
+        _familyNameError = localization.registrationLastNameValidate;
         firstErrorFocusNode ??= _familyNameFocusNode;
       });
     }
@@ -1183,13 +1189,13 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         (_emailController.text.isEmpty ||
             !Validations.isEmailValid(_emailController.text))) {
       setState(() {
-        _emailError = "Please Enter email address";
+        _emailError = localization.emailAddressValidate;
         firstErrorFocusNode ??= _firstNameFocusNode;
       });
     }
     if (_nationalityController.text.isEmpty) {
       setState(() {
-        _nationalityError = "Please Select Nationality";
+        _nationalityError = localization.countryValidate;
         firstErrorFocusNode ??= _nationalityFocusNode;
       });
     }
@@ -1197,27 +1203,27 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         (_mobileNumberController.text.isEmpty ||
             !Validations.isPhoneNumberValid(_mobileNumberController.text))) {
       setState(() {
-        _mobileNumberError = "Please Enter correct mobile number";
+        _mobileNumberError = localization.registrationMobileNumberValidate;
         firstErrorFocusNode ??= _mobileNumberFocusNode;
       });
     }
     if (_genderController.text.isEmpty) {
       setState(() {
-        _genderError = "Please Select Gender";
+        _genderError = localization.genderValidate;
         firstErrorFocusNode ??= _genderFocusNode;
       });
     }
 
     if (_maritalStatusController.text.isEmpty && peopleSoft ) {
       setState(() {
-        _maritalStatusError = "Please Select marital status";
+        _maritalStatusError = localization.maritalStatusValidate;
         firstErrorFocusNode ??= _maritalStatusFocusNode;
       });
     }
 
     if (_dobController.text.isEmpty || !isFourteenYearsOld(_dobController.text)) {
       setState(() {
-        _dobError = "Please Select Valid Date of Birth";
+        _dobError = localization.brithDateValidate;
         firstErrorFocusNode ??= _dobFocusNode;
       });
     }
@@ -1235,13 +1241,13 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         var element = _phoneNumberDetailsList[i];
         if (element.phoneTypeController.text.isEmpty || element.phoneTypeError != null ) {
           setState(() {
-            element.phoneTypeError = "Please Select Phone Type";
+            element.phoneTypeError = localization.submissionPhoneTypeRequired;
             firstErrorFocusNode ??= element.phoneTypeFocusNode;
           });
         }
         if (element.phoneNumberController.text.isEmpty || element.phoneNumberError != null  || !Validations.isPhoneNumberValid(element.phoneNumberController.text)) {
           setState(() {
-            element.phoneNumberError = "Please Enter Phone Number which doesn't exists.";
+            element.phoneNumberError = localization.registrationMobileNumberValidate;
             firstErrorFocusNode ??= element.phoneNumberFocusNode;
           });
         }
@@ -1254,13 +1260,13 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         var element = _emailDetailsList[i];
         if (element.emailTypeController.text.isEmpty || element.emailTypeError != null) {
           setState(() {
-            element.emailTypeError = "Please Enter correct Email Type";
+            element.emailTypeError = localization.emailTypeRequired;
             firstErrorFocusNode ??= element.emailTypeFocusNode;
           });
         }
         if (element.emailIdController.text.isEmpty || element.emailIdError != null) {
           setState(() {
-            element.emailIdError = "Please Enter Email Type";
+            element.emailIdError = localization.emailAddressValidate;
             firstErrorFocusNode ??= element.emailIdFocusNode;
           });
         }

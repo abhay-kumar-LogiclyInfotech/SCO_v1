@@ -11,14 +11,17 @@ import 'package:sco_v1/view/drawer/accout_views/security_questions_view.dart';
 import 'package:sco_v1/view/main_view/services_view.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
+import '../../../data/response/status.dart';
 import '../../../hive/hive_manager.dart';
 import '../../../models/account/simple_tile_model.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/tiles/simple_tile.dart';
 import '../../../resources/getRoles.dart';
+import '../../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../accout_views/change_password_view.dart';
 import '../accout_views/personal_details_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountView extends StatefulWidget {
   const AccountView({super.key});
@@ -34,58 +37,75 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
 
   /// Get Roles
    UserRole? role;
+   bool _isProcessing = false;
+   setIsProcessing(value){
+     setState(() {
+       _isProcessing = value;
+     });
+   }
 
   @override
   void initState() {
     super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
-    role = getRoleFromList(HiveManager.getRole());
+
+    WidgetsBinding.instance.addPostFrameCallback((callback)async{
+      setIsProcessing(true);
+      // Getting Fresh Roles
+      final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
+      await getRolesProvider.getRoles();
+      role = getRoleFromList(HiveManager.getRole());
+      setIsProcessing(false);
+      setState(() {
+      });
+    });
   }
 
 
   @override
   Widget build(BuildContext context) {
+     final localization =AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "My Account"),
-      body: _buildUi(),
+      appBar: CustomSimpleAppBar(titleAsString: localization.myAccount),
+      body: _buildUi(localization),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(AppLocalizations localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     final accountItemsMapList = [
       {
-        'title': "Personal Details",
+        'title': localization.personalDetails,
         'assetAddress': "assets/myAccount/personal_details.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const PersonalDetailsView()))
       },
       if(role == UserRole.scholarStudent)
         {
-        'title': "Employment Status",
+        'title': localization.employmentStatus,
         'assetAddress': "assets/myAccount/employment_status.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const EmploymentStatusView()))
       },
       {
-        'title': "Application Status",
+        'title': localization.myApplications,
         'assetAddress': "assets/myAccount/application_status.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ApplicationStatusView()))
       },
       {
-        'title': "Change Password",
+        'title': localization.reset_password,
         'assetAddress': "assets/myAccount/change_password.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ChangePasswordView()))
       },
       if(role == UserRole.scholarStudent || role == UserRole.applicants)
         {
-        'title': "Addresses",
+        'title': localization.address,
         'assetAddress': "assets/myAccount/addresses.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const AddressesView()))
       },
       {
-        'title': "Security Questions",
+        'title': localization.securityQuestion,
         'assetAddress': "assets/myAccount/security_questions.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const SecurityQuestionsView()))
       },
@@ -99,17 +119,33 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
 
     return Padding(
       padding: EdgeInsets.all(kPadding),
-      child: ListView.builder(
+      child: Consumer<GetRoleViewModel>(builder: (context,provider,_){
+        switch(provider.apiResponse.status){
+          case Status.LOADING:
+            return Utils.pageLoadingIndicator(context: context);
+          case Status.ERROR:
+            return showVoid;
+          case Status.COMPLETED:
+            return ListView.builder(
         itemCount: itemsList.length,
         itemBuilder: (context, index) {
 
-          final item = itemsList[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
-            child: SimpleTile(item: item),
-          );
+        final item = itemsList[index];
+        return Padding(
+        padding: const EdgeInsets.only(bottom: 20.0),
+        child: SimpleTile(item: item),
+        );
         },
-      ),
+        );
+          case Status.NONE:
+           return showVoid;
+          case null:
+           return showVoid;
+        }
+      })
+
+
+
     );
 
 

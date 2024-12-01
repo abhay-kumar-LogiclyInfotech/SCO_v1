@@ -25,40 +25,35 @@ class ScoPrograms extends StatefulWidget {
 class _ScoProgramsState extends State<ScoPrograms>
     with MediaQueryMixin<ScoPrograms> {
   late NavigationServices _navigationServices;
+  final List<Widget> _scoProgramsList = [];
+  final List<ScoProgramTileModel> _scoProgramsModelsList = [];
+  bool _isInitialized = false;
 
   @override
   void initState() {
+    super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
-
-    /// Initialize the SCO programs carousel slider
-    _scoProgramsModelsList.clear();
-    _scoProgramsList.clear();
-    _initializeScoPrograms();
-
-    super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(
-          title: Text(
-        AppLocalizations.of(context)!.scoPrograms,
-        style: AppTextStyles.appBarTitleStyle(),
-      )),
-      body: _buildUI(),
-    );
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_isInitialized) {
+      // Initialize once
+      final localization = AppLocalizations.of(context)!;
+      _scoProgramsModelsList.clear();
+      _scoProgramsList.clear();
+      _initializeScoPrograms(localization);
+      _isInitialized = true;
+    }
   }
 
-  final List<Widget> _scoProgramsList = [];
-  final List<ScoProgramTileModel> _scoProgramsModelsList = [];
-
-  void _initializeScoPrograms() {
+  void _initializeScoPrograms(AppLocalizations localization) {
     final scoProgramsMapList = [
       {
-        'title': "Scholarships In Uae",
+        'title': localization.scholarshipInternal,
         'subTitle': "",
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
@@ -66,7 +61,7 @@ class _ScoProgramsState extends State<ScoPrograms>
         ),
       },
       {
-        'title': "Scholarships In Abroad",
+        'title': localization.scholarshipExternal,
         'subTitle': "",
         'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
@@ -93,16 +88,28 @@ class _ScoProgramsState extends State<ScoPrograms>
     }
   }
 
-  Widget _buildUI() {
-    final provider = Provider.of<LanguageChangeViewModel>(context);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.bgColor,
+      appBar: CustomSimpleAppBar(
+        title: Text(
+          AppLocalizations.of(context)!.scoPrograms,
+          style: AppTextStyles.appBarTitleStyle(),
+        ),
+      ),
+      body: _buildUI(),
+    );
+  }
 
+  Widget _buildUI() {
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
       child: ListView.builder(
         itemCount: _scoProgramsList.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding:  EdgeInsets.only(bottom: kPadding),
+            padding: EdgeInsets.only(bottom: kPadding),
             child: _scoProgramsList[index],
           );
         },

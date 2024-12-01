@@ -75,14 +75,15 @@ class _BonusDetailsViewState extends State<BonusDetailsView> with MediaQueryMixi
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "My Finance"),
-      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+      appBar: CustomSimpleAppBar(titleAsString: localization.myFinance),
+      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<MyFinanceStatusViewModel>(
@@ -110,7 +111,7 @@ class _BonusDetailsViewState extends State<BonusDetailsView> with MediaQueryMixi
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         listOfBonus.isNotEmpty ?
-                        _bonusDetails(provider: provider, langProvider: langProvider)
+                        _bonusDetails(provider: provider, langProvider: langProvider, localization:localization)
                             : Utils.showOnNoDataAvailable()
                         ,
                       ],
@@ -128,10 +129,10 @@ class _BonusDetailsViewState extends State<BonusDetailsView> with MediaQueryMixi
   }
 
   ///*------ BONUS DETAILS Section------*
-  Widget _bonusDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _bonusDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     final listOfBonus = provider.apiResponse.data?.data?.listBonus ?? [];
     return CustomInformationContainer(
-        title: 'Bonus Details',
+        title: localization.bonusDetails,
         expandedContentPadding: EdgeInsets.zero,
         leading: SvgPicture.asset("assets/services/bonus_details.svg"),
         expandedContent: ListView.builder(
@@ -146,11 +147,11 @@ class _BonusDetailsViewState extends State<BonusDetailsView> with MediaQueryMixi
                     financeCard(
                         color: index%2 != 0 ? const Color(0xffF9F9F9) : Colors.white,
                         content:  [
-                          CustomInformationContainerField(title: "S.No", description: (index+1).toString() ?? '- -'),
-                          CustomInformationContainerField(title: "Period", description: topBonus?.periodIdDescription.toString() ?? '- -' ?? '- -'),
-                          CustomInformationContainerField(title: "Term", description: topBonus?.termDescription.toString() ?? '- -'),
-                          CustomInformationContainerField(title: "Amount", description: topBonus?.amount.toString() ?? '- -'),
-                          CustomInformationContainerField(title: "Currency", description: topBonus?.currencyCode.toString() ?? '- -' ,isLastItem: true),
+                          CustomInformationContainerField(title: localization.sr, description: (index+1).toString() ?? '- -'),
+                          CustomInformationContainerField(title: localization.period,description: topBonus?.periodIdDescription.toString() ?? '- -' ?? '- -'),
+                          CustomInformationContainerField(title: localization.term, description: topBonus?.termDescription.toString() ?? '- -'),
+                          CustomInformationContainerField(title: localization.amount, description: topBonus?.amount.toString() ?? '- -'),
+                          CustomInformationContainerField(title:localization.currency, description: topBonus?.currencyCode.toString() ?? '- -' ,isLastItem: true),
                           kFormHeight,
                         ],  langProvider: langProvider,isLastTerm: index == listOfBonus.length -1),
                     if(index < listOfBonus.length-1 ) const MyDivider(color: AppColors.darkGrey),

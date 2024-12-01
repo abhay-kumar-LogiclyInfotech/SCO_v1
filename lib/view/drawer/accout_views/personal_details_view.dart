@@ -21,6 +21,7 @@ import '../../../data/response/status.dart';
 import '../../../models/account/personal_details/PersonalDetailsModel.dart';
 import '../../../resources/app_colors.dart';
 import '../../../utils/constants.dart';
+import '../../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import 'edit_personal_details_view.dart';
 
@@ -35,7 +36,6 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
     with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
-  String _profilePictureUrl = '';
 
   Future<void> _fetchData() async {
     // fetch student profile Information t prefill the user information
@@ -44,9 +44,13 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
     final studentProfilePictureProvider =
         Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
 
+    // Getting Fresh Roles
+    final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
+
     await Future.wait<dynamic>([
       studentProfileProvider.getPersonalDetails(),
-      studentProfilePictureProvider.getProfilePictureUrl()
+      studentProfilePictureProvider.getProfilePictureUrl(),
+      getRolesProvider.getRoles(),
     ]);
     if (studentProfilePictureProvider.apiResponse.status == Status.COMPLETED) {
       setState(() {
@@ -71,18 +75,19 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return PopScope(
       child: Scaffold(
           backgroundColor: AppColors.bgColor,
           appBar: CustomSimpleAppBar(
-            titleAsString: "Personal Details",
+            titleAsString: localization.personalDetails,
           ),
           body: Utils.pageRefreshIndicator(
-              child: _buildUi(), onRefresh: _fetchData)),
+              child: _buildUi(localization), onRefresh: _fetchData)),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Consumer<GetPersonalDetailsViewModel>(
         builder: (context, provider, _) {
@@ -92,7 +97,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
         case Status.ERROR:
           return Center(
             child: Text(
-              AppLocalizations.of(context)!.somethingWentWrong,
+              localization.somethingWentWrong,
             ),
           );
         case Status.COMPLETED:
@@ -139,7 +144,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                     // ProfilePicture(),
                     kFormHeight,
                     _studentInformationSection(
-                        provider: provider, langProvider: langProvider),
+                        provider: provider, langProvider: langProvider,localization: localization),
 
                     userInfo?.phoneNumbers != null
                         ? Column(
@@ -148,7 +153,8 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                               kFormHeight,
                               _studentPhoneInformationSection(
                                   provider: provider,
-                                  langProvider: langProvider),
+                                  langProvider: langProvider,
+                              localization: localization),
                             ],
                           )
                         : showVoid,
@@ -160,7 +166,8 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                               kFormHeight,
                               _studentEmailInformationSection(
                                   provider: provider,
-                                  langProvider: langProvider),
+                                  langProvider: langProvider,
+                              localization: localization),
                             ],
                           )
                         : showVoid,
@@ -180,7 +187,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
 
   //*------Student Information Section------*
   Widget _studentInformationSection(
-      {required GetPersonalDetailsViewModel provider, required langProvider}) {
+      {required GetPersonalDetailsViewModel provider, required langProvider,required AppLocalizations localization}) {
     final user = provider.apiResponse.data?.data?.user;
     final userInfo = provider.apiResponse.data?.data?.userInfo;
     final userInfoType = provider.apiResponse.data?.data?.userInfoType;
@@ -188,43 +195,43 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
     bool lifeRay = userInfoType != null && userInfoType == 'LIFERAY';
     bool peopleSoft = userInfoType != null && userInfoType != 'LIFERAY';
     return CustomInformationContainer(
-        title: "Student Information",
+        title: localization.studentInformation,
         leading:
             SvgPicture.asset("assets/personal_details/student_information.svg"),
         expandedContent: Column(
           children: [
             CustomInformationContainerField(
-              title: "Full Name",
+              title: localization.fullName,
               description:
                   "${user?.firstName} ${user?.middleName} ${user?.middleName2} ${user?.lastName}",
             ),
             CustomInformationContainerField(
-              title: "Emirates ID",
+              title: localization.emiratesId,
               description: user?.emirateId,
             ),
             if (lifeRay)
               CustomInformationContainerField(
-                title: "Email Address",
+                title: localization.emailAddress,
                 description: user?.emailAddress,
               ),
             CustomInformationContainerField(
-              title: "Date of Birth",
+              title: localization.brithDate,
               description: user?.birthDate,
             ),
             if (lifeRay)
               CustomInformationContainerField(
-                title: "Phone Number",
+                title: localization.studentMobileNumber,
                 description: user?.phoneNumber,
               ),
             CustomInformationContainerField(
-              title: "Nationality",
+              title: localization.nationality,
               description: getFullNameFromLov(
                   lovCode: 'COUNTRY',
                   code: user?.nationality,
                   langProvider: langProvider),
             ),
             CustomInformationContainerField(
-              title: "Gender",
+              title: localization.gender,
               description: getFullNameFromLov(
                   lovCode: 'GENDER',
                   code: user?.gender,
@@ -233,7 +240,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
             ),
             peopleSoft
                 ? CustomInformationContainerField(
-                    title: "Marital Status",
+                    title: localization.maritalStatus,
                     description: getFullNameFromLov(
                         lovCode: 'MARITAL_STATUS',
                         code: userInfo?.maritalStatus,
@@ -253,7 +260,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
 
   //*------Student Phone Information Section------*
   Widget _studentPhoneInformationSection(
-      {required GetPersonalDetailsViewModel provider, required langProvider}) {
+      {required GetPersonalDetailsViewModel provider, required langProvider, required AppLocalizations localization}) {
     final userInfo = provider.apiResponse.data?.data?.userInfo;
     List<PhoneNumbers> phoneNumbers = [];
     userInfo?.phoneNumbers?.forEach((element) {
@@ -261,7 +268,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
     });
 
     return CustomInformationContainer(
-        title: "Phone Details",
+        title: localization.contactInformation,
         leading: SvgPicture.asset("assets/personal_details/phone_details.svg"),
         expandedContent: Column(
           children: phoneNumbers.asMap().entries.map((entry) {
@@ -272,18 +279,18 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
             return Column(
               children: [
                 CustomInformationContainerField(
-                  title: "Phone Number",
+                  title: localization.phoneNo,
                   description: "+${phoneDetail.phoneNumber ?? ''}",
                 ),
                 CustomInformationContainerField(
-                  title: "Phone Type",
+                  title: localization.submissionPhoneType,
                   description: getFullNameFromLov(
                       lovCode: 'PHONE_TYPE',
                       code: phoneDetail.phoneType,
                       langProvider: langProvider),
                 ),
                 CustomInformationContainerField(
-                  title: "Preferred",
+                  title: localization.submissionPreferred,
                   isLastItem: true,
                 ),
                 CustomGFCheckbox(
@@ -304,7 +311,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
 
   //*------Student Email Information Section------*
   Widget _studentEmailInformationSection(
-      {required GetPersonalDetailsViewModel provider, required langProvider}) {
+      {required GetPersonalDetailsViewModel provider, required langProvider, required AppLocalizations localization}) {
     final userInfo = provider.apiResponse.data?.data?.userInfo;
     List<Emails> emails = [];
     userInfo?.emails?.forEach((element) {
@@ -312,7 +319,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
     });
 
     return CustomInformationContainer(
-        title: "Email Details",
+        title: localization.emailInformation,
         leading: SvgPicture.asset("assets/personal_details/email.svg"),
         expandedContent: Column(
           children: emails.asMap().entries.map((entry) {
@@ -323,18 +330,18 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
             return Column(
               children: [
                 CustomInformationContainerField(
-                  title: "Email",
+                  title: localization.registrationEmailAddress,
                   description: "${email.emailId}",
                 ),
                 CustomInformationContainerField(
-                  title: "Email Type",
+                  title: localization.emailType,
                   description: getFullNameFromLov(
                       lovCode: 'EMAIL_TYPE',
                       code: email.emailType,
                       langProvider: langProvider),
                 ),
                 CustomInformationContainerField(
-                    title: "Preferred", isLastItem: true),
+                    title: localization.submissionPreferred, isLastItem: true),
                 CustomGFCheckbox(
                     value: email.prefferd ?? false,
                     onChanged: (value) {},

@@ -74,10 +74,12 @@ class UpdateRequestViewModel with ChangeNotifier {
         UpdateRequestModel response = await _myRepo.updateRequest(userId: _userId ?? '',body: body,headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
+        _alertServices.toastMessage(response.message.toString());
         setLoading(false);
         return true;
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.toastMessage(error.toString());
         setLoading(false);
         return false;
       }}

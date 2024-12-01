@@ -8,6 +8,8 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import '../../../utils/utils.dart';
 import '../../app_colors.dart';
 import '../custom_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class KReturnButton extends StatefulWidget {
   const KReturnButton({super.key});
@@ -28,9 +30,10 @@ class _KReturnButtonState extends State<KReturnButton> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return CustomButton(
-        buttonName: "Return",
+        buttonName: localization.back,
         isLoading: false,
         borderColor: AppColors.scoThemeColor,
         buttonColor: Colors.white,

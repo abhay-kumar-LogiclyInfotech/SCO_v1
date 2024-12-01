@@ -75,14 +75,15 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "My Finance"),
-      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+      appBar: CustomSimpleAppBar(titleAsString: localization.myFinance),
+      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<MyFinanceStatusViewModel>(
@@ -110,7 +111,7 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         listOfDeduction.isNotEmpty ?
-                        _deductionDetails(provider: provider, langProvider: langProvider)
+                        _deductionDetails(provider: provider, langProvider: langProvider,localization:localization)
                             : Utils.showOnNoDataAvailable()
                         ,
                       ],
@@ -128,11 +129,11 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
   }
 
   ///*------ Applications Section------*
-  Widget _deductionDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _deductionDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
 
     final listOfDeduction = provider.apiResponse.data?.data?.listDeduction ?? [];
     return CustomInformationContainer(
-        title: 'Deduction Details',
+        title: localization.deductionDetails,
         expandedContentPadding: EdgeInsets.zero,
         leading: SvgPicture.asset("assets/services/deduction_details.svg"),
         expandedContent: ListView.builder(
@@ -147,11 +148,11 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
                   financeCard(
                       color: index%2 != 0 ? const Color(0xffF9F9F9) : Colors.white,
                       content:  [
-                        CustomInformationContainerField(title: "S.No", description: (index+1).toString() ?? '- -'),
-                        CustomInformationContainerField(title: "Total Deduction", description: topDeduction?.totalDeduction.toString() ?? '- -'),
-                        CustomInformationContainerField(title: "Total Deducted", description: topDeduction?.totalDeducted.toString() ?? '- -'),
-                        CustomInformationContainerField(title: "Deduction Pending", description: topDeduction?.deductionPending.toString() ?? '- -'),
-                        CustomInformationContainerField(title: "Currency", description: topDeduction?.currencyCode.toString() ?? '- -' ,isLastItem: true),
+                        CustomInformationContainerField(title: localization.sr, description: (index+1).toString() ?? '- -'),
+                        CustomInformationContainerField(title: localization.totalDeduction, description: topDeduction?.totalDeduction.toString() ?? '- -'),
+                        CustomInformationContainerField(title: localization.totalDeducted, description: topDeduction?.totalDeducted.toString() ?? '- -'),
+                        CustomInformationContainerField(title: localization.deductionPending, description: topDeduction?.deductionPending.toString() ?? '- -'),
+                        CustomInformationContainerField(title: localization.currency, description: topDeduction?.currencyCode.toString() ?? '- -' ,isLastItem: true),
                         kFormHeight,
 
                       ],  langProvider: langProvider,isLastTerm: index == listOfDeduction.length -1),

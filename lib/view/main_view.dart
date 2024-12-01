@@ -74,25 +74,24 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    final provider_1 =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Scaffold(
       key: scaffoldState,
       appBar: CustomTopAppBar(
-        textDirection: getTextDirection(provider_1),
+        textDirection: getTextDirection(langProvider),
         onTap: () {
-          provider_1.appLocale == const Locale('en')
+          langProvider.appLocale == const Locale('en')
               ? scaffoldState.currentState!.openDrawer()
               : scaffoldState.currentState!.openEndDrawer();
         },
       ),
       drawer: CustomDrawerView(
-        textDirection: getTextDirection(provider_1),
+        textDirection: getTextDirection(langProvider),
         scaffoldState: scaffoldState,
       ),
-      drawerEnableOpenDragGesture: provider_1.appLocale == const Locale('en') ? true : false,
-      endDrawer: CustomDrawerView(textDirection: getTextDirection(provider_1), scaffoldState: scaffoldState),
-      endDrawerEnableOpenDragGesture: provider_1.appLocale == const Locale('ar') ? true : false,
+      drawerEnableOpenDragGesture: langProvider.appLocale == const Locale('en') ? true : false,
+      endDrawer: CustomDrawerView(textDirection: getTextDirection(langProvider), scaffoldState: scaffoldState),
+      endDrawerEnableOpenDragGesture: langProvider.appLocale == const Locale('ar') ? true : false,
       body:  IndexedStack(index: currentIndex,children: screens) ,
       // body:_buildUI(),
       // bottomNavigationBar: Material(
@@ -235,37 +234,40 @@ class _MainViewState extends State<MainView> {
       //     ],
       //   ),
       // ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-            currentIndex: currentIndex,
-            onTap: (index) {
-
-            if(index == 0){
-              if(_isLoggedIn){
+        bottomNavigationBar: Directionality(
+          textDirection: getTextDirection(langProvider),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.white,
+              currentIndex: currentIndex,
+              onTap: (index) {
+          
+              if(index == 0){
+                if(_isLoggedIn){
+                  setState(() {
+                    currentIndex = index;
+                  });
+                }else{
+                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+                  _alertServices.showCustomSnackBar("Please Login to use services",
+                    // context,
+                  );
+                }
+              }
+              else{
                 setState(() {
                   currentIndex = index;
                 });
-              }else{
-                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                _alertServices.showCustomSnackBar("Please Login to use services",
-                  // context,
-                );
               }
-            }
-            else{
-              setState(() {
-                currentIndex = index;
-              });
-            }
-
-            },
-            items: [
-              BottomNavigationBarItem(icon:  SvgPicture.asset("assets/services.svg"),activeIcon:SvgPicture.asset("assets/services_selected.svg"),label: "services"),
-
-              BottomNavigationBarItem(icon:  SvgPicture.asset("assets/home.svg"),activeIcon:SvgPicture.asset("assets/home_selected.svg"),label: "Home"),
-
-          BottomNavigationBarItem(icon:  SvgPicture.asset("assets/support.svg"),activeIcon:SvgPicture.asset("assets/support_selected.svg"),label: "Support"),
-        ])
+          
+              },
+              items: [
+                BottomNavigationBarItem(icon:  SvgPicture.asset("assets/services.svg"),activeIcon:SvgPicture.asset("assets/services_selected.svg"),label: "services"),
+          
+                BottomNavigationBarItem(icon:  SvgPicture.asset("assets/home.svg"),activeIcon:SvgPicture.asset("assets/home_selected.svg"),label: "Home"),
+          
+            BottomNavigationBarItem(icon:  SvgPicture.asset("assets/support.svg"),activeIcon:SvgPicture.asset("assets/support_selected.svg"),label: "Support"),
+          ]),
+        )
     );
   }
 

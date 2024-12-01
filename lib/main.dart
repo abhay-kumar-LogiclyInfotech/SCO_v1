@@ -21,6 +21,7 @@ import 'package:sco_v1/viewModel/apply_scholarship/find_draft_by_draft_id_viewmo
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/submitApplicationViewmodel.dart';
+import 'package:sco_v1/viewModel/authentication/get_roles_viewModel.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
@@ -171,6 +172,9 @@ class MyApp extends StatelessWidget {
 
           // decrease notification count
           ChangeNotifierProvider(create: (_) => DecreaseNotificationCountViewModel()),
+
+          // get Roles
+          ChangeNotifierProvider(create: (_) => GetRoleViewModel()),
 
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/tiles/simple_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/contact_us_view.dart';
@@ -13,9 +11,9 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../models/account/simple_tile_model.dart';
 import '../../resources/app_colors.dart';
-import '../../resources/components/custom_simple_app_bar.dart';
-import '../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../viewModel/language_change_ViewModel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SupportView extends StatefulWidget {
   const SupportView({super.key});
@@ -45,23 +43,23 @@ class _SupportViewState extends State<SupportView> with MediaQueryMixin {
 
   Widget _buildUI() {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
 
     final supportItemsMapList = [
       {
-        'title': "Contact Us",
+        'title': localization.contactUs,
         'assetAddress': "assets/support/contact_us.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
-            createRoute(const ContactUsView()))
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ContactUsView()))
       },
 
       {
-        'title': "FAQ's",
+        'title': localization.faqs,
         'assetAddress': "assets/support/faq.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
             createRoute(const FaqView()))
       },
       {
-        'title': "Advisor Contact Details",
+        'title': localization.academic_advisor,
         'assetAddress': "assets/support/advisor_contact_details.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
             createRoute(const AcademicAdvisorView()))

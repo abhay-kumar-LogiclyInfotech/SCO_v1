@@ -21,6 +21,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../viewModel/services/navigation_services.dart';
 import '../../../resources/app_text_styles.dart';
+import '../../../viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
 
 
 class NotificationsView extends StatefulWidget {
@@ -43,6 +44,8 @@ class _NotificationsViewState extends State<NotificationsView>
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// get all notifications
       await Provider.of<GetAllNotificationsViewModel>(context, listen: false).getAllNotifications();
+      await Provider.of<GetNotificationsCountViewModel>(context,listen: false).getNotificationsCount();
+
     });
 
 
@@ -72,16 +75,16 @@ class _NotificationsViewState extends State<NotificationsView>
 
   @override
   Widget build(BuildContext context) {
-    return
+    final localization = AppLocalizations.of(context)!;
 
-      Scaffold(
+    return Scaffold(
         backgroundColor: AppColors.bgColor,
-        appBar: CustomSimpleAppBar(titleAsString: "Notification Center",inNotifications: true,),
-        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+        appBar: CustomSimpleAppBar(titleAsString: localization.notificationCenter,inNotifications: true,),
+        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization: localization), onRefresh: _initializeData) ),
       );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi({required AppLocalizations localization}) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<GetAllNotificationsViewModel>(
@@ -109,7 +112,7 @@ class _NotificationsViewState extends State<NotificationsView>
                       children: [
                         // Edit Addresses Button
                           provider.apiResponse.data?.isNotEmpty ?? false ?
-                          _notificationsSection(provider: provider,langProvider: langProvider) : Utils.showOnNoDataAvailable()
+                          _notificationsSection(provider: provider,langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable()
                       ],
                     ),
                   ),
@@ -127,7 +130,7 @@ class _NotificationsViewState extends State<NotificationsView>
   ///*------ Applications Section------*
 
   Widget _notificationsSection(
-      {required GetAllNotificationsViewModel provider, required LanguageChangeViewModel langProvider}) {
+      {required GetAllNotificationsViewModel provider, required LanguageChangeViewModel langProvider ,required AppLocalizations localization}) {
 
 
     return ListView.builder(
@@ -155,7 +158,7 @@ class _NotificationsViewState extends State<NotificationsView>
                         padding: EdgeInsets.symmetric(horizontal: kPadding),
                         child: Row(
                           children: [
-                            SvgPicture.asset("assets/bell.svg"),
+                           element.isNew ?? false ? SvgPicture.asset("assets/bell.svg") : SvgPicture.asset("assets/message_seen_bell.svg")  ,
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
@@ -175,13 +178,13 @@ class _NotificationsViewState extends State<NotificationsView>
                     child: Column(
                       children: [
                         CustomInformationContainerField(
-                            title: "From",
+                            title: localization.from,
                             description: element?.from ?? ''),
                         CustomInformationContainerField(
-                            title: "Status",
+                            title: localization.status,
                             description:  getFullNameFromLov(langProvider: langProvider,lovCode: 'NOTIFICATION_STS',code: element?.status ?? '') ),
                         CustomInformationContainerField(
-                            title: "Created On",
+                            title: localization.createdOn,
                             description: convertTimestampToDateTime(element?.createDate ?? 0),isLastItem: true),
                         kFormHeight,
                       ],

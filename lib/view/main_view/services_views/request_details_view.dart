@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/services/GetAllRequestsModel.dart';
@@ -32,6 +33,7 @@ import '../../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../viewModel/services/navigation_services.dart';
+import '../../../viewModel/services_viewmodel/get_all_requests_viewModel.dart';
 
 class RequestDetailsView extends StatefulWidget {
   ListOfRequest? request;
@@ -120,19 +122,21 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        titleAsString: "Request",
+        titleAsString: localization.request,
       ),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
           child: Utils.pageRefreshIndicator(
-              child: _buildUi(), onRefresh: _initializeData)),
+              child: _buildUi(localization: localization), onRefresh: _initializeData)),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi({required AppLocalizations localization}) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Directionality(
       textDirection: getTextDirection(langProvider),
@@ -147,11 +151,11 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
               /// Request Details card
               _requestDetailsCard(
-                  request: widget.request, langProvider: langProvider),
+                  request: widget.request, langProvider: langProvider,localization: localization),
 
               /// submit buttons
               _submitAndBackButton(
-                  langProvider: langProvider, request: widget.request),
+                  langProvider: langProvider, request: widget.request,localization: localization),
             ],
           ),
         ),
@@ -161,10 +165,10 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
   //// *----------------------- COMPLETE INFORMATION SECTION START ------------------------*
   Widget _requestDetailsCard(
-      {ListOfRequest? request, required LanguageChangeViewModel langProvider}) {
+      {ListOfRequest? request, required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomInformationContainer(
         leading: SvgPicture.asset("assets/services/request_details.svg"),
-        title: "Request Details",
+        title: localization.requestDetails,
         expandedContentPadding: EdgeInsets.zero,
         expandedContent: Column(
           mainAxisSize: MainAxisSize.max,
@@ -177,7 +181,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
             Padding(
               padding: EdgeInsets.symmetric(horizontal: kPadding),
               child: _requestBasicInformation(
-                  request: request, langProvider: langProvider),
+                  request: request, langProvider: langProvider,localization: localization),
             ),
 
             /// ****************************************************************
@@ -189,7 +193,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
             Padding(
               padding: EdgeInsets.symmetric(horizontal: kPadding),
               child:
-              _addNewComment(request: request, langProvider: langProvider),
+              _addNewComment(request: request, langProvider: langProvider,localization: localization),
             ),
             kFormHeight,
 
@@ -218,35 +222,36 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
   //// *----------------------- BASIC INFORMATION SECTION START ------------------------*
   Widget _requestBasicInformation(
-      {ListOfRequest? request, required LanguageChangeViewModel langProvider}) {
+      {ListOfRequest? request, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     return Column(mainAxisSize: MainAxisSize.max, children: [
       CustomInformationContainerField(
-          title: "S. No.", description: request?.serviceRequestId.toString()),
+          title: localization.sr, description: request?.serviceRequestId.toString()),
       CustomInformationContainerField(
-          title: "Request Id",
+          title: localization.requestId,
           description: request?.ssrRsReqSeqHeader.toString()),
       CustomInformationContainerField(
-          title: "Category",
+          title: localization.category,
           description: getFullNameFromLov(
               langProvider: langProvider,
               lovCode: "SERVICE_CATEGORY",
               code: request?.requestCategory.toString())),
       CustomInformationContainerField(
-          title: "Request Type",
+          title: localization.requestType,
           description: getFullNameFromLov(
               langProvider: langProvider,
               lovCode: 'SERVICE_TYPE#${request?.requestCategory.toString()}',
               code: request?.requestType.toString())),
       CustomInformationContainerField(
-          title: "Request Sub Type",
+          title: localization.requestSubType,
           description: getFullNameFromLov(
               langProvider: langProvider,
               lovCode: 'SERVICE_SUBTYPE#${request?.requestType.toString()}',
               code: request?.requestSubType.toString())),
       CustomInformationContainerField(
-          title: "Request Date", description: request?.requestDate ?? ''),
+          title: localization.requestDate ?? '- -',
+          description: request?.requestDate ?? ' '),
       CustomInformationContainerField(
-          title: "Request Status",
+          title: localization.requestStatus,
           description: getFullNameFromLov(
               langProvider: langProvider,
               code: request?.status.toString(),
@@ -264,7 +269,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
       textDirection: getTextDirection(langProvider),
       child: Container(
           width: double.infinity,
-          // padding: EdgeInsets.all(kPadding - 10),
+          padding: EdgeInsets.all(kPadding - 10),
           decoration: const BoxDecoration(color: AppColors.lightBlue0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,17 +283,17 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.all(kPadding - 10),
-                        child: Text(
-                          // "${(index+1).toString()}) "
-                              "${comment?.ssrRsDescription.toString().replaceAll('<br/>', '\n')}" ??
-                              '',
-                          style: AppTextStyles.bold15ScoButtonColorTextStyle(),
-                          textAlign: TextAlign.start,
-                        ),
+                      Text(
+                        // "${(index+1).toString()}) "
+                            "${comment?.ssrRsDescription.toString().replaceAll('<br/>', '\n')}" ??
+                            '',
+                        style: AppTextStyles.bold15ScoButtonColorTextStyle(),
+                        textAlign: TextAlign.start,
                       ),
-                     if(index < request!.details!.length -1 ) const MyDivider(color: AppColors.darkGrey,),
+                     if(index < request!.details!.length -1 ) const Padding(
+                       padding:  EdgeInsets.symmetric(vertical: 15),
+                       child:  MyDivider(),
+                     ),
                     ],
                   );
                 }),
@@ -304,12 +309,12 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
   final List<Details?> _requestCommentsList = [];
 
   Widget _addNewComment(
-      {ListOfRequest? request, required LanguageChangeViewModel langProvider}) {
+      {ListOfRequest? request, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Comment",
+         localization.comments,
           style: AppTextStyles.titleTextStyle(),
         ),
         const SizedBox.square(dimension: 5),
@@ -318,7 +323,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
             textInputType: TextInputType.multiline,
             currentFocusNode: _newCommentFocusNode,
             controller: _newCommentController,
-            hintText: "Enter your view",
+            hintText: localization.commentsWatermark,
             onChanged: (value) => {})
       ],
     );
@@ -370,41 +375,58 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
   /// Function to add Attachment to the list
   _addFile() async {
-    /// kindly check for permissions
+    /// Check and request permissions
     final permitted = await _permissionServices.checkAndRequestPermission(
-        Platform.isIOS ? Permission.storage : Permission.manageExternalStorage,
-        context);
-    if (permitted) {
-      /// TODO: PLEASE ADD ALLOWED EXTENSIONS
-      final file = await _mediaServices.getSingleFileFromPicker();
+      Platform.isIOS ? Permission.storage : Permission.manageExternalStorage,
+      context,
+    );
 
-      if (file != null) {
-        setState(() {
-          _attachmentsList.add(ListAttachment(
-              attachmentSeqNumberController: TextEditingController(),
-              fileDescriptionController: TextEditingController(),
-              userAttachmentFileController:    TextEditingController(text: file.path.split('/').last),
-              attachmentSysFileNameController: TextEditingController(text: file.path.split('/').last),
-              base64StringController: TextEditingController(text: base64Encode(file.readAsBytesSync())),
-              viewByAdviseeController: TextEditingController(text: 'Y'),
-              attachmentSeqNumberFocusNode: FocusNode(),
-              fileDescriptionFocusNode: FocusNode(),
-              userAttachmentFileFocusNode: FocusNode(),
-              attachmentSysFileNameFocusNode: FocusNode(),
-              base64StringFocusNode: FocusNode(),
-              viewByAdviseeFocusNode: FocusNode(),
-              newlyAded: true,
-              isLoading: false));
-        });
-      }
+    if (!permitted) {
+      // Handle case when permissions are not granted
+      return;
     }
+
+    /// Get file from picker
+    final file = await _mediaServices.getSingleFileFromPicker();
+
+    if (file != null) {
+      _addAttachment(file);
+    }
+  }
+
+  /// Helper Method to Add a File as an Attachment
+  void _addAttachment(File file) {
+    final fileName = file.path.split('/').last;
+    final base64String = base64Encode(file.readAsBytesSync());
+
+    final newAttachment = ListAttachment(
+      attachmentSeqNumberController: TextEditingController(),
+      fileDescriptionController: TextEditingController(),
+      userAttachmentFileController: TextEditingController(text: fileName),
+      attachmentSysFileNameController: TextEditingController(text: fileName),
+      base64StringController: TextEditingController(text: base64String),
+      viewByAdviseeController: TextEditingController(text: 'Y'),
+      attachmentSeqNumberFocusNode: FocusNode(),
+      fileDescriptionFocusNode: FocusNode(),
+      userAttachmentFileFocusNode: FocusNode(),
+      attachmentSysFileNameFocusNode: FocusNode(),
+      base64StringFocusNode: FocusNode(),
+      viewByAdviseeFocusNode: FocusNode(),
+      newlyAded: true,
+      isLoading: false,
+      newRecord: true,
+    );
+
+    setState(() {
+      _attachmentsList.add(newAttachment);
+    });
   }
 
 //// *----------------------- ADD ATTACHMENTS SECTION END ------------------------*
 
   //// *----------------------- SUBMIT AND BACK BUTTON SECTION START ------------------------*
   Widget _submitAndBackButton(
-      {required langProvider, required ListOfRequest? request}) {
+      {required langProvider, required ListOfRequest? request, required AppLocalizations localization}) {
     return Column(
       children: [
         kFormHeight,
@@ -413,27 +435,34 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
         child:Consumer<UpdateRequestViewModel>(builder: (context,updateRequestProvider,_){
           return  CustomButton(
-              buttonName: "Update",
+              buttonName: localization.update,
               isLoading: updateRequestProvider.apiResponse.status == Status.LOADING,
               borderColor: Colors.transparent,
               buttonColor: AppColors.scoThemeColor,
               textDirection: getTextDirection(langProvider),
               onTap: () async {
                 setProcessing(true);
-                bool result = validateForm(langProvider: langProvider, request: request);
-                if (result) {
+                // bool result = validateForm(langProvider: langProvider, request: request);
+                // if (result) {
                   /// Create Form
-                  createForm(request: request);
 
-                  log(form.toString());
+                final logger = Logger();
+
+                for (var attachment in _attachmentsList) {
+                  logger.d(attachment.toJson());
+                }
+
+                  createForm(request: request);
+                logger.d(form.toString());
                   bool result = await updateRequestProvider.updateRequest(form: form);
-                  print(result);
                   if (updateRequestProvider.apiResponse.status == Status.COMPLETED) {
                     /// update and refresh the information
                     // await _initializeData();
-                    _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const RequestView()));
+                    // _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const RequestView()));
+                    Provider.of<GetAllRequestsViewModel>(context,listen: false).getAllRequests();
+                    _navigationServices.goBack();
                   }
-                }
+                // }
                 setProcessing(false);
               });
         })
@@ -450,18 +479,18 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
   /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode;
 
-  bool validateForm({required langProvider, required ListOfRequest? request}) {
-    firstErrorFocusNode = null;
-
-    /// checking for fist error node
-    if (firstErrorFocusNode != null) {
-      FocusScope.of(context).requestFocus(firstErrorFocusNode);
-      return false;
-    } else {
-      /// No errors found, return true
-      return true;
-    }
-  }
+  // bool validateForm({required langProvider, required ListOfRequest? request}) {
+  //   firstErrorFocusNode = null;
+  //
+  //   /// checking for fist error node
+  //   if (firstErrorFocusNode != null) {
+  //     FocusScope.of(context).requestFocus(firstErrorFocusNode);
+  //     return false;
+  //   } else {
+  //     /// No errors found, return true
+  //     return true;
+  //   }
+  // }
 
   //// *----------------------- VALIDATION SECTION END ------------------------*
 
@@ -480,7 +509,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
   }
 
   void createForm({required ListOfRequest? request}) {
-    form.clear();
+    // form.clear();
 
     //// USING LOGIC TO ADD AND REMOVE LAST ITEM:
    final newComment = _newCommentController.text.trim();
@@ -497,6 +526,11 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
         _requestCommentsList.removeLast();
       }
     }
+
+
+
+
+
 
 
     /// add comment and attachments form

@@ -77,14 +77,15 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
         backgroundColor: AppColors.bgColor,
-        appBar: CustomSimpleAppBar(titleAsString: "My Finance"),
-        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+        appBar: CustomSimpleAppBar(titleAsString: localization.myFinance),
+        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
       );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<MyFinanceStatusViewModel>(
@@ -110,13 +111,13 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _salaryDetails(provider: provider, langProvider: langProvider),
+                        _salaryDetails(provider: provider, langProvider: langProvider,localization: localization),
                         kFormHeight,
-                        _deductionDetails(provider: provider, langProvider: langProvider),
+                        _deductionDetails(provider: provider,langProvider: langProvider,localization: localization),
                         kFormHeight,
-                        _bonusDetails(provider: provider, langProvider: langProvider),
+                        _bonusDetails(provider: provider, langProvider: langProvider,localization: localization),
                         kFormHeight,
-                        _warningDetails(provider: provider, langProvider: langProvider),
+                        _warningDetails(provider: provider, langProvider: langProvider,localization: localization),
                       ],
                     ),
                   ),
@@ -132,23 +133,23 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin
   }
 
   ///*------ Top Salary Section------*
-  Widget _salaryDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _salaryDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
 
     final listOfSalaries = provider.apiResponse.data?.data?.listSalaryDetials ?? [];
 
     final topSalaryDetails = listOfSalaries.isNotEmpty ? listOfSalaries[0] : null;
 
     return CustomInformationContainer(
-      title: 'Salary Details',
+      title: localization.salaryDetails,
       leading: SvgPicture.asset("assets/services/salary_details.svg"),
       expandedContentPadding: EdgeInsets.zero,
       expandedContent: financeCard(content:  [
-        CustomInformationContainerField(title: "Bank Name", description: topSalaryDetails?.bankName.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Amount", description: topSalaryDetails?.amount.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Currency", description: topSalaryDetails?.currency.toString() ?? '- -'),
-        CustomInformationContainerField(title: "The Month", description: topSalaryDetails?.salaryMonth.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Status", description: topSalaryDetails?.status.toString() ?? '- -' ,isLastItem: true),
-      ],  langProvider: langProvider,onTapViewAll: (){
+        CustomInformationContainerField(title: localization.bankName, description: topSalaryDetails?.bankName.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.amount, description: topSalaryDetails?.amount.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.currency, description: topSalaryDetails?.currency.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.theMonth, description: topSalaryDetails?.salaryMonth.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.status,description: topSalaryDetails?.status.toString() ?? '- -' ,isLastItem: true),
+      ],localization: localization , langProvider: langProvider,onTapViewAll: (){
         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const SalaryDetailsView()));
       })
     );
@@ -158,66 +159,65 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin
 
 
   ///*------  Top Deduction Section------*
-  Widget _deductionDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _deductionDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
 
     final listOfDeduction = provider.apiResponse.data?.data?.listDeduction ?? [];
     final topDeduction = listOfDeduction.isNotEmpty  ? listOfDeduction[0] : null;
     return CustomInformationContainer(
-      title: 'Deduction Details',
+      title: localization.deductionDetails,
       expandedContentPadding: EdgeInsets.zero,
       leading: SvgPicture.asset("assets/services/deduction_details.svg"),
       expandedContent: financeCard(content: [
-        CustomInformationContainerField(title: "Total Deduction", description: topDeduction?.totalDeduction.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Total Deducted", description: topDeduction?.totalDeducted.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Deduction Pending", description: topDeduction?.deductionPending.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Currency", description: topDeduction?.currencyCode.toString() ?? '- -' ,isLastItem: true),
+        CustomInformationContainerField(title: localization.totalDeduction,description: topDeduction?.totalDeduction.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.totalDeducted, description: topDeduction?.totalDeducted.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.deductionPending, description: topDeduction?.deductionPending.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.currency, description: topDeduction?.currencyCode.toString() ?? '- -' ,isLastItem: true),
       ], onTapViewAll: (){
         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const DeductionDetailsView()));
 
-      }, langProvider: langProvider));
+      }, langProvider: langProvider,localization: localization));
   }
 
   ///*------ Top Bonus Section------*
-  Widget _bonusDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _bonusDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     final listOfBonus = provider.apiResponse.data?.data?.listBonus ?? [];
     final topBonus = listOfBonus.isNotEmpty ? listOfBonus[0] : null;
     return CustomInformationContainer(
-      title: 'Bonus Details',
+      title: localization.bonusDetails,
         expandedContentPadding: EdgeInsets.zero,
         leading: SvgPicture.asset("assets/services/bonus_details.svg"),
       expandedContent: financeCard(content: [
-        CustomInformationContainerField(title: "Period", description: topBonus?.periodIdDescription.toString() ?? '- -' ?? '- -'),
-        CustomInformationContainerField(title: "Term", description: topBonus?.termDescription.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Amount", description: topBonus?.amount.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Currency", description: topBonus?.currencyCode.toString() ?? '- -' ,isLastItem: true),
+        CustomInformationContainerField(title: localization.period, description: topBonus?.periodIdDescription.toString() ?? '- -' ?? '- -'),
+        CustomInformationContainerField(title: localization.term, description: topBonus?.termDescription.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.amount,description: topBonus?.amount.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.currency, description: topBonus?.currencyCode.toString() ?? '- -' ,isLastItem: true),
       ], onTapViewAll: (){
         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const BonusDetailsView()));
 
-      }, langProvider: langProvider));
+      }, langProvider: langProvider,localization: localization));
   }
 
   ///*------ Top Warning Section------*
-  Widget  _warningDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget  _warningDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     final listOfWarnings = provider.apiResponse.data?.data?.listWarnings ?? [];
     final topWarning = listOfWarnings.isNotEmpty ? listOfWarnings[0] : null;
     return CustomInformationContainer(
-      title: 'Warning Details',
+      title: localization.warningDetails,
       expandedContentPadding: EdgeInsets.zero,
       leading: SvgPicture.asset("assets/services/warning_details.svg"),
       expandedContent: financeCard(
           content: [
-        CustomInformationContainerField(title: "Term", description: topWarning?.termDescription.toString() ?? '- -'),
-        CustomInformationContainerField(title: "Certificate Description", description: topWarning?.warningCertificate.toString() ?? '- -' ,isLastItem: true),
+        CustomInformationContainerField(title: localization.term, description: topWarning?.termDescription.toString() ?? '- -'),
+        CustomInformationContainerField(title: localization.certificateDescription, description: topWarning?.warningCertificate.toString() ?? '- -' ,isLastItem: true),
           ],
           onTapViewAll: (){
             _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const WarningDetailsView()));
           },
-          langProvider: langProvider));
-
+          langProvider: langProvider,localization: localization));
   }
 
 
-  Widget financeCard({required List<Widget> content,required onTapViewAll,required langProvider})
+  Widget financeCard({required List<Widget> content,required onTapViewAll,required langProvider, required AppLocalizations localization})
   {
     return Column(
         mainAxisSize: MainAxisSize.max,
@@ -232,7 +232,7 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin
           kFormHeight,
           Padding(
             padding:  EdgeInsets.only(left: kPadding,right: kPadding,bottom: kPadding),
-            child: CustomButton(buttonName: "View All", isLoading: false,buttonColor:AppColors.scoThemeColor,borderColor:Colors.transparent,textDirection: getTextDirection(langProvider), onTap: onTapViewAll),
+            child: CustomButton(buttonName: localization.viewAll, isLoading: false,buttonColor:AppColors.scoThemeColor,borderColor:Colors.transparent,textDirection: getTextDirection(langProvider), onTap: onTapViewAll),
           )
         ]
     );

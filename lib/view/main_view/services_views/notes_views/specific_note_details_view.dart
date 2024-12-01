@@ -77,14 +77,15 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "Note"),
-      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+      appBar: CustomSimpleAppBar(titleAsString: localization.guidance_notes),
+      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization: localization), onRefresh: _initializeData) ),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi({required AppLocalizations localization}) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<GetSpecificNoteDetailsViewModel>(
@@ -113,11 +114,11 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         listDetails.isNotEmpty ?
-                        _listDetails(provider: provider, langProvider: langProvider) : Utils.showOnNoDataAvailable()
+                        _listDetails(provider: provider, langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable()
                         ,
                         kFormHeight,
 
-                        _listActions(provider: provider, langProvider: langProvider)
+                        _listActions(provider: provider, langProvider: langProvider,localization: localization)
 
 
                       ],
@@ -135,21 +136,21 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
   }
 
   ///*------  DETAILS Section------*
-  Widget _listDetails({required GetSpecificNoteDetailsViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _listDetails({required GetSpecificNoteDetailsViewModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
    final noteInfo =  provider.apiResponse.data?.data?.adviseeNote;
     return CustomInformationContainer(
-        title: 'Note Details',
+        title: localization.noteDetails,
         leading: SvgPicture.asset("assets/services/request_details.svg"),
         expandedContent: Column(
           children: [
-            CustomInformationContainerField(title: "Institution", description: noteInfo?.institution ?? '- -'),
-            CustomInformationContainerField(title: "Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: "CATEGORY",code:  noteInfo?.noteType ?? '- -' )),
-            CustomInformationContainerField(title: "Sub Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: 'SUB_CATEGORY#${noteInfo?.noteType}',code: noteInfo?.noteSubType ?? '- -') ),
-            CustomInformationContainerField(title: "Contact Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: "CONTACT_TYPE",code:  noteInfo?.contactType )),
-            CustomInformationContainerField(title: "Note Status", description: getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_STATUS",code:  noteInfo?.noteStatus )),
-            CustomInformationContainerField(title: "Can Advisee View", description:  getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_ACCESS",code:  noteInfo?.access )),
-            CustomInformationContainerField(title: "Created On", description: convertTimestampToDate(int.parse(noteInfo?.createdOn?.toString() ?? '- -'))),
-            CustomInformationContainerField(title: "Subject", description: noteInfo?.subject ?? '- -',isLastItem: true),
+            CustomInformationContainerField(title: localization.institution, description: noteInfo?.institution ?? '- -'),
+            CustomInformationContainerField(title: localization.type, description: getFullNameFromLov(langProvider: langProvider,lovCode: "CATEGORY",code:  noteInfo?.noteType ?? '- -' )),
+            CustomInformationContainerField(title: localization.subType,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'SUB_CATEGORY#${noteInfo?.noteType}',code: noteInfo?.noteSubType ?? '- -') ),
+            CustomInformationContainerField(title: localization.contactType, description: getFullNameFromLov(langProvider: langProvider,lovCode: "CONTACT_TYPE",code:  noteInfo?.contactType )),
+            CustomInformationContainerField(title: localization.noteStatus, description: getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_STATUS",code:  noteInfo?.noteStatus )),
+            CustomInformationContainerField(title: localization.canAdviseeView, description:  getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_ACCESS",code:  noteInfo?.access )),
+            CustomInformationContainerField(title: localization.createdOn, description: convertTimestampToDate(int.parse(noteInfo?.createdOn?.toString() ?? '- -'))),
+            CustomInformationContainerField(title: localization.subject, description: noteInfo?.subject ?? '- -',isLastItem: true),
           ],
         )
     );
@@ -157,10 +158,10 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
   }
 
 
-  Widget _listActions({required GetSpecificNoteDetailsViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _listActions({required GetSpecificNoteDetailsViewModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     final actionsList = provider.apiResponse.data?.data?.adviseeNote?.actionList ?? [];
     return  CustomInformationContainer(
-        title: 'Actions',
+        title: localization.actions,
         expandedContentPadding: EdgeInsets.zero,
         leading: SvgPicture.asset("assets/services/request_details.svg"),
         expandedContent:  actionsList.isNotEmpty ?  ListView.builder(
@@ -175,10 +176,10 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
                     financeCard(
                         color: index%2 != 0 ? const Color(0xffF9F9F9) : Colors.white,
                         content:  [
-                          CustomInformationContainerField(title: "S.No", description: (index+1).toString() ?? '- -'),
-                          CustomInformationContainerField(title: "Comment", description: action.desc ?? '- -'),
-                          CustomInformationContainerField(title: "Due Date", description: convertTimestampToDate(int.parse(action?.dueDate?.toString() ?? '- -'))),
-                          CustomInformationContainerField(title: "Status", description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ITEM_ACTION_STATUS',code:  action.status),isLastItem: true ) ,
+                          CustomInformationContainerField(title: localization.sr, description: (index+1).toString() ?? '- -'),
+                          CustomInformationContainerField(title: localization.comments, description: action.desc ?? '- -'),
+                          CustomInformationContainerField(title: localization.dueDate, description: convertTimestampToDate(int.parse(action?.dueDate?.toString() ?? '- -'))),
+                          CustomInformationContainerField(title: localization.status, description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ITEM_ACTION_STATUS',code:  action.status),isLastItem: true ) ,
                         ],  langProvider: langProvider,isLastTerm: index == actionsList.length -1),
                     if(index < actionsList.length-1 ) const MyDivider(color: AppColors.darkGrey),
                   ],

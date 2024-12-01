@@ -21,6 +21,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/components/custom_advanced_switch.dart';
 import '../../resources/getRoles.dart';
+import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/auth_services.dart';
 import '../../viewModel/services/navigation_services.dart';
@@ -78,6 +79,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
 
     // check user is logged in or not
     _toLogin = await _authService.isLoggedIn();
+
     setState(() {
       _isLoading = false; // Set loading to false after initialization
     });
@@ -101,6 +103,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
      /// Getting profile picture and  name and userTypes
       if(_toLogin){
 
+
         // SETTING USERNAME AND ROLES
         _name = HiveManager.getName() ?? 'User Name';
         _roles = HiveManager.getRole()?? [];
@@ -108,6 +111,9 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
         final profilePictureProvider  = Provider.of<GetProfilePictureUrlViewModel>(context,listen: false);
         await profilePictureProvider.getProfilePictureUrl();
 
+        // Getting Fresh Roles
+        final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
+        await getRolesProvider.getRoles();
 
       }
 
@@ -309,6 +315,21 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                           color: Colors.white.withOpacity(0.25))),
                                 ),
 
+                                // *---- Vision and mission ----*
+                                ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title:  Text(localization.vision_mission_values, style: AppTextStyles.drawerButtonsStyle()),
+                                  leading: SvgPicture.asset("assets/sidemenu/visionMission.svg"),
+                                  dense: true,
+                                  horizontalTitleGap: 5,
+                                  onTap: () {
+                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const VisionAndMissionView()));
+                                  },
+                                  shape: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white.withOpacity(0.25))),
+                                ),
+
 
                                 //*------About Us------*/
                             // ExpansionTile(
@@ -479,9 +500,9 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 await _authService.clearCounter();
 
                                 /// Clearing all data from hive database
-                                await HiveManager.clearData();
-                                await  HiveManager.clearEmiratesId();
-                                await  HiveManager.clearUserId();
+                                // await HiveManager.clearData();
+                                await HiveManager.clearEmiratesId();
+                                await HiveManager.clearUserId();
                                 await HiveManager.clearName();
                                 await HiveManager.clearRole();
 
@@ -490,8 +511,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 _alertServices.toastMessage(localization.logout_success);
                               },
                               shape: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white.withOpacity(0.25))),
-                            ),
-                                const SizedBox(height: 50,),
+                            ), const SizedBox(height: 50,),
 
                               ]),
                         ),

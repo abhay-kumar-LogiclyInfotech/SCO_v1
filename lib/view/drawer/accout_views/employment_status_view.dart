@@ -154,19 +154,21 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        titleAsString: "Employment Status",
+        titleAsString: localization.employmentStatus,
       ),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
           child: Utils.pageRefreshIndicator(
-              child: _buildUi(), onRefresh: _initializeData)),
+              child: _buildUi(localization), onRefresh: _initializeData)),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(AppLocalizations localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Consumer<GetEmploymentStatusViewModel>(
         builder: (context, provider, _) {
@@ -193,12 +195,13 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
                   children: [
                     /// Employment status card
                     _employmentStatusCard(
-                        provider: provider, langProvider: langProvider),
+                        provider: provider, langProvider: langProvider,localization: localization,),
 
                     /// submit buttons
                     _submitAndBackButton(
                         langProvider: langProvider,
-                        employmentStatusProvider: provider),
+                        employmentStatusProvider: provider,
+                    localization: localization),
                   ],
                 ),
               ),
@@ -213,7 +216,6 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
     });
   }
 
-  ///*------Student Information Section------*
 
   /// FocusNodes
   final FocusNode _employmentStatusFocusNode = FocusNode();
@@ -232,23 +234,24 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
 
   Widget _employmentStatusCard(
       {required GetEmploymentStatusViewModel provider,
-      required LanguageChangeViewModel langProvider}) {
+      required LanguageChangeViewModel langProvider,
+      required AppLocalizations localization}) {
     return CustomInformationContainer(
       leading: SvgPicture.asset("assets/myAccount/emloyment_Status_card_title_icon.svg"),
-      title: "Employment Status Details",
+      title: localization.employmentDetails,
         expandedContent: Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         /// First name
         fieldHeading(
-            title: "Employment Status",
+            title: localization.employmentStatus,
             important: true,
             langProvider: langProvider),
         scholarshipFormDropdown(
             currentFocusNode: _employmentStatusFocusNode,
             controller: _employmentStatusController,
             menuItemsList: _employmentStatusMenuItemsList,
-            hintText: "Select Employment Status",
+            hintText: localization.select,
             errorText: _employmentStatusError,
             onChanged: (value) {
               setState(() {
@@ -262,12 +265,12 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
 
         /// ****************************************************************
         kFormHeight,
-        fieldHeading(title: "Employer", important: false, langProvider: langProvider),
+        fieldHeading(title: localization.emphistEmployerName, important: false, langProvider: langProvider),
         scholarshipFormDropdown(
             currentFocusNode: _employerFocusNode,
             controller: _employerController,
             menuItemsList: _employerMenuItemsList,
-            hintText: "Select Employer",
+            hintText: localization.emphistEmployerNameWatermark,
             errorText: _employerError,
             onChanged: (value) {
               setState(() {
@@ -282,11 +285,11 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
         /// ****************************************************************
         kFormHeight,
         fieldHeading(
-            title: "Comments", important: false, langProvider: langProvider),
+            title: localization.comments, important: false, langProvider: langProvider),
         scholarshipFormTextField(
             currentFocusNode: _commentsFocusNode,
             controller: _commentsController,
-            hintText: "Enter Your Comments",
+            hintText: localization.commentsWatermark,
             textInputType: TextInputType.text,
             errorText: _commentsError,
             maxLines: 3,
@@ -386,7 +389,9 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
   Widget _submitAndBackButton(
       {required langProvider,
       UserInfo? userInfo,
-      GetEmploymentStatusViewModel? employmentStatusProvider}) {
+      GetEmploymentStatusViewModel? employmentStatusProvider,
+        required AppLocalizations localization
+      }) {
     return Column(
       children: [
         kFormHeight,
@@ -396,7 +401,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
           child: Consumer<CreateUpdateEmploymentStatusViewModel>(
               builder: (context, createUpdateProvider, _) {
             return CustomButton(
-                buttonName: "Update",
+                buttonName: localization.update,
                 isLoading:
                     createUpdateProvider.apiResponse.status == Status.LOADING,
                 borderColor: Colors.transparent,
@@ -406,7 +411,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
                   setProcessing(true);
 
                   bool result = validateForm(
-                      langProvider: langProvider, userInfo: userInfo);
+                      langProvider: langProvider, userInfo: userInfo,localization: localization);
                   if (result) {
                     /// Create Form
                     createForm(provider: employmentStatusProvider);
@@ -442,12 +447,12 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
   /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode;
 
-  bool validateForm({required langProvider, UserInfo? userInfo}) {
+  bool validateForm({required langProvider, UserInfo? userInfo,     required AppLocalizations localization}) {
     firstErrorFocusNode = null;
 
     if (_employmentStatusController.text.isEmpty) {
       setState(() {
-        _employmentStatusError = "Please Select Employment Status";
+        _employmentStatusError = localization.employmentStatusRequired;
         firstErrorFocusNode ??= _employmentStatusFocusNode;
       });
     }
@@ -479,18 +484,20 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
       GetPersonalDetailsViewModel? personalDetails}) {
     /// create Employment status form it uses post method
     createEmploymentStatusForm = {
-      // "sequanceNumber": "2",
+      "sequanceNumber": "2",
       "employmentStatus": _employmentStatusController.text,
       "employerName": _employerController.text,
       "currentFlag": "Y",
-      "comment": _commentsController.text
+      "comment": _commentsController.text,
+      "listOfFiles": _attachmentsList.map((element) {
+        return element.toJson();
+      }).toList()
     };
 
     /// update Employment status form it uses put method
     updateEmploymentStatusForm = {
       "emplId": provider?.apiResponse?.data?.data?.employmentStatus?.emplId,
-      "sequanceNumber":
-          provider?.apiResponse?.data?.data?.employmentStatus?.sequanceNumber,
+      "sequanceNumber": provider?.apiResponse?.data?.data?.employmentStatus?.sequanceNumber,
       "employmentStatus": _employmentStatusController.text,
       "employerName": _employerController.text,
       "currentFlag": "N",

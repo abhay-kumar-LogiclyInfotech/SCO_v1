@@ -19,7 +19,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../viewModel/services/navigation_services.dart';
 import 'edit_addresses_view.dart';
-import 'edit_personal_details_view.dart';
+import 'edit_personal_details_view.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class AddressesView extends StatefulWidget {
   const AddressesView({super.key});
@@ -70,16 +71,15 @@ class _AddressesViewState extends State<AddressesView>
 
   @override
   Widget build(BuildContext context) {
-    return
-
-      Scaffold(
+    final localization = AppLocalizations.of(context)!;
+    return  Scaffold(
         backgroundColor: AppColors.bgColor,
-        appBar: CustomSimpleAppBar(titleAsString: "Addresses"),
-        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+        appBar: CustomSimpleAppBar(titleAsString: localization.address),
+        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
       );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<GetPersonalDetailsViewModel>(
@@ -121,7 +121,7 @@ class _AddressesViewState extends State<AddressesView>
                               ),
                               kFormHeight,
                               /// Addresses list section
-                              _addressesSection(provider: provider, langProvider: langProvider),
+                              _addressesSection(provider: provider, langProvider: langProvider,localization: localization),
                             ],
                           ) : Utils.showOnNoDataAvailable()
                       ],
@@ -141,7 +141,7 @@ class _AddressesViewState extends State<AddressesView>
   ///*------ Applications Section------*
 
   Widget _addressesSection(
-      {required GetPersonalDetailsViewModel provider, required LanguageChangeViewModel langProvider}) {
+      {required GetPersonalDetailsViewModel provider, required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
 
 
     return ListView.builder(
@@ -156,14 +156,14 @@ physics: const NeverScrollableScrollPhysics(),    itemCount: provider.apiRespons
             mainAxisSize: MainAxisSize.max,
             children: [
               /// ------------ Addresses Section ------------
-              CustomInformationContainerField(title: "S.No", description: (index+1).toString() ??'- -'),
-              CustomInformationContainerField(title: "Address Line 1", description: element?.addressLine1 ??'- -'),
-              CustomInformationContainerField(title: "Address Line 2", description: element?.addressLine2 ?? '- -'),
-              CustomInformationContainerField(title: "Address Type", description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ADDRESS_TYPE',code: element?.addressType ?? '- -') ),
-              CustomInformationContainerField(title: "City", description: element?.city ?? '- -'),
-              CustomInformationContainerField(title: "Country", description: getFullNameFromLov(langProvider: langProvider,lovCode: "COUNTRY",code:  element?.country ?? '- -') ),
-              CustomInformationContainerField(title: "PO Box", description: element?.postalCode ?? '- -'),
-              CustomInformationContainerField(title: "Emirates/States", description: getFullNameFromLov(langProvider: langProvider,lovCode: "STATE#${element?.country ?? '- -'}",code: element?.state ?? '- -')  , isLastItem: true),
+              CustomInformationContainerField(title: localization.sr, description: (index+1).toString() ??'- -'),
+              CustomInformationContainerField(title: localization.addressLine1, description: element?.addressLine1 ??'- -'),
+              CustomInformationContainerField(title: localization.addressLine2, description: element?.addressLine2 ?? '- -'),
+              CustomInformationContainerField(title: localization.addressType, description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ADDRESS_TYPE',code: element?.addressType ?? '- -') ),
+              CustomInformationContainerField(title: localization.city, description: element?.city ?? '- -'),
+              CustomInformationContainerField(title: localization.country, description: getFullNameFromLov(langProvider: langProvider,lovCode: "COUNTRY",code:  element?.country ?? '- -') ),
+              CustomInformationContainerField(title: localization.poBox, description: element?.postalCode ?? '- -'),
+              CustomInformationContainerField(title: localization.state, description: getFullNameFromLov(langProvider: langProvider,lovCode: "STATE#${element?.country ?? '- -'}",code: element?.state ?? '- -')  , isLastItem: true),
             ]
         )),
       );

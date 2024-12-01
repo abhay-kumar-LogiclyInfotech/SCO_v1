@@ -92,17 +92,18 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title:
-            Text("Apply Scholarship", style: AppTextStyles.appBarTitleStyle()),
+            Text(localization.apply_for_scholarship, style: AppTextStyles.appBarTitleStyle()),
       ),
-      body: _buildUI(),
+      body: _buildUI(localization),
     );
   }
 
-  Widget _buildUI() {
+  Widget _buildUI(AppLocalizations localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     dynamic textDirection = getTextDirection(langProvider);
     return Padding(
@@ -117,7 +118,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                     children: [
                       // submit application section:
                       CustomInformationContainer(
-                          title: "Submit An Application",
+                          title: localization.submitApplication,
                           leading: SvgPicture.asset("assets/scholarships.svg"),
                           expandedContent: Column(
                             children: [
@@ -125,7 +126,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
                               // Heading
                               fieldHeading(
-                                  title: "Request Type",
+                                  title: localization.requestType,
                                   important: false,
                                   langProvider: langProvider),
 
@@ -136,7 +137,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                     menuItemsList: Constants.scholarshipRequestType,
                                     provider: langProvider),
                                 currentFocusNode: _requestTypeFocusNode,
-                                hintText: "Select Request Type",
+                                hintText: localization.select,
                                 textColor: AppColors.scoButtonColor,
                                 outlinedBorder: true,
                                 onChanged: (value) {
@@ -157,7 +158,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
                               // Heading
                               fieldHeading(
-                                  title: "Academic Career",
+                                  title: localization.academicCareer,
                                   important: false,
                                   langProvider: langProvider),
 
@@ -169,7 +170,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                     menuItemsList: (academicCareerMenuItemList == null || academicCareerMenuItemList!.isEmpty) ? [] : academicCareerMenuItemList!,
                                     provider: langProvider),
                                 currentFocusNode: _academicCareerFocusNode,
-                                hintText: "Select Academic Career",
+                                hintText: localization.select,
                                 textColor: AppColors.scoButtonColor,
                                 outlinedBorder: true,
                                 value: _selectedAcademicCareer.isEmpty ? null : _selectedAcademicCareer, // Set the value properly
@@ -197,11 +198,9 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                             _selectedAcademicCareer.isNotEmpty?_navigationService.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(
                               selectedScholarshipConfigurationKey: _selectedAcademicCareer,
                               getAllActiveScholarships: provider.apiResponse.data,
-                            ))) : _alertService.flushBarErrorMessages(message: "Please select Academic Career",
+                            ))) : _alertService.flushBarErrorMessages(message: "${localization.select} ${localization.academicCareer}",
                                 // context: context,
                                 provider: langProvider);
-
-
 
                           }),
                     ],

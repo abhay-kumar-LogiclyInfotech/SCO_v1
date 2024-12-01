@@ -141,16 +141,17 @@ class _EditAddressesViewState extends State<EditAddressesView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        titleAsString: "Edit Addresses",
+        titleAsString: localization.editAddresses,
       ),
-      body: Utils.modelProgressHud(processing: _isProcessing,child:  _buildUi()),
+      body: Utils.modelProgressHud(processing: _isProcessing,child:  _buildUi(localization)),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(AppLocalizations localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Consumer<GetPersonalDetailsViewModel>(
         builder: (context, provider, _) {
@@ -183,12 +184,13 @@ class _EditAddressesViewState extends State<EditAddressesView>
                         if (userInfo?.addresses != null)
                           Column(
                             children: [
-                              _addressInformationSection(provider: provider, langProvider: langProvider),
+                              _addressInformationSection(provider: provider, langProvider: langProvider,localization: localization),
                               /// submit buttons
                               _submitAndBackButton(
                                   langProvider: langProvider,
                                   userInfo: userInfo,
-                                  provider: provider),
+                                  provider: provider,
+                              localization: localization),
                             ],
                           ),
 
@@ -273,7 +275,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
     }
   }
 
-  Widget _addressInformationSection({required provider,required langProvider}) {
+  Widget _addressInformationSection({required provider,required langProvider,required AppLocalizations localization}) {
     /// defining langProvider
     final langProvider =
     Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -296,7 +298,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                     children: [
                       /// phone Type
                       fieldHeading(
-                          title: "Address Type",
+                          title: localization.addressType,
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormDropdown(
@@ -306,7 +308,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                         controller: addressInformation.addressTypeController,
                         currentFocusNode: addressInformation.addressTypeFocusNode,
                         menuItemsList: _addressTypeMenuItemsList,
-                        hintText: "Select Address Type",
+                        hintText: localization.addressTypeWatermark,
                         errorText: addressInformation.addressTypeError,
                         onChanged: (value) {
                           setState(() {
@@ -317,7 +319,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                             });
 
                             if(isDuplicate){
-                              addressInformation.addressTypeError = "Address Type already exists";
+                              addressInformation.addressTypeError = localization.duplicateAddresstypeMessage;
                             }
 
 
@@ -333,7 +335,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: "Address Line 1",
+                          title: localization.addressLine1,
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormTextField(
@@ -341,13 +343,13 @@ class _EditAddressesViewState extends State<EditAddressesView>
                           addressInformation.addressLine1FocusNode,
                           nextFocusNode: addressInformation.addressLine2FocusNode,
                           controller: addressInformation.addressLine1Controller,
-                          hintText: "Enter Address Line 1",
+                          hintText: localization.addressLine1Watermark,
                           errorText: addressInformation.addressLine1Error,
                           onChanged: (value) {
                             if (addressInformation.addressLine1FocusNode.hasFocus) {
                               setState(() {
                                 addressInformation.addressLine1Error =
-                                    ErrorText.getNameArabicEnglishValidationError(
+                                    ErrorText.getEmptyFieldError(
                                         name: addressInformation
                                             .addressLine1Controller.text,
                                         context: context);
@@ -358,7 +360,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: "Address Line 2",
+                          title: localization.addressLine2,
                           important: false,
                           langProvider: langProvider),
                       scholarshipFormTextField(
@@ -366,16 +368,16 @@ class _EditAddressesViewState extends State<EditAddressesView>
                           addressInformation.addressLine2FocusNode,
                           nextFocusNode: addressInformation.countryFocusNode,
                           controller: addressInformation.addressLine2Controller,
-                          hintText: "Enter Address Line 2",
+                          hintText: localization.addressLine2Watermark,
                           errorText: addressInformation.addressLine2Error,
                           onChanged: (value) {
                             if (addressInformation.addressLine2FocusNode.hasFocus) {
                               setState(() {
-                                addressInformation.addressLine2Error =
-                                    ErrorText.getNameArabicEnglishValidationError(
-                                        name: addressInformation
-                                            .addressLine2Controller.text,
-                                        context: context);
+                                // addressInformation.addressLine2Error =
+                                //     ErrorText.get(
+                                //         name: addressInformation
+                                //             .addressLine2Controller.text,
+                                //         context: context);
                               });
                             }
                           }),
@@ -384,14 +386,14 @@ class _EditAddressesViewState extends State<EditAddressesView>
                       kFormHeight,
                       /// phone Type
                       fieldHeading(
-                          title: "Country",
+                          title: localization.country,
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormDropdown(context:context,
                         controller: addressInformation.countryController,
                         currentFocusNode: addressInformation.countryFocusNode,
                         menuItemsList: _nationalityMenuItemsList,
-                        hintText: "Select Country",
+                        hintText: localization.select,
                         errorText: addressInformation.countryError,
                         onChanged: (value) {
                           addressInformation.countryError = null;
@@ -416,7 +418,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                       kFormHeight,
                       /// phone Type
                       fieldHeading(
-                          title: "Emirates/State",
+                          title: localization.emirates,
                           important: addressInformation.stateDropdownMenuItems?.isNotEmpty ?? false,
                           langProvider: langProvider),
                       scholarshipFormDropdown(
@@ -426,7 +428,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                         controller: addressInformation.stateController,
                         currentFocusNode: addressInformation.stateFocusNode,
                         menuItemsList: addressInformation.stateDropdownMenuItems,
-                        hintText: "Select Emirates/State",
+                        hintText: localization.emiratesWatermark,
                         errorText: addressInformation.stateError,
                         onChanged: (value) {
                           addressInformation.stateError = null;
@@ -442,14 +444,14 @@ class _EditAddressesViewState extends State<EditAddressesView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: "City",
+                          title: localization.city,
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormTextField(
                           currentFocusNode: addressInformation.cityFocusNode,
                           nextFocusNode: addressInformation.postalCodeFocusNode,
                           controller: addressInformation.cityController,
-                          hintText: "Enter City",
+                          hintText: localization.cityWatermark,
                           errorText: addressInformation.cityError,
                           onChanged: (value) {
                             if (addressInformation.cityFocusNode.hasFocus) {
@@ -466,13 +468,13 @@ class _EditAddressesViewState extends State<EditAddressesView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: "PO Box",
+                          title: localization.poBox,
                           important: false,
                           langProvider: langProvider),
                       scholarshipFormTextField(
                           currentFocusNode: addressInformation.postalCodeFocusNode,
                           controller: addressInformation.postalCodeController,
-                          hintText: "Enter PO Box",
+                          hintText: localization.poboxWatermark,
                           errorText: addressInformation.postalCodeError,
                           onChanged: (value) {
                             if (addressInformation.postalCodeFocusNode.hasFocus) {
@@ -494,7 +496,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                       /// Add More Information container
                       (_addressInformationList.isNotEmpty && !addressInformation.isExisting)
                           ? addRemoveMoreSection(
-                          title: "Delete Address",
+                          title: localization.deleteRowAddress,
                           add: false,
                           onChanged: () {
                             _removeAddress(index);
@@ -521,7 +523,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
         /// Add More Information container
         _addressInformationList.isNotEmpty
             ? addRemoveMoreSection(
-            title: "Add Address",
+            title: localization.addRowAddress,
             add: true,
             onChanged: () {
               _addAddress();
@@ -538,7 +540,8 @@ class _EditAddressesViewState extends State<EditAddressesView>
   Widget _submitAndBackButton(
       {required langProvider,
         UserInfo? userInfo,
-        GetPersonalDetailsViewModel? provider}) {
+        GetPersonalDetailsViewModel? provider,
+      required AppLocalizations localization}) {
     return Column(
       children: [
         kFormHeight,
@@ -548,14 +551,14 @@ class _EditAddressesViewState extends State<EditAddressesView>
           child: Consumer<UpdatePersonalDetailsViewModel>(
               builder: (context, updateProvider, _) {
                 return CustomButton(
-                    buttonName: "Update",
+                    buttonName: localization.update,
                     isLoading: updateProvider?.apiResponse.status == Status.LOADING,
                     borderColor: Colors.transparent,
                     buttonColor: AppColors.scoThemeColor,
                     textDirection: getTextDirection(langProvider),
                     onTap: () async {
                       setIsProcessing(true);
-                      bool result = validateForm(langProvider: langProvider, userInfo: userInfo);
+                      bool result = validateForm(langProvider: langProvider, userInfo: userInfo,localization: localization);
                       if (result) {
                         /// Create Form
                         createForm(provider: provider);
@@ -585,7 +588,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
   //// VALIDATION FUNCTION FOR THE FORM
   /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode;
-  bool validateForm({required langProvider, UserInfo? userInfo}) {
+  bool validateForm({required langProvider, UserInfo? userInfo,required AppLocalizations localization}) {
     final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
     final user = studentProfileProvider.apiResponse.data?.data?.user;
     final userInfo = studentProfileProvider.apiResponse.data?.data?.userInfo;
@@ -604,21 +607,27 @@ class _EditAddressesViewState extends State<EditAddressesView>
 
           if (element.addressTypeController.text.isEmpty || element.addressTypeError != null) {
             setState(() {
-              element.addressTypeError = "Please Select Unique Address Type";
+              element.addressTypeError = localization.duplicateAddresstypeMessage;
               firstErrorFocusNode ??= element.addressTypeFocusNode;
             });
           }
 
-          if (element.addressLine1Controller.text.isEmpty) {
+          if (element.addressLine1Controller.text.isEmpty || element.addressLine1Error != null) {
             setState(() {
-              element.addressLine1Error = "Please Enter Address Line 1";
+              element.addressLine1Error = localization.addressLine1Validate;
               firstErrorFocusNode ??= element.addressLine1FocusNode;
+            });
+          }
+          if (element.addressLine2Controller.text.isNotEmpty && element.addressLine2Error != null) {
+            setState(() {
+              element.addressLine2Error = localization.addressLine2Validate;
+              firstErrorFocusNode ??= element.addressLine2FocusNode;
             });
           }
 
           if (element.countryController.text.isEmpty) {
             setState(() {
-              element.countryError = "Please Select Country";
+              element.countryError = localization.countryValidate;
               firstErrorFocusNode ??= element.countryFocusNode;
             });
           }
@@ -627,14 +636,14 @@ class _EditAddressesViewState extends State<EditAddressesView>
           if ( element.stateController.text.isEmpty && (element.stateDropdownMenuItems?.isNotEmpty ?? false)) {
 
             setState(() {
-              element.stateError = "Please Select State";
+              element.stateError = localization.emiratesValidate;
               firstErrorFocusNode ??= element.stateFocusNode;
             });
           }
 
-          if (element.cityController.text.isEmpty) {
+          if (element.cityController.text.isEmpty || element.cityError != null) {
             setState(() {
-              element.cityError = "Please Enter City";
+              element.cityError = localization.cityValidate;
               firstErrorFocusNode ??= element.cityFocusNode;
             });
           }

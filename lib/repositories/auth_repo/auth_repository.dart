@@ -10,6 +10,7 @@ import 'package:sco_v1/models/authentication/resend_otp_model.dart';
 import 'package:sco_v1/models/authentication/terms_and_conditions_model.dart';
 import 'package:sco_v1/models/authentication/update_security_question_model.dart';
 import 'package:sco_v1/resources/app_urls.dart';
+import 'package:sco_v1/viewModel/authentication/login_viewModel.dart';
 
 import '../../models/account/ChangePasswordModel.dart';
 import '../../models/authentication/forgot_password/forgot_password_send_mail_model.dart';
@@ -165,5 +166,14 @@ class AuthenticationRepository {
     return ChangePasswordModel.fromJson(response);
   }
 
+  //  Get Roles
+  Future<LoginModel> getRoles(
+      {required String userId, required dynamic headers}) async {
+    dynamic response = await _apiServices.getGetApiServices(
+      url: '${AppUrls.baseUrl}users/$userId/user-details',
+      headers: headers,
+    );
+    return LoginModel.fromJson(response);
+  }
 
 }

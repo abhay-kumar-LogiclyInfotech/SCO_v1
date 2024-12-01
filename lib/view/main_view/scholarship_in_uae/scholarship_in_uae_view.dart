@@ -15,6 +15,8 @@ import '../../../resources/app_urls.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ScholarshipsInUaeView extends StatefulWidget {
   const ScholarshipsInUaeView({super.key});
@@ -60,9 +62,10 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "Scholarships in UAE",),
+      appBar: CustomSimpleAppBar(titleAsString: localization.scholarshipInternal,),
       body: _buildUI(),
     );
   }

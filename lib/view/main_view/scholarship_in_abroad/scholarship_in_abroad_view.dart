@@ -124,6 +124,8 @@ import '../../../resources/app_colors.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ScholarshipInAbroadView extends StatefulWidget {
   const ScholarshipInAbroadView({super.key});
@@ -169,9 +171,11 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "Scholarships in UAE",),
+      appBar: CustomSimpleAppBar(titleAsString: localization.scholarshipExternal,),
       body: _buildUI(),
     );
   }

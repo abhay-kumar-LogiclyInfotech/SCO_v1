@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
+import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
@@ -68,16 +69,16 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
 
   @override
   Widget build(BuildContext context) {
-    return
+    final localization = AppLocalizations.of(context)!;
 
-      Scaffold(
+    return Scaffold(
         backgroundColor: AppColors.bgColor,
-        appBar: CustomSimpleAppBar(titleAsString: "My Scholarship"),
-        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+        appBar: CustomSimpleAppBar(titleAsString: localization.myScholarship),
+        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
       );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<MyScholarshipViewModel>(
@@ -104,7 +105,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         /// Employment status card
-                        _applicationsSection(provider: provider, langProvider: langProvider),
+                        _applicationsSection(provider: provider, langProvider: langProvider,localization: localization),
                       ],
                     ),
                   ),
@@ -121,7 +122,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
 
   ///*------ Applications Section------*
 
-  Widget _applicationsSection({required MyScholarshipViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _applicationsSection({required MyScholarshipViewModel provider, required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     // return Column(
     //   children: provider.apiResponse.data!.data!.scholarships!.map((Scholarships element)
     //   {
@@ -151,11 +152,11 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
             children: [
               /// ------------ MY SCHOLARSHIP (APPROVED SCHOLARSHIP) DETAILS ------------
               CustomInformationContainerField(
-                title: "Scholarship Name",
-                description: "SCO${element.academicCareer}${element.scholarshipType}",
+                title: localization.scholarship,
+                description:  Constants.getNameOfScholarshipByConfigurationKey(localization: localization, configurationKey: "SCO${element.academicCareer}${element.scholarshipType}") ,
               ),
               CustomInformationContainerField(
-                title: "Country-University",
+                title: localization.countryAndUniversity,
                 description: getFullNameFromLov(
                   lovCode: 'EXT_ORG_ID',
                   code: '${element.university}',
@@ -163,7 +164,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
                 ) ,
               ),
               CustomInformationContainerField(
-                title: "Country",
+                title:  localization.country,
                 description: getFullNameFromLov(
                   lovCode: 'COUNTRY',
                   code: '${element.country}',
@@ -171,31 +172,31 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
                 ),
               ),
               CustomInformationContainerField(
-                title: "Major",
+                title:  localization.major,
                 description: element.academicCareer ?? '- -',
               ),
               CustomInformationContainerField(
-                title: "Program Duration",
+                title: localization.programDuration,
                 description: element.numberOfYears ?? '- -',
               ),
               CustomInformationContainerField(
-                title: "Approved Date",
+                title: localization.scholarshipApprovedDate,
                 description: element.scholarshipApprovedDate ?? '- -',
               ),
               CustomInformationContainerField(
-                title: "Scholarship Start Date",
+                title: localization.scholarshipStartDate,
                 description: element.studyStartDate ?? '- -',
               ),
               CustomInformationContainerField(
-                title: "Scholarship End Date",
+                title: localization.scholarshipEndDate,
                 description: element.scholarshipEndDate ?? '- -',
               ),
               CustomInformationContainerField(
-                title: "Application Number",
+                title: localization.applicationNumber,
                 description: element.applicationNo ?? '- -',
               ),
               CustomInformationContainerField(
-                title: "Student Id",
+                title: localization.studentId,
                 description: studentId,
                 isLastItem: true,
               ),

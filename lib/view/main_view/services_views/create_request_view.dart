@@ -160,19 +160,20 @@ void dispose(){
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        titleAsString: "Create Request",
+        titleAsString: localization.createRequest,
       ),
       body: Utils.modelProgressHud(
           processing: isProcessing,
           child: Utils.pageRefreshIndicator(
-              child: _buildUi(), onRefresh: _initializeData)),
+              child: _buildUi(localization), onRefresh: _initializeData)),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi(AppLocalizations localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Directionality(
       textDirection: getTextDirection(langProvider),
@@ -185,11 +186,10 @@ void dispose(){
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ///  create request card
-              _createRequestCard(langProvider: langProvider),
+              _createRequestCard(langProvider: langProvider,localization: localization),
 
               /// submit buttons
-              _submitAndBackButton(
-                  langProvider: langProvider),
+              _submitAndBackButton(langProvider: langProvider,localization: localization),
             ],
           ),
         ),
@@ -254,23 +254,23 @@ void dispose(){
 }
 
   Widget _createRequestCard(
-      {required LanguageChangeViewModel langProvider}) {
+      {required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return CustomInformationContainer(
         leading: SvgPicture.asset("assets/services/request_list.svg"),
-        title: "Create Request",
+        title: localization.createRequest,
         expandedContent: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             /// First name
             fieldHeading(
-                title: "Request Category",
+                title: localization.category,
                 important: true,
                 langProvider: langProvider),
             scholarshipFormDropdown(
                 currentFocusNode: _requestCategoryFocusNode,
                 controller: _requestCategoryController,
                 menuItemsList: _requestCategoryMenuItemsList,
-                hintText: "Select Request Category",
+                hintText: localization.select,
                 errorText: _requestCategoryErrorText,
                 onChanged: (value) {
                   setState(() {
@@ -298,13 +298,13 @@ void dispose(){
 
             /// ****************************************************************
             kFormHeight,
-            fieldHeading(title: "Request Type", important: true, langProvider: langProvider),
+            fieldHeading(title: localization.requestType, important: true, langProvider: langProvider),
             scholarshipFormDropdown(
               filled: _requestTypeMenuItemsList.isEmpty,
                 currentFocusNode: _requestTypeFocusNode,
                 controller: _requestTypeController,
                 menuItemsList: _requestTypeMenuItemsList,
-                hintText: "Request Type",
+                hintText: localization.select,
                 errorText: _requestTypeErrorText,
                 onChanged: (value) {
                   setState(() {
@@ -328,13 +328,13 @@ void dispose(){
 
             /// ****************************************************************
             kFormHeight,
-            fieldHeading(title: "Request Sub Type", important: true, langProvider: langProvider),
+            fieldHeading(title: localization.requestSubType, important: true, langProvider: langProvider),
             scholarshipFormDropdown(
                 filled: _requestSubTypeMenuItemsList.isEmpty,
                 currentFocusNode: _requestSubtypeFocusNode,
                 controller: _requestSubtypeController,
                 menuItemsList: _requestSubTypeMenuItemsList,
-                hintText: "Request Sub Type",
+                hintText: localization.select,
                 errorText: _requestSubTypeErrorText,
                 onChanged: (value) {
                   setState(() {
@@ -614,7 +614,8 @@ void dispose(){
         });
   }
 
-  /// Function to add Attachment to the list
+
+
   _addFile() async {
     /// kindly check for permissions
     final permitted = await _permissionServices.checkAndRequestPermission(
@@ -629,7 +630,7 @@ void dispose(){
           _attachmentsList.add(ListAttachment(
               attachmentSeqNumberController: TextEditingController(),
               fileDescriptionController: TextEditingController(),
-              userAttachmentFileController: TextEditingController(text: file.path.split('/').last),
+              userAttachmentFileController:    TextEditingController(text: file.path.split('/').last),
               attachmentSysFileNameController: TextEditingController(text: file.path.split('/').last),
               base64StringController: TextEditingController(text: base64Encode(file.readAsBytesSync())),
               viewByAdviseeController: TextEditingController(text: 'Y'),
@@ -645,6 +646,7 @@ void dispose(){
       }
     }
   }
+
   //// *-------------------------------- ATTACHMENTS SECTION IF NEEDED THEN SHOW TO THE USER TO UPLOAD ATTACHMENT END --------------------------------*
 
 
@@ -654,7 +656,9 @@ void dispose(){
   Widget _submitAndBackButton(
       {required langProvider,
         UserInfo? userInfo,
-        GetEmploymentStatusViewModel? employmentStatusProvider}) {
+        GetEmploymentStatusViewModel? employmentStatusProvider,
+      required AppLocalizations localization
+      }) {
     return Column(
       children: [
         kFormHeight,
@@ -664,7 +668,7 @@ void dispose(){
           child: Consumer<CreateRequestViewModel>(
               builder: (context, createRequestProvider, _) {
                 return CustomButton(
-                    buttonName: "Create",
+                    buttonName: localization.createRequest,
                     isLoading: createRequestProvider.apiResponse.status == Status.LOADING,
                     borderColor: Colors.transparent,
                     buttonColor: AppColors.scoThemeColor,
@@ -672,7 +676,7 @@ void dispose(){
                     onTap: () async {
                       setProcessing(true);
 
-                      bool result = validateForm(langProvider: langProvider);
+                      bool result = validateForm(langProvider: langProvider,localization: localization);
 
                       // for(var ele in _attachmentsList){
                       //   log(ele.toJson().toString());
@@ -704,7 +708,6 @@ void dispose(){
                             ///calling get all requests and navigate back to all requests screen
                            Provider.of<GetAllRequestsViewModel>(context,listen: false).getAllRequests();
                            _navigationServices.goBack();
-
                           } else {
                             log("API call failed: No data returned or request unsuccessful.");
                           }
@@ -728,27 +731,27 @@ void dispose(){
   /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode ;
 
-  bool validateForm({required langProvider}) {
+  bool validateForm({required langProvider,required AppLocalizations localization}) {
     firstErrorFocusNode = null;
     enData = '';
     arData = '';
 
     if (_requestCategoryController.text.isEmpty) {
       setState(() {
-        _requestCategoryErrorText = "Please Select Request Category";
+        _requestCategoryErrorText = localization.pleaseSelectRequestCategory;
         firstErrorFocusNode ??= _requestCategoryFocusNode;
       });
     }
 
     if (_requestTypeController.text.isEmpty) {
       setState(() {
-        _requestTypeErrorText = "Please Select Request Category";
+        _requestTypeErrorText = localization.pleaseSelectRequestType;
         firstErrorFocusNode ??= _requestTypeFocusNode;
       });
     }
     if (_requestSubtypeController.text.isEmpty) {
       setState(() {
-        _requestSubTypeErrorText = "Please Select Request Category";
+        _requestSubTypeErrorText = localization.pleaseSelectRequestSubType;
         firstErrorFocusNode ??= _requestSubtypeFocusNode;
       });
     }
@@ -760,7 +763,7 @@ void dispose(){
           final index = showDataRecordList.indexOf(showFields);
           setState(() {
             firstErrorFocusNode = focusNodes[index];
-            _alertServices.toastMessage("Please fill required fields");
+            _alertServices.flushBarErrorMessages(message: localization.pleaseFillAllRequiredFields);
           });
           break;
         }

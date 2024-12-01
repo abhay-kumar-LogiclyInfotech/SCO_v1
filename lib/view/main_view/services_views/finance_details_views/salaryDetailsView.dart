@@ -75,14 +75,15 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: "My Finance"),
-      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData) ),
+      appBar: CustomSimpleAppBar(titleAsString: localization.myFinance),
+      body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization: localization), onRefresh: _initializeData) ),
     );
   }
 
-  Widget _buildUi() {
+  Widget _buildUi({ required AppLocalizations localization}) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<MyFinanceStatusViewModel>(
@@ -111,7 +112,7 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
                       children: [
 
                         listOfSalaries.isNotEmpty ?
-                        _salaryDetails(provider: provider, langProvider: langProvider)
+                        _salaryDetails(provider: provider, langProvider: langProvider,localization: localization)
                         : Utils.showOnNoDataAvailable()
                         ,
                       ],
@@ -129,7 +130,7 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
   }
 
   ///*------ Applications Section------*
-  Widget _salaryDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider}) {
+  Widget _salaryDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
 
     final listOfSalaries = provider.apiResponse.data?.data?.listSalaryDetials ?? [];
 
@@ -137,7 +138,7 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
 
 
       return CustomInformationContainer(
-          title: 'Salary Details',
+          title: localization.salaryDetails,
           leading: SvgPicture.asset("assets/services/salary_details.svg"),
           expandedContentPadding: EdgeInsets.zero,
           expandedContent: ListView.builder(
@@ -151,12 +152,12 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
                 financeCard(
                     color: index%2 != 0 ? const Color(0xffF9F9F9) : Colors.white,
                     content:  [
-                CustomInformationContainerField(title: "S.No", description: (index+1).toString() ?? '- -'),
-                CustomInformationContainerField(title: "Bank Name", description: topSalaryDetails?.bankName.toString() ?? '- -'),
-                CustomInformationContainerField(title: "Amount", description: topSalaryDetails?.amount.toString() ?? '- -'),
-                CustomInformationContainerField(title: "Currency", description: topSalaryDetails?.currency.toString() ?? '- -'),
-                CustomInformationContainerField(title: "The Month", description: topSalaryDetails?.salaryMonth.toString() ?? '- -'),
-                CustomInformationContainerField(title: "Status", description: topSalaryDetails?.status.toString() ?? '- -' ,isLastItem: true),
+                CustomInformationContainerField(title: localization.sr, description: (index+1).toString() ?? '- -'),
+                CustomInformationContainerField(title: localization.bankName, description: topSalaryDetails?.bankName.toString() ?? '- -'),
+                CustomInformationContainerField(title: localization.amount, description: topSalaryDetails?.amount.toString() ?? '- -'),
+                CustomInformationContainerField(title: localization.currency, description: topSalaryDetails?.currency.toString() ?? '- -'),
+                CustomInformationContainerField(title: localization.theMonth, description: topSalaryDetails?.salaryMonth.toString() ?? '- -'),
+                CustomInformationContainerField(title: localization.status, description: topSalaryDetails?.status.toString() ?? '- -' ,isLastItem: true),
                 kFormHeight,
 
                     ],  langProvider: langProvider,isLastTerm: index == listOfSalaries.length -1),
