@@ -365,8 +365,7 @@ class ListAttachment {
     'fileDescription': fileDescriptionController.text,
     'userAttachmentFile': userAttachmentFileController.text,
     'attachmentSysFileName': attachmentSysFileNameController.text,
-    'base64String':
-    base64StringController.text.isEmpty ? "" : base64StringController.text,
+    'base64String': base64StringController.text.isEmpty ? "" : base64StringController.text,
     'viewByAdvisee': viewByAdviseeController.text,
     'newlyAded': newlyAded,
   };

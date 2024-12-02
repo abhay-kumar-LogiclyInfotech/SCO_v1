@@ -302,43 +302,40 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
   //Submit Button::
   Widget _acceptButton(LanguageChangeViewModel langProvider) {
     return SafeArea(
-      child: ChangeNotifierProvider(
-        create: (context) => TermsAndConditionsViewModel(),
-        child: Consumer<TermsAndConditionsViewModel>(
-            builder: (context, provider, _) {
-          return CustomButton(
-              buttonName:  AppLocalizations.of(context)!
-                  .acceptAndContinue,
-              isLoading:
-                  provider.termsAndConditionsResponse.status == Status.LOADING
-                      ? true
-                      : false,
-              textDirection: TextDirection.ltr,
-              fontSize: 16,
-              buttonColor: AppColors.scoButtonColor,
-              elevation: 1,
-              onTap: () async {
-                if(!isChecked) {
-                  // _alertServices.showCustomSnackBar(AppLocalizations.of(context)!
-                  //       .acceptTermsAndConditions,);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.acceptTermsAndConditions)));
-                }
-                if (isChecked && _userId != null) {
-                  bool result = await provider.updateTermsAndConditions(
-                      context: context,
-                      langProvider: langProvider,
-                      userId: _userId!);
+      child: Consumer<TermsAndConditionsViewModel>(
+          builder: (context, provider, _) {
+        return CustomButton(
+            buttonName:  AppLocalizations.of(context)!
+                .acceptAndContinue,
+            isLoading:
+                provider.termsAndConditionsResponse.status == Status.LOADING
+                    ? true
+                    : false,
+            textDirection: TextDirection.ltr,
+            fontSize: 16,
+            buttonColor: AppColors.scoButtonColor,
+            elevation: 1,
+            onTap: () async {
+              if(!isChecked) {
+                _alertServices.showToast(message: "message");
+                // _alertServices.showCustomSnackBar("Please Accept Terms and conditions.");
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.acceptTermsAndConditions)));
+              }
+              if (isChecked && _userId != null) {
+                bool result = await provider.updateTermsAndConditions(
+                    // context: context,
+                    langProvider: langProvider,
+                    userId: _userId!);
 
-                  if (result) {
-                    _navigationService.pushReplacementCupertino(
-                        CupertinoPageRoute(
-                            builder: (context) => UpdateSecurityQuestionView()));
-                  }
+                if (result) {
+                  _navigationService.pushReplacementCupertino(
+                      CupertinoPageRoute(
+                          builder: (context) => UpdateSecurityQuestionView()));
                 }
+              }
 
-              });
-        }),
-      ),
+            });
+      }),
     );
   }
 }

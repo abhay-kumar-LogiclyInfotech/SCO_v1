@@ -284,44 +284,43 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   }
 
   Widget _submitButton(LanguageChangeViewModel langProvider) {
-    return ChangeNotifierProvider(
-      create: (context) => ForgotPasswordViewModel(),
-      child: Consumer<ForgotPasswordViewModel>(
-        builder: (context, provider, _) {
-          return CustomButton(
-            textDirection: getTextDirection(langProvider),
-            buttonName: AppLocalizations.of(context)!.submit,
-            isLoading:
-                provider.getSecurityQuestionResponse.status == Status.LOADING
-                    ? true
-                    : false,
-            onTap: () async {
-              bool validated = _validateForm(langProvider: langProvider);
+    return Consumer<ForgotPasswordViewModel>(
+      builder: (context, provider, _) {
+        return CustomButton(
+          textDirection: getTextDirection(langProvider),
+          buttonName: AppLocalizations.of(context)!.submit,
+          isLoading:
+              provider.getSecurityQuestionResponse.status == Status.LOADING
+                  ? true
+                  : false,
+          onTap: () async {
+            bool validated = _validateForm(langProvider: langProvider);
 
-              if (validated) {
-                bool result = await provider.getSecurityQuestion(email: _emailController.text, context: context, langProvider: langProvider);
+            if (validated) {
+              bool result = await provider.getSecurityQuestion(email: _emailController.text,
+                  // context: context,
+                  langProvider: langProvider);
 
-                if (result) {
-                  final String securityQuestion = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.securityQuestion.toString() ?? "";
-                  final String securityAnswer = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.securityAnswer.toString() ?? "";
-                  final String userId = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.userId.toString() ?? "";
+              if (result) {
+                final String securityQuestion = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.securityQuestion.toString() ?? "";
+                final String securityAnswer = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.securityAnswer.toString() ?? "";
+                final String userId = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.userId.toString() ?? "";
 
-                  if (securityQuestion.isNotEmpty && securityAnswer.isNotEmpty && userId.isNotEmpty) {
-                    _navigationServices.pushReplacementCupertino(
-                        CupertinoPageRoute(builder: (context) => AnswerSecurityQuestionView(
-                                securityQuestion: securityQuestion,
-                                securityAnswer: securityAnswer,
-                                userId: userId)));
-                  }
+                if (securityQuestion.isNotEmpty && securityAnswer.isNotEmpty && userId.isNotEmpty) {
+                  _navigationServices.pushReplacementCupertino(
+                      CupertinoPageRoute(builder: (context) => AnswerSecurityQuestionView(
+                              securityQuestion: securityQuestion,
+                              securityAnswer: securityAnswer,
+                              userId: userId)));
                 }
               }
-            },
-            fontSize: 16,
-            buttonColor: AppColors.scoButtonColor,
-            elevation: 1,
-          );
-        },
-      ),
+            }
+          },
+          fontSize: 16,
+          buttonColor: AppColors.scoButtonColor,
+          elevation: 1,
+        );
+      },
     );
   }
 

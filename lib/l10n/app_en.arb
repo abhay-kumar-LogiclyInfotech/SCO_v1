@@ -1,7 +1,6 @@
 {
   "emailAddress": "Email Address",
   "idEmailOrMobile": "ID Number, Email or Mobile Number",
-  "login": "LOGIN",
   "or": "or",
   "signInWithUaePass": "Sign in with UAE PASS",
   "readMore": "Read More",
@@ -606,7 +605,7 @@
   "error": "",
   "info": "",
   "warning": "",
-  "login": "Sign in",
+  "login": "LOGIN",
   "submissionPhoneNumber": "Phone Number",
   "submissionPhoneType": "Phone Type",
   "submissionPhoneTypeRequired": "Phone Type is required",

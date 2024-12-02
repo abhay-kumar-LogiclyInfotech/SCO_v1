@@ -217,22 +217,20 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   @override
   void initState() {
-    final GetIt getIt = GetIt.instance;
-    _navigationServices = getIt.get<NavigationServices>();
-    _alertServices = getIt.get<AlertServices>();
-
-    _usernameController = TextEditingController();
-    _passwordController = TextEditingController();
-
-    _emailFocusNode = FocusNode();
-    _passwordFocusNode = FocusNode();
-
-    super.initState();
-    initPlatformState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      initPlatformState();
+      final GetIt getIt = GetIt.instance;
+      _navigationServices = getIt.get<NavigationServices>();
+      _alertServices = getIt.get<AlertServices>();
+
+      _usernameController = TextEditingController();
+      _passwordController = TextEditingController();
+
+      _emailFocusNode = FocusNode();
+      _passwordFocusNode = FocusNode();
       getInitialLanguage();
     });
+    super.initState();
   }
 
   @override
@@ -369,6 +367,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
       obscureText: false,
       hintText: AppLocalizations.of(context)!.loginUsernameWatermark,
       textInputType: TextInputType.emailAddress,
+      textCapitalization: false,
       leading: SvgPicture.asset(
         "assets/email.svg",
         // height: 18,
@@ -438,37 +437,35 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   }
 
   Widget _loginButton(LanguageChangeViewModel langProvider) {
-    return ChangeNotifierProvider(
-        create: (context) => LoginViewModel(),
-        child: Consumer<LoginViewModel>(builder: (context, provider, _) {
-          return CustomButton(
-            fontSize: 16,
-            textDirection: getTextDirection(langProvider),
-            buttonName: AppLocalizations.of(context)!.signIn,
-            isLoading:
-                provider.apiResponse.status == Status.LOADING ? true : false,
-            onTap: () async {
-              setProcessing(true);
-              bool validateFields = _validateFields(langProvider: langProvider);
-              if (validateFields) {
-                provider.username = _usernameController.text.trim();
-                provider.password = _passwordController.text.trim();
-                provider.deviceId = _deviceData['id'].toString().trim();
-
-                bool result = await provider.login(context: context, langProvider: langProvider);
-                if (result) {
-                  //Navigate to MainView after successful login
-                  // _navigationServices.goBack();
-                  _navigationServices.goBackUntilFirstScreen();
-                  _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => const MainView()));
-                }
-              }
-              setProcessing(false);
-            },
-            buttonColor: AppColors.scoButtonColor,
-            elevation: 1,
-          );
-        }));
+    return Consumer<LoginViewModel>(builder: (context, provider, _) {
+      return CustomButton(
+        fontSize: 16,
+        textDirection: getTextDirection(langProvider),
+        buttonName: AppLocalizations.of(context)!.login,
+        isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
+        onTap: () async {
+          setProcessing(true);
+          bool validateFields = _validateFields(langProvider: langProvider);
+          if (validateFields) {
+            provider.username = _usernameController.text.trim();
+            provider.password = _passwordController.text.trim();
+            provider.deviceId = _deviceData['id'].toString().trim();
+            bool result = await provider.login(
+                // context: context,
+                langProvider: langProvider);
+            if (result) {
+              //Navigate to MainView after successful login
+              // _navigationServices.goBack();
+              _navigationServices.goBackUntilFirstScreen();
+              _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => const MainView()));
+            }
+          }
+          setProcessing(false);
+        },
+        buttonColor: AppColors.scoButtonColor,
+        elevation: 1,
+      );
+    });
   }
 
   Widget _or() {

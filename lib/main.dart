@@ -8,6 +8,8 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
+import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
+import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
@@ -21,9 +23,14 @@ import 'package:sco_v1/viewModel/apply_scholarship/find_draft_by_draft_id_viewmo
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/saveAsDraftViewmodel.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/submitApplicationViewmodel.dart';
+import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
 import 'package:sco_v1/viewModel/authentication/get_roles_viewModel.dart';
+import 'package:sco_v1/viewModel/authentication/login_viewModel.dart';
+import 'package:sco_v1/viewModel/authentication/otp_verification_viewModel.dart';
 import 'package:sco_v1/viewModel/authentication/security_question_ViewModel.dart';
 import 'package:sco_v1/viewModel/authentication/signup_viewModel.dart';
+import 'package:sco_v1/viewModel/authentication/terms_and_conditions_viewModel.dart';
+import 'package:sco_v1/viewModel/authentication/update_security_question_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/faq_viewModel.dart';
 import 'package:sco_v1/viewModel/drawer/individual_image_viewModel.dart';
@@ -52,6 +59,8 @@ import 'Test.dart';
 import 'controller/dependency_injection.dart';
 import 'hive/hive_manager.dart';
 
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -62,22 +71,20 @@ Future<void> main() async {
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
   // ]);
-  DependencyInjection.init();
-  await setup();
+  await registerServices();
+  // DependencyInjection.init();
   runApp(MyApp(locale: languageCode));
 }
 
-Future<void> setup() async {
-  bool isRegistered = await registerServices();
-}
+
 
 late NavigationServices _navigationServices;
-final GetIt getIt = GetIt.instance;
 
 class MyApp extends StatelessWidget {
   final String locale;
 
   MyApp({super.key, required this.locale}) {
+    final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
   }
 
@@ -89,7 +96,12 @@ class MyApp extends StatelessWidget {
           /// Always register language viewmodel first
           ChangeNotifierProvider(create: (_) => LanguageChangeViewModel()),
           ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
+          ChangeNotifierProvider(create: (_) => LoginViewModel()),
+          ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
           ChangeNotifierProvider(create: (_) => SignupViewModel()),
+          ChangeNotifierProvider(create: (_) => OtpVerificationViewModel()),
+          ChangeNotifierProvider(create: (_) => UpdateSecurityQuestionViewModel()),
+          ChangeNotifierProvider(create: (_) => TermsAndConditionsViewModel()),
           ChangeNotifierProvider(create: (_) => SecurityQuestionViewModel()),
           ChangeNotifierProvider(create: (_) => FaqViewModel()),
           ChangeNotifierProvider(create: (_) => VisionAndMissionViewModel()),
@@ -178,7 +190,6 @@ class MyApp extends StatelessWidget {
 
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),
-
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
@@ -189,7 +200,8 @@ class MyApp extends StatelessWidget {
                 provider.changeLanguage(Locale(locale));
               }
             }
-            return GetMaterialApp(
+            // return GetMaterialApp(
+            return MaterialApp(
               title: 'SCO',
               // locale: locale == ''
               //     ? const Locale('en')
@@ -218,7 +230,8 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              initialRoute: "/splashView",
+              // initialRoute: "/splashView",
+              home: OtpVerificationView(),
             );
           },
         ));

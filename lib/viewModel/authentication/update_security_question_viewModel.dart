@@ -48,7 +48,8 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
   }
 
   Future<bool> updateSecurityQuestion(
-      {required BuildContext context,
+      {
+        // required BuildContext context,
       required LanguageChangeViewModel langProvider,
       required String userId}) async {
     try {
@@ -87,9 +88,8 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
 
       //Message to show status of the operation:
-      _alertServices.toastMessage(response.message.toString());
       setUpdateSecurityQuestionResponse = ApiResponse.completed(response);
-
+      _alertServices.toastMessage(response.message.toString());
       return true;
     } catch (error) {
       debugPrint('Printing Error: $error');

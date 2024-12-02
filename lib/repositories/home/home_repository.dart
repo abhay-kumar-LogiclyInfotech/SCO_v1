@@ -131,11 +131,13 @@ class HomeRepository {
 
 
 
-  // *------ Fetch Draft By Configuration Key ------*/
+  // *------ Attach file to application form ------*/
+  // url: "https://stg.sco.ae/o/mopa-sco-api/e-services/$userId/attach-file",
+
   Future<AttachFileModel> attachFile(
       {required dynamic userId,required dynamic headers,required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: "https://stg.sco.ae/o/mopa-sco-api/e-services/$userId/attach-file",
+      url: "${AppUrls.baseUrl}e-services/$userId/attach-file",
       headers: headers,
       body: body,
     );

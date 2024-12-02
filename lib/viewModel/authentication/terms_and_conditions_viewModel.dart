@@ -36,7 +36,8 @@ class TermsAndConditionsViewModel with ChangeNotifier {
   }
 
   Future<bool> updateTermsAndConditions(
-      {required BuildContext context,
+      {
+        // required BuildContext context,
       required LanguageChangeViewModel langProvider,
       required String userId}) async {
     try {
@@ -45,7 +46,8 @@ class TermsAndConditionsViewModel with ChangeNotifier {
       //*-----Create Headers Start-----*
       if (userId.isEmpty) {
         _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.error_complete_profile,
+          // message: AppLocalizations.of(context)!.error_complete_profile,
+          message: "Error in completing profile. please complete your profile through website",
           // context: context,
           provider: langProvider,
         );

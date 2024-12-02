@@ -37,7 +37,8 @@ class SecurityQuestionViewModel with ChangeNotifier {
 
   //Get Questions Function:
   Future<bool> getSecurityQuestions(
-      {required BuildContext context,
+      {
+        // required BuildContext context,
       required LanguageChangeViewModel langProvider,
       required String userId}) async {
     try {

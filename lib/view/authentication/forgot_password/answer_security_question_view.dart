@@ -245,106 +245,101 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
 
   //Forgot Security Question:
   Widget _forgotSecurityQuestion() {
-    return ChangeNotifierProvider(
-        create: (context) => ForgotPasswordViewModel(),
-        child: Consumer<ForgotPasswordViewModel>(
-          builder: (context, provider, _) {
-            return InkWell(
-              onTap: () async {
-                bool result =
-                    await provider.getForgotSecurityQuestionVerificationOtp(
-                        userId: widget.userId,context: context);
+    return Consumer<ForgotPasswordViewModel>(
+      builder: (context, provider, _) {
+        return InkWell(
+          onTap: () async {
+            bool result =
+                await provider.getForgotSecurityQuestionVerificationOtp(
+                    userId: widget.userId,context: context);
 
-                if (result) {
-                  String? verificationOtp = provider
-                      .forgotSecurityQuestionOtpVerificationResponse
-                      .data
-                      ?.data
-                      ?.verificationCode;
-                  if (verificationOtp != null && verificationOtp.isNotEmpty) {
-                    _navigationService.pushReplacementCupertino(
-                        CupertinoPageRoute(
-                            builder: (context) =>
-                                ForgotSecurityQuestionOtpVerificationView(verificationOtp: verificationOtp,userId:widget.userId)));
-                  }
-                }
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  provider.forgotSecurityQuestionOtpVerificationResponse
-                              .status ==
-                          Status.LOADING
-                      ? const Padding(
-                          padding: EdgeInsets.only(left: 30.0),
-                          child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: AppColors.scoThemeColor,
-                              strokeWidth: 1.5,
-                            ),
-                          ),
-                        )
-                      :  Text(
-                    AppLocalizations.of(context)!.forgot_security_question,
-                          style: const TextStyle(
-                            color: AppColors.scoThemeColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                ],
-              ),
-            );
+            if (result) {
+              String? verificationOtp = provider
+                  .forgotSecurityQuestionOtpVerificationResponse
+                  .data
+                  ?.data
+                  ?.verificationCode;
+              if (verificationOtp != null && verificationOtp.isNotEmpty) {
+                _navigationService.pushReplacementCupertino(
+                    CupertinoPageRoute(
+                        builder: (context) =>
+                            ForgotSecurityQuestionOtpVerificationView(verificationOtp: verificationOtp,userId:widget.userId)));
+              }
+            }
           },
-        ));
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              provider.forgotSecurityQuestionOtpVerificationResponse
+                          .status ==
+                      Status.LOADING
+                  ? const Padding(
+                      padding: EdgeInsets.only(left: 30.0),
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: AppColors.scoThemeColor,
+                          strokeWidth: 1.5,
+                        ),
+                      ),
+                    )
+                  :  Text(
+                AppLocalizations.of(context)!.forgot_security_question,
+                      style: const TextStyle(
+                        color: AppColors.scoThemeColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
 // Security Answer submit field
   Widget _submitButton({required LanguageChangeViewModel langProvider}) {
     //Creating single Provider instance i.e. not putting in the top of the widget tree.
-    return ChangeNotifierProvider(
-      create: (context) => ForgotPasswordViewModel(),
-      child: Consumer<ForgotPasswordViewModel>(
-        builder: (context, provider, _) {
-          return CustomButton(
-            textDirection: getTextDirection(langProvider),
-            buttonName:AppLocalizations.of(context)!.reset_password,
-            isLoading: provider.sendForgotPasswordSendMailResponse.status ==
-                    Status.LOADING
-                ? true
-                : false,
-            onTap: () async {
-              bool result = validateForm(langProvider: langProvider);
+    return Consumer<ForgotPasswordViewModel>(
+      builder: (context, provider, _) {
+        return CustomButton(
+          textDirection: getTextDirection(langProvider),
+          buttonName:AppLocalizations.of(context)!.reset_password,
+          isLoading: provider.sendForgotPasswordSendMailResponse.status ==
+                  Status.LOADING
+              ? true
+              : false,
+          onTap: () async {
+            bool result = validateForm(langProvider: langProvider);
 
-              if (result) {
+            if (result) {
 
-                /// matching the security answer with user entered answer and show popup
-                if (_answerController.text.trim() != widget.securityAnswer.trim()) {
-                  _alertServices.toastMessage(AppLocalizations.of(context)!.enter_correct_security_answer);
-                }
-                /// if security answer is matched successfully and send password on email
-                if(_answerController.text.trim() == widget.securityAnswer.trim()) {
-                  //*-----Sending password on mail-----*/
-                  bool mailSent = await provider.sendForgotPasswordOnMail(
-                      userId: widget.userId,
-                      context: context,
-                      langProvider: langProvider);
+              /// matching the security answer with user entered answer and show popup
+              if (_answerController.text.trim() != widget.securityAnswer.trim()) {
+                _alertServices.toastMessage(AppLocalizations.of(context)!.enter_correct_security_answer);
+              }
+              /// if security answer is matched successfully and send password on email
+              if(_answerController.text.trim() == widget.securityAnswer.trim()) {
+                //*-----Sending password on mail-----*/
+                bool mailSent = await provider.sendForgotPasswordOnMail(
+                    userId: widget.userId,
+                    context: context,
+                    langProvider: langProvider);
 
-                  if (mailSent) {
-                    _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => ConfirmationView(isVerified: mailSent)));
-                  }
+                if (mailSent) {
+                  _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => ConfirmationView(isVerified: mailSent)));
                 }
               }
-            },
-            fontSize: 16,
-            buttonColor: AppColors.scoButtonColor,
-            elevation: 1,
-          );
-        },
-      ),
+            }
+          },
+          fontSize: 16,
+          buttonColor: AppColors.scoButtonColor,
+          elevation: 1,
+        );
+      },
     );
   }
 

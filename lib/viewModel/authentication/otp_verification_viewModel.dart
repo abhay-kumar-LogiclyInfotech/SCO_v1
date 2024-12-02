@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/models/authentication/resend_otp_model.dart';
 
 import '../../data/response/ApiResponse.dart';
+import '../../main.dart';
 import '../../models/authentication/otp_verification_model.dart';
 import '../../repositories/auth_repo/auth_repository.dart';
 import '../../utils/constants.dart';
@@ -36,14 +38,11 @@ class OtpVerificationViewModel with ChangeNotifier {
   }
 
   //*------Accessing Api Services------*
-  final AuthenticationRepository _authenticationRepository =
-      AuthenticationRepository();
+  final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
 
-  ApiResponse<OtpVerificationModel> _otpVerificationResponse =
-      ApiResponse.none();
+  ApiResponse<OtpVerificationModel> _otpVerificationResponse = ApiResponse.none();
 
-  ApiResponse<OtpVerificationModel> get otpVerificationResponse =>
-      _otpVerificationResponse;
+  ApiResponse<OtpVerificationModel> get otpVerificationResponse => _otpVerificationResponse;
 
   set _setVerificationResponse(ApiResponse<OtpVerificationModel> response) {
     _otpVerificationResponse = response;
@@ -51,7 +50,8 @@ class OtpVerificationViewModel with ChangeNotifier {
   }
 
   Future<bool> verifyOtp(
-      {required BuildContext context,
+      {
+        // required BuildContext context,
       required LanguageChangeViewModel langProvider,
       String? userId,
       required String otp}) async {
@@ -62,8 +62,6 @@ class OtpVerificationViewModel with ChangeNotifier {
       await _setUserId(userId);
       await _setOtp(otp);
 
-      debugPrint(_userId);
-      debugPrint(_otp);
       //*-----Setting Values End------*
 
       //*-----Create Headers Start-----*
@@ -77,11 +75,13 @@ class OtpVerificationViewModel with ChangeNotifier {
           _otp == null ||
           _userId!.isEmpty ||
           _otp!.isEmpty) {
-        _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.error_complete_profile,
-          // context: context,
-          provider: langProvider,
-        );
+        // _alertServices.flushBarErrorMessages(
+        //
+        //   // message: AppLocalizations.of(context)!.error_complete_profile,
+        //   // context: context,
+        //   provider: langProvider,
+        // );
+        _alertServices.toastMessage("Error in Completing profile. please visit website");
         return false;
       }
 
@@ -99,19 +99,19 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Message to show status of the operation start----*
 
       _setVerificationResponse = ApiResponse.completed(response);
-
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
-      _setVerificationResponse = ApiResponse.error(error.toString());
+      // debugPrint('Printing Error: $error');
       //*-----Message to show status of the operation start----*
-      _alertServices.flushBarErrorMessages(
-        message: error.toString(),
-        // context: context,
-        provider: langProvider,
-      );
-      //*-----Message to show status of the operation End----*
+        _alertServices.flushBarErrorMessages(
+          message: error.toString(),
+          // context: context,
+          provider: langProvider,
+        );
 
+
+      //*-----Message to show status of the operation End----*
+      _setVerificationResponse = ApiResponse.error(error.toString());
       return false;
     }
   }
@@ -128,9 +128,8 @@ class OtpVerificationViewModel with ChangeNotifier {
     _resendOtpResponse = response;
     notifyListeners();
   }
-
   Future<bool> resendOtp({
-    required BuildContext context,
+    // required BuildContext context,
     required LanguageChangeViewModel langProvider,
     String? userId,
   }) async {
@@ -153,7 +152,7 @@ class OtpVerificationViewModel with ChangeNotifier {
 
       if (_userId == null || _userId!.isEmpty) {
         _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.error_complete_profile,
+          message: "Error in completing profile",
           // context: context,
           provider: langProvider,
         );
@@ -177,7 +176,7 @@ class OtpVerificationViewModel with ChangeNotifier {
 
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       _setResendOtpResponse = ApiResponse.error(error.toString());
       //*-----Message to show status of the operation start----*
       _alertServices.flushBarErrorMessages(

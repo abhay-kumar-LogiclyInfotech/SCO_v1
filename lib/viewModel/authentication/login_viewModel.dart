@@ -78,7 +78,8 @@ class LoginViewModel with ChangeNotifier {
 
   //*------Login Method------*
   Future<bool> login(
-      {required BuildContext context,
+      {
+        // required BuildContext context,
       required LanguageChangeViewModel langProvider}) async {
     try {
       _setResponse = ApiResponse.loading();
@@ -115,24 +116,30 @@ class LoginViewModel with ChangeNotifier {
       final data = response.data!;
       final userData = response.data!.user!;
 
-     await  HiveManager.storeUserId(userData.userId.toString());
-     await  HiveManager.storeEmiratesId(userData.emirateId.toString());
-      await HiveManager.storeName(
-          [
-            userData.firstName?.trim() ?? '',  // Trim and handle null
-            userData.middleName?.trim() ?? '',
-            userData.middleName2?.trim() ?? '',
-            userData.lastName?.trim() ?? ''
-          ]
-              .where((name) => name.isNotEmpty) // Exclude empty strings
-              .join(' ') // Join the remaining names with a space
-      );
-    await  HiveManager.storeRole(data.roles ?? []);
-     await  _authService.saveAuthState(true);
+      if(data.redirectUrl == null){
+        await  HiveManager.storeUserId(userData.userId.toString());
+        await  HiveManager.storeEmiratesId(userData.emirateId.toString());
+        await HiveManager.storeName(
+            [
+              userData.firstName?.trim() ?? '',  // Trim and handle null
+              userData.middleName?.trim() ?? '',
+              userData.middleName2?.trim() ?? '',
+              userData.lastName?.trim() ?? ''
+            ]
+                .where((name) => name.isNotEmpty) // Exclude empty strings
+                .join(' ') // Join the remaining names with a space
+        );
+        await HiveManager.storeRole(data.roles ?? []);
+        await  _authService.saveAuthState(true);
+        _alertServices.toastMessage(response.message.toString(),);
+        return true;
+      }
+      else{
+        _alertServices.flushBarErrorMessages(message: "Please Complete your registration process through sco website.");
+        return false;
+      }
 
-     _alertServices.toastMessage(response.message.toString(),);
 
-      return true;
     } catch (error) {
       debugPrint(error.toString());
       _setResponse = ApiResponse.error(error.toString());

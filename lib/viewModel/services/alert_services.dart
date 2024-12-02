@@ -165,7 +165,8 @@ class AlertServices {
 
   // Show DelightToastBar with flag control
   void showToast({required String message}) {
-    dynamic myContext = _navigationServices.navigationStateKey.currentContext;
+    dynamic myContext =  _navigationServices.navigationStateKey.currentContext;
+    print(myContext.toString());
     if (!_isNotificationShowing) {
       _isNotificationShowing = true;
       DelightToastBar(
@@ -188,7 +189,7 @@ class AlertServices {
       ).show(myContext);
 
       // Manually reset the flag after a delay
-      Future.delayed(const Duration(seconds: 3), _resetNotificationFlag);
+      Future.delayed(const Duration(seconds: 1), _resetNotificationFlag);
     }
   }
 
@@ -222,7 +223,7 @@ class AlertServices {
           // textDirection: getTextDirection(provider),
           messageColor: Colors.white,
           message: message,
-          duration: const Duration(seconds: 5),
+          duration: const Duration(seconds: 1),
           borderRadius: BorderRadius.circular(15),
           icon: const Icon(
             Icons.notifications_active_outlined,
@@ -253,7 +254,7 @@ class AlertServices {
             ),
           ),
           behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 4),
+          duration: const Duration(seconds: 1),
         ),
       ).closed.then((_) => _resetNotificationFlag());
     }

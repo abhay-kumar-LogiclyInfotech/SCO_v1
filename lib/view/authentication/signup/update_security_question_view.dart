@@ -53,7 +53,10 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   /// This is the call to api to get the all security questions and populate dropdown.
   Future<void> _initializeData({required LanguageChangeViewModel langProvider}) async {
     final provider = Provider.of<SecurityQuestionViewModel>(context, listen: false);
-    await provider.getSecurityQuestions(context: context, langProvider: langProvider, userId: _userId!);
+    await provider.getSecurityQuestions(
+        // context: context,
+        langProvider: langProvider, userId: _userId ?? '');
+        // langProvider: langProvider, userId: "976311" ?? '');
 
     if (provider.getSecurityQuestionResponse.status == Status.COMPLETED) {
       _securityQuestionItemsList = populateNormalDropdown(menuItemsList: provider.getSecurityQuestionResponse.data?.data?.securityQuestions ?? [], provider: langProvider);
@@ -278,64 +281,61 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 //Security Answer submit field
   Widget _submitButton({required LanguageChangeViewModel langProvider}) {
     //Creating single Provider instance i.e. not putting in the top of the widget tree.
-    return ChangeNotifierProvider(
-      create: (context) => UpdateSecurityQuestionViewModel(),
-      child: Consumer<UpdateSecurityQuestionViewModel>(
-        builder: (context, provider, _) {
-          return CustomButton(
-            textDirection: getTextDirection(langProvider),
-            buttonName: AppLocalizations.of(context)!.submit,
-            isLoading: provider.updateSecurityQuestionResponse.status == Status.LOADING
-                    ? true
-                    : false,
-            onTap: () async {
+    return Consumer<UpdateSecurityQuestionViewModel>(
+      builder: (context, provider, _) {
+        return CustomButton(
+          textDirection: getTextDirection(langProvider),
+          buttonName: AppLocalizations.of(context)!.submit,
+          isLoading: provider.updateSecurityQuestionResponse.status == Status.LOADING
+                  ? true
+                  : false,
+          onTap: () async {
 
-              setProcessing(true);
+            setProcessing(true);
 
-              bool result = validateForm(langProvider: langProvider);
-              if (result) {
-                provider.setSecurityQuestion(_questionController.text);
-                provider.setSecurityAnswer(_answerController.text);
-               bool updateResult =  await provider.updateSecurityQuestion(
-                  context: context,
-                  langProvider: langProvider,
-                  userId: _userId!,
-                  // userId: "962229",
-                );
+            bool result = validateForm(langProvider: langProvider);
+            if (result) {
+               provider.setSecurityQuestion(_questionController.text);
+              provider.setSecurityAnswer(_answerController.text);
+             bool updateResult =  await provider.updateSecurityQuestion(
+                // context: context,
+                langProvider: langProvider,
+                userId: _userId ?? '',
+                // userId: "962229",
+              );
                /// checking updating security question because we are using this screen twice
-               if(updateResult && !widget.updatingSecurityQuestion){
-                 _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                 _alertServices.showCustomSnackBar(AppLocalizations.of(context)!.registrationSuccess);
-               }
-              }
-              setProcessing(false);
+             if(updateResult && !widget.updatingSecurityQuestion){
+               _navigationService.goBackUntilFirstScreen();
+               _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+               // _alertServices.showCustomSnackBar(AppLocalizations.of(context)!.registrationSuccess);
+             }
+            }
+            setProcessing(false);
 
-            },
-            fontSize: 16,
-            buttonColor: AppColors.scoThemeColor,
-            borderColor: Colors.transparent,
-            elevation: 1,
-          );
-        },
-      ),
+          },
+          fontSize: 16,
+          buttonColor: AppColors.scoThemeColor,
+          borderColor: Colors.transparent,
+          elevation: 1,
+        );
+      },
     );
   }
 
   //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {
     if (_questionController.text.isEmpty) {
-      // _alertServices.flushBarErrorMessages(
-      //     message: AppLocalizations.of(context)!.selectSecurityQuestion,
-      //     provider: langProvider);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.selectSecurityQuestion)));
+      _alertServices.flushBarErrorMessages(
+          message: AppLocalizations.of(context)!.selectSecurityQuestion,
+          provider: langProvider);
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.selectSecurityQuestion)));
       return false;
     }
     if (_answerController.text.isEmpty) {
-      // _alertServices.flushBarErrorMessages(
-      //     message: AppLocalizations.of(context)!.writeSecurityAnswer,
-      //     provider: langProvider);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.answerSecurityQuestion)));
-
+      _alertServices.flushBarErrorMessages(
+          message: AppLocalizations.of(context)!.writeSecurityAnswer,
+          provider: langProvider);
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.answerSecurityQuestion)));
       return false;
     }
 

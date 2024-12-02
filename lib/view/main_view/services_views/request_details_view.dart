@@ -77,11 +77,9 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
     if (request?.listAttachment != null && request?.listAttachment != []) {
       _attachmentsList.clear();
       for (int i = 0; i < request!.listAttachment!.length; i++) {
-        _attachmentsList
-            .add(ListAttachment.fromJson(request!.listAttachment![i].toJson()));
+        _attachmentsList.add(ListAttachment.fromJson(request!.listAttachment![i].toJson()));
       }
     }
-
     /// To refresh the page
     setState(() {});
   }
@@ -300,7 +298,6 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
           ])),
     );
   }
-
 //// *----------------------- EXISTING COMMENTS SECTION END ------------------------*
 
 //// *----------------------- ADD NEW COMMENTS SECTION START ------------------------*
@@ -328,7 +325,6 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
       ],
     );
   }
-
 //// *----------------------- ADD NEW COMMENTS SECTION END ------------------------*
 
 //// *----------------------- ADD ATTACHMENTS SECTION START ------------------------*
@@ -398,7 +394,6 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
   void _addAttachment(File file) {
     final fileName = file.path.split('/').last;
     final base64String = base64Encode(file.readAsBytesSync());
-
     final newAttachment = ListAttachment(
       attachmentSeqNumberController: TextEditingController(),
       fileDescriptionController: TextEditingController(),
@@ -416,7 +411,6 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
       isLoading: false,
       newRecord: true,
     );
-
     setState(() {
       _attachmentsList.add(newAttachment);
     });
@@ -425,8 +419,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 //// *----------------------- ADD ATTACHMENTS SECTION END ------------------------*
 
   //// *----------------------- SUBMIT AND BACK BUTTON SECTION START ------------------------*
-  Widget _submitAndBackButton(
-      {required langProvider, required ListOfRequest? request, required AppLocalizations localization}) {
+  Widget _submitAndBackButton({required langProvider, required ListOfRequest? request, required AppLocalizations localization}) {
     return Column(
       children: [
         kFormHeight,
@@ -507,7 +500,6 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
       ));
     });
   }
-
   void createForm({required ListOfRequest? request}) {
     // form.clear();
 
@@ -526,12 +518,6 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
         _requestCommentsList.removeLast();
       }
     }
-
-
-
-
-
-
 
     /// add comment and attachments form
     form = {

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import '../login/login_view.dart';
 
 class ConfirmationView extends StatefulWidget {
   final bool isVerified;
@@ -163,14 +165,14 @@ class _ConfirmationViewState extends State<ConfirmationView>
       isLoading: false,
       onTap: () async {
         //*------calling the verifyOtp method in the ViewModel------*
-        setState(() {
-          _isLoading = true;
-        });
-        _navigationServices.goBack();
-        _navigationServices.pushReplacementNamed("/loginView");
-        setState(() {
-          _isLoading = false;
-        });
+        // setState(() {
+        //   _isLoading = true;
+        // });
+        _navigationServices.goBackUntilFirstScreen();
+        _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
+        // setState(() {
+        //   _isLoading = false;
+        // });
       },
       fontSize: 16,
       buttonColor: AppColors.scoButtonColor,

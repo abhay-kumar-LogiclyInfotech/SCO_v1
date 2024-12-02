@@ -1,7 +1,8 @@
 class AppUrls {
   // Use 'const' for a constant base URL
-  static const String _commonBaseUrl = "https://stg.sco.ae/api/";
-  static const String _baseUrl = "https://stg.sco.ae/o/mopa-sco-api/";
+  static const String _domainUrl = "https://stg.sco.ae/";
+  static const String _commonBaseUrl = "${_domainUrl}api/";
+  static const String _baseUrl = "${_domainUrl}o/mopa-sco-api/";
 
 
   //getting the base URL
@@ -21,21 +22,17 @@ class AppUrls {
   /// change password with mopa-sco-api
   static String get changePassword => "${_baseUrl}users/updatePassword";
 
-
   //faq's endpoint
-  static String get faq =>
-      "${_commonBaseUrl}jsonws/journal.journalarticle/get-latest-article";
+  static String get faq => "${_commonBaseUrl}jsonws/journal.journalarticle/get-latest-article";
 
   //vision and mission endpoint
   static String get getPageContentByUrl => "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
 
   //contact us endpoint
-  static String get contactUs =>
-      "${_commonBaseUrl}jsonws/contactus.contactus/add-contact-us";
+  static String get contactUs => "${_commonBaseUrl}jsonws/contactus.contactus/add-contact-us";
 
   //news and events endpoint
-  static String get newsAndEvents =>
-      "${_commonBaseUrl}jsonws/newsandevents.newsandevents/find-all-published-item/group-id/20126/is-published/true/is-event/false";
+  static String get newsAndEvents => "${_commonBaseUrl}jsonws/newsandevents.newsandevents/find-all-published-item/group-id/20126/is-published/true/is-event/false";
 
   //individual image endpoint
   static String get individualImage => "${_baseUrl}common-data/get-image-url/";
@@ -52,22 +49,21 @@ class AppUrls {
   static String get getAllActiveScholarships => "${_commonBaseUrl}jsonws/configuration.submissionconfiguration/find-all-active-scholarship";
 
   // find-draft-by-emirate-id-and-config-key
-  static String get findDraftByConfigurationKey   => "https://stg.sco.ae/api/jsonws/application.applicationdetails/find-draft-by-emirate-id-and-config-key";
+  static String get findDraftByConfigurationKey   => "${_domainUrl}api/jsonws/application.applicationdetails/find-draft-by-emirate-id-and-config-key";
 
   // get File content of the employment status files
-  static String get getEmploymentStatusFileContent   => "https://stg.sco.ae/o/mopa-sco-api/e-services/employment-status-file-content";
+  static String get getEmploymentStatusFileContent   => "${_domainUrl}o/mopa-sco-api/e-services/employment-status-file-content";
 
   // get File content of the Request files
-  static String get getRequestFileContent   => "https://stg.sco.ae/o/mopa-sco-api/self-service/service-request-file-content";
+  static String get getRequestFileContent   => "${_domainUrl}o/mopa-sco-api/self-service/service-request-file-content";
 
   // get File content of the Notes Attachment files
-  static String get getUpdateNoteFileContent   => "https://stg.sco.ae/o/mopa-sco-api/self-service/notes-file-content";
+  static String get getUpdateNoteFileContent   => "${_domainUrl}o/mopa-sco-api/self-service/notes-file-content";
 
   // Update profile image size must be less then 200kb
-  static String get updateProfilePicture   => "https://stg.sco.ae/api/jsonws/userext.userextension/update-user-portrait";
+  static String get updateProfilePicture   => "${_domainUrl}api/jsonws/userext.userextension/update-user-portrait";
 
 
   ///  DECREASE NOTIFICATIONS COUNT
-
-static String get decreaseNotificationCount => "https://stg.sco.ae/api/jsonws/mopanotification.mopanotification/maked-as-view";
+static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
 }

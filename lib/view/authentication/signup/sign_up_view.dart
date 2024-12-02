@@ -759,33 +759,29 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
   }
 
   Widget _signUpButton({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
-    return ChangeNotifierProvider(
-        create: (context) => SignupViewModel(),
-        child: Consumer<SignupViewModel>(builder: (context, provider, _) {
-          return CustomButton(
-            textDirection: getTextDirection(langProvider),
-            buttonName: localization.signUp,
-            isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
-            onTap: ()async {
-              
-              setProcessing(true);
-              
-              bool result = validateForm(langProvider: langProvider, signup: provider,localization:localization);
-              if (result) {
-              bool signUpResult = await provider.signup( langProvider: langProvider);
-              if(signUpResult){
-                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const OtpVerificationView()) );
-              }
-              }
-              setProcessing(false);
+    return Consumer<SignupViewModel>(builder: (context, provider, _) {
+      return CustomButton(
+        textDirection: getTextDirection(langProvider),
+        buttonName: localization.signUp,
+        isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
+        onTap: ()async {
 
+          setProcessing(true);
 
-            },
-            fontSize: 16,
-            buttonColor: AppColors.scoButtonColor,
-            elevation: 1,
-          );
-        }));
+          bool result = validateForm(langProvider: langProvider, signup: provider,localization:localization);
+          if (result) {
+          bool signUpResult = await provider.signup( langProvider: langProvider);
+          if(signUpResult){
+            _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const OtpVerificationView()) );
+                        }
+                       }
+          setProcessing(false);
+        },
+        fontSize: 16,
+        buttonColor: AppColors.scoButtonColor,
+        elevation: 1,
+      );
+    });
   }
 
   Widget _signInLink({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
@@ -844,7 +840,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
       setState(() {
         _firstNameError =  localization.registrationFirstNameValidate;
         requestFocus(_firstNameFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.registrationFirstNameValidate);
       });
       return false;
@@ -858,14 +854,14 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
       setState(() {
         _secondNameError = localization.registrationMiddleNameValidate;
         requestFocus(_secondNameFocusNode);
-        _alertServices.showToast(message: localization.registrationMiddleNameValidate);
+        _alertServices.flushBarErrorMessages(message: localization.registrationMiddleNameValidate);
       });
       return false;
     }
 
 
       // if (_secondNameController.text.isEmpty) {
-    //   _alertServices.showToast(message: localization.enterSecondName, context: context, provider: langProvider);
+    //   _alertServices.flushBarErrorMessages(message: localization.enterSecondName, context: context, provider: langProvider);
     //   return false;
     // } else {
     signup.setMiddleName(_secondNameController.text.trim());
@@ -876,7 +872,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
       setState(() {
         _thirdNameError = localization.registrationThirdNameValidate;
         requestFocus(_thirdFourthNameFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.registrationThirdNameValidate);
       });
 
@@ -884,7 +880,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
     }
 
     // if (_thirdFourthNameController.text.isEmpty) {
-    //   _alertServices.showToast(message: localization.enterThirdFourthName, context: context, provider: langProvider);
+    //   _alertServices.flushBarErrorMessages(message: localization.enterThirdFourthName, context: context, provider: langProvider);
     //   return false;
     // } else {
     signup.setMiddleName2(_thirdFourthNameController.text.trim());
@@ -895,7 +891,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
 
         _familyNameError = localization.registrationLastNameValidate;
         requestFocus(_familyNameFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.registrationLastNameValidate);
       });
 
@@ -909,7 +905,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
         _dobError = localization.brithDateValidate;
         requestFocus(_dobFocusNode);
       });
-      _alertServices.showToast(
+      _alertServices.flushBarErrorMessages(
           message: localization.brithDateValidate);
       return false;
     } else {
@@ -920,7 +916,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
         int.tryParse(_dobDayController.text) == null ||
         int.parse(_dobDayController.text) < 1 ||
         int.parse(_dobDayController.text) > 31) {
-      _alertServices.showToast(
+      _alertServices.flushBarErrorMessages(
           message: localization.enterValidDay,);
       return false;
     } else {
@@ -931,7 +927,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
         int.tryParse(_dobMonthController.text) == null ||
         int.parse(_dobMonthController.text) < 1 ||
         int.parse(_dobMonthController.text) > 12) {
-      _alertServices.showToast(
+      _alertServices.flushBarErrorMessages(
           message: localization.enterValidMonth,
     );
       return false;
@@ -941,7 +937,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
 
     if (_dobYearController.text.isEmpty ||
         int.tryParse(_dobYearController.text) == null) {
-      _alertServices.showToast(
+      _alertServices.flushBarErrorMessages(
           message: localization.enterValidYear,
       );
       return false;
@@ -954,7 +950,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
 
         _genderError = localization.genderValidate;
         requestFocus(_genderFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.enterGender,
        );
       });
@@ -967,7 +963,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
       setState(() {
         _emailError = localization.registrationEmailAddressValidate;
         requestFocus(_emailFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.enterValidEmail,
         );
       });
@@ -982,7 +978,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
       setState(() {
         _confirmEmailError = localization.emailsDoNotMatch;
         requestFocus(_confirmEmailFocusNode);
-        _alertServices.showToast(message: localization.emailsDoNotMatch);
+        _alertServices.flushBarErrorMessages(message: localization.emailsDoNotMatch);
       });
 
       return false;
@@ -996,7 +992,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
 
         _countryError = localization.countryValidate;
         requestFocus(_countryFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.enterCountry,);
       });
 
@@ -1010,7 +1006,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
 
         _emiratesError = localization.emiratesIdValidate;
         requestFocus(_emiratesIdFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.enterValidEmiratesId,
   );
       });
@@ -1025,7 +1021,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
       setState(() {
         _studentPhoneNumberError = localization.registrationMobileNumberValidate;
         requestFocus(_studentPhoneNumberFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.enterValidPhoneNumber,
         );
       });
@@ -1039,7 +1035,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
       setState(() {
         _passwordError = localization.registrationPasswordValidate;
         requestFocus(_passwordFocusNode);
-        _alertServices.showToast(
+        _alertServices.flushBarErrorMessages(
             message: localization.enterValidPassword,
         );
       });
@@ -1053,7 +1049,7 @@ class _SignUpViewState extends State<SignUpView> with MediaQueryMixin<SignUpView
         setState(() {
         _confirmPasswordError = localization.passwordsDoNotMatch;
           requestFocus(_confirmPasswordFocusNode);
-       _alertServices.showToast(
+       _alertServices.flushBarErrorMessages(
            message: localization.passwordsDoNotMatch,
       );
      });

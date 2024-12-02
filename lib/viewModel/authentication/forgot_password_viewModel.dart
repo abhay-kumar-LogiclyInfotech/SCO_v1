@@ -42,7 +42,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
   Future<bool> getSecurityQuestion(
       {required String email,
-      required BuildContext context,
+      // required BuildContext context,
       required LanguageChangeViewModel langProvider}) async {
     try {
       _setGetSecurityQuestionResponse = ApiResponse.loading();
@@ -80,8 +80,8 @@ class ForgotPasswordViewModel with ChangeNotifier {
       if (securityQuestion.isEmpty ||
           securityAnswer.isEmpty ||
           userId.isEmpty) {
-        _alertServices.toastMessage(
-          AppLocalizations.of(context)!.something_went_wrong,);
+        // _alertServices.toastMessage(AppLocalizations.of(context)!.something_went_wrong,);
+        _alertServices.toastMessage("Something went wrong...");
         return false;
       }
 

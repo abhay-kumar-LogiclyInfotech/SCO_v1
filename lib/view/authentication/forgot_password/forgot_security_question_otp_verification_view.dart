@@ -169,168 +169,162 @@ class _ForgotSecurityQuestionOtpVerificationViewState
 
   //*------PinPut Field------*/
   Widget _pinPutField(LanguageChangeViewModel langProvider) {
-    return ChangeNotifierProvider(
-        create: (context) => ForgotPasswordViewModel(),
-        child: Consumer<ForgotPasswordViewModel>(
-          builder: (context, provider, _) {
-            return Directionality(
-              textDirection: getTextDirection(langProvider),
-              child: Pinput(
-                  length: 7,
-                  // obscureText: true,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  defaultPinTheme: Constants.defaultPinTheme,
-                  focusedPinTheme: Constants.defaultPinTheme.copyWith(
-                      decoration: Constants.defaultPinTheme.decoration!
-                          .copyWith(border: Border.all(color: Colors.green))),
-                  onCompleted: (pin) async {
-                    setState(() {
-                      _isLoading = true;
-                    });
+    return Consumer<ForgotPasswordViewModel>(
+      builder: (context, provider, _) {
+        return Directionality(
+          textDirection: getTextDirection(langProvider),
+          child: Pinput(
+              length: 7,
+              // obscureText: true,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              defaultPinTheme: Constants.defaultPinTheme,
+              focusedPinTheme: Constants.defaultPinTheme.copyWith(
+                  decoration: Constants.defaultPinTheme.decoration!
+                      .copyWith(border: Border.all(color: Colors.green))),
+              onCompleted: (pin) async {
+                setState(() {
+                  _isLoading = true;
+                });
 
-                    _verificationCodeController.text = pin.toString();
+                _verificationCodeController.text = pin.toString();
 
-                    if (pin.isNotEmpty) {
-                      bool result =
-                          (pin.toString() == widget.verificationOtp.toString());
+                if (pin.isNotEmpty) {
+                  bool result =
+                      (pin.toString() == widget.verificationOtp.toString());
 
-                      if (result) {
-                        bool mailSent = await provider.sendForgotPasswordOnMail(
-                          userId: widget.userId,
-                          context: context,
-                          langProvider: langProvider,
-                        );
+                  if (result) {
+                    bool mailSent = await provider.sendForgotPasswordOnMail(
+                      userId: widget.userId,
+                      context: context,
+                      langProvider: langProvider,
+                    );
 
-                        if (mailSent) {
-                          _navigationServices.pushReplacementCupertino(
-                            CupertinoPageRoute(
-                              builder: (context) =>
-                                  ConfirmationView(isVerified: mailSent),
-                            ),
-                          );
-                        } else {
-                          _navigationServices.pushReplacementCupertino(
-                            CupertinoPageRoute(
-                              builder: (context) =>
-                                  const ConfirmationView(isVerified: false),
-                            ),
-                          );
-                        }
-                      } else {
-                        _navigationServices.pushReplacementCupertino(
-                          CupertinoPageRoute(
-                            builder: (context) =>
-                                const ConfirmationView(isVerified: false),
-                          ),
-                        );
-                      }
-                      setState(() {
-                        _isLoading = false;
-                      });
+                    if (mailSent) {
+                      _navigationServices.pushReplacementCupertino(
+                        CupertinoPageRoute(
+                          builder: (context) =>
+                              ConfirmationView(isVerified: mailSent),
+                        ),
+                      );
+                    } else {
+                      _navigationServices.pushReplacementCupertino(
+                        CupertinoPageRoute(
+                          builder: (context) =>
+                              const ConfirmationView(isVerified: false),
+                        ),
+                      );
                     }
-                  }),
-            );
-          },
-        ));
+                  } else {
+                    _navigationServices.pushReplacementCupertino(
+                      CupertinoPageRoute(
+                        builder: (context) =>
+                            const ConfirmationView(isVerified: false),
+                      ),
+                    );
+                  }
+                  setState(() {
+                    _isLoading = false;
+                  });
+                }
+              }),
+        );
+      },
+    );
   }
 
   //*------Resend Verification Code Button------*/
   Widget _submitButton(LanguageChangeViewModel langProvider) {
-    return ChangeNotifierProvider(
-        create: (context) => ForgotPasswordViewModel(),
-        child: Consumer<ForgotPasswordViewModel>(
-          builder: (context, provider, _) {
-            return CustomButton(
-              textDirection: getTextDirection(langProvider),
-              buttonName: AppLocalizations.of(context)!.verify,
-              isLoading: _isLoading,
-              onTap: () async {
-                //*------calling the verifyOtp method in the ViewModel------*
-                if (_verificationCodeController.text.isNotEmpty &&
-                    widget.verificationOtp.isNotEmpty) {
-                  bool result = (widget.verificationOtp.toString() ==
-                      _verificationCodeController.text.toString());
-                  if (result) {
-                    bool mailSent = await provider.sendForgotPasswordOnMail(
-                        userId: widget.userId,
-                        context: context,
-                        langProvider: langProvider);
+    return Consumer<ForgotPasswordViewModel>(
+      builder: (context, provider, _) {
+        return CustomButton(
+          textDirection: getTextDirection(langProvider),
+          buttonName: AppLocalizations.of(context)!.verify,
+          isLoading: _isLoading,
+          onTap: () async {
+            //*------calling the verifyOtp method in the ViewModel------*
+            if (_verificationCodeController.text.isNotEmpty &&
+                widget.verificationOtp.isNotEmpty) {
+              bool result = (widget.verificationOtp.toString() ==
+                  _verificationCodeController.text.toString());
+              if (result) {
+                bool mailSent = await provider.sendForgotPasswordOnMail(
+                    userId: widget.userId,
+                    context: context,
+                    langProvider: langProvider);
 
-                    _navigationServices.pushReplacementCupertino(
-                        CupertinoPageRoute(
-                            builder: (context) =>
-                                ConfirmationView(isVerified: mailSent)));
-                  } else {
-                    _navigationServices.pushReplacementCupertino(
-                        CupertinoPageRoute(
-                            builder: (context) =>
-                                const ConfirmationView(isVerified: false)));
-                  }
-                }
-              },
-              fontSize: 16,
-              buttonColor: AppColors.scoButtonColor,
-              elevation: 1,
-            );
+                _navigationServices.pushReplacementCupertino(
+                    CupertinoPageRoute(
+                        builder: (context) =>
+                            ConfirmationView(isVerified: mailSent)));
+              } else {
+                _navigationServices.pushReplacementCupertino(
+                    CupertinoPageRoute(
+                        builder: (context) =>
+                            const ConfirmationView(isVerified: false)));
+              }
+            }
           },
-        ));
+          fontSize: 16,
+          buttonColor: AppColors.scoButtonColor,
+          elevation: 1,
+        );
+      },
+    );
   }
 
   //*------Resend Verification Code------*/
   Widget _resendVerificationCodeButton(LanguageChangeViewModel langProvider) {
-    return ChangeNotifierProvider(
-        create: (context) => ForgotPasswordViewModel(),
-        child: Consumer<ForgotPasswordViewModel>(
-          builder: (context, provider, _) {
-            return InkWell(
-              onTap: () async {
-                bool result =
-                    await provider.getForgotSecurityQuestionVerificationOtp(
-                        userId: widget.userId,context: context);
+    return Consumer<ForgotPasswordViewModel>(
+      builder: (context, provider, _) {
+        return InkWell(
+          onTap: () async {
+            bool result =
+                await provider.getForgotSecurityQuestionVerificationOtp(
+                    userId: widget.userId,context: context);
 
-                if (result) {
-                  String? verificationOtp = provider
-                      .forgotSecurityQuestionOtpVerificationResponse
-                      .data
-                      ?.data
-                      ?.verificationCode;
-                  if (verificationOtp != null && verificationOtp.isNotEmpty) {
-                    _navigationServices.pushReplacementCupertino(
-                        CupertinoPageRoute(
-                            builder: (context) =>
-                                ForgotSecurityQuestionOtpVerificationView(
-                                    verificationOtp: verificationOtp,
-                                    userId: widget.userId)));
-                  }
-                }
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  provider.forgotSecurityQuestionOtpVerificationResponse
-                              .status ==
-                          Status.LOADING
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: AppColors.scoThemeColor,
-                            strokeWidth: 1.5,
-                          ),
-                        )
-                      : Text(
-                          AppLocalizations.of(context)!.resendVerificationCode,
-                          style: const TextStyle(
-                            color: AppColors.scoThemeColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                ],
-              ),
-            );
+            if (result) {
+              String? verificationOtp = provider
+                  .forgotSecurityQuestionOtpVerificationResponse
+                  .data
+                  ?.data
+                  ?.verificationCode;
+              if (verificationOtp != null && verificationOtp.isNotEmpty) {
+                _navigationServices.pushReplacementCupertino(
+                    CupertinoPageRoute(
+                        builder: (context) =>
+                            ForgotSecurityQuestionOtpVerificationView(
+                                verificationOtp: verificationOtp,
+                                userId: widget.userId)));
+              }
+            }
           },
-        ));
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              provider.forgotSecurityQuestionOtpVerificationResponse
+                          .status ==
+                      Status.LOADING
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: AppColors.scoThemeColor,
+                        strokeWidth: 1.5,
+                      ),
+                    )
+                  : Text(
+                      AppLocalizations.of(context)!.resendVerificationCode,
+                      style: const TextStyle(
+                        color: AppColors.scoThemeColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

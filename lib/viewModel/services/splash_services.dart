@@ -12,6 +12,7 @@ import '../language_change_ViewModel.dart';
 import 'auth_services.dart';
 import 'navigation_services.dart';
 
+
 class SplashServices {
   late NavigationServices _navigationServices;
   late AuthService _authService;
