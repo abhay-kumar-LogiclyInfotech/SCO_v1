@@ -45,16 +45,19 @@ class ForgotPasswordViewModel with ChangeNotifier {
       // required BuildContext context,
       required LanguageChangeViewModel langProvider}) async {
     try {
+
+      if (email.isEmpty) {
+        _alertServices.showErrorSnackBar("something went wrong...");
+        return false;
+      }
+
       _setGetSecurityQuestionResponse = ApiResponse.loading();
+
 
       //*-----Create Headers Start-----*
 
       final headers = <String, String>{'authorization': Constants.basicAuth};
       //*-----Create Headers End-----*
-
-      if (email.isEmpty) {
-        return false;
-      }
 
       //*-----Calling Api Start-----*
       final response = await _authenticationRepository.getForgotPasswordSecurityQuestionUsingEmail(email: email, headers: headers);
@@ -81,16 +84,16 @@ class ForgotPasswordViewModel with ChangeNotifier {
           securityAnswer.isEmpty ||
           userId.isEmpty) {
         // _alertServices.toastMessage(AppLocalizations.of(context)!.something_went_wrong,);
-        _alertServices.toastMessage("Something went wrong...");
+        _alertServices.showErrorSnackBar("Something went wrong...");
         return false;
       }
-
+      _alertServices.toastMessage(response.message.toString());
       return true;
     } catch (error) {
       debugPrint('Printing Error: $error');
       _setGetSecurityQuestionResponse = ApiResponse.error(error.toString());
       // Message to show status of the operation:
-      _alertServices.toastMessage(error.toString());
+      _alertServices.showErrorSnackBar(error.toString());
 
       return false;
     }
@@ -124,11 +127,13 @@ class ForgotPasswordViewModel with ChangeNotifier {
     required LanguageChangeViewModel langProvider,
   }) async {
     try {
-      _setSendForgotPasswordSendMailResponse = ApiResponse.loading();
 
       if (userId.isEmpty) {
+        _alertServices.showErrorSnackBar("something went wrong...");
         return false;
       }
+      _setSendForgotPasswordSendMailResponse = ApiResponse.loading();
+
       //*-----Create Headers Start-----*
       final headers = <String, String>{'authorization': Constants.basicAuth};
       //*-----Create Headers End-----*
@@ -145,6 +150,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
       return true;
     } catch (e) {
       debugPrint('Error: $e');
+      _alertServices.showErrorSnackBar(e.toString());
       return false;
     }
   }
@@ -170,14 +176,16 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
   Future<bool> getForgotSecurityQuestionVerificationOtp({
     required String userId,
-    required BuildContext context,
+    // required BuildContext context,
   }) async {
     try {
-      _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.loading();
 
       if (userId.isEmpty) {
+        _alertServices.showErrorSnackBar("something went wrong...");
         return false;
       }
+      _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.loading();
+
       //*-----Create Headers Start-----*
       final headers = <String, String>{'authorization': Constants.basicAuth};
       //*-----Create Headers End-----*
@@ -189,13 +197,13 @@ class ForgotPasswordViewModel with ChangeNotifier {
         headers: headers,
       );
       //*-----Calling Api End-----*
-      _setForgotSecurityQuestionOtpVerificationResponse =
-          ApiResponse.completed(response);
-      _alertServices.toastMessage(AppLocalizations.of(context)!.otp_sent_successfully,);
+      _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.completed(response);
+      _alertServices.toastMessage(response.message.toString());
 
       return true;
     } catch (e) {
       debugPrint('Error: $e');
+      _alertServices.showErrorSnackBar(e.toString());
       return false;
     }
   }

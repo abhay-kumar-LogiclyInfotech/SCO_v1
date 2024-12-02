@@ -297,7 +297,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
             bool validated = _validateForm(langProvider: langProvider);
 
             if (validated) {
-              bool result = await provider.getSecurityQuestion(email: _emailController.text,
+              bool result = await provider.getSecurityQuestion(email: _emailController.text.trim(),
                   // context: context,
                   langProvider: langProvider);
 
@@ -398,28 +398,32 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
 
   bool _validateForm({required LanguageChangeViewModel langProvider}) {
     if (_emailController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
-          // context: context,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message: AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
+      //     // context: context,
+      //     provider: langProvider);
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.pleaseEnterYourEmailAddress);
+
       return false;
     }
     if (_captchaController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message:AppLocalizations.of(context)!.pleaseEnterCaptcha,
-          // context: context,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message:AppLocalizations.of(context)!.pleaseEnterCaptcha,
+      //     // context: context,
+      //     provider: langProvider);
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.pleaseEnterCaptcha);
+
       return false;
     }
     if (_captchaText != _captchaController.text) {
       _rotate();
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.incorrectCaptcha,
-          // context: context,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message: AppLocalizations.of(context)!.incorrectCaptcha,
+      //     // context: context,
+      //     provider: langProvider);
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.incorrectCaptcha);
       return false;
     }
-
     return true;
   }
 }

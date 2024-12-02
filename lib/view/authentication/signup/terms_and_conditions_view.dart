@@ -54,7 +54,7 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(AppLocalizations.of(context)!.termsAndConditions,
-            style: AppTextStyles.appBarTitleStyle()),
+            style: AppTextStyles.appBarTitleStyle()),inNotifications: true,
       ),
       body: _buildUI(),
     );
@@ -317,9 +317,9 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
             elevation: 1,
             onTap: () async {
               if(!isChecked) {
-                _alertServices.showToast(message: "message");
-                // _alertServices.showCustomSnackBar("Please Accept Terms and conditions.");
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.acceptTermsAndConditions)));
+                // _alertServices.flushBarErrorMessages(message:AppLocalizations.of(context)!.acceptTermsAndConditions);
+                _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.acceptTermsAndConditions);
+                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.acceptTermsAndConditions)));
               }
               if (isChecked && _userId != null) {
                 bool result = await provider.updateTermsAndConditions(

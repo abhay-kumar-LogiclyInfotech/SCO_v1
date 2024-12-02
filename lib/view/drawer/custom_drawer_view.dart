@@ -19,6 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 import '../../resources/app_colors.dart';
+import '../../resources/components/account/profile_with_camera_button.dart';
 import '../../resources/components/custom_advanced_switch.dart';
 import '../../resources/getRoles.dart';
 import '../../viewModel/authentication/get_roles_viewModel.dart';
@@ -168,28 +169,41 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
 
-                                Consumer<GetProfilePictureUrlViewModel>(builder: (context,profilePicProvider,_){
-                                  return ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                child: AnimatedContainer(
-                                  duration: const Duration(seconds: 3),
-                                  curve: Curves.easeIn,
-                                  child: Image.network(
-                                      profilePicProvider.apiResponse.data?.url ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                                      fit: BoxFit.cover,
-                                       height: MediaQuery.sizeOf(context).width / 8,
-                                      width: MediaQuery.sizeOf(context).width / 8,
-                                      errorBuilder: (context, object, _) {
-                                      return SvgPicture.asset("images/images_user_sidebar/profile.svg",
-                                              fit: BoxFit.cover,
-                                             height: MediaQuery.sizeOf(context).width / 7, width: MediaQuery.sizeOf(context).width / 7,);},
-                                                          ),
+                        //         Consumer<GetProfilePictureUrlViewModel>(builder: (context,profilePicProvider,_){
+                        //           return ClipRRect(
+                        //           borderRadius: BorderRadius.circular(5),
+                        //         child: AnimatedContainer(
+                        //           duration: const Duration(seconds: 3),
+                        //           curve: Curves.easeIn,
+                        //           child: Image.network(
+                        //               profilePicProvider.apiResponse.data?.url ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                        //               fit: BoxFit.cover,
+                        //                height: MediaQuery.sizeOf(context).width / 8,
+                        //               width: MediaQuery.sizeOf(context).width / 8,
+                        //               errorBuilder: (context, object, _) {
+                        //               return SvgPicture.asset("images/images_user_sidebar/profile.svg",
+                        //                       fit: BoxFit.cover,
+                        //                      height: MediaQuery.sizeOf(context).width / 7, width: MediaQuery.sizeOf(context).width / 7,);},
+                        //                                   ),
+                        //         ),
+                        // );
+                        //         }),
+                                Consumer<GetProfilePictureUrlViewModel>(
+                                  builder: (context,provider,_){
+                                    return ProfileWithCameraButton(
+                                      profileSize: 55,
+                                        cameraEnabled: false,
+                                        profileImage: provider.apiResponse.data?.url != null
+                                            ? NetworkImage(provider.apiResponse.data!.url!.toString())
+                                            : const AssetImage(
+                                            'assets/personal_details/dummy_profile_pic.png'),
+                                        onTap: () {},
+                                        onLongPress: () {});
+                                  },
                                 ),
-                        );
-                                }),
 
                                 SizedBox(
                                   width: MediaQuery.sizeOf(context).width / 24,

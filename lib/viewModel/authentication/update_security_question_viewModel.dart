@@ -53,7 +53,6 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
       required LanguageChangeViewModel langProvider,
       required String userId}) async {
     try {
-      setUpdateSecurityQuestionResponse = ApiResponse.loading();
 
       //*-----Create Headers Start-----*
 
@@ -72,6 +71,9 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
           userId.isEmpty) {
         return false;
       }
+
+      setUpdateSecurityQuestionResponse = ApiResponse.loading();
+
       final fields = <String, String>{
         "securityQuestion": _securityQuestion!,
         "securityAnswer": _securityAnswer!,
@@ -95,9 +97,10 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
       debugPrint('Printing Error: $error');
       setUpdateSecurityQuestionResponse = ApiResponse.error(error.toString());
       //Message to show status of the operation:
-      _alertServices.toastMessage(
-        error.toString()
-      );
+      // _alertServices.toastMessage(
+      //   error.toString()
+      // );
+      _alertServices.showErrorSnackBar(error.toString());
       return false;
     }
   }

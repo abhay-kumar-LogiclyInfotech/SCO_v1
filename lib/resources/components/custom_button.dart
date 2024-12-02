@@ -13,6 +13,7 @@ class CustomButton extends StatefulWidget {
   Color? borderColor;
   Color? textColor;
   BorderRadius? borderRadius;
+  Color? loaderColor;
   dynamic leadingIcon;
   final TextDirection textDirection;
   final void Function() onTap;
@@ -30,6 +31,7 @@ class CustomButton extends StatefulWidget {
       this.leadingIcon,
       this.borderColor,
         this.borderRadius,
+        this.loaderColor,
       required this.textDirection,
       required this.onTap});
 
@@ -99,7 +101,7 @@ class _CustomButtonState extends State<CustomButton>
                           ?  SizedBox(
                               height: 23,
                               width: 23,
-                              child: Utils.pageLoadingIndicator(context: context,color: Colors.white)
+                              child: Utils.pageLoadingIndicator(context: context,color: widget.loaderColor ?? Colors.white)
                             )
                           : Text(
                               widget.buttonName,

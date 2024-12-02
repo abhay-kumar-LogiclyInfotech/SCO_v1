@@ -113,7 +113,7 @@ class SignupViewModel with ChangeNotifier {
   }
 
   //signup Function
-  Future<bool> signup({required LanguageChangeViewModel langProvider}) async {
+  Future<bool> signup({required LanguageChangeViewModel langProvider, required dynamic form}) async {
     try {
       setResponse = ApiResponse.loading();
 
@@ -127,39 +127,42 @@ class SignupViewModel with ChangeNotifier {
 
 
       //*-----Create Body Start----*
-      final body = {
-        "firstName": _firstName,
-        "middleName": _middleName,
-        "middleName2": _middleName2,
-        "lastName": _lastName,
-        "emailAddress": _emailAddress,
-        "confirmEmailAddress": _confirmEmailAddress,
-        "day": _day,
-        "month": _month,
-        "year": _year,
-        "emirateId": _emirateId,
-        "isMale": (_isMale?.toUpperCase() == 'M').toString(),
-        "country": _country?.trim().toUpperCase(),
-        "phoneNo": _phoneNo,
-        "password": _password,
-        "confirmPassword": _confirmPassword
-      };
+      // final body = {
+      //   "firstName": _firstName,
+      //   "middleName": _middleName,
+      //   "middleName2": _middleName2,
+      //   "lastName": _lastName,
+      //   "emailAddress": _emailAddress,
+      //   "confirmEmailAddress": _confirmEmailAddress,
+      //   "day": _day,
+      //   "month": _month,
+      //   "year": _year,
+      //   "emirateId": _emirateId,
+      //   "isMale": (_isMale?.toUpperCase() == 'M').toString(),
+      //   "country": _country?.trim().toUpperCase(),
+      //   "phoneNo": _phoneNo,
+      //   "password": _password,
+      //   "confirmPassword": _confirmPassword
+      // };
       // *-----Create Body End-----*
 
       //*-----Calling Api Start-----*
       final response = await _authenticationRepository.signup(
         headers: headers,
-        body: body,
+        // body: body,
+        body: form,
       );
       //*-----Calling Api End-----*
 
       setResponse = ApiResponse.completed(response);
-      HiveManager.storeUserId(response.data!.user!.userId.toString());
-      _alertServices.flushBarErrorMessages(message: response.message.toString(), provider: langProvider);
+      await HiveManager.storeUserId(response.data!.user!.userId.toString());
+      _alertServices.toastMessage(response.message.toString());
       return true;
     } catch (error) {
       setResponse = ApiResponse.error(error.toString());
-      _alertServices.flushBarErrorMessages(message: error.toString(), provider: langProvider);
+      _alertServices.showErrorSnackBar(error.toString());
+
+      // _alertServices.flushBarErrorMessages(message: error.toString(), provider: langProvider);
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,content: Text(error.toString())));
       return false;
     }

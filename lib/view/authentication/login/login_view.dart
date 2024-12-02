@@ -593,19 +593,18 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   bool _validateFields({required LanguageChangeViewModel langProvider}) {
     final localization = AppLocalizations.of(context)!;
     if (_usernameController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: localization.loginUsernameRequired,
-          // context: context,
-          provider: langProvider);
+      _alertServices.showErrorSnackBar(
+
+          localization.loginUsernameRequired,
+          // // context: context,
+          // provider: langProvider
+          );
 
       return false;
     }
 
     if (_passwordController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: localization.registrationPasswordValidate,
-          // context: context,
-          provider: langProvider);
+      _alertServices.showErrorSnackBar(localization.registrationPasswordValidate);
       return false;
     }
     return true;

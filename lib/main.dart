@@ -72,7 +72,7 @@ Future<void> main() async {
   //   DeviceOrientation.portraitDown,
   // ]);
   await registerServices();
-  // DependencyInjection.init();
+  DependencyInjection.init();
   runApp(MyApp(locale: languageCode));
 }
 
@@ -200,8 +200,8 @@ class MyApp extends StatelessWidget {
                 provider.changeLanguage(Locale(locale));
               }
             }
-            // return GetMaterialApp(
-            return MaterialApp(
+            return GetMaterialApp(
+            // return MaterialApp(
               title: 'SCO',
               // locale: locale == ''
               //     ? const Locale('en')
@@ -230,8 +230,8 @@ class MyApp extends StatelessWidget {
               ),
               navigatorKey: _navigationServices.navigationStateKey,
               routes: _navigationServices.routes,
-              // initialRoute: "/splashView",
-              home: OtpVerificationView(),
+              initialRoute: "/splashView",
+              // home: OtpVerificationView(),
             );
           },
         ));

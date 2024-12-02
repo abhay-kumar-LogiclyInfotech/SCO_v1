@@ -94,7 +94,7 @@ dependencies:
   flutter_html:
   webview_flutter:
   shimmer: ^3.0.0
-  flutter_launcher_icons:
+
 
 
 
@@ -102,6 +102,8 @@ dependencies:
 dev_dependencies:
   hive_generator: ^2.0.1
   build_runner: ^2.4.11
+  flutter_launcher_icons: ^0.14.1
+
   flutter_test:
     sdk: flutter
 
@@ -116,20 +118,29 @@ dev_dependencies:
 
 ## FLUTTER LAUNCHER ICON
 flutter_launcher_icons:
-  image_path: "assets/app_icons/App_Icon/App_Icon1.png"
-  image_path_android: "assets/app_icons/App_Icon/App_Icon1.png"
-  image_path_ios: "assets/app_icons/App_Icon/App_Icon1.png"
-  android: true # can specify file name here e.g. "ic_launcher"
-  ios: true # can specify file name here e.g. "My-Launcher-Icon"
-#  adaptive_icon_background: "assets/app_icons/App_Icon/with-bg.jpg" # only available for Android 8.0 devices and above
-#  adaptive_icon_foreground: "assets/app_icons/App_Icon/with-bg.jpg" # only available for Android 8.0 devices and above
-  adaptive_icon_foreground_inset: 16 # only available for Android 8.0 devices and above
-#  adaptive_icon_monochrome: "assets/app_icons/App_Icon/with-bg.jpg" # only available for Android 13 devices and above
-  min_sdk_android: 21 # android min sdk min:16, default 21
+  android: "launcher_icon"
+  ios: true
   remove_alpha_ios: true
-  background_color_ios: "#ffffff"
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+  image_path: "assets/app_icons/App_Icon/App_Icon1.png"
+  min_sdk_android: 24 # android min sdk min:16, default 21
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/app_icons/App_Icon/App_Icon1.png"
+
+#flutter_launcher_icons:
+#  image_path: "assets/app_icons/App_Icon/App_Icon1.png"
+#  image_path_android: "assets/app_icons/App_Icon/App_Icon1.png"
+#  image_path_ios: "assets/app_icons/App_Icon/App_Icon1.png"
+#  android: "ic_launcher" # can specify file name here e.g. "ic_launcher"
+#  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+##  adaptive_icon_background: "assets/app_icons/App_Icon/with-bg.jpg" # only available for Android 8.0 devices and above
+##  adaptive_icon_foreground: "assets/app_icons/App_Icon/with-bg.jpg" # only available for Android 8.0 devices and above
+#  adaptive_icon_foreground_inset: 16 # only available for Android 8.0 devices and above
+#  adaptive_icon_monochrome: "assets/app_icons/App_Icon/App_Icon1.png" # only available for Android 13 devices and above
+#  min_sdk_android: 21 # android min sdk min:16, default 21
+#  remove_alpha_ios: true
+#  background_color_ios: "#ffffff"
+## For information on the generic Dart part of this file, see the
+## following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:

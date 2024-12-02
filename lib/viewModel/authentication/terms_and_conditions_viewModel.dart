@@ -41,18 +41,21 @@ class TermsAndConditionsViewModel with ChangeNotifier {
       required LanguageChangeViewModel langProvider,
       required String userId}) async {
     try {
-      _setTermsAncConditionsResponse = ApiResponse.loading();
 
       //*-----Create Headers Start-----*
       if (userId.isEmpty) {
-        _alertServices.flushBarErrorMessages(
-          // message: AppLocalizations.of(context)!.error_complete_profile,
-          message: "Error in completing profile. please complete your profile through website",
-          // context: context,
-          provider: langProvider,
-        );
+        // _alertServices.flushBarErrorMessages(
+        //   // message: AppLocalizations.of(context)!.error_complete_profile,
+        //   message: "Error in completing profile. please complete your profile through website",
+        //   // context: context,
+        //   provider: langProvider,
+        // );
+        _alertServices.showErrorSnackBar("Error in completing profile. please complete your profile through website");
         return false;
       }
+
+
+      _setTermsAncConditionsResponse = ApiResponse.loading();
 
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -67,25 +70,27 @@ class TermsAndConditionsViewModel with ChangeNotifier {
         headers: headers,
       );
       //*-----Calling Api End-----*
+      _setTermsAncConditionsResponse = ApiResponse.completed(response);
 
       //Message to show status of the operation:
-      _alertServices.flushBarErrorMessages(
-        message: response.message.toString(),
-        // context: context,
-        provider: langProvider,
-      );
-      _setTermsAncConditionsResponse = ApiResponse.completed(response);
+      // _alertServices.flushBarErrorMessages(
+      //   message: response.message.toString(),
+      //   // context: context,
+      //   provider: langProvider,
+      // );
+      _alertServices.toastMessage(response.message.toString());
 
       return true;
     } catch (error) {
       debugPrint('Printing Error: $error');
       _setTermsAncConditionsResponse = ApiResponse.error(error.toString());
       //Message to show status of the operation:
-      _alertServices.flushBarErrorMessages(
-        message: error.toString(),
-        // context: context,
-        provider: langProvider,
-      );
+      // _alertServices.flushBarErrorMessages(
+      //   message: error.toString(),
+      //   // context: context,
+      //   provider: langProvider,
+      // );
+      _alertServices.showErrorSnackBar(error.toString());
       return false;
     }
   }

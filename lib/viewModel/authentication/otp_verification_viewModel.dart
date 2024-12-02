@@ -54,9 +54,9 @@ class OtpVerificationViewModel with ChangeNotifier {
         // required BuildContext context,
       required LanguageChangeViewModel langProvider,
       String? userId,
-      required String otp}) async {
+      required String otp}) async
+  {
     try {
-      _setVerificationResponse = ApiResponse.loading();
 
       //*-----Setting Values Start------*
       await _setUserId(userId);
@@ -81,9 +81,13 @@ class OtpVerificationViewModel with ChangeNotifier {
         //   // context: context,
         //   provider: langProvider,
         // );
-        _alertServices.toastMessage("Error in Completing profile. please visit website");
+        _alertServices.showErrorSnackBar("Error in Completing profile. please visit website");
+
         return false;
       }
+
+      _setVerificationResponse = ApiResponse.loading();
+
 
       //*-----Calling Api Start-----*
       final response = await _authenticationRepository.verifyOtp(
@@ -91,24 +95,26 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
 
       //*-----Message to show status of the operation start----*
-      _alertServices.flushBarErrorMessages(
-        message: response.message.toString(),
-        // context: context,
-        provider: langProvider,
-      );
+      // _alertServices.flushBarErrorMessages(
+      //   message: response.message.toString(),
+      //   // context: context,
+      //   provider: langProvider,
+      // );
       //*-----Message to show status of the operation start----*
 
       _setVerificationResponse = ApiResponse.completed(response);
+      _alertServices.toastMessage(response.message.toString());
+
       return true;
     } catch (error) {
       // debugPrint('Printing Error: $error');
       //*-----Message to show status of the operation start----*
-        _alertServices.flushBarErrorMessages(
-          message: error.toString(),
-          // context: context,
-          provider: langProvider,
-        );
-
+      //   _alertServices.flushBarErrorMessages(
+      //     message: error.toString(),
+      //     // context: context,
+      //     provider: langProvider,
+      //   );
+      _alertServices.showErrorSnackBar(error.toString());
 
       //*-----Message to show status of the operation End----*
       _setVerificationResponse = ApiResponse.error(error.toString());
@@ -134,14 +140,22 @@ class OtpVerificationViewModel with ChangeNotifier {
     String? userId,
   }) async {
     try {
-      _setResendOtpResponse = ApiResponse.loading();
-
       //*-----Setting Values Start------*
       await _setUserId(userId);
 
       debugPrint(_userId);
       //*-----Setting Values End------*
 
+
+      if (_userId == null || _userId!.isEmpty) {
+        // _alertServices.flushBarErrorMessages(
+        //   message: "Error in completing profile",
+        //   provider: langProvider,
+        // );
+        _alertServices.showErrorSnackBar("Error in completing profile");
+        return false;
+      }
+      _setResendOtpResponse = ApiResponse.loading();
       //*-----Create Headers Start-----*
 
       final headers = <String, String>{
@@ -150,14 +164,6 @@ class OtpVerificationViewModel with ChangeNotifier {
       };
       //*-----Create Headers End-----*
 
-      if (_userId == null || _userId!.isEmpty) {
-        _alertServices.flushBarErrorMessages(
-          message: "Error in completing profile",
-          // context: context,
-          provider: langProvider,
-        );
-        return false;
-      }
 
       //*-----Calling Api Start-----*
       final response = await _authenticationRepository.resendOtp(
@@ -165,25 +171,25 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
 
       //*-----Message to show status of the operation start----*
-      _alertServices.flushBarErrorMessages(
-        message: response.message.toString(),
-        // context: context,
-        provider: langProvider,
-      );
+      // _alertServices.flushBarErrorMessages(
+      //   message: response.message.toString(),
+      //   provider: langProvider,
+      // );
+      _alertServices.toastMessage(response.message.toString());
       //*-----Message to show status of the operation start----*
 
       _setResendOtpResponse = ApiResponse.completed(response);
-
       return true;
     } catch (error) {
       // debugPrint('Printing Error: $error');
       _setResendOtpResponse = ApiResponse.error(error.toString());
       //*-----Message to show status of the operation start----*
-      _alertServices.flushBarErrorMessages(
-        message: error.toString(),
-        // context: context,
-        provider: langProvider,
-      );
+      // _alertServices.flushBarErrorMessages(
+      //   message: error.toString(),
+      //   // context: context,
+      //   provider: langProvider,
+      // );
+      _alertServices.showErrorSnackBar(error.toString());
       //*-----Message to show status of the operation End----*
       return false;
     }

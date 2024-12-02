@@ -298,8 +298,9 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
                     builder: (context) => const TermsAndConditionsView()));
               }
             } else {
-              _alertServices.flushBarErrorMessages(
-                  message: "Please Enter Valid Otp");
+              // _alertServices.flushBarErrorMessages(
+              //     message: "Please Enter Valid Otp");
+              _alertServices.showErrorSnackBar("Please Enter valid OTP");
             }
           },
           fontSize: 16,
@@ -315,22 +316,15 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
       return CustomButton(
         buttonName: AppLocalizations.of(context)!.resend_code,
         isLoading: provider.resendOtpResponse.status == Status.LOADING ? true : false,
-        // isLoading: true,
+        // isLoading: false,
         textDirection: getTextDirection(langProvider),
         buttonColor: Colors.white,
         textColor: AppColors.scoButtonColor,
         borderColor: AppColors.scoButtonColor,
         fontSize: 16,
+        loaderColor: AppColors.scoButtonColor,
         onTap: () async {
-
-          //
-          // final AlertServices alertServices = new AlertServices();
-          // _alertServices.toastMessage("message");
-
-          // GetIt.I.get<AlertServices>().showToast(message: "message");
-          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("This is Snackbar")));
           provider.resendOtp(
-              // context: context,
               langProvider: langProvider,
               userId: _userId);
         },

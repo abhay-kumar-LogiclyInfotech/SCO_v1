@@ -93,7 +93,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
         fit: BoxFit.fill,
         height: 35,
         width: 110,
-      )),
+      ),inNotifications: true,),
       body: _buildUI(context: context),
     );
   }
@@ -251,7 +251,9 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
           onTap: () async {
             bool result =
                 await provider.getForgotSecurityQuestionVerificationOtp(
-                    userId: widget.userId,context: context);
+                    userId: widget.userId
+                    // ,context: context
+                );
 
             if (result) {
               String? verificationOtp = provider
@@ -319,7 +321,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
 
               /// matching the security answer with user entered answer and show popup
               if (_answerController.text.trim() != widget.securityAnswer.trim()) {
-                _alertServices.toastMessage(AppLocalizations.of(context)!.enter_correct_security_answer);
+                _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.enter_correct_security_answer);
               }
               /// if security answer is matched successfully and send password on email
               if(_answerController.text.trim() == widget.securityAnswer.trim()) {
@@ -346,17 +348,19 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
   //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {
     if (_questionController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.selectSecurityQuestion,
-          // context: context,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message: AppLocalizations.of(context)!.selectSecurityQuestion,
+      //     // context: context,
+      //     provider: langProvider);
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.selectSecurityQuestion);
       return false;
     }
     if (_answerController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.writeSecurityAnswer,
-          // context: context,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message: AppLocalizations.of(context)!.writeSecurityAnswer,
+      //     // context: context,
+      //     provider: langProvider);
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.writeSecurityAnswer);
       return false;
     }
 

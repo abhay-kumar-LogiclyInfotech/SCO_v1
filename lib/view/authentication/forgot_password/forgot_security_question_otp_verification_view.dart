@@ -11,6 +11,7 @@ import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/forgot_password/confirmation_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 import '../../../data/response/status.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../utils/constants.dart';
@@ -33,6 +34,7 @@ class _ForgotSecurityQuestionOtpVerificationViewState
     extends State<ForgotSecurityQuestionOtpVerificationView>
     with MediaQueryMixin<ForgotSecurityQuestionOtpVerificationView> {
   late NavigationServices _navigationServices;
+  late AlertServices _alertServices;
 
   //verification code:
   late TextEditingController _verificationCodeController;
@@ -44,6 +46,7 @@ class _ForgotSecurityQuestionOtpVerificationViewState
   void initState() {
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    _alertServices = getIt.get<AlertServices>();
 
     _verificationCodeController = TextEditingController();
 
@@ -241,6 +244,11 @@ class _ForgotSecurityQuestionOtpVerificationViewState
           buttonName: AppLocalizations.of(context)!.verify,
           isLoading: _isLoading,
           onTap: () async {
+
+            if(_verificationCodeController.text.isEmpty){
+              _alertServices.showErrorSnackBar("Please Enter valid otp");
+            }
+
             //*------calling the verifyOtp method in the ViewModel------*
             if (_verificationCodeController.text.isNotEmpty &&
                 widget.verificationOtp.isNotEmpty) {
@@ -280,7 +288,9 @@ class _ForgotSecurityQuestionOtpVerificationViewState
           onTap: () async {
             bool result =
                 await provider.getForgotSecurityQuestionVerificationOtp(
-                    userId: widget.userId,context: context);
+                    userId: widget.userId,
+                    // context: context
+                );
 
             if (result) {
               String? verificationOtp = provider

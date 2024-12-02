@@ -307,7 +307,6 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
              if(updateResult && !widget.updatingSecurityQuestion){
                _navigationService.goBackUntilFirstScreen();
                _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-               // _alertServices.showCustomSnackBar(AppLocalizations.of(context)!.registrationSuccess);
              }
             }
             setProcessing(false);
@@ -325,16 +324,18 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {
     if (_questionController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.selectSecurityQuestion,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message: AppLocalizations.of(context)!.selectSecurityQuestion,
+      //     provider: langProvider);
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.selectSecurityQuestion);
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.selectSecurityQuestion)));
       return false;
     }
     if (_answerController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-          message: AppLocalizations.of(context)!.writeSecurityAnswer,
-          provider: langProvider);
+      // _alertServices.flushBarErrorMessages(
+      //     message: AppLocalizations.of(context)!.writeSecurityAnswer,
+      //     provider: langProvider);
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.writeSecurityAnswer);
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.answerSecurityQuestion)));
       return false;
     }

@@ -147,116 +147,227 @@ import '../language_change_ViewModel.dart';
 import 'navigation_services.dart';
 // import 'language_change_viewModel.dart';
 
+// class AlertServices {
+//   late NavigationServices _navigationServices;
+//
+//   // Flag to track if a notification is being shown
+//   bool _isNotificationShowing = false;
+//
+//   AlertServices() {
+//     final GetIt _getIt = GetIt.instance;
+//     _navigationServices = _getIt.get<NavigationServices>();
+//   }
+//
+//   // Reset flag
+//   void _resetNotificationFlag() {
+//     _isNotificationShowing = false;
+//   }
+//
+//   // Show DelightToastBar with flag control
+//   void showToast({required String message}) {
+//     dynamic myContext =  _navigationServices.navigationStateKey.currentContext;
+//     print(myContext.toString());
+//     if (!_isNotificationShowing) {
+//       _isNotificationShowing = true;
+//       DelightToastBar(
+//         autoDismiss: true,
+//         position: DelightSnackbarPosition.top,
+//         builder: (context) {
+//           return ToastCard(
+//             leading: const Icon(
+//               Icons.notifications_active_outlined,
+//               size: 28,
+//               color: Colors.white,
+//             ),
+//             title: Text(
+//               message,
+//               style: const TextStyle(color: Colors.white),
+//             ),
+//             color: AppColors.scoButtonColor,
+//           );
+//         },
+//       ).show(myContext);
+//
+//       // Manually reset the flag after a delay
+//       Future.delayed(const Duration(seconds: 1), _resetNotificationFlag);
+//     }
+//   }
+//
+//   // FlutterToast with flag control
+//   void toastMessage(String message) {
+//     if (!_isNotificationShowing) {
+//       _isNotificationShowing = true;
+//       Fluttertoast.showToast(
+//         msg: message,
+//         backgroundColor: AppColors.scoThemeColor,
+//         textColor: Colors.white,
+//         fontSize: 15,
+//         toastLength: Toast.LENGTH_LONG,
+//       ).then((_) => _resetNotificationFlag());
+//     }
+//   }
+//
+//   // FlushBar notification with flag control
+//   void flushBarErrorMessages({
+//     required String message,
+//     // required BuildContext context,
+//      LanguageChangeViewModel? provider,
+//   }) {
+//     dynamic myContext = _navigationServices.navigationStateKey.currentContext;
+//     if (!_isNotificationShowing) {
+//       _isNotificationShowing = true;
+//       showFlushbar(
+//         context: myContext,
+//         flushbar: Flushbar(
+//           backgroundColor: AppColors.scoButtonColor,
+//           // textDirection: getTextDirection(provider),
+//           messageColor: Colors.white,
+//           message: message,
+//           duration: const Duration(seconds: 1),
+//           borderRadius: BorderRadius.circular(15),
+//           icon: const Icon(
+//             Icons.notifications_active_outlined,
+//             size: 28,
+//             color: Colors.white,
+//           ),
+//           flushbarPosition: FlushbarPosition.TOP,
+//           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+//         )..show(myContext).then((_) => _resetNotificationFlag()),
+//       );
+//     }
+//   }
+//
+//   // Custom SnackBar with flag control
+//   void showCustomSnackBar(String message) {
+//     dynamic myContext = _navigationServices.navigationStateKey.currentContext;
+//
+//     if (!_isNotificationShowing) {
+//       _isNotificationShowing = true;
+//       ScaffoldMessenger.of(myContext).showSnackBar(
+//         SnackBar(
+//           backgroundColor: Colors.green,
+//           content: Text(
+//             message,
+//             style: const TextStyle(
+//               fontWeight: FontWeight.bold,
+//               color: Colors.white,
+//             ),
+//           ),
+//           behavior: SnackBarBehavior.floating,
+//           duration: const Duration(seconds: 1),
+//         ),
+//       ).closed.then((_) => _resetNotificationFlag());
+//     }
+//   }
+// }
+
 class AlertServices {
   late NavigationServices _navigationServices;
-
-  // Flag to track if a notification is being shown
-  bool _isNotificationShowing = false;
 
   AlertServices() {
     final GetIt _getIt = GetIt.instance;
     _navigationServices = _getIt.get<NavigationServices>();
   }
 
-  // Reset flag
-  void _resetNotificationFlag() {
-    _isNotificationShowing = false;
-  }
-
-  // Show DelightToastBar with flag control
+  // Show DelightToastBar
   void showToast({required String message}) {
-    dynamic myContext =  _navigationServices.navigationStateKey.currentContext;
-    print(myContext.toString());
-    if (!_isNotificationShowing) {
-      _isNotificationShowing = true;
-      DelightToastBar(
-        autoDismiss: true,
-        position: DelightSnackbarPosition.top,
-        builder: (context) {
-          return ToastCard(
-            leading: const Icon(
-              Icons.notifications_active_outlined,
-              size: 28,
-              color: Colors.white,
-            ),
-            title: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
-            ),
-            color: AppColors.scoButtonColor,
-          );
-        },
-      ).show(myContext);
-
-      // Manually reset the flag after a delay
-      Future.delayed(const Duration(seconds: 1), _resetNotificationFlag);
-    }
-  }
-
-  // FlutterToast with flag control
-  void toastMessage(String message) {
-    if (!_isNotificationShowing) {
-      _isNotificationShowing = true;
-      Fluttertoast.showToast(
-        msg: message,
-        backgroundColor: AppColors.scoThemeColor,
-        textColor: Colors.white,
-        fontSize: 15,
-        toastLength: Toast.LENGTH_LONG,
-      ).then((_) => _resetNotificationFlag());
-    }
-  }
-
-  // FlushBar notification with flag control
-  void flushBarErrorMessages({
-    required String message,
-    // required BuildContext context,
-     LanguageChangeViewModel? provider,
-  }) {
     dynamic myContext = _navigationServices.navigationStateKey.currentContext;
-    if (!_isNotificationShowing) {
-      _isNotificationShowing = true;
-      showFlushbar(
-        context: myContext,
-        flushbar: Flushbar(
-          backgroundColor: AppColors.scoButtonColor,
-          // textDirection: getTextDirection(provider),
-          messageColor: Colors.white,
-          message: message,
-          duration: const Duration(seconds: 1),
-          borderRadius: BorderRadius.circular(15),
-          icon: const Icon(
+    print(myContext.toString());
+
+    DelightToastBar(
+      autoDismiss: true,
+      position: DelightSnackbarPosition.top,
+      builder: (context) {
+        return ToastCard(
+          leading: const Icon(
             Icons.notifications_active_outlined,
             size: 28,
             color: Colors.white,
           ),
-          flushbarPosition: FlushbarPosition.TOP,
-          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        )..show(myContext).then((_) => _resetNotificationFlag()),
-      );
-    }
+          title: Text(
+            message,
+            style: const TextStyle(color: Colors.white),
+          ),
+          color: AppColors.scoButtonColor,
+        );
+      },
+    ).show(myContext);
   }
 
-  // Custom SnackBar with flag control
+  // FlutterToast
+  void toastMessage(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: AppColors.scoThemeColor,
+      textColor: Colors.white,
+      fontSize: 15,
+      toastLength: Toast.LENGTH_LONG,
+    );
+  }
+
+  // FlushBar notification
+  void flushBarErrorMessages({
+    required String message,
+    LanguageChangeViewModel? provider,
+  }) {
+    dynamic myContext = _navigationServices.navigationStateKey.currentContext;
+
+    showFlushbar(
+      context: myContext,
+      flushbar: Flushbar(
+        backgroundColor: AppColors.scoButtonColor,
+        messageColor: Colors.white,
+        message: message,
+        duration: const Duration(seconds: 1),
+        borderRadius: BorderRadius.circular(15),
+        icon: const Icon(
+          Icons.notifications_active_outlined,
+          size: 28,
+          color: Colors.white,
+        ),
+        flushbarPosition: FlushbarPosition.TOP,
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      ),
+    );
+  }
+
+  // Custom SnackBar
   void showCustomSnackBar(String message) {
     dynamic myContext = _navigationServices.navigationStateKey.currentContext;
 
-    if (!_isNotificationShowing) {
-      _isNotificationShowing = true;
-      ScaffoldMessenger.of(myContext).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.green,
-          content: Text(
-            message,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+    ScaffoldMessenger.of(myContext).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.green,
+        content: Text(
+          message,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 1),
         ),
-      ).closed.then((_) => _resetNotificationFlag());
-    }
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
+
+  // Custom error SnackBar
+  void showErrorSnackBar(String message) {
+    dynamic myContext = _navigationServices.navigationStateKey.currentContext;
+
+    ScaffoldMessenger.of(myContext).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          message,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 1),
+      ),
+    );
   }
 }

@@ -82,11 +82,12 @@ class LoginViewModel with ChangeNotifier {
         // required BuildContext context,
       required LanguageChangeViewModel langProvider}) async {
     try {
-      _setResponse = ApiResponse.loading();
 
       if(_username.isEmpty || _password.isEmpty){
         return false;
       }
+
+      _setResponse = ApiResponse.loading();
 
       //*-----Create Headers Start-----*
 
@@ -135,7 +136,8 @@ class LoginViewModel with ChangeNotifier {
         return true;
       }
       else{
-        _alertServices.flushBarErrorMessages(message: "Please Complete your registration process through sco website.");
+        // _alertServices.flushBarErrorMessages(message: "Please Complete your registration process through sco website.");
+        _alertServices.showErrorSnackBar("Please Complete your registration process through sco website.");
         return false;
       }
 
@@ -143,10 +145,11 @@ class LoginViewModel with ChangeNotifier {
     } catch (error) {
       debugPrint(error.toString());
       _setResponse = ApiResponse.error(error.toString());
-      _alertServices.flushBarErrorMessages(
-          message: "${error}Please do check you password",
-          // context: context,
-          provider: langProvider);
+      _alertServices.showErrorSnackBar(error.toString());
+      // _alertServices.flushBarErrorMessages(
+      //     message: "${error}Please do check you password",
+      //     // context: context,
+      //     provider: langProvider);
       return false;
     }
   }
