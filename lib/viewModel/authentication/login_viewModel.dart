@@ -132,7 +132,7 @@ class LoginViewModel with ChangeNotifier {
         );
         await HiveManager.storeRole(data.roles ?? []);
         await  _authService.saveAuthState(true);
-        _alertServices.toastMessage(response.message.toString(),);
+        _alertServices.showCustomSnackBar("Login successful");
         return true;
       }
       else{

@@ -271,9 +271,7 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
                     kFormHeight,
                     actionButton(text:localization.update,assetAddress: "assets/services/update_note.svg",onTap: (){
                       _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> UpdateNoteView(noteId: element.noteId.toString())));
-
                     }),
-
                   ],
                 ),
                 isLastItem: true),

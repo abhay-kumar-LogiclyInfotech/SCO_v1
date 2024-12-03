@@ -77,8 +77,6 @@ Future<void> main() async {
 }
 
 
-
-
 class MyApp extends StatefulWidget {
   late NavigationServices _navigationServices;
 

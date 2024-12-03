@@ -104,17 +104,14 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
      /// Getting profile picture and  name and userTypes
       if(_toLogin){
 
-
         // SETTING USERNAME AND ROLES
         _name = HiveManager.getName() ?? 'User Name';
         _roles = HiveManager.getRole()?? [];
-
 
         // Getting Fresh Roles
         final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
         await getRolesProvider.getRoles();
       }
-
     });
   }
 
@@ -229,9 +226,11 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                           ),
                                           Expanded(
                                             child: SelectableText(
-                                              _roles.where((role){
-                                               return role.isNotEmpty;
-                                              }).join(', ') ,
+                                              // _roles.where((role){
+                                              //  return role.isNotEmpty;
+                                              // }).join(', ')
+                                              _roles.any((role) => role.toLowerCase() == 'students') ? "Student" : "User Type",
+
                                               style: TextStyle(
                                                   color: Colors.white
                                                       .withOpacity(0.65)),
@@ -517,7 +516,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 await HiveManager.clearName();
                                 await HiveManager.clearRole();
 
-                                _navigationServices.goBack();
+                                _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const MainView()));
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
                                 _alertServices.toastMessage(localization.logout_success);
                               },

@@ -102,17 +102,25 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
       /// Check if the user is logged in
       isLogged = await _authService.isLoggedIn();
+      setState(() {
+
+      });
+
+
+      // Getting Fresh Roles
+      final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
+      await getRolesProvider.getRoles();
+      role = getRoleFromList(HiveManager.getRole());
+      final profilePictureProvider  = Provider.of<GetProfilePictureUrlViewModel>(context,listen: false);
+      /// Fetching profile picture url
+      await profilePictureProvider.getProfilePictureUrl();
+      setState(() {
+        // Update state to reflect that notifications count is loaded
+      });
       if(isLogged){
         setProcessing(true);
 
-        // Getting Fresh Roles
-        final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
-        await getRolesProvider.getRoles();
-        role = getRoleFromList(HiveManager.getRole());
-
-
       /// Fetch data from providers
-    final profilePictureProvider  = Provider.of<GetProfilePictureUrlViewModel>(context,listen: false);
       final myFinanceProvider = Provider.of<MyFinanceStatusViewModel>(context, listen: false);
       final requestsProvider = Provider.of<GetAllRequestsViewModel>(context, listen: false);
       final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context, listen: false);
@@ -126,11 +134,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           // Update state to reflect that notifications count is loaded
         });
 
-        /// Fetching profile picture url
-        await profilePictureProvider.getProfilePictureUrl();
-        setState(() {
-          // Update state to reflect that notifications count is loaded
-        });
+
 
     // //// This will show the top salary only
     // _scholarshipApproved(langProvider: langProvider),

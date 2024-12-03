@@ -1095,7 +1095,8 @@
   "registrationConfEmailAddress": "تأكيد عنوان البريد الإلكتروني",
   "registrationConfEmailAddressRequired": "تأكيد عنوان البريد الإلكتروني مطلوب",
   "registrationConfEmailAddressWatermark": "أكد إدخال عنوان البريد الإلكتروني",
-  "registrationConfEmailAddressValidate": "يرجى إدخال عنوان بريد إلكتروني صالح للتأكيد"
+  "registrationConfEmailAddressValidate": "يرجى إدخال عنوان بريد إلكتروني صالح للتأكيد",  "change_password": "تغيير كلمة المرور",
+  "generate_new_password": "إنشاء كلمة مرور جديدة"
 }
 
 

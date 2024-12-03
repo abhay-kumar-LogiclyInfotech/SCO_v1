@@ -94,7 +94,7 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ApplicationStatusView()))
       },
       {
-        'title': localization.reset_password,
+        'title': localization.change_password,
         'assetAddress': "assets/myAccount/change_password.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ChangePasswordView()))
       },

@@ -436,6 +436,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
                                 form: createEmploymentStatusForm,
                                 updating: false);
                     if (result) {
+                      setProcessing(false);
                       /// update and refresh the information
                       await _initializeData();
                     }
@@ -490,7 +491,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
       GetPersonalDetailsViewModel? personalDetails}) {
     /// create Employment status form it uses post method
     createEmploymentStatusForm = {
-      "sequanceNumber": "2",
+      "sequanceNumber": "1",
       "employmentStatus": _employmentStatusController.text,
       "employerName": _employerController.text,
       "currentFlag": "Y",

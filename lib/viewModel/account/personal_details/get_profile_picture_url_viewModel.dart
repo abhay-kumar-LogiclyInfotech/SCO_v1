@@ -81,7 +81,6 @@ class GetProfilePictureUrlViewModel with ChangeNotifier {
         setLoading(false);
       }}
     else{
-
       _alertServices.toastMessage("No Internet Connection is available");
       setLoading(false);
     }

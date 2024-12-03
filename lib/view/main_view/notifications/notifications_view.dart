@@ -134,66 +134,94 @@ class _NotificationsViewState extends State<NotificationsView>
 
 
     return ListView.builder(
-        shrinkWrap: true,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: provider.apiResponse.data?.length ?? 0,
+      itemBuilder: (context, index) {
+        // Sort the notifications based on `isNew` before building the list
+        final sortedData = (provider.apiResponse.data ?? [])
+          ..sort((a, b) {
+            // Convert isNew to integer for comparison: true (1), false (0)
+            final isNewA = (a.isNew ?? false) ? 1 : 0;
+            final isNewB = (b.isNew ?? false) ? 1 : 0;
+            return isNewB.compareTo(isNewA);
+          });
 
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount:  provider.apiResponse.data?.length ?? 0
-        ,itemBuilder: (context,index){
-      final element = provider.apiResponse.data![index];
-          return Padding(
-            padding: EdgeInsets.only(bottom: kPadding),
-            child: SimpleCard(
-              onTap: (){
-                /// Moving the details of the notification
-                  _navigationServices.pushCupertino(CupertinoPageRoute(
-                      builder: (context) =>
-                          NotificationDetailView(notification: element)));
-                },
-                contentPadding: EdgeInsets.zero,
-                expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
-                  /// ------------ Advisor's Section ------------
-                  CustomInformationContainerField(
-                      title: "",
-                      descriptionAsWidget: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: kPadding),
-                        child: Row(
-                          children: [
-                           element.isNew ?? false ? SvgPicture.asset("assets/bell.svg") : SvgPicture.asset("assets/message_seen_bell.svg")  ,
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                element.subject ?? '',
-                                style: AppTextStyles.normalTextStyle().copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                    color: AppColors.scoButtonColor),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
-                  Padding(
+        final element = sortedData[index];
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: kPadding),
+          child: SimpleCard(
+            onTap: () {
+              // Navigate to notification details
+              _navigationServices.pushCupertino(
+                CupertinoPageRoute(
+                  builder: (context) => NotificationDetailView(notification: element),
+                ),
+              );
+            },
+            contentPadding: EdgeInsets.zero,
+            expandedContent: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                // ------------ Advisor's Section ------------
+                CustomInformationContainerField(
+                  title: "",
+                  descriptionAsWidget: Padding(
                     padding: EdgeInsets.symmetric(horizontal: kPadding),
-                    child: Column(
+                    child: Row(
                       children: [
-                        CustomInformationContainerField(
-                            title: localization.from,
-                            description: element?.from ?? ''),
-                        CustomInformationContainerField(
-                            title: localization.status,
-                            description:  getFullNameFromLov(langProvider: langProvider,lovCode: 'NOTIFICATION_STS',code: element?.status ?? '') ),
-                        CustomInformationContainerField(
-                            title: localization.createdOn,
-                            description: convertTimestampToDateTime(element?.createDate ?? 0),isLastItem: true),
-                        kFormHeight,
+                        element.isNew ?? false
+                            ? SvgPicture.asset("assets/bell.svg")
+                            : SvgPicture.asset("assets/message_seen_bell.svg"),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            element.subject ?? '',
+                            style: AppTextStyles.normalTextStyle().copyWith(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: AppColors.scoButtonColor,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ])),
-          );
-      return Container();
-    });
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: kPadding),
+                  child: Column(
+                    children: [
+                      CustomInformationContainerField(
+                        title: localization.from,
+                        description: element.from ?? '',
+                      ),
+                      CustomInformationContainerField(
+                        title: localization.status,
+                        description: getFullNameFromLov(
+                          langProvider: langProvider,
+                          lovCode: 'NOTIFICATION_STS',
+                          code: element.status ?? '',
+                        ),
+                      ),
+                      CustomInformationContainerField(
+                        title: localization.createdOn,
+                        description: convertTimestampToDateTime(element.createDate ?? 0),
+                        isLastItem: true,
+                      ),
+                      kFormHeight,
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
 
   }
 }

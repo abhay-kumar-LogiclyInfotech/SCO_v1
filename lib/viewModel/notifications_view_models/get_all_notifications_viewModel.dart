@@ -67,7 +67,6 @@ class GetAllNotificationsViewModel with ChangeNotifier {
         };
 
         List<GetAllNotificationsModel> response = await _myRepo.getAllNotifications(userId: _userId ?? '',headers: headers);
-
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);
       } catch (error) {

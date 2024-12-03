@@ -67,7 +67,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
         /// Refreshing the notifications now
         /// get all notifications
         await Provider.of<GetNotificationsCountViewModel>(context,listen: false).getNotificationsCount();
-        // await Provider.of<GetAllNotificationsViewModel>(context, listen: false).getAllNotifications();
+        await Provider.of<GetAllNotificationsViewModel>(context, listen: false).getAllNotifications();
       }
       catch(e){
         print(e.toString());

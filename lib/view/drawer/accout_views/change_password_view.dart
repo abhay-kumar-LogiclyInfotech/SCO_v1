@@ -162,7 +162,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
     return Directionality(
       textDirection: getTextDirection(provider),
       child: Text(
-        AppLocalizations.of(context)!.resetNewPassword,
+        AppLocalizations.of(context)!.generate_new_password,
         style: const TextStyle(
           color: AppColors.scoButtonColor,
           fontSize: 16,
