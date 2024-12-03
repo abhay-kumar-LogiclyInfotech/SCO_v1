@@ -307,9 +307,15 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
           color: AppColors.lightGrey,
         ),
 
-        // This section is to add file
-        AttachmentAddFileButton(addFile: () async {
-          await _addFile();
+        /// This section is to add file
+        /// We have to show only one attachment to upload because api accepts only one attachment at a time.
+
+
+        AttachmentAddFileButton(
+            showButton: !(_attachmentsList.any((element){return element.newRecord == true || element.newlyAded == true;})),
+            addFile: () async {
+          await _addFile(
+          );
         }),
 
         /// attachments

@@ -79,11 +79,13 @@ class DecreaseNotificationCountViewModel with ChangeNotifier {
       } catch (error) {
         print(error.toString());
         setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
+
         setLoading(false);
         return false;
       }}
     else{
-      _alertServices.toastMessage("No Internet Connection is available");
+      _alertServices.showErrorSnackBar("No Internet Connection is available");
       setLoading(false);
       return false;
     }

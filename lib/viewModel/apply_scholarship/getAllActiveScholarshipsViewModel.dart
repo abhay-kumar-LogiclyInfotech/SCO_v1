@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:sco_v1/controller/internet_controller.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/models/drawer/a_brief_about_sco_model.dart';
 import 'package:sco_v1/repositories/home/home_repository.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:xml/xml.dart' as xml;
 
 import '../../data/response/ApiResponse.dart';
@@ -15,6 +17,12 @@ import '../language_change_ViewModel.dart';
 
 class GetAllActiveScholarshipsViewModel with ChangeNotifier {
   //*------Accessing Api Services------*
+
+  late AlertServices _alertServices;
+  GetAllActiveScholarshipsViewModel(){
+    final GetIt getIt = GetIt.instance;
+    _alertServices = getIt.get<AlertServices>();
+  }
 
   final HomeRepository _homeRepository = HomeRepository();
 
@@ -53,6 +61,8 @@ class GetAllActiveScholarshipsViewModel with ChangeNotifier {
       } catch (error) {
         debugPrint('Printing Error: $error');
         _setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.toastMessage(error.toString());
+
         return false;
       }
     } else {

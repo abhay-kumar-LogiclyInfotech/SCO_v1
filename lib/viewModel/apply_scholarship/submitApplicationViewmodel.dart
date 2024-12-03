@@ -76,10 +76,12 @@ class SubmitApplicationViewmodel with ChangeNotifier {
         SubmitApplicationModel response = await _myRepo.submitApplication(userId: _userId ?? '',body: body,headers: headers);
 
         setSaveAsDraftResponse = ApiResponse.completed(response);
+        _alertServices.toastMessage(response.message.toString());
         setLoading(false);
         return true;
       } catch (error) {
         setSaveAsDraftResponse = ApiResponse.error(error.toString());
+        _alertServices.toastMessage(error.toString());
         setLoading(false);
         return false;
       }}

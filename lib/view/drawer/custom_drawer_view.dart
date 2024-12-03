@@ -109,13 +109,10 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
         _name = HiveManager.getName() ?? 'User Name';
         _roles = HiveManager.getRole()?? [];
 
-        final profilePictureProvider  = Provider.of<GetProfilePictureUrlViewModel>(context,listen: false);
-        await profilePictureProvider.getProfilePictureUrl();
 
         // Getting Fresh Roles
         final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
         await getRolesProvider.getRoles();
-
       }
 
     });

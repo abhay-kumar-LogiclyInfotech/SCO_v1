@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:sco_v1/models/drawer/a_brief_about_sco_model.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:xml/xml.dart' as xml;
 
 import '../../data/response/ApiResponse.dart';
@@ -18,6 +19,9 @@ class ContentSection {
 }
 
 class ABriefAboutScoViewModel with ChangeNotifier {
+
+
+  late AlertServices _alertServices ;
   //*------Accessing Api Services------*
 
   final DrawerRepository _drawerRepository = DrawerRepository();
@@ -114,6 +118,8 @@ class ABriefAboutScoViewModel with ChangeNotifier {
 
       return true;
     } catch (error) {
+      _alertServices.toastMessage(error.toString());
+
       debugPrint('Printing Error: $error');
       _setABriefAboutScoResponse = ApiResponse.error(error.toString());
       return false;

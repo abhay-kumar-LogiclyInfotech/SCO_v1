@@ -203,7 +203,9 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
                   const MyDivider(color: AppColors.lightGrey),
 
                   // This section is to add file
-                  AttachmentAddFileButton(addFile: () async {
+                  AttachmentAddFileButton(
+                      showButton: !(_attachmentsList.any((element){return element.newRecord == true || element.newlyAded == true;}))
+                      ,addFile: () async {
                     await _addFile();
                   }),
 

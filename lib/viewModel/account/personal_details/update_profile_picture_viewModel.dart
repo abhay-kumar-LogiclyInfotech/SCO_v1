@@ -47,7 +47,7 @@ class UpdateProfilePictureViewModel with ChangeNotifier {
 
   ApiResponse<GetProfilePictureUrlModel> get apiResponse => _apiResponse;
 
-  set setSaveAsDraftResponse(ApiResponse<GetProfilePictureUrlModel> response) {
+  set _setApiResponse(ApiResponse<GetProfilePictureUrlModel> response) {
     _apiResponse = response;
     notifyListeners();
   }
@@ -59,7 +59,7 @@ class UpdateProfilePictureViewModel with ChangeNotifier {
     if (networkController.isConnected.value) {
       try {
         setLoading(true);
-        setSaveAsDraftResponse = ApiResponse.loading();
+        _setApiResponse = ApiResponse.loading();
         await setUserId();
 
         final headers = {
@@ -79,11 +79,13 @@ class UpdateProfilePictureViewModel with ChangeNotifier {
         GetProfilePictureUrlModel response = await _myRepo.updateProfilePicture(
             userId: _userId ?? '', body: urlEncodedData, headers: headers);
 
-        setSaveAsDraftResponse = ApiResponse.completed(response);
+        _setApiResponse = ApiResponse.completed(response);
+        _alertServices.toastMessage("Profile picture updated successfully");
         setLoading(false);
         return true;
       } catch (error) {
-        setSaveAsDraftResponse = ApiResponse.error(error.toString());
+        _setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.toastMessage(error.toString());
         setLoading(false);
         return false;
       }

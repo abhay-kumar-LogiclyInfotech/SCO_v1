@@ -268,7 +268,7 @@ class AlertServices {
     final GetIt _getIt = GetIt.instance;
     _navigationServices = _getIt.get<NavigationServices>();
   }
-
+/// --------------------------------------------------------------------------------------------------------------------------------
   // Show DelightToastBar
   void showToast({required String message}) {
     dynamic myContext = _navigationServices.navigationStateKey.currentContext;
@@ -292,17 +292,6 @@ class AlertServices {
         );
       },
     ).show(myContext);
-  }
-
-  // FlutterToast
-  void toastMessage(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      backgroundColor: AppColors.scoThemeColor,
-      textColor: Colors.white,
-      fontSize: 15,
-      toastLength: Toast.LENGTH_LONG,
-    );
   }
 
   // FlushBar notification
@@ -330,6 +319,21 @@ class AlertServices {
       ),
     );
   }
+
+  //// The above messages are not perfect with context changes
+  ///--------------------------------------------------------------------------------------------------------------------------------
+
+  // FlutterToast
+  void toastMessage(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: AppColors.scoThemeColor,
+      textColor: Colors.white,
+      fontSize: 15,
+      toastLength: Toast.LENGTH_LONG,
+    );
+  }
+
 
   // Custom SnackBar
   void showCustomSnackBar(String message) {

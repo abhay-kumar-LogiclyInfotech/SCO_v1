@@ -81,10 +81,13 @@ class UpdatePersonalDetailsViewModel with ChangeNotifier {
         UpdatePersonalDetailsModel response = await _myRepo.updatePersonalDetails(userId: _userId ?? '',body: body,headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
+        _alertServices.toastMessage(response.message.toString());
         setLoading(false);
         return true;
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
+
         setLoading(false);
         return false;
 

@@ -74,12 +74,14 @@ class MyFinanceStatusViewModel with ChangeNotifier {
         setLoading(false);
       } catch (error) {
         setUserProfileInfo = ApiResponse.error(error.toString());
+        _alertServices.toastMessage(error.toString() ?? '');
+
         print(error);
         setLoading(false);
       }}
     else{
 
-      _alertServices.toastMessage("No Internet Connection is available");
+      _alertServices.showErrorSnackBar("No Internet Connection is available");
       setLoading(false);
     }
   }

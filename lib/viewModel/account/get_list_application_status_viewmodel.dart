@@ -78,6 +78,7 @@ class GetListApplicationStatusViewModel with ChangeNotifier {
         setLoading(false);
       } catch (error) {
         setUserProfileInfo = ApiResponse.error(error.toString());
+        _alertServices.toastMessage(error.toString());
         setLoading(false);
       }}
     else{

@@ -76,7 +76,7 @@ class NewsAndEventsViewmodel with ChangeNotifier {
       debugPrint('Printing Error: $error');
       _setNewsAndEventsResponse = ApiResponse.error(error.toString());
       // Message to show status of the operation:
-      _alertServices.toastMessage(error.toString());
+      _alertServices.showErrorSnackBar(error.toString());
 
       return false;
     }

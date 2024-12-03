@@ -6,8 +6,15 @@ import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/models/splash/commonData_model.dart';
 import 'package:sco_v1/repositories/splash_repo/splash_repository.dart';
 import 'package:sco_v1/utils/constants.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 class CommonDataViewModel with ChangeNotifier {
+
+  late AlertServices _alertServices;
+  CommonDataViewModel(){
+    _alertServices = AlertServices();
+  }
+
   final SplashRepository _myRepo = SplashRepository();
   ApiResponse<CommonDataModel> _apiResponse = ApiResponse.loading();
 
@@ -51,6 +58,8 @@ class CommonDataViewModel with ChangeNotifier {
       }
       // Update API response state for error
       apiResponse = ApiResponse.error('Failed to fetch common data: $error');
+      _alertServices.toastMessage(error.toString() ?? '');
+
       return false;
     }
   }

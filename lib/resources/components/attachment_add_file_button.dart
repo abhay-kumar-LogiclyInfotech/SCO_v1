@@ -6,7 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AttachmentAddFileButton extends StatefulWidget {
   final dynamic addFile;
-  const AttachmentAddFileButton({super.key,required this.addFile});
+  bool showButton;
+   AttachmentAddFileButton({super.key,required this.addFile,this.showButton = true});
 
   @override
   State<AttachmentAddFileButton> createState() => _AttachmentAddFileButtonState();
@@ -19,8 +20,11 @@ class _AttachmentAddFileButtonState extends State<AttachmentAddFileButton> {
     return  Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-         Text(localization.attachments),
-        addRemoveMoreSection(
+         Padding(
+           padding: !widget.showButton ? const EdgeInsets.symmetric(vertical: 10) : EdgeInsets.zero,
+           child: Text(localization.attachments),
+         ),
+       if(widget.showButton) addRemoveMoreSection(
             title: localization.addAttachment,
             add: true,
             onChanged: widget.addFile)

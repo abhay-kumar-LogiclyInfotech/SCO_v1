@@ -76,17 +76,19 @@ class AddCommentToNoteViewModel with ChangeNotifier {
         AddCommentToNoteModel response = await _myRepo.addCommentToNote(userId: _userId ?? '',noteId:noteId,body: body,headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
-        setLoading(false);
         _alertServices.toastMessage(response.message ?? '');
+        setLoading(false);
         return true;
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
+
         setLoading(false);
         return false;
 
       }}
     else{
-      _alertServices.toastMessage("No Internet Connection is available");
+      _alertServices.showErrorSnackBar("No Internet Connection is available");
       setLoading(false);
       return false;
 

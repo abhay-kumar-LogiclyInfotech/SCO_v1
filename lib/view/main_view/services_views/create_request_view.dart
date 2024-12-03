@@ -690,11 +690,6 @@ void dispose(){
                           }
 
                         }
-
-                        print(enData);
-                        print(arData);
-
-
                         /// Create Form
                         createForm();
 
@@ -703,11 +698,12 @@ void dispose(){
                         try {
                           bool apiResult = await createRequestProvider.createRequest(form: form);
                           if (apiResult) {
+                            setProcessing(false);
                             /// Update and refresh the information
                             // await _initializeData();
                             ///calling get all requests and navigate back to all requests screen
-                           Provider.of<GetAllRequestsViewModel>(context,listen: false).getAllRequests();
-                           _navigationServices.goBack();
+                            _navigationServices.goBack();
+                            Provider.of<GetAllRequestsViewModel>(context,listen: false).getAllRequests();
                           } else {
                             log("API call failed: No data returned or request unsuccessful.");
                           }
@@ -715,7 +711,6 @@ void dispose(){
                           log("Error during API call: $error");
                         }
                       }
-                      setProcessing(false);
                     });
               }),
         ),

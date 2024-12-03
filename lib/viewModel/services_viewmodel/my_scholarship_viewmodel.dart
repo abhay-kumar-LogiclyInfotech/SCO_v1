@@ -74,12 +74,12 @@ class MyScholarshipViewModel with ChangeNotifier {
         setLoading(false);
       } catch (error) {
         setUserProfileInfo = ApiResponse.error(error.toString());
-        print(error);
+        _alertServices.showErrorSnackBar(error.toString() ?? '');
         setLoading(false);
       }}
     else{
 
-      _alertServices.toastMessage("No Internet Connection is available");
+      _alertServices.showErrorSnackBar("No Internet Connection is available");
       setLoading(false);
     }
   }

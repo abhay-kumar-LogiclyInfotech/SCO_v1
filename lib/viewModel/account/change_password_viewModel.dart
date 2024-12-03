@@ -83,7 +83,7 @@ class ChangePasswordViewModel with ChangeNotifier {
         setLoading(false);
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
-        _alertServices.toastMessage(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
         setLoading(false);
       }}
     else{

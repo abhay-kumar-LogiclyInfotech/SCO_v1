@@ -65,6 +65,7 @@ Future<bool> registerServices() async {
     getIt.registerSingleton<MediaServices>(MediaServices());
     getIt.registerSingleton<PermissionServices>(PermissionServices());
 
+
     // Verify registration
     print("Is NavigationServices registered? ${getIt.isRegistered<NavigationServices>()}");
     print("Is AuthService registered? ${getIt.isRegistered<AuthService>()}");

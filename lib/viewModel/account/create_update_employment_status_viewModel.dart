@@ -74,10 +74,12 @@ class CreateUpdateEmploymentStatusViewModel with ChangeNotifier {
         CreateUpdateEmploymentStatusModel response = await _myRepo.createUpdateEmploymentStatus(userId: _userId ?? '',body: body,headers: headers,updating: updating);
 
         setSaveAsDraftResponse = ApiResponse.completed(response);
+        _alertServices.toastMessage(response.message.toString());
         setLoading(false);
         return true;
       } catch (error) {
         setSaveAsDraftResponse = ApiResponse.error(error.toString());
+        _alertServices.toastMessage(error.toString());
         setLoading(false);
         return false;
       }}

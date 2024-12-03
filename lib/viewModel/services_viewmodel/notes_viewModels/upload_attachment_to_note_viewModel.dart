@@ -76,16 +76,19 @@ class UploadAttachmentToNoteViewModel with ChangeNotifier {
         UploadAttachmentToNoteModel response = await _myRepo.uploadAttachmentToNote(userId: _userId ?? '',noteId:noteId,body: body,headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
+        _alertServices.toastMessage(response.message.toString());
         setLoading(false);
         return true;
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.showErrorSnackBar(error.toString() ?? '');
+
         setLoading(false);
         return false;
 
       }}
     else{
-      _alertServices.toastMessage("No Internet Connection is available");
+      _alertServices.showErrorSnackBar("No Internet Connection is available");
       setLoading(false);
       return false;
 

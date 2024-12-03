@@ -76,9 +76,12 @@ class SaveAsDraftViewmodel with ChangeNotifier {
         SaveAsDraftModel response = await _myRepo.saveAsDraft(userId: _userId ?? '',applicationNumber: applicationNumber,body: body,headers: headers);
 
         setSaveAsDraftResponse = ApiResponse.completed(response);
+        _alertServices.toastMessage(response.message.toString());
         setLoading(false);
       } catch (error) {
         setSaveAsDraftResponse = ApiResponse.error(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
+
         setLoading(false);
       }}
     else{

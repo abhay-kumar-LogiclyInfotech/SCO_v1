@@ -59,15 +59,12 @@ class SecurityQuestionViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
 
       setGetSecurityQuestionResponse = ApiResponse.completed(response);
-
       return true;
     } catch (error) {
       debugPrint('Printing Error: $error');
       setGetSecurityQuestionResponse = ApiResponse.error(error.toString());
-      _alertServices.flushBarErrorMessages(
-          message: error.toString(),
-          // context: context,
-          provider: langProvider);
+      _alertServices.showErrorSnackBar(error.toString());
+
       return false;
     }
   }

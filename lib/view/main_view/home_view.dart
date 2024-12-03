@@ -50,6 +50,7 @@ import '../../resources/app_colors.dart';
 import '../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../resources/custom_painters/faq_painters.dart';
 import '../../resources/getRoles.dart';
+import '../../viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/alert_services.dart';
@@ -92,24 +93,26 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   Future<void> _onRefresh() async {
     try {
 
-      setProcessing(true);
-
-      /// Check if the user is logged in
-      isLogged = await _authService.isLoggedIn();
-      if(isLogged){
-        // Getting Fresh Roles
-        final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
-        await getRolesProvider.getRoles();
-        role = getRoleFromList(HiveManager.getRole());
-        print(role.toString());
-      }
 
       /// Initialize the SCO programs carousel slider
       _scoProgramsModelsList.clear();
       _scoProgramsList.clear();
       _initializeScoPrograms();
 
+
+      /// Check if the user is logged in
+      isLogged = await _authService.isLoggedIn();
+      if(isLogged){
+        setProcessing(true);
+
+        // Getting Fresh Roles
+        final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
+        await getRolesProvider.getRoles();
+        role = getRoleFromList(HiveManager.getRole());
+
+
       /// Fetch data from providers
+    final profilePictureProvider  = Provider.of<GetProfilePictureUrlViewModel>(context,listen: false);
       final myFinanceProvider = Provider.of<MyFinanceStatusViewModel>(context, listen: false);
       final requestsProvider = Provider.of<GetAllRequestsViewModel>(context, listen: false);
       final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context, listen: false);
@@ -123,23 +126,42 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           // Update state to reflect that notifications count is loaded
         });
 
-        // Fetch finance status
-        await myFinanceProvider.myFinanceStatus();
+        /// Fetching profile picture url
+        await profilePictureProvider.getProfilePictureUrl();
         setState(() {
-          // Update state to reflect that finance status is loaded
+          // Update state to reflect that notifications count is loaded
         });
 
-        // Fetch requests
-        await requestsProvider.getAllRequests();
-        setState(() {
-          // Update state to reflect that requests are loaded
-        });
+    // //// This will show the top salary only
+    // _scholarshipApproved(langProvider: langProvider),
+    // // kFormHeight,
+    // _announcements(langProvider: langProvider),
+    // kFormHeight,
+    // _financeView(langProvider: langProvider),
+    // kFormHeight,
+    // _requestView(langProvider: langProvider),
+    // kFormHeight,
+    // _talkToMyAdvisor(langProvider: langProvider),
 
-        // Fetch advisor data
-        await talkToMyAdvisor.getMyAdvisor();
-        setState(() {
-          // Update state to reflect that advisor data is loaded
-        });
+
+        if(role == UserRole.scholarStudent) {
+          // Fetch finance status
+          await myFinanceProvider.myFinanceStatus();
+          setState(() {
+            // Update state to reflect that finance status is loaded
+          });
+          // Fetch requests
+          await requestsProvider.getAllRequests();
+          setState(() {
+            // Update state to reflect that requests are loaded
+          });
+
+          // Fetch advisor data
+          await talkToMyAdvisor.getMyAdvisor();
+          setState(() {
+            // Update state to reflect that advisor data is loaded
+          });
+        }
 
 
         // Fetch all notifications
@@ -157,7 +179,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         setState(() {
           // Final UI refresh to ensure everything is up-to-date
         });
-      }
+      }}
     } catch (error) {
       setProcessing(false);
       /// Handle any errors

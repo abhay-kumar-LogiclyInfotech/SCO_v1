@@ -118,13 +118,14 @@ class ContactUsViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
 
       _setContactUsResponse = ApiResponse.completed(response);
+      _alertServices.toastMessage("Request Submitted Successfully");
 
       return true;
     } catch (error) {
       debugPrint('Printing Error: $error');
       _setContactUsResponse = ApiResponse.error(error.toString());
       // Message to show status of the operation:
-      _alertServices.toastMessage(error.toString());
+      _alertServices.showErrorSnackBar(error.toString());
 
       return false;
     }

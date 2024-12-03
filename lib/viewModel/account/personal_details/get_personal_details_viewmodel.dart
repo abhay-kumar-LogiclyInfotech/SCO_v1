@@ -72,11 +72,12 @@ class GetPersonalDetailsViewModel with ChangeNotifier {
         };
 
         PersonalDetailsModel response = await _myRepo.getPersonalDetails(userId: _userId ?? '',headers: headers);
-
         setUserProfileInfo = ApiResponse.completed(response);
+        // _alertServices.toastMessage(response.message.toString());
         setLoading(false);
       } catch (error) {
         setUserProfileInfo = ApiResponse.error(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
         setLoading(false);
       }}
     else{

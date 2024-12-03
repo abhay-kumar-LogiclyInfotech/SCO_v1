@@ -1134,15 +1134,13 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                   if (result) {
                     /// Create Form
                     createForm(provider: provider);
-
-                    log(form.toString());
                     bool result = await updateProvider.updatePersonalDetails(form: form);
                     if (result) {
+                      setIsProcessing(false);
                       /// update and refresh the information
                       await _initializeData();
                     }
                   }
-                setIsProcessing(false);
                 });
           }),
         ),

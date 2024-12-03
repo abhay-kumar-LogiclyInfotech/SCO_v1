@@ -74,16 +74,18 @@ class CreateRequestViewModel with ChangeNotifier {
         UpdateRequestModel response = await _myRepo.createRequest(userId: _userId ?? '',body: body,headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
-        _alertServices.showCustomSnackBar(apiResponse.data?.message ?? '');
+        _alertServices.toastMessage(response.message.toString() ?? '');
         setLoading(false);
         return true;
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.toastMessage(error.toString() ?? '');
+
         setLoading(false);
         return false;
       }}
     else{
-      _alertServices.toastMessage("No Internet Connection is available");
+      _alertServices.showErrorSnackBar("No Internet Connection is available");
       setLoading(false);
       return false;
     }

@@ -83,7 +83,7 @@ class AttachFileViewmodel with ChangeNotifier {
         return true;
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
-        _alertServices.toastMessage(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
         setLoading(false);
         return false;
       }}

@@ -71,16 +71,17 @@ Future<void> main() async {
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
   // ]);
-  await registerServices();
   DependencyInjection.init();
+  await registerServices();
   runApp(MyApp(locale: languageCode));
 }
 
 
 
-late NavigationServices _navigationServices;
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  late NavigationServices _navigationServices;
+
   final String locale;
 
   MyApp({super.key, required this.locale}) {
@@ -88,6 +89,11 @@ class MyApp extends StatelessWidget {
     _navigationServices = getIt.get<NavigationServices>();
   }
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -194,10 +200,10 @@ class MyApp extends StatelessWidget {
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
             if (provider.appLocale == null) {
-              if (locale.isEmpty) {
+              if (widget.locale.isEmpty) {
                 provider.changeLanguage(const Locale('en'));
               } else {
-                provider.changeLanguage(Locale(locale));
+                provider.changeLanguage(Locale(widget.locale));
               }
             }
             return GetMaterialApp(
@@ -228,8 +234,8 @@ class MyApp extends StatelessWidget {
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
                 useMaterial3: true,
               ),
-              navigatorKey: _navigationServices.navigationStateKey,
-              routes: _navigationServices.routes,
+              navigatorKey: widget._navigationServices.navigationStateKey,
+              routes: widget._navigationServices.routes,
               initialRoute: "/splashView",
               // home: OtpVerificationView(),
             );

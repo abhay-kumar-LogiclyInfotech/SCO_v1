@@ -20,8 +20,8 @@ class DioNetworkApiServices extends DioBaseApiServices {
         return handler.next(options);
       },
       onResponse: (response, handler) {
-        logger.i('Response Status: ${response.statusCode}');
-        logger.i('Response Data: ${response.data}');
+        logger.d('Response Status: ${response.statusCode}');
+        logger.d('Response Data: ${response.data}');
         return handler.next(response);
       },
       onError: (DioError e, handler) {

@@ -76,6 +76,7 @@ class GetEmploymentStatusViewModel with ChangeNotifier {
         setLoading(false);
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
         setLoading(false);
       }}
     else{
