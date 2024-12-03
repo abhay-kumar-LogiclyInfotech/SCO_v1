@@ -54,8 +54,6 @@ dependencies:
   fluttertoast:
   another_flushbar:
   syncfusion_flutter_charts:
-  razorpay_flutter:
-  table_calendar:
   dart_format:
   font_awesome_flutter:
   flutter_switch:
@@ -79,7 +77,6 @@ dependencies:
   logger:
   getwidget: ^4.0.0
   dropdown_button2: ^2.3.9
-  cached_network_image: ^3.4.1
   profile_photo: ^1.0.3
   date_picker_plus: ^4.1.0
   badges: ^3.1.2
@@ -93,7 +90,7 @@ dependencies:
   flutter_widget_from_html: ^0.15.3
   flutter_html:
   webview_flutter:
-  shimmer: ^3.0.0
+#  shimmer: ^3.0.0
 
 
 

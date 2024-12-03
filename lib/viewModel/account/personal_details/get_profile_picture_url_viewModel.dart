@@ -13,12 +13,10 @@ import '../../services/auth_services.dart';
 
 
 
-
-
 class GetProfilePictureUrlViewModel with ChangeNotifier {
-
   late AuthService _authService;
   late AlertServices _alertServices;
+
 
   GetProfilePictureUrlViewModel()
   {

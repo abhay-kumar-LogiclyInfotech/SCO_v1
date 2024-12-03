@@ -46,7 +46,6 @@ class GetRoleViewModel with ChangeNotifier {
   //*------ Get Roles Method------*
   Future<bool> getRoles() async {
     try {
-      _setResponse = ApiResponse.loading();
 
       await setUserId();
 
@@ -58,6 +57,8 @@ class GetRoleViewModel with ChangeNotifier {
         'authorization': Constants.basicAuth
       };
       //*-----Create Headers End-----*
+
+      _setResponse = ApiResponse.loading();
 
 
       //*-----Calling Api Start-----*

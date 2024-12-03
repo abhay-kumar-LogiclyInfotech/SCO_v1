@@ -192,8 +192,8 @@ class Utils {
   static Widget cupertinoLoadingIndicator(
       {dynamic color = AppColors.scoButtonColor}) =>
       Center(child: CupertinoActivityIndicator(color: color));
-
   //*----- page  Loading Indicator-----*/
+
   static Widget pageLoadingIndicator(
       {dynamic color = AppColors.scoButtonColor, required dynamic context}) =>
       SizedBox(height: MediaQuery

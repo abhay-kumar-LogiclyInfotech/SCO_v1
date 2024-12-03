@@ -42,7 +42,6 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../hive/hive_manager.dart';
 import '../../models/services/MyFinanceStatusModel.dart';
