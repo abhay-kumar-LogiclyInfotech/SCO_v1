@@ -1060,7 +1060,11 @@
   "pending": "Pending",
   "rejected": "Rejected",
   "talkToMyAdvisor": "Talk to My Advisor",
-  "youCanSeeListOfAdvisors": "You can see the list of advisors"
+  "youCanSeeListOfAdvisors": "You can see the list of advisors",
+  "services": "Services",
+  "service": "Service",
+  "support": "Support",
+  "aboutSCO": "About SCO"
 }
 
 

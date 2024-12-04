@@ -75,6 +75,7 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       key: scaffoldState,
       appBar: CustomTopAppBar(
@@ -261,11 +262,11 @@ class _MainViewState extends State<MainView> {
           
               },
               items: [
-                BottomNavigationBarItem(icon:  SvgPicture.asset("assets/services.svg"),activeIcon:SvgPicture.asset("assets/services_selected.svg"),label: "services"),
+                BottomNavigationBarItem(icon:  SvgPicture.asset("assets/services.svg"),activeIcon:SvgPicture.asset("assets/services_selected.svg"),label: localization.service),
           
-                BottomNavigationBarItem(icon:  SvgPicture.asset("assets/home.svg"),activeIcon:SvgPicture.asset("assets/home_selected.svg"),label: "Home"),
+                BottomNavigationBarItem(icon:  SvgPicture.asset("assets/home.svg"),activeIcon:SvgPicture.asset("assets/home_selected.svg"),label: localization.home),
           
-            BottomNavigationBarItem(icon:  SvgPicture.asset("assets/support.svg"),activeIcon:SvgPicture.asset("assets/support_selected.svg"),label: "Support"),
+            BottomNavigationBarItem(icon:  SvgPicture.asset("assets/support.svg"),activeIcon:SvgPicture.asset("assets/support_selected.svg"),label: localization.support),
           ]),
         )
     );

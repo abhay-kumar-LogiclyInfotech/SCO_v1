@@ -1155,55 +1155,58 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   }
 
   Widget _scoPrograms({required LanguageChangeViewModel langProvider}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            // title for sco programs
-            Text(
-              AppLocalizations.of(context)!.scoPrograms,
-              style: AppTextStyles.appBarTitleStyle(),
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-            ),
+    return Directionality(
+      textDirection: getTextDirection(langProvider),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              // title for sco programs
+              Text(
+                AppLocalizations.of(context)!.aboutSCO,
+                style: AppTextStyles.appBarTitleStyle(),
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.ellipsis,
+              ),
 
-            // slider for sco programs
-          ],
-        ),
-        Column(
-          children: [
-            // carousel slider
-            CustomCarouselSlider(
-              items: _scoProgramsList,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _scoProgramCurrentIndex = index;
-                });
-              },
-            ),
-            kFormHeight, // animated moving dots
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _scoProgramsList.asMap().entries.map((entry) {
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  width: _scoProgramCurrentIndex == entry.key ? 7.0 : 5.0,
-                  height: 7.0,
-                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _scoProgramCurrentIndex == entry.key
-                        ? Colors.black
-                        : Colors.grey,
-                  ),
-                );
-              }).toList(),
-            )
-          ],
-        )
-      ],
+              // slider for sco programs
+            ],
+          ),
+          Column(
+            children: [
+              // carousel slider
+              CustomCarouselSlider(
+                items: _scoProgramsList,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _scoProgramCurrentIndex = index;
+                  });
+                },
+              ),
+              kFormHeight, // animated moving dots
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _scoProgramsList.asMap().entries.map((entry) {
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    width: _scoProgramCurrentIndex == entry.key ? 7.0 : 5.0,
+                    height: 7.0,
+                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _scoProgramCurrentIndex == entry.key
+                          ? Colors.black
+                          : Colors.grey,
+                    ),
+                  );
+                }).toList(),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 

@@ -85,6 +85,7 @@ class _CustomTextFieldState extends State<CustomTextField>
             : TextCapitalization.none,
         decoration: InputDecoration(
           errorText: widget.errorText,
+          errorMaxLines: 6,
           contentPadding: EdgeInsets.symmetric(
             vertical: screenWidth * 0.03,
             horizontal: widget.leading == null ? screenWidth * 0.03 : 0,

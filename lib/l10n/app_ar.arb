@@ -1096,7 +1096,11 @@
   "registrationConfEmailAddressRequired": "تأكيد عنوان البريد الإلكتروني مطلوب",
   "registrationConfEmailAddressWatermark": "أكد إدخال عنوان البريد الإلكتروني",
   "registrationConfEmailAddressValidate": "يرجى إدخال عنوان بريد إلكتروني صالح للتأكيد",  "change_password": "تغيير كلمة المرور",
-  "generate_new_password": "إنشاء كلمة مرور جديدة"
+  "generate_new_password": "إنشاء كلمة مرور جديدة",
+  "services": "خدمات",
+  "service": "خدمة",
+  "support": "دعم",
+  "aboutSCO": "عن منظمة شنغهاي"
 }
 
 
