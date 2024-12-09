@@ -112,7 +112,7 @@ class _NotificationsViewState extends State<NotificationsView>
                       children: [
                         // Edit Addresses Button
                           provider.apiResponse.data?.isNotEmpty ?? false ?
-                          _notificationsSection(provider: provider,langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable()
+                          _notificationsSection(provider: provider,langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable(context: context)
                       ],
                     ),
                   ),

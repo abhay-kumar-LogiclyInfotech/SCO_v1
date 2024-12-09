@@ -384,7 +384,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
     return Utils.pageRefreshIndicator(
       onRefresh: _onRefresh,
       child: _otherApplicationStatus.isEmpty ?? true
-          ?  Utils.showOnNoDataAvailable()
+          ?  Utils.showOnNoDataAvailable(context: context)
           : SingleChildScrollView(
         child: CustomInformationContainer(
           title: localization.applicationDetails,
@@ -509,7 +509,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
   }) {
     return Utils.pageRefreshIndicator(onRefresh: _onRefresh,child:
     _draftApplicationStatus.isEmpty ?? true
-        ?  Utils.showOnNoDataAvailable()
+        ?  Utils.showOnNoDataAvailable(context: context)
     :
 
     CustomInformationContainer(

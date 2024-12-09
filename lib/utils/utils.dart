@@ -18,6 +18,8 @@ import 'package:xml/xml.dart';
 import 'dart:convert';
 import 'package:xml/xml.dart' as xml;
 import 'package:html/parser.dart' as html;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import '../resources/app_colors.dart';
 import 'constants.dart';
@@ -258,18 +260,19 @@ class Utils {
             ),
           ));
 
-  static Widget showOnNoDataAvailable() =>
-      Column(
+  static Widget showOnNoDataAvailable({required BuildContext context}) {
+    final localization = AppLocalizations.of(context)!;
+     return Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset("assets/no_data_found.svg"),
-          const Text(
-            'No Data Available.', // Fallback for no applications
-            style: TextStyle(fontSize: 16,color: AppColors.scoThemeColor),
+           Text(
+            localization.noData, // Fallback for no applications
+            style: const TextStyle(fontSize: 16,color: AppColors.scoThemeColor),
           ),
         ],
-      );
+      );}
 
 
   // model progress hud

@@ -642,7 +642,6 @@
   "proceedForLogin": "Please proceed for login as using below link",
   "clickHereToLogin": "click here for login",
   "askForVerificationCode": "Please enter the 7 digit code sent to you on your email or mobile to verify your account.",
-  "registrationSuccess": "Your account is successfully registered.",
   "pageNotFound": "The page you trying to access is unavailable.",
   "invalidCode": "The verification code you entered is invalid, Please enter correct the code.",
   "codeExpired": "The verification code you entered is expired, Please generate new code.",
@@ -1064,7 +1063,17 @@
   "services": "Services",
   "service": "Service",
   "support": "Support",
-  "aboutSCO": "About SCO"
+  "aboutSCO": "About SCO",
+  "registrationSuccess": "Your account is successfully registered.",
+  "chooseOption": "Choose an Option",
+  "imageSizeLimit": "Image size must be within 200kb",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "noData": "No Data Available.",
+  "phoneNumberAlreadyEntered": "Phone Number already Entered"
+
+
+
 }
 
 

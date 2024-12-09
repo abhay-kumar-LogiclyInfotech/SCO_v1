@@ -114,7 +114,7 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         listDetails.isNotEmpty ?
-                        _listDetails(provider: provider, langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable()
+                        _listDetails(provider: provider, langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable(context: context)
                         ,
                         kFormHeight,
 
@@ -185,7 +185,7 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
                   ],
                 );}) : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 50),
-                  child: Utils.showOnNoDataAvailable(),
+                  child: Utils.showOnNoDataAvailable(context: context),
                 )
     );
 

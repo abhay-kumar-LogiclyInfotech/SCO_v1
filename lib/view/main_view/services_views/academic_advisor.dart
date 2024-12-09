@@ -121,7 +121,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
                                   langProvider: langProvider),
                             ],
                           )
-                        : Utils.showOnNoDataAvailable()
+                        : Utils.showOnNoDataAvailable(context: context)
                   ],
                 ),
               ),

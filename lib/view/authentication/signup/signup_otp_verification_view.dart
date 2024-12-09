@@ -158,7 +158,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
   Widget _heading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child: Text(AppLocalizations.of(context)!.otp_verification,
+      child: Text(AppLocalizations.of(context)!.registrationSuccess,
           style: AppTextStyles.titleBoldTextStyle()),
     );
   }
@@ -166,7 +166,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
   Widget _subHeading(LanguageChangeViewModel provider) {
     return Directionality(
       textDirection: getTextDirection(provider),
-      child: Text(AppLocalizations.of(context)!.otp_verification_message,
+      child: Text(AppLocalizations.of(context)!.pleaseEnterCode,
           style: const TextStyle(
             color: Colors.black,
             fontSize: 12,

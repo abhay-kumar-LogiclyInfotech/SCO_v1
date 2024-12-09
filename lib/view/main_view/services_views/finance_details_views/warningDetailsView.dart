@@ -112,7 +112,7 @@ class _WarningDetailsViewState extends State<WarningDetailsView> with MediaQuery
                       children: [
                         listOfWarnings.isNotEmpty ?
                         _warningDetails(provider: provider, langProvider: langProvider,localization:localization)
-                            : Utils.showOnNoDataAvailable()
+                            : Utils.showOnNoDataAvailable(context: context)
                         ,
                       ],
                     ),

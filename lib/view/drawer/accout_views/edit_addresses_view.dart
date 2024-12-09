@@ -566,6 +566,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                         log(form.toString());
                         bool result = await updateProvider.updatePersonalDetails(form: form);
                         if (result) {
+                          setIsProcessing(false);
                           /// update and refresh the information
                           await _initializeData();
                         }

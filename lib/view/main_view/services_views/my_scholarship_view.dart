@@ -204,7 +204,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
           ),
         );
       },
-    ) : Utils.showOnNoDataAvailable();
+    ) : Utils.showOnNoDataAvailable(context: context);
 
     // return Column(
     //   children: provider.apiResponse.data?.data?.dataDetails?.scholarships?.map((element) {

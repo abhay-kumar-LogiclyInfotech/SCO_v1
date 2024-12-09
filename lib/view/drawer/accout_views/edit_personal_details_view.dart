@@ -70,14 +70,15 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   Future _initializeData() async {
     /// fetch student profile Information t prefill the user information
     // fetch student profile Information t prefill the user information
-    final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
-    final studentProfilePictureProvider = Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
+    final studentProfileProvider =
+        Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
+    final studentProfilePictureProvider =
+        Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
 
     await Future.wait<dynamic>([
       studentProfileProvider.getPersonalDetails(),
       studentProfilePictureProvider.getProfilePictureUrl()
     ]);
-
 
     // /// Fetching the Profile picture.....
     // if (studentProfilePictureProvider.apiResponse.status == Status.COMPLETED) {
@@ -86,7 +87,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     //   });
     // }
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
-    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final langProvider =
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
 
     /// Check and populate dropdowns only if the values exist
     if (Constants.lovCodeMap['COUNTRY']?.values != null) {
@@ -175,44 +177,41 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     super.initState();
   }
 
-
   bool _isProcessing = false;
-  setIsProcessing(bool value){
+
+  setIsProcessing(bool value) {
     setState(() {
       _isProcessing = value;
     });
   }
 
-
-  File? _profileImageFile ;
-
+  File? _profileImageFile;
 
   setProfilePictureFile(File? file) async {
     if (file != null) {
       try {
-
         /// close the choose option sheet
         _navigationServices.goBack();
 
-       setIsProcessing(true);
+        setIsProcessing(true);
 
-     bool canUpload =   await Utils.compareFileSize(file: file, maxSizeInBytes: 200);
+        bool canUpload = await Utils.compareFileSize(file: file, maxSizeInBytes: 200);
 
-     if(canUpload) {
-       _profileImageFile = file;
-       final myFile = await Utils.saveFileToLocal(file);
-       final base64String = base64Encode(myFile.readAsBytesSync());
+        if (canUpload) {
+          _profileImageFile = file;
+          final myFile = await Utils.saveFileToLocal(file);
+          final base64String = base64Encode(myFile.readAsBytesSync());
 
-       final updateProfilePictureProvider = Provider.of<UpdateProfilePictureViewModel>(context, listen: false);
-       await updateProfilePictureProvider.updateProfilePicture(base64String: base64String);
-       await _initializeData();
-       setState(() {});
-       setIsProcessing(false);
-     }
-     else{
-       _alertServices.showCustomSnackBar("File Size must be under 200KB");
-       setIsProcessing(false);
-     }
+          final updateProfilePictureProvider = Provider.of<UpdateProfilePictureViewModel>(context, listen: false);
+          await updateProfilePictureProvider.updateProfilePicture(base64String: base64String);
+          setIsProcessing(false);
+          await _initializeData();
+          setState(() {});
+          setIsProcessing(false);
+        } else {
+          _alertServices.showCustomSnackBar("File Size must be under 200KB");
+          setIsProcessing(false);
+        }
       } catch (e) {
         log("Error converting file to Base64: $e");
       }
@@ -220,8 +219,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
       log("No file provided.");
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -231,9 +228,11 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
       appBar: CustomSimpleAppBar(
         titleAsString: localization.personalDetails,
       ),
-      body: Utils.modelProgressHud(processing: _isProcessing,child:  _buildUi()),
+      body:
+          Utils.modelProgressHud(processing: _isProcessing, child: _buildUi()),
     );
   }
+
   Widget _buildUi() {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     final localization = AppLocalizations.of(context)!;
@@ -263,35 +262,56 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Consumer<GetProfilePictureUrlViewModel>(
-                      builder: (context,provider,_){
-                        return ProfileWithCameraButton(
-                        profileImage: _profileImageFile != null ? FileImage(_profileImageFile!) :  provider.apiResponse.data?.url != null
-                            ? NetworkImage(provider.apiResponse.data!.url!.toString())
-                            : const AssetImage(
-                            'assets/personal_details/dummy_profile_pic.png'),
-                        onTap: () async{
-                         Destination.chooseFilePickerDestination(context: context, onCameraTap: ()async{
-                           bool cameraPermission =  await _permissionServices.checkAndRequestPermission(Permission.camera, context);
-                           if(cameraPermission)
-                             {
-                                 File? file =  await _mediaServices.getSingleImageFromCamera();
-                                setProfilePictureFile(file);
-                             }
-                         }, onStorageTap: ()async{
-                           bool storagePermission =  await _permissionServices.checkAndRequestPermission(Platform.isAndroid ? Permission.manageExternalStorage : Permission.storage, context);
-                           if(storagePermission){
-                             File? file =  await _mediaServices.getSingleImageFromGallery();
-                             setProfilePictureFile(file);
-                           }
-                         });
-                        },
-                        onLongPress: () {});}),
+                        builder: (context, provider, _) {
+                      return ProfileWithCameraButton(
+                          profileImage: _profileImageFile != null
+                              ? FileImage(_profileImageFile!)
+                              : provider.apiResponse.data?.url != null
+                                  ? NetworkImage(provider.apiResponse.data!.url!
+                                      .toString())
+                                  : const AssetImage(
+                                      'assets/personal_details/dummy_profile_pic.png'),
+                          onTap: () async {
+                            Destination.chooseFilePickerDestination(
+                                context: context,
+                                onCameraTap: () async {
+                                  bool cameraPermission =
+                                      await _permissionServices
+                                          .checkAndRequestPermission(
+                                              Permission.camera, context);
+                                  if (cameraPermission) {
+                                    File? file = await _mediaServices
+                                        .getSingleImageFromCamera();
+                                    setProfilePictureFile(file);
+                                  }
+                                },
+                                onStorageTap: () async {
+                                  bool storagePermission =
+                                      await _permissionServices
+                                          .checkAndRequestPermission(
+                                              Platform.isAndroid
+                                                  ? Permission
+                                                      .manageExternalStorage
+                                                  : Permission.storage,
+                                              context);
+                                  if (storagePermission) {
+                                    File? file = await _mediaServices
+                                        .getSingleImageFromGallery();
+                                    setProfilePictureFile(file);
+                                  }
+                                });
+                          },
+                          onLongPress: () {});
+                    }),
 
                     /// ProfilePicture(),
                     kFormHeight,
 
                     /// Student common information
-                    _studentInformationSection(provider: provider, langProvider: langProvider,localization: localization),
+                    _studentInformationSection(
+                        provider: provider,
+                        langProvider: langProvider,
+                        localization: localization),
 
                     /// student contact information
                     if (userInfo?.phoneNumbers != null)
@@ -300,7 +320,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           kFormHeight,
                           kFormHeight,
                           _studentPhoneInformationSection(
-                              provider: provider, langProvider: langProvider,localization: localization),
+                              provider: provider,
+                              langProvider: langProvider,
+                              localization: localization),
                         ],
                       ),
 
@@ -311,7 +333,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           kFormHeight,
                           kFormHeight,
                           _studentEmailInformationSection(
-                              provider: provider, langProvider: langProvider,localization: localization),
+                              provider: provider,
+                              langProvider: langProvider,
+                              localization: localization),
                         ],
                       ),
 
@@ -320,7 +344,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                         langProvider: langProvider,
                         userInfo: userInfo,
                         provider: provider,
-                    localization: localization),
+                        localization: localization),
                   ],
                 ),
               ),
@@ -384,17 +408,17 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   Widget _studentInformationSection(
       {required GetPersonalDetailsViewModel provider,
       required LanguageChangeViewModel langProvider,
-      required AppLocalizations localization
-      })
-  {
-    final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
-    final userInfoType = studentProfileProvider.apiResponse.data?.data?.userInfoType;
+      required AppLocalizations localization}) {
+    final studentProfileProvider =
+        Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
+    final userInfoType =
+        studentProfileProvider.apiResponse.data?.data?.userInfoType;
 
     bool lifeRay = userInfoType != null && userInfoType == 'LIFERAY';
     bool peopleSoft = userInfoType != null && userInfoType != 'LIFERAY';
 
     return CustomInformationContainer(
-        title: "Student Information",
+        title: localization.studentInformation,
         leading:
             SvgPicture.asset("assets/personal_details/student_information.svg"),
         expandedContent: Column(
@@ -603,7 +627,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: localization.gender, important: true, langProvider: langProvider),
+                title: localization.gender,
+                important: true,
+                langProvider: langProvider),
             scholarshipFormDropdown(
                 currentFocusNode: _genderFocusNode,
                 controller: _genderController,
@@ -749,9 +775,11 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   }
 
   Widget _studentPhoneInformationSection(
-      {required GetPersonalDetailsViewModel provider, required langProvider,required AppLocalizations localization}) {
+      {required GetPersonalDetailsViewModel provider,
+      required langProvider,
+      required AppLocalizations localization}) {
     return CustomInformationContainer(
-        title:localization.contactInformation,
+        title: localization.contactInformation,
         leading: SvgPicture.asset("assets/personal_details/phone_details.svg"),
         expandedContent: Column(
           children: [
@@ -781,23 +809,24 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           setState(() {
                             phoneNumber.phoneTypeError = null;
 
-                            final isDuplicate = _phoneNumberDetailsList.any((element){
-                              return element != phoneNumber && element.phoneTypeController.text == value;
+                            final isDuplicate =
+                                _phoneNumberDetailsList.any((element) {
+                              return element != phoneNumber &&
+                                  element.phoneTypeController.text == value;
                             });
 
-                            if(isDuplicate){
-                              phoneNumber.phoneTypeError = "Phone Type already exists";
-                            }
-                            else
-                            {
+                            if (isDuplicate) {
+                              phoneNumber.phoneTypeError =
+                                  "Phone Type already exists";
+                            } else {
                               /// setting the value for relation type
                               phoneNumber.phoneTypeController.text = value!;
+
                               ///This thing is creating error: don't know how to fix it:
                               Utils.requestFocus(
                                   focusNode: phoneNumber.phoneNumberFocusNode,
                                   context: context);
                             }
-
                           });
                         },
                       ),
@@ -812,30 +841,34 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           currentFocusNode: phoneNumber.phoneNumberFocusNode,
                           nextFocusNode: phoneNumber.countryCodeFocusNode,
                           controller: phoneNumber.phoneNumberController,
-                          hintText: localization.registrationMobileNumberWatermark,
+                          hintText:
+                              localization.registrationMobileNumberWatermark,
                           errorText: phoneNumber.phoneNumberError,
-                          onChanged: (value)
-                          {
+                          onChanged: (value) {
                             /// no validation has been provided
                             if (phoneNumber.phoneNumberFocusNode.hasFocus) {
                               setState(() {
-
-
-                                final isDuplicate = _phoneNumberDetailsList.any((element){
-                                  return element!= phoneNumber && element.phoneNumberController.text == value;
+                                final isDuplicate =
+                                    _phoneNumberDetailsList.any((element) {
+                                  return element != phoneNumber &&
+                                      element.phoneNumberController.text ==
+                                          value;
                                 });
-                                if(isDuplicate){
-                                  phoneNumber.phoneNumberError = "Phone Number already exists";
+                                if (isDuplicate) {
+                                  phoneNumber.phoneNumberError =
+                                      "Phone Number already exists";
+                                } else {
+                                  phoneNumber.phoneNumberController.text =
+                                      value!;
+                                  phoneNumber.phoneNumberError =
+                                      ErrorText.getPhoneNumberError(
+                                          phoneNumber: phoneNumber
+                                              .phoneNumberController.text,
+                                          context: context);
                                 }
-                                else{
-                                  phoneNumber.phoneNumberController.text = value!;
-                                  phoneNumber.phoneNumberError = ErrorText.getPhoneNumberError(phoneNumber: phoneNumber.phoneNumberController.text, context: context);
-                                }
-
                               });
                             }
-                          }
-                          ),
+                          }),
 
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
@@ -885,7 +918,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       phoneNumber.isExisting ? kFormHeight : showVoid,
 
                       /// Add More Information container
-                      (_phoneNumberDetailsList.isNotEmpty && !phoneNumber.isExisting)
+                      (_phoneNumberDetailsList.isNotEmpty &&
+                              !phoneNumber.isExisting)
                           ? addRemoveMoreSection(
                               title: localization.deleteRowPhone,
                               add: false,
@@ -964,7 +998,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   }
 
   Widget _studentEmailInformationSection(
-      {required GetPersonalDetailsViewModel provider, required langProvider, required AppLocalizations localization}) {
+      {required GetPersonalDetailsViewModel provider,
+      required langProvider,
+      required AppLocalizations localization}) {
     return CustomInformationContainer(
         title: localization.emailInformation,
         leading: SvgPicture.asset("assets/personal_details/email.svg"),
@@ -979,6 +1015,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                   return Column(
                     children: [
                       kFormHeight,
+
                       /// phone Type
                       fieldHeading(
                           title: localization.emailType,
@@ -999,16 +1036,21 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                             email.emailTypeError = null;
 
                             // Check if the selected email type is already used in the list
-                            bool isDuplicate = _emailDetailsList.any((element) =>
-                            element != email && element.emailTypeController.text == value);
+                            bool isDuplicate = _emailDetailsList.any(
+                                (element) =>
+                                    element != email &&
+                                    element.emailTypeController.text == value);
 
                             if (isDuplicate) {
                               // Display an error if the email type is already selected
-                              email.emailTypeError = "Email Type already selected";
+                              email.emailTypeError =
+                                  "Email Type already selected";
                             } else {
                               // Update the email type and request focus for the next field
                               email.emailTypeController.text = value!;
-                              Utils.requestFocus(focusNode: email.emailIdFocusNode, context: context);
+                              Utils.requestFocus(
+                                  focusNode: email.emailIdFocusNode,
+                                  context: context);
                             }
                           });
                         },
@@ -1021,25 +1063,28 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           important: true,
                           langProvider: langProvider),
                       scholarshipFormTextField(
-                          currentFocusNode: email.emailIdFocusNode,
-                          nextFocusNode: index < _emailDetailsList.length - 1
-                              ? email.emailTypeFocusNode
-                              : null,
-                          controller: email.emailIdController,
-                          hintText: localization.emailAddressWatermark,
-                          errorText: email.emailIdError,
+                        currentFocusNode: email.emailIdFocusNode,
+                        nextFocusNode: index < _emailDetailsList.length - 1
+                            ? email.emailTypeFocusNode
+                            : null,
+                        controller: email.emailIdController,
+                        hintText: localization.emailAddressWatermark,
+                        errorText: email.emailIdError,
                         onChanged: (value) {
                           setState(() {
                             // Reset the error state
                             email.emailIdError = null;
 
                             // Check if the entered email ID is already used in the list
-                            bool isDuplicate = _emailDetailsList.any((element) =>
-                            element != email && element.emailIdController.text == value);
+                            bool isDuplicate = _emailDetailsList.any(
+                                (element) =>
+                                    element != email &&
+                                    element.emailIdController.text == value);
 
                             if (isDuplicate) {
                               // Display an error if the email ID is already in use
-                              email.emailIdError = localization.emailAddressExists;
+                              email.emailIdError =
+                                  localization.emailAddressExists;
                             } else {
                               // Validate the email format only if no duplicates are found
                               email.emailIdController.text = value!.trim();
@@ -1050,8 +1095,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                             }
                           });
                         },
-
-
                       ),
 
                       /// ****************************************************************************************************************************************************
@@ -1073,7 +1116,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       email.existing ? kFormHeight : showVoid,
 
                       /// Add More Information container
-                      (_emailDetailsList.isNotEmpty && (index != 0) && !email.existing)
+                      (_emailDetailsList.isNotEmpty &&
+                              (index != 0) &&
+                              !email.existing)
                           ? addRemoveMoreSection(
                               title: localization.deleteRow,
                               add: false,
@@ -1128,15 +1173,19 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 buttonColor: AppColors.scoThemeColor,
                 textDirection: getTextDirection(langProvider),
                 onTap: () async {
-                setIsProcessing(true);
+                  setIsProcessing(true);
                   bool result = validateForm(
-                      langProvider: langProvider, userInfo: userInfo,localization: localization);
+                      langProvider: langProvider,
+                      userInfo: userInfo,
+                      localization: localization);
                   if (result) {
                     /// Create Form
                     createForm(provider: provider);
-                    bool result = await updateProvider.updatePersonalDetails(form: form);
+                    bool result =
+                        await updateProvider.updatePersonalDetails(form: form);
                     if (result) {
                       setIsProcessing(false);
+
                       /// update and refresh the information
                       await _initializeData();
                     }
@@ -1150,14 +1199,14 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     );
   }
 
-
-
-
-
   //// VALIDATION FUNCTION FOR THE FORM
   /// To request focus where field needs to adjust:
   FocusNode? firstErrorFocusNode;
-  bool validateForm({required langProvider, UserInfo? userInfo,required AppLocalizations localization}) {
+
+  bool validateForm(
+      {required langProvider,
+      UserInfo? userInfo,
+      required AppLocalizations localization}) {
     final studentProfileProvider =
         Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
     final user = studentProfileProvider.apiResponse.data?.data?.user;
@@ -1169,7 +1218,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
     firstErrorFocusNode = null;
 
-    if (_firstNameController.text.isEmpty || !Validations.isNameArabicEnglishValid(_firstNameController.text)) {
+    if (_firstNameController.text.isEmpty ||
+        !Validations.isNameArabicEnglishValid(_firstNameController.text)) {
       setState(() {
         _firstNameError = localization.registrationFirstNameValidate;
         firstErrorFocusNode ??= _firstNameFocusNode;
@@ -1212,14 +1262,15 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
       });
     }
 
-    if (_maritalStatusController.text.isEmpty && peopleSoft ) {
+    if (_maritalStatusController.text.isEmpty && peopleSoft) {
       setState(() {
         _maritalStatusError = localization.maritalStatusValidate;
         firstErrorFocusNode ??= _maritalStatusFocusNode;
       });
     }
 
-    if (_dobController.text.isEmpty || !isFourteenYearsOld(_dobController.text)) {
+    if (_dobController.text.isEmpty ||
+        !isFourteenYearsOld(_dobController.text)) {
       setState(() {
         _dobError = localization.brithDateValidate;
         firstErrorFocusNode ??= _dobFocusNode;
@@ -1237,15 +1288,20 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     if (userInfo?.phoneNumbers != null) {
       for (int i = 0; i < _phoneNumberDetailsList.length; i++) {
         var element = _phoneNumberDetailsList[i];
-        if (element.phoneTypeController.text.isEmpty || element.phoneTypeError != null ) {
+        if (element.phoneTypeController.text.isEmpty ||
+            element.phoneTypeError != null) {
           setState(() {
             element.phoneTypeError = localization.submissionPhoneTypeRequired;
             firstErrorFocusNode ??= element.phoneTypeFocusNode;
           });
         }
-        if (element.phoneNumberController.text.isEmpty || element.phoneNumberError != null  || !Validations.isPhoneNumberValid(element.phoneNumberController.text)) {
+        if (element.phoneNumberController.text.isEmpty ||
+            element.phoneNumberError != null ||
+            !Validations.isPhoneNumberValid(
+                element.phoneNumberController.text)) {
           setState(() {
-            element.phoneNumberError = localization.registrationMobileNumberValidate;
+            element.phoneNumberError =
+                localization.registrationMobileNumberValidate;
             firstErrorFocusNode ??= element.phoneNumberFocusNode;
           });
         }
@@ -1256,13 +1312,15 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
     if (userInfo?.emails != null) {
       for (int i = 0; i < _emailDetailsList.length; i++) {
         var element = _emailDetailsList[i];
-        if (element.emailTypeController.text.isEmpty || element.emailTypeError != null) {
+        if (element.emailTypeController.text.isEmpty ||
+            element.emailTypeError != null) {
           setState(() {
             element.emailTypeError = localization.emailTypeRequired;
             firstErrorFocusNode ??= element.emailTypeFocusNode;
           });
         }
-        if (element.emailIdController.text.isEmpty || element.emailIdError != null) {
+        if (element.emailIdController.text.isEmpty ||
+            element.emailIdError != null) {
           setState(() {
             element.emailIdError = localization.emailAddressValidate;
             firstErrorFocusNode ??= element.emailIdFocusNode;
@@ -1285,10 +1343,12 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   Map<String, dynamic> form = {};
 
   void createForm({GetPersonalDetailsViewModel? provider}) {
-    final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
+    final studentProfileProvider =
+        Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
     final user = studentProfileProvider.apiResponse.data?.data?.user;
     final userInfo = studentProfileProvider.apiResponse.data?.data?.userInfo;
-    final userInfoType = studentProfileProvider.apiResponse.data?.data?.userInfoType;
+    final userInfoType =
+        studentProfileProvider.apiResponse.data?.data?.userInfoType;
     bool lifeRay = userInfoType != null && userInfoType == 'LIFERAY';
     bool peopleSoft = userInfoType != null && userInfoType != 'LIFERAY';
     // form = {
@@ -1332,26 +1392,33 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
     form = {
       "userInfoType": userInfoType,
-      if(peopleSoft)"userInfo": {
-        "emplId": userInfo?.emplId ?? '',
-        "name": userInfo?.name ?? '',
-        "phoneNumbers":  _phoneNumberDetailsList.isNotEmpty ? _phoneNumberDetailsList.map((element) => element.toJson()).toList() : [],
-        "addresses": userInfo?.addresses ?? [],
-        "scholarships": userInfo?.scholarships ?? '',
-        "emails":  _emailDetailsList.isNotEmpty ? _emailDetailsList.map((element) => element.toJson()).toList() : [],
-        "gender": _genderController.text,
-        "maritalStatus": _maritalStatusController.text,
-        "maritalStatusOn": userInfo?.maritalStatusOn,
-        "highestEduLevel": userInfo?.highestEduLevel,
-        "ftStudent": userInfo?.ftStudent,
-        "ferpa": userInfo?.ferpa,
-        "languageId": '',
-        "birthDate": _dobController.text
-      },
+      if (peopleSoft)
+        "userInfo": {
+          "emplId": userInfo?.emplId ?? '',
+          "name": userInfo?.name ?? '',
+          "phoneNumbers": _phoneNumberDetailsList.isNotEmpty
+              ? _phoneNumberDetailsList
+                  .map((element) => element.toJson())
+                  .toList()
+              : [],
+          "addresses": userInfo?.addresses ?? [],
+          "scholarships": userInfo?.scholarships ?? '',
+          "emails": _emailDetailsList.isNotEmpty
+              ? _emailDetailsList.map((element) => element.toJson()).toList()
+              : [],
+          "gender": _genderController.text,
+          "maritalStatus": _maritalStatusController.text,
+          "maritalStatusOn": userInfo?.maritalStatusOn,
+          "highestEduLevel": userInfo?.highestEduLevel,
+          "ftStudent": userInfo?.ftStudent,
+          "ferpa": userInfo?.ferpa,
+          "languageId": '',
+          "birthDate": _dobController.text
+        },
       "user": {
         "userId": user?.userId,
         "firstName": _firstNameController.text,
-        "lastName":  _familyNameController.text,
+        "lastName": _familyNameController.text,
         "middleName": _secondNameController.text,
         "middleName2": _thirdOrFourthNameController.text,
         "emailAddress": _emailController.text,

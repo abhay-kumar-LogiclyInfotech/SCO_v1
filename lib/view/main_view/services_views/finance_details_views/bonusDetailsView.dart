@@ -112,7 +112,7 @@ class _BonusDetailsViewState extends State<BonusDetailsView> with MediaQueryMixi
                       children: [
                         listOfBonus.isNotEmpty ?
                         _bonusDetails(provider: provider, langProvider: langProvider, localization:localization)
-                            : Utils.showOnNoDataAvailable()
+                            : Utils.showOnNoDataAvailable(context: context)
                         ,
                       ],
                     ),

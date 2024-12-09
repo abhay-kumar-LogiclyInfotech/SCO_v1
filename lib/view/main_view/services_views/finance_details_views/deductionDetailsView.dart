@@ -112,7 +112,7 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
                       children: [
                         listOfDeduction.isNotEmpty ?
                         _deductionDetails(provider: provider, langProvider: langProvider,localization:localization)
-                            : Utils.showOnNoDataAvailable()
+                            : Utils.showOnNoDataAvailable( context: context)
                         ,
                       ],
                     ),

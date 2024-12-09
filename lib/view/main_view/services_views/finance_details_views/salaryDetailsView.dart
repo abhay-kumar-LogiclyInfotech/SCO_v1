@@ -113,7 +113,7 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
 
                         listOfSalaries.isNotEmpty ?
                         _salaryDetails(provider: provider, langProvider: langProvider,localization: localization)
-                        : Utils.showOnNoDataAvailable()
+                        : Utils.showOnNoDataAvailable(context: context)
                         ,
                       ],
                     ),

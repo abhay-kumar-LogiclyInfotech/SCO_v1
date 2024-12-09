@@ -526,7 +526,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             AppLocalizations.of(context)!.dontHaveAccount,
@@ -536,7 +536,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                 fontWeight: FontWeight.bold),
           ),
           const SizedBox(
-            width: 5,
+            width: 5
           ),
           GestureDetector(
             //Implement signup link here:

@@ -9,6 +9,7 @@ import 'package:sco_v1/resources/components/account/Custom_inforamtion_container
 import 'package:sco_v1/resources/components/account/profile_with_camera_button.dart';
 import 'package:sco_v1/resources/components/custom_checkbox_tile.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
+import 'package:sco_v1/resources/components/kButtons/edit_button.dart';
 import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/resources/components/profile_picture/profile_picture.dart';
 import 'package:sco_v1/utils/utils.dart';
@@ -110,21 +111,12 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
                 child: Column(
                   children: [
                     // Edit Profile Button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              _navigationServices.pushSimpleWithAnimationRoute(
-                                  CupertinoPageRoute(
-                                      builder: (context) =>
-                                          const EditPersonalDetailsView()));
-                            },
-                            child: SvgPicture.asset(
-                                "assets/personal_details/edit_profile.svg")),
-                      ],
-                    ),
-
+                    EditButton(onTap: () {
+                      _navigationServices.pushSimpleWithAnimationRoute(
+                          CupertinoPageRoute(
+                              builder: (context) =>
+                              const EditPersonalDetailsView()));
+                    }),
 
                     /// User profile picture without camera button
                     Consumer<GetProfilePictureUrlViewModel>(

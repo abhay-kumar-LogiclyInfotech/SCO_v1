@@ -30,7 +30,6 @@
   "arabic": "العربية",
   "signUp": "التسجيل",
   "forgotPassword": "هل نسيت كلمة المرور؟",
-  "dontHaveAccount": "لا تملك حسابًا؟",
   "resetNewPassword": "إعادة تعيين كلمة المرور الجديدة",
   "newPassword": "كلمة المرور الجديدة",
   "confirmPassword": "تأكيد كلمة المرور",
@@ -1100,7 +1099,19 @@
   "services": "خدمات",
   "service": "خدمة",
   "support": "دعم",
-  "aboutSCO": "عن منظمة شنغهاي"
+  "aboutSCO": "عن منظمة شنغهاي",
+  "chooseOption": "اختر خيارًا",
+  "imageSizeLimit": "يجب أن يكون حجم الصورة أقل من 200 كيلوبايت",
+  "camera": "الكاميرا",
+  "gallery": "المعرض",
+  "noData": "لا توجد بيانات متاحة.",
+  "passportPlaceofIssue": "مكان الإصدار",
+  "passportPlaceofIssueRequired": "مكان الإصدار مطلوب",
+  "passportPlaceofIssueWatermark": "أدخل مكان الإصدار",
+  "passportPlaceofIssueValidate": "يرجى إدخال مكان إصدار صالح",
+  "phoneNumberAlreadyEntered": "تم إدخال رقم الهاتف بالفعل",
+  "highSchoolDetails": "تفاصيل المدرسة الثانوية"
+
 }
 
 

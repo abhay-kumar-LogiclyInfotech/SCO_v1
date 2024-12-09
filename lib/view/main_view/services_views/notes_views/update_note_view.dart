@@ -162,7 +162,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                     listDetails.isNotEmpty
                         ? _listDetails(
                             provider: provider, langProvider: langProvider,localization: localization)
-                        : Utils.showOnNoDataAvailable(),
+                        : Utils.showOnNoDataAvailable(context: context),
                     kFormHeight,
                     _listComments(langProvider: langProvider,localization: localization),
                     kFormHeight,
@@ -390,7 +390,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
             : Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50),
-                child: Utils.showOnNoDataAvailable(),
+                child: Utils.showOnNoDataAvailable(context: context),
               ));
   }
 

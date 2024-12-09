@@ -1,8 +1,13 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/components/custom_text_field.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../app_colors.dart';
+import '../../view/apply_scholarship/form_view_Utils.dart';
+import '../app_colors.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class CustomDropdown extends StatefulWidget {
   dynamic leading;
@@ -54,28 +59,36 @@ class CustomDropdown extends StatefulWidget {
 
 class _CustomDropdownState extends State<CustomDropdown>
     with MediaQueryMixin<CustomDropdown> {
+
+
+  String? selectedValue;
+  final TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-
-
-
-
-
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
     return Directionality(
-      textDirection: widget.textDirection,
+      textDirection: getTextDirection(langProvider),
       child: IgnorePointer(
         ignoring: widget.readOnly ?? false,
         child:
 
         // DropdownButtonFormField(
         DropdownButtonFormField2(
-
-        isExpanded: true,
+           isExpanded: true,
+          enableFeedback: true,
           // isDense: true,
           // dropdownColor: AppColors.scoButtonColor,
 
           // dropdownColor: Colors.white,
-
           items: widget.menuItemsList,
           value: widget.value,
           onChanged: widget.onChanged,
@@ -140,7 +153,7 @@ class _CustomDropdownState extends State<CustomDropdown>
             color: AppColors.darkGrey,
             weight: 10000,
           ),
-            iconSize: 25,
+            iconSize: 25
 
           ),
           menuItemStyleData: const MenuItemStyleData(
@@ -155,6 +168,26 @@ class _CustomDropdownState extends State<CustomDropdown>
             ),
           ),
           // keyboardType: widget.textInputType ?? TextInputType.text,
+          dropdownSearchData: DropdownSearchData(
+            searchController: textEditingController,
+            searchInnerWidgetHeight: 50,
+            searchInnerWidget: Container(
+              height: 50,
+              padding: const EdgeInsets.only(
+                top: 8,
+                bottom: 4,
+                right: 8,
+                left: 8,
+              ),
+              child: scholarshipFormTextField(
+                controller: textEditingController, currentFocusNode: FocusNode(), hintText: localization.searchHere, onChanged: (String? value) {  },
+              ),
+            ),
+            searchMatchFn: (item, searchValue) {
+              return item.child.toString().toLowerCase().contains(searchValue.toLowerCase());
+            },
+          ),
+
         ),
       ),
     );

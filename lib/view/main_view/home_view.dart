@@ -91,6 +91,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   Future<void> _onRefresh() async {
     try {
+      setProcessing(true);
 
 
       /// Initialize the SCO programs carousel slider
@@ -183,11 +184,14 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           // Final UI refresh to ensure everything is up-to-date
         });
       }}
+
+      setProcessing(false);
     } catch (error) {
       setProcessing(false);
       /// Handle any errors
       print('Error during refresh: $error');
     }
+    setProcessing(false);
   }
 
 
