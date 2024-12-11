@@ -440,10 +440,10 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
   /// Function to add Attachment to the list
   _addFile() async {
     /// kindly check for permissions
-    final permitted = await _permissionServices.checkAndRequestPermission(
-        Platform.isIOS ? Permission.storage : Permission.manageExternalStorage,
-        context);
-    if (permitted) {
+    // final permitted = await _permissionServices.checkAndRequestPermission(
+    //     Platform.isIOS ? Permission.storage : Permission.manageExternalStorage,
+    //     context);
+    if (true) {
       /// TODO: PLEASE ADD ALLOWED EXTENSIONS
       final file = await _mediaServices.getSingleFileFromPicker();
       final date = DateTime.now().millisecondsSinceEpoch;

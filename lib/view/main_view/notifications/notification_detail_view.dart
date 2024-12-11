@@ -211,7 +211,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
               Html(
                 data: provider.messageText ?? '',
                 onAnchorTap: (a,b,c)async{
-                await  Utils.launchUrl(a);
+                await  Utils.launchingUrl(a);
                 },
                 style: {
                   "a": Style(

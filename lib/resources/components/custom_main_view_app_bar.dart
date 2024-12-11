@@ -10,6 +10,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:sco_v1/view/main_view/notifications/notifications_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
+import 'package:sco_v1/viewModel/services/auth_services.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../data/response/status.dart';
@@ -39,12 +40,22 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
     with MediaQueryMixin<CustomTopAppBar> {
 
   late NavigationServices _navigationServices;
+  late AuthService _authService;
+  bool isLoggedIn = false;
 
   @override
   void initState() {
 
     final GetIt getIt  = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    _authService = getIt.get<AuthService>();
+
+    WidgetsBinding.instance.addPostFrameCallback((callback)async{
+
+      isLoggedIn = await _authService.isLoggedIn();
+      setState(() {
+      });
+    });
     super.initState();
   }
 
@@ -96,7 +107,7 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
                           // width: 20,
                         ),
                       ),
-                      Row(
+                     if(isLoggedIn) Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,17 +133,17 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
                               },
                           ),
 
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: SvgPicture.asset(
-                              "assets/search.svg",
-                              height: 20,
-                              width: 20,
-                            ),
-                          )
+                          // const SizedBox(
+                          //   width: 30,
+                          // ),
+                          // GestureDetector(
+                          //   onTap: () {},
+                          //   child: SvgPicture.asset(
+                          //     "assets/search.svg",
+                          //     height: 20,
+                          //     width: 20,
+                          //   ),
+                          // )
                         ],
                       ),
                     ],

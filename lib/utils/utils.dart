@@ -20,54 +20,27 @@ import 'package:xml/xml.dart' as xml;
 import 'package:html/parser.dart' as html;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 import '../resources/app_colors.dart';
 import 'constants.dart';
 
 mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
-  double get screenWidth =>
-      MediaQuery
-          .of(context)
-          .size
-          .width;
+  double get screenWidth => MediaQuery.of(context).size.width;
 
-  double get screenHeight =>
-      MediaQuery
-          .of(context)
-          .size
-          .height;
+  double get screenHeight => MediaQuery.of(context).size.height;
 
-  Orientation get orientation =>
-      MediaQuery
-          .of(context)
-          .orientation;
+  Orientation get orientation => MediaQuery.of(context).orientation;
 
-  EdgeInsets get padding =>
-      MediaQuery
-          .of(context)
-          .padding;
+  EdgeInsets get padding => MediaQuery.of(context).padding;
 
-  EdgeInsets get viewInsets =>
-      MediaQuery
-          .of(context)
-          .viewInsets;
+  EdgeInsets get viewInsets => MediaQuery.of(context).viewInsets;
 
-  double get horizontalPadding =>
-      MediaQuery
-          .of(context)
-          .padding
-          .horizontal;
+  double get horizontalPadding => MediaQuery.of(context).padding.horizontal;
 
-  double get verticalPadding =>
-      MediaQuery
-          .of(context)
-          .padding
-          .vertical;
+  double get verticalPadding => MediaQuery.of(context).padding.vertical;
 
   double get kPadding => 20;
 
-  Widget get kFormHeight =>
-      const SizedBox.square(
+  Widget get kFormHeight => const SizedBox.square(
         dimension: 15,
       );
 
@@ -76,42 +49,33 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 
   double get kCardRadius => 15;
 
-  Widget get kSubmitButtonHeight =>
-      const SizedBox.square(
+  Widget get kSubmitButtonHeight => const SizedBox.square(
         dimension: 30,
       );
 }
 
 class Utils {
-
-
-  static launchUrl(dynamic url) async {
+  static  launchingUrl(dynamic url) async {
     // Check if the URL is a Uri object and convert it to a string
     if (url is Uri) {
       url = url.toString();
     }
 
     // Continue with the URL launching logic
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     } else {
       throw 'Could not launch $url';
     }
   }
 
   static Future<void> launchEmail(String emailAddress) async {
-    final Uri emailLaunchUri = Uri(
-      scheme: 'mailto',
-      path: emailAddress,
-    );
-
-    if (await canLaunchUrl(emailLaunchUri)) {
-      await launchUrl(emailLaunchUri);
-    } else {
-      debugPrint('Could not launch email client.');
-    }
+     final Uri emailLaunchUri = Uri(
+       scheme: 'mailto',
+       path: emailAddress,
+     );
+    await launchUrl(emailLaunchUri);
   }
-
 
   static Future<void> makePhoneCall(
       {required String phoneNumber, required BuildContext context}) async {
@@ -121,10 +85,11 @@ class Utils {
     );
 
     // Check permission before making a call
-    final permissionService = PermissionServices();
-    final status = await permissionService.checkAndRequestPermission(
-        Permission.phone, context);
-    if (status) {
+    // final permissionService = PermissionServices();
+    // final status = await permissionService.checkAndRequestPermission(
+    //     Permission.phone, context);
+    if (true) {
+      /// launchUrl is main function which is been provided by the Launch url package itself
       await launchUrl(launchUri);
     }
   }
@@ -145,9 +110,7 @@ class Utils {
       }
 
       // Extract the file name and create the save path
-      String fileName = myFile.path
-          .split('/')
-          .last; // Extracts the file name
+      String fileName = myFile.path.split('/').last; // Extracts the file name
       String savePath = "$folderPath/$fileName";
 
       // Write the file to the save path
@@ -161,7 +124,6 @@ class Utils {
       rethrow;
     }
   }
-
 
   // input borders start
   static InputBorder outlinedInputBorder() {
@@ -192,88 +154,80 @@ class Utils {
 
 //*-----Cupertino Loading Indicator-----*/
   static Widget cupertinoLoadingIndicator(
-      {dynamic color = AppColors.scoButtonColor}) =>
+          {dynamic color = AppColors.scoButtonColor}) =>
       Center(child: CupertinoActivityIndicator(color: color));
+
   //*----- page  Loading Indicator-----*/
 
   static Widget pageLoadingIndicator(
-      {dynamic color = AppColors.scoButtonColor, required dynamic context}) =>
-      SizedBox(height: MediaQuery
-          .of(context)
-          .size
-          .height - (kToolbarHeight * 1.62),
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          {dynamic color = AppColors.scoButtonColor,
+          required dynamic context}) =>
+      SizedBox(
+          height: MediaQuery.of(context).size.height - (kToolbarHeight * 1.62),
+          width: MediaQuery.of(context).size.width,
           child: Center(
-              child: Platform.isAndroid ? Utils.materialLoadingIndicator(
-                  color: color) : Utils.cupertinoLoadingIndicator(
-                  color: color)));
+              child: Platform.isAndroid
+                  ? Utils.materialLoadingIndicator(color: color)
+                  : Utils.cupertinoLoadingIndicator(color: color)));
 
   //*----- page  Refresh Indicator-----*/
   static Widget pageRefreshIndicator(
-      {required dynamic child, required dynamic onRefresh}) => RefreshIndicator(
-      color: Colors.white,
-      backgroundColor: AppColors.scoThemeColor,
-      onRefresh: onRefresh,
-      child: ListView(children: [child]));
-
+          {required dynamic child, required dynamic onRefresh}) =>
+      RefreshIndicator(
+          color: Colors.white,
+          backgroundColor: AppColors.scoThemeColor,
+          onRefresh: onRefresh,
+          child: ListView(children: [child]));
 
   // *-----Show Loading more data from server-----*/
 
-  static Widget spinkitThreeBounce() =>
-      const Center(
+  static Widget spinkitThreeBounce() => const Center(
           child: Padding(
-            padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
-            child: SpinKitThreeBounce(
-              color: Colors.black,
-              size: 23,
-            ),
-          ));
+        padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
+        child: SpinKitThreeBounce(
+          color: Colors.black,
+          size: 23,
+        ),
+      ));
 
 //*------Common Loading Indicators End------*/
 
 //*------Common Error Text Start------*/
-  static Widget showOnError() =>
-      const Center(
+  static Widget showOnError() => const Center(
         child: Text("Something went Wrong"),
       );
 
-  static Widget showOnNone() =>
-      const Center(
+  static Widget showOnNone() => const Center(
         child: Text("Something went Wrong"),
       );
 
-  static Widget showOnNull() =>
-      const Center(
+  static Widget showOnNull() => const Center(
         child: Text("Something went Wrong"),
       );
 
-  static Widget showOnNoLoadingMoreData() =>
-      const Center(
+  static Widget showOnNoLoadingMoreData() => const Center(
           child: Padding(
-            padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
-            child: SpinKitThreeBounce(
-              color: AppColors.WARNING,
-              size: 23,
-            ),
-          ));
+        padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
+        child: SpinKitThreeBounce(
+          color: AppColors.WARNING,
+          size: 23,
+        ),
+      ));
 
   static Widget showOnNoDataAvailable({required BuildContext context}) {
     final localization = AppLocalizations.of(context)!;
-     return Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset("assets/no_data_found.svg"),
-           Text(
-            localization.noData, // Fallback for no applications
-            style: const TextStyle(fontSize: 16,color: AppColors.scoThemeColor),
-          ),
-        ],
-      );}
-
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset("assets/no_data_found.svg"),
+        Text(
+          localization.noData, // Fallback for no applications
+          style: const TextStyle(fontSize: 16, color: AppColors.scoThemeColor),
+        ),
+      ],
+    );
+  }
 
   // model progress hud
 
@@ -283,13 +237,12 @@ class Utils {
         opacity: 0.3,
         blur: 0.1,
         dismissible: false,
-        progressIndicator: Platform.isAndroid ? Utils.materialLoadingIndicator(
-            color: AppColors.scoThemeColor) : Utils.cupertinoLoadingIndicator(
-            color: AppColors.scoThemeColor),
+        progressIndicator: Platform.isAndroid
+            ? Utils.materialLoadingIndicator(color: AppColors.scoThemeColor)
+            : Utils.cupertinoLoadingIndicator(color: AppColors.scoThemeColor),
         inAsyncCall: processing,
         child: child);
   }
-
 
   /// This methods converts the byte data to MB
   static Future<String> getFileSize({required file}) async {
@@ -317,12 +270,9 @@ class Utils {
 
   /// This methods get the file name
   static String getFileName({required File file}) {
-    final fileName = file.path
-        .split('/')
-        .last;
+    final fileName = file.path.split('/').last;
     return fileName;
   }
-
 
   // Method to open pdf
   static Future<void> openFile(File file) async {
@@ -331,9 +281,7 @@ class Utils {
 // open the pdf
     await OpenFile.open(path);
   }
-
 }
-
 
 Future<File> convertBase64ToFile(String base64String, String fileName) async {
   try {
@@ -356,19 +304,19 @@ Future<File> convertBase64ToFile(String base64String, String fileName) async {
   }
 }
 
-
 //Get Text Direction Method:
 TextDirection getTextDirection(LanguageChangeViewModel langProvider) {
   return langProvider.appLocale == const Locale('en') ||
-      langProvider.appLocale == null
+          langProvider.appLocale == null
       ? TextDirection.ltr
       : TextDirection.rtl;
 }
 
 //TextField Heading Text with importance indicator:
-fieldHeading({required String title,
-  required bool important,
-  required LanguageChangeViewModel langProvider}) {
+fieldHeading(
+    {required String title,
+    required bool important,
+    required LanguageChangeViewModel langProvider}) {
   return Directionality(
     textDirection: getTextDirection(langProvider),
     child: Padding(
@@ -385,14 +333,14 @@ fieldHeading({required String title,
                         fontWeight: FontWeight.w500,
                         color: AppColors.fieldTitleDarkGrey),
                     children: <TextSpan>[
-                      TextSpan(
-                        text: title,
-                      ),
-                      important
-                          ? const TextSpan(
+                  TextSpan(
+                    text: title,
+                  ),
+                  important
+                      ? const TextSpan(
                           text: " *", style: TextStyle(color: Colors.red))
-                          : const TextSpan()
-                    ])),
+                      : const TextSpan()
+                ])),
           ),
         ],
       ),
@@ -431,7 +379,6 @@ List<dynamic> populateSimpleValuesFromLOV({
   Color? textColor,
 }) {
   final List<dynamic> finalList = [];
-
 
   for (var element in menuItemsList) {
     if (element.hide == false) {
@@ -501,7 +448,6 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   return dropdownItems;
 }
 
-
 // // populateNormalDropdownWithValue method with hide property:
 List<DropdownMenuItem> populateNormalDropdownWithValue({
   required List menuItemsList,
@@ -546,7 +492,6 @@ List<DropdownMenuItem> populateNormalDropdownWithValue({
 
   return dropdownItems;
 }
-
 
 //populateNormalDropdown with single elements method:
 List<DropdownMenuItem> populateNormalDropdown({
@@ -660,7 +605,6 @@ String extractXmlValue(String xmlString, String languageId, String tagName) {
   return '';
 }
 
-
 String cleanDraftXmlToJson(String xmlString) {
   // Parse the XML string
   final document = XmlDocument.parse(xmlString);
@@ -741,7 +685,6 @@ bool isFourteenYearsOld(String dob) {
   return age >= 14;
 }
 
-
 String formatDateOnly(String? dateString) {
   if (dateString == null || dateString.isEmpty) {
     return ''; // Handle null or empty input
@@ -749,8 +692,8 @@ String formatDateOnly(String? dateString) {
 
   try {
     // Preprocess to make it ISO 8601 compatible
-    String processedDateString = dateString.replaceFirst(' ', 'T').replaceFirst(
-        ' UTC', 'Z');
+    String processedDateString =
+        dateString.replaceFirst(' ', 'T').replaceFirst(' UTC', 'Z');
     // Parse the input date string to DateTime
     DateTime parsedDate = DateTime.parse(processedDateString);
     // Format to date-only string
@@ -760,9 +703,9 @@ String formatDateOnly(String? dateString) {
     return '';
   }
 }
-String convertTimestampToDate(int timestamp) {
 
-  if(timestamp == 0){
+String convertTimestampToDate(int timestamp) {
+  if (timestamp == 0) {
     return '';
   }
   // Convert timestamp to DateTime
@@ -776,8 +719,7 @@ String convertTimestampToDate(int timestamp) {
 }
 
 String convertTimestampToTime(int timestamp) {
-
-  if(timestamp == 0){
+  if (timestamp == 0) {
     return '';
   }
   // Convert timestamp to DateTime
@@ -791,8 +733,7 @@ String convertTimestampToTime(int timestamp) {
 }
 
 String convertTimestampToDateTime(int timestamp) {
-
-  if(timestamp == 0){
+  if (timestamp == 0) {
     return '';
   }
   // Convert timestamp to DateTime
@@ -804,10 +745,9 @@ String convertTimestampToDateTime(int timestamp) {
   return formattedDate;
 }
 
-
 // get full name from lov Code
 String getFullNameFromLov(
-    { String? lovCode, String? code, required langProvider}) {
+    {String? lovCode, String? code, required langProvider}) {
   if (lovCode == null || code == null || lovCode.isEmpty || code.isEmpty) {
     return '';
   }
@@ -824,9 +764,9 @@ String getFullNameFromLov(
     return element.code == code;
   });
 
-
-  return getTextDirection(langProvider) == TextDirection.rtl ? element
-      .valueArabic : element.value;
+  return getTextDirection(langProvider) == TextDirection.rtl
+      ? element.valueArabic
+      : element.value;
 }
 
 String xmlToJson(String xmlContent) {
@@ -879,8 +819,3 @@ String decodeHtmlEntities(String text) {
   // Decode HTML entities (e.g., &lt;, &gt;)
   return html.parse(text).body?.text ?? text;
 }
-
-
-
-
-

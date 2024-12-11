@@ -864,9 +864,11 @@ class _SignUpViewState extends State<SignUpView>
 
           try{
             // setProcessing(true);
+
             if(validateForm(langProvider: langProvider, signup: provider,localization:localization))
             {
               createForm();
+              print(form);
               bool signUpResult = await provider.signup(langProvider: langProvider,form: form);
               if (signUpResult) {
                 _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => const OtpVerificationView()));
@@ -875,13 +877,9 @@ class _SignUpViewState extends State<SignUpView>
                 _alertServices.showErrorSnackBar(provider.apiResponse.message.toString());
               }
             }
-
-
           }catch (e){
             debugPrint(e.toString());
           }
-
-
         },
         fontSize: 16,
         buttonColor: AppColors.scoButtonColor,
@@ -905,7 +903,7 @@ class _SignUpViewState extends State<SignUpView>
       "day": _dobDayController.text.trim(),
       "month": _dobMonthController.text.trim(),
       "year": _dobYearController.text.trim(),
-      "emirateId": _emiratesIdController.text.trim(),
+      "emirateId": _emiratesIdController.text.trim().replaceAll('-', ''),
       "isMale": (_genderController.text.toUpperCase() == 'M').toString().trim(),
       "country": _countryController.text.trim().toUpperCase(),
       "phoneNo": _studentPhoneNumberController.text.trim(),

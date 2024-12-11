@@ -4,6 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
+import 'package:sco_v1/viewModel/services/auth_services.dart';
 
 import '../../data/response/status.dart';
 import '../../viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
@@ -28,7 +30,10 @@ class CustomSimpleAppBar extends StatefulWidget implements PreferredSizeWidget  
 class _CustomSimpleAppBarState extends State<CustomSimpleAppBar> {
 
 
+   bool isLoggedIn = false;
+
   late NavigationServices _navigationServices;
+  late AuthService _authService;
 
 
   @override
@@ -36,6 +41,16 @@ class _CustomSimpleAppBarState extends State<CustomSimpleAppBar> {
 
     final GetIt getIt  = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
+    _authService = getIt.get<AuthService>();
+
+
+    WidgetsBinding.instance.addPostFrameCallback((callback)async{
+
+        isLoggedIn = await _authService.isLoggedIn();
+        setState(() {
+        });
+    });
+
     super.initState();
   }
   @override
@@ -66,10 +81,11 @@ class _CustomSimpleAppBarState extends State<CustomSimpleAppBar> {
            Navigator.of(context).pop();
           },
         ),
-        actions:[
+        actions: isLoggedIn ? [
          if(!(widget.inNotifications ?? true))Consumer<GetNotificationsCountViewModel>(
             builder: (context,provider,_){
               switch(provider.apiResponse.status){
+                /// here totalNotifications is global variable which we have declared somewhere else.
                 case Status.LOADING:
                   return ringBell(totalNotifications,_navigationServices);
                 case Status.ERROR:
@@ -82,7 +98,7 @@ class _CustomSimpleAppBarState extends State<CustomSimpleAppBar> {
                   return ringBell(totalNotifications,_navigationServices);
               }
             },
-          ),const SizedBox(width: 25)],
+          ),const SizedBox(width: 25)] : [],
 
         centerTitle: true,
       ),

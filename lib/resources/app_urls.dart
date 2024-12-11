@@ -5,10 +5,13 @@ class AppUrls {
   static const String _baseUrl = "${_domainUrl}o/mopa-sco-api/";
 
 
+  // Getting domain url
+  static const String domainUrl = _domainUrl;
   //getting the base URL
   static const String baseUrl = _baseUrl;
   // getting common base URL
   static const String commonBaseUrl = _commonBaseUrl;
+
 
   // Static getter for common data endpoint
   static String get commonData => "${_baseUrl}common-data/list-of-values-data";
@@ -66,4 +69,11 @@ class AppUrls {
 
   ///  DECREASE NOTIFICATIONS COUNT
 static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
+
+
+/// Scholarship inside uae
+  static String get scholarshipInsideUae => "${_domainUrl}ar/web/sco/scholarships-inside-uae";
+/// scholarship outside uae
+  static String get scholarshipOutsideUae => "${_domainUrl}ar/web/sco/scholarships-outside-uae";
+
 }

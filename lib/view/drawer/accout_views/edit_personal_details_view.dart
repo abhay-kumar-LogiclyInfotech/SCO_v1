@@ -275,26 +275,26 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                             Destination.chooseFilePickerDestination(
                                 context: context,
                                 onCameraTap: () async {
-                                  bool cameraPermission =
-                                      await _permissionServices
-                                          .checkAndRequestPermission(
-                                              Permission.camera, context);
-                                  if (cameraPermission) {
+                                  // bool cameraPermission =
+                                  //     await _permissionServices
+                                  //         .checkAndRequestPermission(
+                                  //             Permission.camera, context);
+                                  if (true) {
                                     File? file = await _mediaServices
                                         .getSingleImageFromCamera();
                                     setProfilePictureFile(file);
                                   }
                                 },
                                 onStorageTap: () async {
-                                  bool storagePermission =
-                                      await _permissionServices
-                                          .checkAndRequestPermission(
-                                              Platform.isAndroid
-                                                  ? Permission
-                                                      .manageExternalStorage
-                                                  : Permission.storage,
-                                              context);
-                                  if (storagePermission) {
+                                  // bool storagePermission =
+                                  //     await _permissionServices
+                                  //         .checkAndRequestPermission(
+                                  //             Platform.isAndroid
+                                  //                 ? Permission
+                                  //                     .manageExternalStorage
+                                  //                 : Permission.storage,
+                                  //             context);
+                                  if (true) {
                                     File? file = await _mediaServices
                                         .getSingleImageFromGallery();
                                     setProfilePictureFile(file);
@@ -1430,9 +1430,11 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         "gender": _genderController.text,
         "phoneNumber": user?.phoneNumber,
         "nationality": _nationalityController.text,
-        "emirateId": _emiratesIdController.text,
+        "emirateId": _emiratesIdController.text.replaceAll('-', '').trim(),
         "uaePassUuid": user?.uaePassUuid ?? ''
       }
     };
+
+    log(form.toString());
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
@@ -97,6 +98,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
 
 
     WidgetsBinding.instance.addPostFrameCallback((_) async{
+      _loadAppVersion();
 
       // getting initial language
      await getInitialLanguage();
@@ -136,6 +138,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
       width: MediaQuery.sizeOf(context).width * 0.75,
 
       child: SafeArea(
+        bottom: false,
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(
@@ -153,6 +156,8 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:
                   [
+
+                    /// Upper section
                     Expanded(
                       child: Directionality(
                         textDirection: getTextDirection(langProvider),
@@ -160,91 +165,68 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                           child: Column(
                               children: [
                             //*------User Profile Section------*/
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-
-                        //         Consumer<GetProfilePictureUrlViewModel>(builder: (context,profilePicProvider,_){
-                        //           return ClipRRect(
-                        //           borderRadius: BorderRadius.circular(5),
-                        //         child: AnimatedContainer(
-                        //           duration: const Duration(seconds: 3),
-                        //           curve: Curves.easeIn,
-                        //           child: Image.network(
-                        //               profilePicProvider.apiResponse.data?.url ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                        //               fit: BoxFit.cover,
-                        //                height: MediaQuery.sizeOf(context).width / 8,
-                        //               width: MediaQuery.sizeOf(context).width / 8,
-                        //               errorBuilder: (context, object, _) {
-                        //               return SvgPicture.asset("images/images_user_sidebar/profile.svg",
-                        //                       fit: BoxFit.cover,
-                        //                      height: MediaQuery.sizeOf(context).width / 7, width: MediaQuery.sizeOf(context).width / 7,);},
-                        //                                   ),
-                        //         ),
-                        // );
-                        //         }),
-                                Consumer<GetProfilePictureUrlViewModel>(
-                                  builder: (context,provider,_){
-                                    return ProfileWithCameraButton(
-                                      profileSize: 55,
-                                        cameraEnabled: false,
-                                        profileImage: provider.apiResponse.data?.url != null
-                                            ? NetworkImage(provider.apiResponse.data!.url!.toString())
-                                            : const AssetImage(
-                                            'assets/personal_details/dummy_profile_pic.png'),
-                                        onTap: () {},
-                                        onLongPress: () {});
-                                  },
-                                ),
-
-                                SizedBox(
-                                  width: MediaQuery.sizeOf(context).width / 24,
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: SizedBox(
-                                    height: MediaQuery.sizeOf(context).width * 0.12,
-                                    width: MediaQuery.sizeOf(context).width * 0.5,
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                             _name,
-                                              style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: SelectableText(
-                                              // _roles.where((role){
-                                              //  return role.isNotEmpty;
-                                              // }).join(', ')
-                                              _roles.any((role) => role.toLowerCase() == 'students') ? "Student" : "User Type",
-
-                                              style: TextStyle(
-                                                  color: Colors.white
-                                                      .withOpacity(0.65)),
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                if(_toLogin)  Column(
+                                  children: [
+                                    Row(
+                                                                  mainAxisSize: MainAxisSize.max,
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                  children: [
+                                    Consumer<GetProfilePictureUrlViewModel>(
+                                      builder: (context,provider,_){
+                                        return ProfileWithCameraButton(
+                                          profileSize: 55,
+                                            cameraEnabled: false,
+                                            profileImage: provider.apiResponse.data?.url != null
+                                                ? NetworkImage(provider.apiResponse.data!.url!.toString())
+                                                : const AssetImage(
+                                                'assets/personal_details/dummy_profile_pic.png'),
+                                            onTap: () {},
+                                            onLongPress: () {});
+                                      },
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                          
+
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        // color: Colors.green,
+                                        height: 55,
+                                        alignment: Alignment.center,
+                                        // width: MediaQuery.sizeOf(context).width * 0.5,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                               _name,
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white),
+                                              ),
+                                              SelectableText(
+                                                // _roles.where((role){
+                                                //  return role.isNotEmpty;
+                                                // }).join(', ')
+                                                _roles.any((role) => role.toLowerCase() == 'students') ? "Student" : "User Type",
+
+                                                style: TextStyle(color: Colors.white.withOpacity(0.65)),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                                                  ],
+                                                                ),
+                                    const SizedBox(height: 20),
+
+                                  ],
+                                ),
+
                             //*------Menu Items Section------*/
                             //*------Login------*/
                           if(!_toLogin)   ListTile(
@@ -528,49 +510,56 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                       ),
                     ),
 
-
-
                     //*-----Language Selection Section-----*/
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        SvgPicture.asset("assets/sidemenu/language.svg"),
-                         Text(
-                           localization.language,
+                        //*-----Change Language Button-----*/
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset("assets/sidemenu/language.svg"),
+                             Text(
+                               localization.language,
 
-                           style: const TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        const Text(
-                          "English",
-                          style: TextStyle(color: AppColors.scoLightThemeColor),
-                        ),
-                        Consumer<LanguageChangeViewModel>(
-                          builder: (context,provider,_)
-                          {
-                            return CustomAdvancedSwitch(
-                              controller: provider.languageController,
-                              activeColor: AppColors.scoThemeColor,
-                              inactiveColor: Colors.grey,
-                              initialValue: provider.languageController.value,
-                              onChanged: (value)async {
-                                if (value) {
-                                  await Provider.of<LanguageChangeViewModel>(context,listen: false).changeLanguage(const Locale('ar'));
-                                  widget.scaffoldState.currentState!.openEndDrawer();
-                                } else {
-                                  await Provider.of<LanguageChangeViewModel>(context, listen: false).changeLanguage(const Locale('en'));
-                                  widget.scaffoldState.currentState!.openDrawer();
-                                }
+                               style: const TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                            const Text(
+                              "English",
+                              style: TextStyle(color: AppColors.scoLightThemeColor),
+                            ),
+                            Consumer<LanguageChangeViewModel>(
+                              builder: (context,provider,_)
+                              {
+                                return CustomAdvancedSwitch(
+                                  controller: provider.languageController,
+                                  activeColor: AppColors.scoThemeColor,
+                                  inactiveColor: Colors.grey,
+                                  initialValue: provider.languageController.value,
+                                  onChanged: (value)async {
+                                    if (value) {
+                                      await Provider.of<LanguageChangeViewModel>(context,listen: false).changeLanguage(const Locale('ar'));
+                                      widget.scaffoldState.currentState!.openEndDrawer();
+                                    } else {
+                                      await Provider.of<LanguageChangeViewModel>(context, listen: false).changeLanguage(const Locale('en'));
+                                      widget.scaffoldState.currentState!.openDrawer();
+                                    }
+                                  },
+                                );
                               },
-                            );
-                          },
+                            ),
+                            const Text(
+                              "عربي",
+                              style: TextStyle(
+                                  color: AppColors.scoLightThemeColor),
+                            ),
+                          ],
                         ),
-                        const Text(
-                          "عربي",
-                          style: TextStyle(
-                              color: AppColors.scoLightThemeColor),
-                        ),
+                        const SizedBox(height: 10),
+                        Text(_appVersion,style: const TextStyle(color: Colors.white)),
                       ],
                     ),
                   ],
@@ -578,5 +567,14 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
               ),
       ),
     );
+  }
+  String _appVersion = '';
+
+  Future<void> _loadAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      // _appVersion = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
+      _appVersion = 'Version ${packageInfo.version}';
+    });
   }
 }

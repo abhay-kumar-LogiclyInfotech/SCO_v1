@@ -66,7 +66,7 @@ dependencies:
   xml: ^6.5.0
   html_unescape: ^2.0.0
   html:
-  url_launcher: ^6.3.0
+  url_launcher:
   permission_handler: ^11.3.1
   carousel_slider_plus: ^7.0.0
   connectivity_plus:
@@ -90,6 +90,7 @@ dependencies:
   flutter_widget_from_html: ^0.15.3
   flutter_html:
   webview_flutter:
+  package_info_plus: ^8.1.1
 #  shimmer: ^3.0.0
 
 

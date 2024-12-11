@@ -89,45 +89,49 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     final localization = AppLocalizations.of(context)!;
 
-    return Consumer<GetAllRequestsViewModel>(builder: (context, provider, _) {
-      switch (provider.apiResponse.status) {
-        case Status.LOADING:
-          return Utils.pageLoadingIndicator(context: context);
-        case Status.ERROR:
-          return Center(
-            child: Text(
-              AppLocalizations.of(context)!.somethingWentWrong,
-            ),
-          );
-        case Status.COMPLETED:
-          return Directionality(
-            textDirection: getTextDirection(langProvider),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    /// Header to show create request button
-                    _createRequestButton(langProvider: langProvider,localization: localization),
-                    kFormHeight,
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          /// Header to show create request button
+          _createRequestButton(langProvider: langProvider,localization: localization),
+          kFormHeight,
 
-                    /// Request status card
-                    _requestsSection(provider: provider, langProvider: langProvider,localization: localization),
-                  ],
-                ),
-              ),
-            ),
-          );
+          Consumer<GetAllRequestsViewModel>(builder: (context, provider, _) {
+            switch (provider.apiResponse.status) {
+              case Status.LOADING:
+                return Utils.pageLoadingIndicator(context: context);
+              case Status.ERROR:
+                return Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.somethingWentWrong,
+                  ),
+                );
+              case Status.COMPLETED:
+                return Directionality(
+                  textDirection: getTextDirection(langProvider),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        /// Request status card
+                        _requestsSection(provider: provider, langProvider: langProvider,localization: localization),
+                      ],
+                    ),
+                  ),
+                );
 
-        case Status.NONE:
-          return showVoid;
-        case null:
-          return showVoid;
-      }
-    });
+              case Status.NONE:
+                return showVoid;
+              case null:
+                return showVoid;
+            }
+          }),
+        ],
+      ),
+    );
   }
 
   /// *----- header section ------*
@@ -240,8 +244,7 @@ bool isSearching = false;
                      // Check if any value in the map contains the search query
                      return jsonMap.values.any((value) {
                        // Ensure the value is a string before matching
-                       return value != null &&
-                           value.toString().toLowerCase().contains(_searchController.text.toLowerCase());
+                       return value != null && value.toString().toLowerCase().contains(_searchController.text.toLowerCase());
                      });
                    })
                        .toList();

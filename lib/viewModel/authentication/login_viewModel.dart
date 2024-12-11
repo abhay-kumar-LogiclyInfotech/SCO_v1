@@ -119,7 +119,7 @@ class LoginViewModel with ChangeNotifier {
 
       if(data.redirectUrl == null){
         await  HiveManager.storeUserId(userData.userId.toString());
-        await  HiveManager.storeEmiratesId(userData.emirateId.toString());
+        await  HiveManager.storeEmiratesId(userData.emirateId.toString().replaceAll('-', ''));
         await HiveManager.storeName(
             [
               userData.firstName?.trim() ?? '',  // Trim and handle null

@@ -30,6 +30,7 @@ import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart
 import 'package:sco_v1/view/main_view/notifications/notifications_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_abroad/scholarship_in_abroad_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/scholarship_in_uae_view.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/finance.dart';
 import 'package:sco_v1/view/main_view/services_views/finance_details_views/salaryDetailsView.dart';
@@ -42,10 +43,12 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../hive/hive_manager.dart';
 import '../../models/services/MyFinanceStatusModel.dart';
 import '../../resources/app_colors.dart';
+import '../../resources/app_urls.dart';
 import '../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../resources/custom_painters/faq_painters.dart';
 import '../../resources/getRoles.dart';
@@ -1077,9 +1080,11 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                                   children: [
                                     // message Advisor
                                     CustomMaterialButton(
-                                        onPressed: () {
-                                          Utils.launchEmail(
-                                              topAdvisor?.email ?? '');
+                                        onPressed: ()async {
+                                         await Utils.launchEmail(topAdvisor?.email ?? '');
+
+
+
                                         },
                                         isEnabled: false,
                                         shape: const CircleBorder(),
@@ -1087,8 +1092,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                                             "assets/message_advisor.svg")),
                                     // Call advisor
                                     CustomMaterialButton(
-                                        onPressed: () {
-                                          Utils.makePhoneCall(
+                                        onPressed: ()async {
+                                         await Utils.makePhoneCall(
                                               phoneNumber:
                                                   topAdvisor?.phoneNo ?? '',
                                               context: context);
@@ -1127,7 +1132,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         'subTitle': " ",
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
-              createRoute(const ScholarshipsInUaeView()),
+              createRoute(WebView(url: AppUrls.scholarshipInsideUae, scholarshipType: 'INT')),
             ),
       },
       {
@@ -1135,8 +1140,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         'subTitle': "",
         'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
-              createRoute(const ScholarshipInAbroadView()),
-            ),
+          createRoute(WebView(url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')),
+        ),
       },
     ];
 

@@ -20,20 +20,16 @@ class WebView extends StatefulWidget {
   final String url;
   final String scholarshipType;
 
-  const WebView({super.key,required this.url,required this.scholarshipType});
+  const WebView({super.key, required this.url, required this.scholarshipType});
 
   @override
   State<WebView> createState() => _WebViewState();
 }
 
 class _WebViewState extends State<WebView> {
-
   late NavigationServices _navigationServices;
   late final WebViewController controller;
   var loadingPercentage = 0;
-
-
-
 
   @override
   void initState() {
@@ -56,13 +52,32 @@ class _WebViewState extends State<WebView> {
             });
           },
           onPageFinished: (url) {
+            controller.runJavaScript("""
+  const header = document.querySelector('#banner');
+  if (header) {
+    header.style.display = 'none';
+  }
+
+  const footer = document.querySelector('#footer-section-outer');
+  if (footer) {
+    footer.style.display = 'none';
+  }
+
+  const adsSection = document.querySelector('.ads-section');
+  if (adsSection) {
+    adsSection.style.display = 'none';
+  }
+""");
+
             setState(() {
               loadingPercentage = 100;
             });
           },
           onWebResourceError: (error) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Failed to load the page: ${error.description}')),
+              SnackBar(
+                  content:
+                      Text('Failed to load the page: ${error.description}')),
             );
           },
         ));
@@ -70,7 +85,7 @@ class _WebViewState extends State<WebView> {
       // Handle invalid URL
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
-         const SnackBar(content: Text('Invalid URL provided')),
+          const SnackBar(content: Text('Invalid URL provided')),
         );
       });
     }
@@ -85,34 +100,36 @@ class _WebViewState extends State<WebView> {
       return false;
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: widget.scholarshipType == 'EXT' ? "Scholarships In Abroad" : "Scholarships In UAE"  ),
-      body: _isValidUrl(widget.url) ? Stack(
-        children: [
-          Consumer<GetPageContentByUrlViewModel>(
-          builder: (context, provider, _) {
-            return WebViewWidget(
-              controller: controller,
-            );
-        }),
-          if (loadingPercentage < 100)
-            LinearProgressIndicator(
-              backgroundColor: AppColors.scoLightThemeColor,
-              color: AppColors.scoThemeColor,
-              value: loadingPercentage / 100.0,
+      appBar: CustomSimpleAppBar(
+          titleAsString: widget.scholarshipType == 'EXT'
+              ? "Scholarships In Abroad"
+              : "Scholarships In UAE"),
+      body: _isValidUrl(widget.url)
+          ? Stack(children: [
+              Consumer<GetPageContentByUrlViewModel>(
+                  builder: (context, provider, _) {
+                return WebViewWidget(
+                  controller: controller,
+                );
+              }),
+              if (loadingPercentage < 100)
+                LinearProgressIndicator(
+                  backgroundColor: AppColors.scoLightThemeColor,
+                  color: AppColors.scoThemeColor,
+                  value: loadingPercentage / 100.0,
+                ),
+            ])
+          : Center(
+              child: Text(
+                'Something went wrong',
+                style: TextStyle(color: Colors.red, fontSize: 18),
+              ),
             ),
-        ]
-      )  : Center(
-    child: Text(
-    'Something went wrong',
-      style: TextStyle(color: Colors.red, fontSize: 18),
-    ),
-    ),
-
     );
   }
 }

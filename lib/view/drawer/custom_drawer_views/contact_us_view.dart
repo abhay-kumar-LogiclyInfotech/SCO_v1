@@ -34,17 +34,18 @@ class _ContactUsViewState extends State<ContactUsView> {
 
   late AlertServices _alertServices;
 
-  //webUrl:
-  final String webUrl = "https://www.sco.ae";
+  // //webUrl:
+  // final String webUrl = "www.sco.ae";
+
 
   //poBox:
   final String poBoxNumber = "73505";
 
   //phone no. 1:
-  final String phoneNo1 = "+918091771052";
+  final String phoneNo1 = "+971 2 6413999";
 
   //phone no. 2:
-  final String phoneNo2 = "+971509876543";
+  final String phoneNo2 = "+97122228391";
 
   Future<void> _launchUrl(uri) async {
     if (!await launchUrl(Uri.parse(uri))) {
@@ -79,8 +80,7 @@ class _ContactUsViewState extends State<ContactUsView> {
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _mobileFocusNode = FocusNode();
-  final FocusNode _inquiryTypeFocusNode =
-      FocusNode(); // Note: Not used with controller
+  final FocusNode _inquiryTypeFocusNode = FocusNode(); // Note: Not used with controller
   final FocusNode _subjectFocusNode = FocusNode();
   final FocusNode _messageFocusNode = FocusNode();
   final FocusNode _captchaFocusNode = FocusNode();

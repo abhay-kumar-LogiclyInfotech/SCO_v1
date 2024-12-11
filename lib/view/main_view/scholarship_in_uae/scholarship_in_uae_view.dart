@@ -48,6 +48,8 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
       /// INTERNAL SCHOLARSHIPS MENU ITEMS LIST
       academicCareerMenuItemList = provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'INT' && element.isActive == true).toList() ?? [];
+      _scholarshipsInUaeList.clear();
+      _scoProgramsModelsList.clear();
       _initializeScoPrograms();
 
       setState(() {
