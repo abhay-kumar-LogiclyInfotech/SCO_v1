@@ -102,11 +102,12 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
               case Status.LOADING:
                 return Utils.pageLoadingIndicator(context: context);
               case Status.ERROR:
-                return Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.somethingWentWrong,
-                  ),
-                );
+                return showVoid;
+                // return Center(
+                //   child: Text(
+                //     AppLocalizations.of(context)!.somethingWentWrong,
+                //   ),
+                // );
               case Status.COMPLETED:
                 return Directionality(
                   textDirection: getTextDirection(langProvider),

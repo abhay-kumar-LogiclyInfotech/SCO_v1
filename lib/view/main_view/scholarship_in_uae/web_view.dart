@@ -14,7 +14,8 @@ import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/get_page_content_by_urls_viewModels/Internal/get_page_content_by_url_viewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
-import '../../../viewModel/services/navigation_services.dart';
+import '../../../viewModel/services/navigation_services.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class WebView extends StatefulWidget {
   final String url;
@@ -31,28 +32,8 @@ class _WebViewState extends State<WebView> {
   late final WebViewController controller;
   var loadingPercentage = 0;
 
-  @override
-  void initState() {
-    final GetIt getIt = GetIt.instance;
-    _navigationServices = getIt.get<NavigationServices>();
-    // Validate URL
-    if (_isValidUrl(widget.url)) {
-      controller = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse(widget.url))
-        ..setNavigationDelegate(NavigationDelegate(
-          onPageStarted: (url) {
-            setState(() {
-              loadingPercentage = 0;
-            });
-          },
-          onProgress: (progress) {
-            setState(() {
-              loadingPercentage = progress;
-            });
-          },
-          onPageFinished: (url) {
-            controller.runJavaScript("""
+  void hideHeaderAndFooter(){
+    controller.runJavaScript("""
   const header = document.querySelector('#banner');
   if (header) {
     header.style.display = 'none';
@@ -68,7 +49,32 @@ class _WebViewState extends State<WebView> {
     adsSection.style.display = 'none';
   }
 """);
+  }
 
+
+  @override
+  void initState() {
+    final GetIt getIt = GetIt.instance;
+    _navigationServices = getIt.get<NavigationServices>();
+    // Validate URL
+    if (_isValidUrl(widget.url)) {
+      controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(widget.url))
+        ..setNavigationDelegate(NavigationDelegate(
+          onPageStarted: (url) {
+         setState(() {
+              loadingPercentage = 0;
+            });
+          },
+          onProgress: (progress) {
+
+            setState(() {
+              loadingPercentage = progress;
+            });
+          },
+          onPageFinished: (url) {
+            hideHeaderAndFooter();
             setState(() {
               loadingPercentage = 100;
             });
@@ -103,12 +109,13 @@ class _WebViewState extends State<WebView> {
 
   @override
   Widget build(BuildContext context) {
+    final localization =  AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
           titleAsString: widget.scholarshipType == 'EXT'
-              ? "Scholarships In Abroad"
-              : "Scholarships In UAE"),
+              ? localization.scholarshipTypeInternal
+              : localization.scholarshipTypeExternal),
       body: _isValidUrl(widget.url)
           ? Stack(children: [
               Consumer<GetPageContentByUrlViewModel>(
@@ -126,8 +133,8 @@ class _WebViewState extends State<WebView> {
             ])
           : Center(
               child: Text(
-                'Something went wrong',
-                style: TextStyle(color: Colors.red, fontSize: 18),
+                localization.something_went_wrong,
+                style: const TextStyle(color: Colors.red, fontSize: 18),
               ),
             ),
     );

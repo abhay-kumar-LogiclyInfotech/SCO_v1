@@ -18,7 +18,6 @@ import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 import '../../resources/app_colors.dart';
 import '../../resources/components/account/profile_with_camera_button.dart';
 import '../../resources/components/custom_advanced_switch.dart';
@@ -36,6 +35,7 @@ import '../main_view/services_view.dart';
 class CustomDrawerView extends StatefulWidget {
   final TextDirection? textDirection;
   dynamic scaffoldState;
+
   CustomDrawerView({
     super.key,
     this.textDirection,
@@ -46,15 +46,9 @@ class CustomDrawerView extends StatefulWidget {
   State<CustomDrawerView> createState() => _CustomDrawerViewState();
 }
 
-
-
-
 class _CustomDrawerViewState extends State<CustomDrawerView> {
-
-
-  String _name =  "User Name";
+  String _name = "User Name";
   List<String> _roles = ["User Type"];
-
 
   late NavigationServices _navigationServices;
   late AuthService _authService;
@@ -78,7 +72,6 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
     //   _languageController.value = false;
     // }
 
-
     // check user is logged in or not
     _toLogin = await _authService.isLoggedIn();
 
@@ -95,40 +88,30 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
     _authService = getIt.get<AuthService>();
     _alertServices = getIt.get<AlertServices>();
 
-
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       _loadAppVersion();
 
       // getting initial language
-     await getInitialLanguage();
+      await getInitialLanguage();
 
-     /// Getting profile picture and  name and userTypes
-      if(_toLogin){
-
+      /// Getting profile picture and  name and userTypes
+      if (_toLogin) {
         // SETTING USERNAME AND ROLES
         _name = HiveManager.getName() ?? 'User Name';
-        _roles = HiveManager.getRole()?? [];
+        _roles = HiveManager.getRole() ?? [];
 
         // Getting Fresh Roles
-        final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
+        final getRolesProvider =
+            Provider.of<GetRoleViewModel>(context, listen: false);
         await getRolesProvider.getRoles();
       }
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     final localization = AppLocalizations.of(context)!;
-
-
-
-
-
-
 
     return Drawer(
       shape: const RoundedRectangleBorder(),
@@ -154,176 +137,198 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                  [
-
+                  children: [
                     /// Upper section
                     Expanded(
                       child: Directionality(
                         textDirection: getTextDirection(langProvider),
                         child: SingleChildScrollView(
-                          child: Column(
-                              children: [
+                          child: Column(children: [
                             //*------User Profile Section------*/
-                                if(_toLogin)  Column(
-                                  children: [
-                                    Row(
-                                                                  mainAxisSize: MainAxisSize.max,
-                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                                  children: [
-                                    Consumer<GetProfilePictureUrlViewModel>(
-                                      builder: (context,provider,_){
-                                        return ProfileWithCameraButton(
-                                          profileSize: 55,
-                                            cameraEnabled: false,
-                                            profileImage: provider.apiResponse.data?.url != null
-                                                ? NetworkImage(provider.apiResponse.data!.url!.toString())
-                                                : const AssetImage(
-                                                'assets/personal_details/dummy_profile_pic.png'),
-                                            onTap: () {},
-                                            onLongPress: () {});
-                                      },
-                                    ),
+                            if (_toLogin)
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Consumer<GetProfilePictureUrlViewModel>(
+                                        builder: (context, provider, _) {
+                                          return ProfileWithCameraButton(
+                                              profileSize: 55,
+                                              cameraEnabled: false,
+                                              profileImage: provider.apiResponse
+                                                          .data?.url !=
+                                                      null
+                                                  ? NetworkImage(provider
+                                                      .apiResponse.data!.url!
+                                                      .toString())
+                                                  : const AssetImage(
+                                                      'assets/personal_details/dummy_profile_pic.png'),
+                                              onTap: () {},
+                                              onLongPress: () {});
+                                        },
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: SizedBox(
+                                          // color: Colors.green,
+                                          height: 55,
+                                          // width: MediaQuery.sizeOf(context).width * 0.5,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  _name,
+                                                  style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.white),
+                                                ),
+                                                SelectableText(
+                                                  // _roles.where((role){
+                                                  //  return role.isNotEmpty;
+                                                  // }).join(', ')
+                                                  _roles.any((role) =>
+                                                          role.toLowerCase() ==
+                                                          'students')
+                                                      ? "Student"
+                                                      : "User Type",
 
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        // color: Colors.green,
-                                        height: 55,
-                                        alignment: Alignment.center,
-                                        // width: MediaQuery.sizeOf(context).width * 0.5,
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                               _name,
-                                                style: const TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.white),
-                                              ),
-                                              SelectableText(
-                                                // _roles.where((role){
-                                                //  return role.isNotEmpty;
-                                                // }).join(', ')
-                                                _roles.any((role) => role.toLowerCase() == 'students') ? "Student" : "User Type",
-
-                                                style: TextStyle(color: Colors.white.withOpacity(0.65)),
-                                              )
-                                            ],
+                                                  style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.65)),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                                                  ],
-                                                                ),
-                                    const SizedBox(height: 20),
-
-                                  ],
-                                ),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                ],
+                              ),
 
                             //*------Menu Items Section------*/
                             //*------Login------*/
-                          if(!_toLogin)   ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title:  Text(
-                                localization.login,
-                                style: AppTextStyles.drawerButtonsStyle(),
-                              ),
-                              leading:
-                                  SvgPicture.asset("assets/sidemenu/login.svg"),
-                              dense: true,
-                              horizontalTitleGap: 5,
-                              onTap: () {
-
-                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-
-                              },
-                              shape: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.25))),
-                            ),
-
-
-                                //*------ Account ------*/
-                             if(_toLogin)   ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title:  Text(localization.myAccount, style: AppTextStyles.drawerButtonsStyle()),
-                                  leading:
-                                  SvgPicture.asset("assets/sidemenu/account.svg"),
-                                  dense: true,
-                                  horizontalTitleGap: 5,
-                                  onTap: () {
-                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const AccountView()));
-                                  },
-                                  shape: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.white.withOpacity(0.25))),
+                            if (!_toLogin)
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(
+                                  localization.login,
+                                  style: AppTextStyles.drawerButtonsStyle(),
                                 ),
+                                leading: SvgPicture.asset(
+                                    "assets/sidemenu/login.svg"),
+                                dense: true,
+                                horizontalTitleGap: 5,
+                                onTap: () {
+                                  _navigationServices.pushCupertino(
+                                      CupertinoPageRoute(
+                                          builder: (context) =>
+                                              const LoginView()));
+                                },
+                                shape: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white.withOpacity(0.25))),
+                              ),
 
+                            //*------ Account ------*/
+                            if (_toLogin)
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(localization.myAccount,
+                                    style: AppTextStyles.drawerButtonsStyle()),
+                                leading: SvgPicture.asset(
+                                    "assets/sidemenu/account.svg"),
+                                dense: true,
+                                horizontalTitleGap: 5,
+                                onTap: () {
+                                  _navigationServices.pushCupertino(
+                                      CupertinoPageRoute(
+                                          builder: (context) =>
+                                              const AccountView()));
+                                },
+                                shape: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white.withOpacity(0.25))),
+                              ),
 
-
-
-                                //*------Home------*/
+                            //*------Home------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                                title:  Text(localization.home, style: AppTextStyles.drawerButtonsStyle()),
-
+                              title: Text(localization.home,
+                                  style: AppTextStyles.drawerButtonsStyle()),
                               leading:
                                   SvgPicture.asset("assets/sidemenu/home.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
-                                _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>MainView()));
+                                _navigationServices.pushReplacementCupertino(
+                                    CupertinoPageRoute(
+                                        builder: (context) => MainView()));
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Colors.white.withOpacity(0.25))),
                             ),
 
+                            //*------About Us------*/
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(
+                                localization.aboutSco,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                              leading: SvgPicture.asset(
+                                  "assets/sidemenu/aboutUs.svg"),
+                              dense: true,
+                              horizontalTitleGap: 5,
+                              onTap: () {
+                                _navigationServices.pushCupertino(
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            const ABriefAboutScoView(
+                                              appBar: true,
+                                            )));
+                              },
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                            ),
 
-                                //*------About Us------*/
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title:  Text(
-                                    localization.aboutSco,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  ),
-                                  leading:
-                                  SvgPicture.asset("assets/sidemenu/aboutUs.svg"),
-                                  dense: true,
-                                  horizontalTitleGap: 5,
-                                  onTap: () {
-                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ABriefAboutScoView(appBar: true,)));
-                                  },
-                                  shape: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.white.withOpacity(0.25))),
-                                ),
+                            // *---- Vision and mission ----*
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(localization.vision_mission_values,
+                                  style: AppTextStyles.drawerButtonsStyle()),
+                              leading: SvgPicture.asset(
+                                  "assets/sidemenu/visionMission.svg"),
+                              dense: true,
+                              horizontalTitleGap: 5,
+                              onTap: () {
+                                _navigationServices.pushCupertino(
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            const VisionAndMissionView()));
+                              },
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
+                            ),
 
-                                // *---- Vision and mission ----*
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title:  Text(localization.vision_mission_values, style: AppTextStyles.drawerButtonsStyle()),
-                                  leading: SvgPicture.asset("assets/sidemenu/visionMission.svg"),
-                                  dense: true,
-                                  horizontalTitleGap: 5,
-                                  onTap: () {
-                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const VisionAndMissionView()));
-                                  },
-                                  shape: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.white.withOpacity(0.25))),
-                                ),
-
-
-                                //*------About Us------*/
+                            //*------About Us------*/
                             // ExpansionTile(
                             //   dense: true,
                             //   shape: UnderlineInputBorder(
@@ -440,12 +445,17 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               visible: true,
                               child: ListTile(
                                 contentPadding: EdgeInsets.zero,
-                                title:  Text(localization.scoPrograms, style: AppTextStyles.drawerButtonsStyle()),
-                                leading: SvgPicture.asset("assets/sidemenu/scoProgram.svg"),
+                                title: Text(localization.scoPrograms,
+                                    style: AppTextStyles.drawerButtonsStyle()),
+                                leading: SvgPicture.asset(
+                                    "assets/sidemenu/scoProgram.svg"),
                                 dense: true,
                                 horizontalTitleGap: 5,
                                 onTap: () {
-                                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ScoPrograms()));
+                                  _navigationServices.pushCupertino(
+                                      CupertinoPageRoute(
+                                          builder: (context) =>
+                                              const ScoPrograms()));
                                 },
                                 shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -457,12 +467,17 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //*------News------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              title:  Text(localization.newsAndEvents, style: AppTextStyles.drawerButtonsStyle()),
-                              leading: SvgPicture.asset("assets/sidemenu/news.svg"),
+                              title: Text(localization.newsAndEvents,
+                                  style: AppTextStyles.drawerButtonsStyle()),
+                              leading:
+                                  SvgPicture.asset("assets/sidemenu/news.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
-                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NewsAndEventsView()));
+                                _navigationServices.pushCupertino(
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            const NewsAndEventsView()));
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -471,41 +486,62 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //*------Contact Us------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              title:  Text(localization.contactUs, style: AppTextStyles.drawerButtonsStyle()),
-                              leading: SvgPicture.asset("assets/sidemenu/contactUs.svg"),
+                              title: Text(localization.contactUs,
+                                  style: AppTextStyles.drawerButtonsStyle()),
+                              leading: SvgPicture.asset(
+                                  "assets/sidemenu/contactUs.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () async {
-                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ContactUsView()));
+                                _navigationServices.pushCupertino(
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            const ContactUsView()));
                               },
-                              shape: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white.withOpacity(0.25))),
+                              shape: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white.withOpacity(0.25))),
                             ),
                             //*------Logout------*/
-                         if(_toLogin) ListTile(
-                              contentPadding: EdgeInsets.zero,
-                           title:  Text(localization.logout, style: AppTextStyles.drawerButtonsStyle()),
-                           leading: SvgPicture.asset("assets/sidemenu/logout.svg"),
-                              dense: true,
-                              horizontalTitleGap: 5,
-                              onTap: () async{
-                                await _authService.clearAllUserData();
-                                await _authService.clearCounter();
+                            if (_toLogin)
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(localization.logout,
+                                    style: AppTextStyles.drawerButtonsStyle()),
+                                leading: SvgPicture.asset(
+                                    "assets/sidemenu/logout.svg"),
+                                dense: true,
+                                horizontalTitleGap: 5,
+                                onTap: () async {
+                                  await _authService.clearAllUserData();
+                                  await _authService.clearCounter();
 
-                                /// Clearing all data from hive database
-                                // await HiveManager.clearData();
-                                await HiveManager.clearEmiratesId();
-                                await HiveManager.clearUserId();
-                                await HiveManager.clearName();
-                                await HiveManager.clearRole();
+                                  /// Clearing all data from hive database
+                                  // await HiveManager.clearData();
+                                  await HiveManager.clearEmiratesId();
+                                  await HiveManager.clearUserId();
+                                  await HiveManager.clearName();
+                                  await HiveManager.clearRole();
 
-                                _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const MainView()));
-                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                                _alertServices.toastMessage(localization.logout_success);
-                              },
-                              shape: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white.withOpacity(0.25))),
-                            ), const SizedBox(height: 50,),
-
-                              ]),
+                                  _navigationServices.pushReplacementCupertino(
+                                      CupertinoPageRoute(
+                                          builder: (context) =>
+                                              const MainView()));
+                                  _navigationServices.pushCupertino(
+                                      CupertinoPageRoute(
+                                          builder: (context) =>
+                                              const LoginView()));
+                                  _alertServices.toastMessage(
+                                      localization.logout_success);
+                                },
+                                shape: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white.withOpacity(0.25))),
+                              ),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                          ]),
                         ),
                       ),
                     ),
@@ -522,30 +558,41 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SvgPicture.asset("assets/sidemenu/language.svg"),
-                             Text(
-                               localization.language,
-
-                               style: const TextStyle(color: Colors.white, fontSize: 16),
+                            Text(
+                              localization.language,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16),
                             ),
                             const Text(
                               "English",
-                              style: TextStyle(color: AppColors.scoLightThemeColor),
+                              style: TextStyle(
+                                  color: AppColors.scoLightThemeColor),
                             ),
                             Consumer<LanguageChangeViewModel>(
-                              builder: (context,provider,_)
-                              {
+                              builder: (context, provider, _) {
                                 return CustomAdvancedSwitch(
                                   controller: provider.languageController,
                                   activeColor: AppColors.scoThemeColor,
                                   inactiveColor: Colors.grey,
-                                  initialValue: provider.languageController.value,
-                                  onChanged: (value)async {
+                                  initialValue:
+                                      provider.languageController.value,
+                                  onChanged: (value) async {
                                     if (value) {
-                                      await Provider.of<LanguageChangeViewModel>(context,listen: false).changeLanguage(const Locale('ar'));
-                                      widget.scaffoldState.currentState!.openEndDrawer();
+                                      await Provider.of<
+                                                  LanguageChangeViewModel>(
+                                              context,
+                                              listen: false)
+                                          .changeLanguage(const Locale('ar'));
+                                      widget.scaffoldState.currentState!
+                                          .openEndDrawer();
                                     } else {
-                                      await Provider.of<LanguageChangeViewModel>(context, listen: false).changeLanguage(const Locale('en'));
-                                      widget.scaffoldState.currentState!.openDrawer();
+                                      await Provider.of<
+                                                  LanguageChangeViewModel>(
+                                              context,
+                                              listen: false)
+                                          .changeLanguage(const Locale('en'));
+                                      widget.scaffoldState.currentState!
+                                          .openDrawer();
                                     }
                                   },
                                 );
@@ -559,7 +606,16 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        Text(_appVersion,style: const TextStyle(color: Colors.white)),
+                        Directionality(
+                            textDirection: getTextDirection(langProvider),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(_appVersion,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                              ],
+                            )),
                       ],
                     ),
                   ],
@@ -568,6 +624,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
       ),
     );
   }
+
   String _appVersion = '';
 
   Future<void> _loadAppVersion() async {

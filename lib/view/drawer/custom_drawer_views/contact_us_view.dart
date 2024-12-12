@@ -603,11 +603,11 @@ class _ContactUsViewState extends State<ContactUsView> {
                     context: context, langProvider: langProvider);
 
                 if (result) {
-                  _alertServices.flushBarErrorMessages(
-                      message: "Your Query Submitted Successfully.",
-                      // context: context,
-                      provider: langProvider);
-
+                  // _alertServices.showCustomSnackBar(
+                  //    "Your Query Submitted Successfully.",
+                  //     // context: context,
+                  //     // provider: langProvider
+                  // );
                   //*-------Clearing all Fields--------*/
                   setState(() {
                     _nameController.clear();
@@ -635,78 +635,78 @@ class _ContactUsViewState extends State<ContactUsView> {
   bool _validateForm({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     // Validate Full Name
     if (_nameController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-        message: localization.nameCantBeEmpty,
+      _alertServices.showErrorSnackBar(
+       localization.nameCantBeEmpty,
         // context: context,
-        provider: langProvider,
+        // provider: langProvider,
       );
       return false;
     }
 
     // Validate Email Id
     if (_emailController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-        message: localization.emailCantBeEmpty,
+      _alertServices.showErrorSnackBar(
+       localization.emailCantBeEmpty,
         // context: context,
-        provider: langProvider,
+        // provider: langProvider,
       );
       return false;
     }
 
     // Validate Phone Number
     if (_mobileController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-        message: localization.mobileCantBeEmpty,
+      _alertServices.showErrorSnackBar(
+       localization.mobileCantBeEmpty,
         // context: context,
-        provider: langProvider,
+        // provider: langProvider,
       );
       return false;
     }
 
     // Validate Inquiry Type
     if (_inqueryTypeController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-        message: localization.inquiryTypeCantBeEmpty,
+      _alertServices.showErrorSnackBar(
+       localization.inquiryTypeCantBeEmpty,
         // context: context,
-        provider: langProvider,
+        // provider: langProvider,
       );
       return false;
     }
 
     // Validate Subject
     if (_subjectController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-        message: localization.subjectCantBeEmpty,
+      _alertServices.showErrorSnackBar(
+     localization.subjectCantBeEmpty,
         // context: context,
-        provider: langProvider,
+        // provider: langProvider,
       );
       return false;
     }
 
     // Validate Message
     if (_messageController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-        message: localization.messageCantBeEmpty,
+      _alertServices.showErrorSnackBar(
+       localization.messageCantBeEmpty,
         // context: context,
-        provider: langProvider,
+        // provider: langProvider,
       );
       return false;
     }
 
     // Validate Captcha
     if (_captchaController.text.isEmpty) {
-      _alertServices.flushBarErrorMessages(
-        message: localization.captchaCantBeEmpty,
+      _alertServices.showErrorSnackBar(
+       localization.captchaCantBeEmpty,
         // context: context,
-        provider: langProvider,
+        // provider: langProvider,
       );
       return false;
     } else if (_captchaController.text != _captchaText) {
       _rotate();
-      _alertServices.flushBarErrorMessages(
-        message: localization.captchaDoesNotMatch,
+      _alertServices.showErrorSnackBar(
+       localization.captchaDoesNotMatch,
         // context: context,
-        provider: langProvider,
+        // provider: langProvider,
       );
       return false;
     }

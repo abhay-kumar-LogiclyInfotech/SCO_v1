@@ -1173,23 +1173,24 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 buttonColor: AppColors.scoThemeColor,
                 textDirection: getTextDirection(langProvider),
                 onTap: () async {
-                  setIsProcessing(true);
                   bool result = validateForm(
                       langProvider: langProvider,
                       userInfo: userInfo,
                       localization: localization);
                   if (result) {
+                    setIsProcessing(true);
+
                     /// Create Form
                     createForm(provider: provider);
-                    bool result =
-                        await updateProvider.updatePersonalDetails(form: form);
-                    if (result) {
+                    bool upResult = await updateProvider.updatePersonalDetails(form: form);
+                    if (upResult) {
                       setIsProcessing(false);
 
                       /// update and refresh the information
                       await _initializeData();
                     }
                   }
+                  setIsProcessing(false);
                 });
           }),
         ),
@@ -1351,44 +1352,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         studentProfileProvider.apiResponse.data?.data?.userInfoType;
     bool lifeRay = userInfoType != null && userInfoType == 'LIFERAY';
     bool peopleSoft = userInfoType != null && userInfoType != 'LIFERAY';
-    // form = {
-    //   "user": {
-    //     "birthDate": _dobController.text,
-    //     "companyId": user?.companyId,
-    //     "emailAddress": _emailController.text,
-    //     "emirateId": _emiratesIdController.text,
-    //     "firstName": _firstNameController.text,
-    //     "gender": _genderController.text,
-    //     "lastName": _familyNameController.text,
-    //     "middleName": _secondNameController.text,
-    //     "middleName2": _thirdOrFourthNameController.text,
-    //     // "lockout": user?.lockout,
-    //     "nationality": _nationalityController.text,
-    //     "phoneNumber": user?.phoneNumber,
-    //     "userId": user?.userId,
-    //     "username": user?.username
-    //   },
-    //
-    //   /// send userInfo only if it is peoplesoft
-    //   if (peopleSoft) "userInfo": {
-    //     /// Include emails if the list is not empty
-    //     if (_emailDetailsList.isNotEmpty)"emails": _emailDetailsList.map((element) => element.toJson()).toList(),
-    //
-    //     "emplId": userInfo?.emplId,
-    //     "name": userInfo?.name,
-    //
-    //     /// Include phone numbers if the list is not empty
-    //     if (_phoneNumberDetailsList.isNotEmpty)"phoneNumbers": _phoneNumberDetailsList.map((element) => element.toJson()).toList(),
-    //
-    //     "ferpa": userInfo?.ferpa,
-    //     "ftStudent": userInfo?.ftStudent,
-    //     "gender": _genderController.text,
-    //     "highestEduLevel": userInfo?.highestEduLevel,
-    //     "maritalStatus": _maritalStatusController.text,
-    //     "maritalStatusOn": userInfo?.maritalStatusOn
-    //   },
-    //   "userInfoType": userInfoType,
-    // };
 
     form = {
       "userInfoType": userInfoType,
@@ -1434,7 +1397,5 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         "uaePassUuid": user?.uaePassUuid ?? ''
       }
     };
-
-    log(form.toString());
   }
 }

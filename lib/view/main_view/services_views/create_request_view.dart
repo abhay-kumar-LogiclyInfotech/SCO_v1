@@ -688,7 +688,6 @@ void dispose(){
                             enData += ele.collectedDataEn;
                             arData += ele.collectedDataAr;
                           }
-
                         }
                         /// Create Form
                         createForm();
@@ -705,12 +704,19 @@ void dispose(){
                             _navigationServices.goBack();
                             Provider.of<GetAllRequestsViewModel>(context,listen: false).getAllRequests();
                           } else {
+                            setProcessing(false);
+
                             log("API call failed: No data returned or request unsuccessful.");
                           }
+                          setProcessing(false);
+
                         } catch (error) {
+                          setProcessing(false);
+
                           log("Error during API call: $error");
                         }
                       }
+                      setProcessing(false);
                     });
               }),
         ),
