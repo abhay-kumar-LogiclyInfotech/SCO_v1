@@ -194,6 +194,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                                           FontWeight.w500,
                                                       color: Colors.white),
                                                 ),
+                                                const SizedBox(height: 5),
                                                 SelectableText(
                                                   // _roles.where((role){
                                                   //  return role.isNotEmpty;
