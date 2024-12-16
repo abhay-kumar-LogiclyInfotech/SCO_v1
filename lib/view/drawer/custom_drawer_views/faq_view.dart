@@ -38,10 +38,11 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomSimpleAppBar(
-        title: Text("FAQ", style: AppTextStyles.appBarTitleStyle()),
+        title: Text(localization.faqs, style: AppTextStyles.appBarTitleStyle()),
       ),
       body: Utils.pageRefreshIndicator(child: _buildUi(context), onRefresh: _onRefresh) ,
     );

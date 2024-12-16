@@ -531,8 +531,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                       CupertinoPageRoute(
                                           builder: (context) =>
                                               const LoginView()));
-                                  _alertServices.toastMessage(
-                                      localization.logout_success);
+                                  // _alertServices.toastMessage(localization.logout_success);
                                 },
                                 shape: UnderlineInputBorder(
                                     borderSide: BorderSide(
@@ -630,8 +629,8 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
   Future<void> _loadAppVersion() async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      // _appVersion = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
-      _appVersion = 'Version ${packageInfo.version}';
+      _appVersion = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
+      // _appVersion = 'Version ${packageInfo.version}';
     });
   }
 }

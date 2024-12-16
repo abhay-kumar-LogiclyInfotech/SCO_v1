@@ -472,18 +472,26 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               content: Column(
                 children: [
                   // Amount and Read More Button
-                  _buildAmountAndButton(
-                      langProvider: langProvider, topSalary: topSalaryDetails),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25,top: 10),
+                    child: _buildAmountAndButton(langProvider: langProvider, topSalary: topSalaryDetails),
+                  ),
 
-                  const SizedBox(height: 10),
 
-                  const Divider(color: Color(0xffDFDFDF)),
 
-                  const SizedBox(height: 10),
-                  // Date Information
-                  _buildDateInfo(
-                      langProvider: langProvider,
-                      date: topSalaryDetails?.salaryMonth),
+                  if((topSalaryDetails?.salaryMonth ?? '').isNotEmpty)
+                  Column(
+                    children: [
+                      const SizedBox(height: 5),
+
+                      const Divider(color: Color(0xffDFDFDF)),
+
+                      const SizedBox(height: 5),
+                      // Date Information
+                      _buildDateInfo(langProvider: langProvider, date: topSalaryDetails?.salaryMonth),
+                    ],
+                  ),
+
                 ],
               ));
         case Status.NONE:
@@ -507,50 +515,55 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           final firstNotification = allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?  allNotificationsProvider.apiResponse.data?.first : null;
          return
            allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?
-         _homeViewCard(
-            onTap: (){
-              _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NotificationsView() ));
-            },
-            title:AppLocalizations.of(context)!.announcement,
-            icon: SvgPicture.asset("assets/announcements.svg"),
-            langProvider: langProvider,
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                kFormHeight,
-                Text(
-                 firstNotification?.subject ?? '',
-                  style: AppTextStyles.titleTextStyle().copyWith(fontSize: 15),
-                ),
-                kFormHeight,
-                const Divider(),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
+         Column(
+           children: [
+             kFormHeight,
+             _homeViewCard(
+                onTap: (){
+                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NotificationsView() ));
+                },
+                title:AppLocalizations.of(context)!.announcement,
+                icon: SvgPicture.asset("assets/announcements.svg"),
+                langProvider: langProvider,
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.calendar_month_outlined,
-                      color: Colors.grey.shade400,
-                      size: 15,
-                    ),
-                    const SizedBox(width: 5),
+                    kFormHeight,
                     Text(
-                      convertTimestampToDate(firstNotification?.createDate ?? 0),
-                      style: AppTextStyles.subTitleTextStyle()
-                          .copyWith(fontWeight: FontWeight.bold),
+                     firstNotification?.subject ?? '',
+                      style: AppTextStyles.titleTextStyle().copyWith(fontSize: 15),
                     ),
-                    const SizedBox(width: 5),
-                    Text(
-                      convertTimestampToTime(firstNotification?.createDate ?? 0),
-                      style: AppTextStyles.subTitleTextStyle()
-                          .copyWith(fontWeight: FontWeight.normal),
-                    ),
+                    kFormHeight,
+                    const Divider(),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.calendar_month_outlined,
+                          color: Colors.grey.shade400,
+                          size: 15,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          convertTimestampToDate(firstNotification?.createDate ?? 0),
+                          style: AppTextStyles.subTitleTextStyle()
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          convertTimestampToTime(firstNotification?.createDate ?? 0),
+                          style: AppTextStyles.subTitleTextStyle()
+                              .copyWith(fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          ) : showVoid;
+                ),
+              ),
+           ],
+         ) : showVoid;
         case Status.NONE:
           return showVoid;
         case null:
@@ -593,14 +606,14 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                   ),
                 ],
               ),
-              Text(
-                topSalary?.status.toString() ?? "",
-                style: const TextStyle(
-                  color: Color(0xff9AA6B2),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+              // Text(
+              //   topSalary?.status.toString() ?? "",
+              //   style: const TextStyle(
+              //     color: Color(0xff9AA6B2),
+              //     fontSize: 12,
+              //     fontWeight: FontWeight.w400,
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -682,8 +695,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                 readMoreButton(
                   langProvider: langProvider,
                   onTap: () {
-                    _navigationServices.pushCupertino(CupertinoPageRoute(
-                        builder: (context) => const ApplicationStatusView()));
+                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const ApplicationStatusView()));
                   },
                 )
               ],
@@ -827,35 +839,41 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                         _financeAmount(
                           titleColor: const Color(0xffEC6330),
                           title: AppLocalizations.of(context)!.salary,
-                          subTitle: salary?.amount.toString() ?? '',
+                          subTitle: salary?.amount.toString() ?? '0',
                         ),
                         CustomVerticalDivider(),
                         _financeAmount(
                           titleColor: const Color(0xff3A82F7),
                           title: AppLocalizations.of(context)!.deduction,
-                          subTitle: deduction?.totalDeducted.toString() ?? '',
+                          subTitle: deduction?.totalDeducted.toString() ?? '0',
                         ),
                         CustomVerticalDivider(),
                         _financeAmount(
                           titleColor: const Color(0xff67CE67),
                           title:AppLocalizations.of(context)!.bonus,
-                          subTitle: bonus?.amount.toString() ?? '',
+                          subTitle: bonus?.amount.toString() ?? '0',
                         ),
                       ],
                     ),
                   ),
-                  const Divider(),
                   // warning
-                  Text(
-                    AppLocalizations.of(context)!.warning,
-                    style: AppTextStyles.subTitleTextStyle()
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    warning?.termDescription ?? '',
-                    style: AppTextStyles.titleBoldTextStyle()
-                        .copyWith(fontSize: 18),
-                  ),
+                  // Text(
+                  //  AppLocalizations.of(context)!.warning,
+                  //   style: AppTextStyles.subTitleTextStyle()
+                  //       .copyWith(fontWeight: FontWeight.bold),
+                  // ),
+                  if ((warning?.termDescription ?? '').isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Divider(),
+                        Text(
+                          warning!.termDescription!, // Using `!` because the null check ensures it's safe
+                          style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 18),textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
+
                 ],
               ));
         case null:
@@ -869,7 +887,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       String subTitle = "",
       Color titleColor = Colors.black}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -903,18 +921,14 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         case Status.COMPLETED:
           final requests = requestsProvider.apiResponse.data?.data?.listOfRequest;
           final totalRequests = requestsProvider.apiResponse.data?.data?.listOfRequest?.length;
-          final approvedRequests =
-              requests?.where((r) => r.status == "APPROV")?.length ?? 0;
-          final pendingRequests =
-              requests?.where((r) => r.status == "RECVD")?.length ?? 0;
-          final rejectedRequests =
-              requests?.where((r) => r.status == "DENY")?.length ?? 0;
+          final approvedRequests = requests?.where((r) => r.status == "APPROV")?.length ?? 0;
+          final pendingRequests = requests?.where((r) => r.status == "RECVD")?.length ?? 0;
+          final rejectedRequests = requests?.where((r) => r.status == "DENY")?.length ?? 0;
           return _homeViewCard(
               title: AppLocalizations.of(context)!.requests,
               icon: SvgPicture.asset("assets/request.svg"),
               langProvider: langProvider,
-              headerExtraContent: RequestsCountContainer(
-                  color: Colors.blue.shade600, count: totalRequests),
+              // headerExtraContent: RequestsCountContainer(color: Colors.blue.shade600, count: totalRequests),
               contentPadding: EdgeInsets.zero,
               onTap: () {
                 _navigationServices.pushCupertino(CupertinoPageRoute(
@@ -939,11 +953,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                         alignment: WrapAlignment.spaceEvenly,
                         runSpacing: 10,
                         children: [
-                          IntrinsicWidth(
-                              child: _requestTypeWithCount(
-                                  requestType:  AppLocalizations.of(context)!.approved,
-                                  count: approvedRequests,
-                                  color: Colors.green.shade500)),
+                          _requestTypeWithCount(
+                              requestType:  AppLocalizations.of(context)!.approved,
+                              count: approvedRequests,
+                              color: Colors.green.shade500),
                           kFormHeight,
                           _requestTypeWithCount(
                               requestType:  AppLocalizations.of(context)!.pending,
@@ -1224,7 +1237,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     final localization  = AppLocalizations.of(context)!;
     return _homeViewCard(
         title: localization.faqs,
-        icon: const Icon(Icons.face),
+        contentPadding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+        icon: SvgPicture.asset("assets/faq_1.svg"),
         content: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -1284,7 +1298,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                           Text(
                             title,
                             style: AppTextStyles.titleBoldTextStyle()
-                                .copyWith(fontSize: 16),
+                                .copyWith(fontSize: 18,fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 5),
                           headerExtraContent ?? showVoid,

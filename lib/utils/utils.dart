@@ -214,7 +214,7 @@ class Utils {
         ),
       ));
 
-  static Widget showOnNoDataAvailable({required BuildContext context}) {
+  static Widget showOnNoDataAvailable({required BuildContext context, String? text}) {
     final localization = AppLocalizations.of(context)!;
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -222,7 +222,7 @@ class Utils {
       children: [
         SvgPicture.asset("assets/no_data_found.svg"),
         Text(
-          localization.noData, // Fallback for no applications
+         text ?? localization.noData, // Fallback for no applications
           style: const TextStyle(fontSize: 16, color: AppColors.scoThemeColor),
         ),
       ],

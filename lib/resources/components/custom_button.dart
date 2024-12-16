@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 class CustomButton extends StatefulWidget {
   final String buttonName;
@@ -46,9 +48,8 @@ class _CustomButtonState extends State<CustomButton>
 
   @override
   Widget build(BuildContext context) {
-
+final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return GestureDetector(
-
       onTapDown: (_) {
         // When the user starts pressing the container
         setState(() {
@@ -91,9 +92,7 @@ class _CustomButtonState extends State<CustomButton>
                 Container(
                   child: widget.leadingIcon,
                 ),
-                const SizedBox(
-                  width: 2,
-                ),
+                const SizedBox(width: 2),
                 Directionality(
                   textDirection: widget.textDirection,
                   child: Center(
@@ -110,6 +109,8 @@ class _CustomButtonState extends State<CustomButton>
                                   fontSize: widget.fontSize ?? 16,
                                   fontWeight: FontWeight.w600),
                           textAlign: TextAlign.center,
+                                                        overflow: TextOverflow.ellipsis,
+
                             )),
                 ),
               ],

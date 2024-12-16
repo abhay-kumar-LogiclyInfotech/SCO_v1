@@ -341,11 +341,11 @@ class _ContactUsViewState extends State<ContactUsView> {
                 bottomLeft: Radius.circular(15),
               ),
               child: Image.asset(
-                "assets/sidemenu/address_map_image.jpg",
+                "assets/sidemenu/img.png",
                 filterQuality: FilterQuality.high,
-                // height: 140,
-                // width: double.infinity,
-                // fit: BoxFit.cover,
+                width: double.infinity,
+                height: 150,
+                fit: BoxFit.cover,
               ),
             ),
           ],
@@ -521,7 +521,7 @@ class _ContactUsViewState extends State<ContactUsView> {
       textCapitalization: true,
       leading: SvgPicture.asset("assets/email.svg"),
       errorText: _messageError,
-      maxLines: 3,
+      // maxLines: 1,
       onChanged: (value) {
         if (_messageFocusNode.hasFocus) {
           setState(() {

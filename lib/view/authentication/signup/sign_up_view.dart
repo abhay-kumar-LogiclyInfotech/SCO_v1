@@ -302,17 +302,14 @@ class _SignUpViewState extends State<SignUpView>
                             //or
                             _or(),
                             kFormHeight,
-
                             _firstName(
                                 langProvider: langProvider,
                                 localization: localization),
                             kFormHeight,
-
                             _secondName(
                                 langProvider: langProvider,
                                 localization: localization),
                             kFormHeight,
-
                             _thirdFourthName(
                                 langProvider: langProvider,
                                 localization: localization),
@@ -403,10 +400,10 @@ class _SignUpViewState extends State<SignUpView>
       required AppLocalizations localization}) {
     return CustomButton(
       textDirection: getTextDirection(langProvider),
-      buttonName: "Sign up with UAE PASS",
+      buttonName: localization.signUpWithUaePass,
       isLoading: false,
       onTap: () {
-        _alertServices.toastMessage("coming soon...");
+        _alertServices.toastMessage(localization.comingSoon);
       },
       fontSize: 15,
       buttonColor: Colors.white,
@@ -868,7 +865,6 @@ class _SignUpViewState extends State<SignUpView>
             if(validateForm(langProvider: langProvider, signup: provider,localization:localization))
             {
               createForm();
-              print(form);
               bool signUpResult = await provider.signup(langProvider: langProvider,form: form);
               if (signUpResult) {
                 _navigationServices.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => const OtpVerificationView()));

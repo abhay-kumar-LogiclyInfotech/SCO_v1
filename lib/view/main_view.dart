@@ -238,6 +238,8 @@ class _MainViewState extends State<MainView> {
         bottomNavigationBar: Directionality(
           textDirection: getTextDirection(langProvider),
           child: BottomNavigationBar(
+
+            selectedItemColor: AppColors.scoThemeColor,
             backgroundColor: Colors.white,
               currentIndex: currentIndex,
               onTap: (index) {
@@ -249,9 +251,9 @@ class _MainViewState extends State<MainView> {
                   });
                 }else{
                   _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-                  _alertServices.showCustomSnackBar("Please Login to use services",
-                    // context,
-                  );
+                  // _alertServices.showCustomSnackBar("Please Login to use services",
+                  //   // context,
+                  // );
                 }
               }
               else{
@@ -262,11 +264,11 @@ class _MainViewState extends State<MainView> {
           
               },
               items: [
-                BottomNavigationBarItem(icon:  SvgPicture.asset("assets/services.svg"),activeIcon:SvgPicture.asset("assets/services_selected.svg"),label: localization.service),
+        BottomNavigationBarItem(icon:  SvgPicture.asset("assets/services.svg"),activeIcon:SvgPicture.asset("assets/services_selected.svg"),label: localization.service),
           
-                BottomNavigationBarItem(icon:  SvgPicture.asset("assets/home.svg"),activeIcon:SvgPicture.asset("assets/home_selected.svg"),label: localization.home),
+          BottomNavigationBarItem(icon:  SvgPicture.asset("assets/home.svg"),activeIcon:SvgPicture.asset("assets/home_selected.svg"),label: localization.home),
           
-            BottomNavigationBarItem(icon:  SvgPicture.asset("assets/support.svg"),activeIcon:SvgPicture.asset("assets/support_selected.svg"),label: localization.support),
+     BottomNavigationBarItem(icon:  SvgPicture.asset("assets/support.svg"),activeIcon:SvgPicture.asset("assets/support_selected.svg"),label: localization.support),
           ]),
         )
     );

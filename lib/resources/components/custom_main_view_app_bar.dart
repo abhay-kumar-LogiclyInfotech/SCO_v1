@@ -34,32 +34,24 @@ class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(height);
 }
 
-
-
 class _CustomTopAppBarState extends State<CustomTopAppBar>
     with MediaQueryMixin<CustomTopAppBar> {
-
   late NavigationServices _navigationServices;
   late AuthService _authService;
   bool isLoggedIn = false;
 
   @override
   void initState() {
-
-    final GetIt getIt  = GetIt.instance;
+    final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
     _authService = getIt.get<AuthService>();
 
-    WidgetsBinding.instance.addPostFrameCallback((callback)async{
-
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
       isLoggedIn = await _authService.isLoggedIn();
-      setState(() {
-      });
+      setState(() {});
     });
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +61,7 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
       elevation: 0.3,
       child: SafeArea(
         child: Directionality(
-          textDirection: getTextDirection(langProvider) ,
+          textDirection: getTextDirection(langProvider),
           child: Container(
             color: Colors.white,
             height: widget.height,
@@ -107,45 +99,50 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
                           // width: 20,
                         ),
                       ),
-                     if(isLoggedIn) Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                      if (isLoggedIn)
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            //*------Notifications Bell Deprecated by Designer-----*/
 
-                          //*------Notifications Bell Deprecated by Designer-----*/
-
-                          Consumer<GetNotificationsCountViewModel>(
-                            builder: (context,provider,_){
-
-                              switch(provider.apiResponse.status){
-                                case Status.LOADING:
-                                  return ringBell(totalNotifications,_navigationServices);
-                                case Status.ERROR:
-                                  return ringBell(totalNotifications,_navigationServices);
-                                case Status.COMPLETED:
-                                  return ringBell(provider.apiResponse.data.toString(),_navigationServices);
-                                case Status.NONE:
-                                  return ringBell(totalNotifications,_navigationServices);
-                                case null:
-                                  return ringBell(totalNotifications,_navigationServices);
-                              }
+                            Consumer<GetNotificationsCountViewModel>(
+                              builder: (context, provider, _) {
+                                switch (provider.apiResponse.status) {
+                                  case Status.LOADING:
+                                    return ringBell(totalNotifications,
+                                        _navigationServices);
+                                  case Status.ERROR:
+                                    return ringBell(totalNotifications,
+                                        _navigationServices);
+                                  case Status.COMPLETED:
+                                    return ringBell(
+                                        provider.apiResponse.data.toString(),
+                                        _navigationServices);
+                                  case Status.NONE:
+                                    return ringBell(totalNotifications,
+                                        _navigationServices);
+                                  case null:
+                                    return ringBell(totalNotifications,
+                                        _navigationServices);
+                                }
                               },
-                          ),
+                            ),
 
-                          // const SizedBox(
-                          //   width: 30,
-                          // ),
-                          // GestureDetector(
-                          //   onTap: () {},
-                          //   child: SvgPicture.asset(
-                          //     "assets/search.svg",
-                          //     height: 20,
-                          //     width: 20,
-                          //   ),
-                          // )
-                        ],
-                      ),
+                            // const SizedBox(
+                            //   width: 30,
+                            // ),
+                            // GestureDetector(
+                            //   onTap: () {},
+                            //   child: SvgPicture.asset(
+                            //     "assets/search.svg",
+                            //     height: 20,
+                            //     width: 20,
+                            //   ),
+                            // )
+                          ],
+                        ),
                     ],
                   ),
                 )
@@ -161,24 +158,32 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
 // total notifications
 int totalNotifications = 0;
 
-Widget ringBell(count,NavigationServices navigationServices){
+Widget ringBell(count, NavigationServices navigationServices) {
   totalNotifications = int.tryParse(count.toString()) ?? 0;
   return GestureDetector(
     onTap: () {
-navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const NotificationsView()));
+      navigationServices.pushCupertino(
+          CupertinoPageRoute(builder: (context) => const NotificationsView()));
     },
-    child: badges.Badge(badgeContent: Text(     totalNotifications > 9 ? '9+' : totalNotifications.toString()
-      ,overflow: TextOverflow.ellipsis,style: const TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.bold),),
-      position: badges.BadgePosition.bottomEnd(end: -8,bottom: -6),
-      badgeStyle: const badges.BadgeStyle(badgeColor: AppColors.scoThemeColor,borderSide: BorderSide(color: AppColors.scoButtonColor)),
+    child: badges.Badge(
+      badgeContent: Text(
+        totalNotifications > 9 ? '9+' : totalNotifications.toString(),
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+            color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),
+      ),
+      position: badges.BadgePosition.bottomEnd(end: -8, bottom: -6),
+      badgeStyle: const badges.BadgeStyle(
+          badgeColor: AppColors.scoThemeColor,
+          // border of badge
+          // borderSide: BorderSide(color: AppColors.scoButtonColor)
+      ),
       ignorePointer: true,
       child: SvgPicture.asset(
         "assets/notification_bell.svg",
         height: 20,
         width: 20,
       ),
-
-    )
-    ,
+    ),
   );
 }

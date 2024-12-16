@@ -155,9 +155,9 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
             final item = itemsList[index];
             return Padding(
               padding: (index < itemsList.length - 1)
-                  ? const EdgeInsets.only(top: 20.0)
+                  ? const EdgeInsets.only(top: 10.0)
                   : (index == itemsList.length - 1)
-                  ? EdgeInsets.only(top: kPadding,bottom: kPadding)
+                  ? const EdgeInsets.only(top: 10,bottom: 10)
                   : EdgeInsets.zero,
               child: SimpleTile(item: item),
             );

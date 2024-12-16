@@ -40,12 +40,10 @@ class _NotificationsViewState extends State<NotificationsView>
 
 
   Future _initializeData() async {
-
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// get all notifications
       await Provider.of<GetAllNotificationsViewModel>(context, listen: false).getAllNotifications();
       await Provider.of<GetNotificationsCountViewModel>(context,listen: false).getNotificationsCount();
-
     });
 
 

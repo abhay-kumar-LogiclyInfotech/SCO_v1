@@ -254,6 +254,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   Widget build(BuildContext context) {
 
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization= AppLocalizations.of(context)!;
 
 /// Currently i don't know why implemented this but i think to load language.
     if (_isLoading) {
@@ -331,7 +332,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                             _forgotPasswordLink(provider),
                             const SizedBox(height: 40),
                             //Login Button:
-                            _loginButton(provider),
+                            _loginButton(langProvider:provider,localization:localization),
                             const SizedBox(height: 20),
                             //giving or option:
                             _or(),
@@ -436,7 +437,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     );
   }
 
-  Widget _loginButton(LanguageChangeViewModel langProvider) {
+  Widget _loginButton({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return Consumer<LoginViewModel>(builder: (context, provider, _) {
       return CustomButton(
         fontSize: 16,
@@ -451,6 +452,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             provider.password = _passwordController.text.trim();
             provider.deviceId = _deviceData['id'].toString().trim();
             bool result = await provider.login(
+              localization: localization,
                 // context: context,
                 langProvider: langProvider);
             if (result) {
@@ -509,7 +511,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
       buttonName: localization.signInWithUaePass,
       isLoading: false,
       onTap: () {
-        _alertServices.toastMessage( "coming soon...");
+        _alertServices.toastMessage(localization.comingSoon);
       },
       fontSize: 16,
       buttonColor: Colors.white,
@@ -544,7 +546,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
               _navigationServices.pushNamed('/signUpView');
             },
             child: Text(
-              AppLocalizations.of(context)!.signUp,
+              AppLocalizations.of(context)!.registrationForm,
               style: const TextStyle(
                   color: AppColors.scoThemeColor,
                   fontSize: 16,

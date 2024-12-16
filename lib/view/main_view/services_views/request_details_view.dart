@@ -374,15 +374,15 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
   /// Function to add Attachment to the list
   _addFile() async {
     /// Check and request permissions
-    final permitted = await _permissionServices.checkAndRequestPermission(
-      Platform.isIOS ? Permission.storage : Permission.manageExternalStorage,
-      context,
-    );
+    // final permitted = await _permissionServices.checkAndRequestPermission(
+    //   Platform.isIOS ? Permission.storage : Permission.manageExternalStorage,
+    //   context,
+    // );
 
-    if (!permitted) {
-      // Handle case when permissions are not granted
-      return;
-    }
+    // if (!permitted) {
+    //   // Handle case when permissions are not granted
+    //   return;
+    // }
 
     /// Get file from picker
     final file = await _mediaServices.getSingleFileFromPicker();

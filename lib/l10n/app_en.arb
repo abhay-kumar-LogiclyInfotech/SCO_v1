@@ -3,6 +3,8 @@
   "idEmailOrMobile": "ID Number, Email or Mobile Number",
   "or": "or",
   "signInWithUaePass": "Sign in with UAE PASS",
+  "signUpWithUaePass": "Sign up with UAE PASS",
+  "completeRegistration": "Please complete your registration process through SCO website.",
   "readMore": "Read More",
   "scholarships": "Scholarships",
   "scholarshipsInTheUAE": "Scholarships in the United Arab Emirates",
@@ -1070,9 +1072,10 @@
   "camera": "Camera",
   "gallery": "Gallery",
   "noData": "No Data Available.",
-  "phoneNumberAlreadyEntered": "Phone Number already Entered"
+  "phoneNumberAlreadyEntered": "Phone Number already Entered",
+  "personalDetailsTitle": "Personal Details",
+  "employmentStatusTitle": "Employment Status",
+  "youDontHaveDraft": "You don't have previous drafts",
+  "noApplication": "You have not applied for any application"
+
 }
-
-
-
-

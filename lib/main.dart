@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
 import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
 import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
+import 'package:sco_v1/view/test.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
@@ -213,7 +214,6 @@ class _MyAppState extends State<MyApp> {
               //         ? Locale(locale)
               //         : Provider.of<LanguageChangeViewModel>(context).appLocale,
               locale: provider.appLocale,
-
               //when enters the app;
               localizationsDelegates: const [
                 // AppLocalizations.delegate,
@@ -228,14 +228,15 @@ class _MyAppState extends State<MyApp> {
               ],
               supportedLocales: const [Locale('en'), Locale('ar')],
               theme: ThemeData(
-                textTheme: GoogleFonts.robotoTextTheme(),
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true,
+                fontFamily: 'droidArabicKufi',
+                // textTheme: GoogleFonts.robotoTextTheme(),
+                // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                // useMaterial3: true,
               ),
               navigatorKey: widget._navigationServices.navigationStateKey,
               routes: widget._navigationServices.routes,
               initialRoute: "/splashView",
-              // home: OtpVerificationView(),
+              // home: TestView(),
             );
           },
         ));

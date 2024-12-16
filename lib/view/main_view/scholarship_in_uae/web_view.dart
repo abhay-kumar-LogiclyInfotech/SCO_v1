@@ -43,12 +43,20 @@ class _WebViewState extends State<WebView> {
   if (footer) {
     footer.style.display = 'none';
   }
+  
+   const side = document.querySelector('#column-1');
+  if (side) {
+    side.style.display = 'none';
+  }
+  
+
 
   const adsSection = document.querySelector('.ads-section');
   if (adsSection) {
     adsSection.style.display = 'none';
   }
 """);
+
   }
 
 
@@ -114,8 +122,8 @@ class _WebViewState extends State<WebView> {
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
           titleAsString: widget.scholarshipType == 'EXT'
-              ? localization.scholarshipTypeInternal
-              : localization.scholarshipTypeExternal),
+              ? localization.scholarshipTypeExternal
+              : localization.scholarshipTypeInternal),
       body: _isValidUrl(widget.url)
           ? Stack(children: [
               Consumer<GetPageContentByUrlViewModel>(

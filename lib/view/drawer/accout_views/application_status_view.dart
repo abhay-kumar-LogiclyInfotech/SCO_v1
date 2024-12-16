@@ -384,7 +384,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
     return Utils.pageRefreshIndicator(
       onRefresh: _onRefresh,
       child: _otherApplicationStatus.isEmpty ?? true
-          ?  Utils.showOnNoDataAvailable(context: context)
+          ?  Utils.showOnNoDataAvailable(context: context,text: localization.noApplication)
           : SingleChildScrollView(
         child: CustomInformationContainer(
           title: localization.applicationDetails,
@@ -404,10 +404,10 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                       padding: EdgeInsets.all(kPadding),
                       child: Column(
                         children: [
-                          CustomInformationContainerField(
-                            title: localization.sr,
-                            description: (index+1).toString() ?? '- -',
-                          ),
+                          // CustomInformationContainerField(
+                          //   title: localization.sr,
+                          //   description: (index+1).toString() ?? '- -',
+                          // ),
                           CustomInformationContainerField(
                             title: localization.applicationType,
                             description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
@@ -474,13 +474,13 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                             ),
                           actionButtonHolder(actionButtons: [
                             actionButton(backgroundColor: AppColors.SUCCESS, text: localization.viewDetails, onPressed: (){
-                              _alertServices.toastMessage("coming soon...");
+                              _alertServices.toastMessage(localization.comingSoon);
                             }),
                             actionButton(backgroundColor: AppColors.INFO, text: localization.attachments, onPressed: (){
-                              _alertServices.toastMessage("coming soon...");
+                              _alertServices.toastMessage(localization.comingSoon);
                             }),
                             actionButton(backgroundColor: AppColors.scoMidThemeColor, text: localization.universityWishlist, onPressed: (){
-                              _alertServices.toastMessage("coming soon...");
+                              _alertServices.toastMessage(localization.comingSoon);
 
                             }),
                           ]
@@ -505,11 +505,10 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
     required LanguageChangeViewModel langProvider,
     required bool draftTab,
     required AppLocalizations localization
-
   }) {
     return Utils.pageRefreshIndicator(onRefresh: _onRefresh,child:
     _draftApplicationStatus.isEmpty ?? true
-        ?  Utils.showOnNoDataAvailable(context: context)
+        ?  Utils.showOnNoDataAvailable(context: context,text: localization.youDontHaveDraft)
     :
 
     CustomInformationContainer(
@@ -533,10 +532,10 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                   padding:  EdgeInsets.all(kPadding),
                   child: Column(
                     children: [
-                      CustomInformationContainerField(
-                        title: localization.sr,
-                        description: (index+1).toString() ?? '- -',
-                      ),
+                      // CustomInformationContainerField(
+                      //   title: localization.sr,
+                      //   description: (index+1).toString() ?? '- -',
+                      // ),
                       CustomInformationContainerField(
                         title: localization.applicationType,
                         description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',

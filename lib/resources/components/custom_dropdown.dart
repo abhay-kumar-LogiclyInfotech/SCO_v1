@@ -55,8 +55,6 @@ class CustomDropdown extends StatefulWidget {
 }
 
 
-
-
 class _CustomDropdownState extends State<CustomDropdown>
     with MediaQueryMixin<CustomDropdown> {
 
@@ -83,7 +81,8 @@ class _CustomDropdownState extends State<CustomDropdown>
 
         // DropdownButtonFormField(
         DropdownButtonFormField2(
-           isExpanded: true,
+          alignment: Alignment.center,
+           // isExpanded: true,
           enableFeedback: true,
           // isDense: true,
           // dropdownColor: AppColors.scoButtonColor,
@@ -95,20 +94,22 @@ class _CustomDropdownState extends State<CustomDropdown>
           focusNode: widget.currentFocusNode,
           decoration: InputDecoration(
             errorText:  widget.errorText,
-            contentPadding: EdgeInsets.symmetric(
-                vertical: screenWidth * 0.03,
-                horizontal: widget.leading == null ? screenWidth * 0.03 : 0),
+            errorMaxLines: 5,
+            // contentPadding: EdgeInsets.symmetric(
+            //     vertical: screenWidth * 0.03,
+            //     horizontal: widget.leading == null ? screenWidth * 0.03 : 5),
+            contentPadding: EdgeInsets.symmetric(horizontal: 0),
             prefixIcon: widget.leading,
             prefixIconConstraints: const BoxConstraints(
               minWidth: 30,
+              maxHeight: 30,
               minHeight: 0,
             ),
-            isDense: true,
-            alignLabelWithHint: true,
+            isDense: false,
+            alignLabelWithHint: false,
             hintText: widget.hintText,
             hintFadeDuration: const Duration(milliseconds: 500),
-            hintStyle:
-                const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14,fontWeight: FontWeight.w500),
+            hintStyle: const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14,fontWeight: FontWeight.w500),
             border: widget.outlinedBorder
                 ? Utils.outlinedInputBorder()
                 : Utils.underLinedInputBorder(),
@@ -139,6 +140,7 @@ class _CustomDropdownState extends State<CustomDropdown>
               color: widget.textColor ?? AppColors.hintDarkGrey,
               fontSize: 14,
               fontWeight: FontWeight.w500,
+              overflow: TextOverflow.ellipsis
             ),
             overflow: TextOverflow.ellipsis,
           ),
@@ -151,13 +153,12 @@ class _CustomDropdownState extends State<CustomDropdown>
           openMenuIcon: Icon(
             Icons.keyboard_arrow_up_sharp,
             color: AppColors.darkGrey,
-            weight: 10000,
+            // weight: 10000,
           ),
             iconSize: 25
 
           ),
           menuItemStyleData: const MenuItemStyleData(
-
             padding: EdgeInsets.symmetric(horizontal: 0)
           ),
           dropdownStyleData: DropdownStyleData(

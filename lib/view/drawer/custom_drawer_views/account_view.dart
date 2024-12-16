@@ -78,13 +78,13 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
 
     final accountItemsMapList = [
       {
-        'title': localization.personalDetails,
+        'title': localization.personalDetailsTitle,
         'assetAddress': "assets/myAccount/personal_details.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const PersonalDetailsView()))
       },
       if(role == UserRole.scholarStudent)
         {
-        'title': localization.employmentStatus,
+        'title': localization.employmentStatusTitle,
         'assetAddress': "assets/myAccount/employment_status.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const EmploymentStatusView()))
       },
@@ -132,7 +132,7 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
 
         final item = itemsList[index];
         return Padding(
-        padding: const EdgeInsets.only(bottom: 20.0),
+        padding: const EdgeInsets.only(bottom: 10.0),
         child: SimpleTile(item: item),
         );
         },

@@ -10,7 +10,8 @@ import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
 import '../services/auth_services.dart';
-import '../services/navigation_services.dart';
+import '../services/navigation_services.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -80,7 +81,9 @@ class LoginViewModel with ChangeNotifier {
   Future<bool> login(
       {
         // required BuildContext context,
-      required LanguageChangeViewModel langProvider}) async {
+      required LanguageChangeViewModel langProvider,
+      required AppLocalizations localization,
+      }) async {
     try {
 
       if(_username.isEmpty || _password.isEmpty){
@@ -132,12 +135,12 @@ class LoginViewModel with ChangeNotifier {
         );
         await HiveManager.storeRole(data.roles ?? []);
         await  _authService.saveAuthState(true);
-        _alertServices.showCustomSnackBar("Login successful");
+        // _alertServices.showCustomSnackBar(localization.loginSuccess);
         return true;
       }
       else{
         // _alertServices.flushBarErrorMessages(message: "Please Complete your registration process through sco website.");
-        _alertServices.showErrorSnackBar("Please Complete your registration process through sco website.");
+        _alertServices.showErrorSnackBar(localization.completeRegistration);
         return false;
       }
 
