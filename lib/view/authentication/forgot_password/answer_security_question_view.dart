@@ -338,7 +338,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
             }
           },
           fontSize: 16,
-          buttonColor: AppColors.scoButtonColor,
+          // buttonColor: AppColors.scoButtonColor,
           elevation: 1,
         );
       },

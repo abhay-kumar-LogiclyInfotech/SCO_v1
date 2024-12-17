@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/utils/utils.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
@@ -14,8 +15,8 @@ import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/get_page_content_by_urls_viewModels/Internal/get_page_content_by_url_viewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
-import '../../../viewModel/services/navigation_services.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import '../../../viewModel/services/navigation_services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WebView extends StatefulWidget {
   final String url;
@@ -32,7 +33,7 @@ class _WebViewState extends State<WebView> {
   late final WebViewController controller;
   var loadingPercentage = 0;
 
-  void hideHeaderAndFooter(){
+  void hideHeaderAndFooter() {
     controller.runJavaScript("""
   const header = document.querySelector('#banner');
   if (header) {
@@ -49,16 +50,19 @@ class _WebViewState extends State<WebView> {
     side.style.display = 'none';
   }
   
-
-
+     const title = document.querySelector('#p_p_id_com_liferay_site_navigation_breadcrumb_web_portlet_SiteNavigationBreadcrumbPortlet_');
+  if (title) {
+    title.style.display = 'none';
+  }
+  
   const adsSection = document.querySelector('.ads-section');
   if (adsSection) {
     adsSection.style.display = 'none';
   }
 """);
-
   }
 
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -71,23 +75,26 @@ class _WebViewState extends State<WebView> {
         ..loadRequest(Uri.parse(widget.url))
         ..setNavigationDelegate(NavigationDelegate(
           onPageStarted: (url) {
-         setState(() {
+            setState(() {
+              _isLoading = true;
               loadingPercentage = 0;
             });
           },
           onProgress: (progress) {
-
             setState(() {
+              _isLoading = true;
               loadingPercentage = progress;
             });
           },
           onPageFinished: (url) {
             hideHeaderAndFooter();
             setState(() {
+              _isLoading = false;
               loadingPercentage = 100;
             });
           },
           onWebResourceError: (error) {
+            _isLoading = false;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                   content:
@@ -117,21 +124,21 @@ class _WebViewState extends State<WebView> {
 
   @override
   Widget build(BuildContext context) {
-    final localization =  AppLocalizations.of(context)!;
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-          titleAsString: widget.scholarshipType == 'EXT'
-              ? localization.scholarshipTypeExternal
-              : localization.scholarshipTypeInternal),
+          titleAsString: getScholarshipTypeText(widget.scholarshipType,localization)),
       body: _isValidUrl(widget.url)
           ? Stack(children: [
-              Consumer<GetPageContentByUrlViewModel>(
-                  builder: (context, provider, _) {
-                return WebViewWidget(
-                  controller: controller,
-                );
-              }),
+              _isLoading
+                  ? Utils.pageLoadingIndicator(context: context)
+                  : Consumer<GetPageContentByUrlViewModel>(
+                      builder: (context, provider, _) {
+                      return WebViewWidget(
+                        controller: controller,
+                      );
+                    }),
               if (loadingPercentage < 100)
                 LinearProgressIndicator(
                   backgroundColor: AppColors.scoLightThemeColor,
@@ -146,5 +153,29 @@ class _WebViewState extends State<WebView> {
               ),
             ),
     );
+  }
+
+  String getScholarshipTypeText(
+      String scholarshipType, AppLocalizations localization) {
+    switch (scholarshipType) {
+      case 'EXT':
+        return localization.scholarshipTypeExternal;
+      case 'INT':
+        return localization.scholarshipTypeInternal;
+      case 'UGRDINT':
+        return localization.internalBachelor;
+      case 'PGRDINT':
+        return localization.internalPostgraduate;
+      case 'METLOGINT':
+        return localization.internalMeterological;
+        case 'UGRDEXT':
+        return localization.externalBachelor;
+        case 'PGRDEXT':
+        return localization.externalPostgraduate;
+      case 'DDSEXT':
+        return localization.externalDoctors;
+      default:
+        return 'Unknown Type'; // Return a default value if the type does not match
+    }
   }
 }

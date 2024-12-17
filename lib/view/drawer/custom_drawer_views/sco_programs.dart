@@ -57,18 +57,20 @@ class _ScoProgramsState extends State<ScoPrograms>
     final scoProgramsMapList = [
       {
         'title': localization.scholarshipInternal,
-        'subTitle': "",
+        'subTitle': localization.internalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
         // "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
         //   createRoute(const ScholarshipsInUaeView()),
         // ),
-        "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  WebView(url: AppUrls.scholarshipInsideUae, scholarshipType: 'INT')))
+        // "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  WebView(url: AppUrls.scholarshipInsideUae, scholarshipType: 'INT')))
+        "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipsInUaeView()))
       },
     {
     'title': localization.scholarshipExternal,
-    'subTitle': "",
+    'subTitle': localization.externalScholarshipDesc,
     'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
-    "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> WebView(url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')))
+    // "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> WebView(url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')))
+      "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipInAbroadView()))
       },
     ];
 

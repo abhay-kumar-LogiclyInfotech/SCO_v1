@@ -433,7 +433,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
               buttonName: localization.update,
               isLoading: updateRequestProvider.apiResponse.status == Status.LOADING,
               borderColor: Colors.transparent,
-              buttonColor: AppColors.scoThemeColor,
+              // buttonColor: AppColors.scoThemeColor,
               textDirection: getTextDirection(langProvider),
               onTap: () async {
                 setProcessing(true);

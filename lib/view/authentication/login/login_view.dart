@@ -444,6 +444,8 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
         textDirection: getTextDirection(langProvider),
         buttonName: AppLocalizations.of(context)!.login,
         isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
+        // buttonColor: AppColors.scoThem,
+        elevation: 1,
         onTap: () async {
           setProcessing(true);
           bool validateFields = _validateFields(langProvider: langProvider);
@@ -452,7 +454,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
             provider.password = _passwordController.text.trim();
             provider.deviceId = _deviceData['id'].toString().trim();
             bool result = await provider.login(
-              localization: localization,
+                localization: localization,
                 // context: context,
                 langProvider: langProvider);
             if (result) {
@@ -464,8 +466,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
           }
           setProcessing(false);
         },
-        buttonColor: AppColors.scoButtonColor,
-        elevation: 1,
+
       );
     });
   }

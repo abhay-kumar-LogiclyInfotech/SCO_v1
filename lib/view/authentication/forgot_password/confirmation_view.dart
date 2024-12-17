@@ -175,7 +175,7 @@ class _ConfirmationViewState extends State<ConfirmationView>
         // });
       },
       fontSize: 16,
-      buttonColor: AppColors.scoButtonColor,
+      // buttonColor: AppColors.scoButtonColor,
       elevation: 1,
     );
   }

@@ -81,32 +81,31 @@ class _CustomDropdownState extends State<CustomDropdown>
 
         // DropdownButtonFormField(
         DropdownButtonFormField2(
-          alignment: Alignment.center,
-           // isExpanded: true,
+          alignment: getTextDirection(langProvider) == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight,
+          isExpanded: true,
           enableFeedback: true,
-          // isDense: true,
+          isDense: true,
           // dropdownColor: AppColors.scoButtonColor,
-
           // dropdownColor: Colors.white,
           items: widget.menuItemsList,
           value: widget.value,
           onChanged: widget.onChanged,
           focusNode: widget.currentFocusNode,
           decoration: InputDecoration(
+
             errorText:  widget.errorText,
             errorMaxLines: 5,
-            // contentPadding: EdgeInsets.symmetric(
-            //     vertical: screenWidth * 0.03,
-            //     horizontal: widget.leading == null ? screenWidth * 0.03 : 5),
-            contentPadding: EdgeInsets.symmetric(horizontal: 0),
+            // isCollapsed: true,
+            isDense: false,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: screenWidth * 0.03,
+                horizontal: widget.leading == null ? screenWidth * 0.03 : 0),
             prefixIcon: widget.leading,
             prefixIconConstraints: const BoxConstraints(
               minWidth: 30,
-              maxHeight: 30,
               minHeight: 0,
             ),
-            isDense: false,
-            alignLabelWithHint: false,
+            // alignLabelWithHint: false,
             hintText: widget.hintText,
             hintFadeDuration: const Duration(milliseconds: 500),
             hintStyle: const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14,fontWeight: FontWeight.w500),
@@ -132,6 +131,7 @@ class _CustomDropdownState extends State<CustomDropdown>
           // cursorColor: AppColors.darkGrey,
           style: TextStyle(
             color: widget.textColor ?? AppColors.hintDarkGrey,
+            overflow: TextOverflow.ellipsis
           ),
           // padding: EdgeInsets.zero,
           hint: Text(
@@ -147,22 +147,23 @@ class _CustomDropdownState extends State<CustomDropdown>
           iconStyleData: const IconStyleData(icon:  Icon(
             Icons.keyboard_arrow_down_sharp,
             color: AppColors.darkGrey,
-            weight: 10000,
-
           ),
+
           openMenuIcon: Icon(
             Icons.keyboard_arrow_up_sharp,
             color: AppColors.darkGrey,
             // weight: 10000,
           ),
             iconSize: 25
-
           ),
           menuItemStyleData: const MenuItemStyleData(
             padding: EdgeInsets.symmetric(horizontal: 0)
           ),
           dropdownStyleData: DropdownStyleData(
-            padding: const EdgeInsets.all(10),
+            useSafeArea: true,
+            width: screenWidth-10, /// This is responsible for spacing between the prefix icon and Dropdown text.
+            maxHeight: screenHeight/1.5,
+            padding:const EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -173,12 +174,12 @@ class _CustomDropdownState extends State<CustomDropdown>
             searchController: textEditingController,
             searchInnerWidgetHeight: 50,
             searchInnerWidget: Container(
-              height: 50,
+              // height: 50,
               padding: const EdgeInsets.only(
-                top: 8,
+                top: 10,
                 bottom: 4,
-                right: 8,
-                left: 8,
+                right: 5,
+                left: 5,
               ),
               child: scholarshipFormTextField(
                 controller: textEditingController, currentFocusNode: FocusNode(), hintText: localization.searchHere, onChanged: (String? value) {  },
@@ -190,6 +191,7 @@ class _CustomDropdownState extends State<CustomDropdown>
           ),
 
         ),
+
       ),
     );
   }

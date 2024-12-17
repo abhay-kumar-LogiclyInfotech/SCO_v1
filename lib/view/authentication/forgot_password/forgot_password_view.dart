@@ -317,7 +317,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
             }
           },
           fontSize: 16,
-          buttonColor: AppColors.scoButtonColor,
+          // buttonColor: AppColors.scoButtonColor,
           elevation: 1,
         );
       },

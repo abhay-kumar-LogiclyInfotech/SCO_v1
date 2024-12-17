@@ -264,25 +264,21 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                     borderSide: BorderSide(
                                         color: Colors.white.withOpacity(0.25))),
                               ),
-
                             //*------Home------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
                               title: Text(localization.home,
                                   style: AppTextStyles.drawerButtonsStyle()),
                               leading:
-                                  SvgPicture.asset("assets/sidemenu/home.svg"),
+                                  SvgPicture.asset("assets/sidemenu/home_selected.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
                                 _navigationServices.pushReplacementCupertino(
                                     CupertinoPageRoute(
-                                        builder: (context) => MainView()));
+                                        builder: (context) => const MainView()));
                               },
-                              shape: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.25))),
-                            ),
+                              shape: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white.withOpacity(0.25)))),
 
                             //*------About Us------*/
                             ListTile(

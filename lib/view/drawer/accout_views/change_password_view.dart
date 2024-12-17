@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +12,7 @@ import 'package:sco_v1/viewModel/account/change_password_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../resources/components/custom_text_field.dart';
+import '../../../resources/components/kButtons/kReturnButton.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
 
@@ -276,7 +278,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
           setProcessing(false);
         },
         fontSize: 16,
-        buttonColor: AppColors.scoThemeColor,
+        // buttonColor: AppColors.scoThemeColor,
         borderColor: Colors.transparent,
         elevation: 1,
       );
@@ -292,19 +294,20 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
   Widget _cancelButton(LanguageChangeViewModel provider) {
     final localization = AppLocalizations.of(context)!;
 
-    return CustomButton(
-      textDirection: getTextDirection(provider),
-      buttonName: localization.back,
-      isLoading: false,
-      onTap: () {
-        _navigationServices.goBack();
-      },
-      fontSize: 16,
-      buttonColor: Colors.white,
-      borderColor: AppColors.scoThemeColor,
-      textColor: AppColors.scoThemeColor,
-      elevation: 0,
-    );
+    // return CustomButton(
+    //   textDirection: getTextDirection(provider),
+    //   buttonName: localization.back,
+    //   isLoading: false,
+    //   onTap: () {
+    //     _navigationServices.goBack();
+    //   },
+    //   fontSize: 16,
+    //   buttonColor: Colors.white,
+    //   borderColor: AppColors.scoThemeColor,
+    //   textColor: AppColors.scoThemeColor,
+    //   elevation: 0,
+    // );
+    return const KReturnButton();
   }
 
 

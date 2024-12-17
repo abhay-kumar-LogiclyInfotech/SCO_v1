@@ -202,7 +202,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
     return CustomButton(
         buttonName: localization.meetingRequestButton,
         isLoading: false,
-        buttonColor: AppColors.scoButtonColor,
+        // buttonColor: AppColors.scoButtonColor,
         textDirection: getTextDirection(langProvider),
         onTap: () {
           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>CreateRequestView(

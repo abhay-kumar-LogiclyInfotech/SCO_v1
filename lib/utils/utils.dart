@@ -413,7 +413,7 @@ List<DropdownMenuItem> populateCommonDataDropdown({
     DropdownMenuItem(
       value: '', // Empty value for the default option
       child: Text(
-        textDirection == TextDirection.ltr ? 'Select' : 'اختر',
+        textDirection == TextDirection.ltr ? 'Select'.trim() : 'اختر'.trim(),
         // 'Select' in both languages
         style: TextStyle(
           color: textColor ?? AppColors.hintDarkGrey,

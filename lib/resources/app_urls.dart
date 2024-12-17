@@ -76,4 +76,55 @@ static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanoti
 /// scholarship outside uae
   static String get scholarshipOutsideUae => "${_domainUrl}ar/web/sco/scholarships-outside-uae";
 
+
+  static const String _scholarshipInUae = "${_domainUrl}ar/web/sco/scholarship-whithin-the-uae/";
+  /// bachelor links
+  static const String _bachelorInUae = "${_scholarshipInUae}bachelor-s-degree-scholarship/";
+  static String get bachelorsTermsAndConditions => "${_bachelorInUae}bachelor-s-degree-scholarship-admission-terms-and-conditions";
+  static String get bachelorsUniversityAndSpecializationList => "${_bachelorInUae}sco-accredited-universities-and-specializations-list";
+  static String get bachelorsDegreePrivileges => "${_bachelorInUae}bachelor-s-degree-scholarship-privileges";
+  static String get bachelorsDegreeStudentObligations => "${_bachelorInUae}student-obligations-for-the-bachelor-s-degree-scholarship";
+  static String get bachelorsDegreeImportantGuidelines => "${_bachelorInUae}important-guidelines-for-high-school-students";
+  static String get bachelorsDegreeApplyingProcedure => "${_bachelorInUae}bachelor-s-degree-applying-procedures";
+
+
+
+  static String get graduateTermsAndConditions => "${_domainUrl}web/sco/scholarship-within-uae/graduate-studies-scholarship-admission-terms-and-conditions";
+  static String get graduateUniversityAndSpecializationList => "${_scholarshipInUae}graduate-studies-scholarship/sco-accredited-universities-and-specializations-list";
+  static String get graduateDegreePrivileges => "${_scholarshipInUae}graduate-studies-scholarship/graduate-studies-scholarship-privileges";
+  static String get graduateDegreeStudentObligations => "${_scholarshipInUae}graduate-studies-scholarship/student-obligations-for-the-graduate-studies-scholarship";
+  static String get graduateDegreeApplyingProcedure => "${_scholarshipInUae}graduate-studies-scholarship/graduate-studies-scholarship-applying-procedures";
+
+
+  static const String _meteorological = "${_scholarshipInUae}meteorological-scholarship/";
+  static String get meteorologicalTermsAndConditions => "${_meteorological}meteorological-scholarship-admission-terms-and-conditions";
+  static String get meteorologicalUniversityAndSpecializationList => "${_meteorological}sco-accredited-universities-and-specializations-list";
+  static String get meteorologicalDegreePrivileges => "${_meteorological}meteorological-scholarship-privileges";
+  static String get meteorologicalDegreeStudentObligations => "${_meteorological}student-obligations-for-the-meteorological-scholarship";
+  static String get meteorologicalDegreeApplyingProcedure => "${_meteorological}meteorological-scholarship-applying-procedures";
+
+
+  static const String _scholarshipOutsideUae = "${_domainUrl}ar/web/sco/scholarship-outside-the-uae/";
+  static const String _distinguishedOutsideUae = "${_scholarshipOutsideUae}distinguished-doctors-scholarship/";
+  static String get distinguishedTermsAndConditions => "${_distinguishedOutsideUae}distinguished-doctors-scholarship-admission-terms-and-conditions";
+  static String get distinguishedDegreePrivileges => "${_distinguishedOutsideUae}distinguished-doctors-scholarship-privileges";
+  static String get distinguishedDegreeStudentObligations => "${_distinguishedOutsideUae}student-obligations-for-the-distinguished-doctors-scholarship";
+  static String get distinguishedDegreeApplyingProcedure => "${_distinguishedOutsideUae}distinguished-doctors-scholarship-applying-procedures";
+  static String get distinguishedDegreeMedicalLicensingExam => "${_distinguishedOutsideUae}medical-licensing-exams";
+
+  static const String _bachelorOutsideUae = "${_scholarshipOutsideUae}bachelors-degree-scholarship/";
+  static String get bachelorOutsideUaeTermsAndConditions => "${_bachelorOutsideUae}bachelor-s-degree-scholarship-admission-terms-and-conditions";
+  static String get bachelorOutsideUaeScoAccredited => "${_bachelorOutsideUae}sco-accredited-universities-and-specializations-list";
+  static String get bachelorOutsideUaeDegreePrivileges => "${_bachelorOutsideUae}bachelor-s-degree-scholarship-privileges";
+  static String get bachelorOutsideUaeDegreeStudentObligations => "${_bachelorOutsideUae}student-obligations-for-the-bachelors-degree-scholarship";
+  static String get bachelorOutsideUaeDegreeImportantGuidelines => "${_bachelorOutsideUae}important-guidelines-for-high-school-students";
+  static String get bachelorOutsideUaeDegreeApplyingProcedure => "${_bachelorOutsideUae}bachelors-degree-applying-procedures";
+
+
+  static String get graduateOutsideUaeTermsAndConditions => "${_scholarshipOutsideUae}graduate-studies-scholarship/graduate-studies-scholarship-admission-terms-and-conditions";
+  static String get graduateOutsideUaeUniversityAndSpecializationList => "${_scholarshipOutsideUae}graduate-studies-scholarship/sco-accredited-universities-and-specializations-list";
+  static String get graduateOutsideUaeDegreePrivileges => "${_scholarshipOutsideUae}graduate-studies-scholarship/graduate-studies-scholarship-privileges";
+  static String get graduateOutsideUaeDegreeStudentObligations => "${_scholarshipOutsideUae}graduate-studies-scholarship/student-obligations-for-the-graduate-studies-scholarship";
+  static String get graduateOutsideUaeDegreeApplyingProcedure => "${_scholarshipOutsideUae}graduate-studies-scholarship/graduate-studies-scholarship-applying-procedures";
+
 }

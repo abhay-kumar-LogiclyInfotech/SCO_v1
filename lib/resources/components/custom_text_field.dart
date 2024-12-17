@@ -10,7 +10,7 @@ class CustomTextField extends StatefulWidget {
   FocusNode? nextFocusNode;
   bool? autofocus;
   final TextEditingController controller;
-   bool? obscureText;
+  bool? obscureText;
   final String hintText;
   bool? textCapitalization;
   Widget? icon;
@@ -29,34 +29,35 @@ class CustomTextField extends StatefulWidget {
   int? maxLength;
   bool? enabled;
   dynamic validator;
-TextStyle? textStyle;
-   CustomTextField(
-      {super.key,
-      this.readOnly,
-      required this.currentFocusNode,
-      this.nextFocusNode,
-      this.autofocus,
-      required this.controller,
-        this.obscureText,
-        this.fillColor,
-      required this.hintText,
-      this.textCapitalization,
-      this.icon,
-      this.filled,
-      this.textInputType,
-      this.leading,
-      this.trailing,
-      required this.onChanged,
-      this.onTap,
-      this.errorText,
-      this.inputFormat,
-      this.border,
-      this.maxLines,
-        this.maxLength,
-      this.textStyle,
-        this.enabled,
-        this.validator,
-      });
+  TextStyle? textStyle;
+
+  CustomTextField({
+    super.key,
+    this.readOnly,
+    required this.currentFocusNode,
+    this.nextFocusNode,
+    this.autofocus,
+    required this.controller,
+    this.obscureText,
+    this.fillColor,
+    required this.hintText,
+    this.textCapitalization,
+    this.icon,
+    this.filled,
+    this.textInputType,
+    this.leading,
+    this.trailing,
+    required this.onChanged,
+    this.onTap,
+    this.errorText,
+    this.inputFormat,
+    this.border,
+    this.maxLines,
+    this.maxLength,
+    this.textStyle,
+    this.enabled,
+    this.validator,
+  });
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -85,19 +86,18 @@ class _CustomTextFieldState extends State<CustomTextField>
             : TextCapitalization.none,
         decoration: InputDecoration(
           errorText: widget.errorText,
-          errorMaxLines: 6,
+          errorMaxLines: 5,
           contentPadding: EdgeInsets.symmetric(
             vertical: screenWidth * 0.03,
             horizontal: widget.leading == null ? screenWidth * 0.03 : 0,
           ),
-          prefixIcon: widget.leading, // Adjust padding as needed)
+          prefixIcon: widget.leading,
+          // Adjust padding as needed)
           // (widget.maxLines != null && widget.maxLines! > 1)
           //     ? Padding(
           //         padding: const EdgeInsets.only(bottom: 47),
           //         child: widget.leading ?? Container())
           //     :
-
-
 
           // add a default widget if leading is null
           prefixIconConstraints: const BoxConstraints(
@@ -114,24 +114,26 @@ class _CustomTextFieldState extends State<CustomTextField>
           // hintStyle: widget.textStyle ?? const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
           hintStyle: const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
           border: widget.border ?? Utils.underLinedInputBorder(),
-
-          focusedBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.green)) ??
-               Utils.underLinedInputBorder(),
-          errorBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
+          focusedBorder: widget.border?.copyWith(
+                  borderSide: const BorderSide(color: Colors.green)) ??
+              Utils.underLinedInputBorder(),
+          errorBorder: widget.border
+                  ?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
               const UnderlineInputBorder(
                   borderRadius: BorderRadius.zero,
                   borderSide: BorderSide(color: Colors.red)),
-          enabledBorder: widget.border ??
-              Utils.underLinedInputBorder(),
+          enabledBorder: widget.border ?? Utils.underLinedInputBorder(),
 
-          focusedErrorBorder: widget.border?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
+          focusedErrorBorder: widget.border
+                  ?.copyWith(borderSide: const BorderSide(color: Colors.red)) ??
               Utils.underLinedInputBorder(),
           filled: widget.filled,
           fillColor: widget.fillColor ?? Colors.grey.shade200,
         ),
         inputFormatters: widget.inputFormat,
         cursorColor: AppColors.hintDarkGrey,
-        style:  widget.textStyle ?? const TextStyle(color: AppColors.hintDarkGrey),
+        style:
+            widget.textStyle ?? const TextStyle(color: AppColors.hintDarkGrey),
         keyboardType: widget.textInputType ?? TextInputType.text,
         onSubmitted: (_) {
           widget.nextFocusNode != null
@@ -141,9 +143,7 @@ class _CustomTextFieldState extends State<CustomTextField>
         onChanged: (value) {
           widget.onChanged(value.trim());
         },
-
       ),
     );
   }
 }
-

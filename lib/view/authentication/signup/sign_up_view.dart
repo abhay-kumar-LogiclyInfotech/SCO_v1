@@ -402,15 +402,16 @@ class _SignUpViewState extends State<SignUpView>
       textDirection: getTextDirection(langProvider),
       buttonName: localization.signUpWithUaePass,
       isLoading: false,
-      onTap: () {
-        _alertServices.toastMessage(localization.comingSoon);
-      },
       fontSize: 15,
       buttonColor: Colors.white,
       borderColor: Colors.black,
       textColor: Colors.black,
       elevation: 1,
       leadingIcon: const Icon(Icons.fingerprint),
+      onTap: () {
+        _alertServices.toastMessage(localization.comingSoon);
+      },
+
     );
   }
 
@@ -857,6 +858,9 @@ class _SignUpViewState extends State<SignUpView>
         textDirection: getTextDirection(langProvider),
         buttonName: localization.signUp,
         isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
+        fontSize: 16,
+        // buttonColor: AppColors.scoButtonColor,
+        elevation: 1,
         onTap: () async {
 
           try{
@@ -877,9 +881,7 @@ class _SignUpViewState extends State<SignUpView>
             debugPrint(e.toString());
           }
         },
-        fontSize: 16,
-        buttonColor: AppColors.scoButtonColor,
-        elevation: 1,
+
       );
     });
   }

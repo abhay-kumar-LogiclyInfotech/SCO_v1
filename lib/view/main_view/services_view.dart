@@ -168,7 +168,7 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
     else{
       return Padding(
         padding:  EdgeInsets.all(kPadding),
-        child: SimpleCard(expandedContent: const Column(children: [Text("You are not awarded with any scholarship yet. Apply for scholarship and  pull down to refresh.")],)),
+        child: SimpleCard(expandedContent:  Column(children: [Text(appLocalizations!.servicesUnavailable)],)),
       );
     }
   }

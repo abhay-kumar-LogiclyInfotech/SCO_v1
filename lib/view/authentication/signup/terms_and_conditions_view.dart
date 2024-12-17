@@ -313,7 +313,7 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
                     : false,
             textDirection: TextDirection.ltr,
             fontSize: 16,
-            buttonColor: AppColors.scoButtonColor,
+            // buttonColor: AppColors.scoButtonColor,
             elevation: 1,
             onTap: () async {
               if(!isChecked) {

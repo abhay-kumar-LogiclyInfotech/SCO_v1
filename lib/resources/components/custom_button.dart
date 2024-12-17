@@ -80,8 +80,9 @@ final langProvider = Provider.of<LanguageChangeViewModel>(context);
             // width: double.infinity,
             padding: EdgeInsets.all(screenWidth * 0.02),
             decoration: BoxDecoration(
-                color: _isPressed ? AppColors.lightGrey : widget.buttonColor ?? Colors.black,
-                border: Border.all(color: widget.borderColor ?? Colors.black),
+                color: _isPressed ? AppColors.lightGrey : widget.buttonColor ?? AppColors.scoThemeColor,
+                // border: Border.all(color: widget.borderColor ?? Colors.black),
+                border: Border.all(color: widget.borderColor ?? AppColors.scoThemeColor),
                 gradient: widget.gradient,
                 borderRadius: widget.borderRadius ?? BorderRadius.circular(180)),
             child: Row(

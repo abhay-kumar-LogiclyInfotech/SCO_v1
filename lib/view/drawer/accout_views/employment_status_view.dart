@@ -411,7 +411,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
                 isLoading:
                     createUpdateProvider.apiResponse.status == Status.LOADING,
                 borderColor: Colors.transparent,
-                buttonColor: AppColors.scoThemeColor,
+                // buttonColor: AppColors.scoThemeColor,
                 textDirection: getTextDirection(langProvider),
                 onTap: () async {
                   setProcessing(true);

@@ -192,7 +192,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                           buttonName: AppLocalizations.of(context)!.submit,
                           isLoading: false,
                           textDirection: textDirection,
-                          buttonColor: AppColors.scoButtonColor,
+                          // buttonColor: AppColors.scoButtonColor,
                           onTap: () {
 
                             _selectedAcademicCareer.isNotEmpty?_navigationService.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(

@@ -68,13 +68,14 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
               value: widget.acceptStudentUndertaking,
               onChanged: widget.onAcceptTerms,
               text: localization.studentUndertaking,
+              textStyle: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14,fontWeight: FontWeight.w600),
             ),
 
             Padding(
               padding: EdgeInsets.all(kPadding),
               child: CustomButton(
                   buttonName: localization.submit,
-                  buttonColor: AppColors.scoThemeColor,
+                  // buttonColor: AppColors.scoThemeColor,
                   borderColor: Colors.transparent,
                   isLoading: false,
                   textDirection: getTextDirection(langProvider),

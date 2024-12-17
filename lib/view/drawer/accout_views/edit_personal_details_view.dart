@@ -1170,7 +1170,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 buttonName: localization.updateProfile,
                 isLoading: updateProvider?.apiResponse.status == Status.LOADING,
                 borderColor: Colors.transparent,
-                buttonColor: AppColors.scoThemeColor,
+                // buttonColor: AppColors.scoThemeColor,
                 textDirection: getTextDirection(langProvider),
                 onTap: () async {
                   bool result = validateForm(

@@ -113,12 +113,18 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    /// Header to show create request button
-                    _createRequestButton(langProvider: langProvider,localization: localization),
-                    kFormHeight,
 
-                    /// _notesSection
-                    _notesSection(provider: provider, langProvider: langProvider,localization:localization),
+                    ((provider.apiResponse.data?.data?.adviseeNotes?.isNotEmpty ?? false)) ?
+                      Column(
+                        children: [
+                          /// Header to show create request button
+                          _guidanceNotesTitle(langProvider: langProvider,localization: localization),
+                          kFormHeight,
+                          /// _notesSection
+                          _notesSection(provider: provider, langProvider: langProvider,localization:localization),
+                        ],
+                      ) : Utils.showOnNoDataAvailable(context: context,text: localization.guidance_notes_unavailable)
+
                   ],
                 ),
               ),
@@ -134,7 +140,7 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
   }
 
   /// *----- header section ------*
-  Widget _createRequestButton({required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
+  Widget _guidanceNotesTitle({required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
     return CustomInformationContainer(
       title: localization.advisorsNotesList,
       expandedContentPadding: EdgeInsets.zero,

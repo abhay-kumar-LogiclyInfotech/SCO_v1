@@ -208,35 +208,17 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    /// Initialize the SCO programs carousel slider
+    /// Currently we are clearing initializing again and again to show realtime language conversion
+    _scoProgramsModelsList.clear();
+    _scoProgramsList.clear();
+    _initializeScoPrograms();
+
+
     return Scaffold(
         backgroundColor: AppColors.bgColor,
         body: Utils.modelProgressHud(processing: isProcessing,child:  Utils.pageRefreshIndicator(
             child: _buildUI(), onRefresh: _onRefresh)));
-    //    body:  Shimmer.fromColors(
-    //      baseColor: AppColors.lightGrey,
-    //      highlightColor: Colors.grey.withOpacity(0.5),
-    //      //   highlightColor: AppColors.scoLightThemeColor,
-    //      enabled: true,
-    //      child: ListView.builder(
-    //        itemCount: 5,
-    //        itemBuilder: (context, index) {
-    //          return Container(
-    //            height: 150.0, // Use a fixed height value for better performance
-    //            margin: const EdgeInsets.only(bottom: 10),
-    //            width: double.infinity,
-    //            decoration: BoxDecoration(
-    //              color: Colors.black.withOpacity(0.9),
-    //              borderRadius: BorderRadius.circular(20.0), // Adjust as desired
-    //              border: Border.all(
-    //                color: Colors.white, // Consider a contrasting border color
-    //                width: 1.0, // Adjust border thickness
-    //              ),
-    //            ),
-    //          );
-    //        },
-    //      ),
-    //    )
-    // );
   }
 
   // check for the scholarship status
@@ -660,31 +642,33 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   // *---- Scholarship applied container If a user is Applicant then show this and move the user to application statuses view ----*
   Widget _scholarshipAppliedContainer(
       {required LanguageChangeViewModel langProvider}) {
+    final localization = AppLocalizations.of(context)!;
     return _homeViewCard(
         langProvider: langProvider,
-        title: AppLocalizations.of(context)!.scholarshipOffice,
+        title: localization.scholarshipOffice,
         icon: Image.asset("assets/scholarship_office.png"),
         content: Column(
           children: [
+            kFormHeight,
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Scholarship status:
-                const Expanded(
+                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Scholarship Status",
-                        style: TextStyle(
+                        localization.scholarshipStatusApplied,
+                        style: const TextStyle(
                             fontSize: 12, color: AppColors.hintDarkGrey),
                         textAlign: TextAlign.start,
                       ),
-                      Text("Scholarship Applied",
-                          style: TextStyle(
+                      Text(localization.scholarshipAppliedApplied,
+                          style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.greenColor,
                               fontWeight: FontWeight.bold),
@@ -703,27 +687,27 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             kFormHeight,
 
             // divider
-            const Divider(color: AppColors.lightGrey),
-            const SizedBox.square(
-              dimension: 5,
-            ),
-            // date
+            // const Divider(color: AppColors.lightGrey),
+            // const SizedBox.square(
+            //   dimension: 5,
+            // ),
+            // // date
             // _buildDateInfo(langProvider: langProvider, date: "DD/MM/YYYY"),
           ],
         ));
   }
 
   Widget _uploadDocumentsSection({required LanguageChangeViewModel langProvider}){
-    return CustomInformationContainer(leading: SvgPicture.asset("assets/myDocuments.svg"),title: "Upload Documents", expandedContent: Column(
+    final localization = AppLocalizations.of(context)!;
+    return CustomInformationContainer(leading: SvgPicture.asset("assets/myDocuments.svg"),title: localization.uploadDocuments, expandedContent: Column(
       children: [
-
         const SizedBox(height: 25),
-        Text("My Documents",style: AppTextStyles.titleBoldTextStyle().copyWith(height: 1.9)),
-        const Text("Click Below to Upload Documents",style: TextStyle(height: 1.5),),
+        Text(localization.myDocuments,style: AppTextStyles.titleBoldTextStyle().copyWith(height: 1.9)),
+         Text(localization.clickToUploadDocuments,style: const TextStyle(height: 1.5),),
         const SizedBox(height: 25),
         const MyDivider(color: AppColors.darkGrey),
         const SizedBox(height: 30),
-        CustomButton(buttonName: "Click Here", isLoading: false,buttonColor: AppColors.scoButtonColor, textDirection: getTextDirection(langProvider), onTap: (){
+        CustomButton(buttonName: localization.clickHere, isLoading: false,buttonColor: AppColors.scoButtonColor, textDirection: getTextDirection(langProvider), onTap: (){
           _alertServices.toastMessage(AppLocalizations.of(context)!.comingSoon,);
         }),
         const SizedBox(height: 30),
@@ -1142,7 +1126,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     final scoProgramsMapList = [
       {
         'title': localization.scholarshipInternal,
-        'subTitle': " ",
+        'subTitle':localization.internalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
               createRoute(WebView(url: AppUrls.scholarshipInsideUae, scholarshipType: 'INT')),
@@ -1150,7 +1134,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       },
       {
         'title': localization.scholarshipExternal,
-        'subTitle': "",
+        'subTitle': localization.externalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
           createRoute(WebView(url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')),
@@ -1231,6 +1215,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       ),
     );
   }
+
+
 
   // &---- FaQ section -----*
   Widget _faqSection({langProvider}) {

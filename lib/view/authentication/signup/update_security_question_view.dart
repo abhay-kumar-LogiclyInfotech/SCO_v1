@@ -313,7 +313,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
           },
           fontSize: 16,
-          buttonColor: AppColors.scoThemeColor,
+          // buttonColor: AppColors.scoThemeColor,
           borderColor: Colors.transparent,
           elevation: 1,
         );

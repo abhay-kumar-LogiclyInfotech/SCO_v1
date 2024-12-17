@@ -495,7 +495,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                 buttonName: localization.update,
                 isLoading: _isProcessing,
                 borderColor: Colors.transparent,
-                buttonColor: AppColors.scoThemeColor,
+                // buttonColor: AppColors.scoThemeColor,
                 textDirection: getTextDirection(langProvider),
                 onTap: () async {
                   try {
