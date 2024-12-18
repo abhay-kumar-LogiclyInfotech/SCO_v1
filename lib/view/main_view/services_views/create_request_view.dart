@@ -58,10 +58,6 @@ class CreateRequestView extends StatefulWidget {
 
 class _CreateRequestViewState extends State<CreateRequestView>
     with MediaQueryMixin {
-
-
-
-  
   late NavigationServices _navigationServices;
   late AuthService _authService;
   late PermissionServices _permissionServices;

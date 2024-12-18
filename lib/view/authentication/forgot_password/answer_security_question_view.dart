@@ -54,7 +54,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
       {required LanguageChangeViewModel langProvider}) async {
     setState(() {
       _questionController.text = widget.securityQuestion;
-      debugPrint(_questionController.text);
+      // debugPrint(_questionController.text);
     });
   }
 

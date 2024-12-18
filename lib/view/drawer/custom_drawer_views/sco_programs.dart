@@ -37,27 +37,34 @@ class _ScoProgramsState extends State<ScoPrograms>
     super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (!_isInitialized) {
-      // Initialize once
-      final localization = AppLocalizations.of(context)!;
-      _scoProgramsModelsList.clear();
-      _scoProgramsList.clear();
+    _scoProgramsModelsList.clear();
+    _scoProgramsList.clear();
+    WidgetsBinding.instance.addPostFrameCallback((callback){
+      final localization = AppLocalizations.of(context);
       _initializeScoPrograms(localization);
-      _isInitialized = true;
-    }
+    });
+
   }
 
-  void _initializeScoPrograms(AppLocalizations localization) {
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //
+  //   if (!_isInitialized) {
+  //     // Initialize once
+  //     final localization = AppLocalizations.of(context)!;
+  //     _scoProgramsModelsList.clear();
+  //     _scoProgramsList.clear();
+  //     _initializeScoPrograms(localization);
+  //     _isInitialized = true;
+  //   }
+  // }
+
+  void _initializeScoPrograms(AppLocalizations? localization) {
     final scoProgramsMapList = [
       {
-        'title': localization.scholarshipInternal,
-        'subTitle': localization.internalScholarshipDesc,
+        'title': localization?.scholarshipInternal,
+        'subTitle': localization?.internalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
         // "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
         //   createRoute(const ScholarshipsInUaeView()),
@@ -66,8 +73,8 @@ class _ScoProgramsState extends State<ScoPrograms>
         "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipsInUaeView()))
       },
     {
-    'title': localization.scholarshipExternal,
-    'subTitle': localization.externalScholarshipDesc,
+    'title': localization?.scholarshipExternal,
+    'subTitle': localization?.externalScholarshipDesc,
     'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
     // "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> WebView(url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')))
       "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipInAbroadView()))
@@ -83,13 +90,16 @@ class _ScoProgramsState extends State<ScoPrograms>
     for (var model in _scoProgramsModelsList) {
       _scoProgramsList.add(
         CustomScoProgramTile(
-          imagePath: model.imagePath!,
-          title: model.title!,
-          subTitle: model.subTitle!,
-          onTap: model.onTap!,
+          imagePath: model.imagePath ?? '',
+          title: model.title ?? '',
+          subTitle: model.subTitle ?? '',
+          onTap: model.onTap ?? (){},
         ),
       );
     }
+    setState(() {
+
+    });
   }
 
   @override
@@ -102,7 +112,7 @@ class _ScoProgramsState extends State<ScoPrograms>
           style: AppTextStyles.appBarTitleStyle(),
         ),
       ),
-      body: _buildUI(),
+      body:  _buildUI()
     );
   }
 
@@ -110,6 +120,8 @@ class _ScoProgramsState extends State<ScoPrograms>
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
       child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: _scoProgramsList.length,
         itemBuilder: (context, index) {
           return Padding(

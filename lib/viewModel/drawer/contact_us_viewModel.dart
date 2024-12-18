@@ -95,7 +95,7 @@ class ContactUsViewModel with ChangeNotifier {
       _setContactUsResponse = ApiResponse.loading();
 
       //*-----printing the values:
-      debugPrintFields();
+      // debugPrintFields();
 
       //*-----Create Headers-----*
       final headers = <String, String>{
@@ -122,7 +122,7 @@ class ContactUsViewModel with ChangeNotifier {
 
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       _setContactUsResponse = ApiResponse.error(error.toString());
       // Message to show status of the operation:
       _alertServices.showErrorSnackBar(error.toString());

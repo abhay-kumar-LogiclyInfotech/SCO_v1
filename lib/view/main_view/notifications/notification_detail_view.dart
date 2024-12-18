@@ -70,7 +70,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
         await Provider.of<GetAllNotificationsViewModel>(context, listen: false).getAllNotifications();
       }
       catch(e){
-        print(e.toString());
+        // print(e.toString());
       }
     });
   }

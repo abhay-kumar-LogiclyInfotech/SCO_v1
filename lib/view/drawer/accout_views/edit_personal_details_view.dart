@@ -768,7 +768,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         _phoneNumberDetailsList.removeAt(index);
       });
     } else {
-      print("Invalid index: $index");
+      // print("Invalid index: $index");
 
       /// Debugging print to show invalid index
     }
@@ -991,7 +991,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         _emailDetailsList.removeAt(index);
       });
     } else {
-      print("Invalid index: $index");
+      // print("Invalid index: $index");
 
       /// Debugging print to show invalid index
     }

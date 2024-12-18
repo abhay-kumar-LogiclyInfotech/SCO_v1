@@ -52,7 +52,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
     _verificationCodeController = TextEditingController();
 
     super.initState();
-    debugPrint(HiveManager.getUserId());
+    // debugPrint(HiveManager.getUserId());
     _userId = HiveManager.getUserId();
   }
 

@@ -76,7 +76,7 @@ class MyFinanceStatusViewModel with ChangeNotifier {
         setUserProfileInfo = ApiResponse.error(error.toString());
         _alertServices.toastMessage(error.toString() ?? '');
 
-        print(error);
+        // print(error);
         setLoading(false);
       }}
     else{

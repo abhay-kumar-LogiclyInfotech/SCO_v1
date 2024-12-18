@@ -10,11 +10,11 @@ import 'package:sco_v1/Test.dart';
 import 'package:sco_v1/controller/dependency_injection.dart';
 import 'package:sco_v1/data/response/status.dart';
 import 'package:sco_v1/models/home/ScoProgramsTileModel.dart';
+import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
 import 'package:sco_v1/resources/components/carsousel_slider.dart';
-import 'package:sco_v1/resources/components/custom_about_organization_containers.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_vertical_divider.dart';
 import 'package:sco_v1/resources/components/myDivider.dart';
@@ -24,18 +24,13 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/select_scholarship_type_view.dart';
 import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/application_status_view.dart';
-import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
-import 'package:sco_v1/view/drawer/custom_drawer_views/news_and_events_view.dart';
 import 'package:sco_v1/view/main_view/notifications/notifications_view.dart';
-import 'package:sco_v1/view/main_view/scholarship_in_abroad/scholarship_in_abroad_view.dart';
-import 'package:sco_v1/view/main_view/scholarship_in_uae/scholarship_in_uae_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/finance.dart';
 import 'package:sco_v1/view/main_view/services_views/finance_details_views/salaryDetailsView.dart';
 import 'package:sco_v1/view/main_view/services_views/request_view.dart';
-import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/get_all_notifications_viewModel.dart';
 import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_count_viewModel.dart';
 import 'package:sco_v1/viewModel/services/auth_services.dart';
@@ -43,20 +38,18 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../hive/hive_manager.dart';
 import '../../models/services/MyFinanceStatusModel.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_urls.dart';
 import '../../resources/components/tiles/custom_sco_program_tile.dart';
-import '../../resources/custom_painters/faq_painters.dart';
 import '../../resources/getRoles.dart';
 import '../../viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/alert_services.dart';
-import '../drawer/custom_drawer_views/vision_and_mission_view.dart';
+import '../responsive.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -180,7 +173,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
       } catch (e) {
         // Handle exceptions for individual tasks or overall process
-        print("Error fetching data: $e");
+        // print("Error fetching data: $e");
       } finally {
         setProcessing(false);
         setState(() {
@@ -192,7 +185,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     } catch (error) {
       setProcessing(false);
       /// Handle any errors
-      print('Error during refresh: $error');
+      // print('Error during refresh: $error');
     }
     setProcessing(false);
   }
@@ -227,9 +220,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   Widget _buildUI() {
     // *-----Initialize the languageProvider-----*
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
-
-
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: kPadding),
       child: SingleChildScrollView(
@@ -247,9 +237,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             if(isLogged && role == UserRole.applicants) Column(
               children: [
                 _scholarshipAppliedContainer(langProvider: langProvider),
-                kFormHeight,
                 _uploadDocumentsSection(langProvider: langProvider),
-                kFormHeight,
                 _faqSection(langProvider: langProvider),
                 kFormHeight,
               ],
@@ -262,9 +250,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           Column(
               children: [
                 _applyScholarshipButton(langProvider: langProvider),
-                kFormHeight,
                 _scoPrograms(langProvider: langProvider),
-                kFormHeight,
                 _faqSection(langProvider: langProvider),
                 kFormHeight,
               ],
@@ -273,13 +259,9 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               children: [
                 //// This will show the top salary only
                 _scholarshipApproved(langProvider: langProvider),
-                // kFormHeight,
                 _announcements(langProvider: langProvider),
-                kFormHeight,
                 _financeView(langProvider: langProvider),
-                kFormHeight,
                 _requestView(langProvider: langProvider),
-                kFormHeight,
                 _talkToMyAdvisor(langProvider: langProvider),
                 kFormHeight,
               ],
@@ -447,35 +429,39 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
           final topSalaryDetails = listOfSalaries.isNotEmpty ? listOfSalaries[0] : null;
 
-          return _homeViewCard(
-              langProvider: langProvider,
-              title: AppLocalizations.of(context)!.scholarshipOffice,
-              icon: Image.asset("assets/scholarship_office.png"),
-              content: Column(
-                children: [
-                  // Amount and Read More Button
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25,top: 10),
-                    child: _buildAmountAndButton(langProvider: langProvider, topSalary: topSalaryDetails),
-                  ),
-
-
-
-                  if((topSalaryDetails?.salaryMonth ?? '').isNotEmpty)
-                  Column(
+          return Column(
+            children: [
+              // kFormHeight,
+              _homeViewCard(
+                  langProvider: langProvider,
+                  title: AppLocalizations.of(context)!.scholarshipOffice,
+                  icon: SvgPicture.asset('assets/sco_office.svg'),
+                  content: Column(
                     children: [
-                      const SizedBox(height: 5),
+                      // Amount and Read More Button
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25,top: 10),
+                        child: _buildAmountAndButton(langProvider: langProvider, topSalary: topSalaryDetails),
+                      ),
 
-                      const Divider(color: Color(0xffDFDFDF)),
 
-                      const SizedBox(height: 5),
-                      // Date Information
-                      _buildDateInfo(langProvider: langProvider, date: topSalaryDetails?.salaryMonth),
+
+                      if((topSalaryDetails?.salaryMonth ?? '').isNotEmpty)
+                      Column(
+                        children: [
+                          const SizedBox(height: 5),
+
+                          const Divider(color: Color(0xffDFDFDF)),
+
+                          const SizedBox(height: 5),
+                          // Date Information
+                          _buildDateInfo(langProvider: langProvider, date: topSalaryDetails?.salaryMonth),
+                        ],
+                      ),
                     ],
-                  ),
-
-                ],
-              ));
+                  )),
+            ],
+          );
         case Status.NONE:
           return showVoid;
         case null:
@@ -494,9 +480,20 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         case Status.ERROR:
           return showVoid;
         case Status.COMPLETED:
-          final firstNotification = allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?  allNotificationsProvider.apiResponse.data?.first : null;
-         return
-           allNotificationsProvider.apiResponse.data?.isNotEmpty ?? false ?
+        // Check if there's any notification with `isNew == true`
+          final hasNewNotification = allNotificationsProvider.apiResponse.data?.any(
+                (notification) => notification.isNew == true,
+          ) ??
+              false;
+
+// Get the first notification with `isNew == true` if available
+          final firstNotification = hasNewNotification
+              ? allNotificationsProvider.apiResponse.data?.firstWhere(
+                (notification) => notification.isNew == true,
+          )
+              : null;
+
+          return hasNewNotification ?
          Column(
            children: [
              kFormHeight,
@@ -641,7 +638,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   // *---- Scholarship applied container If a user is Applicant then show this and move the user to application statuses view ----*
   Widget _scholarshipAppliedContainer(
-      {required LanguageChangeViewModel langProvider}) {
+      {required LanguageChangeViewModel langProvider})
+  {
     final localization = AppLocalizations.of(context)!;
     return _homeViewCard(
         langProvider: langProvider,
@@ -697,22 +695,28 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         ));
   }
 
+  /// AFTER SCHOLARSHIP APPLIED THIS WILL APPEAR IF THERE IS ANY APPROVED DOCUMENTS LIST AVAILABLE.
   Widget _uploadDocumentsSection({required LanguageChangeViewModel langProvider}){
     final localization = AppLocalizations.of(context)!;
-    return CustomInformationContainer(leading: SvgPicture.asset("assets/myDocuments.svg"),title: localization.uploadDocuments, expandedContent: Column(
+    return Column(
       children: [
-        const SizedBox(height: 25),
-        Text(localization.myDocuments,style: AppTextStyles.titleBoldTextStyle().copyWith(height: 1.9)),
-         Text(localization.clickToUploadDocuments,style: const TextStyle(height: 1.5),),
-        const SizedBox(height: 25),
-        const MyDivider(color: AppColors.darkGrey),
-        const SizedBox(height: 30),
-        CustomButton(buttonName: localization.clickHere, isLoading: false,buttonColor: AppColors.scoButtonColor, textDirection: getTextDirection(langProvider), onTap: (){
-          _alertServices.toastMessage(AppLocalizations.of(context)!.comingSoon,);
-        }),
-        const SizedBox(height: 30),
+        kFormHeight,
+        CustomInformationContainer(leading: SvgPicture.asset("assets/myDocuments.svg"),title: localization.uploadDocuments, expandedContent: Column(
+          children: [
+            const SizedBox(height: 25),
+            Text(localization.myDocuments,style: AppTextStyles.titleBoldTextStyle().copyWith(height: 1.9)),
+             Text(localization.clickToUploadDocuments,style: const TextStyle(height: 1.5),),
+            const SizedBox(height: 25),
+            const MyDivider(color: AppColors.darkGrey),
+            const SizedBox(height: 30),
+            CustomButton(buttonName: localization.clickHere, isLoading: false,buttonColor: AppColors.scoButtonColor, textDirection: getTextDirection(langProvider), onTap: (){
+              _alertServices.toastMessage(AppLocalizations.of(context)!.comingSoon,);
+            }),
+            const SizedBox(height: 30),
+          ],
+        )),
       ],
-    ));
+    );
   }
 
   Widget readMoreButton({required langProvider, required onTap}) => SizedBox(
@@ -732,13 +736,14 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   // Apply Scholarship Button
   Widget _applyScholarshipButton(
-      {required LanguageChangeViewModel langProvider}) {
+      {required LanguageChangeViewModel langProvider})
+  {
     final localization = AppLocalizations.of(context)!;
 
     return _homeViewCard(
         langProvider: langProvider,
         title: AppLocalizations.of(context)!.scholarshipOffice,
-        icon: Image.asset("assets/scholarship_office.png"),
+        icon: SvgPicture.asset("assets/sco_office.svg"),
         content: Column(
           children: [
             kFormHeight,
@@ -799,67 +804,87 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           final warning = financeData?.listWarnings?.isNotEmpty == true
               ? financeData?.listWarnings?.first
               : null;
-          return _homeViewCard(
-              onTap: () {
-                _navigationServices.pushCupertino(CupertinoPageRoute(
-                    builder: (context) => const FinanceView()));
-              },
-              title: AppLocalizations.of(context)!.myFinance,
-              icon: SvgPicture.asset("assets/my_finance.svg"),
-              langProvider: langProvider,
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  kFormHeight,
-                  Center(
-                    child: Wrap(
-                      runSpacing: 20,
-                      spacing: 30,
-                      runAlignment: WrapAlignment.spaceEvenly,
-                      alignment: WrapAlignment.spaceAround,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        _financeAmount(
-                          titleColor: const Color(0xffEC6330),
-                          title: AppLocalizations.of(context)!.salary,
-                          subTitle: salary?.amount.toString() ?? '0',
+          return Column(
+            children: [
+              kFormHeight,
+              _homeViewCard(
+                  onTap: () {
+                    _navigationServices.pushCupertino(CupertinoPageRoute(
+                        builder: (context) => const FinanceView()));
+                  },
+                  contentPadding: EdgeInsets.zero,
+                  title: AppLocalizations.of(context)!.myFinance,
+                  icon: SvgPicture.asset("assets/my_finance.svg"),
+                  langProvider: langProvider,
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      kFormHeight,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20,right: 20,bottom: 10),
+                        child: Center(
+                          child: Wrap(
+                            // runSpacing: 20,
+                            // spacing: 30,
+                            // runAlignment: WrapAlignment.spaceEvenly,
+                            // alignment: WrapAlignment.spaceAround,
+                            // crossAxisAlignment: WrapCrossAlignment.center,
+                            runSpacing: 20,
+                            spacing: 25,
+                            runAlignment: WrapAlignment.spaceAround,
+                            alignment: WrapAlignment.start,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              _financeAmount(
+                                // titleColor: const Color(0xffEC6330),
+                                iconAddress: "assets/salary_icon.svg",
+                                title: AppLocalizations.of(context)!.salary,
+                                subTitle: salary?.amount.toString() ?? '0',
+                              ),
+                         CustomVerticalDivider(height: 35,),
+                              _financeAmount(
+                                // titleColor: const Color(0xff3A82F7),
+                                iconAddress: "assets/deduction_icon.svg",
+                                title: AppLocalizations.of(context)!.deduction,
+                                subTitle: deduction?.totalDeducted.toString() ?? '0',
+                              ),
+                          CustomVerticalDivider(height: 35,),
+                              _financeAmount(
+                                // titleColor: const Color(0xff67CE67),
+                                iconAddress: "assets/bonus_icon.svg",
+                                title:AppLocalizations.of(context)!.bonus,
+                                subTitle: bonus?.amount.toString() ?? '0',
+                              ),
+                            ],
+                          ),
                         ),
-                        CustomVerticalDivider(),
-                        _financeAmount(
-                          titleColor: const Color(0xff3A82F7),
-                          title: AppLocalizations.of(context)!.deduction,
-                          subTitle: deduction?.totalDeducted.toString() ?? '0',
+                      ),
+                      // warning
+                      // Text(
+                      //  AppLocalizations.of(context)!.warning,
+                      //   style: AppTextStyles.subTitleTextStyle()
+                      //       .copyWith(fontWeight: FontWeight.bold),
+                      // ),
+                      const Divider(),
+                      if ((warning?.termDescription ?? '').isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8,bottom: 15,left: 20,right: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(AppLocalizations.of(context)!.warning,style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.bold)),
+                              Text(
+                                warning!.termDescription!, // Using `!` because the null check ensures it's safe
+                                style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 18),textAlign: TextAlign.start,
+                              ),
+                            ],
+                          ),
                         ),
-                        CustomVerticalDivider(),
-                        _financeAmount(
-                          titleColor: const Color(0xff67CE67),
-                          title:AppLocalizations.of(context)!.bonus,
-                          subTitle: bonus?.amount.toString() ?? '0',
-                        ),
-                      ],
-                    ),
-                  ),
-                  // warning
-                  // Text(
-                  //  AppLocalizations.of(context)!.warning,
-                  //   style: AppTextStyles.subTitleTextStyle()
-                  //       .copyWith(fontWeight: FontWeight.bold),
-                  // ),
-                  if ((warning?.termDescription ?? '').isNotEmpty)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Divider(),
-                        Text(
-                          warning!.termDescription!, // Using `!` because the null check ensures it's safe
-                          style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 18),textAlign: TextAlign.start,
-                        ),
-                      ],
-                    ),
-
-                ],
-              ));
+                    ],
+                  )),
+            ],
+          );
         case null:
           return showVoid;
       }
@@ -868,17 +893,27 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
   Widget _financeAmount(
       {String title = "",
+        String iconAddress = '',
       String subTitle = "",
-      Color titleColor = Colors.black}) {
+      Color titleColor = AppColors.scoButtonColor}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: TextStyle(
-              color: titleColor, fontSize: 12, fontWeight: FontWeight.bold),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(iconAddress),
+            const SizedBox(width: 5),
+            Text(
+              textAlign: TextAlign.center,
+              title,
+              style: TextStyle(
+                  color: titleColor, fontSize: 15, fontWeight: FontWeight.w600),
+            ),
+          ],
         ),
         Text(
           subTitle,
@@ -908,53 +943,62 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           final approvedRequests = requests?.where((r) => r.status == "APPROV")?.length ?? 0;
           final pendingRequests = requests?.where((r) => r.status == "RECVD")?.length ?? 0;
           final rejectedRequests = requests?.where((r) => r.status == "DENY")?.length ?? 0;
-          return _homeViewCard(
-              title: AppLocalizations.of(context)!.requests,
-              icon: SvgPicture.asset("assets/request.svg"),
-              langProvider: langProvider,
-              // headerExtraContent: RequestsCountContainer(color: Colors.blue.shade600, count: totalRequests),
-              contentPadding: EdgeInsets.zero,
-              onTap: () {
-                _navigationServices.pushCupertino(CupertinoPageRoute(
-                    builder: (context) => const RequestView()));
-              },
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                   Padding(
-                    padding: const EdgeInsets.only(left: 50.0,right: 50),
-                    child: Text(
-                      AppLocalizations.of(context)!.totalNumberOfRequests,
-                      style: const TextStyle(fontSize: 14, height: 2.5),
-                    ),
-                  ),
-                  kFormHeight,
-                  _homeViewCardBottomContainer(
-                      padding: const EdgeInsets.all(10),
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        runAlignment: WrapAlignment.start,
-                        alignment: WrapAlignment.spaceEvenly,
-                        runSpacing: 10,
-                        children: [
-                          _requestTypeWithCount(
-                              requestType:  AppLocalizations.of(context)!.approved,
-                              count: approvedRequests,
-                              color: Colors.green.shade500),
-                          kFormHeight,
-                          _requestTypeWithCount(
-                              requestType:  AppLocalizations.of(context)!.pending,
-                              count: pendingRequests,
-                              color: const Color(0xffF4AA73)),
-                          kFormHeight,
-                          _requestTypeWithCount(
-                              requestType:  AppLocalizations.of(context)!.rejected,
-                              count: rejectedRequests,
-                              color: AppColors.DANGER),
-                        ],
-                      )),
-                ],
-              ));
+          return Column(
+            children: [
+              kFormHeight,
+              _homeViewCard(
+                  title: AppLocalizations.of(context)!.requests,
+                  icon: SvgPicture.asset("assets/request.svg"),
+                  langProvider: langProvider,
+                  // headerExtraContent: RequestsCountContainer(color: Colors.blue.shade600, count: totalRequests),
+                  contentPadding: EdgeInsets.zero,
+                  onTap: () {
+                    _navigationServices.pushCupertino(CupertinoPageRoute(
+                        builder: (context) => const RequestView()));
+                  },
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //  Padding(
+                      //   padding: const EdgeInsets.only(left: 50.0,right: 50),
+                      //   child: Text(
+                      //     AppLocalizations.of(context)!.totalNumberOfRequests,
+                      //     style: const TextStyle(fontSize: 14, height: 2.5),
+                      //   ),
+                      // ),
+                      // kFormHeight,
+                      const SizedBox(height: 8),
+                      const Divider(),
+                      // kFormHeight,
+                      _homeViewCardBottomContainer(
+                          padding: const EdgeInsets.all(10),
+                          backGroundColor: Colors.transparent,
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            runAlignment: WrapAlignment.start,
+                            alignment: WrapAlignment.spaceEvenly,
+                            runSpacing: 10,
+                            children: [
+                              _requestTypeWithCount(
+                                  requestType:  AppLocalizations.of(context)!.approved,
+                                  count: approvedRequests,
+                                  color: Colors.green.shade500),
+                              kFormHeight,
+                              _requestTypeWithCount(
+                                  requestType:  AppLocalizations.of(context)!.pending,
+                                  count: pendingRequests,
+                                  color: const Color(0xffF4AA73)),
+                              kFormHeight,
+                              _requestTypeWithCount(
+                                  requestType:  AppLocalizations.of(context)!.rejected,
+                                  count: rejectedRequests,
+                                  color: AppColors.DANGER),
+                            ],
+                          )),
+                    ],
+                  )),
+            ],
+          );
         case null:
           return showVoid;
       }
@@ -965,17 +1009,17 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   Widget _requestTypeWithCount(
       {String requestType = "",
       dynamic color = Colors.black,
-      dynamic count = 10}) {
-    return Row(
+      dynamic count = 0}) {
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        RequestsCountContainer(color: color, count: count),
+        const SizedBox.square(dimension: 5),
         Text(requestType,
             style: const TextStyle(
                 color: AppColors.scoButtonColor,
-                fontSize: 12,
+                fontSize: 15,
                 fontWeight: FontWeight.w600)),
-        const SizedBox.square(dimension: 5),
-        RequestsCountContainer(color: color, count: count)
       ],
     );
   }
@@ -997,116 +1041,124 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             final topAdvisor =
                 listOfAdvisors.isNotEmpty ? listOfAdvisors[0] : null;
 
-            return _homeViewCard(
-                onTap: () {
-                  _navigationServices.pushCupertino(CupertinoPageRoute(
-                      builder: (context) => const AcademicAdvisorView()));
-                },
-                title: AppLocalizations.of(context)!.talkToMyAdvisor,
-                icon: SvgPicture.asset("assets/talk_to_my_advisor.svg"),
-                langProvider: langProvider,
-                contentPadding: EdgeInsets.zero,
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                     Padding(
-                      padding: const EdgeInsets.only(left: 50.0,right: 50),
-                      child: Text(
-                        AppLocalizations.of(context)!.youCanSeeListOfAdvisors,
-                        style: const TextStyle(fontSize: 14, height: 2.5),
-                      ),
-                    ),
-                    kFormHeight,
-                    _homeViewCardBottomContainer(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // image of the academic advisor
-                            Row(
+            return Column(
+              children: [
+                kFormHeight,
+                _homeViewCard(
+                    onTap: () {
+                      _navigationServices.pushCupertino(CupertinoPageRoute(
+                          builder: (context) => const AcademicAdvisorView()));
+                    },
+                    title: AppLocalizations.of(context)!.talkToMyAdvisor,
+                    icon: SvgPicture.asset("assets/talk_to_my_advisor.svg"),
+                    langProvider: langProvider,
+                    contentPadding: EdgeInsets.zero,
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                         Padding(
+                          padding: const EdgeInsets.only(left: 50.0,right: 50),
+                          child: Text(
+                            AppLocalizations.of(context)!.youCanSeeListOfAdvisors,
+                            style: const TextStyle(fontSize: 14, height: 2.5),
+                          ),
+                        ),
+                        // kFormHeight,
+                        const Divider(),
+                        _homeViewCardBottomContainer(
+                            padding: const EdgeInsets.all(10),
+                            backGroundColor: Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        image: const DecorationImage(
-                                            image: AssetImage(
-                                                "assets/login_bg.png")))),
-                                kFormHeight,
-
-                                /// Title and subtitle
-                                Container(
-                                  constraints:
-                                      const BoxConstraints(maxWidth: 120),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        topAdvisor?.advisorName ?? '',
-                                        style:
-                                            AppTextStyles.titleBoldTextStyle()
-                                                .copyWith(
-                                                    fontSize: 14, height: 1.3),
-                                      ),
-                                      Text(
-                                          topAdvisor?.advisorRoleDescription
-                                                  ?.toString() ??
-                                              '',
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              height: 2,
-                                              overflow: TextOverflow.ellipsis)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            /// call and message buttons
-                            Expanded(
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                    minWidth: 200, maxWidth: 200),
-                                child: Wrap(
-                                  runSpacing: 0,
-                                  spacing: -30,
-                                  runAlignment: WrapAlignment.end,
-                                  alignment: WrapAlignment.end,
+                                // image of the academic advisor
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    // message Advisor
-                                    CustomMaterialButton(
-                                        onPressed: ()async {
-                                         await Utils.launchEmail(topAdvisor?.email ?? '');
+                                    Container(
+                                      alignment: Alignment.center,
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8),
+                                            image: const DecorationImage(
+                                                image: AssetImage("assets/login_bg.png")))),
+                                    kFormHeight,
 
-
-
-                                        },
-                                        isEnabled: false,
-                                        shape: const CircleBorder(),
-                                        child: SvgPicture.asset(
-                                            "assets/message_advisor.svg")),
-                                    // Call advisor
-                                    CustomMaterialButton(
-                                        onPressed: ()async {
-                                         await Utils.makePhoneCall(
-                                              phoneNumber:
-                                                  topAdvisor?.phoneNo ?? '',
-                                              context: context);
-                                        },
-                                        isEnabled: false,
-                                        shape: const CircleBorder(),
-                                        child: SvgPicture.asset(
-                                            "assets/call_advisor.svg")),
+                                    /// Title and subtitle
+                                    Container(
+                                      constraints:
+                                          const BoxConstraints(maxWidth: 120),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            topAdvisor?.advisorName ?? '',
+                                            style:
+                                                AppTextStyles.titleBoldTextStyle()
+                                                    .copyWith(
+                                                        fontSize: 14, height: 1.2),
+                                          ),
+                                          Text(
+                                              topAdvisor?.advisorRoleDescription
+                                                      ?.toString() ??
+                                                  '',
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  height: 2,
+                                                  overflow: TextOverflow.ellipsis)),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                            )
-                          ],
-                        ))
-                  ],
-                ));
+
+                                /// call and message buttons
+                                Expanded(
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                        minWidth: 200, maxWidth: 200),
+                                    child: Wrap(
+                                      runSpacing: 0,
+                                      spacing: -30,
+                                      runAlignment: WrapAlignment.end,
+                                      alignment: WrapAlignment.end,
+                                      children: [
+                                        // message Advisor
+                                        CustomMaterialButton(
+                                            onPressed: ()async {
+                                             await Utils.launchEmail(topAdvisor?.email ?? '');
+
+
+
+                                            },
+                                            isEnabled: false,
+                                            shape: const CircleBorder(),
+                                            child: SvgPicture.asset(
+                                                "assets/message_advisor.svg")),
+                                        // Call advisor
+                                        CustomMaterialButton(
+                                            onPressed: ()async {
+                                             await Utils.makePhoneCall(
+                                                  phoneNumber:
+                                                      topAdvisor?.phoneNo ?? '',
+                                                  context: context);
+                                            },
+                                            isEnabled: false,
+                                            shape: const CircleBorder(),
+                                            child: SvgPicture.asset(
+                                                "assets/call_advisor.svg")),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ))
+                      ],
+                    )),
+              ],
+            );
           case null:
             return showVoid;
         }
@@ -1120,7 +1172,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   final List<Widget> _scoProgramsList = [];
   final List<ScoProgramTileModel> _scoProgramsModelsList = [];
 
-  void _initializeScoPrograms() {
+  void _initializeScoPrograms()
+  {
     final localization = AppLocalizations.of(context)!;
 
     final scoProgramsMapList = [
@@ -1166,12 +1219,13 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          kFormHeight,
           Row(
             children: [
               // title for sco programs
               Text(
                 AppLocalizations.of(context)!.aboutSCO,
-                style: AppTextStyles.appBarTitleStyle(),
+                style: AppTextStyles.appBarTitleStyle().copyWith(fontSize: 20),
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1217,29 +1271,33 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
   }
 
 
-
   // &---- FaQ section -----*
   Widget _faqSection({langProvider}) {
     final localization  = AppLocalizations.of(context)!;
-    return _homeViewCard(
-        title: localization.faqs,
-        contentPadding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-        icon: SvgPicture.asset("assets/faq_1.svg"),
-        content: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(localization.frequentlyAskedQuestions,
-              style: AppTextStyles.titleTextStyle(),
-            )
-          ],
-        ),
-        langProvider: langProvider,
-        onTap: () {
-          // Navigate to FAQ page
-          _navigationServices.pushCupertino(
-              CupertinoPageRoute(builder: (context) => const FaqView()));
-        });
+    return Column(
+      children: [
+        kFormHeight,
+        _homeViewCard(
+            title: localization.faqs,
+            contentPadding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+            icon: SvgPicture.asset("assets/faq_1.svg"),
+            content: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(localization.frequentlyAskedQuestions,
+                  style: AppTextStyles.titleTextStyle(),
+                )
+              ],
+            ),
+            langProvider: langProvider,
+            onTap: () {
+              // Navigate to FAQ page
+              _navigationServices.pushCupertino(
+                  CupertinoPageRoute(builder: (context) => const FaqView()));
+            }),
+      ],
+    );
   }
 
   // main card for home
@@ -1281,10 +1339,12 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                         children: [
                           icon,
                           const SizedBox(width: 10),
-                          Text(
-                            title,
-                            style: AppTextStyles.titleBoldTextStyle()
-                                .copyWith(fontSize: 18,fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Text(
+                              title,
+                              style: AppTextStyles.titleBoldTextStyle()
+                                  .copyWith(fontSize: 20,fontWeight: FontWeight.bold),
+                            ),
                           ),
                           const SizedBox(width: 5),
                           headerExtraContent ?? showVoid,
@@ -1321,7 +1381,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     required dynamic child,
     dynamic backGroundColor = AppColors.lightBlue0,
     padding = EdgeInsets.zero,
-  }) {
+  })
+  {
     return Container(
       padding: padding,
       width: double.infinity,

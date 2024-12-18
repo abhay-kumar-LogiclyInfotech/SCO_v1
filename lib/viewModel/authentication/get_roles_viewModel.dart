@@ -77,7 +77,7 @@ class GetRoleViewModel with ChangeNotifier {
       // _alertServices.toastMessage(response.message.toString(),);
       return true;
     } catch (error) {
-      debugPrint(error.toString());
+      // debugPrint(error.toString());
       _setResponse = ApiResponse.error(error.toString());
       // _alertServices.toastMessage(
       //  "${error}Please do check you password");

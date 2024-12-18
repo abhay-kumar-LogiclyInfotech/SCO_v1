@@ -334,18 +334,25 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
 Widget actionButton({required assetAddress,required text,required onTap}){
   return GestureDetector(
     onTap: onTap,
-    child: Row(
-      children: [
-        SvgPicture.asset(assetAddress ?? ''),
-        const SizedBox.square(dimension: 3),
-        Text(
-          text ?? '',
-          style: AppTextStyles.normalTextStyle().copyWith(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: AppColors.scoButtonColor),
-        )
-      ],
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.scoButtonColor)
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset(assetAddress ?? ''),
+          const SizedBox.square(dimension: 3),
+          Text(
+            text ?? '',
+            style: AppTextStyles.normalTextStyle().copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                color: AppColors.scoButtonColor),
+          )
+        ],
+      ),
     ),
   );
 }

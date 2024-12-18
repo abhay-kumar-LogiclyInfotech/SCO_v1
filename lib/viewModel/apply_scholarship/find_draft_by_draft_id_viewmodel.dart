@@ -57,7 +57,7 @@ class FindDraftByDraftIdViewmodel with ChangeNotifier {
 
       try {
 
-        print("Inside FindDraft ViewModel");
+        // print("Inside FindDraft ViewModel");
 
         setLoading(true);
         setApiResponse = ApiResponse.loading();
@@ -72,7 +72,7 @@ class FindDraftByDraftIdViewmodel with ChangeNotifier {
 
 
         setApiResponse = ApiResponse.completed(response);
-        print(apiResponse.data);
+        // print(apiResponse.data);
         setLoading(false);
       } catch (error) {
         setApiResponse = ApiResponse.error(error.toString());

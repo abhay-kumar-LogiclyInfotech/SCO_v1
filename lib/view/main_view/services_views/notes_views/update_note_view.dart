@@ -542,7 +542,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                     }
                   } catch (e) {
                     // Handle any errors gracefully
-                    print("Error during update: $e");
+                    // print("Error during update: $e");
                   } finally {
                     setIsProcessing(false); // Stop processing
                   }

@@ -12,27 +12,27 @@ class DioNetworkApiServices extends DioBaseApiServices {
 
   DioNetworkApiServices() {
     // Initialize Logger
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        logger.i('Request: ${options.method} ${options.uri}');
-        logger.i('Request Headers: ${options.headers}');
-        logger.i('Request Data: ${options.data}');
-        return handler.next(options);
-      },
-      onResponse: (response, handler) {
-        logger.d('Response Status: ${response.statusCode}');
-        logger.d('Response Data: ${response.data}');
-        return handler.next(response);
-      },
-      onError: (DioError e, handler) {
-        logger.e('Error: ${e.message}');
-        if (e.response != null) {
-          logger.e('Error Response Status: ${e.response?.statusCode}');
-          logger.e('Error Response Data: ${e.response?.data}');
-        }
-        return handler.next(e);
-      },
-    ));
+    // _dio.interceptors.add(InterceptorsWrapper(
+    //   onRequest: (options, handler) {
+    //     logger.i('Request: ${options.method} ${options.uri}');
+    //     logger.i('Request Headers: ${options.headers}');
+    //     logger.i('Request Data: ${options.data}');
+    //     return handler.next(options);
+    //   },
+    //   onResponse: (response, handler) {
+    //     logger.d('Response Status: ${response.statusCode}');
+    //     logger.d('Response Data: ${response.data}');
+    //     return handler.next(response);
+    //   },
+    //   onError: (DioError e, handler) {
+    //     logger.e('Error: ${e.message}');
+    //     if (e.response != null) {
+    //       logger.e('Error Response Status: ${e.response?.statusCode}');
+    //       logger.e('Error Response Data: ${e.response?.data}');
+    //     }
+    //     return handler.next(e);
+    //   },
+    // ));
   }
 
   @override
@@ -212,14 +212,16 @@ class DioNetworkApiServices extends DioBaseApiServices {
         case DioErrorType.connectionError:
           return FetchDataException('Connection Error occurred');
         case DioErrorType.unknown:
-          return FetchDataException('Unexpected error: ${error.message}');
+          // return FetchDataException('Unexpected error: ${error.message}');
+          return FetchDataException(' ${error.message}');
       }
     } else if (error is SocketException) {
       return FetchDataException('No Internet Connection');
     } else if (error is FormatException) {
       return FetchDataException('Response format error: $error');
     } else {
-      return AppExceptions('Unexpected Error', error.toString());
+      // return AppExceptions('Unexpected Error', error.toString());
+      return AppExceptions('', error.toString());
     }
   }
 

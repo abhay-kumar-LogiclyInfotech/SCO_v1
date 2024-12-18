@@ -50,7 +50,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   Future<void> getInitialLanguage() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? language = preferences.getString('language_code');
-    debugPrint(language);
 
     if (language != null && language == 'ar') {
       _isArabic = true;
@@ -211,7 +210,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
     setState(() {
       _deviceData = deviceData;
-      debugPrint(_deviceData['id']);
+      // debugPrint(_deviceData['id']);
     });
   }
 

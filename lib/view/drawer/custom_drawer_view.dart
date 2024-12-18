@@ -27,6 +27,7 @@ import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/auth_services.dart';
 import '../../viewModel/services/navigation_services.dart';
 import '../authentication/login/login_view.dart';
+import '../responsive.dart';
 import 'custom_drawer_views/contact_us_view.dart';
 import 'custom_drawer_views/faq_view.dart';
 import 'custom_drawer_views/news_and_events_view.dart';
@@ -543,76 +544,85 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                     ),
 
                     //*-----Language Selection Section-----*/
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        //*-----Change Language Button-----*/
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset("assets/sidemenu/language.svg"),
-                            Text(
-                              localization.language,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 16),
-                            ),
-                            const Text(
-                              "English",
-                              style: TextStyle(
-                                  color: AppColors.scoLightThemeColor),
-                            ),
-                            Consumer<LanguageChangeViewModel>(
-                              builder: (context, provider, _) {
-                                return CustomAdvancedSwitch(
-                                  controller: provider.languageController,
-                                  activeColor: AppColors.scoThemeColor,
-                                  inactiveColor: Colors.grey,
-                                  initialValue:
-                                      provider.languageController.value,
-                                  onChanged: (value) async {
-                                    if (value) {
-                                      await Provider.of<
-                                                  LanguageChangeViewModel>(
-                                              context,
-                                              listen: false)
-                                          .changeLanguage(const Locale('ar'));
-                                      widget.scaffoldState.currentState!
-                                          .openEndDrawer();
-                                    } else {
-                                      await Provider.of<
-                                                  LanguageChangeViewModel>(
-                                              context,
-                                              listen: false)
-                                          .changeLanguage(const Locale('en'));
-                                      widget.scaffoldState.currentState!
-                                          .openDrawer();
-                                    }
-                                  },
-                                );
-                              },
-                            ),
-                            const Text(
-                              "عربي",
-                              style: TextStyle(
-                                  color: AppColors.scoLightThemeColor),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Directionality(
-                            textDirection: getTextDirection(langProvider),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(_appVersion,
-                                    style:
-                                        const TextStyle(color: Colors.white)),
-                              ],
-                            )),
-                      ],
+                    Directionality(
+                      textDirection: getTextDirection(langProvider),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          //*-----Change Language Button-----*/
+                          Row(
+                            mainAxisSize:  MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset("assets/sidemenu/language.svg"),
+                              const SizedBox(width: 10),
+                              Text(
+                                localization.language,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                              const SizedBox(width: 10),
+
+                              const Text(
+                                "English",
+                                style: TextStyle(
+                                    color: AppColors.scoLightThemeColor),
+                              ),
+                              const SizedBox(width: 8),
+
+                              Consumer<LanguageChangeViewModel>(
+                                builder: (context, provider, _) {
+                                  return CustomAdvancedSwitch(
+                                    controller: provider.languageController,
+                                    activeColor: AppColors.scoThemeColor,
+                                    inactiveColor: Colors.grey,
+                                    initialValue:
+                                        provider.languageController.value,
+                                    onChanged: (value) async {
+                                      if (value) {
+                                        await Provider.of<
+                                                    LanguageChangeViewModel>(
+                                                context,
+                                                listen: false)
+                                            .changeLanguage(const Locale('ar'));
+                                        widget.scaffoldState.currentState!
+                                            .openEndDrawer();
+                                      } else {
+                                        await Provider.of<
+                                                    LanguageChangeViewModel>(
+                                                context,
+                                                listen: false)
+                                            .changeLanguage(const Locale('en'));
+                                        widget.scaffoldState.currentState!
+                                            .openDrawer();
+                                      }
+                                    },
+                                  );
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                "عربي",
+                                style: TextStyle(
+                                    color: AppColors.scoLightThemeColor),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Directionality(
+                              textDirection: getTextDirection(langProvider),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(_appVersion,
+                                      style:
+                                          const TextStyle(color: Colors.white)),
+                                ],
+                              )),
+                        ],
+                      ),
                     ),
                   ],
                 ),

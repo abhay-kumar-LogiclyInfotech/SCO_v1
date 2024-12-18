@@ -82,7 +82,7 @@ class TermsAndConditionsViewModel with ChangeNotifier {
 
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       _setTermsAncConditionsResponse = ApiResponse.error(error.toString());
       //Message to show status of the operation:
       // _alertServices.flushBarErrorMessages(

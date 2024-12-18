@@ -115,7 +115,8 @@ class NetworkApiServices extends BaseApiServices {
     } else if (error is FormatException) {
       return FormatException('Response format error: $error');
     } else {
-      return AppExceptions(" Unexpected Error", "$error");
+      // return AppExceptions(" Unexpected Error", "$error");
+      return AppExceptions(" ", "$error");
     }
   }
 

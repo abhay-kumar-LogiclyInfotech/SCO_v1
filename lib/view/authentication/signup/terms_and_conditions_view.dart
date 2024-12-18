@@ -44,7 +44,7 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
 
     super.initState();
 
-    debugPrint(HiveManager.getUserId());
+    // debugPrint(HiveManager.getUserId());
     _userId = HiveManager.getUserId();
   }
 
@@ -293,7 +293,7 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView>
       onChanged: (value) {
         setState(() {
           isChecked = value!;
-          debugPrint(isChecked.toString());
+          // debugPrint(isChecked.toString());
         });
       },
     ));

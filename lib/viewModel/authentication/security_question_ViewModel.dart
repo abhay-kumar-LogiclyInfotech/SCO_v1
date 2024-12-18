@@ -61,7 +61,7 @@ class SecurityQuestionViewModel with ChangeNotifier {
       setGetSecurityQuestionResponse = ApiResponse.completed(response);
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       setGetSecurityQuestionResponse = ApiResponse.error(error.toString());
       _alertServices.showErrorSnackBar(error.toString());
 

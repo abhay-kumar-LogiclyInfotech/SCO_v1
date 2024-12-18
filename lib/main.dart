@@ -1,15 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
-import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
-import 'package:sco_v1/view/authentication/signup/update_security_question_view.dart';
 import 'package:sco_v1/view/test.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
@@ -68,10 +65,10 @@ Future<void> main() async {
   await HiveManager.init();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   final String languageCode = sharedPreferences.getString('language_code') ?? '';
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  //   DeviceOrientation.portraitDown,
-  // ]);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   DependencyInjection.init();
   await registerServices();
   runApp(MyApp(locale: languageCode));
@@ -206,6 +203,7 @@ class _MyAppState extends State<MyApp> {
               }
             }
             return GetMaterialApp(
+              debugShowCheckedModeBanner: false,
             // return MaterialApp(
               title: 'SCO',
               // locale: locale == ''
@@ -236,7 +234,7 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: widget._navigationServices.navigationStateKey,
               routes: widget._navigationServices.routes,
               initialRoute: "/splashView",
-              // home: TestView(),
+              // home: MapSample(),
             );
           },
         ));

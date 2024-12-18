@@ -103,9 +103,9 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         widget.graduationDetailsList.removeAt(index);
       });
     }
-    print(widget.graduationDetailsList.length.toString());
+    // print(widget.graduationDetailsList.length.toString());
     if (widget.graduationDetailsList.length == 1) {
-      print(widget.graduationDetailsList.length.toString());
+      // print(widget.graduationDetailsList.length.toString());
       final item = widget.graduationDetailsList[0];
       _updateShowCurrentlyStudyingWithFalse(item);
     }

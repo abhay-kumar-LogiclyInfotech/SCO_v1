@@ -609,7 +609,7 @@
   "registrationFailed": "Unable to register user, Please try again later.",
   "error": "",
   "info": "",
-  "warning": "",
+  "warning": "Warning",
   "login": "LOGIN",
   "submissionPhoneNumber": "Phone Number",
   "submissionPhoneType": "Phone Type",
@@ -1119,5 +1119,7 @@
   "graduate_outside_uae_terms_and_conditions": "Graduate Studies Scholarship admission terms and conditions",
   "graduate_outside_uae_scholarship_privileges": "Graduate Studies Scholarship privileges",
   "student_obligations_for_graduate_outside_uae_scholarship": "Student Obligations for the Graduate Studies Scholarship",
-  "graduate_outside_uae_scholarship_applying_procedures": "Graduate Studies Scholarship applying Procedures"
+  "graduate_outside_uae_scholarship_applying_procedures": "Graduate Studies Scholarship applying Procedures",
+  "noNotificationAvailable": "No notification available."
+
 }

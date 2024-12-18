@@ -272,7 +272,6 @@ class AlertServices {
   // Show DelightToastBar
   void showToast({required String message}) {
     dynamic myContext = _navigationServices.navigationStateKey.currentContext;
-    print(myContext.toString());
 
     DelightToastBar(
       autoDismiss: true,

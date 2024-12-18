@@ -90,7 +90,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
       _alertServices.toastMessage(response.message.toString());
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       _setGetSecurityQuestionResponse = ApiResponse.error(error.toString());
       // Message to show status of the operation:
       _alertServices.showErrorSnackBar(error.toString());
@@ -149,7 +149,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
       _alertServices.toastMessage(AppLocalizations.of(context)!.password_sent_successfully);
       return true;
     } catch (e) {
-      debugPrint('Error: $e');
+      // debugPrint('Error: $e');
       _alertServices.showErrorSnackBar(e.toString());
       return false;
     }
@@ -202,7 +202,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
       return true;
     } catch (e) {
-      debugPrint('Error: $e');
+      // debugPrint('Error: $e');
       _alertServices.showErrorSnackBar(e.toString());
       return false;
     }

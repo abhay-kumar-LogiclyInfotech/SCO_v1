@@ -73,7 +73,7 @@ class FaqViewModel with ChangeNotifier {
 
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       _setFaqResponse = ApiResponse.error(error.toString());
       // Message to show status of the operation:
       _alertServices.showErrorSnackBar(error.toString());

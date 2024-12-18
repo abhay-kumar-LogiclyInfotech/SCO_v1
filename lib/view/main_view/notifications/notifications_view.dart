@@ -110,7 +110,7 @@ class _NotificationsViewState extends State<NotificationsView>
                       children: [
                         // Edit Addresses Button
                           provider.apiResponse.data?.isNotEmpty ?? false ?
-                          _notificationsSection(provider: provider,langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable(context: context)
+                          _notificationsSection(provider: provider,langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable(context: context,text: localization.noNotificationAvailable)
                       ],
                     ),
                   ),
@@ -129,8 +129,6 @@ class _NotificationsViewState extends State<NotificationsView>
 
   Widget _notificationsSection(
       {required GetAllNotificationsViewModel provider, required LanguageChangeViewModel langProvider ,required AppLocalizations localization}) {
-
-
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

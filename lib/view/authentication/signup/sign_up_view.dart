@@ -878,7 +878,7 @@ class _SignUpViewState extends State<SignUpView>
               }
             }
           }catch (e){
-            debugPrint(e.toString());
+            // debugPrint(e.toString());
           }
         },
 

@@ -59,7 +59,7 @@ class GetNotificationsCountViewModel with ChangeNotifier {
         setLoading(true);
         setApiResponse = ApiResponse.loading();
         await setEmiratesId();
-        print(_userEmiratesId);
+        // print(_userEmiratesId);
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'authorization': Constants.basicAuth
@@ -67,7 +67,7 @@ class GetNotificationsCountViewModel with ChangeNotifier {
 
         dynamic response = await _myRepo.getNotificationsCount(userEmiratesId: _userEmiratesId ?? '',headers: headers);
 
-        print(response);
+        // print(response);
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);
@@ -75,7 +75,7 @@ class GetNotificationsCountViewModel with ChangeNotifier {
         setApiResponse = ApiResponse.error(error.toString());
         _alertServices.showErrorSnackBar(error.toString());
 
-        print(error);
+        // print(error);
         setLoading(false);
       }}
     else{

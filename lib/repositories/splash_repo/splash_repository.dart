@@ -17,7 +17,7 @@ class SplashRepository {
       );
       return CommonDataModel.fromJson(response);
     } catch (error) {
-      debugPrint('Error fetching common data: $error');
+      // debugPrint('Error fetching common data: $error');
       throw Exception('Failed to fetch common data');
     }
   }

@@ -121,10 +121,11 @@ static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanoti
   static String get bachelorOutsideUaeDegreeApplyingProcedure => "${_bachelorOutsideUae}bachelors-degree-applying-procedures";
 
 
-  static String get graduateOutsideUaeTermsAndConditions => "${_scholarshipOutsideUae}graduate-studies-scholarship/graduate-studies-scholarship-admission-terms-and-conditions";
-  static String get graduateOutsideUaeUniversityAndSpecializationList => "${_scholarshipOutsideUae}graduate-studies-scholarship/sco-accredited-universities-and-specializations-list";
-  static String get graduateOutsideUaeDegreePrivileges => "${_scholarshipOutsideUae}graduate-studies-scholarship/graduate-studies-scholarship-privileges";
-  static String get graduateOutsideUaeDegreeStudentObligations => "${_scholarshipOutsideUae}graduate-studies-scholarship/student-obligations-for-the-graduate-studies-scholarship";
-  static String get graduateOutsideUaeDegreeApplyingProcedure => "${_scholarshipOutsideUae}graduate-studies-scholarship/graduate-studies-scholarship-applying-procedures";
+  static const String _graduateOutsideUae = "${_scholarshipOutsideUae}graduate-studies-scholarship/";
+  static String get graduateOutsideUaeTermsAndConditions => "${_scholarshipOutsideUae}graduate-studies-scholarship-admission-terms-and-conditions";
+  static String get graduateOutsideUaeUniversityAndSpecializationList => "${_scholarshipOutsideUae}sco-accredited-universities-and-specializations-list";
+  static String get graduateOutsideUaeDegreePrivileges => "${_scholarshipOutsideUae}graduate-studies-scholarship-privileges";
+  static String get graduateOutsideUaeDegreeStudentObligations => "${_scholarshipOutsideUae}student-obligations-for-the-graduate-studies-scholarship";
+  static String get graduateOutsideUaeDegreeApplyingProcedure => "${_scholarshipOutsideUae}graduate-studies-scholarship-applying-procedures";
 
 }

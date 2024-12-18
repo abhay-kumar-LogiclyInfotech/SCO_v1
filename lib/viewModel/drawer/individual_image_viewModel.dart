@@ -45,7 +45,7 @@ class IndividualImageViewModel with ChangeNotifier {
 
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       setIndividualImageResponse = ApiResponse.error(error.toString());
       return false;
     }

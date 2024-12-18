@@ -51,13 +51,6 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
 
   late TabController _tabController;
 
-
-
-
-
-
-
-
   @override
   void initState() {
 
@@ -111,8 +104,6 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
         }
       }
     }
-
-
   }
 
 

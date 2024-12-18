@@ -59,7 +59,7 @@ class GetAllActiveScholarshipsViewModel with ChangeNotifier {
         _setApiResponse = ApiResponse.completed(response);
         return true;
       } catch (error) {
-        debugPrint('Printing Error: $error');
+        // debugPrint('Printing Error: $error');
         _setApiResponse = ApiResponse.error(error.toString());
         _alertServices.toastMessage(error.toString());
 

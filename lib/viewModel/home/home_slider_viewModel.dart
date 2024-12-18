@@ -232,9 +232,9 @@ class HomeSliderViewModel with ChangeNotifier {
       final list = parseServiceList(response);
 
 
-      print(list.length);
+      // print(list.length);
       list.forEach((action){
-        debugPrint(action.serviceShortDescription);
+        // debugPrint(action.serviceShortDescription);
       });
 
 
@@ -242,7 +242,7 @@ class HomeSliderViewModel with ChangeNotifier {
 
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       _setHomeSliderResponse = ApiResponse.error(error.toString());
       _alertServices.toastMessage(error.toString());
 

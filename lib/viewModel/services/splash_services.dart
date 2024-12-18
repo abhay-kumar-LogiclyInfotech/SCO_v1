@@ -46,7 +46,7 @@ class SplashServices {
     final provider = Provider.of<CommonDataViewModel>(context, listen: false);
 
     bool isDataStored = HiveManager.isDataStored();
-    debugPrint("Common Data Already Stored: ${isDataStored.toString()}");
+    // debugPrint("Common Data Already Stored: ${isDataStored.toString()}");
     if (isLoggedInKey && isDataStored) {
       if (counter < 20) {
         final response = HiveManager.getStoredData();
@@ -56,7 +56,7 @@ class SplashServices {
             for (var res in response!.data!.response!) res.lovCode!: res
           };
           Constants.lovCodeMap = tempMap;
-          debugPrint('Data stored');
+          // debugPrint('Data stored');
         }
         await _authService.incrementCounter();
         await callBasicApis();
@@ -78,7 +78,7 @@ class SplashServices {
             for (var res in response!.data!.response!) res.lovCode!: res
           };
           Constants.lovCodeMap = tempMap;
-          debugPrint('Data stored');
+          // debugPrint('Data stored');
         }
         await _authService.incrementCounter();
         await callBasicApis();

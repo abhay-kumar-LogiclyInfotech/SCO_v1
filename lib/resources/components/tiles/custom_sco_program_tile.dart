@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
+import '../../../view/responsive.dart';
 import '../../app_text_styles.dart';
 
 
@@ -51,12 +52,15 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
             ),
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(flex:3,child: _imageSection()),
-                Expanded(flex:10,child: _titleSection()),
-                Expanded(flex:1,child: _endSection())
+                // Expanded(flex:3,child: _imageSection()),
+                // Expanded(flex:10,child: _titleSection()),
+                // Expanded(flex:1,child: _endSection())
+                _imageSection(),
+                Expanded(child: _titleSection()),
+                _endSection()
               ],
             ),
           ),
@@ -145,13 +149,16 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
             style: AppTextStyles.titleBoldTextStyle(),
 
           ),
-          const SizedBox(height: 8,),
+          const SizedBox(height: 5),
           Text(
-            widget.subTitle.length < 80 ? widget.subTitle : "${widget.subTitle.substring(0, 80)}...",
+            widget.subTitle.length < (screenWidth < 420 ? 60 : 100) ?
+            widget.subTitle
+                : "${widget.subTitle.substring(0, ((screenWidth < 420 ? 60 : 100)))}...",
             // textAlign: TextAlign.left,
             style: const TextStyle(
               color: Colors.black,fontSize: 12,height: 1.5
             ),
+            // overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

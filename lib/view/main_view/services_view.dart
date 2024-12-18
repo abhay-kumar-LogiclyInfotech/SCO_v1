@@ -70,7 +70,7 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
        await getRolesProvider.getRoles();
 
        role = getRoleFromList(HiveManager.getRole());
-       print(role.toString());
+       // print(role.toString());
      }
    setState(() {
       // update the state of the application status

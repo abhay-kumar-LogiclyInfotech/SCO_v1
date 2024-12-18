@@ -171,11 +171,10 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
         file = await convertBase64ToFile(base64String,
             widget.attachment.attachmentSysFileNameController.text);
       } else {
-        debugPrint("Invalid file data received for request attachment.");
+        // debugPrint("Invalid file data received for request attachment.");
       }
     } else if (provider.apiResponse.status == Status.ERROR) {
-      debugPrint(
-          provider.apiResponse.message ?? "Error fetching request file.");
+      // debugPrint(provider.apiResponse.message ?? "Error fetching request file.");
     }
   }
 
@@ -241,7 +240,7 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
                           .showCustomSnackBar("File not available to open.");
                     }
                   },
-                  leading: SvgPicture.asset("assets/services/file_icon.svg"),
+                  leading: SvgPicture.asset("assets/attachment_icon.svg"),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   title: widget.attachment.isLoading
                       ?  Text(localization.loading)

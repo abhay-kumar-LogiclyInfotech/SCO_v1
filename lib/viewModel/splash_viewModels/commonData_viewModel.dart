@@ -53,9 +53,9 @@ class CommonDataViewModel with ChangeNotifier {
       apiResponse = ApiResponse.completed(response);
       return true;
     } catch (error) {
-      if (kDebugMode) {
-        print('Error in fetchCommonData: $error');
-      }
+      // if (kDebugMode) {
+      //   print('Error in fetchCommonData: $error');
+      // }
       // Update API response state for error
       apiResponse = ApiResponse.error('Failed to fetch common data: $error');
       _alertServices.toastMessage(error.toString() ?? '');

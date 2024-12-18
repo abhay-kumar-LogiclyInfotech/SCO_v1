@@ -94,7 +94,7 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
       _alertServices.toastMessage(response.message.toString());
       return true;
     } catch (error) {
-      debugPrint('Printing Error: $error');
+      // debugPrint('Printing Error: $error');
       setUpdateSecurityQuestionResponse = ApiResponse.error(error.toString());
       //Message to show status of the operation:
       // _alertServices.toastMessage(

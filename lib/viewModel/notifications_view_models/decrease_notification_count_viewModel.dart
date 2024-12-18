@@ -77,7 +77,7 @@ class DecreaseNotificationCountViewModel with ChangeNotifier {
         setLoading(false);
         return true;
       } catch (error) {
-        print(error.toString());
+        // print(error.toString());
         setApiResponse = ApiResponse.error(error.toString());
         _alertServices.showErrorSnackBar(error.toString());
 
