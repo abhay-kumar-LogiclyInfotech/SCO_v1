@@ -149,16 +149,20 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
             style: AppTextStyles.titleBoldTextStyle(),
 
           ),
-          const SizedBox(height: 5),
-          Text(
-            widget.subTitle.length < (screenWidth < 420 ? 60 : 100) ?
-            widget.subTitle
-                : "${widget.subTitle.substring(0, ((screenWidth < 420 ? 60 : 100)))}...",
-            // textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: Colors.black,fontSize: 12,height: 1.5
-            ),
-            // overflow: TextOverflow.ellipsis,
+         if(widget.subTitle.isNotEmpty) Column(
+            children: [
+              const SizedBox(height: 5),
+              Text(
+                widget.subTitle.length < (screenWidth < 420 ? 60 : 100) ?
+                widget.subTitle
+                    : "${widget.subTitle.substring(0, ((screenWidth < 420 ? 60 : 100)))}...",
+                // textAlign: TextAlign.left,
+                style: const TextStyle(
+                    color: Colors.black,fontSize: 12,height: 1.5
+                ),
+                // overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ],
       ),

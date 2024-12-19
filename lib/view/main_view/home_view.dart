@@ -564,26 +564,35 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text(
-                    topSalary?.amount.toString() ?? "0",
-                    style: const TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xff0B9967),
+              Center(
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        const SizedBox(height: 9),
+                        Text(
+                          overflow: TextOverflow.ellipsis,
+                          topSalary?.amount.toString() ?? "0",
+                          style: const TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xff0B9967),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    topSalary?.currency.toString() ?? "",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xff0B9967),
-                      fontWeight: FontWeight.w400,
+                    const SizedBox(width: 4),
+                    Text(
+                      textAlign: TextAlign.end,
+                      topSalary?.currency.toString() ?? "",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xff0B9967),
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               // Text(
               //   topSalary?.status.toString() ?? "",
@@ -831,8 +840,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                             // alignment: WrapAlignment.spaceAround,
                             // crossAxisAlignment: WrapCrossAlignment.center,
                             runSpacing: 20,
-                            spacing: 25,
-                            runAlignment: WrapAlignment.spaceAround,
+                            spacing: 15,
+                            runAlignment: WrapAlignment.spaceEvenly,
                             alignment: WrapAlignment.start,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [

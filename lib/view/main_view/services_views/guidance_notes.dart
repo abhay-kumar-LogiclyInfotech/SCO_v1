@@ -269,15 +269,20 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
             CustomInformationContainerField(title: localization.createdOn, description: convertTimestampToDate(element.createdOn)),
             CustomInformationContainerField(
                 title: localization.actions,
-                descriptionAsWidget: Row(
+                descriptionAsWidget: Column(
                   children: [
-                    actionButton(text: localization.view,assetAddress: "assets/services/status.svg",onTap: (){
-                      _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> SpecificNoteDetailsView(noteId: element.noteId.toString())));
-                    }),
-                    kFormHeight,
-                    actionButton(text:localization.update,assetAddress: "assets/services/update_note.svg",onTap: (){
-                      _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> UpdateNoteView(noteId: element.noteId.toString())));
-                    }),
+                    const SizedBox(height: 15),
+                    Row(
+                      children: [
+                        actionButton(text: localization.view,assetAddress: "assets/services/status.svg",onTap: (){
+                          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> SpecificNoteDetailsView(noteId: element.noteId.toString())));
+                        }),
+                        kFormHeight,
+                        actionButton(text:localization.update,assetAddress: "assets/services/update_note.svg",onTap: (){
+                          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> UpdateNoteView(noteId: element.noteId.toString())));
+                        }),
+                      ],
+                    ),
                   ],
                 ),
                 isLastItem: true),
