@@ -760,7 +760,7 @@ void dispose(){
           final index = showDataRecordList.indexOf(showFields);
           setState(() {
             firstErrorFocusNode = focusNodes[index];
-            _alertServices.flushBarErrorMessages(message: localization.pleaseFillAllRequiredFields);
+            _alertServices.showErrorSnackBar(localization.pleaseFillAllRequiredFields);
           });
           break;
         }
@@ -788,16 +788,16 @@ void dispose(){
     String formattedDate1 = DateFormat('yyyy-MM-dd').format(currentDate); // 2024-11-24
 
    form = {
-      "requestCategory": _requestCategoryController.text.trim(),
+    "requestCategory": _requestCategoryController.text.trim(),
     "requestType": _requestTypeController.text.trim(),
     "requestSubType": _requestSubtypeController.text,
-    "ssrRsReqSeqHeader": 0,
-    "serviceRequestId": 0,
-    "requestDate": formattedDate1.toString(),
-    "status": null,
+    // "ssrRsReqSeqHeader": 0,
+    // "serviceRequestId": 0,
+    // "requestDate": formattedDate1.toString(),
+    // "status": null,
     "details": [
   {
-    "ssrRsReqSeq": null,
+    // "ssrRsReqSeq": null,
     "ssrRsDescription": arData.trim(),
     "displayToUser": "Y",
     "newlyAded": true
