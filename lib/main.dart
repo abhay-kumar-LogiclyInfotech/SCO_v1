@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/view/test.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_employment_status_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
@@ -191,6 +192,10 @@ class _MyAppState extends State<MyApp> {
           // get Roles
           ChangeNotifierProvider(create: (_) => GetRoleViewModel()),
 
+          // get application sections of applied scholarship application
+          ChangeNotifierProvider(create: (_) => GetApplicationSectionViewModel()),
+
+          
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),
         ],

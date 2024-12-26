@@ -6,6 +6,7 @@ import 'package:sco_v1/models/TestModel.dart';
 import 'package:sco_v1/models/account/GetBase64StringModel.dart';
 import 'package:sco_v1/models/account/GetEmploymentStatusModel.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
+import 'package:sco_v1/models/account/edit_application_sections_model/GetApplicationSectionsModel.dart';
 import 'package:sco_v1/models/account/personal_details/GetProfilePictureUrlModel.dart';
 import 'package:sco_v1/models/account/personal_details/UpdatePersonalDetailsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
@@ -461,5 +462,15 @@ class HomeRepository {
         body: body
     );
     return DecreaseNotificationCountModel.fromJson(response);
+  }
+
+  /// GET APPLICATION SECTIONS MODEL
+  Future<GetApplicationSectionsModel> getApplicationSections(
+      {required String userId,required String applicationNumber, required dynamic headers}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: '${AppUrls.baseUrl}e-services/$userId/fetch-ps-application/$applicationNumber',
+      headers: headers,
+    );
+    return GetApplicationSectionsModel.fromJson(response);
   }
 }

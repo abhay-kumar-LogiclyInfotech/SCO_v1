@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
@@ -18,6 +19,7 @@ import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
+import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_employment_history_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
@@ -399,10 +401,11 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                           //   title: localization.sr,
                           //   description: (index+1).toString() ?? '- -',
                           // ),
-                          CustomInformationContainerField(
-                            title: localization.applicationType,
-                            description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
-                          ),
+
+                          // CustomInformationContainerField(
+                          //   title: localization.applicationType,
+                          //   description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
+                          // ),
                           CustomInformationContainerField(
                             title: localization.applicationNumber,
                             description: application?.admApplicationNumber ?? '- -',
@@ -464,15 +467,67 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                               ],
                             ),
                           actionButtonHolder(actionButtons: [
+                            /// VIEW APPLICATION
                             actionButton(backgroundColor: AppColors.SUCCESS, text: localization.viewDetails, onPressed: (){
                               _alertServices.toastMessage(localization.comingSoon);
                             }),
+                            /// UPLOAD APPROVED ATTACHMENTS
                             actionButton(backgroundColor: AppColors.INFO, text: localization.attachments, onPressed: (){
                               _alertServices.toastMessage(localization.comingSoon);
                             }),
+                            /// UNIVERSITY WISHLIST
                             actionButton(backgroundColor: AppColors.scoMidThemeColor, text: localization.universityWishlist, onPressed: (){
                               _alertServices.toastMessage(localization.comingSoon);
+                            }),
+                            /// EDIT BUTTON
+                            /// SHOW EDIT BUTTON IF EDITING IS ALLOWED
+                            if(application.editAllowed || application.editAllowed.toString() == 'true')
+                            actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.edit, onPressed: (){
 
+                              /// show options which are available to edit for specific application
+                              showModalBottomSheet
+                                (context: context,
+                                  builder: (context){return
+                                Container(
+                                  // height: screenHeight/4,
+                                  width: screenWidth,
+                                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: kPadding),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white
+                                ),
+                                child: SafeArea(
+                                  child: GridView(
+                                   shrinkWrap: true,
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing:10,childAspectRatio: 5),
+                                    children: [
+                                      /// EDIT HIGH-SCHOOL DETAILS
+                                      if(application.schoolEditAllowed.toString().toUpperCase() == 'Y')
+                                      actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.highSchoolDetails, onPressed: (){
+                                      }),
+
+                                      /// EDIT GRADUATION DETAILS
+                                      if(application.graduationEditAllowed.toString().toUpperCase() == 'Y')
+                                        actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.graduationDetails, onPressed: (){
+                                      }),
+
+                                      /// EDIT UNIVERSITY AND MAJORS DETAILS
+                                      if(application.wishListEditAllowed.toString().toUpperCase() == 'Y')
+                                        actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.universityAndMajor, onPressed: (){
+                                      }),
+
+                                      /// EDIT EMPLOYMENT HISTORY DETAILS
+                                      if(application.workExpEditAllowed.toString().toUpperCase() == 'Y')
+                                        actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.employmentHistory, onPressed: (){
+                                          /// move to edit employment history
+                                          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditEmploymentHistoryView(
+                                            applicationNumber: application.admApplicationNumber,
+                                          )));
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                                );});
                             }),
                           ]
                           )

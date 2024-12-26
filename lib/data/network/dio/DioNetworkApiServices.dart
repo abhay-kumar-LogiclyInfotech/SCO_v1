@@ -12,27 +12,27 @@ class DioNetworkApiServices extends DioBaseApiServices {
 
   DioNetworkApiServices() {
     // Initialize Logger
-    // _dio.interceptors.add(InterceptorsWrapper(
-    //   onRequest: (options, handler) {
-    //     logger.i('Request: ${options.method} ${options.uri}');
-    //     logger.i('Request Headers: ${options.headers}');
-    //     logger.i('Request Data: ${options.data}');
-    //     return handler.next(options);
-    //   },
-    //   onResponse: (response, handler) {
-    //     logger.d('Response Status: ${response.statusCode}');
-    //     logger.d('Response Data: ${response.data}');
-    //     return handler.next(response);
-    //   },
-    //   onError: (DioError e, handler) {
-    //     logger.e('Error: ${e.message}');
-    //     if (e.response != null) {
-    //       logger.e('Error Response Status: ${e.response?.statusCode}');
-    //       logger.e('Error Response Data: ${e.response?.data}');
-    //     }
-    //     return handler.next(e);
-    //   },
-    // ));
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        logger.i('Request: ${options.method} ${options.uri}');
+        logger.i('Request Headers: ${options.headers}');
+        logger.i('Request Data: ${options.data}');
+        return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        logger.d('Response Status: ${response.statusCode}');
+        logger.d('Response Data: ${response.data}');
+        return handler.next(response);
+      },
+      onError: (DioError e, handler) {
+        logger.e('Error: ${e.message}');
+        if (e.response != null) {
+          logger.e('Error Response Status: ${e.response?.statusCode}');
+          logger.e('Error Response Data: ${e.response?.data}');
+        }
+        return handler.next(e);
+      },
+    ));
   }
 
   @override

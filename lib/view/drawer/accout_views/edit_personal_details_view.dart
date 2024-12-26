@@ -1397,5 +1397,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
         "uaePassUuid": user?.uaePassUuid ?? ''
       }
     };
+    print(form);
   }
 }
