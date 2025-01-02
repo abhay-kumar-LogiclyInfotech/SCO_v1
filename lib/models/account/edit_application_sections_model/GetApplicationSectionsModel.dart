@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../apply_scholarship/FillScholarshipFormModels.dart';
+
 class GetApplicationSectionsModel {
   final String messageCode;
   final String message;
@@ -53,9 +55,9 @@ class Data {
 }
 
 class PsApplication {
-  final List<Graduation> graduationList;
+  final List<GraduationInfo> graduationList;
   final List<UniversityPriority> universtiesPriorityList;
-  final List<RequiredExamination> requiredExaminationList;
+  final List<RequiredExaminations> requiredExaminationList;
   final List<dynamic> addressList;
   final List<dynamic> highSchoolList;
   final List<EmploymentHistory> emplymentHistory;
@@ -101,13 +103,13 @@ class PsApplication {
 
   factory PsApplication.fromJson(Map<String, dynamic> json) => PsApplication(
     graduationList: (json['graduationList'] as List)
-        .map((e) => Graduation.fromJson(e))
+        .map((e) => GraduationInfo.fromJson(e))
         .toList(),
     universtiesPriorityList: (json['universtiesPriorityList'] as List)
         .map((e) => UniversityPriority.fromJson(e))
         .toList(),
     requiredExaminationList: (json['requiredExaminationList'] as List)
-        .map((e) => RequiredExamination.fromJson(e))
+        .map((e) => RequiredExaminations.fromJson(e))
         .toList(),
     addressList: List<dynamic>.from(json['addressList'] ?? []),
     highSchoolList: List<dynamic>.from(json['highSchoolList'] ?? []),
@@ -160,85 +162,85 @@ class PsApplication {
   };
 }
 
-class Graduation {
-  final String level;
-  final String country;
-  final String university;
-  final String? otherUniversity;
-  final String major;
-  final String? otherMajor;
-  final String cgpa;
-  final int graduationStartDate;
-  final dynamic graduationEndDate;
-  final String sponsorShip;
-  final dynamic errorMessage;
-  final bool currentlyStudying;
-  final bool highestQualification;
-  final String lastTerm;
-  final bool showCurrentlyStudying;
-  final CaseStudy caseStudy;
-  final bool newField;
-
-  Graduation({
-    required this.level,
-    required this.country,
-    required this.university,
-    this.otherUniversity,
-    required this.major,
-    this.otherMajor,
-    required this.cgpa,
-    required this.graduationStartDate,
-    this.graduationEndDate,
-    required this.sponsorShip,
-    this.errorMessage,
-    required this.currentlyStudying,
-    required this.highestQualification,
-    required this.lastTerm,
-    required this.showCurrentlyStudying,
-    required this.caseStudy,
-    required this.newField,
-  });
-
-  factory Graduation.fromJson(Map<String, dynamic> json) => Graduation(
-    level: json['level'],
-    country: json['country'],
-    university: json['university'],
-    otherUniversity: json['otherUniversity'],
-    major: json['major'],
-    otherMajor: json['otherMajor'],
-    cgpa: json['cgpa'],
-    graduationStartDate: json['graduationStartDate'],
-    graduationEndDate: json['graduationEndDate'],
-    sponsorShip: json['sponsorShip'],
-    errorMessage: json['errorMessage'],
-    currentlyStudying: json['currentlyStudying'],
-    highestQualification: json['highestQualification'],
-    lastTerm: json['lastTerm'],
-    showCurrentlyStudying: json['showCurrentlyStudying'],
-    caseStudy: CaseStudy.fromJson(json['caseStudy']),
-    newField: json['new'],
-  );
-
-  Map<String, dynamic> toJson() => {
-    'level': level,
-    'country': country,
-    'university': university,
-    'otherUniversity': otherUniversity,
-    'major': major,
-    'otherMajor': otherMajor,
-    'cgpa': cgpa,
-    'graduationStartDate': graduationStartDate,
-    'graduationEndDate': graduationEndDate,
-    'sponsorShip': sponsorShip,
-    'errorMessage': errorMessage,
-    'currentlyStudying': currentlyStudying,
-    'highestQualification': highestQualification,
-    'lastTerm': lastTerm,
-    'showCurrentlyStudying': showCurrentlyStudying,
-    'caseStudy': caseStudy.toJson(),
-    'new': newField,
-  };
-}
+// class GraduationInfo {
+//   final String level;
+//   final String country;
+//   final String university;
+//   final String? otherUniversity;
+//   final String major;
+//   final String? otherMajor;
+//   final String cgpa;
+//   final int graduationStartDate;
+//   final dynamic graduationEndDate;
+//   final String sponsorShip;
+//   final dynamic errorMessage;
+//   final bool currentlyStudying;
+//   final bool highestQualification;
+//   final String lastTerm;
+//   final bool showCurrentlyStudying;
+//   final CaseStudy caseStudy;
+//   final bool newField;
+//
+//   GraduationInfo({
+//     required this.level,
+//     required this.country,
+//     required this.university,
+//     this.otherUniversity,
+//     required this.major,
+//     this.otherMajor,
+//     required this.cgpa,
+//     required this.graduationStartDate,
+//     this.graduationEndDate,
+//     required this.sponsorShip,
+//     this.errorMessage,
+//     required this.currentlyStudying,
+//     required this.highestQualification,
+//     required this.lastTerm,
+//     required this.showCurrentlyStudying,
+//     required this.caseStudy,
+//     required this.newField,
+//   });
+//
+//   factory GraduationInfo.fromJson(Map<String, dynamic> json) => GraduationInfo(
+//     level: json['level'],
+//     country: json['country'],
+//     university: json['university'],
+//     otherUniversity: json['otherUniversity'],
+//     major: json['major'],
+//     otherMajor: json['otherMajor'],
+//     cgpa: json['cgpa'],
+//     graduationStartDate: json['graduationStartDate'],
+//     graduationEndDate: json['graduationEndDate'],
+//     sponsorShip: json['sponsorShip'],
+//     errorMessage: json['errorMessage'],
+//     currentlyStudying: json['currentlyStudying'],
+//     highestQualification: json['highestQualification'],
+//     lastTerm: json['lastTerm'],
+//     showCurrentlyStudying: json['showCurrentlyStudying'],
+//     caseStudy: CaseStudy.fromJson(json['caseStudy']),
+//     newField: json['new'],
+//   );
+//
+//   Map<String, dynamic> toJson() => {
+//     'level': level,
+//     'country': country,
+//     'university': university,
+//     'otherUniversity': otherUniversity,
+//     'major': major,
+//     'otherMajor': otherMajor,
+//     'cgpa': cgpa,
+//     'graduationStartDate': graduationStartDate,
+//     'graduationEndDate': graduationEndDate,
+//     'sponsorShip': sponsorShip,
+//     'errorMessage': errorMessage,
+//     'currentlyStudying': currentlyStudying,
+//     'highestQualification': highestQualification,
+//     'lastTerm': lastTerm,
+//     'showCurrentlyStudying': showCurrentlyStudying,
+//     'caseStudy': caseStudy.toJson(),
+//     'new': newField,
+//   };
+// }
 
 class CaseStudy {
   final String title;
@@ -325,107 +327,107 @@ class UniversityPriority {
   };
 }
 
-class RequiredExamination {
-  final String examination;
-  final String examinationTypeId;
-  final int examinationGrade;
-  final dynamic errorMessage;
-  final int minScore;
-  final int maxScore;
-  final int examDate;
-  final dynamic minDateAllowed;
-  final bool newField;
+// class RequiredExaminations {
+//   final String examination;
+//   final String examinationTypeId;
+//   final int examinationGrade;
+//   final dynamic errorMessage;
+//   final int minScore;
+//   final int maxScore;
+//   final int examDate;
+//   final dynamic minDateAllowed;
+//   final bool newField;
+//
+//   RequiredExaminations({
+//     required this.examination,
+//     required this.examinationTypeId,
+//     required this.examinationGrade,
+//     this.errorMessage,
+//     required this.minScore,
+//     required this.maxScore,
+//     required this.examDate,
+//     this.minDateAllowed,
+//     required this.newField,
+//   });
+//
+//   factory RequiredExaminations.fromJson(Map<String, dynamic> json) =>
+//       RequiredExaminations(
+//         examination: json['examination'],
+//         examinationTypeId: json['examinationTypeId'],
+//         examinationGrade: json['examinationGrade'],
+//         errorMessage: json['errorMessage'],
+//         minScore: json['minScore'],
+//         maxScore: json['maxScore'],
+//         examDate: json['examDate'],
+//         minDateAllowed: json['minDateAllowed'],
+//         newField: json['new'],
+//       );
+//
+//   Map<String, dynamic> toJson() => {
+//     'examination': examination,
+//     'examinationTypeId': examinationTypeId,
+//     'examinationGrade': examinationGrade,
+//     'errorMessage': errorMessage,
+//     'minScore': minScore,
+//     'maxScore': maxScore,
+//     'examDate': examDate,
+//     'minDateAllowed': minDateAllowed,
+//     'new': newField,
+//   };
+// }
 
-  RequiredExamination({
-    required this.examination,
-    required this.examinationTypeId,
-    required this.examinationGrade,
-    this.errorMessage,
-    required this.minScore,
-    required this.maxScore,
-    required this.examDate,
-    this.minDateAllowed,
-    required this.newField,
-  });
-
-  factory RequiredExamination.fromJson(Map<String, dynamic> json) =>
-      RequiredExamination(
-        examination: json['examination'],
-        examinationTypeId: json['examinationTypeId'],
-        examinationGrade: json['examinationGrade'],
-        errorMessage: json['errorMessage'],
-        minScore: json['minScore'],
-        maxScore: json['maxScore'],
-        examDate: json['examDate'],
-        minDateAllowed: json['minDateAllowed'],
-        newField: json['new'],
-      );
-
-  Map<String, dynamic> toJson() => {
-    'examination': examination,
-    'examinationTypeId': examinationTypeId,
-    'examinationGrade': examinationGrade,
-    'errorMessage': errorMessage,
-    'minScore': minScore,
-    'maxScore': maxScore,
-    'examDate': examDate,
-    'minDateAllowed': minDateAllowed,
-    'new': newField,
-  };
-}
-
-class EmploymentHistory {
-  final String employerName;
-  final int startDate;
-  final int endDate;
-  final String occupation;
-  final String title;
-  final String place;
-  final String reportingManager;
-  final String contantNumber;
-  final String contactEmail;
-  final bool newField;
-
-  EmploymentHistory({
-    required this.employerName,
-    required this.startDate,
-    required this.endDate,
-    required this.occupation,
-    required this.title,
-    required this.place,
-    required this.reportingManager,
-    required this.contantNumber,
-    required this.contactEmail,
-    required this.newField,
-  });
-
-  factory EmploymentHistory.fromJson(Map<String, dynamic> json) =>
-      EmploymentHistory(
-        employerName: json['employerName'],
-        startDate: json['startDate'],
-        endDate: json['endDate'],
-        occupation: json['occupation'],
-        title: json['title'],
-        place: json['place'],
-        reportingManager: json['reportingManager'],
-        contantNumber: json['contantNumber'],
-        contactEmail: json['contactEmail'],
-        newField: json['new'],
-      );
-
-  Map<String, dynamic> toJson() => {
-    'employerName': employerName,
-    'startDate': startDate,
-    'endDate': endDate,
-    'occupation': occupation,
-    'title': title,
-    'place': place,
-    'reportingManager': reportingManager,
-    'contantNumber': contantNumber,
-    'contactEmail': contactEmail,
-    'new': newField,
-  };
-}
+// class EmploymentHistory {
+//   final String employerName;
+//   final int startDate;
+//   final int endDate;
+//   final String occupation;
+//   final String title;
+//   final String place;
+//   final String reportingManager;
+//   final String contantNumber;
+//   final String contactEmail;
+//   final bool newField;
+//
+//   EmploymentHistory({
+//     required this.employerName,
+//     required this.startDate,
+//     required this.endDate,
+//     required this.occupation,
+//     required this.title,
+//     required this.place,
+//     required this.reportingManager,
+//     required this.contantNumber,
+//     required this.contactEmail,
+//     required this.newField,
+//   });
+//
+//   factory EmploymentHistory.fromJson(Map<String, dynamic> json) =>
+//       EmploymentHistory(
+//         employerName: json['employerName'],
+//         startDate: json['startDate'],
+//         endDate: json['endDate'],
+//         occupation: json['occupation'],
+//         title: json['title'],
+//         place: json['place'],
+//         reportingManager: json['reportingManager'],
+//         contantNumber: json['contantNumber'],
+//         contactEmail: json['contactEmail'],
+//         newField: json['new'],
+//       );
+//
+//   Map<String, dynamic> toJson() => {
+//     'employerName': employerName,
+//     'startDate': startDate,
+//     'endDate': endDate,
+//     'occupation': occupation,
+//     'title': title,
+//     'place': place,
+//     'reportingManager': reportingManager,
+//     'contantNumber': contantNumber,
+//     'contactEmail': contactEmail,
+//     'new': newField,
+//   };
+// }
 
 class MajorWish {
   final String major;

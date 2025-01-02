@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
@@ -11,10 +12,12 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
 import '../../../apply_scholarship/form_views/employment_history_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class EditEmploymentHistoryView extends StatefulWidget {
-  final String applicationNumber;
-  const EditEmploymentHistoryView({super.key,required this.applicationNumber});
+  final ApplicationStatusDetail applicationStatusDetails;
+  const EditEmploymentHistoryView({super.key,required this.applicationStatusDetails});
 
   @override
   State<EditEmploymentHistoryView> createState() => _EditEmploymentHistoryViewState();
@@ -38,11 +41,39 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
 
       /// Making api call to ps-application
       final psApplicationProvider = Provider.of<GetApplicationSectionViewModel>(context,listen:false);
-      await psApplicationProvider.getApplicationSections(applicationNumber: widget.applicationNumber);
+      await psApplicationProvider.getApplicationSections(applicationNumber: widget.applicationStatusDetails.admApplicationNumber);
+
+      if(psApplicationProvider.apiResponse.status == Status.COMPLETED && psApplicationProvider.apiResponse.data?.data.psApplication.emplymentHistory != null)
+      {
+
+        /// TODO: ADD EMPLOYMENT STATUS HERE
+        final empHistory = psApplicationProvider.apiResponse.data?.data.psApplication.emplymentHistory;
+
+        if(empHistory?.isNotEmpty ?? false) {
+          for (var element in empHistory!) {
+            _employmentHistoryList.add(element);
+          }
+        }
+
+          ///  Given by Backend Dev i.e. Amit Sharma: Tell him if employment count is more than 0 than ask him to select previous employment. And if 0 than not employed and if any employment record is not having the end date ask hi. To select currently employed
+        if(_employmentHistoryList.isEmpty){
+          _employmentStatus = 'N';
+        }
+        else if(_employmentHistoryList.any((element){
+          return element.endDateController.text.isNotEmpty;
+        }))
+        {
+          _employmentStatus = 'P';
+        }
+        else{
+          _employmentStatus = 'E';
+        }
+
+
       setState(() {
 
       });
-    });
+    }});
     super.initState();
   }
 
@@ -56,9 +87,10 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
   @override
   Widget build(BuildContext context) {
     final LanguageChangeViewModel langProvider = context.read<LanguageChangeViewModel>();
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-      appBar: CustomSimpleAppBar(titleAsString: "Employment History",),
+      appBar: CustomSimpleAppBar(titleAsString: localization.employmentHistory,),
       body: Utils.modelProgressHud(processing: _isProcessing,child: Padding(
         padding:  const EdgeInsets.symmetric(vertical: 20),
         child: _employmentHistoryDetailsSection(step: 0,langProvider: langProvider),
@@ -94,7 +126,7 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
         reportingManagerController: TextEditingController(),
         contactNumberController: TextEditingController(),
         contactEmailController: TextEditingController(),
-        isNewController: TextEditingController(),
+        isNewController: TextEditingController(text: 'true'),
         errorMessageController: TextEditingController(),
         employerNameFocusNode: FocusNode(),
         designationFocusNode: FocusNode(),
@@ -165,6 +197,7 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
           return EmploymentHistoryView(onEmploymentStatusChanged: (value) {
             setState(() {
               _employmentStatus = value;
+              print(_employmentStatus);
 
               if (_employmentStatus == 'N') {
                 _employmentHistoryList.clear();

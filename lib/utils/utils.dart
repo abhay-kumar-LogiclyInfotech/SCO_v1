@@ -685,24 +685,52 @@ bool isFourteenYearsOld(String dob) {
   return age >= 14;
 }
 
+// String formatDateOnly(String? dateString) {
+//   if (dateString == null || dateString.isEmpty) {
+//     return ''; // Handle null or empty input
+//   }
+//
+//   try {
+//     // Preprocess to make it ISO 8601 compatible
+//     String processedDateString = dateString.replaceFirst(' ', 'T').replaceFirst(' UTC', 'Z');
+//     // Parse the input date string to DateTime
+//     DateTime parsedDate = DateTime.parse(processedDateString);
+//     // Format to date-only string
+//     return DateFormat('yyyy-MM-dd').format(parsedDate);
+//   } catch (e) {
+//     // Handle invalid date string format
+//     return '';
+//   }
+// }
+// import 'package:intl/intl.dart';
+
 String formatDateOnly(String? dateString) {
   if (dateString == null || dateString.isEmpty) {
     return ''; // Handle null or empty input
   }
 
   try {
-    // Preprocess to make it ISO 8601 compatible
-    String processedDateString =
-        dateString.replaceFirst(' ', 'T').replaceFirst(' UTC', 'Z');
-    // Parse the input date string to DateTime
-    DateTime parsedDate = DateTime.parse(processedDateString);
+    DateTime parsedDate;
+
+    if (RegExp(r'^\d+$').hasMatch(dateString)) {
+      // If the input is numeric, treat it as a timestamp in milliseconds
+      int timestamp = int.parse(dateString);
+      parsedDate = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    } else {
+      // Preprocess to make it ISO 8601 compatible
+      String processedDateString = dateString.replaceFirst(' ', 'T').replaceFirst(' UTC', 'Z');
+      // Parse the input date string to DateTime
+      parsedDate = DateTime.parse(processedDateString);
+    }
+
     // Format to date-only string
     return DateFormat('yyyy-MM-dd').format(parsedDate);
   } catch (e) {
-    // Handle invalid date string format
+    // Handle invalid date string or timestamp format
     return '';
   }
 }
+
 
 String convertTimestampToDate(int timestamp) {
   if (timestamp == 0) {

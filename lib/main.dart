@@ -195,7 +195,6 @@ class _MyAppState extends State<MyApp> {
           // get application sections of applied scholarship application
           ChangeNotifierProvider(create: (_) => GetApplicationSectionViewModel()),
 
-          
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),
         ],

@@ -20,10 +20,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GraduationInformationView extends StatefulWidget {
   dynamic graduationDetailsList;
-  dynamic selectedScholarship;
+  dynamic academicCareer;
+  dynamic scholarshipType;
   final bool displayHighSchool;
   dynamic havingSponsor;
-  final Function(dynamic langProvider) draftPrevNextButtons;
+  dynamic draftPrevNextButtons;
   dynamic nationalityMenuItemsList;
   dynamic Function() addGraduation;
   dynamic graduationLevelMenuItems;
@@ -37,9 +38,10 @@ class GraduationInformationView extends StatefulWidget {
       required this.graduationLevelMenuItems,
       required this.caseStudyYearDropdownMenuItems,
       required this.graduationLevelDDSMenuItems,
-      required this.selectedScholarship,
+      required this.academicCareer,
+      required this.scholarshipType,
       required this.displayHighSchool,
-      required this.draftPrevNextButtons,
+       this.draftPrevNextButtons,
       required this.havingSponsor,
       this.nationalityMenuItemsList,
       required this.addGraduation,
@@ -178,13 +180,13 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         child: SingleChildScrollView(
             child: Column(children: [
           if (!widget.displayHighSchool)
-            widget.draftPrevNextButtons(langProvider),
+            widget.draftPrevNextButtons,
           kFormHeight,
 
           /// if selected scholarship matches the condition then high school details section else don't
-          (widget.selectedScholarship?.acadmicCareer != 'SCHL' && widget.selectedScholarship?.acadmicCareer != 'HCHL')
+          (widget.academicCareer != 'SCHL' && widget.academicCareer != 'HCHL')
               ? CustomInformationContainer(
-                  title: widget.selectedScholarship?.acadmicCareer == 'DDS'
+                  title: widget.academicCareer == 'DDS'
                       ? localization.ddsGraduationTitle
                       : localization.graduationDetails,
                   expandedContent: Column(
@@ -208,7 +210,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                     /// ****************************************************************************************************************************************************
 
                                     sectionTitle(
-                                        title: widget.selectedScholarship?.acadmicCareer == 'DDS' ? '${localization.ddsGraduationTitle} ${index + 1}' : "${localization.graduationDetails} ${index + 1}"),
+                                        title: widget.academicCareer == 'DDS' ? '${localization.ddsGraduationTitle} ${index + 1}' : "${localization.graduationDetails} ${index + 1}"),
 
                                     graduationInfo.showCurrentlyStudying
                                         ? Column(children: [
@@ -296,7 +298,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
                                     /// ****************************************************************************************************************************************************
 
-                                    (widget.selectedScholarship?.acadmicCareer == 'UGRD') ? (graduationInfo.currentlyStudying ?
+                                    (widget.academicCareer == 'UGRD') ? (graduationInfo.currentlyStudying ?
 
                                             /// copy paste full below code
                                            /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
@@ -312,7 +314,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
                                     /// ****************************************************************************************************************************************************
 
-                                    (!(widget.selectedScholarship?.scholarshipType == 'INT' && widget.selectedScholarship?.acadmicCareer == 'UGRD') && index != 0)
+                                    (!(widget.scholarshipType == 'INT' && widget.academicCareer == 'UGRD') && index != 0)
                                         ? addRemoveMoreSection(
                                             title: localization.deleteRowGraduation,
                                             add: false,
@@ -333,7 +335,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                     /// ****************************************************************************************************************************************************
                                   ]);
                             }),
-                        (!(widget.selectedScholarship?.scholarshipType == 'INT' && widget.selectedScholarship?.acadmicCareer == 'UGRD') && widget.selectedScholarship?.acadmicCareer != 'UGRD')
+                        (!(widget.scholarshipType == 'INT' && widget.academicCareer == 'UGRD') && widget.academicCareer != 'UGRD')
                             ? addRemoveMoreSection(
                                 title: localization.addRowGraduation,
                                 add: true,
@@ -347,7 +349,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                     ],
                   ))
               : showVoid,
-          widget.draftPrevNextButtons(langProvider)
+          widget.draftPrevNextButtons
         ])));
   }
 
@@ -361,7 +363,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
         /// graduation level
         /// For student who are not applying ug scholarship will see options as editable to they can edit them to select graduation level
-        (index > 0 && widget.selectedScholarship?.acadmicCareer != 'UGRD' && widget.selectedScholarship?.acadmicCareer != 'DDS')
+        (index > 0 && widget.academicCareer != 'UGRD' && widget.academicCareer != 'DDS')
             ? Column(
                 children: [
                   kFormHeight,
@@ -406,7 +408,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
             /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
             /// ****************************************************************************************************************************************************
             /// show static bachelor graduation level
-            (index == 0 || widget.selectedScholarship?.acadmicCareer == 'UGRD')
+            (index == 0 || widget.academicCareer == 'UGRD')
                 ? _showBachelorScholarshipByDefault(
                     index: index,
                     langProvider: langProvider,
@@ -416,7 +418,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
 
         /// to dropdown for dds
-        (index != 0 && widget.selectedScholarship?.acadmicCareer == 'DDS')
+        (index != 0 && widget.academicCareer == 'DDS')
             ? Column(
                 children: [
                   fieldHeading(
@@ -495,7 +497,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
         /// graduation university
 
-        widget.selectedScholarship?.acadmicCareer != 'DDS'
+        widget.academicCareer != 'DDS'
             ? Column(
                 children: [
                   kFormHeight,
@@ -537,7 +539,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: widget.selectedScholarship?.acadmicCareer != 'DDS'
+                      title: widget.academicCareer != 'DDS'
                           ? localization.hsOtherUniversity
                           : localization.ddsUniversity,
                       important: true,
@@ -548,7 +550,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                       nextFocusNode: graduationInfo.majorFocusNode,
                       controller: graduationInfo.otherUniversityController,
                       hintText:
-                          widget.selectedScholarship?.acadmicCareer != 'DDS'
+                          widget.academicCareer != 'DDS'
                               ? localization.hsOtherUniversityWatermark
                               : localization.ddsUniversityWatermark,
                       errorText: graduationInfo.otherUniversityError,
@@ -571,7 +573,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         ///  major
         kFormHeight,
         fieldHeading(
-            title: widget.selectedScholarship?.acadmicCareer != 'DDS'
+            title: widget.academicCareer != 'DDS'
                 ? localization.hsMajor
                 : localization.ddsMajor,
             important: true,
@@ -581,7 +583,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
             currentFocusNode: graduationInfo.majorFocusNode,
             nextFocusNode: graduationInfo.cgpaFocusNode,
             controller: graduationInfo.majorController,
-            hintText: widget.selectedScholarship?.acadmicCareer != 'DDS'
+            hintText: widget.academicCareer != 'DDS'
                 ? localization.hsMajorWatermark
                 : localization.ddsMajorWatermark,
             errorText: graduationInfo.majorError,
@@ -735,7 +737,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
         /// ****************************************************************************************************************************************************
         /// questions if dds
-        widget.selectedScholarship?.acadmicCareer == 'DDS'
+        widget.academicCareer == 'DDS'
             ? Column(
                 children: [
                   kFormHeight,
@@ -776,7 +778,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
 
         /// SPONSORSHIP
-        ((widget.havingSponsor == 'Y') || widget.selectedScholarship?.acadmicCareer != 'DDS')
+        ((widget.havingSponsor == 'Y') || widget.academicCareer != 'DDS')
             ? Column(
                 children: [
                   kFormHeight,

@@ -887,8 +887,8 @@ class GraduationInfo {
       otherUniversityController: TextEditingController(text: json['otherUniversity'] ?? ''),
       majorController: TextEditingController(text: json['major'] ?? ''),
       cgpaController: TextEditingController(text: json['cgpa'] ?? ''),
-      graduationStartDateController: TextEditingController(text: formatDateOnly(json['graduationStartDate'] ?? '')),
-      graduationEndDateController: TextEditingController(text: formatDateOnly(json['graduationEndDate'] ?? '')),
+      graduationStartDateController: TextEditingController(text: formatDateOnly(json['graduationStartDate']?.toString() ?? '')),
+      graduationEndDateController: TextEditingController(text: formatDateOnly(json['graduationEndDate']?.toString() ?? '')),
       lastTermController: TextEditingController(text: json['lastTerm'] ?? ''),
       caseStudyTitleController: TextEditingController(
         text: (json['caseStudy'] != null && json['caseStudy'] is Map && json['caseStudy']['title'] != null)
@@ -900,12 +900,12 @@ class GraduationInfo {
             ? json['caseStudy']['description'].toString()
             : '',
       ),
-
       caseStudyStartYearController: TextEditingController(
         text: (json['caseStudy'] is Map && json['caseStudy']['startYear'] != null)
             ? json['caseStudy']['startYear'].toString()
             : '',
       ),
+
 
       levelFocusNode: FocusNode(),
       countryFocusNode: FocusNode(),
@@ -920,7 +920,8 @@ class GraduationInfo {
       caseStudyDescriptionFocusNode: FocusNode(),
       caseStudyStartYearFocusNode: FocusNode(),
       currentlyStudying: json['currentlyStudying'] == 'true',
-      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      // isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      isNewController: TextEditingController(text: (json['isNew']?.toString() ?? json['new']?.toString() ?? 'false'),),
       sponsorShipController: TextEditingController(text: json['sponsorShip'] ?? 'no'),
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
       highestQualification: json['highestQualification'] == 'true',
@@ -948,6 +949,7 @@ class GraduationInfo {
       },
       'currentlyStudying': currentlyStudying.toString(),
       'isNew': isNewController.text,
+      'new': isNewController.text,
       'sponsorShip': sponsorShipController.text,
       'errorMessage': errorMessageController.text,
       'highestQualification': highestQualification.toString(),
@@ -1015,14 +1017,17 @@ class RequiredExaminations {
   // From JSON
   factory RequiredExaminations.fromJson(Map<String, dynamic> json) {
     return RequiredExaminations(
-      examinationController: TextEditingController(text: json['examination'] ?? ''),
-      examinationTypeIdController: TextEditingController(text: json['examinationTypeId'] ?? ''),
-      examinationGradeController: TextEditingController(text: json['examinationGrade'] ?? ''),
-      minScoreController: TextEditingController(text: json['minScore'] ?? ''),
-      maxScoreController: TextEditingController(text: json['maxScore'] ?? ''),
-      examDateController: TextEditingController(text: formatDateOnly(json['examDate'] ?? '')),
-      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
-      errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
+      examinationController: TextEditingController(text: json['examination']?.toString() ?? ''),
+      examinationTypeIdController: TextEditingController(text: json['examinationTypeId']?.toString() ?? ''),
+      examinationGradeController: TextEditingController(text: json['examinationGrade']?.toString() ?? ''),
+      minScoreController: TextEditingController(text: json['minScore']?.toString() ?? ''),
+      maxScoreController: TextEditingController(text: json['maxScore']?.toString() ?? ''),
+      examDateController: TextEditingController(text: formatDateOnly(json['examDate']?.toString() ?? '')),
+      // isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      isNewController: TextEditingController(
+        text: (json['isNew']?.toString() ?? json['new']?.toString() ?? 'false'),
+      ),
+      errorMessageController: TextEditingController(text: json['errorMessage']?.toString() ?? ''),
       examinationFocusNode: FocusNode(),
       examinationTypeIdFocusNode: FocusNode(),
       examinationGradeFocusNode: FocusNode(),
@@ -1042,6 +1047,7 @@ class RequiredExaminations {
       'maxScore': maxScoreController.text,
       'examDate': examDateController.text,
       'isNew': isNewController.text,
+      'new':isNewController.text,
       'errorMessage': errorMessageController.text,
     };
   }
@@ -1126,18 +1132,22 @@ class EmploymentHistory {
 
   // From JSON
   factory EmploymentHistory.fromJson(Map<String, dynamic> json) {
+
     return EmploymentHistory(
       employerNameController: TextEditingController(text: json['employerName'] ?? ''),
       designationController: TextEditingController(text: json['designation'] ?? ''),
-      startDateController: TextEditingController(text: formatDateOnly(json['startDate']) ?? ''),
-      endDateController: TextEditingController(text: formatDateOnly(json['endDate']) ?? ''),
+      startDateController: TextEditingController(text: formatDateOnly(json['startDate'].toString()) ?? ''),
+      endDateController: TextEditingController(text: formatDateOnly(json['endDate'].toString()) ?? ''),
       occupationController: TextEditingController(text: json['occupation'] ?? ''),
       titleController: TextEditingController(text: json['title'] ?? ''),
       placeController: TextEditingController(text: json['place'] ?? ''),
       reportingManagerController: TextEditingController(text: json['reportingManager'] ?? ''),
       contactNumberController: TextEditingController(text: json['contantNumber'] ?? ''),
       contactEmailController: TextEditingController(text: json['contactEmail'] ?? ''),
-      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      // isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      isNewController: TextEditingController(
+        text: (json['isNew']?.toString() ?? json['new']?.toString() ?? 'false'),
+      ),
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
       employerNameFocusNode: FocusNode(),
       designationFocusNode: FocusNode(),
@@ -1166,6 +1176,7 @@ class EmploymentHistory {
       'contantNumber': contactNumberController.text,
       'contactEmail': contactEmailController.text,
       'isNew': isNewController.text,
+      'new': isNewController.text,
       'errorMessage': errorMessageController.text,
     };
   }

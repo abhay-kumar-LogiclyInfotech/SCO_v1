@@ -20,6 +20,8 @@ import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_employment_history_view.dart';
+import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_graduation_details_View.dart';
+import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_required_examinations_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
@@ -509,6 +511,10 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                       /// EDIT GRADUATION DETAILS
                                       if(application.graduationEditAllowed.toString().toUpperCase() == 'Y')
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.graduationDetails, onPressed: (){
+                                          /// Move to Edit Graduation Details
+                                          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditGraduationDetailsView(
+                                            applicationStatusDetails: application,
+                                          )));
                                       }),
 
                                       /// EDIT UNIVERSITY AND MAJORS DETAILS
@@ -516,12 +522,23 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.universityAndMajor, onPressed: (){
                                       }),
 
+                                      /// EDIT UNIVERSITY AND MAJORS DETAILS
+                                      /// TODO: UNCOMMENT THE CONDITION AFTER TESTING
+                                      // if(application.testEditAllowed.toString().toUpperCase() == 'Y')
+                                      if(true)
+                                        actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.requiredExamination, onPressed: (){
+                                          /// Move to required examinations list
+                                          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditRequiredExaminationsView(
+                                            applicationStatusDetails: application,
+                                          )));
+                                        }),
+
                                       /// EDIT EMPLOYMENT HISTORY DETAILS
                                       if(application.workExpEditAllowed.toString().toUpperCase() == 'Y')
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.employmentHistory, onPressed: (){
                                           /// move to edit employment history
                                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditEmploymentHistoryView(
-                                            applicationNumber: application.admApplicationNumber,
+                                            applicationStatusDetails: application,
                                           )));
                                       }),
                                     ],
