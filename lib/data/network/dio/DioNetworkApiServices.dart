@@ -216,7 +216,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
           return FetchDataException(' ${error.message}');
       }
     } else if (error is SocketException) {
-      return FetchDataException('No Internet Connection');
+      return FetchDataException(error.message);
     } else if (error is FormatException) {
       return FetchDataException('Response format error: $error');
     } else {

@@ -120,6 +120,19 @@ class HomeRepository {
 
 
 
+  // *------ Fetch submitted application details By application number ------*/
+  Future<FindDraftByConfigurationKeyModel> getSubmittedApplicationDetailsByApplicationNumber(
+      {required dynamic headers,required dynamic applicationNumber}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: "${AppUrls.commonBaseUrl}jsonws/application.applicationdetails/find-by-application-number/application-no/$applicationNumber",
+      headers: headers,
+    );
+    return FindDraftByConfigurationKeyModel.fromJson(response);
+  }
+
+
+
+
   // *------ Delete Draft Method ------*/
   Future<DeleteDraftModel> deleteDraft(
       {required String userId,required String draftId, required dynamic headers}) async {

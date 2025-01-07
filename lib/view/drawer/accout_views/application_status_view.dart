@@ -22,6 +22,7 @@ import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_employment_history_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_graduation_details_View.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_required_examinations_view.dart';
+import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/view_application_details_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
@@ -471,7 +472,9 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                           actionButtonHolder(actionButtons: [
                             /// VIEW APPLICATION
                             actionButton(backgroundColor: AppColors.SUCCESS, text: localization.viewDetails, onPressed: (){
-                              _alertServices.toastMessage(localization.comingSoon);
+                              _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> ViewApplicationDetailsView(
+                                applicationStatusDetails: application,
+                              )));
                             }),
                             /// UPLOAD APPROVED ATTACHMENTS
                             actionButton(backgroundColor: AppColors.INFO, text: localization.attachments, onPressed: (){

@@ -188,8 +188,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
     bool peopleSoft = userInfoType != null && userInfoType != 'LIFERAY';
     return CustomInformationContainer(
         title: localization.studentInformation,
-        leading:
-            SvgPicture.asset("assets/personal_details/student_information.svg"),
+        leading: SvgPicture.asset("assets/personal_details/student_information.svg"),
         expandedContent: Column(
           children: [
             CustomInformationContainerField(

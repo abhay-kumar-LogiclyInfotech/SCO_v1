@@ -24,12 +24,12 @@ import '../../viewModel/language_change_ViewModel.dart';
 
 
 // dashed section divider is used to indicate the difference between the sections
-dynamic sectionDivider() {
-  return const Column(
+dynamic sectionDivider({Color? color}) {
+  return  Column(
     children: [
-      SizedBox(height: 20),
-       MyDivider(color: AppColors.scoButtonColor),
-      SizedBox(height: 20),
+     const  SizedBox(height: 20),
+       MyDivider(color: color ?? AppColors.scoButtonColor),
+      const SizedBox(height: 20),
     ],
   );
 }
