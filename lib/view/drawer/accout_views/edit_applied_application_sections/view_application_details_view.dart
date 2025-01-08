@@ -589,8 +589,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
         )),
         kFormHeight,
         /// Military Service Information
-       if(_passportNationalityController.text.isNotEmpty &&
-           _passportNationalityController.text == "ARE") CustomInformationContainer(title: localization.militaryServicePanel,
+       if(_passportNationalityController.text.isNotEmpty && _passportNationalityController.text == "ARE") CustomInformationContainer(title: localization.militaryServicePanel,
             expandedContentPadding: EdgeInsets.zero,
             expandedContent: Column(
           children: [
@@ -672,7 +671,49 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                               CustomInformationContainerField(title: localization.hsLevel,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'HIGH_SCHOOL_LEVEL',code: highSchoolInfo.hsLevelController.text),),
                               CustomInformationContainerField(title: localization.schoolCountry,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'COUNTRY',code: highSchoolInfo.hsCountryController.text),),
                               CustomInformationContainerField(title: localization.emirates,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'STATE#${highSchoolInfo.hsCountryController.text}',code: highSchoolInfo.hsStateController.text),),
+                              if (highSchoolInfo.hsCountryController.text == 'ARE')CustomInformationContainerField(title: localization.hsName,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'SCHOOL_CD#${highSchoolInfo.hsStateController.text}', code: highSchoolInfo.hsNameController.text,),),
+                              if (highSchoolInfo.hsCountryController.text != 'ARE' || highSchoolInfo.hsNameController.text == 'OTH')CustomInformationContainerField(title: highSchoolInfo.hsCountryController.text == 'ARE' ? localization.hsnameOther : localization.hsName,description:  highSchoolInfo.otherHsNameController.text,),
                               CustomInformationContainerField(title: localization.hsType,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'HIGH_SCHOOL_TYPE',code: highSchoolInfo.hsTypeController.text),),
+                              CustomInformationContainerField(title: localization.curriculumTypes,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'CURRICULM_TYPE#${highSchoolInfo.hsTypeController.text}',code: highSchoolInfo.curriculumTypeController.text),),
+                              CustomInformationContainerField(title: localization.curriculumAverage,description: highSchoolInfo.curriculumAverageController.text,),
+                              CustomInformationContainerField(title: localization.hsYearOfPassing,description: highSchoolInfo.yearOfPassingController.text,),
+                              CustomInformationContainerField(title: localization.hsDateOfGraduation,description: highSchoolInfo.passingYearController.text,),
+                              sectionTitle(title: localization.highschoolSubjects),
+                              kFormHeight,
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: highSchoolInfo.hsDetails.length,
+                                  itemBuilder: (context, index) {
+                                    var element = highSchoolInfo.hsDetails[index];
+                                    return Column(
+                                      children: [
+                                        CustomInformationContainerField(
+                                          title: getFullNameFromLov(langProvider: langProvider,lovCode: 'SUBJECT',code: element.subjectTypeController.text),
+                                          description: element.gradeController.text,
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                             // sectionDivider(),
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: highSchoolInfo.otherHSDetails.length,
+                                  itemBuilder: (context, index) {
+                                    var element = highSchoolInfo.otherHSDetails[index];
+                                    return Column(
+                                        children: [
+                                          CustomInformationContainerField(
+                                            title: element.otherSubjectNameController.text,
+                                            description: element.gradeController.text,
+                                          ),
+                                        ]);}),
+
+
+
+
+
                               // CustomInformationContainerField(title: localization.curriculumTypes,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'HIGH_SCHOOL_TYPE',code: highSchoolInfo.curriculumTypeController.text),),
 
                               if(index < _highSchoolList.length -1) sectionDivider(color: AppColors.darkGrey)

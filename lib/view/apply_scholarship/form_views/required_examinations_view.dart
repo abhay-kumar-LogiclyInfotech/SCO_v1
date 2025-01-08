@@ -18,7 +18,7 @@ import '../form_view_Utils.dart';
 class RequiredExaminationsView extends StatefulWidget {
   dynamic draftPrevNextButtons;
   dynamic acadmicCareer;
- dynamic requiredExaminationList;
+  List<RequiredExaminations> requiredExaminationList;
   dynamic testScoreVal;
  dynamic requiredExaminationDropdownMenuItems;
 
