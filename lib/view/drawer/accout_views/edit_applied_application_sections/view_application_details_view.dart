@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/components/custom_dropdown.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_submitted_application_details_by_applicaion_number_viewModel.dart';
 
@@ -29,7 +30,8 @@ import '../../../apply_scholarship/form_view_Utils.dart';
 
 class ViewApplicationDetailsView extends StatefulWidget {
   final ApplicationStatusDetail applicationStatusDetails;
-  const ViewApplicationDetailsView({super.key,required this.applicationStatusDetails});
+  final dynamic configurationKey;
+  const ViewApplicationDetailsView({super.key,required this.applicationStatusDetails,required this.configurationKey});
 
   @override
   State<ViewApplicationDetailsView> createState() => _ViewApplicationDetailsViewState();
@@ -98,6 +100,8 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
   final TextEditingController _motherUAENationalController = TextEditingController();
   bool _isMotherUAECheckbox = false;
   String havingSponsor = '';
+  bool isSpecialCase = false;
+
 
   /// Family Information
   final TextEditingController _familyInformationEmiratesController = TextEditingController();
@@ -115,9 +119,6 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
   final List<PhoneNumber> _phoneNumberList = [];
   /// address list
   final List<Address> _addressInformationList = [];
-  /// final HIGH SCHOOL list
-  final List<HighSchool> _highSchoolList = [];
-
 
   /// Military service information
   MilitaryStatus? _isMilitaryService;
@@ -125,6 +126,42 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
   final TextEditingController _militaryServiceStartDateController = TextEditingController();
   final TextEditingController _militaryServiceEndDateController = TextEditingController();
   final TextEditingController _reasonForMilitaryController = TextEditingController();
+
+  /// final HIGH SCHOOL list
+  final List<HighSchool> _highSchoolList = [];
+
+  /// Graduation Details
+  final List<GraduationInfo> _graduationDetailsList = [];
+
+
+  /// controllers, focus nodes and error text variables for Academic program
+  final TextEditingController _acadProgramController = TextEditingController();
+  final TextEditingController _acadProgramDdsController = TextEditingController();
+  final TextEditingController _acadProgramPgrdController = TextEditingController();
+
+
+  bool isStudyCountry = false;
+  List<dynamic> _majorsMenuItemsList = [];
+  // _majorsMenuItemsList = getMajors(); /// calling the getMajors method to populate the majors function
+
+  /// Majors
+  final List<MajorWishList> _majorsWishlist = [];
+
+  /// University Priority List
+  final List<UniversityPriority> _universityPriorityList = [];
+
+  /// Required
+ final List<RequiredExaminations> _requiredExaminationList = [];
+
+ /// Employment History
+
+
+
+  /// Attachments
+  final List<Attachment> _filteredMyAttachmentsList = [];
+
+
+
 
 
 
@@ -138,6 +175,8 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
       /// clean the draft application data and prefill the fields
       Map<String, dynamic> cleanedDraft = jsonDecode(cleanDraftXmlToJson(applicationDetailsProvider.apiResponse.data?.applicationData ?? ''));
 
+
+      isStudyCountry = widget.applicationStatusDetails.scholarshipType == 'INT' ? true : false;
 
       /// Name as per passport
       if (cleanedDraft['nameAsPasport'] != null) {
@@ -167,6 +206,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
 
       /// Personal Information Prefilled
+      _emiratesIdController.text = cleanedDraft['emirateId'].toString();
       _emiratesIdExpiryDateController.text = formatDateOnly(cleanedDraft['emirateIdExpiryDate'].toString() ?? '');
       _dateOfBirthController.text = formatDateOnly(cleanedDraft['dateOfBirth'].toString() ?? '');
       _placeOfBirthController.text = cleanedDraft['placeOfBirth'] ?? '';
@@ -301,7 +341,132 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
         }
       }
 
+      /// graduation details
+      if (cleanedDraft['graduationList'] != null &&  cleanedDraft['graduationList'].toString().trim().isNotEmpty) {
+        _graduationDetailsList.clear(); /// Clear the current list
+        if(cleanedDraft['graduationList'] is List) {
 
+          for (int index = 0; index < cleanedDraft['graduationList'].length; index++) {
+            var element = cleanedDraft['graduationList'][index];
+            _graduationDetailsList.add(GraduationInfo.fromJson(element)); /// Add to the list
+            /// populate dropdowns
+            // _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: index);
+            // _populateUniversityMenuItemsList(langProvider: langProvider, index: index);
+          }
+
+        }
+        else{
+          _graduationDetailsList.add(GraduationInfo.fromJson(cleanedDraft['graduationList'])); /// Add to the list
+          /// populate dropdowns
+          // _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: 0);
+          // _populateUniversityMenuItemsList(langProvider: langProvider, index: 0);
+        }
+      }
+
+      /// special case
+      if(cleanedDraft['isSpecialCase'] != null){
+       isSpecialCase = cleanedDraft['isSpecialCase'].toString() == 'true';
+      }
+
+
+      /// academic programs
+      _acadProgramDdsController.text = cleanedDraft['acadProgramDds'] ?? '';
+      _acadProgramPgrdController.text = cleanedDraft['acadProgramPgrd'] ?? '';
+
+      _majorsMenuItemsList =   getMajors(academicCareer: widget.applicationStatusDetails.acadCareer,
+          admitType: widget.applicationStatusDetails.admitType,
+          scholarshipType: widget.applicationStatusDetails.scholarshipType,
+          isStudyCountry: isStudyCountry,
+          isSpecialCase: isSpecialCase);
+
+      /// majors
+      if (cleanedDraft['majorWishList'] != null && cleanedDraft['majorWishList'] != 'true' && cleanedDraft['majorWishList'].toString().trim().isNotEmpty) {
+        _majorsWishlist.clear(); /// Clear the current list
+        if(cleanedDraft['majorWishList'] is List){
+          for (int index = 0;
+          index < cleanedDraft['majorWishList'].length;
+          index++) {
+            var element = cleanedDraft['majorWishList'][index];
+            _majorsWishlist.add(MajorWishList.fromJson(element)); /// Add to the list
+          }
+        }
+        else{
+          _majorsWishlist.add(MajorWishList.fromJson(cleanedDraft['majorWishList'])); /// Add to the list
+        }
+      }
+
+      /// university Priority
+      if (cleanedDraft['universtiesPriorityList'] != null &&  cleanedDraft['universtiesPriorityList'].toString().trim().isNotEmpty) {
+        _universityPriorityList.clear(); /// Clear the current list
+
+        if( cleanedDraft['universtiesPriorityList'] is List){
+
+          for (int index = 0; index < cleanedDraft['universtiesPriorityList'].length; index++) {
+            var element = cleanedDraft['universtiesPriorityList'][index];
+            _universityPriorityList.add(UniversityPriority.fromJson(element)); /// Add to the list
+          }}
+        else{
+          _universityPriorityList.add(UniversityPriority.fromJson(cleanedDraft['universtiesPriorityList']));
+        }
+      }
+
+      /// required Examinations
+      if (cleanedDraft['requiredExaminationList'] != null && cleanedDraft['requiredExaminationList'].toString().trim().isNotEmpty) { // Make sure we are checking as a string
+        _requiredExaminationList.clear(); // Clear the current list
+        if (cleanedDraft['requiredExaminationList'] is List) {
+          // If it's a list, iterate through it
+          for (int index = 0; index < cleanedDraft['requiredExaminationList'].length; index++) {
+            var element = cleanedDraft['requiredExaminationList'][index];
+            _requiredExaminationList.add(RequiredExaminations.fromJson(element)); // Add to the list
+            // populate examination type dropdown
+            // _populateExaminationTypeDropdown(langProvider: langProvider, index: index);
+          }
+        } else {
+          // If it's not a list (presumably a single object), handle it here
+          _requiredExaminationList.add(RequiredExaminations.fromJson(cleanedDraft['requiredExaminationList'])); // Add to the list
+          // _populateExaminationTypeDropdown(langProvider: langProvider, index: 0);
+        }
+      }
+
+
+      /// attachments
+      if (cleanedDraft['attachments'] != null && cleanedDraft['attachments'].toString().trim().isNotEmpty) {
+        bool hasValidAttachments = true;
+
+        if (cleanedDraft['attachments'] is List) {
+          for (var element in cleanedDraft['attachments']) {
+            /// Check if processCD or documentCD is empty
+            if ((element['processCD'] == null || element['processCD'].toString().trim().isEmpty) ||
+                (element['documentCD'] == null || element['documentCD'].toString().trim().isEmpty)) {
+              hasValidAttachments = false;
+              break;
+            }
+          }
+        } else {
+          var element = cleanedDraft['attachments'];
+          /// Check if processCD or documentCD is empty for single attachment
+          if ((element['processCD'] == null || element['processCD'].toString().trim().isEmpty) ||
+              (element['documentCD'] == null || element['documentCD'].toString().trim().isEmpty)) {
+            hasValidAttachments = false;
+          }
+        }
+
+        if (hasValidAttachments) {
+          /// Clear and add attachments if valid
+          // _myAttachmentsList.clear();
+          _filteredMyAttachmentsList.clear();
+
+          if (cleanedDraft['attachments'] is List) {
+            for (var element in cleanedDraft['attachments']) {
+              // _myAttachmentsList.add(Attachment.fromJson(element));
+              _filteredMyAttachmentsList.add(Attachment.fromJson(element));
+            }
+          } else {
+            // _myAttachmentsList.add(Attachment.fromJson(cleanedDraft['attachments']));
+            _filteredMyAttachmentsList.add(Attachment.fromJson(cleanedDraft['attachments']));
+          }
+        }
+      }
 
     });
   }
@@ -316,6 +481,139 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
         academicCareer == 'SCHL' ||
         academicCareer == 'HCHL');
   }
+  bool isUniversityAndMajorsRequired() {
+    return widget.applicationStatusDetails.acadCareer != 'SCHL';
+  }
+  bool displayEmploymentHistory() {
+    final key = widget.configurationKey;
+    return (key == 'SCOPGRDINT' || key == 'SCOPGRDEXT' || key == 'SCODDSEXT');
+  }
+
+
+
+  /// Get majors function
+  List<dynamic> getMajors({
+    required String academicCareer,
+    required String? admitType,
+    required String? scholarshipType,
+    required bool isStudyCountry,
+    required bool isSpecialCase,
+    String? configurationKey,
+  })
+  {
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+
+    // Step 1: Define the majorCriteria based on academic career
+    String majorCriteria = (academicCareer.toUpperCase() == "PGRD")
+        ? "MAJORSPGRD#$academicCareer#${isStudyCountry ? 'N' : 'Y'}"
+        : "MAJORS#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
+
+    // Step 2: Fetch items based on majorCriteria
+    List<dynamic> items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+
+    // Step 3: Handle admit types and scholarship types
+    if (admitType?.toUpperCase() == "ACT") {
+      majorCriteria = "MAJORSACT#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
+      items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+    } else if (admitType?.toUpperCase() == "NLU") {
+      majorCriteria = "MAJORSNL#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
+      items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+    } else if (scholarshipType?.toUpperCase() == "INT" && admitType?.toUpperCase() != "MET") {
+      items = _filterItemsForINT(items, admitType, configurationKey);
+    } else if (scholarshipType?.toUpperCase() == "EXT") {
+      // Items remain unchanged for "EXT" scholarship type
+    } else {
+      // Default case to filter only "BAM" items
+      items = items.where((item) => item.code?.toUpperCase() == "BAM").toList();
+    }
+
+    // Step 4: Handle special cases
+    if (isSpecialCase) {
+      items.add({'value': 'OTH', 'label': 'آخر'}); // Append special case "OTH"
+    }
+
+    // Return the final list of dropdown menu items
+    // return populateCommonDataDropdown(menuItemsList: items, provider: langProvider);
+    return items;
+  }
+
+  /// Helper method to filter items for "INT" scholarship type
+  List<dynamic> _filterItemsForINT(List<dynamic> items, String? admitType, String? configurationKey) {
+    return items.where((item) {
+      if (item.code?.toUpperCase() == "OTH") {
+        return _isValidAdmitTypeForINT(admitType, configurationKey);
+      }
+      return true; // Include other items
+    }).toList();
+  }
+
+  /// Helper method to validate "INT" admit type
+  bool _isValidAdmitTypeForINT(String? admitType, String? configurationKey) {
+    return ["MOP", "MOS"].contains(admitType?.toUpperCase()) ||
+        configurationKey?.toUpperCase() == "SCOUGRDINTHH";
+  }
+
+
+
+  /// Helper method for university
+
+  List<DropdownMenuItem> populateUniversitiesWishList(
+      UniversityPriority universityInfo)
+  {
+    String country = universityInfo.countryIdController.text;
+    /// Step 1: Fetch initial list of universities based on country
+    List<DropdownMenuItem> items = fetchListOfValue("UNIVERSITY#$country#UNV");
+
+    /// List to store final items
+    List<DropdownMenuItem> itemsNew = [];
+
+    /// Step 2: Handle special case
+    if (isSpecialCase ?? false) {
+      itemsNew.add(const DropdownMenuItem(
+          value: "OTH", child: Text("آخر"))); /// "OTH" means "Other"
+    }
+
+    /// Step 3: Check for different admit types
+    if (widget.applicationStatusDetails.admitType?.toUpperCase() == "NLU") {
+      /// For "NLU" admit type
+      itemsNew = fetchListOfValue("EXTUNIVERSITYNL#$country#UNV");
+    } else if (country.toUpperCase() == "GBR") {
+      /// For country "GBR"
+      itemsNew.add(const DropdownMenuItem(value: "OTH", child: Text("آخر")));
+    } else if (country.toUpperCase() != "ARE" && widget.applicationStatusDetails.scholarshipType?.toUpperCase() != "INT") {
+      /// For countries not equal to "ARE" and scholarship type not "INT"
+      itemsNew = fetchListOfValue("GRAD_UNIVERSITY#$country#UNV");
+    } else if (widget.applicationStatusDetails.scholarshipType?.toUpperCase() == "INT" && widget.applicationStatusDetails.admitType?.toUpperCase() == "MET") {
+      /// For "INT" scholarship type with "MET" admit type
+      for (var item in items) {
+        if (item.value.toString().toUpperCase() == "00000105") {
+          itemsNew.add(item);
+        }
+      }
+    } else {
+      /// Default case, add all items
+      itemsNew.addAll(items);
+    }
+
+    universityInfo.universityDropdown = itemsNew;
+    return itemsNew;
+  }
+  List<DropdownMenuItem> fetchListOfValue(String key) {
+    /// Your logic to fetch values goes here
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+    if (Constants.lovCodeMap[key]?.values != null) {
+      return populateCommonDataDropdown(
+        menuItemsList: Constants.lovCodeMap[key]!.values!,
+        provider: langProvider,
+        textColor: AppColors.scoButtonColor,
+      );
+    } else {
+      /// Handle the case where the values are null (e.g., return an empty list or log an error)
+      return []; /// or any appropriate fallback
+    }
+  }
+
+
 
 
   @override
@@ -392,6 +690,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
   /// Application Details View
 Widget _applicationDetails({required langProvider,required AppLocalizations localization}){
+    final academicCareer = widget.applicationStatusDetails.acadCareer;
     return Column(
       children: [
         CustomInformationContainer(
@@ -650,8 +949,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
 
         kFormHeight,
         /// High School Information
-        if(displayHighSchool())
-          CustomInformationContainer(
+        if(displayHighSchool())CustomInformationContainer(
               title: localization.highSchoolDetails,
               expandedContent: Column(
                 children: [
@@ -709,21 +1007,394 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                                             description: element.gradeController.text,
                                           ),
                                         ]);}),
-
-
-
-
-
                               // CustomInformationContainerField(title: localization.curriculumTypes,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'HIGH_SCHOOL_TYPE',code: highSchoolInfo.curriculumTypeController.text),),
-
                               if(index < _highSchoolList.length -1) sectionDivider(color: AppColors.darkGrey)
-
                             ]);})
                 ],
-          ))
+          )),
+
+        kFormHeight,
+        /// Graduation Information
+        if(academicCareer != 'SCHL' && academicCareer != 'HCHL')
+          Column(
+            children: [
+              CustomInformationContainer(title: academicCareer == 'DDS' ? localization.ddsGraduationTitle : localization.graduationDetails,
+                  expandedContent: Column(
+                    children: [
+                      ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _graduationDetailsList.length,
+                          itemBuilder: (context, index) {
+                            final graduationInfo = _graduationDetailsList[index];
+                            return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  sectionTitle(title: academicCareer == 'DDS' ? '${localization.ddsGraduationTitle} ${index + 1}' : "${localization.graduationDetails} ${index + 1}"),
+                                  if(graduationInfo.showCurrentlyStudying)Column(
+                                    children: [
+                                      kFormHeight,
+                                      CustomInformationContainerField(title: localization.currentlyStudying,isLastItem: true,),
+                                      CustomRadioListTile(
+                                        value: true,
+                                        groupValue: graduationInfo.currentlyStudying,
+                                        onChanged: (value) {},
+                                        title: localization.yes,
+                                        textStyle: textFieldTextStyle,
+                                      ),
+                                      CustomRadioListTile(
+                                          value: false,
+                                          groupValue: graduationInfo
+                                              .currentlyStudying,
+                                          onChanged: (value) {},
+                                          title: localization.no,
+                                          textStyle: textFieldTextStyle),
+                                      if(graduationInfo.currentlyStudying && graduationInfo.showCurrentlyStudying)Column(
+                                        children: [
+                                          CustomInformationContainerField(title: localization.lastTerm,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'LAST_TERM',code:graduationInfo.lastTermController.text ),),
+                                          (academicCareer == 'UGRD') ? (graduationInfo.currentlyStudying ?
+
+                                          /// copy paste full below code
+                                          /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
+                                          _graduationInformation(
+                                              index: index,
+                                              langProvider: langProvider,
+                                              graduationInfo: graduationInfo)
+                                              : showVoid)
+                                              : _graduationInformation(
+                                              index: index,
+                                              langProvider: langProvider,
+                                              graduationInfo: graduationInfo),
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                ]);
+                          })
+
+                    ],
+                  ))
+
+            ],
+          ),
+        kFormHeight,
+
+        /// University and majors
+        if(isUniversityAndMajorsRequired())Column(
+          children: [
+            /// majors
+            CustomInformationContainer(title: academicCareer == 'PGRD'
+                ? localization.pgrdMajorWishlist
+                : localization.majorWishlist, expandedContent: Column(
+              children: [
+                /// PGRD Academic Career
+                if(academicCareer == 'PGRD' && academicCareer != 'DDS')CustomInformationContainerField(title: localization.pgrdAdacProgram,
+                  description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ACAD_PROG_PGRD',code: _acadProgramPgrdController.text),
+                ),
+                /// Major Selection
+                if(academicCareer != 'DDS')
+                  ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _majorsWishlist.length,
+                      itemBuilder: (context, index) {
+                        final majorInfo = _majorsWishlist[index];
+                        return Column(children: [
+                          CustomInformationContainerField(title: index == 0
+                              ? localization.majorsWish1
+                              : index == 1
+                              ? localization.majorsWish2
+                              : localization.majorsWish3,
+                            description: getFullNameForMajor(majorInfo.majorController.text).toString(),
+                          ),
+                          if(academicCareer != 'DDS' && majorInfo.majorController.text == 'OTH')
+                            CustomInformationContainerField(title: localization.otherMajor,
+                              description: majorInfo.otherMajorController.text,
+                            ),
+                        ]);
+                      }),
+                /// DDS Major Selection
+                if(academicCareer == 'DDS')CustomInformationContainerField(title: localization.ddsMajor1,
+                  description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ACAD_PROG_DDS',code: _acadProgramDdsController.text),
+
+                )
+              ],
+            )),
+            kFormHeight,
+
+            /// University priority List
+            if(academicCareer != 'HCHL')
+              CustomInformationContainer(title: academicCareer == 'DDS' ? localization.ddsWishlist : localization.universityWishList,
+                expandedContent:  Column(
+                  children: [if (academicCareer != 'HCHL') Column(
+                    children: [
+                      ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _universityPriorityList.length,
+                          itemBuilder: (context, index) {
+                            final universityInfo = _universityPriorityList[index];
+                            return Column(children: [
+                              CustomInformationContainerField(title: localization.country, description: getFullNameFromLov(langProvider: langProvider,lovCode: 'COUNTRY',code:universityInfo.countryIdController.text, ),),
+                              if(academicCareer != 'DDS')
+                                Column(
+                                  children: [
+                                    CustomInformationContainerField(title: localization.majors,
+                                      description: universityInfo.majorsController.text,
+                                    ),
+                                    if(universityInfo.majorsController.text == 'OTH' || academicCareer == 'DDS')
+                                      CustomInformationContainerField(title: academicCareer != 'DDS' ? localization.otherMajor : localization.ddsMajor,
+                                        description: universityInfo.otherMajorsController.text,
+                                      ),
+                                    if(academicCareer != "DDS")
+                                      CustomInformationContainerField(title: localization.university,
+                                        description: universityInfo.universityIdController.text, /// TODO: UNIVERSITY FULL NAME IS PENDING TO CALCULATE
+                                      ),
+                                    if((universityInfo.universityIdController.text == 'OTH' ||  academicCareer == 'DDS'))
+                                      CustomInformationContainerField(title: academicCareer != 'DDS'
+                                          ? localization.universityNameIfOther
+                                          : localization.ddsUniversity,
+                                          description: universityInfo.otherUniversityNameController.text),
+                                    CustomInformationContainerField(title: localization.universityStatus,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'UNIVERSITY_STATUS' ,code: universityInfo.statusController.text,),isLastItem: true,),
+                                    if(index < _universityPriorityList.length - 1)  sectionDivider(color: AppColors.darkGrey)
+                                  ],
+                                )
+                            ]);
+                          })
+                    ],
+                  )],
+                )
+
+
+
+                ,),
+          ],
+        ),
+
+        kFormHeight,
+        /// Required Examination
+        CustomInformationContainer(
+          title: academicCareer == 'DDS'
+              ? localization.ddsExams
+              : localization.examinationForUniversities,
+          expandedContent: Column(
+            children: [
+              ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _requiredExaminationList.length,
+                  itemBuilder: (context, index) {
+                    final requiredExamInfo = _requiredExaminationList[index];
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CustomInformationContainerField(title: localization.examination,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'EXAMINATION#$academicCareer',code:  requiredExamInfo.examinationController.text),),
+                          CustomInformationContainerField(title: localization.examinationType,description:getFullNameFromLov(langProvider: langProvider,lovCode: 'EXAMINATION_TYPE#${requiredExamInfo.examinationController.text}',code: requiredExamInfo.examinationTypeIdController.text,)),
+                          CustomInformationContainerField(title: academicCareer != 'DDS' ? localization.examinationGrade : localization.examinationDdsGrade,description:requiredExamInfo.examinationGradeController.text,),
+                          CustomInformationContainerField(title: localization.dateExam, description:requiredExamInfo.examDateController.text,isLastItem: true,),
+                          if(index < _requiredExaminationList.length - 1)  sectionDivider(color: AppColors.darkGrey)
+
+                        ]);
+                  })
+            ],
+          ),
+        ),
+
+        if(displayEmploymentHistory())
+          CustomInformationContainer(
+            title: localization.employmentHistory,
+            expandedContent: Column(
+
+            ),
+          ),
+
+        kFormHeight,
+        /// attachments
+        CustomInformationContainer(
+          title: localization.attachments,
+          expandedContent: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Use the filtered lists for the ListView
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _filteredMyAttachmentsList.length,
+                    // Use filtered length
+                    itemBuilder: (context, index) {
+                      // final attachment = _filteredAttachmentsList[index]; // From filtered list
+                      final myAttachment = _filteredMyAttachmentsList[index]; // From filtered list
+
+                     return Column(
+                       children: [
+                     // CustomInformationContainerField(
+                     //   title: '',
+                     //   description: getFullNameFromLov(langProvider: langProvider,lovCode: widget.selectedCheckListCode,code: myAttachment.attachmentNameController.text).replaceAll('\n', ''),
+                     // ),
+                         CustomInformationContainerField(title: localization.fileName,description: myAttachment.userFileNameController.text,),
+                         CustomInformationContainerField(title: localization.comment,description: myAttachment.commentController.text,isLastItem: true,),
+                         if(index < _filteredMyAttachmentsList.length - 1)  sectionDivider(color: AppColors.darkGrey)
+                       ],
+                     );
+
+                    })
+              ]),
+        )
+
+
       ],
     );
 }
+
+
+
+/// Graduation Information
+Widget _graduationInformation({required int index,
+        required LanguageChangeViewModel langProvider,
+        required GraduationInfo graduationInfo}) {
+    final academicCareer = widget.applicationStatusDetails.acadCareer;
+    final localization = AppLocalizations.of(context)!;
+    return Column(
+        children: [
+          (index > 0 && academicCareer != 'UGRD' && academicCareer != 'DDS')
+              ?
+              CustomInformationContainerField(title: localization.hsGraduationLevel,
+              description: getFullNameFromLov(langProvider: langProvider,
+                  lovCode: 'GRADUATION_LEVEL',
+                  code: graduationInfo.levelController.text
+              ),)
+              :  (index == 0 || academicCareer == 'UGRD') ? _showBachelorScholarshipByDefault(
+        index: index,
+        langProvider: langProvider,
+        graduationInfo: graduationInfo)  : showVoid,
+
+          /// for dds graduation level
+          if(index != 0 && academicCareer == 'DDS')
+            CustomInformationContainerField(title: localization.ddsGraduationTitle2,description: getFullNameFromLov(langProvider: langProvider,
+                lovCode: 'DDS_GRAD_LEVEL#SIS_GRAD_LEVEL',
+                code: graduationInfo.levelController.text
+            ),),
+
+          /// Country
+          CustomInformationContainerField(title: localization.country,description: getFullNameFromLov(langProvider: langProvider,
+              lovCode: 'COUNTRY',
+              code: graduationInfo.countryController.text,
+          ),),
+
+          /// Graduation University
+          if(academicCareer != 'DDS')
+            CustomInformationContainerField(title: localization.hsUniversity,description: getFullNameFromLov(langProvider: langProvider,
+              lovCode: 'GRAD_UNIVERSITY#${graduationInfo.countryController.text}#UNV',
+              code: graduationInfo.universityController.text,
+            ),),
+
+          /// other university
+          if(graduationInfo.universityController.text == 'OTH')
+            CustomInformationContainerField(title: academicCareer != 'DDS' ? localization.hsOtherUniversity
+        : localization.ddsUniversity,description: graduationInfo.otherUniversityController.text,),
+
+          /// major
+          CustomInformationContainerField(title: academicCareer != 'DDS'
+              ? localization.hsMajor
+              : localization.ddsMajor,description: graduationInfo.majorController.text,),
+
+          /// cgpa
+          CustomInformationContainerField(title: localization.cgpa,description: graduationInfo.cgpaController.text,),
+
+          /// start date
+          CustomInformationContainerField(title: localization.hsGraducationStartDate,description: graduationInfo.graduationStartDateController.text,),
+
+          /// end date
+          CustomInformationContainerField(title: localization.hsGraducationEndDate,description: graduationInfo.graduationEndDateController.text,),
+
+          /// question if AcademicCareer  == DDS
+          if(academicCareer == 'DDS') Column(
+            children: [
+              CustomInformationContainerField(title: localization.ddsGradQuestion,isLastItem: true,),
+              /// Yes or no : Show round radio
+              CustomRadioListTile(
+                value: 'Y',
+                groupValue: havingSponsor,
+                onChanged: (value) {},
+                title: localization.yes,
+                textStyle: textFieldTextStyle,
+              ),
+              CustomRadioListTile(
+                  value: "N",
+                  groupValue: havingSponsor,
+                  onChanged: (value) {},
+                  title: localization.no,
+                  textStyle: textFieldTextStyle),
+
+            ],
+          ),
+
+          /// Sponsorship
+          if((havingSponsor == 'Y') || academicCareer != 'DDS')CustomInformationContainerField(title: localization.hsSponsorship,
+            description: graduationInfo.sponsorShipController.text,),
+
+          /// case study
+          if(graduationInfo.levelController.text == 'PGRD' || graduationInfo.levelController.text == 'PG' || graduationInfo.levelController.text == 'DDS')
+            Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              sectionTitle(title: localization.caseStudy),
+              const SizedBox(height: 5,),
+              CustomInformationContainerField(title: localization.caseStudyTitle,
+              description: graduationInfo.caseStudyTitleController.text,),
+              CustomInformationContainerField(title: localization.caseStudyStartYear,
+                description: graduationInfo.caseStudyStartYearController.text,),
+              CustomInformationContainerField(title: localization.caseStudyDescription,
+                description: graduationInfo.caseStudyDescriptionController.text,),
+            ],
+          )
+        ]);
+  }
+
+
+  Widget _showBachelorScholarshipByDefault(
+      {required int index,
+        required LanguageChangeViewModel langProvider,
+        required GraduationInfo graduationInfo}) {
+    final localization = AppLocalizations.of(context)!;
+    /// setting bachelor by default
+    graduationInfo.levelController.text = 'UG';
+    return Column(
+      children: [
+        CustomInformationContainerField(title: localization.hsGraduationLevel,
+        description: getFullNameFromLov(langProvider: langProvider,
+        lovCode: 'GRADUATION_LEVEL',
+          code: graduationInfo.levelController.text
+        ),
+        )
+      ],
+    );
+  }
+
+
+  /// Function to get full name for majors
+dynamic getFullNameForMajor(value){
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    bool  isLTR =  getTextDirection(langProvider) == TextDirection.ltr;
+    for(var i in _majorsMenuItemsList){
+      if(i.code.toString() == value.trim()){
+        if(isLTR){
+          return i.value.toString();
+        }
+        return i.valueArabic.toString();
+      };
+    }
+    return null;
+  }
 
 
 Widget _sectionsWithPadding({required String title,required List<Widget> children }) {
@@ -739,5 +1410,6 @@ Widget _sectionsWithPadding({required String title,required List<Widget> childre
       ),
     );
 }
+
 
 }

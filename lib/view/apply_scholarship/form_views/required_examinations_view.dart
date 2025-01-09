@@ -57,10 +57,7 @@ _alertServices = getIt.get<AlertServices>();
         if (element.code.toString() == code.toString()) {
           requiredExaminationInfo.minScoreController.text = element.value.toString().split(":").elementAt(0).toString();
           requiredExaminationInfo.maxScoreController.text = element.value.toString().split(":").last.toString();
-          print('Original value: ${element.value}');
-          print('Min Score: ${element.value.toString().split(":").elementAt(0).toString()}');
-          print('Max Score: ${element.value.toString().split(":").last.toString()}');
-        }
+       }
       }
     } else {
       // debugPrint("TEST_SCORE_VAL is Empty");
@@ -185,8 +182,7 @@ _alertServices = getIt.get<AlertServices>();
                                         controller: requiredExamInfo.examinationController,
                                         currentFocusNode:
                                         requiredExamInfo.examinationFocusNode,
-                                        menuItemsList:
-                                        widget.requiredExaminationDropdownMenuItems ??
+                                        menuItemsList: widget.requiredExaminationDropdownMenuItems ??
                                             [],
                                         hintText: localization.select,
                                         errorText: requiredExamInfo.examinationError,

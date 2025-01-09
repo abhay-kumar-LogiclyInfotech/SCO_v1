@@ -474,6 +474,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                             actionButton(backgroundColor: AppColors.SUCCESS, text: localization.viewDetails, onPressed: (){
                               _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> ViewApplicationDetailsView(
                                 applicationStatusDetails: application,
+                                  configurationKey:configurationKey,
                               )));
                             }),
                             /// UPLOAD APPROVED ATTACHMENTS

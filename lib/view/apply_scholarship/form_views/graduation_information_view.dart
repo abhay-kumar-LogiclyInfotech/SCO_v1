@@ -19,7 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class GraduationInformationView extends StatefulWidget {
-  dynamic graduationDetailsList;
+  List<GraduationInfo> graduationDetailsList;
   dynamic academicCareer;
   dynamic scholarshipType;
   final bool displayHighSchool;
@@ -27,9 +27,9 @@ class GraduationInformationView extends StatefulWidget {
   dynamic draftPrevNextButtons;
   dynamic nationalityMenuItemsList;
   dynamic Function() addGraduation;
-  dynamic graduationLevelMenuItems;
-  dynamic graduationLevelDDSMenuItems;
-  dynamic caseStudyYearDropdownMenuItems;
+  List<DropdownMenuItem> graduationLevelMenuItems;
+  List<DropdownMenuItem> graduationLevelDDSMenuItems;
+  List<DropdownMenuItem> caseStudyYearDropdownMenuItems;
   final Function(String) onUpdateHavingSponsor;
 
   GraduationInformationView(
@@ -209,8 +209,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                   children: [
                                     /// ****************************************************************************************************************************************************
 
-                                    sectionTitle(
-                                        title: widget.academicCareer == 'DDS' ? '${localization.ddsGraduationTitle} ${index + 1}' : "${localization.graduationDetails} ${index + 1}"),
+                                    sectionTitle(title: widget.academicCareer == 'DDS' ? '${localization.ddsGraduationTitle} ${index + 1}' : "${localization.graduationDetails} ${index + 1}"),
 
                                     graduationInfo.showCurrentlyStudying
                                         ? Column(children: [
@@ -364,7 +363,9 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// graduation level
         /// For student who are not applying ug scholarship will see options as editable to they can edit them to select graduation level
         (index > 0 && widget.academicCareer != 'UGRD' && widget.academicCareer != 'DDS')
-            ? Column(
+            ?
+        /// WE don't need to set level statically
+        Column(
                 children: [
                   kFormHeight,
                   fieldHeading(
@@ -572,12 +573,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
         ///  major
         kFormHeight,
-        fieldHeading(
-            title: widget.academicCareer != 'DDS'
-                ? localization.hsMajor
-                : localization.ddsMajor,
-            important: true,
-            langProvider: langProvider),
+        fieldHeading(title: widget.academicCareer != 'DDS' ? localization.hsMajor : localization.ddsMajor, important: true, langProvider: langProvider),
         scholarshipFormTextField(
             maxLength: 40,
             currentFocusNode: graduationInfo.majorFocusNode,
@@ -620,8 +616,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
         /// ****************************************************************************************************************************************************
         /// start date
-        fieldHeading(
-            title: localization.hsGraducationStartDate, important: true, langProvider: langProvider),
+        fieldHeading(title: localization.hsGraducationStartDate, important: true, langProvider: langProvider),
         scholarshipFormDateField(
           currentFocusNode: graduationInfo.graduationStartDateFocusNode,
           controller: graduationInfo.graduationStartDateController,
@@ -778,6 +773,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
 
         /// SPONSORSHIP
+        /// <div class="col-md-3 col-sm-6 col-12"style="display:#{applicationForm.applicationData.havingSponser eq 'Y' or applicationForm.applicationData.acadCareer ne 'DDS'?'block':'none'}">
         ((widget.havingSponsor == 'Y') || widget.academicCareer != 'DDS')
             ? Column(
                 children: [
