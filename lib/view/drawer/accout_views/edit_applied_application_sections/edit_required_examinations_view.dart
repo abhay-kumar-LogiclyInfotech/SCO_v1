@@ -18,13 +18,10 @@ import '../../../../viewModel/account/edit_application_sections_view_Model/get_a
 class EditRequiredExaminationsView extends StatefulWidget {
   final ApplicationStatusDetail applicationStatusDetails;
 
-  const EditRequiredExaminationsView(
-      {super.key, required this.applicationStatusDetails});
+  const EditRequiredExaminationsView({super.key, required this.applicationStatusDetails});
 
   @override
-  State<EditRequiredExaminationsView> createState() =>
-      _EditRequiredExaminationsViewState();
-}
+  State<EditRequiredExaminationsView> createState() => _EditRequiredExaminationsViewState();}
 
 class _EditRequiredExaminationsViewState
     extends State<EditRequiredExaminationsView> {

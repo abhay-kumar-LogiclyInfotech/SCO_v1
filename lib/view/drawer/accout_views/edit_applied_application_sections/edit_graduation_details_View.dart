@@ -65,7 +65,6 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
           for (int index = 0; index < gradList!.length; index++) {
             var element = gradList[index];
             _graduationDetailsList.add(element);
-
             /// Add to the list
             /// populate dropdowns
             _populateGraduationLastTermMenuItemsList(
@@ -74,6 +73,7 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
                 langProvider: langProvider, index: index);
           }
         }
+        print(_graduationDetailsList.length);
 
         setState(() {});
       }
@@ -214,7 +214,6 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
   Widget _graduationDetailsSection(
       {required int step, required LanguageChangeViewModel langProvider}) {
     return Consumer<GetApplicationSectionViewModel>
-
       (
 
         builder: (context, provider, _) {
@@ -231,8 +230,7 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
                 graduationLevelDDSMenuItems: _graduationLevelDDSMenuItems,
                 caseStudyYearDropdownMenuItems: _caseStudyYearDropdownMenuItems,
                 academicCareer: widget.applicationStatusDetails.acadCareer,
-                scholarshipType: widget.applicationStatusDetails
-                    .scholarshipType,
+                scholarshipType: widget.applicationStatusDetails.scholarshipType,
                 nationalityMenuItemsList: _nationalityMenuItemsList,
                 displayHighSchool: displayHighSchool(),
                 draftPrevNextButtons: draftDummy(langProvider),
@@ -248,7 +246,12 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
     );
   }
 
+
+
+
+
   Widget draftDummy(langProvider) {
   return Container();
   }
 }
+

@@ -19,6 +19,7 @@ import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
+import 'package:sco_v1/view/apply_scholarship/form_views/high_school_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_employment_history_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_graduation_details_View.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_required_examinations_view.dart';
@@ -40,6 +41,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../viewModel/services/alert_services.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import 'edit_applied_application_sections/edit_high_school_details_view.dart';
 
 class ApplicationStatusView extends StatefulWidget {
   const ApplicationStatusView({super.key});
@@ -405,10 +407,10 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                           //   description: (index+1).toString() ?? '- -',
                           // ),
 
-                          // CustomInformationContainerField(
-                          //   title: localization.applicationType,
-                          //   description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
-                          // ),
+                          CustomInformationContainerField(
+                            title: localization.applicationType,
+                            description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
+                          ),
                           CustomInformationContainerField(
                             title: localization.applicationNumber,
                             description: application?.admApplicationNumber ?? '- -',
@@ -510,6 +512,10 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                       /// EDIT HIGH-SCHOOL DETAILS
                                       if(application.schoolEditAllowed.toString().toUpperCase() == 'Y')
                                       actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.highSchoolDetails, onPressed: (){
+                                        /// Move to required examinations list
+                                        _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditHighSchoolDetailsView(
+                                          applicationStatusDetails: application,
+                                        )));
                                       }),
 
                                       /// EDIT GRADUATION DETAILS
@@ -528,8 +534,8 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
 
                                       /// EDIT UNIVERSITY AND MAJORS DETAILS
                                       /// TODO: UNCOMMENT THE CONDITION AFTER TESTING
-                                      // if(application.testEditAllowed.toString().toUpperCase() == 'Y')
-                                      if(true)
+                                      if(application.testEditAllowed.toString().toUpperCase() == 'Y')
+                                      // if(true)
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.requiredExamination, onPressed: (){
                                           /// Move to required examinations list
                                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditRequiredExaminationsView(

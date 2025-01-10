@@ -19,6 +19,7 @@ import '../../../../resources/components/myDivider.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/account/personal_details/get_personal_details_viewmodel.dart';
+import '../../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
 import '../../../../viewModel/services/media_services.dart';
 import '../../../../viewModel/services/navigation_services.dart';
@@ -70,7 +71,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
     grandFatherNameFocusNode: FocusNode(),
     familyNameFocusNode: FocusNode(),
   );
-  List<PersonName> _nameAsPassport = [];
+  final List<PersonName> _nameAsPassport = [];
 
 
   /// Passport Details
@@ -154,9 +155,16 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
  final List<RequiredExaminations> _requiredExaminationList = [];
 
  /// Employment History
+ /// available employment status from lov
+ List _employmentStatusItemsList = [];
+ /// current Employment status
+ String? _employmentStatus;
+ final List<EmploymentHistory> _employmentHistoryList = [];
 
 
 
+  /// Selected checklist code for attachments full name
+   String _selectedChecklistCode = "";
   /// Attachments
   final List<Attachment> _filteredMyAttachmentsList = [];
 
@@ -168,9 +176,31 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
   Future _initializeData() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
+
+
+      if (Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null) {
+        _employmentStatusItemsList = populateUniqueSimpleValuesFromLOV(
+            menuItemsList: Constants.lovCodeMap['EMPLOYMENT_STATUS']!.values!,
+            provider: Provider.of<LanguageChangeViewModel>(context,listen: false),
+            textColor: AppColors.scoButtonColor);
+      }
+
+      /// As we need checklist code to show the full name of document so we need to call the all active scholarship api from where we can match the configuration key and get the checklist code
+      // fetching all active scholarships:
+      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context, listen: false);
+      await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
+      if(provider.apiResponse.status == Status.COMPLETED){
+        final activeScholarships = provider.apiResponse.data;
+        final activeScholarship = activeScholarships?.firstWhere((scholarship) => scholarship.configurationKey == widget.configurationKey);
+        _selectedChecklistCode = activeScholarship?.checklistCode?? '';
+      }
+
+
       /// get personal details to show addresses
       final applicationDetailsProvider = Provider.of<GetSubmittedApplicationDetailsByApplicationNumberViewModel>(context, listen: false);
       await applicationDetailsProvider.getSubmittedApplicationDetailsByApplicationNumber(applicationNumber: widget.applicationStatusDetails.admApplicationNumber);
+
+
 
       /// clean the draft application data and prefill the fields
       Map<String, dynamic> cleanedDraft = jsonDecode(cleanDraftXmlToJson(applicationDetailsProvider.apiResponse.data?.applicationData ?? ''));
@@ -428,6 +458,36 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
         }
       }
 
+      /// Employment History
+      /// employment Status
+      _employmentStatus = cleanedDraft['employmentStatus'] ?? '';
+      if (cleanedDraft['emplymentHistory'] != null && cleanedDraft['emplymentHistory'] != 'true' &&  displayEmploymentHistory()) {
+        _employmentHistoryList.clear(); /// Clear the current list
+
+        if (cleanedDraft['emplymentHistory'] is List) {
+
+          for (int index = 0;
+          index < cleanedDraft['emplymentHistory'].length;
+          index++) {
+            var element = cleanedDraft['emplymentHistory'][index];
+            _employmentHistoryList.add(EmploymentHistory.fromJson(
+                element)); /// Add to the list
+            /// populate examination type dropdown
+            // _populateExaminationTypeDropdown(
+            //   langProvider: langProvider,
+            //   index: index,
+            // );
+          }
+        } else {
+          _employmentHistoryList.add(EmploymentHistory.fromJson(
+              cleanedDraft['emplymentHistory'])); /// Add to the list
+          /// populate examination type dropdown
+          // _populateExaminationTypeDropdown(
+          //   langProvider: langProvider,
+          //   index: 0,
+          // );
+        }
+      }
 
       /// attachments
       if (cleanedDraft['attachments'] != null && cleanedDraft['attachments'].toString().trim().isNotEmpty) {
@@ -646,45 +706,62 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
         appBar: CustomSimpleAppBar(
           titleAsString: localization.myApplications,
         ),
-        body: Utils.modelProgressHud(
-            processing: _isProcessing,
-            child: _buildUi(localization)
-        )
+        body: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData)
 
     );
   }
 
   Widget _buildUi(AppLocalizations localization) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
-    return Consumer<GetSubmittedApplicationDetailsByApplicationNumberViewModel>(
-        builder: (context, provider, _) {
-          switch (provider.apiResponse.status) {
-            case Status.LOADING:
-              return Utils.pageLoadingIndicator(context: context);
+    return Consumer<GetAllActiveScholarshipsViewModel>(
+      builder: (context,getActiveScholarshipProvider,_){
+        switch (getActiveScholarshipProvider.apiResponse.status) {
+          case Status.LOADING:
+        return Utils.pageLoadingIndicator(context: context);
+          case Status.ERROR:
+            return Center(
+              child: Text(
+                AppLocalizations.of(context)!.somethingWentWrong,
+              ),
+            );
+          case Status.COMPLETED:
+            return Consumer<GetSubmittedApplicationDetailsByApplicationNumberViewModel>(
+                builder: (context, provider, _) {
+                  switch (provider.apiResponse.status) {
+                    case Status.LOADING:
+                  return Utils.pageLoadingIndicator(context: context);
 
-            case Status.ERROR:
-              return Center(
-                child: Text(
-                  AppLocalizations.of(context)!.somethingWentWrong,
-                ),
-              );
-            case Status.COMPLETED:
-              return SingleChildScrollView(
-                child: Directionality(
-                  textDirection: getTextDirection(langProvider),
-                  child: Padding(
-                    padding:  EdgeInsets.all(kPadding),
-                    child: _applicationDetails(langProvider:langProvider,localization: localization),
-                  ),
-                ),
-              );
+                    case Status.ERROR:
+                      return Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.somethingWentWrong,
+                        ),
+                      );
+                    case Status.COMPLETED:
+                      return SingleChildScrollView(
+                        child: Directionality(
+                          textDirection: getTextDirection(langProvider),
+                          child: Padding(
+                            padding:  EdgeInsets.all(kPadding),
+                            child: _applicationDetails(langProvider:langProvider,localization: localization),
+                          ),
+                        ),
+                      );
 
-            case Status.NONE:
-              return showVoid;
-            case null:
-              return showVoid;
-          }
-        });
+                    case Status.NONE:
+                      return showVoid;
+                    case null:
+                      return showVoid;
+                  }
+                });
+
+          case Status.NONE:
+            return Utils.showOnNone();
+          case null:
+            return showVoid;
+        }
+      },
+    );
   }
 
 
@@ -1145,7 +1222,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                                 Column(
                                   children: [
                                     CustomInformationContainerField(title: localization.majors,
-                                      description: universityInfo.majorsController.text,
+                                      description: getFullNameForMajor(universityInfo.majorsController.text).toString(),
                                     ),
                                     if(universityInfo.majorsController.text == 'OTH' || academicCareer == 'DDS')
                                       CustomInformationContainerField(title: academicCareer != 'DDS' ? localization.otherMajor : localization.ddsMajor,
@@ -1208,11 +1285,63 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
           ),
         ),
 
+        kFormHeight,
+        /// Employment History
         if(displayEmploymentHistory())
           CustomInformationContainer(
             title: localization.employmentHistory,
             expandedContent: Column(
+              children: [
+                CustomInformationContainerField(title: localization.previouslyEmployed,isLastItem: true,),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _employmentStatusItemsList.length,
+                    itemBuilder: (context, index) {
+                      final element = _employmentStatusItemsList[index];
+                      return CustomRadioListTile(
+                        value: element.code,
+                        groupValue: _employmentStatus,
+                        onChanged: (value){},
+                        title: getTextDirection(langProvider) ==
+                            TextDirection.ltr
+                            ? element.value
+                            : element.valueArabic,
+                        textStyle: textFieldTextStyle,
+                      );
+                    }),
+                kFormHeight,
+                if(_employmentStatus != null && _employmentStatus != '' && _employmentStatus != 'N')
+                  Column(
+                    children: [
+                      ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _employmentHistoryList.length,
+                          itemBuilder: (context, index) {
+                            final employmentHistInfo = _employmentHistoryList[index];
+                            return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CustomInformationContainerField(title: localization.emphistEmployerName, description: employmentHistInfo.employerNameController.text,),
+                                  CustomInformationContainerField(title: localization.emphistTitleName, description: employmentHistInfo.titleController.text,),
+                                  CustomInformationContainerField(title: localization.emphistOccupationName, description: employmentHistInfo.occupationController.text,),
+                                  CustomInformationContainerField(title: localization.emphistPlace, description: employmentHistInfo.placeController.text,),
+                                  CustomInformationContainerField(title: localization.employmentStartDate, description: employmentHistInfo.startDateController.text,),
+                                  CustomInformationContainerField(title: localization.employmentEndDate, description: employmentHistInfo.endDateController.text,),
+                                  CustomInformationContainerField(title: localization.emphistReportingManager, description: employmentHistInfo.reportingManagerController.text,),
+                                  CustomInformationContainerField(title: localization.emphistMgrContactNo, description: employmentHistInfo.contactNumberController.text,),
+                                  CustomInformationContainerField(title: localization.managerEmail, description: employmentHistInfo.contactEmailController.text,isLastItem: true,),
+                                  if(index < _employmentHistoryList.length - 1)  sectionDivider(color: AppColors.darkGrey)
 
+                                ]);
+                          })
+                    ],
+                  )
+              ],
             ),
           ),
 
@@ -1233,13 +1362,10 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                     itemBuilder: (context, index) {
                       // final attachment = _filteredAttachmentsList[index]; // From filtered list
                       final myAttachment = _filteredMyAttachmentsList[index]; // From filtered list
-
                      return Column(
                        children: [
-                     // CustomInformationContainerField(
-                     //   title: '',
-                     //   description: getFullNameFromLov(langProvider: langProvider,lovCode: widget.selectedCheckListCode,code: myAttachment.attachmentNameController.text).replaceAll('\n', ''),
-                     // ),
+                         CustomInformationContainerField(title: localization.sr,description: (index + 1).toString(),),
+                         CustomInformationContainerField(title: localization.requestAttachfile, description:  getFullNameFromLov(langProvider: langProvider,lovCode: _selectedChecklistCode,code: myAttachment.attachmentNameController.text).replaceAll('\n', ''),),
                          CustomInformationContainerField(title: localization.fileName,description: myAttachment.userFileNameController.text,),
                          CustomInformationContainerField(title: localization.comment,description: myAttachment.commentController.text,isLastItem: true,),
                          if(index < _filteredMyAttachmentsList.length - 1)  sectionDivider(color: AppColors.darkGrey)
@@ -1249,8 +1375,6 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                     })
               ]),
         )
-
-
       ],
     );
 }

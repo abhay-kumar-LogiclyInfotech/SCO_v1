@@ -78,7 +78,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
         reportingManagerController: TextEditingController(),
         contactNumberController: TextEditingController(),
         contactEmailController: TextEditingController(),
-        isNewController: TextEditingController(),
+        isNewController: TextEditingController(text: 'true'),
         errorMessageController: TextEditingController(),
         employerNameFocusNode: FocusNode(),
         designationFocusNode: FocusNode(),
@@ -93,10 +93,6 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
       ));
     });
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +122,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: widget.employmentStatusItemsList.length,
                                   itemBuilder: (context, index) {
-                                    final element =
-                                    widget.employmentStatusItemsList[index];
+                                    final element = widget.employmentStatusItemsList[index];
                                     return CustomRadioListTile(
                                       value: element.code,
                                       groupValue: widget.employmentStatus,
@@ -148,8 +143,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                   ListView.builder(
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
-                                      physics:
-                                      const NeverScrollableScrollPhysics(),
+                                      physics: const NeverScrollableScrollPhysics(),
                                       itemCount:
                                       widget.employmentHistoryList.length,
                                       itemBuilder: (context, index) {
@@ -234,7 +228,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                             /// ****************************************************************************************************************************************************
 
                                             kFormHeight,
-                                            /// occupation
+                                            /// Name
                                             fieldHeading(
                                                 title: localization.emphistOccupationName,
                                                 important: true,

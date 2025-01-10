@@ -1,11 +1,20 @@
+
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
+import 'package:sco_v1/resources/components/kButtons/kReturnButton.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
+import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../../../data/response/status.dart';
+import '../../../../models/account/edit_application_sections_model/GetApplicationSectionsModel.dart';
 import '../../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../../resources/app_colors.dart';
 import '../../../../utils/constants.dart';
@@ -23,12 +32,18 @@ class EditEmploymentHistoryView extends StatefulWidget {
   State<EditEmploymentHistoryView> createState() => _EditEmploymentHistoryViewState();
 }
 
-class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
+class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> with MediaQueryMixin{
+late AlertServices _alertServices;
 
 
+PsApplication? peopleSoftApplication;
 
   @override
   void initState() {
+
+    final GetIt getIt = GetIt.instance;
+    _alertServices = getIt.get<AlertServices>();
+
     WidgetsBinding.instance.addPostFrameCallback((callback)async{
       final LanguageChangeViewModel langProvider = Provider.of(context,listen: false);
       if (Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null) {
@@ -46,7 +61,11 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
       if(psApplicationProvider.apiResponse.status == Status.COMPLETED && psApplicationProvider.apiResponse.data?.data.psApplication.emplymentHistory != null)
       {
 
-        /// TODO: ADD EMPLOYMENT STATUS HERE
+
+        peopleSoftApplication = psApplicationProvider.apiResponse.data?.data.psApplication;
+
+
+
         final empHistory = psApplicationProvider.apiResponse.data?.data.psApplication.emplymentHistory;
 
         if(empHistory?.isNotEmpty ?? false) {
@@ -54,8 +73,7 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
             _employmentHistoryList.add(element);
           }
         }
-
-          ///  Given by Backend Dev i.e. Amit Sharma: Tell him if employment count is more than 0 than ask him to select previous employment. And if 0 than not employed and if any employment record is not having the end date ask hi. To select currently employed
+        ///  Given by Backend Dev i.e. Amit Sharma: Tell him if employment count is more than 0 than ask him to select previous employment. And if 0 than not employed and if any employment record is not having the end date ask hi. To select currently employed
         if(_employmentHistoryList.isEmpty){
           _employmentStatus = 'N';
         }
@@ -68,6 +86,7 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
         else{
           _employmentStatus = 'E';
         }
+
 
 
       setState(() {
@@ -109,7 +128,7 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
 
 
   /// employment history list
-  List<EmploymentHistory> _employmentHistoryList = [];
+  final List<EmploymentHistory> _employmentHistoryList = [];
 
 
   /// add employment history
@@ -142,50 +161,8 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
     });
   }
 
-
-  void _removeEmploymentHistory(int index) {
-    if (index >= 0 && index < _employmentHistoryList.length) {
-      setState(() {
-        /// Get the item to be deleted
-        final item = _employmentHistoryList[index];
-
-        /// Dispose of all the TextEditingController instances
-        item.employerNameController.dispose();
-        item.designationController.dispose();
-        item.startDateController.dispose();
-        item.endDateController.dispose();
-        item.occupationController.dispose();
-        item.titleController.dispose();
-        item.placeController.dispose();
-        item.reportingManagerController.dispose();
-        item.contactNumberController.dispose();
-        item.contactEmailController.dispose();
-        item.isNewController.dispose();
-        item.errorMessageController.dispose();
-
-        /// Dispose of all the FocusNode instances
-        item.employerNameFocusNode.dispose();
-        item.designationFocusNode.dispose();
-        item.startDateFocusNode.dispose();
-        item.endDateFocusNode.dispose();
-        item.occupationFocusNode.dispose();
-        item.titleFocusNode.dispose();
-        item.placeFocusNode.dispose();
-        item.reportingManagerFocusNode.dispose();
-        item.contactNumberFocusNode.dispose();
-        item.contactEmailFocusNode.dispose();
-
-        /// Remove the item from the list
-        _employmentHistoryList.removeAt(index);
-      });
-    }
-  }
-
-
-    Widget _employmentHistoryDetailsSection(
-        {required int step, required LanguageChangeViewModel langProvider}) {
-
-
+  Widget _employmentHistoryDetailsSection({required int step, required LanguageChangeViewModel langProvider}) {
+    final localization = AppLocalizations.of(context)!;
    return Consumer<GetApplicationSectionViewModel>(
       builder: (context,provider,_){
         switch (provider.apiResponse.status){
@@ -194,26 +171,33 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
           case Status.ERROR:
             return  Utils.showOnError();
           case Status.COMPLETED:
-          return EmploymentHistoryView(onEmploymentStatusChanged: (value) {
-            setState(() {
-              _employmentStatus = value;
-              print(_employmentStatus);
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                EmploymentHistoryView(onEmploymentStatusChanged: (value) {
+                  setState(() {
+                    _employmentStatus = value;
+                    if (_employmentStatus == 'N') {
+                      _employmentHistoryList.clear();
+                    }
+                    if (_employmentHistoryList.isEmpty) {
+                      _addEmploymentHistory();
+                    } else {
+                      _employmentHistoryList.clear();
+                      _addEmploymentHistory();
+                    }
+                  });
+                },
+                    employmentHistoryList: _employmentHistoryList,
+                    employmentStatus: _employmentStatus,
+                    employmentStatusItemsList: _employmentStatusItemsList,
+                    draftPrevNextButtons: const SizedBox()
+                ),
 
-              if (_employmentStatus == 'N') {
-                _employmentHistoryList.clear();
-              }
-              if (_employmentHistoryList.isEmpty) {
-                _addEmploymentHistory();
-              } else {
-                _employmentHistoryList.clear();
-                _addEmploymentHistory();
-              }
-            });
-          },
-              employmentHistoryList: _employmentHistoryList,
-              employmentStatus: _employmentStatus,
-              employmentStatusItemsList: _employmentStatusItemsList,
-              draftPrevNextButtons: const SizedBox()
+                /// submit and back button
+                _submitAndBackButton(localization:localization,langProvider: langProvider),
+              ],
+            ),
           );
           case Status.NONE:
             return  Utils.showOnNone();
@@ -221,11 +205,143 @@ class _EditEmploymentHistoryViewState extends State<EditEmploymentHistoryView> {
             return  Utils.showOnNone();
         }
         return Container();
-
-
       },
     );
 
 
     }
+
+  Widget _submitAndBackButton({required AppLocalizations localization,required LanguageChangeViewModel langProvider}) {
+      /// SubmitButton
+    return  Padding(
+      padding:  EdgeInsets.all(kPadding),
+      child: Column(
+          children: [
+            CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
+              final logger =  Logger();
+              if(validateEmploymentHistory(langProvider)){
+                dynamic form = peopleSoftApplication?.toJson();
+                form['emplymentHistory'] = _employmentHistoryList.map((element){return element.toJson();}).toList();
+                log(jsonEncode(form));
+              }
+            }),
+            kFormHeight,
+            const KReturnButton(),
+          ],
+        ),
+    );
+}
+
+  FocusNode? firstErrorFocusNode;
+  bool validateEmploymentHistory(langProvider) {
+    final localization = AppLocalizations.of(context)!;
+    firstErrorFocusNode = null;
+
+    /// validate employment history
+
+    /// select employment status
+    if (_employmentStatus == null || _employmentStatus == '') {
+      _alertServices.showToast(message: "${localization.previouslyEmployed} ?",
+        // context: context,
+      );
+    }
+
+    if (_employmentStatus != null &&
+        _employmentStatus != '' &&
+        _employmentStatus != 'N') {
+      for (int i = 0; i < _employmentHistoryList.length; i++) {
+        var element = _employmentHistoryList[i];
+
+        /// employer name
+        if (element.employerNameController.text.isEmpty || element.employerNameError != null) {
+          setState(() {
+            element.employerNameError = localization.emphistEmployerNameValidate;
+            firstErrorFocusNode ??= element.employerNameFocusNode;
+          });
+        }
+
+        /// designation
+        if (element.titleController.text.isEmpty || element.titleError != null) {
+          setState(() {
+            element.titleError = localization.emphistTitleNameValidate;
+            firstErrorFocusNode ??= element.titleFocusNode;
+          });
+        }
+
+        ///work place
+        if (element.placeController.text.isEmpty || element.placeError != null) {
+          setState(() {
+            element.placeError = localization.emphistPlaceValidate;
+            firstErrorFocusNode ??= element.placeFocusNode;
+          });
+        }
+
+        ///occupation
+        if (element.occupationController.text.isEmpty || element.occupationError != null) {
+          setState(() {
+            element.occupationError = localization.emphistOccupationNameValidate;
+            firstErrorFocusNode ??= element.occupationFocusNode;
+          });
+        }
+
+        /// start date
+        if (element.startDateController.text.isEmpty || element.startDateError != null) {
+          setState(() {
+            element.startDateError = localization.employmentStartDateRequired;
+            firstErrorFocusNode ??= element.startDateFocusNode;
+          });
+        }
+
+        /// end date
+        if (_employmentStatus == 'P' &&
+            ( element.endDateController.text.isEmpty || element.endDateError != null)) {
+          setState(() {
+            element.endDateError = localization.employmentEndDateRequired;
+            firstErrorFocusNode ??= element.endDateFocusNode;
+          });
+        }
+
+        /// end date
+        if (element.endDateController.text.isNotEmpty && (element.endDateController.text == element.startDateController.text)) {
+
+          setState(() {
+            element.endDateError = "${localization.employmentEndDateRequired}\nPlease correct start and End Date";
+            firstErrorFocusNode ??= element.endDateFocusNode;
+          });
+        }
+
+        /// reporting manager
+        if (element.reportingManagerController.text.isEmpty || element.reportingManagerError != null) {
+          setState(() {
+            element.reportingManagerError = localization.emphistReportingManagerValidate;
+            firstErrorFocusNode ??= element.reportingManagerFocusNode;
+          });
+        }
+        /// contact number
+        if (element.contactNumberController.text.isEmpty || element.contactNumberError != null) {
+          setState(() {
+            element.contactNumberError = localization.emphistMgrContactNoValidate;
+            firstErrorFocusNode ??= element.contactNumberFocusNode;
+          });
+        }
+        /// email
+        if (element.contactEmailController.text.isEmpty || element.contactEmailError != null) {
+          setState(() {
+            element.contactEmailError = localization.registrationEmailAddressValidate;
+            firstErrorFocusNode ??= element.contactEmailFocusNode;
+          });
+        }
+      }
+    }
+    /// checking for fist error node
+    if (firstErrorFocusNode != null ||
+        _employmentStatus == null ||
+        _employmentStatus == '') {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      /// No errors found, return true
+      return true;
+    }
+  }
 }

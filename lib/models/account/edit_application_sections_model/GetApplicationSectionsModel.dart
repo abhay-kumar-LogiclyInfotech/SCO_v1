@@ -59,7 +59,7 @@ class PsApplication {
   final List<UniversityPriority> universtiesPriorityList;
   final List<RequiredExaminations> requiredExaminationList;
   final List<dynamic> addressList;
-  final List<dynamic> highSchoolList;
+  final List<HighSchool> highSchoolList;
   final List<EmploymentHistory> emplymentHistory;
   final List<MajorWish> majorWishList;
   final String name;
@@ -112,7 +112,14 @@ class PsApplication {
         .map((e) => RequiredExaminations.fromJson(e))
         .toList(),
     addressList: List<dynamic>.from(json['addressList'] ?? []),
-    highSchoolList: List<dynamic>.from(json['highSchoolList'] ?? []),
+
+    //
+    // highSchoolList: List<dynamic>.from(json['highSchoolList'] ?? []),
+
+    highSchoolList: (json['highSchoolList'] as List)
+        .map((e) => HighSchool.fromJson(e))
+        .toList(),
+
     emplymentHistory: (json['emplymentHistory'] as List)
         .map((e) => EmploymentHistory.fromJson(e))
         .toList(),

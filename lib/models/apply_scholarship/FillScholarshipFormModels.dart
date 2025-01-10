@@ -583,7 +583,7 @@ class HighSchool {
       hsStateController:
           TextEditingController(text: json['hsState'].toString()),
       yearOfPassingController:
-          TextEditingController(text: json['yearOfPassing'].toString()),
+          TextEditingController(text: formatDateOnly(json['yearOfPassing'].toString())),
       hsTypeController: TextEditingController(text: json['hsType'].toString()),
       curriculumTypeController:
           TextEditingController(text: json['curriculumType'].toString()),
@@ -592,12 +592,16 @@ class HighSchool {
       otherHsNameController:
           TextEditingController(text: json['otherHsName'].toString()),
       passingYearController:
-          TextEditingController(text: json['passignYear'].toString()),
+          TextEditingController(text:  json['passignYear'].toString()),
       maxDateController:
           TextEditingController(text: json['maxDate'].toString()),
       disableStateController:
           TextEditingController(text: json['disableState'].toString()),
-      isNewController: TextEditingController(text: json['isNew'].toString()),
+
+      // isNewController: TextEditingController(text: json['isNew'].toString()),
+      isNewController: TextEditingController(text: (json['isNew']?.toString() ?? json['new']?.toString() ?? 'false'),),
+
+
       highestQualificationController:
           TextEditingController(text: json['highestQualification'].toString()),
       hsLevelFocusNode: FocusNode(),
@@ -611,14 +615,28 @@ class HighSchool {
       otherHsNameFocusNode: FocusNode(),
       passingYearFocusNode: FocusNode(),
       maxDateFocusNode: FocusNode(),
-      hsDetails: (json['hsDetails'] as List)
+      // hsDetails: (json['hsDetails'] as List)
+      //     .map((e) => HSDetails.fromJson(e))
+      //     .toList(),
+      // otherHSDetails: (json['otherHSDetails'] as List)
+      //     .map((e) => HSDetails.fromJson(e))
+      //     .toList(),
+
+      hsDetails: (json['hsDetails'] is List
+          ? (json['hsDetails'] as List)
           .map((e) => HSDetails.fromJson(e))
-          .toList(),
-      otherHSDetails: (json['otherHSDetails'] as List)
+          .toList()
+          : []), /// Provide an empty list if hsDetails is not a List
+
+      otherHSDetails: (json['otherHSDetails'] is List
+          ? (json['otherHSDetails'] as List)
           .map((e) => HSDetails.fromJson(e))
-          .toList(),
+          .toList()
+          : []), /// Provide an
     );
   }
+
+
 
   // To JSON
   Map<String, dynamic> toJson() {
@@ -636,12 +654,17 @@ class HighSchool {
       'maxDate': maxDateController.text,
       'disableState': disableStateController.text,
       'isNew': isNewController.text,
+      'new': isNewController.text,
       'highestQualification': highestQualificationController.text,
       'hsDetails': hsDetails.map((e) => e.toJson()).toList(),
       'otherHSDetails': otherHSDetails.map((e) => e.toJson()).toList(),
     };
   }
 }
+
+
+
+
 
 // HSDetails model
 class HSDetails {
@@ -761,6 +784,8 @@ class RelativeInfo {
     };
   }
 }
+
+
 
 // graduation information
 class GraduationInfo {
@@ -919,13 +944,13 @@ class GraduationInfo {
       caseStudyTitleFocusNode: FocusNode(),
       caseStudyDescriptionFocusNode: FocusNode(),
       caseStudyStartYearFocusNode: FocusNode(),
-      currentlyStudying: json['currentlyStudying'] == 'true',
+      currentlyStudying: json['currentlyStudying'].toString() == 'true',
       // isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
       isNewController: TextEditingController(text: (json['isNew']?.toString() ?? json['new']?.toString() ?? 'false'),),
       sponsorShipController: TextEditingController(text: json['sponsorShip'] ?? 'no'),
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
-      highestQualification: json['highestQualification'] == 'true',
-      showCurrentlyStudying: json['showCurrentlyStudying'] == 'true',
+      highestQualification: json['highestQualification'].toString() == 'true',
+      showCurrentlyStudying: json['showCurrentlyStudying'].toString() == 'true',
       sponsorShipFocusNode: FocusNode(),
     );
   }
@@ -957,6 +982,8 @@ class GraduationInfo {
     };
   }
 }
+
+
 
 // required Examinations
 class RequiredExaminations {
