@@ -1,10 +1,18 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 
 import '../../../../data/response/status.dart';
 import '../../../../models/account/GetListApplicationStatusModel.dart';
+import '../../../../models/account/edit_application_sections_model/GetApplicationSectionsModel.dart';
 import '../../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../../resources/app_colors.dart';
+import '../../../../resources/components/custom_button.dart';
 import '../../../../resources/components/custom_simple_app_bar.dart';
+import '../../../../resources/components/kButtons/kReturnButton.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
@@ -12,6 +20,7 @@ import '../../../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../viewModel/services/alert_services.dart';
 import '../../../apply_scholarship/form_views/graduation_information_view.dart';
 
 class EditGraduationDetailsView extends StatefulWidget {
@@ -25,9 +34,17 @@ class EditGraduationDetailsView extends StatefulWidget {
       _EditGraduationDetailsViewState();
 }
 
-class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
+class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> with MediaQueryMixin {
+  late AlertServices _alertServices;
+
+
+  PsApplication? peopleSoftApplication;
+
   @override
   void initState() {
+
+    final GetIt getIt = GetIt.instance;
+    _alertServices = getIt.get<AlertServices>();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       final LanguageChangeViewModel langProvider =
       Provider.of(context, listen: false);
@@ -58,6 +75,14 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
           psApplicationProvider
               .apiResponse.data?.data.psApplication.graduationList !=
               null) {
+
+
+        /// Setting the peoplesoft application to get and submit the full application.
+        peopleSoftApplication = psApplicationProvider.apiResponse.data?.data.psApplication;
+
+
+
+
         final gradList = psApplicationProvider.apiResponse.data?.data
             .psApplication.graduationList;
 
@@ -213,6 +238,7 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
 
   Widget _graduationDetailsSection(
       {required int step, required LanguageChangeViewModel langProvider}) {
+    final localization = AppLocalizations.of(context)!;
     return Consumer<GetApplicationSectionViewModel>
       (
 
@@ -223,19 +249,26 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
             case Status.ERROR:
               return Utils.showOnError();
             case Status.COMPLETED:
-              return GraduationInformationView(
-                onUpdateHavingSponsor: updateHavingSponsor,
-                graduationDetailsList: _graduationDetailsList,
-                graduationLevelMenuItems: _graduationLevelMenuItems,
-                graduationLevelDDSMenuItems: _graduationLevelDDSMenuItems,
-                caseStudyYearDropdownMenuItems: _caseStudyYearDropdownMenuItems,
-                academicCareer: widget.applicationStatusDetails.acadCareer,
-                scholarshipType: widget.applicationStatusDetails.scholarshipType,
-                nationalityMenuItemsList: _nationalityMenuItemsList,
-                displayHighSchool: displayHighSchool(),
-                draftPrevNextButtons: draftDummy(langProvider),
-                havingSponsor: havingSponsor,
-                addGraduation: _addGraduationDetail,
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    GraduationInformationView(
+                      onUpdateHavingSponsor: updateHavingSponsor,
+                      graduationDetailsList: _graduationDetailsList,
+                      graduationLevelMenuItems: _graduationLevelMenuItems,
+                      graduationLevelDDSMenuItems: _graduationLevelDDSMenuItems,
+                      caseStudyYearDropdownMenuItems: _caseStudyYearDropdownMenuItems,
+                      academicCareer: widget.applicationStatusDetails.acadCareer,
+                      scholarshipType: widget.applicationStatusDetails.scholarshipType,
+                      nationalityMenuItemsList: _nationalityMenuItemsList,
+                      displayHighSchool: displayHighSchool(),
+                      draftPrevNextButtons: draftDummy(langProvider),
+                      havingSponsor: havingSponsor,
+                      addGraduation: _addGraduationDetail,
+                    ),
+                    _submitAndBackButton(localization: localization, langProvider: langProvider),
+                  ],
+                ),
               );
             case Status.NONE:
               return Utils.showOnNone();
@@ -245,6 +278,227 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> {
         }
     );
   }
+
+
+  Widget _submitAndBackButton({required AppLocalizations localization,required LanguageChangeViewModel langProvider}) {
+    /// SubmitButton
+    return  Padding(
+      padding:  EdgeInsets.all(kPadding),
+      child: Column(
+        children: [
+          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
+            final logger =  Logger();
+            if(validateGraduationDetails(langProvider)){
+              dynamic form = peopleSoftApplication?.toJson();
+              form['graduationList'] = _graduationDetailsList.map((element){return element.toJson();}).toList();
+              log(jsonEncode(form));
+            }
+          }),
+          kFormHeight,
+          const KReturnButton(),
+        ],
+      ),
+    );
+  }
+
+
+  FocusNode? firstErrorFocusNode;
+
+  bool validateGraduationDetails(langProvider) {
+    final academicCareer = widget.applicationStatusDetails.acadCareer;
+    
+    final localization = AppLocalizations.of(context)!;
+    firstErrorFocusNode = null;
+
+    /// validate graduation details
+    if (academicCareer != 'SCHL' &&
+        academicCareer != 'HCHL') {
+      for (int index = 0; index < _graduationDetailsList.length; index++) {
+        var element = _graduationDetailsList[index];
+        validateGraduationDetails(element) {
+          if (element.currentlyStudying && element.showCurrentlyStudying) {
+            /// validating last term
+            if (element.lastTermController.text.isEmpty || element.lastTermError != null) {
+              setState(() {
+                element.lastTermError = localization.lastTermRequired;
+                firstErrorFocusNode ??= element.lastTermFocusNode;
+              });
+            }
+          }
+          /// #################################################################
+          /// Condition using index and scholarship details
+          if (index > 0 &&
+              academicCareer != 'UGRD' &&
+              academicCareer != 'DDS') {
+            /// validating graduation level
+            if (element.levelController.text.isEmpty || element.levelError != null) {
+              setState(() {
+                element.levelError = localization.hsGraduationLevelValidate;
+                firstErrorFocusNode ??= element.levelFocusNode;
+              });
+            }
+          }
+
+          /// #################################################################
+          /// validating dds graduation level
+          if (index != 0 && academicCareer == 'DDS') {
+            if (element.levelController.text.isEmpty || element.levelError != null) {
+              setState(() {
+                element.levelError = localization.hsGraduationLevelValidate;
+                firstErrorFocusNode ??= element.levelFocusNode;
+              });
+            }
+          }
+          /// #################################################################
+          /// validating graduation country
+          if (element.countryController.text.isEmpty || element.countryError != null) {
+            setState(() {
+              element.countryError = localization.countryValidate;
+              firstErrorFocusNode ??= element.countryFocusNode;
+            });
+          }
+          /// #################################################################
+          /// high school university
+          if (academicCareer != 'DDS') {
+            if (element.universityController.text.isEmpty || element.universityError !=null) {
+              setState(() {
+                element.universityError = localization.hsUniversityValidate;
+                firstErrorFocusNode ??= element.universityFocusNode;
+              });
+            }
+          }
+
+          /// #################################################################
+          /// other university
+          if (element.universityController.text == 'OTH') {
+            if (element.otherUniversityController.text.isEmpty || element.otherUniversityError != null) {
+              setState(() {
+                element.otherUniversityError = academicCareer != 'DDS'
+                    ? localization.hsOtherUniversityValidate
+                    : localization.ddsOtherUniversityRequired;
+                firstErrorFocusNode ??= element.otherUniversityFocusNode;
+              });
+            }
+          }
+          /// #################################################################
+          /// major
+          if (element.majorController.text.isEmpty || element.majorError != null) {
+            setState(() {
+              element.majorError = academicCareer != 'DDS'
+                  ? localization.hsMajorValidate
+                  : localization.ddsMajorValidate;
+              firstErrorFocusNode ??= element.majorFocusNode;
+            });
+          }
+          /// #################################################################
+          /// cgpa
+          if (element.cgpaController.text.isEmpty || element.cgpaError != null) {
+            setState(() {
+              element.cgpaError = localization.cgpaValidate;
+              firstErrorFocusNode ??= element.cgpaFocusNode;
+            });
+          }
+          /// #################################################################
+          if (element.graduationStartDateController.text.isEmpty || element.graduationStartDateError != null) {
+            setState(() {
+              element.graduationStartDateError = localization.hsGraducationStartDateValidate;
+              firstErrorFocusNode ??= element.graduationStartDateFocusNode;
+            });
+          }
+          /// #################################################################
+          /// graduation end data
+          element.graduationEndDateError = null;
+          if ((!element.currentlyStudying && element.levelController.text.isNotEmpty)) {
+
+            if (element.graduationEndDateController.text.isEmpty || element.graduationEndDateError != null) {
+              setState(() {
+                element.graduationEndDateError = localization.hsGraducationEndDateValidate;
+                firstErrorFocusNode ??= element.graduationEndDateFocusNode;
+              });
+            }
+
+            if (element.graduationEndDateController.text == element.graduationStartDateController.text) {
+              setState(() {
+                element.graduationEndDateError = "${localization.hsGraducationEndDateValidate}\nPlease Enter correct start and end Date";
+                firstErrorFocusNode ??= element.graduationEndDateFocusNode;
+              });
+            }
+
+
+
+          }
+          /// #################################################################
+          /// Are you currently receiving scholarship or grant from other university
+          if (academicCareer == 'DDS') {
+            if (havingSponsor.isEmpty) {
+              _alertServices.flushBarErrorMessages(
+                  message: localization.ddsGradQuestion,
+                  // context: context,
+                  provider: langProvider);
+              firstErrorFocusNode = FocusNode();
+              return false;
+            }
+          }
+          /// #################################################################
+          /// sponsorship name
+          if ((havingSponsor == 'Y') ||
+              academicCareer != 'DDS') {
+            if (element.sponsorShipController.text.isEmpty || element.sponsorShipError != null) {
+              setState(() {
+                element.sponsorShipError = localization.hsSponsorshipValidate;
+                firstErrorFocusNode ??= element.sponsorShipFocusNode;
+              });
+            }
+          }
+
+          /// #################################################################
+          if (element.levelController.text == 'PGRD' ||
+              element.levelController.text == 'PG' ||
+              element.levelController.text == 'DDS') {
+            /// case study title
+            if (element.caseStudyTitleController.text.isEmpty || element.caseSudyError != null) {
+              setState(() {
+                element.caseStudyTitleError = localization.caseStudyTitleValidate;
+                firstErrorFocusNode ??= element.caseStudyTitleFocusNode;
+              });
+            }
+
+            /// case study start year
+            if (element.caseStudyStartYearController.text.isEmpty || element.caseStudyStartYearError != null) {
+              setState(() {
+                element.caseStudyStartYearError = localization.caseStudyStartYearValidate;
+                firstErrorFocusNode ??= element.caseStudyStartYearFocusNode;
+              });
+            }
+            /// case study description
+            if (element.caseStudyDescriptionController.text.isEmpty || element.caseStudyDescriptionError !=  null) {
+              setState(() {
+                element.caseStudyDescriptionError = localization.caseStudyDescriptionValidate;
+                firstErrorFocusNode ??= element.caseStudyDescriptionFocusNode;
+              });
+            }
+          }
+          /// #################################################################
+        }
+        if (academicCareer == 'UGRD' && element.currentlyStudying) {
+          validateGraduationDetails(element);
+        }
+        if (academicCareer != 'UGRD') {
+          validateGraduationDetails(element);
+        }
+      }
+    }
+
+    if (firstErrorFocusNode != null) {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      /// No errors found, return true
+      // await saveDraft();
+      return true;
+    }
+  }
+
 
 
 

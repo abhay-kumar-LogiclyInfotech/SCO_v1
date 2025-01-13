@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/models/splash/commonData_model.dart';
 import 'package:sco_v1/resources/components/custom_dropdown.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_submitted_application_details_by_applicaion_number_viewModel.dart';
@@ -434,9 +435,11 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
           for (int index = 0; index < cleanedDraft['universtiesPriorityList'].length; index++) {
             var element = cleanedDraft['universtiesPriorityList'][index];
             _universityPriorityList.add(UniversityPriority.fromJson(element)); /// Add to the list
+            populateUniversitiesWishList(_universityPriorityList[index]);
           }}
         else{
           _universityPriorityList.add(UniversityPriority.fromJson(cleanedDraft['universtiesPriorityList']));
+          populateUniversitiesWishList(_universityPriorityList[0]);
         }
       }
 
@@ -616,21 +619,20 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
 
   /// Helper method for university
-
-  List<DropdownMenuItem> populateUniversitiesWishList(
-      UniversityPriority universityInfo)
+  List<Values> populateUniversitiesWishList(UniversityPriority universityInfo)
   {
     String country = universityInfo.countryIdController.text;
     /// Step 1: Fetch initial list of universities based on country
-    List<DropdownMenuItem> items = fetchListOfValue("UNIVERSITY#$country#UNV");
+    List<Values> items = fetchListOfValue("UNIVERSITY#$country#UNV");
 
     /// List to store final items
-    List<DropdownMenuItem> itemsNew = [];
+    List<Values> itemsNew = [];
 
-    /// Step 2: Handle special case
+    // / Step 2: Handle special case
     if (isSpecialCase ?? false) {
-      itemsNew.add(const DropdownMenuItem(
-          value: "OTH", child: Text("آخر"))); /// "OTH" means "Other"
+      // itemsNew.add(const DropdownMenuItem(
+      //     value: "OTH", child: Text("آخر"))); /// "OTH" means "Other"
+      itemsNew.add(Values(code: 'OTH',value: 'Other',valueArabic: 'آخر',));
     }
 
     /// Step 3: Check for different admit types
@@ -639,7 +641,8 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
       itemsNew = fetchListOfValue("EXTUNIVERSITYNL#$country#UNV");
     } else if (country.toUpperCase() == "GBR") {
       /// For country "GBR"
-      itemsNew.add(const DropdownMenuItem(value: "OTH", child: Text("آخر")));
+      // itemsNew.add(const DropdownMenuItem(value: "OTH", child: Text("آخر")));
+      itemsNew.add(Values(code: 'OTH',value: 'Other',valueArabic: 'آخر',));
     } else if (country.toUpperCase() != "ARE" && widget.applicationStatusDetails.scholarshipType?.toUpperCase() != "INT") {
       /// For countries not equal to "ARE" and scholarship type not "INT"
       itemsNew = fetchListOfValue("GRAD_UNIVERSITY#$country#UNV");
@@ -655,14 +658,16 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
       itemsNew.addAll(items);
     }
 
-    universityInfo.universityDropdown = itemsNew;
+    // universityInfo.universityDropdown = itemsNew;
     return itemsNew;
   }
-  List<DropdownMenuItem> fetchListOfValue(String key) {
+  List<Values> fetchListOfValue(String key) {
     /// Your logic to fetch values goes here
     final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
     if (Constants.lovCodeMap[key]?.values != null) {
-      return populateCommonDataDropdown(
+      return Constants.lovCodeMap[key]!.values!;
+
+        populateCommonDataDropdown(
         menuItemsList: Constants.lovCodeMap[key]!.values!,
         provider: langProvider,
         textColor: AppColors.scoButtonColor,
@@ -1230,7 +1235,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                                       ),
                                     if(academicCareer != "DDS")
                                       CustomInformationContainerField(title: localization.university,
-                                        description: universityInfo.universityIdController.text, /// TODO: UNIVERSITY FULL NAME IS PENDING TO CALCULATE
+                                        description: getFullNameForUniversity(value: universityInfo.universityIdController.text, universityInfo: universityInfo)   /// TODO: UNIVERSITY FULL NAME IS PENDING TO CALCULATE
                                       ),
                                     if((universityInfo.universityIdController.text == 'OTH' ||  academicCareer == 'DDS'))
                                       CustomInformationContainerField(title: academicCareer != 'DDS'
@@ -1510,6 +1515,22 @@ dynamic getFullNameForMajor(value){
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     bool  isLTR =  getTextDirection(langProvider) == TextDirection.ltr;
     for(var i in _majorsMenuItemsList){
+      if(i.code.toString() == value.trim()){
+        if(isLTR){
+          return i.value.toString();
+        }
+        return i.valueArabic.toString();
+      };
+    }
+    return null;
+  }
+
+  /// Function to get full name from university list
+dynamic getFullNameForUniversity({required value,required universityInfo}){
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    bool  isLTR =  getTextDirection(langProvider) == TextDirection.ltr;
+    final listOfValues = populateUniversitiesWishList(universityInfo);
+    for(var i in listOfValues){
       if(i.code.toString() == value.trim()){
         if(isLTR){
           return i.value.toString();

@@ -196,7 +196,6 @@ class _MyAppState extends State<MyApp> {
           // Get submitted application details
           ChangeNotifierProvider(create: (_) => GetSubmittedApplicationDetailsByApplicationNumberViewModel()),
 
-
           // get application sections of applied scholarship application
           ChangeNotifierProvider(create: (_) => GetApplicationSectionViewModel()),
 

@@ -1,19 +1,28 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/view/apply_scholarship/form_views/required_examinations_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../../data/response/status.dart';
 import '../../../../models/account/GetListApplicationStatusModel.dart';
+import '../../../../models/account/edit_application_sections_model/GetApplicationSectionsModel.dart';
 import '../../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../../resources/app_colors.dart';
+import '../../../../resources/components/custom_button.dart';
 import '../../../../resources/components/custom_simple_app_bar.dart';
+import '../../../../resources/components/kButtons/kReturnButton.dart';
 import '../../../../utils/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
+import '../../../../viewModel/services/alert_services.dart';
 
 class EditRequiredExaminationsView extends StatefulWidget {
   final ApplicationStatusDetail applicationStatusDetails;
@@ -24,9 +33,17 @@ class EditRequiredExaminationsView extends StatefulWidget {
   State<EditRequiredExaminationsView> createState() => _EditRequiredExaminationsViewState();}
 
 class _EditRequiredExaminationsViewState
-    extends State<EditRequiredExaminationsView> {
+    extends State<EditRequiredExaminationsView> with MediaQueryMixin{
+  late AlertServices _alertServices;
+
+
+  PsApplication? peopleSoftApplication;
+
   @override
   void initState() {
+
+    final GetIt getIt = GetIt.instance;
+    _alertServices = getIt.get<AlertServices>();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       final langProvider =
           Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -62,6 +79,10 @@ class _EditRequiredExaminationsViewState
           psApplicationProvider
                   .apiResponse.data?.data.psApplication.emplymentHistory !=
               null) {
+
+        /// setting peoplesoft application to get the full application
+        peopleSoftApplication = psApplicationProvider.apiResponse.data?.data.psApplication;
+
         final requiredExamination = psApplicationProvider
             .apiResponse.data?.data.psApplication.requiredExaminationList;
 
@@ -104,7 +125,7 @@ class _EditRequiredExaminationsViewState
     });
   }
 
-  List<RequiredExaminations> _requiredExaminationList = [];
+  final List<RequiredExaminations> _requiredExaminationList = [];
 
   List<DropdownMenuItem>? _requiredExaminationDropdownMenuItems = [];
 
@@ -137,6 +158,9 @@ class _EditRequiredExaminationsViewState
   }
 
   Widget _buildUi() {
+
+    final LanguageChangeViewModel langProvider = context.read<LanguageChangeViewModel>();
+    final localization = AppLocalizations.of(context)!;
     return Consumer<GetApplicationSectionViewModel>(
       builder: (context, provider, _) {
         switch (provider.apiResponse.status) {
@@ -145,13 +169,20 @@ class _EditRequiredExaminationsViewState
           case Status.ERROR:
             return Utils.showOnError();
           case Status.COMPLETED:
-            return RequiredExaminationsView(
-                draftPrevNextButtons: Container(),
-                acadmicCareer: widget.applicationStatusDetails.acadCareer,
-                requiredExaminationList: _requiredExaminationList,
-                requiredExaminationDropdownMenuItems:
-                    _requiredExaminationDropdownMenuItems,
-                testScoreVal: _testScoreVal);
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  RequiredExaminationsView(
+                      draftPrevNextButtons: Container(),
+                      acadmicCareer: widget.applicationStatusDetails.acadCareer,
+                      requiredExaminationList: _requiredExaminationList,
+                      requiredExaminationDropdownMenuItems:
+                          _requiredExaminationDropdownMenuItems,
+                      testScoreVal: _testScoreVal),
+                  _submitAndBackButton(localization: localization, langProvider: langProvider)
+                ],
+              ),
+            );
           case Status.NONE:
             return Utils.showOnNone();
           case null:
@@ -159,5 +190,69 @@ class _EditRequiredExaminationsViewState
         }
       },
     );
+  }
+
+  Widget _submitAndBackButton({required AppLocalizations localization,required LanguageChangeViewModel langProvider}) {
+    /// SubmitButton
+    return  Padding(
+      padding:  EdgeInsets.all(kPadding),
+      child: Column(
+        children: [
+          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
+            final logger =  Logger();
+            if(validateRequiredExaminations(langProvider)){
+              dynamic form = peopleSoftApplication?.toJson();
+              form['requiredExaminationList'] = _requiredExaminationList.map((element){return element.toJson();}).toList();
+              log(jsonEncode(form));
+            }
+          }),
+          kFormHeight,
+          const KReturnButton(),
+        ],
+      ),
+    );
+  }
+
+  FocusNode? firstErrorFocusNode;
+  bool validateRequiredExaminations(langProvider) {
+    final localization = AppLocalizations.of(context)!;
+    for (int i = 0; i < _requiredExaminationList.length; i++) {
+      firstErrorFocusNode = null;
+
+      var element = _requiredExaminationList[i];
+      if (element.examinationError != null ) {
+        setState(() {
+          element.examinationError = localization.duplicateExaminationMessage;
+          firstErrorFocusNode ??= element.examinationFocusNode;
+        });
+      }
+      if (element.examinationController.text.isNotEmpty && element.examinationTypeIdController.text.isEmpty && (element.examinationTypeDropdown?.isNotEmpty ?? false || element.examinationTypeDropdown != null)) {
+        setState(() {
+          element.examinationTypeIdError = localization.examinationTypeValidate;
+          firstErrorFocusNode ??= element.examinationTypeIdFocusNode;
+        });
+      }
+      // if (element.examinationGradeController.text.isEmpty) {
+      //   setState(() {
+      //     element.examinationGradeError = "Please Enter Examination Grade";
+      //     firstErrorFocusNode ??= element.examinationGradeFocusNode;
+      //   });
+      // }
+      if (element.examinationController.text.isNotEmpty && element.examDateController.text.isEmpty) {
+        setState(() {
+          element.examDateError = localization.dateExamValidate;
+          firstErrorFocusNode ??= element.examDateFocusNode;
+        });
+      }
+    }
+
+    /// checking for fist error node
+    if (firstErrorFocusNode != null) {
+      FocusScope.of(context).requestFocus(firstErrorFocusNode);
+      return false;
+    } else {
+      /// No errors found, return true
+      return true;
+    }
   }
 }

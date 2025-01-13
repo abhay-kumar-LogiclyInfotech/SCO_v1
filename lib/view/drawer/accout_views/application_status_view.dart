@@ -87,8 +87,8 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
 
 
 
-  List<ApplicationStatus> _draftApplicationStatus = [];
-  List<ApplicationStatus> _otherApplicationStatus = [];
+  final List<ApplicationStatus> _draftApplicationStatus = [];
+  final List<ApplicationStatus> _otherApplicationStatus = [];
 
   Future<void> _onRefresh() async {
     /// fetch list of application status
@@ -534,8 +534,8 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
 
                                       /// EDIT UNIVERSITY AND MAJORS DETAILS
                                       /// TODO: UNCOMMENT THE CONDITION AFTER TESTING
-                                      if(application.testEditAllowed.toString().toUpperCase() == 'Y')
-                                      // if(true)
+                                      // if(application.testEditAllowed.toString().toUpperCase() == 'Y')
+                                      if(true)
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.requiredExamination, onPressed: (){
                                           /// Move to required examinations list
                                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditRequiredExaminationsView(
