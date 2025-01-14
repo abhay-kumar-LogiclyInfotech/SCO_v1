@@ -96,8 +96,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        title:
-            Text(localization.apply_for_scholarship, style: AppTextStyles.appBarTitleStyle()),
+        title: Text(localization.apply_for_scholarship, style: AppTextStyles.appBarTitleStyle()),
       ),
       body: _buildUI(localization),
     );

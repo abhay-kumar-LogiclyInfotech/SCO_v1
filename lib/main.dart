@@ -7,7 +7,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/models/account/edit_application_sections_model/UploadUpdateAttachmentModel.dart';
 import 'package:sco_v1/view/test.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/get_list_of_attachments_viewModel.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/upload_update_attachment_view_model.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_submitted_application_details_by_applicaion_number_viewModel.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
@@ -198,6 +201,13 @@ class _MyAppState extends State<MyApp> {
 
           // get application sections of applied scholarship application
           ChangeNotifierProvider(create: (_) => GetApplicationSectionViewModel()),
+
+          // get Uploaded list of attachments
+          ChangeNotifierProvider(create: (_) => GetListOfAttachmentsViewModel()),
+
+
+          /// Uploading and updating approved attachment
+          ChangeNotifierProvider(create: (_) => UploadUpdateAttachmentViewModel()),
 
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),

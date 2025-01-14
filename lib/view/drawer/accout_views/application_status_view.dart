@@ -20,8 +20,10 @@ import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
 import 'package:sco_v1/view/apply_scholarship/form_views/high_school_view.dart';
+import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/attachments_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_employment_history_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_graduation_details_View.dart';
+import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_major_and_universities_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_required_examinations_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/view_application_details_view.dart';
 import 'package:sco_v1/viewModel/account/get_list_application_status_viewmodel.dart';
@@ -480,13 +482,17 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                               )));
                             }),
                             /// UPLOAD APPROVED ATTACHMENTS
-                            actionButton(backgroundColor: AppColors.INFO, text: localization.attachments, onPressed: (){
-                              _alertServices.toastMessage(localization.comingSoon);
+                            if(application?.attachmentAllowed ?? false)
+                              actionButton(backgroundColor: AppColors.INFO, text: localization.attachments, onPressed: (){
+                              _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> AttachmentsView(
+                                applicationStatusDetails: application,
+                                configurationKey: configurationKey,
+                              )));
                             }),
                             /// UNIVERSITY WISHLIST
-                            actionButton(backgroundColor: AppColors.scoMidThemeColor, text: localization.universityWishlist, onPressed: (){
-                              _alertServices.toastMessage(localization.comingSoon);
-                            }),
+                            // actionButton(backgroundColor: AppColors.scoMidThemeColor, text: localization.universityWishlist, onPressed: (){
+                            //   _alertServices.toastMessage(localization.comingSoon);
+                            // }),
                             /// EDIT BUTTON
                             /// SHOW EDIT BUTTON IF EDITING IS ALLOWED
                             if(application.editAllowed || application.editAllowed.toString() == 'true')
@@ -530,12 +536,16 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                       /// EDIT UNIVERSITY AND MAJORS DETAILS
                                       if(application.wishListEditAllowed.toString().toUpperCase() == 'Y')
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.universityAndMajor, onPressed: (){
+                                          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditMajorsAndUniversityView(
+                                            applicationStatusDetails: application,
+                                            configurationKey: configurationKey,
+                                          )));
                                       }),
 
                                       /// EDIT UNIVERSITY AND MAJORS DETAILS
                                       /// TODO: UNCOMMENT THE CONDITION AFTER TESTING
-                                      // if(application.testEditAllowed.toString().toUpperCase() == 'Y')
-                                      if(true)
+                                      if(application.testEditAllowed.toString().toUpperCase() == 'Y')
+                                      // if(true)
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.requiredExamination, onPressed: (){
                                           /// Move to required examinations list
                                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditRequiredExaminationsView(

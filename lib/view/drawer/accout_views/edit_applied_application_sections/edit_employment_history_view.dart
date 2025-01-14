@@ -10,6 +10,7 @@ import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/kButtons/kReturnButton.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/edit_employment_history_viewModel.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
@@ -217,14 +218,23 @@ PsApplication? peopleSoftApplication;
       padding:  EdgeInsets.all(kPadding),
       child: Column(
           children: [
-            CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
-              final logger =  Logger();
-              if(validateEmploymentHistory(langProvider)){
-                dynamic form = peopleSoftApplication?.toJson();
-                form['emplymentHistory'] = _employmentHistoryList.map((element){return element.toJson();}).toList();
-                log(jsonEncode(form));
-              }
-            }),
+
+            ChangeNotifierProvider(create: (context)=>EditEmploymentHistoryViewModel(),
+            child: Consumer<EditEmploymentHistoryViewModel>(
+              builder: (context,provider,_){
+                return CustomButton(buttonName: localization.update, isLoading: provider.apiResponse.status == Status.LOADING, textDirection: getTextDirection(langProvider),
+                    onTap: ()async{
+                  if(validateEmploymentHistory(langProvider)){
+                    dynamic form = peopleSoftApplication?.toJson();
+                    form['emplymentHistory'] = _employmentHistoryList.map((element){return element.toJson();}).toList();
+                    await provider.editEmploymentHistory(applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form);
+                    log(jsonEncode(form));
+                  }
+                });
+              },
+            ),
+            ),
+
             kFormHeight,
             const KReturnButton(),
           ],

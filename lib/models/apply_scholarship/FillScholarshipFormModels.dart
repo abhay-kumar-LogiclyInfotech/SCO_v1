@@ -1457,6 +1457,9 @@ class Attachment {
   final TextEditingController descriptionController;
   final TextEditingController base64StringController;
 
+   TextEditingController? emplIdController;
+   TextEditingController? applicationNumberController;
+
   // Focus Nodes
   final FocusNode processCdFocusNode;
   final FocusNode documentCdFocusNode;
@@ -1502,6 +1505,9 @@ class Attachment {
   String? applictantIdError;
   String? descriptionError;
   String? base64StringError;
+
+  bool toUpdateApprovedAttachment = false;
+  bool toUploadApprovedAttachment = false;
 
   Attachment({
     required this.processCdController,
@@ -1567,6 +1573,8 @@ class Attachment {
     this.applictantIdError,
     this.descriptionError,
     this.base64StringError,
+    this.emplIdController,
+    this.applicationNumberController,
   });
 
   // From JSON
@@ -1644,6 +1652,36 @@ class Attachment {
       'base64String': base64StringController.text,
     };
   }
+  // To update attachment
+  Map<String, dynamic> updateAttachmentToJson() {
+    return {
+
+
+      "processCD": processCdController.text,
+      "documentCD": documentCdController.text,
+      "description": descriptionController.text,
+      "userFileName": userFileNameController.text,
+      "comment": commentController.text,
+      "emplId": emplIdController?.text ?? '',
+      "applicationNo":applicationNumberController?.text ?? '',
+      "base64String": base64StringController.text
+    };
+  }
+
+  // To upload attachment
+  Map<String, dynamic> uploadAttachmentToJson() {
+    return {
+      "processCD": processCdController.text,
+      "documentCD": documentCdController.text,
+      "description": descriptionController.text,
+      "userFileName": userFileNameController.text,
+      "comment": commentController.text,
+      "base64String": base64StringController.text
+    };
+  }
+
+
+
 }
 
 

@@ -208,6 +208,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
 
       isStudyCountry = widget.applicationStatusDetails.scholarshipType == 'INT' ? true : false;
+      // isStudyCountry = true;
 
       /// Name as per passport
       if (cleanedDraft['nameAsPasport'] != null) {
@@ -552,6 +553,11 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
     return (key == 'SCOPGRDINT' || key == 'SCOPGRDEXT' || key == 'SCODDSEXT');
   }
 
+  bool isRequiredExaminationDetailsRequired() {
+    final academicCareer = widget.applicationStatusDetails.acadCareer;
+    return !(academicCareer == 'SCHL' || academicCareer == 'HCHL');
+  }
+
 
 
   /// Get majors function
@@ -578,23 +584,24 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
     if (admitType?.toUpperCase() == "ACT") {
       majorCriteria = "MAJORSACT#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
       items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
-    } else if (admitType?.toUpperCase() == "NLU") {
+    }
+    else if (admitType?.toUpperCase() == "NLU") {
       majorCriteria = "MAJORSNL#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
       items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
-    } else if (scholarshipType?.toUpperCase() == "INT" && admitType?.toUpperCase() != "MET") {
+    }
+    else if (scholarshipType?.toUpperCase() == "INT" && admitType?.toUpperCase() != "MET") {
       items = _filterItemsForINT(items, admitType, configurationKey);
-    } else if (scholarshipType?.toUpperCase() == "EXT") {
+    }
+    else if (scholarshipType?.toUpperCase() == "EXT") {
       // Items remain unchanged for "EXT" scholarship type
     } else {
       // Default case to filter only "BAM" items
       items = items.where((item) => item.code?.toUpperCase() == "BAM").toList();
     }
-
     // Step 4: Handle special cases
     if (isSpecialCase) {
       items.add({'value': 'OTH', 'label': 'آخر'}); // Append special case "OTH"
     }
-
     // Return the final list of dropdown menu items
     // return populateCommonDataDropdown(menuItemsList: items, provider: langProvider);
     return items;
@@ -661,6 +668,8 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
     // universityInfo.universityDropdown = itemsNew;
     return itemsNew;
   }
+
+
   List<Values> fetchListOfValue(String key) {
     /// Your logic to fetch values goes here
     final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -677,8 +686,6 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
       return []; /// or any appropriate fallback
     }
   }
-
-
 
 
   @override
@@ -1255,102 +1262,113 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
 
 
                 ,),
+
+            kFormHeight,
           ],
         ),
 
-        kFormHeight,
         /// Required Examination
-        CustomInformationContainer(
-          title: academicCareer == 'DDS'
-              ? localization.ddsExams
-              : localization.examinationForUniversities,
-          expandedContent: Column(
-            children: [
-              ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _requiredExaminationList.length,
-                  itemBuilder: (context, index) {
-                    final requiredExamInfo = _requiredExaminationList[index];
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomInformationContainerField(title: localization.examination,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'EXAMINATION#$academicCareer',code:  requiredExamInfo.examinationController.text),),
-                          CustomInformationContainerField(title: localization.examinationType,description:getFullNameFromLov(langProvider: langProvider,lovCode: 'EXAMINATION_TYPE#${requiredExamInfo.examinationController.text}',code: requiredExamInfo.examinationTypeIdController.text,)),
-                          CustomInformationContainerField(title: academicCareer != 'DDS' ? localization.examinationGrade : localization.examinationDdsGrade,description:requiredExamInfo.examinationGradeController.text,),
-                          CustomInformationContainerField(title: localization.dateExam, description:requiredExamInfo.examDateController.text,isLastItem: true,),
-                          if(index < _requiredExaminationList.length - 1)  sectionDivider(color: AppColors.darkGrey)
 
-                        ]);
-                  })
-            ],
-          ),
+       if(isRequiredExaminationDetailsRequired())
+        Column(
+          children: [
+            CustomInformationContainer(
+              title: academicCareer == 'DDS'
+                  ? localization.ddsExams
+                  : localization.examinationForUniversities,
+              expandedContent: Column(
+                children: [
+                  ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _requiredExaminationList.length,
+                      itemBuilder: (context, index) {
+                        final requiredExamInfo = _requiredExaminationList[index];
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomInformationContainerField(title: localization.examination,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'EXAMINATION#$academicCareer',code:  requiredExamInfo.examinationController.text),),
+                              CustomInformationContainerField(title: localization.examinationType,description:getFullNameFromLov(langProvider: langProvider,lovCode: 'EXAMINATION_TYPE#${requiredExamInfo.examinationController.text}',code: requiredExamInfo.examinationTypeIdController.text,)),
+                              CustomInformationContainerField(title: academicCareer != 'DDS' ? localization.examinationGrade : localization.examinationDdsGrade,description:requiredExamInfo.examinationGradeController.text,),
+                              CustomInformationContainerField(title: localization.dateExam, description:requiredExamInfo.examDateController.text,isLastItem: true,),
+                              if(index < _requiredExaminationList.length - 1)  sectionDivider(color: AppColors.darkGrey)
+
+                            ]);
+                      })
+                ],
+              ),
+            ),
+            kFormHeight,
+          ],
         ),
 
-        kFormHeight,
         /// Employment History
         if(displayEmploymentHistory())
-          CustomInformationContainer(
-            title: localization.employmentHistory,
-            expandedContent: Column(
-              children: [
-                CustomInformationContainerField(title: localization.previouslyEmployed,isLastItem: true,),
-                ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _employmentStatusItemsList.length,
-                    itemBuilder: (context, index) {
-                      final element = _employmentStatusItemsList[index];
-                      return CustomRadioListTile(
-                        value: element.code,
-                        groupValue: _employmentStatus,
-                        onChanged: (value){},
-                        title: getTextDirection(langProvider) ==
-                            TextDirection.ltr
-                            ? element.value
-                            : element.valueArabic,
-                        textStyle: textFieldTextStyle,
-                      );
-                    }),
-                kFormHeight,
-                if(_employmentStatus != null && _employmentStatus != '' && _employmentStatus != 'N')
-                  Column(
-                    children: [
-                      ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _employmentHistoryList.length,
-                          itemBuilder: (context, index) {
-                            final employmentHistInfo = _employmentHistoryList[index];
-                            return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomInformationContainerField(title: localization.emphistEmployerName, description: employmentHistInfo.employerNameController.text,),
-                                  CustomInformationContainerField(title: localization.emphistTitleName, description: employmentHistInfo.titleController.text,),
-                                  CustomInformationContainerField(title: localization.emphistOccupationName, description: employmentHistInfo.occupationController.text,),
-                                  CustomInformationContainerField(title: localization.emphistPlace, description: employmentHistInfo.placeController.text,),
-                                  CustomInformationContainerField(title: localization.employmentStartDate, description: employmentHistInfo.startDateController.text,),
-                                  CustomInformationContainerField(title: localization.employmentEndDate, description: employmentHistInfo.endDateController.text,),
-                                  CustomInformationContainerField(title: localization.emphistReportingManager, description: employmentHistInfo.reportingManagerController.text,),
-                                  CustomInformationContainerField(title: localization.emphistMgrContactNo, description: employmentHistInfo.contactNumberController.text,),
-                                  CustomInformationContainerField(title: localization.managerEmail, description: employmentHistInfo.contactEmailController.text,isLastItem: true,),
-                                  if(index < _employmentHistoryList.length - 1)  sectionDivider(color: AppColors.darkGrey)
+          Column(
+            children: [
+              CustomInformationContainer(
+                title: localization.employmentHistory,
+                expandedContent: Column(
+                  children: [
+                    CustomInformationContainerField(title: localization.previouslyEmployed,isLastItem: true,),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _employmentStatusItemsList.length,
+                        itemBuilder: (context, index) {
+                          final element = _employmentStatusItemsList[index];
+                          return CustomRadioListTile(
+                            value: element.code,
+                            groupValue: _employmentStatus,
+                            onChanged: (value){},
+                            title: getTextDirection(langProvider) ==
+                                TextDirection.ltr
+                                ? element.value
+                                : element.valueArabic,
+                            textStyle: textFieldTextStyle,
+                          );
+                        }),
+                    kFormHeight,
+                    if(_employmentStatus != null && _employmentStatus != '' && _employmentStatus != 'N')
+                      Column(
+                        children: [
+                          ListView.builder(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _employmentHistoryList.length,
+                              itemBuilder: (context, index) {
+                                final employmentHistInfo = _employmentHistoryList[index];
+                                return Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      CustomInformationContainerField(title: localization.emphistEmployerName, description: employmentHistInfo.employerNameController.text,),
+                                      CustomInformationContainerField(title: localization.emphistTitleName, description: employmentHistInfo.titleController.text,),
+                                      CustomInformationContainerField(title: localization.emphistOccupationName, description: employmentHistInfo.occupationController.text,),
+                                      CustomInformationContainerField(title: localization.emphistPlace, description: employmentHistInfo.placeController.text,),
+                                      CustomInformationContainerField(title: localization.employmentStartDate, description: employmentHistInfo.startDateController.text,),
+                                      CustomInformationContainerField(title: localization.employmentEndDate, description: employmentHistInfo.endDateController.text,),
+                                      CustomInformationContainerField(title: localization.emphistReportingManager, description: employmentHistInfo.reportingManagerController.text,),
+                                      CustomInformationContainerField(title: localization.emphistMgrContactNo, description: employmentHistInfo.contactNumberController.text,),
+                                      CustomInformationContainerField(title: localization.managerEmail, description: employmentHistInfo.contactEmailController.text,isLastItem: true,),
+                                      if(index < _employmentHistoryList.length - 1)  sectionDivider(color: AppColors.darkGrey)
 
-                                ]);
-                          })
-                    ],
-                  )
-              ],
-            ),
+                                    ]);
+                              })
+                        ],
+                      )
+                  ],
+                ),
+              ),
+              kFormHeight,
+            ],
           ),
 
-        kFormHeight,
         /// attachments
         CustomInformationContainer(
           title: localization.attachments,
@@ -1510,8 +1528,9 @@ Widget _graduationInformation({required int index,
   }
 
 
-  /// Function to get full name for majors
+/// Function to get full name for majors
 dynamic getFullNameForMajor(value){
+  _majorsMenuItemsList =   getMajors(academicCareer: widget.applicationStatusDetails.acadCareer, admitType: widget.applicationStatusDetails.admitType, scholarshipType: widget.applicationStatusDetails.scholarshipType, isStudyCountry: isStudyCountry, isSpecialCase: isSpecialCase);
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     bool  isLTR =  getTextDirection(langProvider) == TextDirection.ltr;
     for(var i in _majorsMenuItemsList){
@@ -1520,12 +1539,13 @@ dynamic getFullNameForMajor(value){
           return i.value.toString();
         }
         return i.valueArabic.toString();
-      };
+      }
     }
-    return null;
+    return '';
   }
 
-  /// Function to get full name from university list
+
+/// Function to get full name from university list
 dynamic getFullNameForUniversity({required value,required universityInfo}){
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     bool  isLTR =  getTextDirection(langProvider) == TextDirection.ltr;
@@ -1555,6 +1575,4 @@ Widget _sectionsWithPadding({required String title,required List<Widget> childre
       ),
     );
 }
-
-
 }

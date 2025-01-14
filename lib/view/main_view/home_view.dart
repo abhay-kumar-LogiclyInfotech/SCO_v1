@@ -713,35 +713,35 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
     return Column(
       children: [
         kFormHeight,
-        CustomInformationContainer(
-            leading: SvgPicture.asset("assets/myDocuments.svg"),
-            title: localization.uploadDocuments,
-            expandedContent: Column(
-              children: [
-                const SizedBox(height: 25),
-                Text(localization.myDocuments,
-                    style: AppTextStyles.titleBoldTextStyle()
-                        .copyWith(height: 1.9)),
-                Text(
-                  localization.clickToUploadDocuments,
-                  style: const TextStyle(height: 1.5),
-                ),
-                const SizedBox(height: 25),
-                const MyDivider(color: AppColors.darkGrey),
-                const SizedBox(height: 30),
-                CustomButton(
-                    buttonName: localization.clickHere,
-                    isLoading: false,
-                    buttonColor: AppColors.scoButtonColor,
-                    textDirection: getTextDirection(langProvider),
-                    onTap: () {
-                      _alertServices.toastMessage(
-                        AppLocalizations.of(context)!.comingSoon,
-                      );
-                    }),
-                const SizedBox(height: 30),
-              ],
-            )),
+        // CustomInformationContainer(
+        //     leading: SvgPicture.asset("assets/myDocuments.svg"),
+        //     title: localization.uploadDocuments,
+        //     expandedContent: Column(
+        //       children: [
+        //         const SizedBox(height: 25),
+        //         Text(localization.myDocuments,
+        //             style: AppTextStyles.titleBoldTextStyle()
+        //                 .copyWith(height: 1.9)),
+        //         Text(
+        //           localization.clickToUploadDocuments,
+        //           style: const TextStyle(height: 1.5),
+        //         ),
+        //         const SizedBox(height: 25),
+        //         const MyDivider(color: AppColors.darkGrey),
+        //         const SizedBox(height: 30),
+        //         CustomButton(
+        //             buttonName: localization.clickHere,
+        //             isLoading: false,
+        //             buttonColor: AppColors.scoButtonColor,
+        //             textDirection: getTextDirection(langProvider),
+        //             onTap: () {
+        //               _alertServices.toastMessage(
+        //                 AppLocalizations.of(context)!.comingSoon,
+        //               );
+        //             }),
+        //         const SizedBox(height: 30),
+        //       ],
+        //     )),
       ],
     );
   }

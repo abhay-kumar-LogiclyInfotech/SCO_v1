@@ -6,43 +6,46 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
+import 'package:sco_v1/view/main_view/services_views/guidance_notes.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 
-import '../../models/apply_scholarship/FillScholarshipFormModels.dart';
-import '../../resources/app_colors.dart';
-import '../../resources/app_text_styles.dart';
-import '../../resources/components/myDivider.dart';
-import '../../viewModel/services/permission_checker_service.dart';
-import 'form_view_Utils.dart';
+import '../../../../models/apply_scholarship/FillScholarshipFormModels.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../../resources/app_colors.dart';
+import '../../../../resources/app_text_styles.dart';
+import '../../../../resources/components/myDivider.dart';
+import '../../../apply_scholarship/form_view_Utils.dart';
 
 
-class AttachFile extends StatefulWidget {
+
+class UploadUpdateAttachmentFileView extends StatefulWidget {
 
   String selectedCheckListCode;
   final Attachment myAttachment; // This is the actual attachment which holds the base 64 string and other parameters also
   final dynamic onPressed;
   final dynamic onAction;
-   int? attachmentNumber;
-   bool? isValid;
-   AttachFile({super.key,
-     this.attachmentNumber,
-     required this.selectedCheckListCode,
+  int? attachmentNumber;
+  bool? isValid;
+  UploadUpdateAttachmentFileView({super.key,
+    this.attachmentNumber,
+    required this.selectedCheckListCode,
     required  this.myAttachment,
-     required this.onPressed,
-     required this.onAction,
-     this.isValid = false,
- });
+    required this.onPressed,
+    required this.onAction,
+    this.isValid = false,
+  });
 
   @override
-  State<AttachFile> createState() => _AttachFileState();
+  State<UploadUpdateAttachmentFileView> createState() => _UploadUpdateAttachmentFileViewState();
 }
 
-class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
+class _UploadUpdateAttachmentFileViewState extends State<UploadUpdateAttachmentFileView> with MediaQueryMixin {
 
 
   @override
@@ -58,21 +61,23 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       // ****************************************************************************************************************************************************
       // title name for document
-      RichText(
-          text: TextSpan(children: [
-            TextSpan(
-              text:  "${widget.attachmentNumber}.  ${getFullNameFromLov(langProvider: langProvider,lovCode: widget.selectedCheckListCode,code: widget.myAttachment.attachmentNameController.text).replaceAll('\n', '')}",
 
-    // getTextDirection(langProvider) == TextDirection.ltr
-    //               ?  widget.attachment.value.toString().replaceAll('\n', '')
-    //               : widget.attachment.valueArabic.toString().replaceAll('\n', ''),
-              style: AppTextStyles.titleBoldTextStyle()
-                  .copyWith(fontWeight: FontWeight.w600),
-            ),
-            TextSpan(text: (required == 'XMRL' || required == 'MRL' || required == 'NMRL') ? "*" : "", style: AppTextStyles.titleBoldTextStyle().copyWith(fontWeight: FontWeight.w600, color: Colors.red),),
-          ])),
+      CustomInformationContainerField(title: localization.fileName,
+descriptionAsWidget:
+RichText(
+    text: TextSpan(children: [
+      TextSpan(
+        text:  "${widget.attachmentNumber}.  ${getFullNameFromLov(langProvider: langProvider,lovCode: widget.selectedCheckListCode,code: widget.myAttachment.attachmentNameController.text).replaceAll('\n', '')}",
 
-      kFormHeight,
+        // getTextDirection(langProvider) == TextDirection.ltr
+        //               ?  widget.attachment.value.toString().replaceAll('\n', '')
+        //               : widget.attachment.valueArabic.toString().replaceAll('\n', ''),
+        style: AppTextStyles.normalTextStyle().copyWith(fontWeight: FontWeight.w600,fontSize: 12,color: AppColors.scoButtonColor),
+
+      ),
+      TextSpan(text: (required == 'XMRL' || required == 'MRL' || required == 'NMRL') ? "*" : "", style: AppTextStyles.titleBoldTextStyle().copyWith(fontWeight: FontWeight.w600, color: Colors.red),),
+    ]))
+      ),
       // container to pick attachment
       Container(
           decoration: BoxDecoration(
@@ -111,15 +116,14 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
         /// For SEL0006 document code we use images and for other then this we use pdf
           widget.myAttachment.documentCdController.text.toUpperCase() == 'SEL006' ? localization.allowedFileTypeImage : localization.allowedFileTypePdf,
           style: AppTextStyles.normalTextStyle().copyWith(color: Colors.blueGrey, fontSize: 12)),
+      // const Divider(),
       kFormHeight,
-
-
-     if(widget.isValid ?? false) Column(
-       children: [
-         const Text("Invalid Document Uploaded. Please Re-Upload.",style: TextStyle(color: AppColors.DANGER),),
-         kFormHeight,
-       ],
-     ),
+      if(widget.isValid ?? false) Column(
+        children: [
+          const Text("Invalid Document Uploaded. Please Re-Upload.",style: TextStyle(color: AppColors.DANGER),),
+          kFormHeight,
+        ],
+      ),
 
       // comments
       sectionTitle(title: localization.comments),
@@ -141,23 +145,39 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
 
       kFormHeight,
       // Action
-      Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-           Text(
-            localization.action,
-            style: const TextStyle(fontSize: 14, color: AppColors.scoButtonColor),
-          ),
-          GestureDetector(
-              onTap: widget.onAction,
-              child: SvgPicture.asset("assets/action.svg"))
-        ],
+      Text(localization.action,style: const TextStyle(color: AppColors.darkGrey,fontSize: 12)),
+      const SizedBox(height: 2),
+      GestureDetector(
+        onTap: widget.onAction,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset("assets/services/bin.svg" ?? ''),
+            const SizedBox.square(dimension: 3),
+            Text(
+              localization.action ?? '',
+              style: AppTextStyles.normalTextStyle().copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: AppColors.scoButtonColor),
+            )
+          ],
+        ),
       ),
-      
-      kFormHeight,
-      const MyDivider(),
-      kFormHeight
+      // Row(
+      //   mainAxisSize: MainAxisSize.max,
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //   children: [
+      //     Text(
+      //       localization.action,
+      //       style: const TextStyle(fontSize: 14, color: AppColors.scoButtonColor),
+      //     ),
+      //     GestureDetector(
+      //         onTap: widget.onAction,
+      //         child: SvgPicture.asset("assets/action.svg"))
+      //   ],
+      // ),
+
     ]);
   }
 }

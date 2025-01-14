@@ -61,7 +61,7 @@ class PsApplication {
   final List<dynamic> addressList;
   final List<HighSchool> highSchoolList;
   final List<EmploymentHistory> emplymentHistory;
-  final List<MajorWish> majorWishList;
+  final List<MajorWishList> majorWishList;
   final String name;
   final String emplId;
   final String applicationNo;
@@ -124,7 +124,7 @@ class PsApplication {
         .map((e) => EmploymentHistory.fromJson(e))
         .toList(),
     majorWishList: (json['majorWishList'] as List)
-        .map((e) => MajorWish.fromJson(e))
+        .map((e) => MajorWishList.fromJson(e))
         .toList(),
     name: json['name'],
     emplId: json['emplId'],
@@ -248,91 +248,91 @@ class PsApplication {
 //     'new': newField,
 //   };
 // }
+//
+// class CaseStudy {
+//   final String title;
+//   final String description;
+//   final String startYear;
+//
+//   CaseStudy({
+//     required this.title,
+//     required this.description,
+//     required this.startYear,
+//   });
+//
+//   factory CaseStudy.fromJson(Map<String, dynamic> json) => CaseStudy(
+//     title: json['title'],
+//     description: json['description'],
+//     startYear: json['startYear'],
+//   );
+//
+//   Map<String, dynamic> toJson() => {
+//     'title': title,
+//     'description': description,
+//     'startYear': startYear,
+//   };
+// }
 
-class CaseStudy {
-  final String title;
-  final String description;
-  final String startYear;
-
-  CaseStudy({
-    required this.title,
-    required this.description,
-    required this.startYear,
-  });
-
-  factory CaseStudy.fromJson(Map<String, dynamic> json) => CaseStudy(
-    title: json['title'],
-    description: json['description'],
-    startYear: json['startYear'],
-  );
-
-  Map<String, dynamic> toJson() => {
-    'title': title,
-    'description': description,
-    'startYear': startYear,
-  };
-}
-
-class UniversityPriority {
-  final String countryId;
-  final String universityId;
-  final String otherUniversityName;
-  final String majors;
-  final String status;
-  final String otherMajor;
-  final String rank;
-  final String type;
-  final dynamic errorMessage;
-  final String sequenceNumber;
-  final String universityStatus;
-  final bool newField;
-
-  UniversityPriority({
-    required this.countryId,
-    required this.universityId,
-    required this.otherUniversityName,
-    required this.majors,
-    required this.status,
-    required this.otherMajor,
-    required this.rank,
-    required this.type,
-    this.errorMessage,
-    required this.sequenceNumber,
-    required this.universityStatus,
-    required this.newField,
-  });
-
-  factory UniversityPriority.fromJson(Map<String, dynamic> json) =>
-      UniversityPriority(
-        countryId: json['countryId'],
-        universityId: json['universityId'],
-        otherUniversityName: json['otherUniversityName'],
-        majors: json['majors'],
-        status: json['status'],
-        otherMajor: json['otherMajor'],
-        rank: json['rank'],
-        type: json['type'],
-        errorMessage: json['errorMessage'],
-        sequenceNumber: json['sequenceNumber'],
-        universityStatus: json['universityStatus'],
-        newField: json['new'],
-      );
-
-  Map<String, dynamic> toJson() => {
-    'countryId': countryId,
-    'universityId': universityId,
-    'otherUniversityName': otherUniversityName,
-    'majors': majors,
-    'status': status,
-    'otherMajor': otherMajor,
-    'rank': rank,
-    'type': type,
-    'errorMessage': errorMessage,
-    'sequenceNumber': sequenceNumber,
-    'universityStatus': universityStatus,
-    'new': newField,
-  };
-}
+// class UniversityPriority {
+//   final String countryId;
+//   final String universityId;
+//   final String otherUniversityName;
+//   final String majors;
+//   final String status;
+//   final String otherMajor;
+//   final String rank;
+//   final String type;
+//   final dynamic errorMessage;
+//   final String sequenceNumber;
+//   final String universityStatus;
+//   final bool newField;
+//
+//   UniversityPriority({
+//     required this.countryId,
+//     required this.universityId,
+//     required this.otherUniversityName,
+//     required this.majors,
+//     required this.status,
+//     required this.otherMajor,
+//     required this.rank,
+//     required this.type,
+//     this.errorMessage,
+//     required this.sequenceNumber,
+//     required this.universityStatus,
+//     required this.newField,
+//   });
+//
+//   factory UniversityPriority.fromJson(Map<String, dynamic> json) =>
+//       UniversityPriority(
+//         countryId: json['countryId'],
+//         universityId: json['universityId'],
+//         otherUniversityName: json['otherUniversityName'],
+//         majors: json['majors'],
+//         status: json['status'],
+//         otherMajor: json['otherMajor'],
+//         rank: json['rank'],
+//         type: json['type'],
+//         errorMessage: json['errorMessage'],
+//         sequenceNumber: json['sequenceNumber'],
+//         universityStatus: json['universityStatus'],
+//         newField: json['new'],
+//       );
+//
+//   Map<String, dynamic> toJson() => {
+//     'countryId': countryId,
+//     'universityId': universityId,
+//     'otherUniversityName': otherUniversityName,
+//     'majors': majors,
+//     'status': status,
+//     'otherMajor': otherMajor,
+//     'rank': rank,
+//     'type': type,
+//     'errorMessage': errorMessage,
+//     'sequenceNumber': sequenceNumber,
+//     'universityStatus': universityStatus,
+//     'new': newField,
+//   };
+// }
 
 // class RequiredExaminations {
 //   final String examination;
@@ -436,38 +436,38 @@ class UniversityPriority {
 //   };
 // }
 
-class MajorWish {
-  final String major;
-  final String otherMajor;
-  final String type;
-  final dynamic errorMessage;
-  final String sequenceNumber;
-  final bool newField;
-
-  MajorWish({
-    required this.major,
-    required this.otherMajor,
-    required this.type,
-    this.errorMessage,
-    required this.sequenceNumber,
-    required this.newField,
-  });
-
-  factory MajorWish.fromJson(Map<String, dynamic> json) => MajorWish(
-    major: json['major'],
-    otherMajor: json['otherMajor'],
-    type: json['type'],
-    errorMessage: json['errorMessage'],
-    sequenceNumber: json['sequenceNumber'],
-    newField: json['new'],
-  );
-
-  Map<String, dynamic> toJson() => {
-    'major': major,
-    'otherMajor': otherMajor,
-    'type': type,
-    'errorMessage': errorMessage,
-    'sequenceNumber': sequenceNumber,
-    'new': newField,
-  };
-}
+// class MajorWish {
+//   final String major;
+//   final String otherMajor;
+//   final String type;
+//   final dynamic errorMessage;
+//   final String sequenceNumber;
+//   final bool newField;
+//
+//   MajorWish({
+//     required this.major,
+//     required this.otherMajor,
+//     required this.type,
+//     this.errorMessage,
+//     required this.sequenceNumber,
+//     required this.newField,
+//   });
+//
+//   factory MajorWish.fromJson(Map<String, dynamic> json) => MajorWish(
+//     major: json['major'],
+//     otherMajor: json['otherMajor'],
+//     type: json['type'],
+//     errorMessage: json['errorMessage'],
+//     sequenceNumber: json['sequenceNumber'],
+//     newField: json['new'],
+//   );
+//
+//   Map<String, dynamic> toJson() => {
+//     'major': major,
+//     'otherMajor': otherMajor,
+//     'type': type,
+//     'errorMessage': errorMessage,
+//     'sequenceNumber': sequenceNumber,
+//     'new': newField,
+//   };
+// }
