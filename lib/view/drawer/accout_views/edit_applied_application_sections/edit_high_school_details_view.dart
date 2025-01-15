@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/view/apply_scholarship/form_views/high_school_view.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/edit_application_sections_viewModel.dart';
 
 import '../../../../data/response/status.dart';
 import '../../../../models/account/GetListApplicationStatusModel.dart';
@@ -52,6 +53,7 @@ class _EditHighSchoolDetailsViewState extends State<EditHighSchoolDetailsView> w
 
     if (psApplicationProvider.apiResponse.status == Status.COMPLETED && psApplicationProvider.apiResponse.data?.data.psApplication.graduationList != null) {
       final highSchoolList = psApplicationProvider.apiResponse.data?.data.psApplication.highSchoolList;
+      peopleSoftApplication = psApplicationProvider.apiResponse.data?.data.psApplication;
 
       if (highSchoolList?.isNotEmpty ?? false) {
         for (int index = 0; index < highSchoolList!.length; index++) {
@@ -62,6 +64,22 @@ class _EditHighSchoolDetailsViewState extends State<EditHighSchoolDetailsView> w
           _populateHighSchoolNameDropdown(langProvider: langProvider,index: index);
           _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider,index: index);
 
+        }
+      }
+
+
+      final gradList = psApplicationProvider.apiResponse.data?.data.psApplication.graduationList;
+
+      if (gradList?.isNotEmpty ?? false) {
+        for (int index = 0; index < gradList!.length; index++) {
+          var element = gradList[index];
+          _graduationDetailsList.add(element);
+          /// Add to the list
+          /// populate dropdowns
+          _populateGraduationLastTermMenuItemsList(
+              langProvider: langProvider, index: index);
+          _populateUniversityMenuItemsList(
+              langProvider: langProvider, index: index);
         }
       }
 
@@ -134,6 +152,108 @@ class _EditHighSchoolDetailsViewState extends State<EditHighSchoolDetailsView> w
   }
 
 
+  // Graduation Details Data
+  List<GraduationInfo> _graduationDetailsList = [];
+
+  /// sponsorship question for dds (One student can have only have one sponsor)
+  String havingSponsor = '';
+
+  void updateHavingSponsor(String value) {
+    setState(() {
+      havingSponsor = value;
+    });
+  }
+
+  /// to populate the graduation Details
+  _populateGraduationLastTermMenuItemsList(
+      {required LanguageChangeViewModel langProvider, required int index}) {
+    setState(() {
+      if (Constants.lovCodeMap['LAST_TERM']?.values != null) {
+        _graduationDetailsList[index].lastTerm = populateCommonDataDropdown(
+            menuItemsList: Constants.lovCodeMap['LAST_TERM']!.values!,
+            provider: langProvider,
+            textColor: AppColors.scoButtonColor);
+      }
+    });
+  }
+
+  /// populate menu items list
+  _populateUniversityMenuItemsList(
+      {required LanguageChangeViewModel langProvider, required int index}) {
+    setState(() {
+      if (Constants
+          .lovCodeMap[
+      'GRAD_UNIVERSITY#${_graduationDetailsList[index].countryController
+          .text}#UNV']
+          ?.values !=
+          null) {
+        _graduationDetailsList[index].university = populateCommonDataDropdown(
+            menuItemsList: Constants
+                .lovCodeMap[
+            'GRAD_UNIVERSITY#${_graduationDetailsList[index].countryController
+                .text}#UNV']!
+                .values!,
+            provider: langProvider,
+            textColor: AppColors.scoButtonColor);
+      }
+    });
+  }
+
+  _addGraduationDetail() {
+    bool isAlreadyCurrentlyStudying = _graduationDetailsList
+        .any((element) => element.currentlyStudying == true);
+    setState(() {
+      _graduationDetailsList.add(GraduationInfo(
+        levelController: TextEditingController(),
+        countryController: TextEditingController(),
+        universityController: TextEditingController(),
+        majorController: TextEditingController(),
+        cgpaController: TextEditingController(),
+        graduationStartDateController: TextEditingController(),
+        lastTermController: TextEditingController(),
+        caseStudyTitleController: TextEditingController(),
+        caseStudyDescriptionController: TextEditingController(),
+        caseStudyStartYearController: TextEditingController(),
+        levelFocusNode: FocusNode(),
+        countryFocusNode: FocusNode(),
+        universityFocusNode: FocusNode(),
+        majorFocusNode: FocusNode(),
+        cgpaFocusNode: FocusNode(),
+        graduationStartDateFocusNode: FocusNode(),
+        lastTermFocusNode: FocusNode(),
+        caseStudyTitleFocusNode: FocusNode(),
+        caseStudyDescriptionFocusNode: FocusNode(),
+        caseStudyStartYearFocusNode: FocusNode(),
+        isNewController: TextEditingController(text: 'true'),
+        sponsorShipController: TextEditingController(),
+        errorMessageController: TextEditingController(),
+        highestQualification: false,
+        showCurrentlyStudying: !isAlreadyCurrentlyStudying,
+        currentlyStudying: false,
+        lastTerm: [],
+        graduationLevel: [],
+        university: [],
+        otherUniversityController: TextEditingController(),
+        otherUniversityFocusNode: FocusNode(),
+        graduationEndDateController: TextEditingController(),
+        graduationEndDateFocusNode: FocusNode(),
+        sponsorShipFocusNode: FocusNode(),
+      ));
+    });
+  }
+
+  bool displayHighSchool() {
+    /// We will show High school details option to UG,UGRD ,SCHL and HCHL scholarship types
+    final academicCareer = widget.applicationStatusDetails.acadCareer;
+    return (academicCareer == 'UG' ||
+        academicCareer == 'UGRD' ||
+        academicCareer == 'SCHL' ||
+        academicCareer == 'HCHL');
+  }
+
+
+
+
   bool _isProcessing = false;
 
   resetProcessing(bool value) {
@@ -191,12 +311,30 @@ class _EditHighSchoolDetailsViewState extends State<EditHighSchoolDetailsView> w
       padding:  EdgeInsets.all(kPadding),
       child: Column(
         children: [
-          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
+          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()
+          async{
             final logger =  Logger();
             if(validateHighSchoolDetails(langProvider)){
               dynamic form = peopleSoftApplication?.toJson();
-              form['highSchoolList'] = _highSchoolList.map((element){return element.toJson();}).toList();
+              var graduationRecords = form['graduationList'] = _graduationDetailsList.map((element){return element.toJson();}).toList();
+              var highSchoolRecords = form['highSchoolList'] = _highSchoolList.map((element){return element.toJson();}).toList();
+
+
+
+
+              final academicCareer =  widget.applicationStatusDetails.acadCareer;
+              final scholarshipType =  widget.applicationStatusDetails.scholarshipType;
+
+              String highestQualification = getHighestQualification(graduationDetailsList: _graduationDetailsList,academicCareer: academicCareer, scholarshipType: scholarshipType, highSchoolRecords: highSchoolRecords, graduationRecords: graduationRecords);
+
+              form['highestQualification'] = highestQualification;
+              form['graduationList'] = graduationRecords;
+              form['highSchoolList'] = highSchoolRecords;
+
               log(jsonEncode(form));
+
+              // final provider = Provider.of<EditApplicationSectionsViewModel>(context,listen: false);
+              // await provider.editApplicationSections(sectionType: EditApplicationSection.education,applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form);
             }
           }),
           kFormHeight,
@@ -205,6 +343,19 @@ class _EditHighSchoolDetailsViewState extends State<EditHighSchoolDetailsView> w
       ),
     );
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   FocusNode? firstErrorFocusNode;
   bool validateHighSchoolDetails(langProvider) {

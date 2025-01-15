@@ -15,6 +15,7 @@ import '../../../../resources/components/custom_simple_app_bar.dart';
 import '../../../../resources/components/kButtons/kReturnButton.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/utils.dart';
+import '../../../../viewModel/account/edit_application_sections_view_Model/edit_application/edit_application_sections_viewModel.dart';
 import '../../../../viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -83,8 +84,7 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
 
 
 
-        final gradList = psApplicationProvider.apiResponse.data?.data
-            .psApplication.graduationList;
+        final gradList = psApplicationProvider.apiResponse.data?.data.psApplication.graduationList;
 
         if (gradList?.isNotEmpty ?? false) {
           for (int index = 0; index < gradList!.length; index++) {
@@ -98,7 +98,20 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
                 langProvider: langProvider, index: index);
           }
         }
-        print(_graduationDetailsList.length);
+
+        /// Retrieving the high school data because we also need check the high school list while marking highest Qualification
+        final highSchoolList = psApplicationProvider.apiResponse.data?.data.psApplication.highSchoolList;
+        if (highSchoolList?.isNotEmpty ?? false) {
+          for (int index = 0; index < highSchoolList!.length; index++) {
+            var element = highSchoolList[index];
+            _highSchoolList.add(element);
+
+            _populateHighSchoolStateDropdown(langProvider: langProvider,index: index);
+            _populateHighSchoolNameDropdown(langProvider: langProvider,index: index);
+            _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider,index: index);
+
+          }
+        }
 
         setState(() {});
       }
@@ -113,6 +126,78 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
       _isProcessing = value;
     });
   }
+
+
+
+
+  /// HighSchool Data
+  final List<HighSchool> _highSchoolList = [];
+
+  /// to populate the states based on high school country
+  _populateHighSchoolStateDropdown(
+      {required LanguageChangeViewModel langProvider, required int index}) {
+    setState(() {
+      if (Constants
+          .lovCodeMap[
+      'STATE#${_highSchoolList[index].hsCountryController.text}']
+          ?.values !=
+          null) {
+        _highSchoolList[index].schoolStateDropdownMenuItems =
+            populateCommonDataDropdown(
+                menuItemsList: Constants
+                    .lovCodeMap[
+                'STATE#${_highSchoolList[index].hsCountryController.text}']!
+                    .values!,
+                provider: langProvider,
+                textColor: AppColors.scoButtonColor);
+      }
+    });
+  }
+
+  _populateHighSchoolNameDropdown(
+      {required LanguageChangeViewModel langProvider, required int index}) {
+    setState(() {
+      if (Constants
+          .lovCodeMap[
+      'SCHOOL_CD#${_highSchoolList[index].hsStateController.text}']
+          ?.values !=
+          null) {
+        _highSchoolList[index].schoolNameDropdownMenuItems =
+            populateCommonDataDropdown(
+                menuItemsList: Constants
+                    .lovCodeMap[
+                'SCHOOL_CD#${_highSchoolList[index].hsStateController.text}']!
+                    .values!,
+                provider: langProvider,
+                textColor: AppColors.scoButtonColor);
+      }
+    });
+  }
+
+  _populateHighSchoolCurriculumTypeDropdown(
+      {required LanguageChangeViewModel langProvider, required int index}) {
+    setState(() {
+      if (Constants
+          .lovCodeMap[
+      'CURRICULM_TYPE#${_highSchoolList[index].hsTypeController.text}']
+          ?.values !=
+          null) {
+        _highSchoolList[index].schoolCurriculumTypeDropdownMenuItems =
+            populateCommonDataDropdown(
+                menuItemsList: Constants
+                    .lovCodeMap[
+                'CURRICULM_TYPE#${_highSchoolList[index].hsTypeController.text}']!
+                    .values!,
+                provider: langProvider,
+                textColor: AppColors.scoButtonColor);
+      }
+    });
+  }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -286,13 +371,34 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
       padding:  EdgeInsets.all(kPadding),
       child: Column(
         children: [
-          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
+          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()
+          async{
             final logger =  Logger();
             if(validateGraduationDetails(langProvider)){
               dynamic form = peopleSoftApplication?.toJson();
-              form['graduationList'] = _graduationDetailsList.map((element){return element.toJson();}).toList();
+             var graduationRecords = form['graduationList'] = _graduationDetailsList.map((element){return element.toJson();}).toList();
+              var highSchoolRecords = form['highSchoolList'] = _highSchoolList.map((element){return element.toJson();}).toList();
+
+
+             final academicCareer =  widget.applicationStatusDetails.acadCareer;
+             final scholarshipType =  widget.applicationStatusDetails.scholarshipType;
+
+             String highestQualification = getHighestQualification(graduationDetailsList: _graduationDetailsList,academicCareer: academicCareer, scholarshipType: scholarshipType, highSchoolRecords: highSchoolRecords, graduationRecords: graduationRecords);
+
+
+              form['highestQualification'] = highestQualification;
+              form['graduationList'] = graduationRecords;
+              form['highSchoolList'] = highSchoolRecords;
+
               log(jsonEncode(form));
+
+              final provider = Provider.of<EditApplicationSectionsViewModel>(context,listen: false);
+              await provider.editApplicationSections(sectionType: EditApplicationSection.education,applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form);
+
             }
+
+
+
           }),
           kFormHeight,
           const KReturnButton(),
@@ -300,6 +406,11 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
       ),
     );
   }
+
+
+
+
+
 
 
   FocusNode? firstErrorFocusNode;
@@ -508,4 +619,49 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
   return Container();
   }
 }
+
+
+// bool showHighSchool = shouldShowHighSchoolDetails(academicCareer);
+// bool showGraduation = shouldShowGraduationSection(academicCareer);
+//
+// print("show High School: $showHighSchool");
+// print("show Graduation Details: $showHighSchool");
+//
+//
+// String highestQualification = '';
+//
+// /// If we have graduation details then it is obvious that we can get highestQualification from graduation details only
+// if(showGraduation){
+// bool showingAddGraduationButton = shouldShowAddGraduationButton(scholarshipType: scholarshipType, academicCareer: academicCareer);
+// /// If we are not showing the add more button then check if we have any detail which have parameter currently studying.
+// /// If bool found with currently studying set highest qualification from graduation details
+// if(!showingAddGraduationButton){
+// final currentlyStudying = _graduationDetailsList.any((element){return element.currentlyStudying;});
+// if(currentlyStudying){
+// /// If after finding that student is currently studying from graduation then set highest qualification from graduation.
+// highestQualification = markHighestGraduationQualification(Constants.referenceValuesGraduation, graduationRecords);
+//
+// }
+// if(!currentlyStudying){
+// /// If we are not showing the add more button and also the currently studying for graduation in false then we have to check highest
+// /// qualification from highSchool list and set highest qualification flags from high school list too.
+// highestQualification = markHighestHighSchoolQualification(Constants.referenceValuesHighSchool, highSchoolRecords);
+// }
+// }
+//
+// /// If we are showing the add more button which means we have enough number of graduation details.
+// /// Now set the boolean flag for all and set highest qualification also.
+// if(showingAddGraduationButton) {
+// highestQualification = markHighestGraduationQualification(Constants.referenceValuesGraduation, graduationRecords);
+// log(jsonEncode(graduationRecords));
+// }
+// }
+//
+// /// When we are showing only high school then get highest qualification from highschool only
+// if(showHighSchool && !showGraduation){
+// highestQualification = markHighestHighSchoolQualification(Constants.referenceValuesHighSchool, highSchoolRecords);
+// log(jsonEncode(graduationRecords));
+// }
+//
+// debugPrint("Printing the Highest Level: $highestQualification");
 

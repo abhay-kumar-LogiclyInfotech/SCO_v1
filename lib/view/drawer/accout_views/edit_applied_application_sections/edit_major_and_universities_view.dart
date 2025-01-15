@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/view/apply_scholarship/form_views/required_examinations_view.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/edit_application_sections_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../../data/response/status.dart';
@@ -50,8 +51,23 @@ class _EditMajorsAndUniversityViewState
     final GetIt getIt = GetIt.instance;
     _alertServicess = getIt.get<AlertServices>();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
+      await _refreshView();
+    });
 
+    super.initState();
+  }
+
+  _refreshView()async{
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
       final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+
+      _universityPriorityList.clear();
+      _majorsMenuItemsList.clear();
+      _majorsWishlist.clear();
+      _nationalityMenuItemsList.clear();
+
+
+      isStudyCountry = widget.applicationStatusDetails.scholarshipType == 'INT';
 
       /// Check and populate dropdowns only if the values exist
       if (Constants.lovCodeMap['COUNTRY']?.values != null) {
@@ -79,42 +95,54 @@ class _EditMajorsAndUniversityViewState
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
       }
-      _majorsMenuItemsList = getMajors(); /// calling the getMajors method to populate the majors function
+      _majorsMenuItemsList = getMajors();
+
+      /// calling the getMajors method to populate the majors function
 
 
       /// Making api call to ps-application
-      final psApplicationProvider = Provider.of<GetApplicationSectionViewModel>(context, listen: false);
-      await psApplicationProvider.getApplicationSections(applicationNumber: widget.applicationStatusDetails.admApplicationNumber);
+      final psApplicationProvider = Provider.of<GetApplicationSectionViewModel>(
+          context, listen: false);
+      await psApplicationProvider.getApplicationSections(
+          applicationNumber: widget.applicationStatusDetails
+              .admApplicationNumber);
 
-      if (psApplicationProvider.apiResponse.status == Status.COMPLETED && psApplicationProvider.apiResponse.data?.data.psApplication.emplymentHistory != null) {
+      if (psApplicationProvider.apiResponse.status == Status.COMPLETED &&
+          psApplicationProvider.apiResponse.data?.data.psApplication
+              .emplymentHistory != null) {
 
         /// setting peoplesoft application to get the full application
-        peopleSoftApplication = psApplicationProvider.apiResponse.data?.data.psApplication;
+        peopleSoftApplication =
+            psApplicationProvider.apiResponse.data?.data.psApplication;
 
-        final majors = psApplicationProvider.apiResponse.data?.data.psApplication.majorWishList;
-        final universityWishlist = psApplicationProvider.apiResponse.data?.data.psApplication.universityWishList;
+        final majors = psApplicationProvider.apiResponse.data?.data
+            .psApplication.majorWishList;
+        final universityWishlist = psApplicationProvider.apiResponse.data?.data
+            .psApplication.universtiesPriorityList;
 
         if (majors?.isNotEmpty ?? false) {
           // If it's a list, iterate through it
           for (int index = 0; index < majors!.length!; index++) {
             var element = majors[index];
             _majorsWishlist.add(element); // Add to the list
-
+          }
+        }
+        if (universityWishlist?.isNotEmpty ?? false) {
+          // If it's a list, iterate through it
+          for (int index = 0; index < universityWishlist!.length!; index++) {
+            var element = universityWishlist[index];
+            _universityPriorityList.add(element); // Add to the list
           }
         }
 
         setState(() {});
       }
-    });
-
-    super.initState();
-  }
-
-
+    });}
 
   List<DropdownMenuItem> _nationalityMenuItemsList = [];
 
   final List<MajorWishList> _majorsWishlist = [];
+
 
 
   bool _isProcessing = false;
@@ -175,25 +203,26 @@ class _EditMajorsAndUniversityViewState
     /// Step 1: Check for postgraduate academic career ("PGRD")
     if (academicCareer?.toUpperCase() == "PGRD") {
       String majorCriteria = "MAJORSPGRD#${academicCareer?.toUpperCase()}#${isStudyCountry ? 'N' : 'Y'}";
+      print(majorCriteria);
       return populateCommonDataDropdown(
-        menuItemsList: Constants.lovCodeMap[majorCriteria]?.values ?? [],
+        menuItemsList: populateUniqueSimpleValuesFromLOV(menuItemsList:  Constants.lovCodeMap[majorCriteria]?.values ?? []),
         provider: langProvider,
       );
     }
 
     /// Step 2: Default major criteria for non-PGRD
     String majorCriteria = "MAJORS#${academicCareer?.toUpperCase()}#${isStudyCountry ? 'N' : 'Y'}";
-    List<dynamic> items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+    List<dynamic> items =  populateUniqueSimpleValuesFromLOV(menuItemsList:  Constants.lovCodeMap[majorCriteria]?.values ?? []);
 
     /// Step 3: Check for different admit types
     if (admitType?.toUpperCase() == "ACT") {
       /// For "ACT" admit type
       majorCriteria = "MAJORSACT#${academicCareer?.toUpperCase()}#${isStudyCountry ? 'N' : 'Y'}";
-      items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+      items = populateUniqueSimpleValuesFromLOV(menuItemsList:  Constants.lovCodeMap[majorCriteria]?.values ?? []);
     } else if (admitType?.toUpperCase() == "NLU") {
       /// For "NLU" admit type
       majorCriteria = "MAJORSNL#${academicCareer?.toUpperCase()}#${isStudyCountry ? 'N' : 'Y'}";
-      items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+      items = populateUniqueSimpleValuesFromLOV(menuItemsList:  Constants.lovCodeMap[majorCriteria]?.values ?? []);
     } else if (scholarshipType?.toUpperCase() == "INT" && admitType?.toUpperCase() != "MET") {
       /// Handle "INT" admit type with specific filtering for "OTH"
       List<dynamic> filteredItems = [];
@@ -244,6 +273,8 @@ class _EditMajorsAndUniversityViewState
 
 
 
+
+
   /// Function to add a new MajorWishList item
   void addMajorWishList() {
     /// Create a new MajorWishList instance
@@ -251,6 +282,7 @@ class _EditMajorsAndUniversityViewState
       majorController: TextEditingController(),
       otherMajorController: TextEditingController(),
       errorMessageController: TextEditingController(),
+      sequenceNumberController: TextEditingController(),
       isNewController: TextEditingController(),
       majorFocusNode: FocusNode(),
       otherMajorFocusNode: FocusNode(),
@@ -352,7 +384,7 @@ class _EditMajorsAndUniversityViewState
    List<DropdownMenuItem> _universityPriorityStatus = [];
 
   /// Function to add a new UniversityPriority item with only countryId provided
-  void addUniversityPriority() {
+  void addUniversityPriority(String sequenceNumber) {
     /// Create a new UniversityPriority instance with only countryId set
     UniversityPriority newPriority = UniversityPriority(
       /// countryIdController: TextEditingController(text: _selectedScholarship?.acadmicCareer == 'UGRD' ? "ARE" : ''),
@@ -365,6 +397,7 @@ class _EditMajorsAndUniversityViewState
       statusController: TextEditingController(),
       errorMessageController: TextEditingController(),
       isNewController: TextEditingController(text: 'true'),
+      sequenceNumberController: TextEditingController(text: sequenceNumber),
       countryIdFocusNode: FocusNode(),
       universityIdFocusNode: FocusNode(),
       otherUniversityNameFocusNode: FocusNode(),
@@ -449,41 +482,41 @@ class _EditMajorsAndUniversityViewState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  /// dropdown for pgrd students academic program
-                  if(academicCareer == 'PGRD' && academicCareer != 'DDS')
-                    Column(
-                      children: [
-                        fieldHeading(
-                          title: localization.pgrdAdacProgram,
-                          important: true,
-                          langProvider: langProvider,
-                        ),
-                        scholarshipFormDropdown(context:context,
-                          controller: _acadProgramPgrdController,
-                          currentFocusNode: _acadProgramPgrdFocusNode,
-                          menuItemsList: _acadProgramPgrdMenuItemsList,
-                          hintText: localization.select,
-                          errorText: _acadProgramPgrdErrorText,
-                          onChanged: (value) {
-                            _acadProgramPgrdErrorText = null;
-
-                            setState(() {
-                              _acadProgramPgrdController.text = value!;
-
-                              /// TODO: Pending implementation of the academic program next focus request
-                              /// /// Move focus to the next field
-                              /// Utils.requestFocus(
-                              ///   focusNode: requiredExamInfo
-                              ///       .examinationGradeFocusNode,
-                              ///   context: context,
-                              /// );
-                            });
-                          },
-                        )
-                      ],
-                    ),
-
-                  kFormHeight,
+                  // /// dropdown for pgrd students academic program
+                  // if(academicCareer == 'PGRD' && academicCareer != 'DDS')
+                  //   Column(
+                  //     children: [
+                  //       fieldHeading(
+                  //         title: localization.pgrdAdacProgram,
+                  //         important: true,
+                  //         langProvider: langProvider,
+                  //       ),
+                  //       scholarshipFormDropdown(context:context,
+                  //         controller: _acadProgramPgrdController,
+                  //         currentFocusNode: _acadProgramPgrdFocusNode,
+                  //         menuItemsList: _acadProgramPgrdMenuItemsList,
+                  //         hintText: localization.select,
+                  //         errorText: _acadProgramPgrdErrorText,
+                  //         onChanged: (value) {
+                  //           _acadProgramPgrdErrorText = null;
+                  //
+                  //           setState(() {
+                  //             _acadProgramPgrdController.text = value!;
+                  //
+                  //             /// TODO: Pending implementation of the academic program next focus request
+                  //             /// /// Move focus to the next field
+                  //             /// Utils.requestFocus(
+                  //             ///   focusNode: requiredExamInfo
+                  //             ///       .examinationGradeFocusNode,
+                  //             ///   context: context,
+                  //             /// );
+                  //           });
+                  //         },
+                  //       )
+                  //     ],
+                  //   ),
+                  //
+                  // kFormHeight,
 
                   /// Select Majors wishlist
                   academicCareer != 'DDS'
@@ -525,7 +558,7 @@ class _EditMajorsAndUniversityViewState
                                     setState(() {
                                       majorInfo.majorError = localization.duplicateWishUniversity;
                                       majorInfo.majorController.clear();
-                                      majorInfo.isNewController.text = "false";
+                                      // majorInfo.isNewController.text = "false";
 
                                       // Display a toast message
                                       _alertServicess.toastMessage("This major has already been selected. Please choose another one.",
@@ -535,7 +568,7 @@ class _EditMajorsAndUniversityViewState
                                     // If the major is valid, update the field and show a success message
                                     setState(() {
                                       majorInfo.majorController.text = value!;
-                                      majorInfo.isNewController.text = "true"; // Mark entry as valid
+                                      // majorInfo.isNewController.text = "true"; // Mark entry as valid
                                       // Optionally, display a success toast
                                       _alertServicess.toastMessage("Major selected successfully.");
                                     });
@@ -569,32 +602,32 @@ class _EditMajorsAndUniversityViewState
 
 
 
-                  /// major when academic program is dds
-                  academicCareer == 'DDS'
-                      ? Column(
-                    children: [
-                      fieldHeading(
-                        title: localization.ddsMajor1,
-                        important: true,
-                        langProvider: langProvider,
-                      ),
-                      scholarshipFormDropdown(context:context,
-                        controller: _acadProgramDdsController,
-                        currentFocusNode: _acadProgramDdsFocusNode,
-                        menuItemsList: _acadProgramDdsMenuItemsList,
-                        hintText: localization.select,
-                        errorText: _acadProgramDdsErrorText,
-                        onChanged: (value) {
-                          _acadProgramDdsErrorText = null;
-
-                          setState(() {
-                            _acadProgramDdsController.text = value!;
-                          });
-                        },
-                      )
-                    ],
-                  )
-                      : showVoid
+                  // /// major when academic program is dds
+                  // academicCareer == 'DDS'
+                  //     ? Column(
+                  //   children: [
+                  //     fieldHeading(
+                  //       title: localization.ddsMajor1,
+                  //       important: true,
+                  //       langProvider: langProvider,
+                  //     ),
+                  //     scholarshipFormDropdown(context:context,
+                  //       controller: _acadProgramDdsController,
+                  //       currentFocusNode: _acadProgramDdsFocusNode,
+                  //       menuItemsList: _acadProgramDdsMenuItemsList,
+                  //       hintText: localization.select,
+                  //       errorText: _acadProgramDdsErrorText,
+                  //       onChanged: (value) {
+                  //         _acadProgramDdsErrorText = null;
+                  //
+                  //         setState(() {
+                  //           _acadProgramDdsController.text = value!;
+                  //         });
+                  //       },
+                  //     )
+                  //   ],
+                  // )
+                  //     : showVoid
                 ])),
         kFormHeight,
 
@@ -925,7 +958,7 @@ class _EditMajorsAndUniversityViewState
                               add: true,
                               onChanged: () {
                                 setState(() {
-                                  addUniversityPriority();
+                                  addUniversityPriority((_universityPriorityList.length +1).toString());
                                 });
                               }),
                         ],
@@ -945,15 +978,29 @@ class _EditMajorsAndUniversityViewState
       padding:  EdgeInsets.all(kPadding),
       child: Column(
         children: [
-          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
-            final logger =  Logger();
-            if(validateUniversityAndMajorsDetails(langProvider)){
-              dynamic form = peopleSoftApplication?.toJson();
-              form['majorWishList'] = _majorsWishlist.map((element){return element.toJson();}).toList();
-              form['universtiesPriorityList'] = _universityPriorityList.map((element){return element.toJson();}).toList();
-              log(jsonEncode(form));
-            }
-          }),
+
+          Consumer<EditApplicationSectionsViewModel>(
+            builder: (context,provider,_){
+              return CustomButton(buttonName: localization.update, isLoading:
+                  provider.apiResponse.status == Status.LOADING
+                  , textDirection: getTextDirection(langProvider), onTap: ()
+              async{
+                final logger =  Logger();
+                if(validateUniversityAndMajorsDetails(langProvider)){
+                  dynamic form = peopleSoftApplication?.toJson();
+                  form['majorWishList'] = _majorsWishlist.map((element){return element.editMajorsListToJson();}).toList();
+                  form['universtiesPriorityList'] = _universityPriorityList.map((element){return element.editUniversityListToJson();}).toList();
+                  log(jsonEncode(form));
+
+                  await provider.editApplicationSections(sectionType: EditApplicationSection.universityPriority, applicationNumber: widget.applicationStatusDetails.admApplicationNumber, form: form);
+                  await _refreshView();
+                }
+              });
+
+            },
+          ),
+
+
           kFormHeight,
           const KReturnButton(),
         ],
@@ -967,15 +1014,15 @@ class _EditMajorsAndUniversityViewState
 
     final academicCareer = widget.applicationStatusDetails.acadCareer;
 
-    /// academic program pgrd
-    if (academicCareer == 'PGRD' &&
-        academicCareer != 'DDS') {
-      if (_acadProgramPgrdController.text.isEmpty || _acadProgramErrorText != null) {
-        setState(() {
-          _acadProgramPgrdErrorText = localization.pgrdAdacProgramRequired;
-          firstErrorFocusNode ??= _acadProgramPgrdFocusNode;
-        });
-      }}
+    // /// academic program pgrd
+    // if (academicCareer == 'PGRD' &&
+    //     academicCareer != 'DDS') {
+    //   if (_acadProgramPgrdController.text.isEmpty || _acadProgramErrorText != null) {
+    //     setState(() {
+    //       _acadProgramPgrdErrorText = localization.pgrdAdacProgramRequired;
+    //       firstErrorFocusNode ??= _acadProgramPgrdFocusNode;
+    //     });
+    //   }}
 
     /// #################################################################
     /// major
@@ -1009,15 +1056,15 @@ class _EditMajorsAndUniversityViewState
 
     /// #################################################################
 
-    /// academic program dds
-    if (academicCareer == 'DDS') {
-      if (_acadProgramDdsController.text.isEmpty || _acadProgramDdsErrorText != null) {
-        setState(() {
-          _acadProgramDdsErrorText = localization.ddsMajorRequired;
-          firstErrorFocusNode ??= _acadProgramDdsFocusNode;
-        });
-      }
-    }
+    // /// academic program dds
+    // if (academicCareer == 'DDS') {
+    //   if (_acadProgramDdsController.text.isEmpty || _acadProgramDdsErrorText != null) {
+    //     setState(() {
+    //       _acadProgramDdsErrorText = localization.ddsMajorRequired;
+    //       firstErrorFocusNode ??= _acadProgramDdsFocusNode;
+    //     });
+    //   }
+    // }
 
     /// #################################################################
 

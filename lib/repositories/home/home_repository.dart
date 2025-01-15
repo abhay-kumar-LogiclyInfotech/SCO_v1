@@ -8,6 +8,7 @@ import 'package:sco_v1/models/account/GetEmploymentStatusModel.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/models/account/edit_application_sections_model/GetApplicationSectionsModel.dart';
 import 'package:sco_v1/models/account/edit_application_sections_model/GetListOfAttachmentsModel.dart';
+import 'package:sco_v1/models/account/edit_application_sections_model/UpdatePeopleSoftApplicationModel.dart';
 import 'package:sco_v1/models/account/edit_application_sections_model/UploadUpdateAttachmentModel.dart';
 import 'package:sco_v1/models/account/personal_details/GetProfilePictureUrlModel.dart';
 import 'package:sco_v1/models/account/personal_details/UpdatePersonalDetailsModel.dart';
@@ -499,20 +500,18 @@ class HomeRepository {
 
   /// Edit Employment History
   // *------ Save As Draft Method ------*/
-  Future<dynamic> editEmploymentHistory(
-      {required String userId,
+  Future<UpdatePeopleSoftApplicationModel> editApplicationSection(
+      {required String url,
       required String applicationNumber,
       required dynamic body,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
       //https://stg.sco.ae/o/mopa-sco-api/e-services/{userId}/update-ps-application/workexp/{applicationNo}
-      url:
-          '${AppUrls.baseUrl}e-services/$userId/update-ps-application/workexp/$applicationNumber',
+      url: url,
       body: body,
       headers: headers,
     );
-    // return SaveAsDraftModel.fromJson(response);
-    return response;
+    return UpdatePeopleSoftApplicationModel.fromJson(response);
   }
 
   /// GET APPLICATION SECTIONS MODEL

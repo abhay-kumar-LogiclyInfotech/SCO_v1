@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/account/edit_application_sections_model/UploadUpdateAttachmentModel.dart';
 import 'package:sco_v1/view/test.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/edit_application_sections_viewModel.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/get_list_of_attachments_viewModel.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/upload_update_attachment_view_model.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
@@ -208,6 +209,9 @@ class _MyAppState extends State<MyApp> {
 
           /// Uploading and updating approved attachment
           ChangeNotifierProvider(create: (_) => UploadUpdateAttachmentViewModel()),
+
+          /// Edit Peoplesoft application sections
+          ChangeNotifierProvider(create: (_) => EditApplicationSectionsViewModel()),
 
           // register Test ViewModel
           // ChangeNotifierProvider(create: (_) => TestApi()),

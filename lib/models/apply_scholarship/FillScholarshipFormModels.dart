@@ -1216,6 +1216,7 @@ class MajorWishList {
   TextEditingController otherMajorController;
   TextEditingController errorMessageController;
   TextEditingController isNewController;
+  TextEditingController? sequenceNumberController;
 
   // Focus Nodes
   FocusNode majorFocusNode;
@@ -1238,6 +1239,7 @@ class MajorWishList {
     required this.otherMajorFocusNode,
     required this.errorMessageFocusNode,
     required this.isNewFocusNode,
+    this.sequenceNumberController,
     this.majorError,
     this.otherMajorError,
     this.errorMessageError,
@@ -1251,7 +1253,15 @@ class MajorWishList {
       majorController: TextEditingController(text: json['major'] ?? ''),
       otherMajorController: TextEditingController(text: json['otherMajor'] ?? ''),
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
-      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      // isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      isNewController: TextEditingController(
+        text: (json['isNew']?.toString()?.trim().isNotEmpty == true
+            ? json['isNew'].toString()
+            : json['new']?.toString()?.trim().isNotEmpty == true
+            ? json['new'].toString()
+            : 'false'),
+      ),
+      sequenceNumberController: TextEditingController(text: json['sequenceNumber'] ?? ''),
       majorFocusNode: FocusNode(),
       otherMajorFocusNode: FocusNode(),
       errorMessageFocusNode: FocusNode(),
@@ -1266,6 +1276,17 @@ class MajorWishList {
       'otherMajor': otherMajorController.text,
       'errorMessage': errorMessageController.text,
       'isNew': isNewController.text,
+      'new': isNewController.text,
+    };
+  }
+  // To JSON
+  Map<String, dynamic> editMajorsListToJson() {
+    return {
+      'major': majorController.text,
+      'otherMajor': otherMajorController.text,
+      'errorMessage': errorMessageController.text,
+      'sequenceNumber': sequenceNumberController?.text ?? '',
+      'new': isNewController.text,
     };
   }
 }
@@ -1278,6 +1299,8 @@ class UniversityPriority {
   TextEditingController otherUniversityNameController;
   TextEditingController majorsController;
   TextEditingController otherMajorsController;
+  TextEditingController? sequenceNumberController;
+
 
   TextEditingController statusController;
   TextEditingController errorMessageController;
@@ -1319,6 +1342,7 @@ class UniversityPriority {
     required this.majorsFocusNode,
     required this.otherMajorsFocusNode,
     required this.statusFocusNode,
+    this.sequenceNumberController,
     this.countryIdError,
     this.universityIdError,
     this.otherUniversityNameError,
@@ -1340,7 +1364,11 @@ class UniversityPriority {
       otherMajorsController: TextEditingController(text: json['otherMajor'] ?? ''),
       statusController: TextEditingController(text: json['status'] ?? ''),
       errorMessageController: TextEditingController(text: json['errorMessage'] ?? ''),
-      isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      // isNewController: TextEditingController(text: json['isNew']?.toString() ?? 'false'),
+      isNewController: TextEditingController(text: (json['isNew']?.toString() ?? json['new']?.toString() ?? 'false'),),
+      sequenceNumberController: TextEditingController(text: json['sequenceNumber'] ?? ''),
+
+
       countryIdFocusNode: FocusNode(),
       universityIdFocusNode: FocusNode(),
       otherUniversityNameFocusNode: FocusNode(),
@@ -1361,6 +1389,21 @@ class UniversityPriority {
       'status': statusController.text,
       'errorMessage': errorMessageController.text,
       'isNew': isNewController.text,
+      'new': isNewController.text,
+    };
+  }
+  // To JSON
+  Map<String, dynamic> editUniversityListToJson() {
+    return {
+      'countryId': countryIdController.text,
+      'universityId': universityIdController.text,
+      'otherUniversityName': otherUniversityNameController.text,
+      'majors': majorsController.text,
+      'otherMajor': otherMajorsController.text,
+      'status': statusController.text,
+      'errorMessage': errorMessageController.text,
+      'sequenceNumber': sequenceNumberController?.text ?? '',
+      'new': isNewController.text,
     };
   }
 }

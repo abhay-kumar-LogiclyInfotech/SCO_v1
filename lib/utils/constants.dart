@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sco_v1/models/splash/commonData_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../models/apply_scholarship/FillScholarshipFormModels.dart';
 
 
 class Constants {
@@ -53,6 +56,34 @@ class Constants {
 
   ];
 
+  static const referenceValuesHighSchool = [
+    {"code": "1", "value": "Gr10", "order": 1}, // 10th grade
+    {"code": "2", "value": "Gr11-Term1", "order": 2}, // 11th first term
+    {"code": "3", "value": "Gr11-Final", "order": 3}, // 11th final
+    {"code": "4", "value": "Gr12-Term1", "order": 4}, // 12th mid term (Term 1)
+    {"code": "8", "value": "Gr12-Term2", "order": 5}, // 12th mid term (Term 2)
+    {"code": "5", "value": "Gr12-Final", "order": 6}, // 12th final
+    {"code": "6", "value": "Elementary", "order": 0}, // Below 10th grade
+    {"code": "7", "value": "Preliminary", "order": 0}, // Below 10th grade
+  ];
+
+
+  static const referenceValuesGraduation = [
+    {"code": "UG", "value": "Bachelor", "order": 1},
+    {"code": "MD", "value": "Bachelor of Medicine", "order": 2},
+    {"code": "DP", "value": "Diploma", "order": 3},
+    {"code": "IC", "value": "Internship Certificate", "order": 4},
+    {"code": "PG", "value": "Master", "order": 5},
+    {"code": "MF", "value": "Membership or Fellowship", "order": 6},
+    {"code": "PHD", "value": "PhD", "order": 7},
+    {"code": "SB", "value": "Specialty Board (Arab, US, CAN.)", "order": 8},
+    {"code": "1", "value": "Year 1", "order": 9},
+    {"code": "2", "value": "Year 2", "order": 10},
+    {"code": "3", "value": "Year 3", "order": 11},
+    {"code": "4", "value": "Year 4", "order": 12},
+    {"code": "5", "value": "Year 5", "order": 13},
+    {"code": "6", "value": "Year 6", "order": 14},
+  ];
 
 
 
@@ -545,6 +576,153 @@ static String getNameOfScholarshipByConfigurationKey({required AppLocalizations 
 
 }
 
+
+
+String markHighestHighSchoolQualification(List<Map<String, dynamic>> referenceValues, List<Map<String, dynamic>> hsRecords) {
+  // Step 1: Create a map of code to order based on the reference list
+  final Map<String, int> orderMap = {
+    for (var item in referenceValues) item['code']: item['order']
+  };
+
+  // Step 2: Track the record with the highest qualification
+  Map<String, dynamic>? highestQualificationRecord;
+  int highestOrder = -1;
+
+  // Step 3: Find the record with the highest order
+  for (var record in hsRecords) {
+    final hsLevel = record['hsLevel'] as String?;
+    if (hsLevel != null && orderMap.containsKey(hsLevel)) {
+      final order = orderMap[hsLevel]!;
+
+      // If this record has a higher order, update the highest qualification record
+      if (order > highestOrder) {
+        highestOrder = order;
+        highestQualificationRecord = record;
+      }
+    }
+  }
+
+  // Step 4: Mark all records as false initially
+  for (var record in hsRecords) {
+    record['highestQualification'] = false;
+  }
+
+  // Step 5: Mark the highest qualification record as true
+  if (highestQualificationRecord != null) {
+    highestQualificationRecord['highestQualification'] = true;
+    return highestQualificationRecord['hsLevel'];
+  }
+  return '';
+}
+String markHighestGraduationQualification(List<Map<String, dynamic>> referenceValues, List<Map<String, dynamic>> graduationRecords) {
+  // Step 1: Create a map of code to order based on the reference list
+  final Map<String, int> orderMap = {
+    for (var item in referenceValues) item['code']: item['order']
+  };
+
+  // Step 2: Track the record with the highest qualification
+  Map<String, dynamic>? highestQualificationRecord;
+  int highestOrder = -1;
+
+  // Step 3: Find the record with the highest order
+  for (var record in graduationRecords) {
+    final graduationLevel = record['level'] as String?;
+    if (graduationLevel != null && orderMap.containsKey(graduationLevel)) {
+      final order = orderMap[graduationLevel]!;
+
+      // If this record has a higher order, update the highest qualification record
+      if (order > highestOrder) {
+        highestOrder = order;
+        highestQualificationRecord = record;
+      }
+    }
+  }
+
+  // Step 4: Mark all records as false initially
+  for (var record in graduationRecords) {
+    record['highestQualification'] = false;
+  }
+
+  // Step 5: Mark the highest qualification record as true
+  if (highestQualificationRecord != null) {
+    highestQualificationRecord['highestQualification'] = true;
+    return highestQualificationRecord['level'];
+  }
+  return '';
+}
+
+bool shouldShowGraduationSection(String academicCareer) {
+  return academicCareer != 'SCHL' && academicCareer != 'HCHL';
+}
+
+bool shouldShowHighSchoolDetails(String academicCareer) {
+  return academicCareer == 'UG' || academicCareer == 'UGRD' || academicCareer == 'SCHL' || academicCareer == 'HCHL';
+}
+
+bool shouldShowAddGraduationButton({required scholarshipType, required academicCareer}){
+  return (!(scholarshipType == 'INT' && academicCareer == 'UGRD') && academicCareer != 'UGRD');
+}
+
+
+String getHighestQualification(
+    {required String academicCareer,
+      required String scholarshipType,
+      required List<Map<String,dynamic>> highSchoolRecords,
+      required List<Map<String, dynamic>> graduationRecords,
+      required List<GraduationInfo> graduationDetailsList,
+    }
+    )
+{
+  bool showHighSchool = shouldShowHighSchoolDetails(academicCareer);
+  bool showGraduation = shouldShowGraduationSection(academicCareer);
+
+  print("show High School: $showHighSchool");
+  print("show Graduation Details: $showHighSchool");
+
+
+  String highestQualification = '';
+
+  /// If we have graduation details then it is obvious that we can get highestQualification from graduation details only
+  if(showGraduation){
+    bool showingAddGraduationButton = shouldShowAddGraduationButton(scholarshipType: scholarshipType, academicCareer: academicCareer);
+    /// If we are not showing the add more button then check if we have any detail which have parameter currently studying.
+    /// If bool found with currently studying set highest qualification from graduation details
+    if(!showingAddGraduationButton){
+      final currentlyStudying = graduationDetailsList.any((element){return element.currentlyStudying;});
+      // if(currentlyStudying){
+        /// If after finding that student is currently studying from graduation then set highest qualification from graduation.
+        highestQualification = markHighestGraduationQualification(Constants.referenceValuesGraduation, graduationRecords);
+
+      // }
+      // if(!currentlyStudying){
+      //   /// If we are not showing the add more button and also the currently studying for graduation in false then we have to check highest
+      //   /// qualification from highSchool list and set highest qualification flags from high school list too.
+      //   highestQualification = markHighestHighSchoolQualification(Constants.referenceValuesHighSchool, highSchoolRecords);
+      // }
+    }
+
+    /// If we are showing the add more button which means we have enough number of graduation details.
+    /// Now set the boolean flag for all and set highest qualification also.
+    if(showingAddGraduationButton) {
+      highestQualification = markHighestGraduationQualification(Constants.referenceValuesGraduation, graduationRecords);
+      log(jsonEncode(graduationRecords));
+    }
+  }
+
+  /// When we are showing only high school then get highest qualification from highschool only
+  if(showHighSchool && !showGraduation){
+    highestQualification = markHighestHighSchoolQualification(Constants.referenceValuesHighSchool, highSchoolRecords);
+    log(jsonEncode(graduationRecords));
+  }
+
+  debugPrint("Printing the Highest Level: $highestQualification");
+  return highestQualification;
+}
+
+
+
+
 enum MilitaryStatus { yes, no, postponed, exemption }
 enum ScholarshipStatus{applyScholarship,appliedScholarship,approvedScholarship}
 enum AttachmentType {request,employment,updateNote}
+enum EditApplicationSection {education,employmentHistory,requiredExaminations,universityPriority}

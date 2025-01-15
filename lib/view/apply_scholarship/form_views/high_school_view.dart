@@ -116,7 +116,7 @@ class _HighSchoolViewState extends State<HighSchoolView> with MediaQueryMixin {
           maxDateController: TextEditingController(),
           disableStateController: TextEditingController(),
           isNewController: TextEditingController(text: "true"),
-          highestQualificationController: TextEditingController(),
+          highestQualificationController: TextEditingController(text: 'false'),
           hsLevelFocusNode: FocusNode(),
           hsNameFocusNode: FocusNode(),
           hsCountryFocusNode: FocusNode(),

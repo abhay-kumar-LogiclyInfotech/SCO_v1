@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/view/apply_scholarship/form_views/required_examinations_view.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/edit_application_sections_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../../data/response/status.dart';
@@ -45,17 +46,29 @@ class _EditRequiredExaminationsViewState
     final GetIt getIt = GetIt.instance;
     _alertServices = getIt.get<AlertServices>();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      final langProvider =
-          Provider.of<LanguageChangeViewModel>(context, listen: false);
+     await _refreshView();
+    });
+
+    super.initState();
+  }
+
+
+  _refreshView()async{
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+      final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+      _requiredExaminationList.clear();
+      _requiredExaminationDropdownMenuItems?.clear();
+      _testScoreVal.clear();
+
       if (Constants
-              .lovCodeMap[
-                  'EXAMINATION#${widget.applicationStatusDetails.acadCareer}']
-              ?.values !=
+          .lovCodeMap[
+      'EXAMINATION#${widget.applicationStatusDetails.acadCareer}']
+          ?.values !=
           null) {
         _requiredExaminationDropdownMenuItems = populateCommonDataDropdown(
             menuItemsList: Constants
                 .lovCodeMap[
-                    'EXAMINATION#${widget.applicationStatusDetails.acadCareer}']!
+            'EXAMINATION#${widget.applicationStatusDetails.acadCareer}']!
                 .values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
@@ -70,14 +83,14 @@ class _EditRequiredExaminationsViewState
 
       /// Making api call to ps-application
       final psApplicationProvider =
-          Provider.of<GetApplicationSectionViewModel>(context, listen: false);
+      Provider.of<GetApplicationSectionViewModel>(context, listen: false);
       await psApplicationProvider.getApplicationSections(
           applicationNumber:
-              widget.applicationStatusDetails.admApplicationNumber);
+          widget.applicationStatusDetails.admApplicationNumber);
 
       if (psApplicationProvider.apiResponse.status == Status.COMPLETED &&
           psApplicationProvider
-                  .apiResponse.data?.data.psApplication.emplymentHistory !=
+              .apiResponse.data?.data.psApplication.emplymentHistory !=
               null) {
 
         /// setting peoplesoft application to get the full application
@@ -100,9 +113,13 @@ class _EditRequiredExaminationsViewState
         setState(() {});
       }
     });
-
-    super.initState();
   }
+
+
+
+
+
+
 
   /// get examination type
   _populateExaminationTypeDropdown(
@@ -132,6 +149,8 @@ class _EditRequiredExaminationsViewState
   /// get min score and max score just fetching the elements from the lov and based on exam and exam type selection we will find min and max score and set that to the fields
   List _testScoreVal = [];
 
+
+
   bool _isProcessing = false;
 
   resetProcessing(bool value) {
@@ -158,7 +177,6 @@ class _EditRequiredExaminationsViewState
   }
 
   Widget _buildUi() {
-
     final LanguageChangeViewModel langProvider = context.read<LanguageChangeViewModel>();
     final localization = AppLocalizations.of(context)!;
     return Consumer<GetApplicationSectionViewModel>(
@@ -198,14 +216,24 @@ class _EditRequiredExaminationsViewState
       padding:  EdgeInsets.all(kPadding),
       child: Column(
         children: [
-          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: (){
-            final logger =  Logger();
-            if(validateRequiredExaminations(langProvider)){
-              dynamic form = peopleSoftApplication?.toJson();
-              form['requiredExaminationList'] = _requiredExaminationList.map((element){return element.toJson();}).toList();
-              log(jsonEncode(form));
-            }
-          }),
+
+          Consumer<EditApplicationSectionsViewModel>(
+            builder: (context,provider,_){
+              return CustomButton(buttonName: localization.update, isLoading: provider.apiResponse.status == Status.LOADING,
+                  textDirection: getTextDirection(langProvider),
+                  onTap: ()async{
+                final logger =  Logger();
+                if(validateRequiredExaminations(langProvider)){
+                  dynamic form = peopleSoftApplication?.toJson();
+                  form['requiredExaminationList'] = _requiredExaminationList.map((element){return element.toJson();}).toList();
+                  await provider.editApplicationSections(sectionType: EditApplicationSection.requiredExaminations, applicationNumber: widget.applicationStatusDetails.admApplicationNumber, form: form);
+                await _refreshView();
+                }
+              }
+              );
+
+            },
+          ),
           kFormHeight,
           const KReturnButton(),
         ],

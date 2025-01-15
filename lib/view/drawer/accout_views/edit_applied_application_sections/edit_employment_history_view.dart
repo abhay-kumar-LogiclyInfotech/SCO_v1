@@ -10,7 +10,7 @@ import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/kButtons/kReturnButton.dart';
-import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/edit_employment_history_viewModel.dart';
+import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/edit_application_sections_viewModel.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
@@ -38,6 +38,8 @@ late AlertServices _alertServices;
 
 
 PsApplication? peopleSoftApplication;
+dynamic form ;
+
 
   @override
   void initState() {
@@ -46,6 +48,16 @@ PsApplication? peopleSoftApplication;
     _alertServices = getIt.get<AlertServices>();
 
     WidgetsBinding.instance.addPostFrameCallback((callback)async{
+      await _refreshView();
+    });
+    super.initState();
+  }
+
+  _refreshView()async{
+    WidgetsBinding.instance.addPostFrameCallback((callback)async{
+
+      _employmentHistoryList.clear();
+      _employmentStatusItemsList.clear();
       final LanguageChangeViewModel langProvider = Provider.of(context,listen: false);
       if (Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null) {
         _employmentStatusItemsList = populateUniqueSimpleValuesFromLOV(
@@ -88,13 +100,14 @@ PsApplication? peopleSoftApplication;
           _employmentStatus = 'E';
         }
 
+        form = peopleSoftApplication?.toJson();
 
 
-      setState(() {
 
-      });
-    }});
-    super.initState();
+        setState(() {
+
+        });
+      }});
   }
 
    bool _isProcessing = false;
@@ -129,7 +142,7 @@ PsApplication? peopleSoftApplication;
 
 
   /// employment history list
-  final List<EmploymentHistory> _employmentHistoryList = [];
+   List<EmploymentHistory> _employmentHistoryList = [];
 
 
   /// add employment history
@@ -180,10 +193,13 @@ PsApplication? peopleSoftApplication;
                     _employmentStatus = value;
                     if (_employmentStatus == 'N') {
                       _employmentHistoryList.clear();
+                      _employmentHistoryList = [];
+                      form['emplymentHistory']=[];
                     }
-                    if (_employmentHistoryList.isEmpty) {
-                      _addEmploymentHistory();
-                    } else {
+                    // if (_employmentHistoryList.isEmpty) {
+                    //   _addEmploymentHistory();
+                    // }
+                    else {
                       _employmentHistoryList.clear();
                       _addEmploymentHistory();
                     }
@@ -219,22 +235,20 @@ PsApplication? peopleSoftApplication;
       child: Column(
           children: [
 
-            ChangeNotifierProvider(create: (context)=>EditEmploymentHistoryViewModel(),
-            child: Consumer<EditEmploymentHistoryViewModel>(
+            ChangeNotifierProvider(create: (context)=>EditApplicationSectionsViewModel(),
+            child: Consumer<EditApplicationSectionsViewModel>(
               builder: (context,provider,_){
                 return CustomButton(buttonName: localization.update, isLoading: provider.apiResponse.status == Status.LOADING, textDirection: getTextDirection(langProvider),
                     onTap: ()async{
-                  if(validateEmploymentHistory(langProvider)){
-                    dynamic form = peopleSoftApplication?.toJson();
-                    form['emplymentHistory'] = _employmentHistoryList.map((element){return element.toJson();}).toList();
-                    await provider.editEmploymentHistory(applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form);
-                    log(jsonEncode(form));
+                      if(validateEmploymentHistory(langProvider)){
+                    form['emplymentHistory'] = _employmentHistoryList.isNotEmpty ? _employmentHistoryList.map((element){return element.toJson();}).toList() : [];
+                    await provider.editApplicationSections(applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form,sectionType: EditApplicationSection.employmentHistory);
+                    await _refreshView();
                   }
                 });
               },
             ),
             ),
-
             kFormHeight,
             const KReturnButton(),
           ],

@@ -351,7 +351,7 @@ fieldHeading(
 // populateCommonDataDropdown method with hide property:
 List<dynamic> populateUniqueSimpleValuesFromLOV({
   required List menuItemsList,
-  required LanguageChangeViewModel provider,
+   LanguageChangeViewModel? provider,
   Color? textColor,
 }) {
   List<String> uniqueKeys = [];
