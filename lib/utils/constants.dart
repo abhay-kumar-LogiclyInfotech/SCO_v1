@@ -677,7 +677,7 @@ String getHighestQualification(
   bool showGraduation = shouldShowGraduationSection(academicCareer);
 
   print("show High School: $showHighSchool");
-  print("show Graduation Details: $showHighSchool");
+  print("show Graduation Details: $showGraduation");
 
 
   String highestQualification = '';

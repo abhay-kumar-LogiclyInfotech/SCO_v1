@@ -1029,7 +1029,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                   ],
                 ),
               if(_isMilitaryService == MilitaryStatus.no) showVoid,
-              if(_isMilitaryService == MilitaryStatus.postponed) showVoid,
+              if(_isMilitaryService == MilitaryStatus.postponed) CustomInformationContainerField(title: localization.militaryReason,description: _reasonForMilitaryController.text,),
               if(_isMilitaryService == MilitaryStatus.exemption) CustomInformationContainerField(title: localization.militaryReason,description: _reasonForMilitaryController.text,),
             ])
 
@@ -1117,13 +1117,16 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                           itemCount: _graduationDetailsList.length,
                           itemBuilder: (context, index) {
                             final graduationInfo = _graduationDetailsList[index];
+                            var graduationRecord = _graduationDetailsList.map((element){return element.toJson();}).toList();
                             return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   sectionTitle(title: academicCareer == 'DDS' ? '${localization.ddsGraduationTitle} ${index + 1}' : "${localization.graduationDetails} ${index + 1}"),
-                                  if(graduationInfo.showCurrentlyStudying)Column(
+                                  // if(graduationInfo.showCurrentlyStudying)
+                                  if( graduationInfo.levelController.text == markHighestGraduationQualification(Constants.referenceValuesGraduation, graduationRecord))
+                                    Column(
                                     children: [
                                       kFormHeight,
                                       CustomInformationContainerField(title: localization.currentlyStudying,isLastItem: true,),
@@ -1141,26 +1144,34 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                                           onChanged: (value) {},
                                           title: localization.no,
                                           textStyle: textFieldTextStyle),
-                                      if(graduationInfo.currentlyStudying && graduationInfo.showCurrentlyStudying)Column(
-                                        children: [
-                                          CustomInformationContainerField(title: localization.lastTerm,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'LAST_TERM',code:graduationInfo.lastTermController.text ),),
-                                          (academicCareer == 'UGRD') ? (graduationInfo.currentlyStudying ?
+                                    ],
+                                  ),
+                                    Column(
+                                    children: [
+                                      if(graduationInfo.currentlyStudying && graduationInfo.showCurrentlyStudying)
+                                      CustomInformationContainerField(title: localization.lastTerm,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'LAST_TERM',code:graduationInfo.lastTermController.text ),),
+                                      (academicCareer == 'UGRD') ? (graduationInfo.currentlyStudying ?
 
-                                          /// copy paste full below code
-                                          /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
-                                          _graduationInformation(
-                                              index: index,
-                                              langProvider: langProvider,
-                                              graduationInfo: graduationInfo)
-                                              : showVoid)
-                                              : _graduationInformation(
+                                      /// copy paste full below code
+                                      /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
+                                      _graduationInformation(
+                                          index: index,
+                                          langProvider: langProvider,
+                                          graduationInfo: graduationInfo)
+                                          : showVoid)
+                                          : Column(
+                                            children: [
+                                              kFormHeight,
+                                              _graduationInformation(
                                               index: index,
                                               langProvider: langProvider,
                                               graduationInfo: graduationInfo),
-                                        ],
-                                      )
+                                            ],
+                                          ),
                                     ],
-                                  )
+                                  ),
+
+                                  if(index < _graduationDetailsList.length-1) sectionDivider()
                                 ]);
                           })
 
