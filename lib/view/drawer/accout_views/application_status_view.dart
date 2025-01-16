@@ -429,11 +429,10 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                   '',
                             ),
                           ),
-                          CustomInformationContainerField(
-                            title: localization.scholarshipType,
-                            description: application?.scholarshipType ?? '- -',
-                          ),
-
+                          // CustomInformationContainerField(
+                          //   title: localization.scholarshipType,
+                          //   description: application?.scholarshipType ?? '- -',
+                          // ),
 
                           if(showOnStatusBasis(application))
                             Column(
@@ -516,7 +515,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing:10,childAspectRatio: 5),
                                     children: [
                                       /// EDIT HIGH-SCHOOL DETAILS
-                                      if(application.schoolEditAllowed.toString().toUpperCase() == 'Y')
+                                      if(application.schoolEditAllowed.toString().toUpperCase() == 'Y' && shouldShowHighSchoolDetails(application.acadCareer))
                                       actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.highSchoolDetails, onPressed: (){
                                         /// Move to required examinations list
                                         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditHighSchoolDetailsView(
@@ -525,7 +524,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                       }),
 
                                       /// EDIT GRADUATION DETAILS
-                                      if(application.graduationEditAllowed.toString().toUpperCase() == 'Y')
+                                      if(application.graduationEditAllowed.toString().toUpperCase() == 'Y' && shouldShowGraduationSection(application.acadCareer))
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.graduationDetails, onPressed: (){
                                           /// Move to Edit Graduation Details
                                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditGraduationDetailsView(
@@ -534,7 +533,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                       }),
 
                                       /// EDIT UNIVERSITY AND MAJORS DETAILS
-                                      if(application.wishListEditAllowed.toString().toUpperCase() == 'Y')
+                                      if(application.wishListEditAllowed.toString().toUpperCase() == 'Y' && shouldShowUniversityAndMajors(application.acadCareer))
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.universityAndMajor, onPressed: (){
                                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditMajorsAndUniversityView(
                                             applicationStatusDetails: application,
@@ -543,9 +542,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                       }),
 
                                       /// EDIT UNIVERSITY AND MAJORS DETAILS
-                                      /// TODO: UNCOMMENT THE CONDITION AFTER TESTING
-                                      if(application.testEditAllowed.toString().toUpperCase() == 'Y')
-                                      // if(true)
+                                      if(application.testEditAllowed.toString().toUpperCase() == 'Y' && shouldShowRequiredExaminations(application.acadCareer))
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.requiredExamination, onPressed: (){
                                           /// Move to required examinations list
                                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditRequiredExaminationsView(
@@ -554,7 +551,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                         }),
 
                                       /// EDIT EMPLOYMENT HISTORY DETAILS
-                                      if(application.workExpEditAllowed.toString().toUpperCase() == 'Y')
+                                      if(application.workExpEditAllowed.toString().toUpperCase() == 'Y' && shouldShowEmploymentHistory(configurationKey))
                                         actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.employmentHistory, onPressed: (){
                                           /// move to edit employment history
                                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditEmploymentHistoryView(

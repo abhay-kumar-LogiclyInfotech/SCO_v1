@@ -1131,7 +1131,9 @@
   "graduate_outside_uae_scholarship_privileges": "امتيازات بعثة الدراسات العليا",
   "student_obligations_for_graduate_outside_uae_scholarship": "التزامات الطالب لبعثة الدراسات العليا",
   "graduate_outside_uae_scholarship_applying_procedures": "إجراءات التقديم لبعثة الدراسات العليا",
-  "noNotificationAvailable": "لا توجد إشعارات متاحة."
+  "noNotificationAvailable": "لا توجد إشعارات متاحة.",
+  "invalidDocument": "تم تحميل مستند غير صالح. يرجى إعادة التحميل."
+
 
 }
 

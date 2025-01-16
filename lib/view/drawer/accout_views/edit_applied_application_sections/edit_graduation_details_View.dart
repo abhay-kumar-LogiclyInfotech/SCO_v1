@@ -47,8 +47,26 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
     final GetIt getIt = GetIt.instance;
     _alertServices = getIt.get<AlertServices>();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      final LanguageChangeViewModel langProvider =
-      Provider.of(context, listen: false);
+    await _refreshView();
+    });
+    super.initState();
+  }
+
+
+  _refreshView()async{
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+
+
+      _nationalityMenuItemsList.clear();
+      _graduationDetailsList.clear();
+      _graduationLevelMenuItems.clear();
+      _graduationLevelDDSMenuItems.clear();
+      _caseStudyYearDropdownMenuItems.clear();
+
+      _highSchoolList.clear();
+
+
+      final LanguageChangeViewModel langProvider = Provider.of(context, listen: false);
 
 
       if (Constants.lovCodeMap['GRADUATION_LEVEL']?.values != null) {
@@ -116,8 +134,8 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
         setState(() {});
       }
     });
-    super.initState();
   }
+
 
   bool _isProcessing = false;
 
@@ -225,6 +243,9 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
   List<DropdownMenuItem> _graduationLevelDDSMenuItems = [];
   List<DropdownMenuItem> _caseStudyYearDropdownMenuItems = [];
 
+
+
+
   /// sponsorship question for dds (One student can have only have one sponsor)
   String havingSponsor = '';
 
@@ -270,8 +291,8 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
   }
 
   _addGraduationDetail() {
-    bool isAlreadyCurrentlyStudying = _graduationDetailsList
-        .any((element) => element.currentlyStudying == true);
+    // bool isAlreadyCurrentlyStudying = _graduationDetailsList
+    //     .any((element) => element.currentlyStudying == true);
     setState(() {
       _graduationDetailsList.add(GraduationInfo(
         levelController: TextEditingController(),
@@ -298,7 +319,7 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
         sponsorShipController: TextEditingController(),
         errorMessageController: TextEditingController(),
         highestQualification: false,
-        showCurrentlyStudying: !isAlreadyCurrentlyStudying,
+        showCurrentlyStudying: false,
         currentlyStudying: false,
         lastTerm: [],
         graduationLevel: [],
@@ -371,35 +392,38 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
       padding:  EdgeInsets.all(kPadding),
       child: Column(
         children: [
-          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()
-          async{
-            final logger =  Logger();
-            if(validateGraduationDetails(langProvider)){
-              dynamic form = peopleSoftApplication?.toJson();
-             var graduationRecords = form['graduationList'] = _graduationDetailsList.map((element){return element.toJson();}).toList();
-              var highSchoolRecords = form['highSchoolList'] = _highSchoolList.map((element){return element.toJson();}).toList();
+
+          Consumer<EditApplicationSectionsViewModel>(
+            builder: (context,provider,_){
+              return CustomButton(buttonName: localization.update, isLoading: provider.apiResponse.status == Status.LOADING, textDirection: getTextDirection(langProvider), onTap: ()
+                async{
+                  final logger =  Logger();
+                  if(validateGraduationDetails(langProvider)){
+                    dynamic form = peopleSoftApplication?.toJson();
+                    var graduationRecords = form['graduationList'] = _graduationDetailsList.map((element){return element.toJson();}).toList();
+                    var highSchoolRecords = form['highSchoolList'] = _highSchoolList.map((element){return element.toJson();}).toList();
 
 
-             final academicCareer =  widget.applicationStatusDetails.acadCareer;
-             final scholarshipType =  widget.applicationStatusDetails.scholarshipType;
+                    final academicCareer =  widget.applicationStatusDetails.acadCareer;
+                    final scholarshipType =  widget.applicationStatusDetails.scholarshipType;
 
-             String highestQualification = getHighestQualification(graduationDetailsList: _graduationDetailsList,academicCareer: academicCareer, scholarshipType: scholarshipType, highSchoolRecords: highSchoolRecords, graduationRecords: graduationRecords);
+                    String highestQualification = getHighestQualification(graduationDetailsList: _graduationDetailsList,academicCareer: academicCareer, scholarshipType: scholarshipType, highSchoolRecords: highSchoolRecords, graduationRecords: graduationRecords);
 
 
-              form['highestQualification'] = highestQualification;
-              form['graduationList'] = graduationRecords;
-              form['highSchoolList'] = highSchoolRecords;
+                    form['highestQualification'] = highestQualification;
+                    form['graduationList'] = graduationRecords;
+                    if(shouldShowHighSchoolDetails(academicCareer)) form['highSchoolList'] = highSchoolRecords;
 
-              log(jsonEncode(form));
-
-              final provider = Provider.of<EditApplicationSectionsViewModel>(context,listen: false);
-              await provider.editApplicationSections(sectionType: EditApplicationSection.education,applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form);
-
-            }
+                    await provider.editApplicationSections(sectionType: EditApplicationSection.education,applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form);
+                    await _refreshView();
+                  }
 
 
 
-          }),
+                });
+            },
+          ),
+
           kFormHeight,
           const KReturnButton(),
         ],

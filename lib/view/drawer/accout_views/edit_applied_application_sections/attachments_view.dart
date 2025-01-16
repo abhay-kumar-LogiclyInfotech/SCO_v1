@@ -363,7 +363,7 @@ class _AttachmentsViewState extends State<AttachmentsView>
                                   ]))
                           ),
                           CustomInformationContainerField(title: localization.comment ?? '',description: uploadedFile?.description?.toString(),),
-                          CustomInformationContainerField(title: localization.status ?? '',description: "Document Uploaded",isLastItem: true,),
+                          CustomInformationContainerField(title: localization.status ?? '',description: localization.documentUploaded,isLastItem: true,),
                         ],
                       ),
                     ),

@@ -614,6 +614,35 @@ String markHighestHighSchoolQualification(List<Map<String, dynamic>> referenceVa
   }
   return '';
 }
+
+
+bool shouldShowGraduationSection(String academicCareer) {
+  return academicCareer != 'SCHL' && academicCareer != 'HCHL';
+}
+
+bool shouldShowHighSchoolDetails(String academicCareer) {
+  return academicCareer == 'UG' || academicCareer == 'UGRD' || academicCareer == 'SCHL' || academicCareer == 'HCHL';
+}
+
+bool shouldShowUniversityAndMajors(String academicCareer) {
+  return academicCareer != 'SCHL';
+}
+
+
+bool shouldShowRequiredExaminations(String academicCareer) {
+  return !(academicCareer == 'SCHL' || academicCareer == 'HCHL');
+}
+
+
+bool shouldShowEmploymentHistory(String configurationKey) {
+  return (configurationKey == 'SCOPGRDINT' || configurationKey == 'SCOPGRDEXT' || configurationKey == 'SCODDSEXT');}
+
+
+
+
+
+
+
 String markHighestGraduationQualification(List<Map<String, dynamic>> referenceValues, List<Map<String, dynamic>> graduationRecords) {
   // Step 1: Create a map of code to order based on the reference list
   final Map<String, int> orderMap = {
@@ -651,13 +680,7 @@ String markHighestGraduationQualification(List<Map<String, dynamic>> referenceVa
   return '';
 }
 
-bool shouldShowGraduationSection(String academicCareer) {
-  return academicCareer != 'SCHL' && academicCareer != 'HCHL';
-}
 
-bool shouldShowHighSchoolDetails(String academicCareer) {
-  return academicCareer == 'UG' || academicCareer == 'UGRD' || academicCareer == 'SCHL' || academicCareer == 'HCHL';
-}
 
 bool shouldShowAddGraduationButton({required scholarshipType, required academicCareer}){
   return (!(scholarshipType == 'INT' && academicCareer == 'UGRD') && academicCareer != 'UGRD');

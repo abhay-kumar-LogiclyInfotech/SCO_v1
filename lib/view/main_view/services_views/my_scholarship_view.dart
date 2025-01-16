@@ -171,10 +171,10 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
                   langProvider: langProvider,
                 ),
               ),
-              CustomInformationContainerField(
-                title:  localization.major,
-                description: element.academicCareer ?? '- -',
-              ),
+              // CustomInformationContainerField(
+              //   title:  localization.major,
+              //   description: element.academicCareer ?? '- -',
+              // ),
               CustomInformationContainerField(
                 title: localization.programDuration,
                 description: element.numberOfYears ?? '- -',

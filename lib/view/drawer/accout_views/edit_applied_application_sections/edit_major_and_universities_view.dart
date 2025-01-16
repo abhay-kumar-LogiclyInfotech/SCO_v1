@@ -974,37 +974,34 @@ class _EditMajorsAndUniversityViewState
 
   Widget _submitAndBackButton({required AppLocalizations localization,required LanguageChangeViewModel langProvider}) {
     /// SubmitButton
-    return  Padding(
-      padding:  EdgeInsets.all(kPadding),
-      child: Column(
-        children: [
+    return  Column(
+      children: [
+        kFormHeight,
+        Consumer<EditApplicationSectionsViewModel>(
+          builder: (context,provider,_){
+            return CustomButton(buttonName: localization.update, isLoading:
+                provider.apiResponse.status == Status.LOADING
+                , textDirection: getTextDirection(langProvider), onTap: ()
+            async{
+              final logger =  Logger();
+              if(validateUniversityAndMajorsDetails(langProvider)){
+                dynamic form = peopleSoftApplication?.toJson();
+                form['majorWishList'] = _majorsWishlist.map((element){return element.editMajorsListToJson();}).toList();
+                form['universtiesPriorityList'] = _universityPriorityList.map((element){return element.editUniversityListToJson();}).toList();
+                log(jsonEncode(form));
 
-          Consumer<EditApplicationSectionsViewModel>(
-            builder: (context,provider,_){
-              return CustomButton(buttonName: localization.update, isLoading:
-                  provider.apiResponse.status == Status.LOADING
-                  , textDirection: getTextDirection(langProvider), onTap: ()
-              async{
-                final logger =  Logger();
-                if(validateUniversityAndMajorsDetails(langProvider)){
-                  dynamic form = peopleSoftApplication?.toJson();
-                  form['majorWishList'] = _majorsWishlist.map((element){return element.editMajorsListToJson();}).toList();
-                  form['universtiesPriorityList'] = _universityPriorityList.map((element){return element.editUniversityListToJson();}).toList();
-                  log(jsonEncode(form));
+                await provider.editApplicationSections(sectionType: EditApplicationSection.universityPriority, applicationNumber: widget.applicationStatusDetails.admApplicationNumber, form: form);
+                await _refreshView();
+              }
+            });
 
-                  await provider.editApplicationSections(sectionType: EditApplicationSection.universityPriority, applicationNumber: widget.applicationStatusDetails.admApplicationNumber, form: form);
-                  await _refreshView();
-                }
-              });
-
-            },
-          ),
+          },
+        ),
 
 
-          kFormHeight,
-          const KReturnButton(),
-        ],
-      ),
+        kFormHeight,
+        const KReturnButton(),
+      ],
     );
   }
 

@@ -1698,8 +1698,6 @@ class Attachment {
   // To update attachment
   Map<String, dynamic> updateAttachmentToJson() {
     return {
-
-
       "processCD": processCdController.text,
       "documentCD": documentCdController.text,
       "description": descriptionController.text,

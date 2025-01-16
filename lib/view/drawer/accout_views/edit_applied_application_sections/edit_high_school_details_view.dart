@@ -44,47 +44,59 @@ class _EditHighSchoolDetailsViewState extends State<EditHighSchoolDetailsView> w
   void initState() {
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      final langProvider = Provider.of<LanguageChangeViewModel>(context,listen: false);
-    /// Making api call to ps-application
-    final psApplicationProvider = Provider.of<GetApplicationSectionViewModel>(context, listen: false);
-    await psApplicationProvider.getApplicationSections(
-        applicationNumber:
-        widget.applicationStatusDetails.admApplicationNumber);
+      await _refreshView();
+    }
 
-    if (psApplicationProvider.apiResponse.status == Status.COMPLETED && psApplicationProvider.apiResponse.data?.data.psApplication.graduationList != null) {
-      final highSchoolList = psApplicationProvider.apiResponse.data?.data.psApplication.highSchoolList;
-      peopleSoftApplication = psApplicationProvider.apiResponse.data?.data.psApplication;
-
-      if (highSchoolList?.isNotEmpty ?? false) {
-        for (int index = 0; index < highSchoolList!.length; index++) {
-          var element = highSchoolList[index];
-          _highSchoolList.add(element);
-
-          _populateHighSchoolStateDropdown(langProvider: langProvider,index: index);
-          _populateHighSchoolNameDropdown(langProvider: langProvider,index: index);
-          _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider,index: index);
-
-        }
-      }
-
-
-      final gradList = psApplicationProvider.apiResponse.data?.data.psApplication.graduationList;
-
-      if (gradList?.isNotEmpty ?? false) {
-        for (int index = 0; index < gradList!.length; index++) {
-          var element = gradList[index];
-          _graduationDetailsList.add(element);
-          /// Add to the list
-          /// populate dropdowns
-          _populateGraduationLastTermMenuItemsList(
-              langProvider: langProvider, index: index);
-          _populateUniversityMenuItemsList(
-              langProvider: langProvider, index: index);
-        }
-      }
-
-      setState(() {});}});
+    );
     super.initState();
+  }
+
+  _refreshView()async{
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+
+      _highSchoolList.clear();
+      _graduationDetailsList.clear();
+
+      final langProvider = Provider.of<LanguageChangeViewModel>(context,listen: false);
+      /// Making api call to ps-application
+      final psApplicationProvider = Provider.of<GetApplicationSectionViewModel>(context, listen: false);
+      await psApplicationProvider.getApplicationSections(
+          applicationNumber:
+          widget.applicationStatusDetails.admApplicationNumber);
+
+      if (psApplicationProvider.apiResponse.status == Status.COMPLETED && psApplicationProvider.apiResponse.data?.data.psApplication.graduationList != null) {
+        final highSchoolList = psApplicationProvider.apiResponse.data?.data.psApplication.highSchoolList;
+        peopleSoftApplication = psApplicationProvider.apiResponse.data?.data.psApplication;
+
+        if (highSchoolList?.isNotEmpty ?? false) {
+          for (int index = 0; index < highSchoolList!.length; index++) {
+            var element = highSchoolList[index];
+            _highSchoolList.add(element);
+
+            _populateHighSchoolStateDropdown(langProvider: langProvider,index: index);
+            _populateHighSchoolNameDropdown(langProvider: langProvider,index: index);
+            _populateHighSchoolCurriculumTypeDropdown(langProvider: langProvider,index: index);
+
+          }
+        }
+
+
+        final gradList = psApplicationProvider.apiResponse.data?.data.psApplication.graduationList;
+
+        if (gradList?.isNotEmpty ?? false) {
+          for (int index = 0; index < gradList!.length; index++) {
+            var element = gradList[index];
+            _graduationDetailsList.add(element);
+            /// Add to the list
+            /// populate dropdowns
+            _populateGraduationLastTermMenuItemsList(
+                langProvider: langProvider, index: index);
+            _populateUniversityMenuItemsList(
+                langProvider: langProvider, index: index);
+          }
+        }
+
+        setState(() {});}});
   }
 
 
@@ -311,32 +323,42 @@ class _EditHighSchoolDetailsViewState extends State<EditHighSchoolDetailsView> w
       padding:  EdgeInsets.all(kPadding),
       child: Column(
         children: [
-          CustomButton(buttonName: localization.update, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()
-          async{
-            final logger =  Logger();
-            if(validateHighSchoolDetails(langProvider)){
-              dynamic form = peopleSoftApplication?.toJson();
-              var graduationRecords = form['graduationList'] = _graduationDetailsList.map((element){return element.toJson();}).toList();
-              var highSchoolRecords = form['highSchoolList'] = _highSchoolList.map((element){return element.toJson();}).toList();
 
 
 
 
-              final academicCareer =  widget.applicationStatusDetails.acadCareer;
-              final scholarshipType =  widget.applicationStatusDetails.scholarshipType;
+        Consumer<EditApplicationSectionsViewModel>(
+          builder: (context,provider,_){
+            return CustomButton(buttonName: localization.update,
+                isLoading: provider.apiResponse.status == Status.LOADING, textDirection: getTextDirection(langProvider), onTap: ()
+            async{
+              final logger =  Logger();
+              if(validateHighSchoolDetails(langProvider)){
+                dynamic form = peopleSoftApplication?.toJson();
+                var graduationRecords = form['graduationList'] = _graduationDetailsList.map((element){return element.toJson();}).toList();
+                var highSchoolRecords = form['highSchoolList'] = _highSchoolList.map((element){return element.toJson();}).toList();
 
-              String highestQualification = getHighestQualification(graduationDetailsList: _graduationDetailsList,academicCareer: academicCareer, scholarshipType: scholarshipType, highSchoolRecords: highSchoolRecords, graduationRecords: graduationRecords);
 
-              form['highestQualification'] = highestQualification;
-              form['graduationList'] = graduationRecords;
-              form['highSchoolList'] = highSchoolRecords;
 
-              log(jsonEncode(form));
 
-              // final provider = Provider.of<EditApplicationSectionsViewModel>(context,listen: false);
-              // await provider.editApplicationSections(sectionType: EditApplicationSection.education,applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form);
-            }
-          }),
+                final academicCareer =  widget.applicationStatusDetails.acadCareer;
+                final scholarshipType =  widget.applicationStatusDetails.scholarshipType;
+
+                String highestQualification = getHighestQualification(graduationDetailsList: _graduationDetailsList,academicCareer: academicCareer, scholarshipType: scholarshipType, highSchoolRecords: highSchoolRecords, graduationRecords: graduationRecords);
+
+                form['highestQualification'] = highestQualification;
+                if(shouldShowGraduationSection(academicCareer))form['graduationList'] = graduationRecords;
+                form['highSchoolList'] = highSchoolRecords;
+                await provider.editApplicationSections(sectionType: EditApplicationSection.education,applicationNumber: widget.applicationStatusDetails.admApplicationNumber,form: form);
+                await _refreshView();
+              }
+            });
+          },
+        )  ,
+
+
+
+
           kFormHeight,
           const KReturnButton(),
         ],

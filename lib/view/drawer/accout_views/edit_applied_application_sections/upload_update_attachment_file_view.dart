@@ -120,7 +120,7 @@ RichText(
       kFormHeight,
       if(widget.isValid ?? false) Column(
         children: [
-          const Text("Invalid Document Uploaded. Please Re-Upload.",style: TextStyle(color: AppColors.DANGER),),
+           Text(localization.invalidDocument,style: const TextStyle(color: AppColors.DANGER),),
           kFormHeight,
         ],
       ),

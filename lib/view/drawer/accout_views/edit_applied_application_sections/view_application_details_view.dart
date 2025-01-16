@@ -1396,10 +1396,24 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                     itemBuilder: (context, index) {
                       // final attachment = _filteredAttachmentsList[index]; // From filtered list
                       final myAttachment = _filteredMyAttachmentsList[index]; // From filtered list
-                     return Column(
+                      final required = myAttachment.requiredController.text.toString();
+
+                      return Column(
                        children: [
                          CustomInformationContainerField(title: localization.sr,description: (index + 1).toString(),),
-                         CustomInformationContainerField(title: localization.requestAttachfile, description:  getFullNameFromLov(langProvider: langProvider,lovCode: _selectedChecklistCode,code: myAttachment.attachmentNameController.text).replaceAll('\n', ''),),
+                         CustomInformationContainerField(title: localization.requestAttachfile,
+
+                           // description:  getFullNameFromLov(langProvider: langProvider,lovCode: _selectedChecklistCode,code: myAttachment.attachmentNameController.text).replaceAll('\n', ''),
+                             descriptionAsWidget:
+                             RichText(
+                                 text: TextSpan(children: [
+                                   TextSpan(
+                                     text:  getFullNameFromLov(langProvider: langProvider,lovCode: _selectedChecklistCode,code: myAttachment.attachmentNameController.text).replaceAll('\n', ''),
+                                     style: AppTextStyles.normalTextStyle().copyWith(fontWeight: FontWeight.w600,fontSize: 12,color: AppColors.scoButtonColor),
+                                   ),
+                                   TextSpan(text: (required == 'XMRL' || required == 'MRL' || required == 'NMRL') ? "*" : "", style: AppTextStyles.titleBoldTextStyle().copyWith(fontWeight: FontWeight.w600, color: Colors.red),),
+                                 ]))
+                         ),
                          CustomInformationContainerField(title: localization.fileName,description: myAttachment.userFileNameController.text,),
                          CustomInformationContainerField(title: localization.comment,description: myAttachment.commentController.text,isLastItem: true,),
                          if(index < _filteredMyAttachmentsList.length - 1)  sectionDivider(color: AppColors.darkGrey)

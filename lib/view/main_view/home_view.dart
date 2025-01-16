@@ -848,7 +848,8 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                     children: [
                       kFormHeight,
                       Container(
-                        padding: EdgeInsets.only(left: kPadding, right: kPadding, bottom: 10),
+                        color: Colors.transparent,
+                        padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
                         width: double.infinity,
                         child:  Row(
                           mainAxisSize: MainAxisSize.max,
@@ -1030,7 +1031,8 @@ CustomVerticalDivider(height: 35),
                       const Divider(),
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: kPadding,vertical: kPadding),
+                        color: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
                         child: screenWidth < 370  ?
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

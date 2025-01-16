@@ -411,7 +411,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         /// ****************************************************************************************************************************************************
         /// graduation level
         /// For student who are not applying ug scholarship will see options as editable to they can edit them to select graduation level
-        (index > 0 && widget.academicCareer != 'UGRD' && widget.academicCareer != 'DDS')
+        (index >= 0 && widget.academicCareer != 'UGRD' && widget.academicCareer != 'DDS')
             ?
         /// WE don't need to set level statically
         Column(
@@ -508,6 +508,9 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                           /// Move focus to the next field
                           Utils.requestFocus(focusNode: graduationInfo.countryFocusNode, context: context,
                           );
+                        }
+                        if((graduationInfo.levelController.text == markHighestGraduationQualification(Constants.referenceValuesGraduation, widget.graduationDetailsList.map((element){return element.toJson();}).toList()))){
+                          _updateShowCurrentlyStudyingWithFalse(graduationInfo);
                         }
                       });
                     },
