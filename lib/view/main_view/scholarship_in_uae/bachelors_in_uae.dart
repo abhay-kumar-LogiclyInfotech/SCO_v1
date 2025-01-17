@@ -72,7 +72,7 @@ class _BachelorsInUaeViewState extends State<BachelorsInUaeView>
         'title': localization.internalBachelor,
         'subTitle': "This is Subtitle 1",
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
-        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const WebView(url: "url",scholarshipType: 'INT',),),
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute( WebView(url: "url",scholarshipType: 'INT',),),
         ),
       },
       {

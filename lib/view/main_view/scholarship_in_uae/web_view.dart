@@ -20,9 +20,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WebView extends StatefulWidget {
   final String url;
-  final String scholarshipType;
+   String? scholarshipType;
+   String? title;
 
-  const WebView({super.key, required this.url, required this.scholarshipType});
+   WebView({super.key, required this.url,  this.scholarshipType,this.title});
 
   @override
   State<WebView> createState() => _WebViewState();
@@ -127,8 +128,8 @@ class _WebViewState extends State<WebView> {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(
-          titleAsString: getScholarshipTypeText(widget.scholarshipType,localization)),
+      appBar: widget.scholarshipType == null ? CustomSimpleAppBar(titleAsString: widget.title ?? "SCO",) :  CustomSimpleAppBar(
+          titleAsString: getScholarshipTypeText(widget.scholarshipType!,localization)),
       body: _isValidUrl(widget.url)
           ? Stack(children: [
               _isLoading

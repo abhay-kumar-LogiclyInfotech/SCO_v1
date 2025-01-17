@@ -79,7 +79,7 @@ class DrawerRepository {
   Future<ABriefAboutScoModel> aBriefAboutSco(
       {required dynamic body, required dynamic headers}) async {
     dynamic response = await _apiServices.getPostApiServices(
-      url: AppUrls.aBriefAboutSco,
+      url: "https://sco.ae/jsonws/pageview.pagecontent/get-page-content-by-page-url",
       headers: headers,
       body: body
     );

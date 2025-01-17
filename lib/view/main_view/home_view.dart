@@ -26,6 +26,8 @@ import 'package:sco_v1/view/authentication/login/login_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/application_status_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/main_view/notifications/notifications_view.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_abroad/scholarship_in_abroad_view.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_uae/scholarship_in_uae_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/finance.dart';
@@ -1277,19 +1279,19 @@ CustomVerticalDivider(height: 35),
         'title': localization.scholarshipInternal,
         'subTitle': localization.internalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
-        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
-              createRoute(WebView(
-                  url: AppUrls.scholarshipInsideUae, scholarshipType: 'INT')),
-            ),
+        // "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
+        //       createRoute(WebView(
+        //           url: AppUrls.scholarshipInsideUae, scholarshipType: 'INT')),
+        //     ),
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView()),),
+
       },
       {
         'title': localization.scholarshipExternal,
         'subTitle': localization.externalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
-        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
-              createRoute(WebView(
-                  url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')),
-            ),
+        // "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')),),
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView()),),
       },
     ];
 

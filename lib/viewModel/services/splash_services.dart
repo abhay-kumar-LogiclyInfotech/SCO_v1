@@ -29,12 +29,9 @@ class SplashServices {
       //*------Api call for SCO About Us-------*/
       // Initialize data after widget build phase:
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final langProvider =
-            Provider.of<LanguageChangeViewModel>(context, listen: false);
-        final provider =
-            Provider.of<ABriefAboutScoViewModel>(context, listen: false);
-        await provider.aBriefAboutSco(
-            context: context, langProvider: langProvider);
+        final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+        final provider = Provider.of<ABriefAboutScoViewModel>(context, listen: false);
+        // await provider.aBriefAboutSco(context: context, langProvider: langProvider);
       });
 
     }

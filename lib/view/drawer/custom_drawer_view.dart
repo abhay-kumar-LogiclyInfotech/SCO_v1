@@ -13,12 +13,14 @@ import 'package:sco_v1/view/drawer/custom_drawer_views/sco_programs.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/vision_and_mission_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/account_view.dart';
 import 'package:sco_v1/view/main_view.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../resources/app_colors.dart';
+import '../../resources/app_urls.dart';
 import '../../resources/components/account/profile_with_camera_button.dart';
 import '../../resources/components/custom_advanced_switch.dart';
 import '../../resources/getRoles.dart';
@@ -294,12 +296,13 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
-                                _navigationServices.pushCupertino(
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            const ABriefAboutScoView(
-                                              appBar: true,
-                                            )));
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>WebView(url: AppUrls.briefAboutSco, title: localization.aBriefAboutSCO,)));
+                                // _navigationServices.pushCupertino(
+                                //     CupertinoPageRoute(
+                                //         builder: (context) =>
+                                //             const ABriefAboutScoView(
+                                //               appBar: true,
+                                //             )));
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(

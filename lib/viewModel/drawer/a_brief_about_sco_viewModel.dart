@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:sco_v1/models/drawer/a_brief_about_sco_model.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
@@ -22,6 +23,11 @@ class ABriefAboutScoViewModel with ChangeNotifier {
 
 
   late AlertServices _alertServices ;
+
+  ABriefAboutScoViewModel(){
+    final GetIt getIt = GetIt.instance;
+   _alertServices = getIt.get<AlertServices>();
+  }
   //*------Accessing Api Services------*
 
   final DrawerRepository _drawerRepository = DrawerRepository();
@@ -55,7 +61,8 @@ class ABriefAboutScoViewModel with ChangeNotifier {
       };
 
       //*------Create Body------*
-      final body = <String, String>{"pageUrl": "/web/sco/privacy-policy"};
+      // final body = <String, String>{"pageUrl": "/web/sco/privacy-policy"};
+      final body = <String, String>{"pageUrl": "/web/about-sco/a-brief-about-the-office"};
 
       //*-----Calling Api Start-----*
       final response =

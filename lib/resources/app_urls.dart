@@ -71,13 +71,19 @@ class AppUrls {
 static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
 
 
+
+
+//// ******************************************************** Urls for web view Start **********************************************************
+  static const String _staticWebPagesDomainUrl = "https://sco.ae/";
+  static String get briefAboutSco => "${_staticWebPagesDomainUrl}ar/web/sco/about-sco/a-brief-about-the-office";
+
 /// Scholarship inside uae
-  static String get scholarshipInsideUae => "${_domainUrl}ar/web/sco/scholarships-inside-uae";
+  static String get scholarshipInsideUae => "${_staticWebPagesDomainUrl}ar/web/sco/scholarships-inside-uae";
 /// scholarship outside uae
-  static String get scholarshipOutsideUae => "${_domainUrl}ar/web/sco/scholarships-outside-uae";
+  static String get scholarshipOutsideUae => "${_staticWebPagesDomainUrl}ar/web/sco/scholarships-outside-uae";
 
 
-  static const String _scholarshipInUae = "${_domainUrl}ar/web/sco/scholarship-whithin-the-uae/";
+  static const String _scholarshipInUae = "${_staticWebPagesDomainUrl}ar/web/sco/scholarship-whithin-the-uae/";
   /// bachelor links
   static const String _bachelorInUae = "${_scholarshipInUae}bachelor-s-degree-scholarship/";
   static String get bachelorsTermsAndConditions => "${_bachelorInUae}bachelor-s-degree-scholarship-admission-terms-and-conditions";
@@ -89,7 +95,7 @@ static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanoti
 
 
 
-  static String get graduateTermsAndConditions => "${_domainUrl}web/sco/scholarship-within-uae/graduate-studies-scholarship-admission-terms-and-conditions";
+  static String get graduateTermsAndConditions => "${_staticWebPagesDomainUrl}web/sco/scholarship-within-uae/graduate-studies-scholarship-admission-terms-and-conditions";
   static String get graduateUniversityAndSpecializationList => "${_scholarshipInUae}graduate-studies-scholarship/sco-accredited-universities-and-specializations-list";
   static String get graduateDegreePrivileges => "${_scholarshipInUae}graduate-studies-scholarship/graduate-studies-scholarship-privileges";
   static String get graduateDegreeStudentObligations => "${_scholarshipInUae}graduate-studies-scholarship/student-obligations-for-the-graduate-studies-scholarship";
@@ -104,7 +110,7 @@ static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanoti
   static String get meteorologicalDegreeApplyingProcedure => "${_meteorological}meteorological-scholarship-applying-procedures";
 
 
-  static const String _scholarshipOutsideUae = "${_domainUrl}ar/web/sco/scholarship-outside-the-uae/";
+  static const String _scholarshipOutsideUae = "${_staticWebPagesDomainUrl}ar/web/sco/scholarship-outside-the-uae/";
   static const String _distinguishedOutsideUae = "${_scholarshipOutsideUae}distinguished-doctors-scholarship/";
   static String get distinguishedTermsAndConditions => "${_distinguishedOutsideUae}distinguished-doctors-scholarship-admission-terms-and-conditions";
   static String get distinguishedDegreePrivileges => "${_distinguishedOutsideUae}distinguished-doctors-scholarship-privileges";
@@ -122,10 +128,11 @@ static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanoti
 
 
   static const String _graduateOutsideUae = "${_scholarshipOutsideUae}graduate-studies-scholarship/";
-  static String get graduateOutsideUaeTermsAndConditions => "${_scholarshipOutsideUae}graduate-studies-scholarship-admission-terms-and-conditions";
-  static String get graduateOutsideUaeUniversityAndSpecializationList => "${_scholarshipOutsideUae}sco-accredited-universities-and-specializations-list";
-  static String get graduateOutsideUaeDegreePrivileges => "${_scholarshipOutsideUae}graduate-studies-scholarship-privileges";
-  static String get graduateOutsideUaeDegreeStudentObligations => "${_scholarshipOutsideUae}student-obligations-for-the-graduate-studies-scholarship";
-  static String get graduateOutsideUaeDegreeApplyingProcedure => "${_scholarshipOutsideUae}graduate-studies-scholarship-applying-procedures";
+  static String get graduateOutsideUaeTermsAndConditions => "${_graduateOutsideUae}graduate-studies-scholarship-admission-terms-and-conditions";
+  static String get graduateOutsideUaeUniversityAndSpecializationList => "${_graduateOutsideUae}sco-accredited-universities-and-specializations-list";
+  static String get graduateOutsideUaeDegreePrivileges => "${_graduateOutsideUae}graduate-studies-scholarship-privileges";
+  static String get graduateOutsideUaeDegreeStudentObligations => "${_graduateOutsideUae}student-obligations-for-the-graduate-studies-scholarship";
+  static String get graduateOutsideUaeDegreeApplyingProcedure => "${_graduateOutsideUae}graduate-studies-scholarship-applying-procedures";
+//// ******************************************************** Urls for web view Start **********************************************************
 
 }
