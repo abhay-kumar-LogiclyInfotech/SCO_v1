@@ -17,8 +17,7 @@ class Constants {
 
   static Map<String, Response> lovCodeMap = {};
 
-  static RegExp get emiratesIdRegex =>
-      RegExp(r'\b784-[0-9]{4}-[0-9]{7}-[0-9]{1}\b');
+  static RegExp get emiratesIdRegex => RegExp(r'\b784-[0-9]{4}-[0-9]{7}-[0-9]{1}\b');
 
   static PinTheme defaultPinTheme = PinTheme(
       width: 44,
@@ -66,7 +65,6 @@ class Constants {
     {"code": "6", "value": "Elementary", "order": 0}, // Below 10th grade
     {"code": "7", "value": "Preliminary", "order": 0}, // Below 10th grade
   ];
-
 
   static const referenceValuesGraduation = [
     {"code": "UG", "value": "Bachelor", "order": 1},
@@ -571,8 +569,6 @@ static String getNameOfScholarshipByConfigurationKey({required AppLocalizations 
    }
    return scholarshipName;
  }
-
-
 
 }
 

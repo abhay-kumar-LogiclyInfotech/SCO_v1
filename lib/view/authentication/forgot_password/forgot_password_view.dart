@@ -143,15 +143,16 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 33),
+                            kSmallSpace,
 
-                            //heading:
+                            // heading:
                             _heading(provider),
-                            const SizedBox(height: 25),
 
+                            // subheading
                             _subHeading(provider),
-                            const SizedBox(height: 25),
-                            //email Address Field;
+                            kFormHeight,
+
+                            // email Address Field
                             _emailAddressField(provider),
                             const SizedBox(height: 10),
 
@@ -182,25 +183,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
               ],
             ),
           ),
-          Positioned(left: 10,child: SafeArea(child: ChangeLanguageButton())),
-
+          Positioned(left: 10,right:10,child: SafeArea(child: ChangeLanguageButton())),
         ],
       ),
     );
   }
 
-  Widget _heading(LanguageChangeViewModel provider) {
-    return Directionality(
-      textDirection: getTextDirection(provider),
-      child: Text(
-        AppLocalizations.of(context)!.forgotPasswordTitle,
-        style: const TextStyle(
-          color: AppColors.scoButtonColor,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
+  Widget _heading(LanguageChangeViewModel langProvider) {
+    return Utils.authViewTitle(langProvider: langProvider, text: AppLocalizations.of(context)!.forgotPasswordTitle);
   }
 
   Widget _subHeading(LanguageChangeViewModel provider) {
@@ -249,9 +239,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           decoration: BoxDecoration(
               border: Border.all(color: AppColors.darkGrey),
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(10),
+          ),
           child: Text(
             _captchaText ?? '',
+            textAlign: TextAlign.center,
             style: AppTextStyles.titleTextStyle(),
           ),
         ),
@@ -276,8 +268,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       textInputType: TextInputType.number,
       leading: SvgPicture.asset(
         "assets/captcha.svg",
-        // height: 18,
-        // width: 18,
       ),
       onChanged: (value) {},
     );
@@ -398,29 +388,15 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
 
   bool _validateForm({required LanguageChangeViewModel langProvider}) {
     if (_emailController.text.isEmpty) {
-      // _alertServices.flushBarErrorMessages(
-      //     message: AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
-      //     // context: context,
-      //     provider: langProvider);
       _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.pleaseEnterYourEmailAddress);
-
       return false;
     }
     if (_captchaController.text.isEmpty) {
-      // _alertServices.flushBarErrorMessages(
-      //     message:AppLocalizations.of(context)!.pleaseEnterCaptcha,
-      //     // context: context,
-      //     provider: langProvider);
       _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.pleaseEnterCaptcha);
-
       return false;
     }
     if (_captchaText != _captchaController.text) {
       _rotate();
-      // _alertServices.flushBarErrorMessages(
-      //     message: AppLocalizations.of(context)!.incorrectCaptcha,
-      //     // context: context,
-      //     provider: langProvider);
       _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.incorrectCaptcha);
       return false;
     }

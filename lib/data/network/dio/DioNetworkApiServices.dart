@@ -12,27 +12,27 @@ class DioNetworkApiServices extends DioBaseApiServices {
 
   DioNetworkApiServices() {
     // Initialize Logger
-    // _dio.interceptors.add(InterceptorsWrapper(
-    //   onRequest: (options, handler) {
-    //     logger.i('Request: ${options.method} ${options.uri}');
-    //     logger.i('Request Headers: ${options.headers}');
-    //     logger.d('Request Data: ${options.data}');
-    //     return handler.next(options);
-    //   },
-    //   onResponse: (response, handler) {
-    //     logger.d('Response Status: ${response.statusCode}');
-    //     logger.d('Response Data: ${response.data}');
-    //     return handler.next(response);
-    //   },
-    //   onError: (DioError e, handler) {
-    //     logger.e('Error: ${e.message}');
-    //     if (e.response != null) {
-    //       logger.e('Error Response Status: ${e.response?.statusCode}');
-    //       logger.e('Error Response Data: ${e.response?.data}');
-    //     }
-    //     return handler.next(e);
-    //   },
-    // ));
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        logger.i('Request: ${options.method} ${options.uri}');
+        logger.i('Request Headers: ${options.headers}');
+        logger.d('Request Data: ${options.data}');
+        return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        logger.d('Response Status: ${response.statusCode}');
+        logger.d('Response Data: ${response.data}');
+        return handler.next(response);
+      },
+      onError: (DioError e, handler) {
+        logger.e('Error: ${e.message}');
+        if (e.response != null) {
+          logger.e('Error Response Status: ${e.response?.statusCode}');
+          logger.e('Error Response Data: ${e.response?.data}');
+        }
+        return handler.next(e);
+      },
+    ));
   }
 
   @override
@@ -183,8 +183,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
       case 500:
         throw InternalServerErrorException(_errorMessage(response));
       default:
-        throw FetchDataException(
-            'Error occurred while communicating with server with status code ${response.statusCode}');
+        throw FetchDataException('Error occurred while communicating with server with status code ${response.statusCode}');
     }
   }
 
@@ -233,8 +232,6 @@ class DioNetworkApiServices extends DioBaseApiServices {
         final error = errorData['error'];
         final errors = errorData['errors'];
         final message = errorData['message'];
-
-
 
         if (message != null) {
           return message.toString();

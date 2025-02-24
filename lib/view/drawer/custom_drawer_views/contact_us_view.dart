@@ -248,6 +248,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                   const SizedBox(height: 7),
                   //*----Post Office Text-----*
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         poBox,
@@ -261,7 +262,8 @@ class _ContactUsViewState extends State<ContactUsView> {
                           );
                         },
                         child: Text(
-                          poBoxNumber,
+                          " $poBoxNumber ",
+                          textDirection: TextDirection.ltr,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -285,6 +287,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                           },
                           child: Text(
                             phoneNo1,
+                            textDirection: TextDirection.ltr,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 14),
                           ),
@@ -301,6 +304,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                           },
                           child: Text(
                             phoneNo2,
+                            textDirection: TextDirection.ltr,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 14),
                           ),

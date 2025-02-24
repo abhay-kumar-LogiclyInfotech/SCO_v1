@@ -122,36 +122,6 @@ class _SignUpViewState extends State<SignUpView>
 
   @override
   void initState() {
-    // _firstNameController = TextEditingController();
-    // _secondNameController = TextEditingController();
-    // _thirdFourthNameController = TextEditingController();
-    // _familyNameController = TextEditingController();
-    // _dobController = TextEditingController();
-    // _dobDayController = TextEditingController();
-    // _dobMonthController = TextEditingController();
-    // _dobYearController = TextEditingController();
-    // _genderController = TextEditingController();
-    // _emailController = TextEditingController();
-    // _confirmEmailController = TextEditingController();
-    // _passwordController = TextEditingController();
-    // _confirmPasswordController = TextEditingController();
-    // _countryController = TextEditingController();
-    // _emiratesIdController = TextEditingController();
-    // _studentPhoneNumberController = TextEditingController();
-    //
-    // _firstNameFocusNode = FocusNode();
-    // _secondNameFocusNode = FocusNode();
-    // _thirdFourthNameFocusNode = FocusNode();
-    // _familyNameFocusNode = FocusNode();
-    // _dobFocusNode = FocusNode();
-    // _genderFocusNode = FocusNode();
-    // _emailFocusNode = FocusNode();
-    // _confirmEmailFocusNode = FocusNode();
-    // _passwordFocusNode = FocusNode();
-    // _confirmPasswordFocusNode = FocusNode();
-    // _countryFocusNode = FocusNode();
-    // _emiratesIdFocusNode = FocusNode();
-    // _studentPhoneNumberFocusNode = FocusNode();
 
     final provider =
         Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -216,15 +186,7 @@ class _SignUpViewState extends State<SignUpView>
     super.dispose();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   gender = [
-  //     AppLocalizations.of(context)!.male,
-  //     AppLocalizations.of(context)!.female,
-  //     AppLocalizations.of(context)!.transgender,
-  //   ];
-  // }
+
 
   bool _processing = false;
 
@@ -244,6 +206,7 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _buildUI() {
     final localization = AppLocalizations.of(context)!;
+    final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Stack(
       alignment: Alignment.topLeft,
       children: [
@@ -283,6 +246,8 @@ class _SignUpViewState extends State<SignUpView>
                 height: 55,
                 width: 110,
               )),
+              kSmallSpace,
+              Utils.authViewTitle(langProvider: langProvider, text: AppLocalizations.of(context)!.signUp),
               Expanded(
                 child: Consumer<LanguageChangeViewModel>(
                   builder: (context, langProvider, _) {
@@ -293,8 +258,7 @@ class _SignUpViewState extends State<SignUpView>
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 30),
-                            //sign Up with UAE Pass;
+                            kSmallSpace,                            //sign Up with UAE Pass;
                             _signUpWithUaePassButton(
                                 langProvider: langProvider,
                                 localization: localization),
@@ -390,7 +354,7 @@ class _SignUpViewState extends State<SignUpView>
             ],
           ),
         ),
-        Positioned(left: 10, child: SafeArea(child: ChangeLanguageButton())),
+        Positioned(left:10,right:10,child: SafeArea(child: ChangeLanguageButton())),
       ],
     );
   }
@@ -411,7 +375,6 @@ class _SignUpViewState extends State<SignUpView>
       onTap: () {
         _alertServices.toastMessage(localization.comingSoon);
       },
-
     );
   }
 

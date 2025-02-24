@@ -149,7 +149,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
               ],
             ),
           ),
-          Positioned(left: 10, child: SafeArea(child: ChangeLanguageButton())),
+          Positioned(left: 10,right: 10, child: SafeArea(child: ChangeLanguageButton())),
         ],
       ),
     );

@@ -24,7 +24,7 @@ class LanguageChangeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
- ValueNotifier<bool> _languageController = ValueNotifier<bool>(false);
+ final ValueNotifier<bool> _languageController = ValueNotifier<bool>(false);
 
   setLanguageControllerValue(value){
     _languageController.value = value;

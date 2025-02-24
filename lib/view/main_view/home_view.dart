@@ -1,23 +1,16 @@
-import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/Test.dart';
-import 'package:sco_v1/controller/dependency_injection.dart';
 import 'package:sco_v1/data/response/status.dart';
 import 'package:sco_v1/models/home/ScoProgramsTileModel.dart';
-import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
-import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
 import 'package:sco_v1/resources/components/carsousel_slider.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_vertical_divider.dart';
-import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/resources/components/requests_count_container.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/utils/utils.dart';
@@ -28,7 +21,6 @@ import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 import 'package:sco_v1/view/main_view/notifications/notifications_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_abroad/scholarship_in_abroad_view.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/scholarship_in_uae_view.dart';
-import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/view/main_view/services_views/academic_advisor.dart';
 import 'package:sco_v1/view/main_view/services_views/finance.dart';
 import 'package:sco_v1/view/main_view/services_views/finance_details_views/salaryDetailsView.dart';
@@ -44,14 +36,12 @@ import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel
 import '../../hive/hive_manager.dart';
 import '../../models/services/MyFinanceStatusModel.dart';
 import '../../resources/app_colors.dart';
-import '../../resources/app_urls.dart';
 import '../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../resources/getRoles.dart';
 import '../../viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/alert_services.dart';
-import '../responsive.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -101,12 +91,10 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       setState(() {});
 
       // Getting Fresh Roles
-      final getRolesProvider =
-          Provider.of<GetRoleViewModel>(context, listen: false);
+      final getRolesProvider = Provider.of<GetRoleViewModel>(context, listen: false);
       await getRolesProvider.getRoles();
       role = getRoleFromList(HiveManager.getRole());
-      final profilePictureProvider =
-          Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
+      final profilePictureProvider = Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
 
       /// Fetching profile picture url
       await profilePictureProvider.getProfilePictureUrl();
@@ -117,16 +105,11 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
         setProcessing(true);
 
         /// Fetch data from providers
-        final myFinanceProvider =
-            Provider.of<MyFinanceStatusViewModel>(context, listen: false);
-        final requestsProvider =
-            Provider.of<GetAllRequestsViewModel>(context, listen: false);
-        final talkToMyAdvisor =
-            Provider.of<GetMyAdvisorViewModel>(context, listen: false);
-        final getNotificationsCount =
-            Provider.of<GetNotificationsCountViewModel>(context, listen: false);
-        final getAllNotificationProvider =
-            Provider.of<GetAllNotificationsViewModel>(context, listen: false);
+        final myFinanceProvider = Provider.of<MyFinanceStatusViewModel>(context, listen: false);
+        final requestsProvider = Provider.of<GetAllRequestsViewModel>(context, listen: false);
+        final talkToMyAdvisor = Provider.of<GetMyAdvisorViewModel>(context, listen: false);
+        final getNotificationsCount = Provider.of<GetNotificationsCountViewModel>(context, listen: false);
+        final getAllNotificationProvider = Provider.of<GetAllNotificationsViewModel>(context, listen: false);
         try {
           // Fetch notifications count
           await getNotificationsCount.getNotificationsCount();
@@ -1133,12 +1116,10 @@ CustomVerticalDivider(height: 35),
           case Status.NONE:
             return showVoid;
           case Status.COMPLETED:
-            final listOfAdvisors =
-                provider.apiResponse.data?.data?.listOfAdvisor ?? [];
-            final topAdvisor =
-                listOfAdvisors.isNotEmpty ? listOfAdvisors[0] : null;
+            final listOfAdvisors = provider.apiResponse.data?.data?.listOfAdvisor ?? [];
+            final topAdvisor = listOfAdvisors.isNotEmpty ? listOfAdvisors[0] : null;
 
-            return Column(
+            return listOfAdvisors.isEmpty ? showVoid : Column(
               children: [
                 kFormHeight,
                 _homeViewCard(
@@ -1279,18 +1260,12 @@ CustomVerticalDivider(height: 35),
         'title': localization.scholarshipInternal,
         'subTitle': localization.internalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
-        // "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
-        //       createRoute(WebView(
-        //           url: AppUrls.scholarshipInsideUae, scholarshipType: 'INT')),
-        //     ),
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView()),),
-
       },
       {
         'title': localization.scholarshipExternal,
         'subTitle': localization.externalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
-        // "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')),),
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView()),),
       },
     ];

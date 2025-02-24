@@ -350,10 +350,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
               ],
             ),
           ),
-          Positioned(left: 10,child: SafeArea(child: ChangeLanguageButton())),
-          // Positioned(
-          //     left: kPadding,
-          //     child: SafeArea(child: _selectLanguage(langProvider)))
+          Positioned(left:10,right:10,child: SafeArea(child: ChangeLanguageButton())),
         ],
       ),)
     );

@@ -20,7 +20,7 @@ abstract class DioBaseApiServices {
     required dynamic body,
   });
 
-  // update in http
+  // known as update in http
   Future<dynamic> dioPatchApiService({
     required String url,
     required Map<String, String> headers,

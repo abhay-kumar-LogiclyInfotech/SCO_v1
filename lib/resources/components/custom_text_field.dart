@@ -81,6 +81,7 @@ class _CustomTextFieldState extends State<CustomTextField>
         controller: widget.controller,
         autofocus: widget.autofocus ?? false,
         obscureText: widget.obscureText ?? false,
+        textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
         textCapitalization: widget.textCapitalization == true
             ? TextCapitalization.sentences
             : TextCapitalization.none,
@@ -112,7 +113,8 @@ class _CustomTextFieldState extends State<CustomTextField>
           hintText: widget.hintText,
           hintFadeDuration: const Duration(milliseconds: 500),
           // hintStyle: widget.textStyle ?? const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
-          hintStyle: const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
+          hintStyle:
+              const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14),
           border: widget.border ?? Utils.underLinedInputBorder(),
           focusedBorder: widget.border?.copyWith(
                   borderSide: const BorderSide(color: Colors.green)) ??

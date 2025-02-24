@@ -348,18 +348,10 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
   //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {
     if (_questionController.text.isEmpty) {
-      // _alertServices.flushBarErrorMessages(
-      //     message: AppLocalizations.of(context)!.selectSecurityQuestion,
-      //     // context: context,
-      //     provider: langProvider);
       _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.selectSecurityQuestion);
       return false;
     }
     if (_answerController.text.isEmpty) {
-      // _alertServices.flushBarErrorMessages(
-      //     message: AppLocalizations.of(context)!.writeSecurityAnswer,
-      //     // context: context,
-      //     provider: langProvider);
       _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.writeSecurityAnswer);
       return false;
     }

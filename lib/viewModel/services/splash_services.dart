@@ -29,9 +29,7 @@ class SplashServices {
       //*------Api call for SCO About Us-------*/
       // Initialize data after widget build phase:
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
-        final provider = Provider.of<ABriefAboutScoViewModel>(context, listen: false);
-        // await provider.aBriefAboutSco(context: context, langProvider: langProvider);
+
       });
 
     }
@@ -40,7 +38,7 @@ class SplashServices {
     final int counter = await _authService.getCounter();
 
     // This is for LOV's
-    final provider = Provider.of<CommonDataViewModel>(context, listen: false);
+    final provider = context.read<CommonDataViewModel>();
 
     bool isDataStored = HiveManager.isDataStored();
     // debugPrint("Common Data Already Stored: ${isDataStored.toString()}");
@@ -80,11 +78,14 @@ class SplashServices {
         await _authService.incrementCounter();
         await callBasicApis();
         _navigationServices.pushReplacementNamed('/mainView');
-      } else {
+        _navigationServices.pushNamed('/loginView');
+      }
+      else {
         bool commonDataFetched = await provider.fetchCommonData();
         if (commonDataFetched) {
           await callBasicApis();
           _navigationServices.pushReplacementNamed('/mainView');
+          _navigationServices.pushNamed('/loginView');
         }
       }
     }

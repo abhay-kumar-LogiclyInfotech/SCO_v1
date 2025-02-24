@@ -55,26 +55,12 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
 
   late NavigationServices _navigationServices;
   late AuthService _authService;
-  late AlertServices _alertServices;
 
-  bool _isArabic = false;
   bool _isLoading = true; // State to track loading
   bool _toLogin = false;
 
-  final _languageController = ValueNotifier<bool>(false);
 
   Future<void> getInitialLanguage() async {
-    // final SharedPreferences preferences = await SharedPreferences.getInstance();
-    // final String? language = preferences.getString('language_code');
-    //
-    // if (language != null && language == 'ar') {
-    //   _isArabic = true;
-    //   _languageController.value = true;
-    // } else {
-    //   _isArabic = false;
-    //   _languageController.value = false;
-    // }
-
     // check user is logged in or not
     _toLogin = await _authService.isLoggedIn();
 
@@ -89,10 +75,9 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
     _authService = getIt.get<AuthService>();
-    _alertServices = getIt.get<AlertServices>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _loadAppVersion();
+      _loadAppVersion(AppLocalizations.of(context)!);
 
       // getting initial language
       await getInitialLanguage();
@@ -297,12 +282,6 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                               horizontalTitleGap: 5,
                               onTap: () {
                                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>WebView(url: AppUrls.briefAboutSco, title: localization.aBriefAboutSCO,)));
-                                // _navigationServices.pushCupertino(
-                                //     CupertinoPageRoute(
-                                //         builder: (context) =>
-                                //             const ABriefAboutScoView(
-                                //               appBar: true,
-                                //             )));
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -329,119 +308,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                       color: Colors.white.withOpacity(0.25))),
                             ),
 
-                            //*------About Us------*/
-                            // ExpansionTile(
-                            //   dense: true,
-                            //   shape: UnderlineInputBorder(
-                            //       borderSide: BorderSide(
-                            //           color: Colors.white.withOpacity(0.25))),
-                            //   collapsedShape: UnderlineInputBorder(
-                            //       borderSide: BorderSide(
-                            //           color: Colors.white.withOpacity(0.25))),
-                            //   tilePadding: EdgeInsets.zero,
-                            //   leading: SvgPicture.asset(
-                            //       "assets/sidemenu/aboutUs.svg"),
-                            //   title:  Text(
-                            //     localization.aboutUs,
-                            //     style: const TextStyle(
-                            //         color: Colors.white, fontSize: 14),
-                            //   ),
-                            //   iconColor: Colors.white,
-                            //   collapsedIconColor: Colors.white,
-                            //   children: <Widget>[
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //
-                            //         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const ABriefAboutScoView(appBar: true,)));
-                            //       },
-                            //       child: Container(
-                            //           color: Colors.transparent,
-                            //           padding: const EdgeInsets.all(8),
-                            //           // width: MediaQuery.sizeOf(context).width * 0.3,
-                            //           child: Row(
-                            //             mainAxisSize: MainAxisSize.max,
-                            //             children: [
-                            //               Expanded(
-                            //                 flex: 1,
-                            //                 child: SvgPicture.asset(
-                            //                     "assets/sidemenu/briefAboutSco.svg"),
-                            //               ),
-                            //                Expanded(
-                            //                 flex: 2,
-                            //                 child: Text(
-                            //                   localization.aBriefAboutSCO,
-                            //                   style: const TextStyle(
-                            //                       color: Colors.white,
-                            //                       fontSize: 14),
-                            //                 ),
-                            //               )
-                            //             ],
-                            //           )),
-                            //     ),
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //
-                            //         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const VisionAndMissionView()));
-                            //
-                            //       },
-                            //       child: Container(
-                            //         color: Colors.transparent,
-                            //         padding: const EdgeInsets.all(8),
-                            //         // width: MediaQuery.sizeOf(context).width * 0.3,
-                            //         child: Row(
-                            //           mainAxisSize: MainAxisSize.max,
-                            //           children: [
-                            //             Expanded(
-                            //               flex: 1,
-                            //               child: SvgPicture.asset(
-                            //                   "assets/sidemenu/visionMission.svg"),
-                            //             ),
-                            //              Expanded(
-                            //               flex: 2,
-                            //               child: Text(
-                            //                 localization.visionMission,
-                            //
-                            //                 style:const  TextStyle(
-                            //                     color: Colors.white,
-                            //                     fontSize: 14),
-                            //               ),
-                            //             )
-                            //           ],
-                            //         ),
-                            //       ),
-                            //     ),
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //         _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> const FaqView()));
-                            //       },
-                            //       child: Container(
-                            //           color: Colors.transparent,
-                            //           padding: const EdgeInsets.all(8),
-                            //           // width: MediaQuery.sizeOf(context).width * 0.3,
-                            //           child: Row(
-                            //             mainAxisSize: MainAxisSize.max,
-                            //             children: [
-                            //               Expanded(
-                            //                 flex: 1,
-                            //                 child: SvgPicture.asset(
-                            //                     "assets/sidemenu/faq.svg"),
-                            //               ),
-                            //                Expanded(
-                            //                 flex: 2,
-                            //                 child: Text(
-                            //                   localization.faq,
-                            //
-                            //                   style:const  TextStyle(
-                            //                       color: Colors.white,
-                            //                       fontSize: 14),
-                            //                 ),
-                            //               )
-                            //             ],
-                            //           )),
-                            //     ),
-                            //   ],
-                            // ),
-                            //*------SCO Programs------*/
+                           /// sco programs
                             Visibility(
                               visible: true,
                               child: ListTile(
@@ -636,10 +503,10 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
 
   String _appVersion = '';
 
-  Future<void> _loadAppVersion() async {
+  Future<void> _loadAppVersion(AppLocalizations localization) async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      _appVersion = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
+      _appVersion = '${localization.version} ${packageInfo.version} (${packageInfo.buildNumber})';
       // _appVersion = 'Version ${packageInfo.version}';
     });
   }

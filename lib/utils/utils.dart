@@ -40,9 +40,8 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 
   double get kPadding => 20;
 
-  Widget get kFormHeight => const SizedBox.square(
-        dimension: 15,
-      );
+  Widget get kFormHeight => const SizedBox.square(dimension: 15,);
+  Widget get kSmallSpace => const SizedBox.square(dimension: 10,);
 
   // shrink box
   Widget get showVoid => const SizedBox.shrink();
@@ -281,6 +280,22 @@ class Utils {
 // open the pdf
     await OpenFile.open(path);
   }
+
+  /// kAuthViewTitle
+  static Widget authViewTitle({required langProvider,required text}){
+    return Directionality(
+      textDirection: getTextDirection(langProvider),
+      child: Text(text,
+        style: const TextStyle(
+          color: AppColors.scoButtonColor,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+
 }
 
 Future<File> convertBase64ToFile(String base64String, String fileName) async {
@@ -839,7 +854,6 @@ Map<String, dynamic> _convertXmlToMap(xml.XmlElement element) {
       }
     }
   });
-
   return map;
 }
 

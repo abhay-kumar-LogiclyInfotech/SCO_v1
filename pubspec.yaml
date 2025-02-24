@@ -75,7 +75,7 @@ dependencies:
   dio: ^5.6.0
   material_dialogs: ^1.1.5
   logger:
-  getwidget: ^4.0.0
+  getwidget: ^5.0.0
   dropdown_button2: ^2.3.9
   profile_photo: ^1.0.3
   date_picker_plus: ^4.1.0
