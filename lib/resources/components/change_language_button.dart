@@ -11,14 +11,16 @@ import '../app_colors.dart';
 import 'custom_advanced_switch.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
-class ChangeLanguageButton extends StatefulWidget {ChangeLanguageButton({super.key});
+class ChangeLanguageButton extends StatefulWidget
+{
+   bool showBackButton;
+  ChangeLanguageButton({super.key,this.showBackButton = false});
 
   @override
   State<ChangeLanguageButton> createState() => _ChangeLanguageButtonState();
 }
 
-class _ChangeLanguageButtonState extends State<ChangeLanguageButton>
-    with MediaQueryMixin {
+class _ChangeLanguageButtonState extends State<ChangeLanguageButton> with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
   @override
@@ -34,14 +36,17 @@ class _ChangeLanguageButtonState extends State<ChangeLanguageButton>
       child: SizedBox(
         width: screenWidth,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             /// back button
-            InkResponse(
+            if(widget.showBackButton) InkResponse(
               splashColor: Colors.green,
               onTap: () {
                 _navigationServices.goBack();
               },
               child:  Row(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                  const  Icon(
@@ -50,51 +55,55 @@ class _ChangeLanguageButtonState extends State<ChangeLanguageButton>
                     weight: 1,
                     fill: 1,
                   ),
-                  Text( AppLocalizations.of(context)?.back ?? 'Back'),
+                  Text( AppLocalizations.of(context)?.back ?? 'Back',style: const TextStyle(color: Colors.black),),
                 ],
               ),
             ),
 
             /// language change button
-            Expanded(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text("English"),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Consumer<LanguageChangeViewModel>(
-                    builder: (context, provider, _) {
-                      return CustomAdvancedSwitch(
-                        controller: provider.languageController,
-                        activeColor: AppColors.scoThemeColor,
-                        inactiveColor: Colors.grey,
-                        initialValue: provider.languageController.value,
-                        onChanged: (value) async {
-                          if (value) {
-                            context
-                                .read<LanguageChangeViewModel>()
-                                .changeLanguage(const Locale('ar'));
-                          } else {
-                            context
-                                .read<LanguageChangeViewModel>()
-                                .changeLanguage(const Locale('en'));
-                          }
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 10),
-                 const  Text("عربي"),
-                ],
-              ),
-            ),
+           widget.showBackButton ?  Expanded(
+              child: changeLanguageButtonWidget(),
+            ) : changeLanguageButtonWidget(),
           ],
         ),
       ),
     );
   }
+
+}
+Widget changeLanguageButtonWidget(){
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.end,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      const Text("English",style: TextStyle(color: Colors.black),),
+      const SizedBox(
+        width: 10,
+      ),
+      Consumer<LanguageChangeViewModel>(
+        builder: (context, provider, _) {
+          return CustomAdvancedSwitch(
+            controller: provider.languageController,
+            activeColor: AppColors.scoThemeColor,
+            inactiveColor: Colors.grey,
+            initialValue: provider.languageController.value,
+            onChanged: (value) async {
+              if (value) {
+                context
+                    .read<LanguageChangeViewModel>()
+                    .changeLanguage(const Locale('ar'));
+              } else {
+                context
+                    .read<LanguageChangeViewModel>()
+                    .changeLanguage(const Locale('en'));
+              }
+            },
+          );
+        },
+      ),
+      const SizedBox(width: 10),
+      const  Text("عربي",style: TextStyle(color: Colors.black),),
+    ],
+  );
 }

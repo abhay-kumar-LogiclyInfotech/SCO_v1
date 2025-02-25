@@ -12,13 +12,17 @@ import '../../viewModel/notifications_view_models/get_notifications_count_viewMo
 import '../../viewModel/services/navigation_services.dart';
 import '../app_colors.dart';
 import '../app_text_styles.dart';
+import 'change_language_button.dart';
 import 'custom_main_view_app_bar.dart';
 
 class CustomSimpleAppBar extends StatefulWidget implements PreferredSizeWidget  {
    Widget? title;
   String? titleAsString;
+  TextStyle? titleAsStringStyle;
   bool? inNotifications;
-   CustomSimpleAppBar({super.key,  this.title,this.titleAsString,this.inNotifications = false});
+  Widget? actions;
+  bool showChangeLanguageButton;
+   CustomSimpleAppBar({super.key,  this.title,this.titleAsString,this.inNotifications = false,this.actions,this.titleAsStringStyle,this.showChangeLanguageButton = false});
 
   @override
   State<CustomSimpleAppBar> createState() => _CustomSimpleAppBarState();
@@ -59,18 +63,12 @@ class _CustomSimpleAppBarState extends State<CustomSimpleAppBar> {
     return Directionality(
       textDirection: getTextDirection(provider),
       child: AppBar(
-
         elevation: 0.2,
         shadowColor: Colors.grey,
         backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        title:
-      widget.titleAsString != null ?  Text(widget.titleAsString ?? '',
-            style: AppTextStyles.appBarTitleStyle())
-
-         : widget.title,
-
+        title: widget.titleAsString != null ?  Text(widget.titleAsString ?? '', style:widget.titleAsStringStyle ?? AppTextStyles.appBarTitleStyle()) : widget.title,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: const Icon(
@@ -98,13 +96,15 @@ class _CustomSimpleAppBarState extends State<CustomSimpleAppBar> {
                   return ringBell(totalNotifications,_navigationServices);
               }
             },
-          ),const SizedBox(width: 25)] : [],
+          ),const SizedBox(width: 25)] : [
+         if(widget.showChangeLanguageButton) changeLanguageButtonWidget(), const SizedBox(width: 15,)
+            // widget.actions ?? const SizedBox()
+        ],
 
         centerTitle: true,
       ),
     );
   }
 
-  @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

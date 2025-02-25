@@ -9,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/kBackgrounds/kLoginSignUpBg.dart';
 import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
@@ -18,6 +19,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../../data/response/status.dart';
+import '../../../resources/app_text_styles.dart';
 import '../../../resources/components/change_language_button.dart';
 import '../../../resources/components/custom_dropdown.dart';
 import '../../../resources/components/custom_text_field.dart';
@@ -37,36 +39,6 @@ class _SignUpViewState extends State<SignUpView>
   late NavigationServices _navigationServices;
   late AlertServices _alertServices;
 
-  // late TextEditingController _firstNameController;
-  // late TextEditingController _secondNameController;
-  // late TextEditingController _thirdFourthNameController;
-  // late TextEditingController _familyNameController;
-  // late TextEditingController _dobController;
-  // late TextEditingController _dobDayController;
-  // late TextEditingController _dobMonthController;
-  // late TextEditingController _dobYearController;
-  // late TextEditingController _genderController;
-  // late TextEditingController _emailController;
-  // late TextEditingController _confirmEmailController;
-  // late TextEditingController _passwordController;
-  // late TextEditingController _confirmPasswordController;
-  // late TextEditingController _countryController;
-  // late TextEditingController _emiratesIdController;
-  // late TextEditingController _studentPhoneNumberController;
-  //
-  // late FocusNode _firstNameFocusNode;
-  // late FocusNode _secondNameFocusNode;
-  // late FocusNode _thirdFourthNameFocusNode;
-  // late FocusNode _familyNameFocusNode;
-  // late FocusNode _dobFocusNode;
-  // late FocusNode _genderFocusNode;
-  // late FocusNode _emailFocusNode;
-  // late FocusNode _confirmEmailFocusNode;
-  // late FocusNode _passwordFocusNode;
-  // late FocusNode _confirmPasswordFocusNode;
-  // late FocusNode _countryFocusNode;
-  // late FocusNode _emiratesIdFocusNode;
-  // late FocusNode _studentPhoneNumberFocusNode;
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _secondNameController = TextEditingController();
   final TextEditingController _thirdFourthNameController = TextEditingController();
@@ -200,6 +172,7 @@ class _SignUpViewState extends State<SignUpView>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      appBar: CustomSimpleAppBar(titleAsString: "Sign Up",titleAsStringStyle: AppTextStyles.appBarTitleStyle().copyWith(color: Colors.black),showChangeLanguageButton: true,),
       body:  _buildUI(),
     );
   }
@@ -210,44 +183,33 @@ class _SignUpViewState extends State<SignUpView>
     return Stack(
       alignment: Alignment.topLeft,
       children: [
-        const KLoginSignupBg(),
+        // const KLoginSignupBg(),
         Container(
           width: double.infinity,
           height: double.infinity,
-          margin: EdgeInsets.only(
-            top: orientation == Orientation.portrait
-                ? screenHeight / 2.5
-                : screenHeight / 3,
-          ),
-          padding: EdgeInsets.only(
-            left: orientation == Orientation.portrait
-                ? screenWidth * 0.08
-                : screenWidth / 100,
-            right: orientation == Orientation.portrait
-                ? screenWidth * 0.08
-                : screenWidth / 100,
-            top: orientation == Orientation.portrait
-                ? screenWidth * 0.05
-                : screenWidth / 100 * 5,
-            bottom: orientation == Orientation.portrait
-                ? screenWidth / 100 * 1
-                : screenWidth / 100 * 1,
+          // margin: EdgeInsets.only(
+          //   top: orientation == Orientation.portrait
+          //       ? screenHeight / 2.5
+          //       : screenHeight / 3,
+          // ),
+          padding: EdgeInsets.symmetric(
+            horizontal: kPadding,
           ),
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.elliptical(60, 60)),
+            // borderRadius: BorderRadius.vertical(top: Radius.elliptical(60, 60)),
           ),
           child: Column(
             children: [
-              SizedBox(
-                  child: SvgPicture.asset(
-                "assets/sco_logo.svg",
-                fit: BoxFit.fill,
-                height: 55,
-                width: 110,
-              )),
-              kSmallSpace,
-              Utils.authViewTitle(langProvider: langProvider, text: AppLocalizations.of(context)!.signUp),
+              // SizedBox(
+              //     child: SvgPicture.asset(
+              //   "assets/sco_logo.svg",
+              //   fit: BoxFit.fill,
+              //   height: 55,
+              //   width: 110,
+              // )),
+              // kSmallSpace,
+              // Utils.authViewTitle(langProvider: langProvider, text: AppLocalizations.of(context)!.signUp),
               Expanded(
                 child: Consumer<LanguageChangeViewModel>(
                   builder: (context, langProvider, _) {
@@ -354,7 +316,7 @@ class _SignUpViewState extends State<SignUpView>
             ],
           ),
         ),
-        Positioned(left:10,right:10,child: SafeArea(child: ChangeLanguageButton())),
+        // Positioned(left:10,right:10,child: SafeArea(child: ChangeLanguageButton(showBackButton: true,))),
       ],
     );
   }
@@ -425,8 +387,6 @@ class _SignUpViewState extends State<SignUpView>
       textCapitalization: true,
       leading: SvgPicture.asset(
         "assets/name.svg",
-        // height: 18,
-        // width: 18,
       ),
       errorText: _firstNameError,
       onChanged: (value) {
@@ -454,8 +414,6 @@ class _SignUpViewState extends State<SignUpView>
       errorText: _secondNameError,
       leading: SvgPicture.asset(
         "assets/name.svg",
-        // height: 18,
-        // width: 18,
       ),
       onChanged: (value) {
         if (_secondNameFocusNode.hasFocus) {
@@ -510,8 +468,6 @@ class _SignUpViewState extends State<SignUpView>
       textCapitalization: true,
       leading: SvgPicture.asset(
         "assets/familyName.svg",
-        // height: 18,
-        // width: 18,
       ),
       errorText: _familyNameError,
       onChanged: (value) {
@@ -574,6 +530,7 @@ class _SignUpViewState extends State<SignUpView>
     return CustomDropdown(
       leading: SvgPicture.asset("assets/gender.svg"),
       textDirection: getTextDirection(langProvider),
+      useScreenWidthToAdjustDropdown: true,
       menuItemsList: _genderMenuItemsList,
       currentFocusNode: _genderFocusNode,
       hintText: localization.genderWatermark,
@@ -601,8 +558,6 @@ class _SignUpViewState extends State<SignUpView>
       textCapitalization: true,
       leading: SvgPicture.asset(
         "assets/email.svg",
-        // height: 18,
-        // width: 18,
       ),
       errorText: _emailError,
       onChanged: (value) {
@@ -630,8 +585,6 @@ class _SignUpViewState extends State<SignUpView>
         textCapitalization: true,
         leading: SvgPicture.asset(
           "assets/email.svg",
-          // height: 18,
-          // width: 18,
         ),
         errorText: _confirmEmailError,
         onChanged: (value) {
@@ -659,8 +612,6 @@ class _SignUpViewState extends State<SignUpView>
               textInputType: TextInputType.visiblePassword,
               leading: SvgPicture.asset(
                 "assets/lock.svg",
-                // height: 18,
-                // width: 18,
               ),
               obscureText: obscurePassword,
               trailing: GestureDetector(
@@ -703,8 +654,6 @@ class _SignUpViewState extends State<SignUpView>
             textInputType: TextInputType.text,
             leading: SvgPicture.asset(
               "assets/lock.svg",
-              // height: 18,
-              // width: 18,
             ),
             obscureText: obscurePassword,
             trailing: GestureDetector(
@@ -741,6 +690,7 @@ class _SignUpViewState extends State<SignUpView>
     return CustomDropdown(
       leading: SvgPicture.asset("assets/country.svg"),
       textDirection: getTextDirection(langProvider),
+      useScreenWidthToAdjustDropdown: true,
       menuItemsList: _countryMenuItemsList,
       currentFocusNode: _countryFocusNode,
       hintText: localization.country,

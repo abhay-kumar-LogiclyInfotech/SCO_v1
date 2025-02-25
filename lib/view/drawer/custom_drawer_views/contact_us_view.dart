@@ -479,6 +479,7 @@ class _ContactUsViewState extends State<ContactUsView> {
       leading: SvgPicture.asset("assets/inquiry_type.svg"),
       textDirection: getTextDirection(langProvider),
       menuItemsList: _inquiryTypeMenuItemsList,
+      useScreenWidthToAdjustDropdown: true,
       onChanged: (value) {
         _inqueryTypeController.text = value!;
         //This thing is creating error: don't know how to fix it:

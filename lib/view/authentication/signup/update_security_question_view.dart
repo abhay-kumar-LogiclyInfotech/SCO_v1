@@ -24,7 +24,9 @@ import '../../../viewModel/authentication/update_security_question_viewModel.dar
 
 class UpdateSecurityQuestionView extends StatefulWidget {
   bool updatingSecurityQuestion;
-   UpdateSecurityQuestionView({super.key,this.updatingSecurityQuestion = false});
+
+  UpdateSecurityQuestionView(
+      {super.key, this.updatingSecurityQuestion = false});
 
   @override
   State<UpdateSecurityQuestionView> createState() =>
@@ -47,19 +49,23 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   String? _answerError;
   String? _userId;
 
-
-
   // creating and updating the security question setup view
   /// This is the call to api to get the all security questions and populate dropdown.
-  Future<void> _initializeData({required LanguageChangeViewModel langProvider}) async {
-    final provider = Provider.of<SecurityQuestionViewModel>(context, listen: false);
+  Future<void> _initializeData(
+      {required LanguageChangeViewModel langProvider}) async {
+    final provider =
+        Provider.of<SecurityQuestionViewModel>(context, listen: false);
     await provider.getSecurityQuestions(
         // context: context,
-        langProvider: langProvider, userId: _userId ?? '');
-        // langProvider: langProvider, userId: "976311" ?? '');
+        langProvider: langProvider,
+        userId: _userId ?? '');
+    // langProvider: langProvider, userId: "976311" ?? '');
 
     if (provider.getSecurityQuestionResponse.status == Status.COMPLETED) {
-      _securityQuestionItemsList = populateNormalDropdown(menuItemsList: provider.getSecurityQuestionResponse.data?.data?.securityQuestions ?? [], provider: langProvider);
+      _securityQuestionItemsList = populateNormalDropdown(
+          menuItemsList: provider.getSecurityQuestionResponse.data?.data?.securityQuestions ??
+              [],
+          provider: langProvider);
       setState(() {});
     }
   }
@@ -74,16 +80,15 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     _userId = HiveManager.getUserId();
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-    await  _initializeData(langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
-    setState(() {
+      await _initializeData(
+          langProvider:
+              Provider.of<LanguageChangeViewModel>(context, listen: false));
+      setState(() {});
     });
-    });
-
 
     super.initState();
     _answerError = null;
   }
-
 
   @override
   void dispose() {
@@ -94,15 +99,13 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     super.dispose();
   }
 
-
   bool _processing = false;
 
-  setProcessing(value){
+  setProcessing(value) {
     setState(() {
       _processing = value;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -110,13 +113,19 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-          title: widget.updatingSecurityQuestion ? Text(localization.securityQuestion,style: AppTextStyles.appBarTitleStyle(),) : SvgPicture.asset(
-        "assets/sco_logo.svg",
-        fit: BoxFit.fill,
-        height: 35,
-        width: 110,
-      )),
-      body: Utils.modelProgressHud(child:  _buildUI(context: context),processing: _processing),
+          title: widget.updatingSecurityQuestion
+              ? Text(
+                  localization.securityQuestion,
+                  style: AppTextStyles.appBarTitleStyle(),
+                )
+              : SvgPicture.asset(
+                  "assets/sco_logo.svg",
+                  fit: BoxFit.fill,
+                  height: 35,
+                  width: 110,
+                )),
+      body: Utils.modelProgressHud(
+          child: _buildUI(context: context), processing: _processing),
     );
   }
 
@@ -247,7 +256,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
           FocusScope.of(context).requestFocus(_answerFocusNode);
         });
       },
-      outlinedBorder:true ,
+      outlinedBorder: true,
       currentFocusNode: _questionFocusNode,
       hintText: AppLocalizations.of(context)!.selectSecurityQuestion,
     );
@@ -286,31 +295,32 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         return CustomButton(
           textDirection: getTextDirection(langProvider),
           buttonName: AppLocalizations.of(context)!.submit,
-          isLoading: provider.updateSecurityQuestionResponse.status == Status.LOADING
+          isLoading:
+              provider.updateSecurityQuestionResponse.status == Status.LOADING
                   ? true
                   : false,
           onTap: () async {
-
             setProcessing(true);
 
             bool result = validateForm(langProvider: langProvider);
             if (result) {
-               provider.setSecurityQuestion(_questionController.text);
+              provider.setSecurityQuestion(_questionController.text);
               provider.setSecurityAnswer(_answerController.text);
-             bool updateResult =  await provider.updateSecurityQuestion(
+              bool updateResult = await provider.updateSecurityQuestion(
                 // context: context,
                 langProvider: langProvider,
                 userId: _userId ?? '',
                 // userId: "962229",
               );
-               /// checking updating security question because we are using this screen twice
-             if(updateResult && !widget.updatingSecurityQuestion){
-               _navigationService.goBackUntilFirstScreen();
-               _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-             }
+
+              /// checking updating security question because we are using this screen twice
+              if (updateResult && !widget.updatingSecurityQuestion) {
+                _navigationService.goBackUntilFirstScreen();
+                _navigationService.pushReplacementCupertino(CupertinoPageRoute(
+                    builder: (context) => const LoginView()));
+              }
             }
             setProcessing(false);
-
           },
           fontSize: 16,
           // buttonColor: AppColors.scoThemeColor,
@@ -327,7 +337,8 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
       // _alertServices.flushBarErrorMessages(
       //     message: AppLocalizations.of(context)!.selectSecurityQuestion,
       //     provider: langProvider);
-      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.selectSecurityQuestion);
+      _alertServices.showErrorSnackBar(
+          AppLocalizations.of(context)!.selectSecurityQuestion);
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.selectSecurityQuestion)));
       return false;
     }
@@ -335,7 +346,8 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
       // _alertServices.flushBarErrorMessages(
       //     message: AppLocalizations.of(context)!.writeSecurityAnswer,
       //     provider: langProvider);
-      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.writeSecurityAnswer);
+      _alertServices
+          .showErrorSnackBar(AppLocalizations.of(context)!.writeSecurityAnswer);
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.answerSecurityQuestion)));
       return false;
     }

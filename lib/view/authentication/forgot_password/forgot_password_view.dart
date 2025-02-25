@@ -183,7 +183,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
               ],
             ),
           ),
-          Positioned(left: 10,right:10,child: SafeArea(child: ChangeLanguageButton())),
+          Positioned(left: 10,right:10,child: SafeArea(child: ChangeLanguageButton(showBackButton: true,))),
         ],
       ),
     );
@@ -354,7 +354,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             AppLocalizations.of(context)!.dontHaveAccount,

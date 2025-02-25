@@ -32,6 +32,8 @@ class CustomDropdown extends StatefulWidget {
   String? hintText;
   bool outlinedBorder;
 
+  bool useScreenWidthToAdjustDropdown;
+
   CustomDropdown({
     super.key,
     this.leading,
@@ -47,7 +49,8 @@ class CustomDropdown extends StatefulWidget {
     this.errorText,
     this.outlinedBorder = false,
     this.borderRadius,
-    this.readOnly
+    this.readOnly,
+    this.useScreenWidthToAdjustDropdown = false,
   });
 
   @override
@@ -131,10 +134,11 @@ class _CustomDropdownState extends State<CustomDropdown>
           // cursorColor: AppColors.darkGrey,
           style: TextStyle(
             color: widget.textColor ?? AppColors.hintDarkGrey,
-            overflow: TextOverflow.ellipsis
+            overflow: TextOverflow.ellipsis,
           ),
           // padding: EdgeInsets.zero,
           hint: Text(
+            textDirection: getTextDirection(langProvider),
             widget.hintText ?? widget.menuItemsList[0].value.toString(),
             style: TextStyle(
               color: widget.textColor ?? AppColors.hintDarkGrey,
@@ -161,9 +165,9 @@ class _CustomDropdownState extends State<CustomDropdown>
           ),
           dropdownStyleData: DropdownStyleData(
             useSafeArea: true,
-            width: screenWidth-10, /// This is responsible for spacing between the prefix icon and Dropdown text.
+            width: widget.useScreenWidthToAdjustDropdown ? screenWidth- screenWidth/10.5 : null, /// This is responsible for spacing between the prefix icon and Dropdown text.
             maxHeight: screenHeight/1.5,
-            padding:const EdgeInsets.only(left: 10),
+            padding:const EdgeInsets.only(left: 10,right: 10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),

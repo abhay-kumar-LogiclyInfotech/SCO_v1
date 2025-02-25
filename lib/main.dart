@@ -7,8 +7,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/models/account/edit_application_sections_model/UploadUpdateAttachmentModel.dart';
-import 'package:sco_v1/view/test.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/edit_application_sections_viewModel.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/get_list_of_attachments_viewModel.dart';
 import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/edit_application/upload_update_attachment_view_model.dart';
@@ -59,7 +57,6 @@ import 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/upload_atta
 import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Test.dart';
 import 'controller/dependency_injection.dart';
 import 'hive/hive_manager.dart';
 
@@ -213,8 +210,6 @@ class _MyAppState extends State<MyApp> {
           /// Edit Peoplesoft application sections
           ChangeNotifierProvider(create: (_) => EditApplicationSectionsViewModel()),
 
-          // register Test ViewModel
-          // ChangeNotifierProvider(create: (_) => TestApi()),
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
@@ -227,37 +222,21 @@ class _MyAppState extends State<MyApp> {
             }
             return GetMaterialApp(
               debugShowCheckedModeBanner: false,
-            // return MaterialApp(
               title: 'SCO',
-              // locale: locale == ''
-              //     ? const Locale('en')
-              //     : provider.appLocale == null
-              //         ? Locale(locale)
-              //         : Provider.of<LanguageChangeViewModel>(context).appLocale,
               locale: provider.appLocale,
               //when enters the app;
               localizationsDelegates: const [
-                // AppLocalizations.delegate,
-                // GlobalMaterialLocalizations.delegate,
-                // // GlobalWidgetsLocalizations.delegate,
-                // GlobalCupertinoLocalizations.delegate,
-
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
               supportedLocales: const [Locale('en'), Locale('ar')],
-              theme: ThemeData(
-                fontFamily: 'droidArabicKufi',
-                // textTheme: GoogleFonts.robotoTextTheme(),
-                // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                // useMaterial3: true,
-              ),
+              theme: ThemeData(fontFamily: 'droidArabicKufi',),
               navigatorKey: widget._navigationServices.navigationStateKey,
               routes: widget._navigationServices.routes,
               initialRoute: "/splashView",
-              // home: TestView()
+              // home: UpdateSecurityQuestionView()
             );
           },
         ));

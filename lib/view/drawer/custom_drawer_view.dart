@@ -276,12 +276,12 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 14),
                               ),
-                              leading: SvgPicture.asset(
-                                  "assets/sidemenu/aboutUs.svg"),
+                              leading: SvgPicture.asset("assets/sidemenu/aboutUs.svg"),
                               dense: true,
                               horizontalTitleGap: 5,
                               onTap: () {
-                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>WebView(url: AppUrls.briefAboutSco, title: localization.aBriefAboutSCO,)));
+                                // _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>WebView(url: AppUrls.briefAboutSco, title: localization.aBriefAboutSCO,)));
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const VisionAndMissionView()));
                               },
                               shape: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -289,24 +289,23 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             ),
 
                             // *---- Vision and mission ----*
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(localization.vision_mission_values,
-                                  style: AppTextStyles.drawerButtonsStyle()),
-                              leading: SvgPicture.asset(
-                                  "assets/sidemenu/visionMission.svg"),
-                              dense: true,
-                              horizontalTitleGap: 5,
-                              onTap: () {
-                                _navigationServices.pushCupertino(
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            const VisionAndMissionView()));
-                              },
-                              shape: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.white.withOpacity(0.25))),
-                            ),
+                            // ListTile(
+                            //   contentPadding: EdgeInsets.zero,
+                            //   title: Text(localization.vision_mission_values,
+                            //       style: AppTextStyles.drawerButtonsStyle()),
+                            //   leading: SvgPicture.asset("assets/sidemenu/visionMission.svg"),
+                            //   dense: true,
+                            //   horizontalTitleGap: 5,
+                            //   onTap: () {
+                            //     _navigationServices.pushCupertino(
+                            //         CupertinoPageRoute(
+                            //             builder: (context) =>
+                            //                 const VisionAndMissionView()));
+                            //   },
+                            //   shape: UnderlineInputBorder(
+                            //       borderSide: BorderSide(
+                            //           color: Colors.white.withOpacity(0.25))),
+                            // ),
 
                            /// sco programs
                             Visibility(

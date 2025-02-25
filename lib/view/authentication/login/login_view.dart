@@ -555,39 +555,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
     );
   }
 
-  Widget _selectLanguage(langProvider) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text("English"),
-        const SizedBox(
-          width: 10,
-        ),
-        CustomAdvancedSwitch(
-          controller: _languageController,
-          activeColor: AppColors.scoThemeColor,
-          inactiveColor: Colors.grey,
-          initialValue: _isArabic,
-          onChanged: (value) {
-            if (value) {
-              Provider.of<LanguageChangeViewModel>(context, listen: false)
-                  .changeLanguage(const Locale('ar'));
-            } else {
-              Provider.of<LanguageChangeViewModel>(context, listen: false)
-                  .changeLanguage(const Locale('en'));
-            }
-          },
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        const Directionality(
-            textDirection: TextDirection.rtl, child: Text("عربي")),
-      ],
-    );
-  }
 
   bool _validateFields({required LanguageChangeViewModel langProvider}) {
     final localization = AppLocalizations.of(context)!;

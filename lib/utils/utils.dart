@@ -409,7 +409,8 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
   Color? textColor,
-}) {
+})
+{
   final textDirection = getTextDirection(provider);
 
   List<String> uniqueKeys = [];
@@ -426,9 +427,11 @@ List<DropdownMenuItem> populateCommonDataDropdown({
   // Add the constant "Select" option at the 0th index
   List<DropdownMenuItem> dropdownItems = [
     DropdownMenuItem(
-      value: '', // Empty value for the default option
+      value: '', // Empty value for the default option,
+      alignment: textDirection == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight,
       child: Text(
         textDirection == TextDirection.ltr ? 'Select'.trim() : 'اختر'.trim(),
+        textDirection: textDirection,
         // 'Select' in both languages
         style: TextStyle(
           color: textColor ?? AppColors.hintDarkGrey,
@@ -446,10 +449,12 @@ List<DropdownMenuItem> populateCommonDataDropdown({
         .map((element) {
       return DropdownMenuItem(
         value: element.code.toString(),
+        alignment: textDirection == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight,
         child: Text(
           textDirection == TextDirection.ltr
               ? element.value
               : element.valueArabic.toString(),
+          textDirection: textDirection,
           style: TextStyle(
             color: textColor ?? AppColors.hintDarkGrey,
             fontSize: 14,
@@ -467,13 +472,15 @@ List<DropdownMenuItem> populateCommonDataDropdown({
 List<DropdownMenuItem> populateNormalDropdownWithValue({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
-}) {
+})
+{
   final textDirection = getTextDirection(provider);
 
   // Add a constant "Select" option at the 0th index
   List<DropdownMenuItem> dropdownItems = [
     DropdownMenuItem(
       value: '', // Empty value
+      alignment: textDirection == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight,
       child: Text(
         textDirection == TextDirection.ltr ? 'Select' : 'اختر',
         // 'Select' in both languages
@@ -491,10 +498,12 @@ List<DropdownMenuItem> populateNormalDropdownWithValue({
     menuItemsList.map((element) {
       return DropdownMenuItem(
         value: element['code'].toString(),
+        alignment: textDirection == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight,
         child: Text(
           textDirection == TextDirection.ltr
               ? element['value'].toString()
               : element['valueArabic'].toString(),
+          textDirection: textDirection,
           style: const TextStyle(
             color: AppColors.scoButtonColor,
             fontSize: 14,
@@ -512,15 +521,18 @@ List<DropdownMenuItem> populateNormalDropdownWithValue({
 List<DropdownMenuItem> populateNormalDropdown({
   required List menuItemsList,
   required LanguageChangeViewModel provider,
-}) {
+})
+{
   final textDirection = getTextDirection(provider);
   return menuItemsList.map((element) {
     return DropdownMenuItem(
       value: element.toString(),
+      alignment: textDirection == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight,
       child: Text(
         textDirection == TextDirection.ltr
             ? element.toString()
             : element.toString(),
+        textDirection:  textDirection,
         style: const TextStyle(
           color: Colors.black,
           fontSize: 14,
