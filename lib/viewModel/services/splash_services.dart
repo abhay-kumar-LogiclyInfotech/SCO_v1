@@ -77,15 +77,15 @@ class SplashServices {
         }
         await _authService.incrementCounter();
         await callBasicApis();
-        _navigationServices.pushReplacementNamed('/mainView');
-        _navigationServices.pushNamed('/loginView');
+        // _navigationServices.pushReplacementNamed('/mainView');
+        _navigationServices.pushReplacementNamed('/loginView');
       }
       else {
         bool commonDataFetched = await provider.fetchCommonData();
         if (commonDataFetched) {
           await callBasicApis();
-          _navigationServices.pushReplacementNamed('/mainView');
-          _navigationServices.pushNamed('/loginView');
+          // _navigationServices.pushReplacementNamed('/mainView');
+          _navigationServices.pushReplacementNamed('/loginView');
         }
       }
     }
