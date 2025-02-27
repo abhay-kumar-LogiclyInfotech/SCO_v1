@@ -59,8 +59,6 @@ class CreateRequestView extends StatefulWidget {
 class _CreateRequestViewState extends State<CreateRequestView>
     with MediaQueryMixin {
   late NavigationServices _navigationServices;
-  late AuthService _authService;
-  late PermissionServices _permissionServices;
   late MediaServices _mediaServices;
   late AlertServices _alertServices;
 
@@ -72,13 +70,6 @@ class _CreateRequestViewState extends State<CreateRequestView>
     for(var element in Constants.requestStructureList){
       _requestStructureList.add(RequestStructureModel.fromJson(element));
     }
-
-
-
-
-    /// fetch student profile Information t prefill the user information
-    // final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context,listen: false);
-    // await studentProfileProvider.getPersonalDetails();
 
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
     final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
@@ -103,8 +94,6 @@ class _CreateRequestViewState extends State<CreateRequestView>
   _requestSubtypeController.text = widget.requestSubType!.toUpperCase();
   _populateAllFields();
 }
-
-
       /// To refresh the page
       setState(() {});
 
@@ -116,9 +105,7 @@ class _CreateRequestViewState extends State<CreateRequestView>
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
       _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
       _mediaServices = getIt.get<MediaServices>();
-      _authService = getIt.get<AuthService>();
       _alertServices = getIt.get<AlertServices>();
 
       await _initializeData();
@@ -175,7 +162,7 @@ void dispose(){
       textDirection: getTextDirection(langProvider),
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(kPadding),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -351,20 +338,6 @@ void dispose(){
                 context: context),
 
             buildFieldWidgets(langProvider),
-
-
-            // scholarshipFormTextField(
-            //     currentFocusNode: _commentsFocusNode,
-            //     controller: _commentsController,
-            //     hintText: "Enter Your Comments",
-            //     textInputType: TextInputType.text,
-            //     errorText: _commentsError,
-            //     maxLines: 3,
-            //     onChanged: (value) {
-            //       if (_commentsFocusNode.hasFocus) {
-            //         setState(() {});
-            //       }
-            //     }),
 
             /// ****************************************************************
             kFormHeight,

@@ -38,19 +38,21 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 
   double get verticalPadding => MediaQuery.of(context).padding.vertical;
 
-  double get kPadding => 20;
+  double get kPadding => 12;
+  double get kTileSpace => 8;
+  double get kCardSpace => 10;
+  double get kCardPadding => 15;
 
   Widget get kFormHeight => const SizedBox.square(dimension: 15,);
   Widget get kSmallSpace => const SizedBox.square(dimension: 10,);
+  Widget get kLargeSpace => const SizedBox.square(dimension: 20,);
 
   // shrink box
   Widget get showVoid => const SizedBox.shrink();
 
   double get kCardRadius => 15;
 
-  Widget get kSubmitButtonHeight => const SizedBox.square(
-        dimension: 30,
-      );
+  Widget get kSubmitButtonHeight => const SizedBox.square(dimension: 30,) ;
 }
 
 class Utils {
@@ -131,10 +133,10 @@ class Utils {
         borderSide: const BorderSide(color: AppColors.darkGrey));
   }
 
-  static InputBorder underLinedInputBorder() {
-    return const UnderlineInputBorder(
+  static InputBorder underLinedInputBorder([Color? color]) {
+    return  UnderlineInputBorder(
         borderRadius: BorderRadius.zero,
-        borderSide: BorderSide(color: AppColors.darkGrey));
+        borderSide: BorderSide(color: color ?? AppColors.darkGrey));
   }
 
   // input borders end

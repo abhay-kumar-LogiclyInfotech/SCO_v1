@@ -80,8 +80,7 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
       appBar: CustomSimpleAppBar(titleAsString: localization.request),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
-          child: Utils.pageRefreshIndicator(
-              child: _buildUi(), onRefresh: _initializeData)),
+          child: Utils.pageRefreshIndicator(child: _buildUi(), onRefresh: _initializeData)),
     );
   }
 
@@ -90,7 +89,7 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
     final localization = AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding:  EdgeInsets.all(kPadding),
       child: Column(
         children: [
           /// Header to show create request button
@@ -103,11 +102,6 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
                 return Utils.pageLoadingIndicator(context: context);
               case Status.ERROR:
                 return showVoid;
-                // return Center(
-                //   child: Text(
-                //     AppLocalizations.of(context)!.somethingWentWrong,
-                //   ),
-                // );
               case Status.COMPLETED:
                 return Directionality(
                   textDirection: getTextDirection(langProvider),
@@ -278,7 +272,7 @@ bool isSearching = false;
   Widget _requestCard({required langProvider,required element,required AppLocalizations localization})
   {
     return Padding(
-      padding: EdgeInsets.only(bottom: kPadding),
+      padding: EdgeInsets.only(bottom: kCardSpace),
       child: SimpleCard(
         onTap: (){
           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> RequestDetailsView(request: element)));

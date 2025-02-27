@@ -83,10 +83,8 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      // appBar: CustomSimpleAppBar(titleAsString: "Services"),
       body: RefreshIndicator(
         color: Colors.white,
           backgroundColor: AppColors.scoThemeColor,
@@ -96,9 +94,7 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
   }
 
   Widget _buildUi() {
-
-    final langProvider = Provider.of<LanguageChangeViewModel>(context);
-   final appLocalizations =  AppLocalizations.of(context);
+    final appLocalizations =  AppLocalizations.of(context);
 
     final accountItemsMapList = [
       {
@@ -146,7 +142,7 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
 
     if(role == UserRole.scholarStudent && isLogged){
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: kPadding),
+        padding: EdgeInsets.all(kPadding),
         child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -154,11 +150,12 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
           itemBuilder: (context, index) {
             final item = itemsList[index];
             return Padding(
-              padding: (index < itemsList.length - 1)
-                  ? const EdgeInsets.only(top: 10.0)
-                  : (index == itemsList.length - 1)
-                  ? const EdgeInsets.only(top: 10,bottom: 10)
-                  : EdgeInsets.zero,
+              padding:  EdgeInsets.only(bottom: kTileSpace),
+              // padding: (index < itemsList.length - 1)
+              //     ? const EdgeInsets.only(top: 10.0)
+              //     : (index == itemsList.length - 1)
+              //     ? const EdgeInsets.only(top: 10,bottom: 10)
+              //     : EdgeInsets.zero,
               child: SimpleTile(item: item),
             );
           },

@@ -34,8 +34,6 @@ class NotificationsView extends StatefulWidget {
 class _NotificationsViewState extends State<NotificationsView>
     with MediaQueryMixin {
   late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
 
 
 
@@ -55,8 +53,6 @@ class _NotificationsViewState extends State<NotificationsView>
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
       _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
 
       await _initializeData();
     });
@@ -74,7 +70,6 @@ class _NotificationsViewState extends State<NotificationsView>
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-
     return Scaffold(
         backgroundColor: AppColors.bgColor,
         appBar: CustomSimpleAppBar(titleAsString: localization.notificationCenter,inNotifications: true,),
@@ -102,7 +97,7 @@ class _NotificationsViewState extends State<NotificationsView>
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding:  EdgeInsets.all(kPadding),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -146,7 +141,7 @@ class _NotificationsViewState extends State<NotificationsView>
         final element = sortedData[index];
 
         return Padding(
-          padding: EdgeInsets.only(bottom: kPadding),
+          padding: EdgeInsets.only(bottom: kCardSpace),
           child: SimpleCard(
             onTap: () {
               // Navigate to notification details
@@ -164,7 +159,7 @@ class _NotificationsViewState extends State<NotificationsView>
                 CustomInformationContainerField(
                   title: "",
                   descriptionAsWidget: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: kPadding),
+                    padding: EdgeInsets.symmetric(horizontal: kCardPadding),
                     child: Row(
                       children: [
                         element.isNew ?? false
@@ -187,7 +182,7 @@ class _NotificationsViewState extends State<NotificationsView>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: kPadding),
+                  padding: EdgeInsets.symmetric(horizontal: kCardPadding),
                   child: Column(
                     children: [
                       CustomInformationContainerField(
@@ -217,7 +212,5 @@ class _NotificationsViewState extends State<NotificationsView>
         );
       },
     );
-
-
   }
 }

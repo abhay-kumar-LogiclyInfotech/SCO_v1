@@ -146,31 +146,15 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         Container(
           width: double.infinity,
           height: double.infinity,
-          margin: EdgeInsets.only(
-            top: orientation == Orientation.portrait
-                ? screenHeight / 3
-                : screenHeight / 3,
-          ),
-          padding: EdgeInsets.only(
-            left: orientation == Orientation.portrait
-                ? screenWidth * 0.08
-                : screenWidth / 100,
-            right: orientation == Orientation.portrait
-                ? screenWidth * 0.08
-                : screenWidth / 100,
-            top: orientation == Orientation.portrait
-                ? screenWidth * 0.05
-                : screenWidth / 100 * 5,
-            bottom: orientation == Orientation.portrait
-                ? screenWidth / 100 * 1
-                : screenWidth / 100 * 1,
-          ),
+          margin: EdgeInsets.only(top: orientation == Orientation.portrait ? screenHeight / 3 : screenHeight / 3,),
+          padding: EdgeInsets.symmetric(horizontal: kPadding),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.elliptical(60, 60)),
           ),
           child: Column(
             children: [
+              kLargeSpace,
               _title(),
               Expanded(
                 child: Consumer<SecurityQuestionViewModel>(
@@ -192,16 +176,14 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
                             children: [
                               const SizedBox(height: 40),
                               fieldHeading(
-                                title: AppLocalizations.of(context)!
-                                    .securityQuestion,
+                                title: AppLocalizations.of(context)!.securityQuestion,
                                 important: true,
                                 langProvider: langProvider,
                               ),
                               _questionField(langProvider: langProvider),
                               const SizedBox(height: 20),
                               fieldHeading(
-                                title: AppLocalizations.of(context)!
-                                    .securityAnswer,
+                                title: AppLocalizations.of(context)!.securityAnswer,
                                 important: true,
                                 langProvider: langProvider,
                               ),
@@ -232,7 +214,6 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
       padding: const EdgeInsets.all(50.0),
       child: SvgPicture.asset(
         "assets/security_question_bg1.svg",
-        // fit: BoxFit.fill,
       ),
     );
   }
@@ -280,8 +261,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
           // Validate only when user interacts with the field
           if (_answerFocusNode.hasFocus) {
             setState(() {
-              _answerError = ErrorText.getSecurityAnswerError(
-                  answer: value!, context: context);
+              _answerError = ErrorText.getSecurityAnswerError(answer: value!, context: context);
             });
           }
         });
@@ -307,23 +287,19 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
               provider.setSecurityQuestion(_questionController.text);
               provider.setSecurityAnswer(_answerController.text);
               bool updateResult = await provider.updateSecurityQuestion(
-                // context: context,
                 langProvider: langProvider,
                 userId: _userId ?? '',
-                // userId: "962229",
               );
 
               /// checking updating security question because we are using this screen twice
               if (updateResult && !widget.updatingSecurityQuestion) {
                 _navigationService.goBackUntilFirstScreen();
-                _navigationService.pushReplacementCupertino(CupertinoPageRoute(
-                    builder: (context) => const LoginView()));
+                _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => const LoginView()));
               }
             }
             setProcessing(false);
           },
           fontSize: 16,
-          // buttonColor: AppColors.scoThemeColor,
           borderColor: Colors.transparent,
           elevation: 1,
         );
@@ -334,21 +310,11 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {
     if (_questionController.text.isEmpty) {
-      // _alertServices.flushBarErrorMessages(
-      //     message: AppLocalizations.of(context)!.selectSecurityQuestion,
-      //     provider: langProvider);
-      _alertServices.showErrorSnackBar(
-          AppLocalizations.of(context)!.selectSecurityQuestion);
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.selectSecurityQuestion)));
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.selectSecurityQuestion);
       return false;
     }
     if (_answerController.text.isEmpty) {
-      // _alertServices.flushBarErrorMessages(
-      //     message: AppLocalizations.of(context)!.writeSecurityAnswer,
-      //     provider: langProvider);
-      _alertServices
-          .showErrorSnackBar(AppLocalizations.of(context)!.writeSecurityAnswer);
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.answerSecurityQuestion)));
+      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.writeSecurityAnswer);
       return false;
     }
 

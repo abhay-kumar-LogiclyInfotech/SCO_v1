@@ -89,10 +89,8 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
               painter: DashedBottomBorderPainter(),
               child: Container(
                 width: double.maxFinite,
-                padding: widget.expandedContentPadding ??  const EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+                padding: widget.expandedContentPadding ??   EdgeInsets.all(kCardPadding),
                 decoration: const BoxDecoration(
-                  // color: Colors.white,
-
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(15),
                   ),

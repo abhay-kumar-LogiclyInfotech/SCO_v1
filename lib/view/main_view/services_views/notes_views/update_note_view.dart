@@ -51,19 +51,15 @@ class UpdateNoteView extends StatefulWidget {
 }
 
 class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
-  late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
   late MediaServices _mediaServices;
 
   Future _initializeData() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// fetch my application with approved
-      final provider =
-          Provider.of<GetSpecificNoteDetailsViewModel>(context, listen: false);
+      final provider = Provider.of<GetSpecificNoteDetailsViewModel>(context, listen: false);
       await provider.getSpecificNoteDetails(noteId: widget.noteId);
 
-      final commentsList =
-          provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ?? [];
+      final commentsList = provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ?? [];
       if (commentsList.isNotEmpty) {
         _commentsDetailsList.clear();
         for (var element in commentsList) {
@@ -71,8 +67,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
         }
       }
 
-      final attachmentsList =
-          provider.apiResponse.data?.data?.adviseeNote?.listOfAttachments ?? [];
+      final attachmentsList = provider.apiResponse.data?.data?.adviseeNote?.listOfAttachments ?? [];
 
       /// Fetching the list of attachments and initializing the mh list:
       if (attachmentsList.isNotEmpty) {
@@ -98,8 +93,6 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
       _mediaServices = getIt.get<MediaServices>();
 
       await _initializeData();
@@ -146,14 +139,12 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
             ),
           );
         case Status.COMPLETED:
-          final listDetails =
-              provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ??
-                  [];
+          final listDetails = provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ?? [];
           return Directionality(
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding:  EdgeInsets.all(kPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,9 +154,9 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                         ? _listDetails(
                             provider: provider, langProvider: langProvider,localization: localization)
                         : Utils.showOnNoDataAvailable(context: context),
-                    kFormHeight,
+                    kSmallSpace,
                     _listComments(langProvider: langProvider,localization: localization),
-                    kFormHeight,
+                    kSmallSpace,
                     SimpleCard(
                         expandedContent: Column(
                       children: [
@@ -184,7 +175,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                         }),
                       ],
                     )),
-                    kFormHeight,
+                    kSmallSpace,
                     _submitAndBackButton(
                         langProvider: langProvider,
                         getSpecificNoteDetailsProvider: provider,localization: localization),
@@ -247,8 +238,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                     code: noteInfo?.access)),
             CustomInformationContainerField(
                 title: localization.createdOn,
-                description: convertTimestampToDate(
-                    int.parse(noteInfo?.createdOn?.toString() ?? '- -'))),
+                description: noteInfo?.createdOn?.toString() ?? '- -'),
             CustomInformationContainerField(
                 title: localization.subject,
                 description: noteInfo?.subject ?? '- -',
@@ -263,9 +253,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
   /// Comments Details Sections and also option to add comment
   final List<NoteDetailList> _commentsDetailsList = [];
 
-  _addComment() {
-    final date = DateTime.now().millisecondsSinceEpoch;
-
+  _addComment() {final date = DateTime.now().millisecondsSinceEpoch;
     _commentsDetailsList.add(NoteDetailList(
         itemSeqController: TextEditingController(),
         noteItemLongTextController: TextEditingController(),

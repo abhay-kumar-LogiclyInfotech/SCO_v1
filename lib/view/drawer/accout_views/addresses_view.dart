@@ -99,7 +99,7 @@ class _AddressesViewState extends State<AddressesView> with MediaQueryMixin {
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding:  EdgeInsets.all(kPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,

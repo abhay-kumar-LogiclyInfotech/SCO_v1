@@ -209,7 +209,6 @@ class _MyAppState extends State<MyApp> {
 
           /// Edit Peoplesoft application sections
           ChangeNotifierProvider(create: (_) => EditApplicationSectionsViewModel()),
-
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {

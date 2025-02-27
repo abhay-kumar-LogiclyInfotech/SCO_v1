@@ -12,8 +12,7 @@ import 'package:sco_v1/viewModel/notifications_view_models/get_notifications_cou
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
-import 'package:html/parser.dart' as html ;
-
+import 'package:html/parser.dart' as html;
 
 import '../../../../data/response/status.dart';
 import '../../../../resources/app_colors.dart';
@@ -28,10 +27,10 @@ import '../../../models/notifications/GetAllNotificationsModel.dart';
 import '../../../resources/app_text_styles.dart';
 import 'package:flutter_html/flutter_html.dart' as flutter_html;
 
-
 class NotificationDetailView extends StatefulWidget {
   final GetAllNotificationsModel notification;
-  const NotificationDetailView({super.key,required this.notification});
+
+  const NotificationDetailView({super.key, required this.notification});
 
   @override
   State<NotificationDetailView> createState() => _NotificationDetailViewState();
@@ -39,37 +38,31 @@ class NotificationDetailView extends StatefulWidget {
 
 class _NotificationDetailViewState extends State<NotificationDetailView>
     with MediaQueryMixin {
-  late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
-
-
-
   Future _initializeData() async {
-
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-
-
-      try
-      {
+      try {
         /// Decrease the notification count:
-        final decreaseCountProvider = Provider.of<DecreaseNotificationCountViewModel>(context,listen: false);
-        final _notification = widget.notification;
+        final decreaseCountProvider =
+            Provider.of<DecreaseNotificationCountViewModel>(context,
+                listen: false);
+        final notification = widget.notification;
         final form = {
-          "userId": _notification.userId ?? '',
-          "notificationId": _notification.notificationId ?? '',
-          "emplId":_notification.emplId ?? ''
+          "userId": notification.userId ?? '',
+          "notificationId": notification.notificationId ?? '',
+          "emplId": notification.emplId ?? ''
         };
 
         /// Calling decrease count api
-        await decreaseCountProvider.decreaseNotificationCount(form:form);
+        await decreaseCountProvider.decreaseNotificationCount(form: form);
 
         /// Refreshing the notifications now
         /// get all notifications
-        await Provider.of<GetNotificationsCountViewModel>(context,listen: false).getNotificationsCount();
-        await Provider.of<GetAllNotificationsViewModel>(context, listen: false).getAllNotifications();
-      }
-      catch(e){
+        await Provider.of<GetNotificationsCountViewModel>(context,
+                listen: false)
+            .getNotificationsCount();
+        await Provider.of<GetAllNotificationsViewModel>(context, listen: false)
+            .getAllNotifications();
+      } catch (e) {
         // print(e.toString());
       }
     });
@@ -78,19 +71,13 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      /// initialize navigation services
-      GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
-
       await _initializeData();
     });
-
     super.initState();
   }
 
   bool _isProcessing = false;
+
   void setProcessing(bool isProcessing) {
     setState(() {
       _isProcessing = isProcessing;
@@ -101,75 +88,83 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-    return
-      Scaffold(
-        backgroundColor: AppColors.bgColor,
-        appBar: CustomSimpleAppBar(titleAsString: localization.notificationDetails,inNotifications: true,),
-        body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization: localization), onRefresh: _initializeData) ),
-      );
+    return Scaffold(
+      backgroundColor: AppColors.bgColor,
+      appBar: CustomSimpleAppBar(
+        titleAsString: localization.notificationDetails,
+        inNotifications: true,
+      ),
+      body: Utils.modelProgressHud(
+          processing: _isProcessing,
+          child: Utils.pageRefreshIndicator(
+              child: _buildUi(localization: localization),
+              onRefresh: _initializeData)),
+    );
   }
 
-  Widget _buildUi({
-    required AppLocalizations localization
-}) {
+  Widget _buildUi({required AppLocalizations localization}) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return Consumer<DecreaseNotificationCountViewModel>(
         builder: (context, provider, _) {
-          switch (provider.apiResponse.status) {
-            case Status.LOADING:
-              return Utils.pageLoadingIndicator(context: context);
+      switch (provider.apiResponse.status) {
+        case Status.LOADING:
+          return Utils.pageLoadingIndicator(context: context);
 
-            case Status.ERROR:
-              return Center(
-                child: Text(
-                  AppLocalizations.of(context)!.somethingWentWrong,
+        case Status.ERROR:
+          return Center(
+            child: Text(
+              AppLocalizations.of(context)!.somethingWentWrong,
+            ),
+          );
+        case Status.COMPLETED:
+          return Directionality(
+            textDirection: getTextDirection(langProvider),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:  EdgeInsets.all(kPadding),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // See Full notification details
+                    _notificationDetailsSection(
+                        provider: widget.notification,
+                        langProvider: langProvider,
+                        localization: localization)
+                  ],
                 ),
-              );
-            case Status.COMPLETED:
-              return Directionality(
-                textDirection: getTextDirection(langProvider),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // See Full notification details
-                        _notificationDetailsSection(provider: widget.notification,langProvider: langProvider,localization:localization)
-                      ],
-                    ),
-                  ),
-                ),
-              );
+              ),
+            ),
+          );
 
-            case Status.NONE:
-              return showVoid;
-            case null:
-              return showVoid;
-          }
-        });
-
+        case Status.NONE:
+          return showVoid;
+        case null:
+          return showVoid;
+      }
+    });
   }
 
   ///*------ Applications Section------*
 
   Widget _notificationDetailsSection(
-      {required GetAllNotificationsModel provider, required LanguageChangeViewModel langProvider,required AppLocalizations localization}) {
-
-
+      {required GetAllNotificationsModel provider,
+      required LanguageChangeViewModel langProvider,
+      required AppLocalizations localization}) {
     return SimpleCard(
       contentPadding: EdgeInsets.zero,
-      expandedContent:Column(children: [
+      expandedContent: Column(children: [
         CustomInformationContainerField(
             title: "",
             descriptionAsWidget: Padding(
-              padding: EdgeInsets.symmetric(horizontal: kPadding),
+              padding: EdgeInsets.symmetric(horizontal: kCardPadding),
               child: Row(
                 children: [
-                  provider.isNew ?? false ? SvgPicture.asset("assets/bell.svg") : SvgPicture.asset("assets/message_seen_bell.svg")  ,
+                  provider.isNew ?? false
+                      ? SvgPicture.asset("assets/bell.svg")
+                      : SvgPicture.asset("assets/message_seen_bell.svg"),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -185,33 +180,45 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
               ),
             )),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: kPadding),
+          padding: EdgeInsets.symmetric(horizontal: kCardPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomInformationContainerField(
-                  title: localization.from,
-                  description: provider?.from ?? ''),
+                  title: localization.from, description: provider?.from ?? ''),
               CustomInformationContainerField(
                   title: localization.createdOn,
-                  description: convertTimestampToDateTime(provider?.createDate ?? 0)),
+                  description:
+                      convertTimestampToDateTime(provider?.createDate ?? 0)),
               CustomInformationContainerField(
                   title: localization.status,
-                  description:  getFullNameFromLov(langProvider: langProvider,lovCode: 'NOTIFICATION_STS',code: provider?.status ?? '') ),
+                  description: getFullNameFromLov(
+                      langProvider: langProvider,
+                      lovCode: 'NOTIFICATION_STS',
+                      code: provider?.status ?? '')),
               CustomInformationContainerField(
                   title: localization.notificationType,
-                  description: getFullNameFromLov(langProvider: langProvider,lovCode: 'NOTIFICATION_TYPE',code: provider?.notificationType ?? '') ),
+                  description: getFullNameFromLov(
+                      langProvider: langProvider,
+                      lovCode: 'NOTIFICATION_TYPE',
+                      code: provider?.notificationType ?? '')),
               CustomInformationContainerField(
                   title: localization.importance,
-                  description: getFullNameFromLov(langProvider: langProvider,lovCode: 'NOTIF_IMPORTANCE',code: provider?.importance ?? '') ),
+                  description: getFullNameFromLov(
+                      langProvider: langProvider,
+                      lovCode: 'NOTIF_IMPORTANCE',
+                      code: provider?.importance ?? '')),
               CustomInformationContainerField(
                   title: localization.subject,
                   description: provider?.subject ?? ''),
-               Text(localization.message,style: AppTextStyles.subTitleTextStyle(),),
+              Text(
+                localization.message,
+                style: AppTextStyles.subTitleTextStyle(),
+              ),
               Html(
                 data: provider.messageText ?? '',
-                onAnchorTap: (a,b,c)async{
-                await  Utils.launchingUrl(a);
+                onAnchorTap: (a, b, c) async {
+                  await Utils.launchingUrl(a);
                 },
                 style: {
                   "a": Style(
@@ -223,22 +230,16 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
                   //   textDecoration: TextDecoration.none, // If no underline is needed for <p> tags
                   // ),
                   "div": Style(
-                    color: AppColors.scoButtonColor,
-                    fontSize: FontSize(14),
-                    fontWeight: FontWeight.w600),
+                      color: AppColors.scoButtonColor,
+                      fontSize: FontSize(14),
+                      fontWeight: FontWeight.w600),
                 },
               ),
-
-
-
-
-
               kFormHeight,
             ],
           ),
         ),
       ]),
     );
-
   }
 }

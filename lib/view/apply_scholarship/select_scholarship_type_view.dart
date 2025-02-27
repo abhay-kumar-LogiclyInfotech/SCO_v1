@@ -45,8 +45,6 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
   // Academic career menuItemList
   List<GetAllActiveScholarshipsModel?>? academicCareerMenuItemList = [];
 
-
-
   // Preparing dropdown items
   List<DropdownMenuItem> populateAcademicCareer({
     required List<GetAllActiveScholarshipsModel?> menuItemsList,
@@ -85,8 +83,12 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       // fetching all active scholarships:
-      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context, listen: false);
-      await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
+      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context,
+          listen: false);
+      await provider.getAllActiveScholarships(
+          context: context,
+          langProvider:
+              Provider.of<LanguageChangeViewModel>(context, listen: false));
     });
   }
 
@@ -96,7 +98,8 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        title: Text(localization.apply_for_scholarship, style: AppTextStyles.appBarTitleStyle()),
+        title: Text(localization.apply_for_scholarship,
+            style: AppTextStyles.appBarTitleStyle()),
       ),
       body: _buildUI(localization),
     );
@@ -133,7 +136,8 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                               CustomDropdown(
                                 textDirection: textDirection,
                                 menuItemsList: populateNormalDropdownWithValue(
-                                    menuItemsList: Constants.scholarshipRequestType,
+                                    menuItemsList:
+                                        Constants.scholarshipRequestType,
                                     provider: langProvider),
                                 currentFocusNode: _requestTypeFocusNode,
                                 hintText: localization.select,
@@ -142,13 +146,23 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                 onChanged: (value) {
                                   setState(() {
                                     // Reset academicCareerMenuItemList when Request Type changes
-                                    _selectedAcademicCareer = ''; // Reset the selected academic career
+                                    _selectedAcademicCareer =
+                                        ''; // Reset the selected academic career
 
                                     // Filter the list of active scholarships based on the selected request type
-                                    academicCareerMenuItemList = provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == value.toString() && element.isActive == true).toList();
+                                    academicCareerMenuItemList = provider
+                                        .apiResponse.data
+                                        ?.where((element) =>
+                                            element.scholarshipType
+                                                    .toString() ==
+                                                value.toString() &&
+                                            element.isActive == true)
+                                        .toList();
 
                                     // request next focus
-                                    Utils.requestFocus(focusNode: _academicCareerFocusNode, context: context);
+                                    Utils.requestFocus(
+                                        focusNode: _academicCareerFocusNode,
+                                        context: context);
                                   });
                                 },
                               ),
@@ -163,16 +177,25 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
                               // Dropdown for Academic Career
                               CustomDropdown(
-                                filled: (academicCareerMenuItemList == null || academicCareerMenuItemList!.isEmpty),
+                                filled: (academicCareerMenuItemList == null ||
+                                    academicCareerMenuItemList!.isEmpty),
                                 textDirection: textDirection,
                                 menuItemsList: populateAcademicCareer(
-                                    menuItemsList: (academicCareerMenuItemList == null || academicCareerMenuItemList!.isEmpty) ? [] : academicCareerMenuItemList!,
+                                    menuItemsList:
+                                        (academicCareerMenuItemList == null ||
+                                                academicCareerMenuItemList!
+                                                    .isEmpty)
+                                            ? []
+                                            : academicCareerMenuItemList!,
                                     provider: langProvider),
                                 currentFocusNode: _academicCareerFocusNode,
                                 hintText: localization.select,
                                 textColor: AppColors.scoButtonColor,
                                 outlinedBorder: true,
-                                value: _selectedAcademicCareer.isEmpty ? null : _selectedAcademicCareer, // Set the value properly
+                                value: _selectedAcademicCareer.isEmpty
+                                    ? null
+                                    : _selectedAcademicCareer,
+                                // Set the value properly
                                 onChanged: (value) {
                                   // Handle academic career selection
                                   setState(() {
@@ -193,14 +216,19 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                           textDirection: textDirection,
                           // buttonColor: AppColors.scoButtonColor,
                           onTap: () {
-
-                            _selectedAcademicCareer.isNotEmpty?_navigationService.pushCupertino(CupertinoPageRoute(builder: (context)=>FillScholarshipFormView(
-                              selectedScholarshipConfigurationKey: _selectedAcademicCareer,
-                              getAllActiveScholarships: provider.apiResponse.data,
-                            ))) : _alertService.flushBarErrorMessages(message: "${localization.select} ${localization.academicCareer}",
-                                // context: context,
-                                provider: langProvider);
-
+                            _selectedAcademicCareer.isNotEmpty
+                                ? _navigationService.pushCupertino(
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            FillScholarshipFormView(
+                                              selectedScholarshipConfigurationKey:
+                                                  _selectedAcademicCareer,
+                                              getAllActiveScholarships:
+                                                  provider.apiResponse.data,
+                                            )))
+                                : _alertService.showErrorSnackBar(
+                                    "${localization.select} ${localization.academicCareer}",
+                                  );
                           }),
                     ],
                   ),

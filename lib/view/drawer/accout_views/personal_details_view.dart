@@ -107,7 +107,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(kPadding),
                 child: Column(
                   children: [
                     // Edit Profile Button
@@ -254,9 +254,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
       {required GetPersonalDetailsViewModel provider, required langProvider, required AppLocalizations localization}) {
     final userInfo = provider.apiResponse.data?.data?.userInfo;
     List<PhoneNumbers> phoneNumbers = [];
-    userInfo?.phoneNumbers?.forEach((element) {
-      phoneNumbers.add(element);
-    });
+    userInfo?.phoneNumbers?.forEach((element) {phoneNumbers.add(element);});
 
     return CustomInformationContainer(
         title: localization.contactInformation,

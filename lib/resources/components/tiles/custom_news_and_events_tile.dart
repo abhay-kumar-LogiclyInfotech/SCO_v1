@@ -14,6 +14,7 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import '../../../data/response/status.dart';
 import '../../app_colors.dart';
 import '../../app_text_styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomNewsAndEventsTile extends StatefulWidget {
   final String imageId;
@@ -22,8 +23,8 @@ class CustomNewsAndEventsTile extends StatefulWidget {
   String? date;
   final void Function() onTap;
 
-
-  CustomNewsAndEventsTile({super.key,
+  CustomNewsAndEventsTile({
+    super.key,
     required this.imageId,
     required this.title,
     required this.subTitle,
@@ -36,18 +37,17 @@ class CustomNewsAndEventsTile extends StatefulWidget {
       _CustomNewsAndEventsTileState();
 }
 
-class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with MediaQueryMixin {
-
+class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile>
+    with MediaQueryMixin {
   late NavigationServices _navigationServices;
-
 
   String? _imageUrl;
 
   void _initializeData() async {
     final langProvider =
-    Provider.of<LanguageChangeViewModel>(context, listen: false);
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
     final provider =
-    Provider.of<IndividualImageViewModel>(context, listen: false);
+        Provider.of<IndividualImageViewModel>(context, listen: false);
 
     // Schedule the data fetch to avoid direct async calls in build phase
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -72,7 +72,6 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with 
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
 
-
     //Initialize the image url;
     _initializeData();
   }
@@ -80,7 +79,7 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with 
   @override
   Widget build(BuildContext context) {
     final langProvider =
-    Provider.of<LanguageChangeViewModel>(context, listen: false);
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
     return Directionality(
       textDirection: getTextDirection(langProvider),
       child: GestureDetector(
@@ -150,9 +149,8 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with 
             );
           case Status.COMPLETED:
             return AspectRatio(
-              aspectRatio: 4/1.7,
-              child:
-              Stack(
+              aspectRatio: 4 / 1.7,
+              child: Stack(
                 children: [
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 2000),
@@ -160,37 +158,17 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with 
                     // height: 95,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(kCardRadius),
+                        borderRadius: BorderRadius.circular(kCardRadius),
                         image: DecorationImage(
-                            image: NetworkImage(_imageUrl ?? Constants.newsImageUrl,),
-                            filterQuality: FilterQuality.high,
-                            fit: BoxFit.fill,
-                           )
-                    ),
+                          image: NetworkImage(
+                            _imageUrl ?? Constants.newsImageUrl,
+                          ),
+                          filterQuality: FilterQuality.high,
+                          fit: BoxFit.fill,
+                        )),
                   ),
-
                 ],
               ),
-            );
-
-
-            Image.network(
-              _imageUrl ?? Constants.newsImageUrl,
-              filterQuality: FilterQuality.high,
-              fit: BoxFit.contain,
-              height: 100,
-              width: double.infinity,
-              // height: screenHeight / 5.6,
-              errorBuilder: (BuildContext context, Object, StackTrace) {
-                return Image.network(
-                  "assets/sidemenu/scholarships_uae.jpg",
-                  filterQuality: FilterQuality.high,
-                  height: 100,
-                  fit: BoxFit.fill,
-                  // width: screenWidth / 4,
-                  // height: screenHeight / 8,
-                );
-              },
             );
 
           default:
@@ -219,19 +197,23 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with 
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox.square(dimension: 5,),
+          const SizedBox.square(
+            dimension: 5,
+          ),
           //Date
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SvgPicture.asset("assets/sidemenu/date_icon.svg",),
+              SvgPicture.asset(
+                "assets/sidemenu/date_icon.svg",
+              ),
               const SizedBox(
                 width: 4.5,
               ),
               Text(
-                widget.date ?? "Date", // textAlign: TextAlign.justify,
+                widget.date ?? "--", // textAlign: TextAlign.justify,
                 style: const TextStyle(
                   color: Color(0xff747D85),
                   fontSize: 10,
@@ -241,8 +223,6 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with 
           ),
 
           const SizedBox.square(dimension: 8),
-
-
 
           //Title
           Text(
@@ -256,22 +236,37 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile> with 
             // widget.subTitle.length < 100
             //     ?
             widget.subTitle,
-                // : "${widget.subTitle.substring(0, 100)}...",
+            // : "${widget.subTitle.substring(0, 100)}...",
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.subTitleTextStyle(),
           ),
-kFormHeight,
-         const  Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Read more",style: TextStyle(color: Colors.blue,fontSize: 10,fontWeight: FontWeight.w600),)
-,               Icon(Icons.keyboard_arrow_right_sharp,size: 12,color: Colors.blue,weight: 50,)
-            ],
+          kFormHeight,
+          Directionality(
+            textDirection:
+                getTextDirection(context.read<LanguageChangeViewModel>()),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.readMore,
+                  style: const TextStyle(
+                      color: Colors.blue,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600),
+                ),
+                Icon(
+                  getTextDirection(context.read<LanguageChangeViewModel>()) ==
+                          TextDirection.rtl
+                      ? Icons.keyboard_arrow_left_sharp
+                      : Icons.keyboard_arrow_right_sharp,
+                  size: 12,
+                  color: Colors.blue,
+                  weight: 50,
+                )
+              ],
+            ),
           ),
           const SizedBox.square(dimension: 8),
-
-
-
         ],
       ),
     );

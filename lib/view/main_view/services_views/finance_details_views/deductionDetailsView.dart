@@ -34,19 +34,11 @@ class DeductionDetailsView extends StatefulWidget {
 
 class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQueryMixin
 {
-  late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
-
-
-
   Future _initializeData() async {
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-
       /// fetch my application with approved
       await Provider.of<MyFinanceStatusViewModel>(context, listen: false).myFinanceStatus();
-
     });
 
   }
@@ -54,13 +46,7 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      /// initialize navigation services
-      GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
-
-      await _initializeData();
+     await _initializeData();
     });
 
     super.initState();
@@ -104,7 +90,7 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding:  EdgeInsets.all(kPadding),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,7 +140,6 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
                         CustomInformationContainerField(title: localization.deductionPending, description: topDeduction?.deductionPending.toString() ?? '- -'),
                         CustomInformationContainerField(title: localization.currency, description: topDeduction?.currencyCode.toString() ?? '- -' ,isLastItem: true),
                         kFormHeight,
-
                       ],  langProvider: langProvider,isLastTerm: index == listOfDeduction.length -1),
                   if(index < listOfDeduction.length-1 ) const MyDivider(color: AppColors.darkGrey),
                 ],
@@ -172,7 +157,7 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
           border: Border.all(color: Colors.transparent)
       ),
       child: Padding(
-        padding:  EdgeInsets.only(left: kPadding,right: kPadding,top: kPadding),
+        padding:  EdgeInsets.only(left: kCardPadding,right: kCardPadding,top: kCardPadding),
         child: Column(
           children: content,
         ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/utils.dart';
 import '../app_colors.dart';
 
-class SimpleCard extends StatelessWidget {
+class SimpleCard extends StatefulWidget {
   final Widget expandedContent;
   dynamic onTap;
    EdgeInsetsGeometry? contentPadding;
@@ -10,16 +11,21 @@ class SimpleCard extends StatelessWidget {
    SimpleCard({super.key,this.contentPadding ,required this.expandedContent,this.cardColor,this.onTap});
 
   @override
+  State<SimpleCard> createState() => _SimpleCardState();
+}
+
+class _SimpleCardState extends State<SimpleCard> with MediaQueryMixin {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Material(
 
-        color: cardColor ?? Colors.white,
+        color: widget.cardColor ?? Colors.white,
         borderRadius: const BorderRadius.all(Radius.circular(15)),
         child: Container(
           width: double.maxFinite,
-          padding: contentPadding ??  const EdgeInsets.all(20),
+          padding: widget.contentPadding ??   EdgeInsets.all(kCardPadding),
           decoration:  BoxDecoration(
             // color: Colors.white,
             border: Border.all(color: AppColors.lightGrey),
@@ -27,7 +33,7 @@ class SimpleCard extends StatelessWidget {
               Radius.circular(15)
             ),
           ),
-          child: expandedContent,
+          child: widget.expandedContent,
         ),
       ),
     );

@@ -34,8 +34,6 @@ class FinanceView extends StatefulWidget {
 
 class _FinanceViewState extends State<FinanceView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
 
   Future _initializeData() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
@@ -51,8 +49,6 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin {
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
       _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
 
       await _initializeData();
     });
@@ -100,31 +96,35 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin {
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(kPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _salaryDetails(
-                        provider: provider,
-                        langProvider: langProvider,
-                        localization: localization),
-                    kFormHeight,
+                      provider: provider,
+                      langProvider: langProvider,
+                      localization: localization,
+                    ),
+                    kSmallSpace,
                     _deductionDetails(
-                        provider: provider,
-                        langProvider: langProvider,
-                        localization: localization),
-                    kFormHeight,
+                      provider: provider,
+                      langProvider: langProvider,
+                      localization: localization,
+                    ),
+                    kSmallSpace,
                     _bonusDetails(
-                        provider: provider,
-                        langProvider: langProvider,
-                        localization: localization),
-                    kFormHeight,
+                      provider: provider,
+                      langProvider: langProvider,
+                      localization: localization,
+                    ),
+                    kSmallSpace,
                     _warningDetails(
-                        provider: provider,
-                        langProvider: langProvider,
-                        localization: localization),
+                      provider: provider,
+                      langProvider: langProvider,
+                      localization: localization,
+                    ),
                   ],
                 ),
               ),
@@ -294,8 +294,8 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin {
       required AppLocalizations localization}) {
     return Column(mainAxisSize: MainAxisSize.max, children: [
       Padding(
-        padding:
-            EdgeInsets.only(left: kPadding, right: kPadding, top: kPadding),
+        padding: EdgeInsets.only(
+            left: kCardPadding, right: kCardPadding, top: kCardPadding),
         child: Column(
           children: content,
         ),
@@ -303,8 +303,8 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin {
       const MyDivider(color: AppColors.darkGrey),
       kFormHeight,
       Padding(
-        padding:
-            EdgeInsets.only(left: kPadding, right: kPadding, bottom: kPadding),
+        padding: EdgeInsets.only(
+            left: kCardPadding, right: kCardPadding, bottom: kCardPadding),
         child: CustomButton(
             buttonName: localization.viewAll,
             isLoading: false,

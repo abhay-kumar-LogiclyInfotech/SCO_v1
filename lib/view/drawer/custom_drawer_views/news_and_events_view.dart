@@ -68,7 +68,7 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
   Widget _buildUi(context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Container(
-      padding: const EdgeInsets.only(left: 10.0, right: 10),
+      padding:  EdgeInsets.all(kPadding),
       child: Consumer<NewsAndEventsViewmodel>(
         builder: (context, provider, _) {
           switch (provider.newsAndEventsResponse.status) {
@@ -88,20 +88,10 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: provider.parsedNewsAndEventsModelList.length,
                   itemBuilder: (context, index) {
-                    bool isLastIndex = (index ==
-                        provider.parsedNewsAndEventsModelList.length -
-                            1); //// Replace 10 with your itemCount if dynamic
                     final item = provider.parsedNewsAndEventsModelList[index];
-                    final languageId =
-                        getTextDirection(langProvider) == TextDirection.rtl
-                            ? 'ar_SA'
-                            : 'en_US';
+                    final languageId = getTextDirection(langProvider) == TextDirection.rtl ? 'ar_SA' : 'en_US';
                     return Padding(
-                      padding: index == 0
-                          ? const EdgeInsets.only(top: 30.0, bottom: 15.0)
-                          : isLastIndex
-                              ? const EdgeInsets.only(bottom: 30.0)
-                              : const EdgeInsets.only(bottom: 15.0),
+                      padding: EdgeInsets.only(bottom: kCardSpace),
                       child: CustomNewsAndEventsTile(
                         title: item.getTitle(languageId),
                         imageId: item.coverImageFileEntryId,

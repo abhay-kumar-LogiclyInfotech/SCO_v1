@@ -239,11 +239,11 @@ class _SupportViewState extends State<SupportView> with MediaQueryMixin {
           children: itemsList
               .map(
                 (item) => Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:  EdgeInsets.only(bottom: kTileSpace),
               child: SimpleTile(item: item),
             ),
           )
-              .toList(),
+           .toList(),
         ),
       ),
     );

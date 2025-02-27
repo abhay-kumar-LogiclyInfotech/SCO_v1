@@ -59,8 +59,6 @@ class GetAllNotesViewModel with ChangeNotifier {
     if (networkController.isConnected.value) {
 
       try {
-
-
         setLoading(true);
         setApiResponse = ApiResponse.loading();
         await setUserId();
@@ -75,13 +73,12 @@ class GetAllNotesViewModel with ChangeNotifier {
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);
       } catch (error) {
+        print(error);
         setApiResponse = ApiResponse.error(error.toString());
         _alertServices.showErrorSnackBar(error.toString() ?? '');
-
         setLoading(false);
       }}
     else{
-
       _alertServices.showErrorSnackBar("No Internet Connection is available");
       setLoading(false);
     }

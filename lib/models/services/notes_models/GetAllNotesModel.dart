@@ -92,8 +92,8 @@ class AdviseeNotes {
   String? access;
   String? contactType;
   String? subject;
-  int? createdOn;
-  int? updatedOn;
+  dynamic? createdOn;
+  dynamic? updatedOn;
   List<dynamic>? noteDetailList;
   List<dynamic>? actionList;
   List<dynamic>? listOfAttachments;

@@ -187,7 +187,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding:  EdgeInsets.all(kPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -346,19 +346,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
                       _attachmentsList.removeAt(index);
                     });
                   }),
-              // const SizedBox.square(dimension: 5),
-              // scholarshipFormTextField(
-              //     maxLines: 3,
-              //     textInputType: TextInputType.multiline,
-              //     currentFocusNode: attachment.attachUserFileFocusNode,
-              //     controller: attachment.attachUserFileController,
-              //     hintText: "Comment",
-              //     onChanged: (value) {}),
-              // kFormHeight,
-              // const MyDivider(
-              //   color: AppColors.lightGrey,
-              // ),
-              const SizedBox.square(dimension: 20),
+               SizedBox(height: kCardSpace,)
             ],
           );
         });

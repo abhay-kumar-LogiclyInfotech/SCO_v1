@@ -50,7 +50,7 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
 
   Widget _buildUi(context) {
     return Padding(
-      padding:  EdgeInsets.only(left: kPadding,right: kPadding),
+      padding:  EdgeInsets.all(kPadding),
       child: Consumer<FaqViewModel>(
         builder: (context, provider, _) {
           switch (provider.faqResponse.status) {
@@ -79,11 +79,7 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
 
                     if (question != 'null' && answer != 'null') {
                       return Padding(
-                        padding: index == 0
-                            ? const EdgeInsets.only(top: 30.0, bottom: 15.0)
-                            : isLastIndex
-                                ? const EdgeInsets.only(bottom: 30.0)
-                                : const EdgeInsets.only(bottom: 15.0),
+                        padding: EdgeInsets.only(bottom: kTileSpace),
                         child: CustomExpansionTile(
                             title: question,
                             trailing: const Icon(

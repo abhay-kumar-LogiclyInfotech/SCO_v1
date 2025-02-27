@@ -37,7 +37,6 @@ class NewsAndEventsDetailView extends StatefulWidget {
 
 class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
     with MediaQueryMixin<NewsAndEventsDetailView> {
-  late NavigationServices _navigationService;
 
   String? _imageUrl;
 
@@ -66,7 +65,6 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
   @override
   void initState() {
     final GetIt getIt = GetIt.instance;
-    _navigationService = getIt.get<NavigationServices>();
 
     super.initState();
 
@@ -87,17 +85,15 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
   }
 
   Widget _buildUI() {
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: kPadding),
+      padding: EdgeInsets.all(kPadding),
       child: SingleChildScrollView(
         child: Directionality(
           textDirection: getTextDirection(langProvider),
           child: Column(
             children: [
-              kFormHeight,
               Material(
                 color: Colors.white,
                 shadowColor: Colors.transparent,

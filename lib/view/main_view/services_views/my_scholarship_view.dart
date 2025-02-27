@@ -25,21 +25,12 @@ class MyScholarshipView extends StatefulWidget {
   State<MyScholarshipView> createState() => _MyScholarshipViewState();
 }
 
-class _MyScholarshipViewState extends State<MyScholarshipView>
-    with MediaQueryMixin {
-  late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
-
-
+class _MyScholarshipViewState extends State<MyScholarshipView> with MediaQueryMixin {
 
   Future _initializeData() async {
-
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-
       /// fetch my application with approved
       await Provider.of<MyScholarshipViewModel>(context, listen: false).getMyScholarship();
-
     });
 
 
@@ -49,11 +40,6 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// initialize navigation services
-      GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
-
       await _initializeData();
     });
 
@@ -98,7 +84,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding:  EdgeInsets.all(kPadding),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,18 +109,6 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
   ///*------ Applications Section------*
 
   Widget _applicationsSection({required MyScholarshipViewModel provider, required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
-    // return Column(
-    //   children: provider.apiResponse.data!.data!.scholarships!.map((Scholarships element)
-    //   {
-    //
-    //     return SimpleCard(expandedContent: Column(
-    //       children: [
-    //         Text(element?.country ?? ''),
-    //       ],
-    //     ));
-    //
-    //   }).toList(),
-    // );
     final studentId = provider.apiResponse.data?.data?.dataDetails?.emplId ?? '';
 
    final listOfScholarships =  provider.apiResponse.data?.data?.dataDetails?.scholarships ?? [];
@@ -205,26 +179,5 @@ class _MyScholarshipViewState extends State<MyScholarshipView>
         );
       },
     ) : Utils.showOnNoDataAvailable(context: context);
-
-    // return Column(
-    //   children: provider.apiResponse.data?.data?.dataDetails?.scholarships?.map((element) {
-    //     return SimpleCard(expandedContent: Column(
-    //       mainAxisSize: MainAxisSize.max,
-    //       children: [
-    //         /// ------------ MY SCHOLARSHIP (APPROVED SCHOLARSHIP) DETAILS ------------
-    //       CustomInformationContainerField(title: "Scholarship Name", description: "SCO${element.academicCareer}${element.scholarshipType}"),
-    //       CustomInformationContainerField(title: "Country-University", description:  getFullNameFromLov(lovCode: 'EXT_ORG_ID',code: '${element.university}',langProvider: langProvider)     ),
-    //       CustomInformationContainerField(title: "Country", description: getFullNameFromLov(lovCode: 'COUNTRY',code: '${element.country}',langProvider: langProvider)  ),
-    //       CustomInformationContainerField(title: "Major", description: element.academicCareer),
-    //       CustomInformationContainerField(title: "Program Duration", description: element.numberOfYears),
-    //       CustomInformationContainerField(title: "Approved Date", description: element.scholarshipApprovedDate),
-    //       CustomInformationContainerField(title: "Scholarship Start Date", description: element.studyStartDate),
-    //       CustomInformationContainerField(title: "Scholarship End Date", description: element.scholarshipEndDate),
-    //       CustomInformationContainerField(title: "Application Number", description: element.applicationNo),
-    //       CustomInformationContainerField(title: "Student Id", description: studentId,isLastItem: true),
-    //       ]
-    //     ));
-    //   }).toList() ?? [],
-    // );
   }
 }

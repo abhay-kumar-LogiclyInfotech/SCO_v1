@@ -36,10 +36,6 @@ class SpecificNoteDetailsView extends StatefulWidget {
 
 class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with MediaQueryMixin
 {
-  late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
-
 
 
   Future _initializeData() async {
@@ -48,7 +44,6 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
 
       /// fetch my application with approved
       await Provider.of<GetSpecificNoteDetailsViewModel>(context, listen: false).getSpecificNoteDetails(noteId: widget.noteId);
-
     });
 
   }
@@ -57,11 +52,6 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// initialize navigation services
-      GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
-
       await _initializeData();
     });
 
@@ -102,12 +92,11 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
               );
             case Status.COMPLETED:
               final listDetails = provider.apiResponse.data?.data?.adviseeNote?.noteDetailList ?? [];
-              final listActions = provider.apiResponse.data?.data?.adviseeNote?.actionList ?? [];
               return Directionality(
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding:  EdgeInsets.all(kPadding),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,8 +105,7 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
                         listDetails.isNotEmpty ?
                         _listDetails(provider: provider, langProvider: langProvider,localization: localization) : Utils.showOnNoDataAvailable(context: context)
                         ,
-                        kFormHeight,
-
+                         SizedBox(height: kCardSpace,),
                         _listActions(provider: provider, langProvider: langProvider,localization: localization)
 
 
@@ -149,7 +137,7 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
             CustomInformationContainerField(title: localization.contactType, description: getFullNameFromLov(langProvider: langProvider,lovCode: "CONTACT_TYPE",code:  noteInfo?.contactType )),
             CustomInformationContainerField(title: localization.noteStatus, description: getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_STATUS",code:  noteInfo?.noteStatus )),
             CustomInformationContainerField(title: localization.canAdviseeView, description:  getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_ACCESS",code:  noteInfo?.access )),
-            CustomInformationContainerField(title: localization.createdOn, description: convertTimestampToDate(int.parse(noteInfo?.createdOn?.toString() ?? '- -'))),
+            CustomInformationContainerField(title: localization.createdOn, description: noteInfo?.createdOn?.toString() ?? '- -'),
             CustomInformationContainerField(title: localization.subject, description: noteInfo?.subject ?? '- -',isLastItem: true),
           ],
         )
@@ -162,7 +150,6 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
     final actionsList = provider.apiResponse.data?.data?.adviseeNote?.actionList ?? [];
     return  CustomInformationContainer(
         title: localization.actions,
-        expandedContentPadding: EdgeInsets.zero,
         leading: SvgPicture.asset("assets/services/request_details.svg"),
         expandedContent:  actionsList.isNotEmpty ?  ListView.builder(
             shrinkWrap: true,
@@ -178,7 +165,7 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
                         content:  [
                           CustomInformationContainerField(title: localization.sr, description: (index+1).toString() ?? '- -'),
                           CustomInformationContainerField(title: localization.comments, description: action.desc ?? '- -'),
-                          CustomInformationContainerField(title: localization.dueDate, description: convertTimestampToDate(int.parse(action?.dueDate?.toString() ?? '- -'))),
+                          CustomInformationContainerField(title: localization.dueDate, description: action.dueDate?.toString() ?? '- -'),
                           CustomInformationContainerField(title: localization.status, description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ITEM_ACTION_STATUS',code:  action.status),isLastItem: true ) ,
                         ],  langProvider: langProvider,isLastTerm: index == actionsList.length -1),
                     if(index < actionsList.length-1 ) const MyDivider(color: AppColors.darkGrey),

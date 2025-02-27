@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
+import 'package:sco_v1/resources/cards/simple_card.dart';
 import 'package:sco_v1/viewModel/drawer/contact_us_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,7 +30,7 @@ class ContactUsView extends StatefulWidget {
   State<ContactUsView> createState() => _ContactUsViewState();
 }
 
-class _ContactUsViewState extends State<ContactUsView> {
+class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
 
 
   late AlertServices _alertServices;
@@ -101,6 +102,7 @@ class _ContactUsViewState extends State<ContactUsView> {
   String? _inquiryTypeError;
   String? _subjectError;
   String? _messageError;
+  String? _captchaError;
 
   List<DropdownMenuItem> _inquiryTypeMenuItemsList = [];
 
@@ -122,8 +124,6 @@ class _ContactUsViewState extends State<ContactUsView> {
       _angle += 180.0;
     });
   }
-
-
 
   void _initializeData(){
     //Rooting the angle and generating the new captcha
@@ -175,31 +175,57 @@ class _ContactUsViewState extends State<ContactUsView> {
           style: AppTextStyles.appBarTitleStyle(),
         ),
       ),
-      body: SafeArea(child: _buildUi(localization: localization)),
+      body: _buildUi(localization: localization),
     );
   }
 
   Widget _buildUi({required localization}) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-        child: SingleChildScrollView(
-          child: Column(
+    return Padding(
+      padding:  EdgeInsets.all(kPadding),
+      child: SingleChildScrollView(
+        child: SimpleCard(
+          contentPadding: EdgeInsets.zero,
+          expandedContent: Column(
             children: [
-              const SizedBox(height: 20),
               //*----Common Contact Details Section-----*/
               _commonContactDetailsSection(langProvider: langProvider ,localization: localization),
+              Padding(
+                padding:  const EdgeInsets.symmetric(vertical: 10.0,horizontal: 10),
+                child: Column(
+                  children: [
 
-              const SizedBox(height: 30),
+                    //*-----Static Text (Write To US)-----*/
+                    _heading(langProvider: langProvider ,text: localization.writeToUs),
+                    kSmallSpace,
 
-              //*-----Static Text (Write To US)-----*/
-              _writeToUs(langProvider: langProvider ,localization: localization),
-              const SizedBox(height: 30),
+                    //*----InQuery Form------*/
+                    _inQueryForm(langProvider: langProvider ,localization: localization),
+                    kSmallSpace,
 
-              //*----Inquery Form------*/
-              _inqueryForm(langProvider: langProvider ,localization: localization),
-              const SizedBox(height: 20),
+                    /// location
+                    _heading(langProvider: langProvider ,text: localization.officeLocation),
+
+                  ],
+                ),
+              ),
+
+              //*----Address Image From Map ----*
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                ),
+                child: Image.asset(
+                  "assets/sidemenu/img.png",
+                  filterQuality: FilterQuality.high,
+                  width: double.infinity,
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+
             ],
           ),
         ),
@@ -338,20 +364,7 @@ class _ContactUsViewState extends State<ContactUsView> {
               ),
             ),
 
-            //*----Address Image From Map ----*
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(15),
-                bottomLeft: Radius.circular(15),
-              ),
-              child: Image.asset(
-                "assets/sidemenu/img.png",
-                filterQuality: FilterQuality.high,
-                width: double.infinity,
-                height: 150,
-                fit: BoxFit.cover,
-              ),
-            ),
+
           ],
         ),
       ),
@@ -359,21 +372,21 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
   //*----Write To Us Section-----*
-  Widget _writeToUs({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
+  Widget _heading({required LanguageChangeViewModel langProvider, required String text}) {
     return Directionality(
         textDirection: getTextDirection(langProvider),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              localization.writeToUs,
+              text,
               style: AppTextStyles.titleBoldTextStyle(),
             )
           ],
         ));
   }
 
-  Widget _inqueryForm({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
+  Widget _inQueryForm({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
     return Column(
       children: [
         _nameSection(langProvider: langProvider ,localization: localization),
@@ -388,7 +401,7 @@ class _ContactUsViewState extends State<ContactUsView> {
         const SizedBox(height: 10),
         _messageSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 10),
-        _createCaptchaSection(),
+        _createCaptchaSection(langProvider: langProvider),
         _captchaSection(langProvider: langProvider ,localization: localization),
         const SizedBox(height: 30),
         _submitButton(langProvider: langProvider ,localization: localization),
@@ -408,8 +421,6 @@ class _ContactUsViewState extends State<ContactUsView> {
       textCapitalization: true,
       leading: SvgPicture.asset(
         "assets/name.svg",
-        // height: 18,
-        // width: 18,
       ),
       errorText: _nameError,
       onChanged: (value) {
@@ -435,15 +446,12 @@ class _ContactUsViewState extends State<ContactUsView> {
       textCapitalization: false,
       leading: SvgPicture.asset(
         "assets/email.svg",
-        // height: 18,
-        // width: 18,
       ),
       errorText: _emailError,
       onChanged: (value) {
         if (_emailFocusNode.hasFocus) {
           setState(() {
-            _emailError =
-                ErrorText.getEmailError(email: value!, context: context);
+            _emailError = ErrorText.getEmailError(email: value!, context: context);
           });
         }
       },
@@ -479,8 +487,10 @@ class _ContactUsViewState extends State<ContactUsView> {
       leading: SvgPicture.asset("assets/inquiry_type.svg"),
       textDirection: getTextDirection(langProvider),
       menuItemsList: _inquiryTypeMenuItemsList,
+      errorText: _inquiryTypeError,
       useScreenWidthToAdjustDropdown: true,
       onChanged: (value) {
+        _inquiryTypeError = null;
         _inqueryTypeController.text = value!;
         //This thing is creating error: don't know how to fix it:
         FocusScope.of(context).requestFocus(_subjectFocusNode);
@@ -530,8 +540,7 @@ class _ContactUsViewState extends State<ContactUsView> {
       onChanged: (value) {
         if (_messageFocusNode.hasFocus) {
           setState(() {
-            _messageError =
-                ErrorText.getEmptyFieldError(name: value!, context: context);
+            _messageError = ErrorText.getEmptyFieldError(name: value!, context: context);
           });
         }
       },
@@ -539,30 +548,33 @@ class _ContactUsViewState extends State<ContactUsView> {
   }
 
 //*------generate Captcha-----*
-  Widget _createCaptchaSection() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          decoration: BoxDecoration(
-              border: Border.all(color: AppColors.darkGrey),
-              borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            _captchaText ?? '',
-            style: AppTextStyles.titleTextStyle(),
+  Widget _createCaptchaSection({required LanguageChangeViewModel langProvider}) {
+    return Directionality(
+      textDirection: getTextDirection(langProvider),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+                border: Border.all(color: AppColors.darkGrey),
+                borderRadius: BorderRadius.circular(10)),
+            child: Text(
+              _captchaText ?? '',
+              style: AppTextStyles.titleTextStyle(),
+            ),
           ),
-        ),
-        Transform.rotate(
-            angle: _angle * 3.1415927 / 180, // Convert degrees to radians
-            child: IconButton(
-                onPressed: _rotate,
-                icon: const Icon(
-                  Icons.rotate_right,
-                  size: 30,
-                )))
-      ],
+          Transform.rotate(
+              angle: _angle * 3.1415927 / 180, // Convert degrees to radians
+              child: IconButton(
+                  onPressed: _rotate,
+                  icon: const Icon(
+                    Icons.rotate_right,
+                    size: 30,
+                  )))
+        ],
+      ),
     );
   }
 
@@ -576,10 +588,15 @@ class _ContactUsViewState extends State<ContactUsView> {
       textInputType: TextInputType.number,
       leading: SvgPicture.asset(
         "assets/captcha.svg",
-        // height: 18,
-        // width: 18,
       ),
-      onChanged: (value) {},
+      errorText: _captchaError,
+      onChanged: (value) {
+        if (_captchaFocusNode.hasFocus) {
+          setState(() {
+            _captchaError = ErrorText.getEmptyFieldError(name: value!, context: context);
+          });
+        }
+      },
     );
   }
 
@@ -638,84 +655,74 @@ class _ContactUsViewState extends State<ContactUsView> {
 
   //Extra validations for better user Experience:
   bool _validateForm({required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
+
+    bool? validated;
+
     // Validate Full Name
     if (_nameController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-       localization.nameCantBeEmpty,
-        // context: context,
-        // provider: langProvider,
-      );
-      return false;
+      setState(() {
+        validated = false;
+        _nameError = localization.nameCantBeEmpty;
+      });
     }
 
     // Validate Email Id
     if (_emailController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-       localization.emailCantBeEmpty,
-        // context: context,
-        // provider: langProvider,
-      );
-      return false;
+      setState(() {
+        validated = false;
+        _emailError = localization.emailCantBeEmpty;
+      });
     }
 
-    // Validate Phone Number
-    if (_mobileController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-       localization.mobileCantBeEmpty,
-        // context: context,
-        // provider: langProvider,
-      );
-      return false;
-    }
+    // // Validate Phone Number
+    // if (_mobileController.text.isEmpty) {
+    //   setState(() {
+    //     validated = false;
+    //     _mobileError = localization.mobileCantBeEmpty;
+    //   });
+    // }
 
     // Validate Inquiry Type
     if (_inqueryTypeController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-       localization.inquiryTypeCantBeEmpty,
-        // context: context,
-        // provider: langProvider,
-      );
-      return false;
+      setState(() {
+        validated = false;
+        _inquiryTypeError = localization.inquiryTypeCantBeEmpty;
+      });
     }
 
     // Validate Subject
     if (_subjectController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-     localization.subjectCantBeEmpty,
-        // context: context,
-        // provider: langProvider,
-      );
-      return false;
+      setState(() {
+        validated = false;
+        _subjectError = localization.subjectCantBeEmpty;
+      });
     }
 
     // Validate Message
     if (_messageController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-       localization.messageCantBeEmpty,
-        // context: context,
-        // provider: langProvider,
-      );
-      return false;
+      setState(() {
+        validated = false;
+        _messageError = localization.messageCantBeEmpty;
+      });
     }
 
     // Validate Captcha
     if (_captchaController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-       localization.captchaCantBeEmpty,
-        // context: context,
-        // provider: langProvider,
-      );
-      return false;
+      setState(() {
+        validated = false;
+        _captchaError = localization.captchaCantBeEmpty;
+      });
     } else if (_captchaController.text != _captchaText) {
       _rotate();
-      _alertServices.showErrorSnackBar(
-       localization.captchaDoesNotMatch,
-        // context: context,
-        // provider: langProvider,
-      );
-      return false;
+      setState(() {
+        validated = false;
+        _captchaError = localization.captchaDoesNotMatch;
+      });
     }
 
+    if(validated == false){
+      return false;
+    }
     return true;
   }
 }

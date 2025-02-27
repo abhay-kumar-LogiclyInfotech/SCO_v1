@@ -20,7 +20,7 @@ class VisionAndMissionView extends StatefulWidget {
   State<VisionAndMissionView> createState() => _VisionAndMissionViewState();
 }
 
-class _VisionAndMissionViewState extends State<VisionAndMissionView> {
+class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQueryMixin {
   @override
   void initState() {
     super.initState();
@@ -52,7 +52,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> {
     final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
     final localization = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding:  EdgeInsets.all(kPadding),
       child: Directionality(
         textDirection: getTextDirection(langProvider),
         child: SingleChildScrollView(

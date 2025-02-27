@@ -120,7 +120,7 @@ class _CustomDropdownState extends State<CustomDropdown>
                 : Utils.underLinedInputBorder(),
             errorBorder: widget.outlinedBorder
                 ? Utils.outlinedInputBorder().copyWith(borderSide: const BorderSide(color: Colors.red))
-                : Utils.underLinedInputBorder(),
+                : Utils.underLinedInputBorder(Colors.red),
             enabledBorder: widget.outlinedBorder
                 ? Utils.outlinedInputBorder()
                 : Utils.underLinedInputBorder(),

@@ -30,7 +30,6 @@ class _ScoProgramsState extends State<ScoPrograms>
   late NavigationServices _navigationServices;
   final List<Widget> _scoProgramsList = [];
   final List<ScoProgramTileModel> _scoProgramsModelsList = [];
-  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -46,19 +45,6 @@ class _ScoProgramsState extends State<ScoPrograms>
 
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //
-  //   if (!_isInitialized) {
-  //     // Initialize once
-  //     final localization = AppLocalizations.of(context)!;
-  //     _scoProgramsModelsList.clear();
-  //     _scoProgramsList.clear();
-  //     _initializeScoPrograms(localization);
-  //     _isInitialized = true;
-  //   }
-  // }
 
   void _initializeScoPrograms(AppLocalizations? localization) {
     final scoProgramsMapList = [
@@ -66,17 +52,12 @@ class _ScoProgramsState extends State<ScoPrograms>
         'title': localization?.scholarshipInternal,
         'subTitle': localization?.internalScholarshipDesc,
         'imagePath': "assets/sidemenu/scholarships_uae.jpg",
-        // "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
-        //   createRoute(const ScholarshipsInUaeView()),
-        // ),
-        // "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  WebView(url: AppUrls.scholarshipInsideUae, scholarshipType: 'INT')))
-        "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipsInUaeView()))
+       "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipsInUaeView()))
       },
     {
     'title': localization?.scholarshipExternal,
     'subTitle': localization?.externalScholarshipDesc,
     'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
-    // "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> WebView(url: AppUrls.scholarshipOutsideUae, scholarshipType: 'EXT')))
       "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipInAbroadView()))
       },
     ];
@@ -118,14 +99,14 @@ class _ScoProgramsState extends State<ScoPrograms>
 
   Widget _buildUI() {
     return Padding(
-      padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
+      padding:  EdgeInsets.all(kPadding),
       child: ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _scoProgramsList.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.only(bottom: kPadding),
+            padding: EdgeInsets.only(bottom: kTileSpace),
             child: _scoProgramsList[index],
           );
         },

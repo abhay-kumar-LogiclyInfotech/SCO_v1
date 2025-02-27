@@ -34,14 +34,11 @@ class AcademicAdvisorView extends StatefulWidget {
 class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
     with MediaQueryMixin {
   late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
 
   Future _initializeData() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// get personal details to show addresses
-      await Provider.of<GetMyAdvisorViewModel>(context, listen: false)
-          .getMyAdvisor();
+      await Provider.of<GetMyAdvisorViewModel>(context, listen: false).getMyAdvisor();
     });
   }
 
@@ -49,11 +46,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// initialize navigation services
-      GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
-
+      _navigationServices = GetIt.instance.get<NavigationServices>();
       await _initializeData();
     });
 
@@ -101,7 +94,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding:  EdgeInsets.all(kPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -146,10 +139,9 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
         physics: const NeverScrollableScrollPhysics(),
         itemCount: provider.apiResponse?.data?.data?.listOfAdvisor?.length ?? 0,
         itemBuilder: (context, index) {
-          final element =
-              provider.apiResponse?.data?.data?.listOfAdvisor?[index];
+          final element = provider.apiResponse?.data?.data?.listOfAdvisor?[index];
           return Padding(
-            padding: EdgeInsets.only(bottom: kPadding),
+            padding: EdgeInsets.only(bottom: kCardSpace),
             child: SimpleCard(
                 contentPadding: EdgeInsets.zero,
                 expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
@@ -157,7 +149,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
                   CustomInformationContainerField(
                       title: "",
                       descriptionAsWidget: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: kPadding),
+                        padding: EdgeInsets.symmetric(horizontal: kCardPadding),
                         child: Text(
                           element?.advisorName ?? '',
                           style: AppTextStyles.normalTextStyle().copyWith(
@@ -167,7 +159,7 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
                         ),
                       )),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: kPadding),
+                    padding: EdgeInsets.symmetric(horizontal: kCardPadding),
                     child: Column(
                       children: [
                         CustomInformationContainerField(

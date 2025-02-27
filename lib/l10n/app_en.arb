@@ -201,7 +201,7 @@
   "subject": "Subject",
   "contactUs": "Contact Us",
   "send": "SEND",
-  "writeToUs": "Write To Us-",
+  "writeToUs": "Write To Us",
   "poBox": "PO Box ",
   "phoneNo": "Phone No: ",
   "website": "Website: ",
@@ -1122,5 +1122,6 @@
   "graduate_outside_uae_scholarship_applying_procedures": "Graduate Studies Scholarship applying Procedures",
   "noNotificationAvailable": "No notification available.",
   "invalidDocument": "Invalid Document Uploaded. Please Re-Upload.",
-  "version": "Version"
+  "version": "Version",
+  "officeLocation": "Office Location"
 }

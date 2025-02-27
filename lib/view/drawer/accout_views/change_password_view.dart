@@ -130,8 +130,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 33),
-
+                            kSmallSpace,
                             //heading:
                             _heading(langProvider), const SizedBox(height: 40),
 

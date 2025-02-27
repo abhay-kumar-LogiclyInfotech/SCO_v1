@@ -15,13 +15,11 @@ import '../../services/auth_services.dart';
 
 class GetSpecificNoteDetailsViewModel with ChangeNotifier {
 
-  late AuthService _authService;
   late AlertServices _alertServices;
 
   GetSpecificNoteDetailsViewModel()
   {
     final GetIt getIt = GetIt.instance;
-    _authService = getIt.get<AuthService>();
     _alertServices = getIt.get<AlertServices>();
   }
   String? _userId;

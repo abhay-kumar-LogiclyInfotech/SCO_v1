@@ -34,12 +34,6 @@ class SalaryDetailsView extends StatefulWidget {
 
 class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMixin
 {
-  late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
-
-
-
   Future _initializeData() async {
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
@@ -55,11 +49,6 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// initialize navigation services
-      GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
-
       await _initializeData();
     });
 
@@ -104,7 +93,7 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
                 textDirection: getTextDirection(langProvider),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding:  EdgeInsets.all(kPadding),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -133,10 +122,6 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
   Widget _salaryDetails({required MyFinanceStatusViewModel provider, required LanguageChangeViewModel langProvider, required AppLocalizations localization}) {
 
     final listOfSalaries = provider.apiResponse.data?.data?.listSalaryDetials ?? [];
-
-
-
-
       return CustomInformationContainer(
           title: localization.salaryDetails,
           leading: SvgPicture.asset("assets/services/salary_details.svg"),
@@ -177,7 +162,7 @@ class _SalaryDetailsViewState extends State<SalaryDetailsView> with MediaQueryMi
       border: Border.all(color: Colors.transparent)
     ),
       child: Padding(
-        padding:  EdgeInsets.only(left: kPadding,right: kPadding,top: kPadding),
+        padding:  EdgeInsets.only(left: kCardPadding,right: kCardPadding,top: kCardPadding),
         child: Column(
           children: content,
         ),

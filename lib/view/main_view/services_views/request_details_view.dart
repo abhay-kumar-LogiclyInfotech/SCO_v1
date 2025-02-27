@@ -47,17 +47,12 @@ class RequestDetailsView extends StatefulWidget {
 class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQueryMixin
 {
   late NavigationServices _navigationServices;
-  late AuthService _authService;
-  late PermissionServices _permissionServices;
   late MediaServices _mediaServices;
 
-  List<DropdownMenuItem> _employmentStatusMenuItemsList = [];
-  List<DropdownMenuItem> _employerMenuItemsList = [];
+
 
   Future _initializeData() async {
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
-    final langProvider =
-    Provider.of<LanguageChangeViewModel>(context, listen: false);
 
     final request = widget.request;
 
@@ -91,10 +86,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
       _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
       _mediaServices = getIt.get<MediaServices>();
-      _authService = getIt.get<AuthService>();
-
       await _initializeData();
     });
 
@@ -140,7 +132,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
       textDirection: getTextDirection(langProvider),
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding:  EdgeInsets.all(kPadding),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -177,7 +169,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
             /// Basic information of request
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: kPadding),
+              padding: EdgeInsets.symmetric(horizontal: kCardPadding),
               child: _requestBasicInformation(
                   request: request, langProvider: langProvider,localization: localization),
             ),
@@ -189,7 +181,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
             kFormHeight,
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: kPadding),
+              padding: EdgeInsets.symmetric(horizontal: kCardPadding),
               child:
               _addNewComment(request: request, langProvider: langProvider,localization: localization),
             ),
@@ -197,7 +189,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
             /// ****************************************************************
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: kPadding),
+              padding: EdgeInsets.symmetric(horizontal: kCardPadding),
               child: Column(
                 children: [
                   const MyDivider(color: AppColors.lightGrey),
@@ -263,13 +255,12 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
   //// *----------------------- BASIC INFORMATION SECTION END ------------------------*
 
   //// *----------------------- EXISTING COMMENTS SECTION START ------------------------*
-  Widget _existingComments(
-      {ListOfRequest? request, required LanguageChangeViewModel langProvider}) {
+  Widget _existingComments({ListOfRequest? request, required LanguageChangeViewModel langProvider}) {
     return Directionality(
       textDirection: getTextDirection(langProvider),
       child: Container(
           width: double.infinity,
-          padding: EdgeInsets.all(kPadding - 10),
+          padding: EdgeInsets.all(kCardPadding),
           decoration: const BoxDecoration(color: AppColors.lightBlue0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,19 +344,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
                       _attachmentsList.removeAt(index);
                     });
                   }),
-               SizedBox.square(dimension: kPadding),
-              // scholarshipFormTextField(
-              //     maxLines: 2,
-              //     textInputType: TextInputType.multiline,
-              //     currentFocusNode: attachment.fileDescriptionFocusNode,
-              //     controller: attachment.fileDescriptionController,
-              //     hintText: "Comment",
-              //     onChanged: (value) {}),
-              // kFormHeight,
-              // const MyDivider(
-              //   color: AppColors.lightGrey,
-              // ),
-              // kFormHeight,
+               SizedBox.square(dimension: kCardSpace),
             ],
           );
         });

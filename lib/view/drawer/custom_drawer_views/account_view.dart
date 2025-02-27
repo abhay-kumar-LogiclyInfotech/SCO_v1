@@ -33,16 +33,15 @@ class AccountView extends StatefulWidget {
 class _AccountViewState extends State<AccountView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
-
-
   /// Get Roles
-   UserRole? role;
-   bool _isProcessing = false;
-   setIsProcessing(value){
-     setState(() {
-       _isProcessing = value;
-     });
-   }
+  UserRole? role;
+  bool _isProcessing = false;
+
+  setIsProcessing(value) {
+    setState(() {
+      _isProcessing = value;
+    });
+  }
 
   @override
   void initState() {
@@ -50,22 +49,21 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
 
-    WidgetsBinding.instance.addPostFrameCallback((callback)async{
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
       setIsProcessing(true);
       // Getting Fresh Roles
-      final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
+      final getRolesProvider =
+          Provider.of<GetRoleViewModel>(context, listen: false);
       await getRolesProvider.getRoles();
       role = getRoleFromList(HiveManager.getRole());
       setIsProcessing(false);
-      setState(() {
-      });
+      setState(() {});
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-     final localization =AppLocalizations.of(context)!;
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.myAccount),
@@ -80,34 +78,41 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
       {
         'title': localization.personalDetailsTitle,
         'assetAddress': "assets/myAccount/personal_details.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const PersonalDetailsView()))
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const PersonalDetailsView()))
       },
-      if(role == UserRole.scholarStudent)
+      if (role == UserRole.scholarStudent)
         {
-        'title': localization.employmentStatusTitle,
-        'assetAddress': "assets/myAccount/employment_status.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const EmploymentStatusView()))
-      },
+          'title': localization.employmentStatusTitle,
+          'assetAddress': "assets/myAccount/employment_status.svg",
+          "routeBuilder": () =>
+              _navigationServices.pushSimpleWithAnimationRoute(
+                  createRoute(const EmploymentStatusView()))
+        },
       {
         'title': localization.myApplications,
         'assetAddress': "assets/myAccount/application_status.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ApplicationStatusView()))
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const ApplicationStatusView()))
       },
       {
         'title': localization.change_password,
         'assetAddress': "assets/myAccount/change_password.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ChangePasswordView()))
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const ChangePasswordView()))
       },
-      if(role == UserRole.scholarStudent || role == UserRole.applicants)
+      if (role == UserRole.scholarStudent || role == UserRole.applicants)
         {
-        'title': localization.address,
-        'assetAddress': "assets/myAccount/addresses.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const AddressesView()))
-      },
+          'title': localization.address,
+          'assetAddress': "assets/myAccount/addresses.svg",
+          "routeBuilder": () => _navigationServices
+              .pushSimpleWithAnimationRoute(createRoute(const AddressesView()))
+        },
       {
         'title': localization.securityQuestion,
         'assetAddress': "assets/myAccount/security_questions.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const SecurityQuestionsView()))
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+            createRoute(const SecurityQuestionsView()))
       },
     ];
 
@@ -118,80 +123,29 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
     }
 
     return Padding(
-      padding: EdgeInsets.all(kPadding),
-      child: Consumer<GetRoleViewModel>(builder: (context,provider,_){
-        switch(provider.apiResponse.status){
-          case Status.LOADING:
-            return Utils.pageLoadingIndicator(context: context);
-          case Status.ERROR:
-            return showVoid;
-          case Status.COMPLETED:
-            return ListView.builder(
-        itemCount: itemsList.length,
-        itemBuilder: (context, index) {
-
-        final item = itemsList[index];
-        return Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: SimpleTile(item: item),
-        );
-        },
-        );
-          case Status.NONE:
-           return showVoid;
-          case null:
-           return showVoid;
-        }
-      })
-
-
-
-    );
-
-
-    // Previous one with gridview
-    return Padding(
-      padding: const EdgeInsets.only(left: 20.0, right: 20),
-      child: Directionality(
-        textDirection: getTextDirection(langProvider),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-//providing space from above
-              const SizedBox(height: 20),
-
-              //grid View:
-              // GridView.builder(
-              //     shrinkWrap: true,
-              //     physics: const NeverScrollableScrollPhysics(),
-              //     itemCount: itemsList.length,
-              //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              //       crossAxisCount: 2, // Number of columns
-              //       crossAxisSpacing: 30, // Spacing between columns
-              //       mainAxisSpacing: 30, // Spacing between rows
-              //       childAspectRatio: 1,
-              //     ),
-              //     itemBuilder: (context, index) {
-              //       final lastIndex = itemsList.length - 1;
-              //       SimpleTileModel item = itemsList[index];
-              //       return CustomAccountGridContainer(
-              //         assetAddress: item.assetAddress!,
-              //         title: item.title!,
-              //         onTap: item.routeBuilder!,
-              //       );
-              //     }),
-
-
-
-
-              //Providing space from below
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+        padding: EdgeInsets.all(kPadding),
+        child: Consumer<GetRoleViewModel>(builder: (context, provider, _) {
+          switch (provider.apiResponse.status) {
+            case Status.LOADING:
+              return Utils.pageLoadingIndicator(context: context);
+            case Status.ERROR:
+              return showVoid;
+            case Status.COMPLETED:
+              return ListView.builder(
+                itemCount: itemsList.length,
+                itemBuilder: (context, index) {
+                  final item = itemsList[index];
+                  return Padding(
+                    padding:  EdgeInsets.only(bottom: kTileSpace),
+                    child: SimpleTile(item: item),
+                  );
+                },
+              );
+            case Status.NONE:
+              return showVoid;
+            case null:
+              return showVoid;
+          }
+        }));
   }
 }

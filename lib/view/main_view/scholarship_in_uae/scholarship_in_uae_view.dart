@@ -210,7 +210,6 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
 
   void _initializeScoPrograms() {
-    final localization = AppLocalizations.of(context)!;
     final scoProgramsMapList = createScholarshipList(context);
 
     // Map JSON data to models
@@ -233,17 +232,14 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
 
   Widget _buildUI() {
-    final provider = Provider.of<LanguageChangeViewModel>(context);
-
-
    return Padding(
-     padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
+     padding:  EdgeInsets.all(kPadding),
      child: ListView.builder(
        itemCount: _scholarshipsInUaeList.length ?? 0,
        itemBuilder: (context, index) {
          final scholarshipType = _scholarshipsInUaeList[index];
          return Padding(
-           padding:  const EdgeInsets.only(bottom: 10),
+           padding:   EdgeInsets.only(bottom: kTileSpace),
            child: scholarshipType,
          );
        },

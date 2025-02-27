@@ -179,7 +179,6 @@ class _SignUpViewState extends State<SignUpView>
 
   Widget _buildUI() {
     final localization = AppLocalizations.of(context)!;
-    final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return Stack(
       alignment: Alignment.topLeft,
       children: [
@@ -439,8 +438,6 @@ class _SignUpViewState extends State<SignUpView>
       textCapitalization: true,
       leading: SvgPicture.asset(
         "assets/name.svg",
-        // height: 18,
-        // width: 18,
       ),
       errorText: _thirdNameError,
       onChanged: (value) {

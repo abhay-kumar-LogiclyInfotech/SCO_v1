@@ -39,8 +39,6 @@ class GuidanceNotesView extends StatefulWidget {
 
 class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
-  late PermissionServices _permissionServices;
-  late MediaServices _mediaServices;
 
   Future _initializeData() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
@@ -57,9 +55,6 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
       /// initialize navigation services
       GetIt getIt = GetIt.instance;
       _navigationServices = getIt.get<NavigationServices>();
-      _permissionServices = getIt.get<PermissionServices>();
-      _mediaServices = getIt.get<MediaServices>();
-
       await _initializeData();
 
     });
@@ -83,8 +78,7 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
       appBar: CustomSimpleAppBar(titleAsString: localization.guidance_notes),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
-          child: Utils.pageRefreshIndicator(
-              child: _buildUi(localization), onRefresh: _initializeData)),
+          child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData)),
     );
   }
 
@@ -107,7 +101,7 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding:  EdgeInsets.all(kPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -213,8 +207,7 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
                   // Check if any value in the map contains the search query
                   return jsonMap.values.any((value) {
                     // Ensure the value is a string before matching
-                    return value != null &&
-                        value.toString().toLowerCase().contains(_searchController.text.toLowerCase());
+                    return value != null && value.toString().toLowerCase().contains(_searchController.text.toLowerCase());
                   });
                 }).length,
                 itemBuilder: (context, index) {
@@ -260,13 +253,12 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
   Widget _noteCard({required langProvider,required element,required index,required AppLocalizations localization})
   {
     return Padding(
-      padding: EdgeInsets.only(bottom: kPadding),
-      child: SimpleCard(
-          expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
+      padding: EdgeInsets.only(bottom: kCardSpace),
+      child: SimpleCard(expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
             CustomInformationContainerField(title: localization.sr, description: (index+1).toString()),
             CustomInformationContainerField(title: localization.noteId, description: element.noteId.toString()),
             CustomInformationContainerField(title: localization.subject,description: element.subject.toString()),
-            CustomInformationContainerField(title: localization.createdOn, description: convertTimestampToDate(element.createdOn)),
+            CustomInformationContainerField(title: localization.createdOn, description: element.createdOn.toString()),
             CustomInformationContainerField(
                 title: localization.actions,
                 descriptionAsWidget: Column(
@@ -286,54 +278,9 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
                   ],
                 ),
                 isLastItem: true),
-            // CustomInformationContainerField(
-            //     title: "Category",
-            //     description: getFullNameFromLov(
-            //         langProvider: langProvider,
-            //         lovCode: "SERVICE_CATEGORY",
-            //         code: element.requestCategory.toString())),
-            // CustomInformationContainerField(
-            //     title: "Request Type",
-            //     description: getFullNameFromLov(
-            //         langProvider: langProvider,
-            //         lovCode:
-            //         'SERVICE_TYPE#${element.requestCategory.toString()}',
-            //         code: element.requestType.toString())),
-            // CustomInformationContainerField(
-            //     title: "Request Sub Type",
-            //     description: getFullNameFromLov(
-            //         langProvider: langProvider,
-            //         lovCode:
-            //         'SERVICE_SUBTYPE#${element.requestType.toString()}',
-            //         code: element.requestSubType.toString())),
-            // CustomInformationContainerField(
-            //     title: "Request Date",
-            //     description: element.requestDate ?? ''),
-            // CustomInformationContainerField(
-            //     title: "Status",
-            //     descriptionAsWidget: Row(
-            //       children: [
-            //         SvgPicture.asset("assets/services/status.svg"),
-            //         const SizedBox.square(dimension: 3),
-            //         Text(
-            //           getFullNameFromLov(
-            //               langProvider: langProvider,
-            //               code: element.status.toString(),
-            //               lovCode: 'SERVICE_STATUS'),
-            //           style: AppTextStyles.normalTextStyle().copyWith(
-            //               fontWeight: FontWeight.w600,
-            //               fontSize: 14,
-            //               color: AppColors.scoButtonColor),
-            //         )
-            //       ],
-            //     ),
-            //     isLastItem: true),
           ])),
     );
-
-
   }
-
 }
 
 Widget actionButton({required assetAddress,required text,required onTap}){
@@ -346,6 +293,7 @@ Widget actionButton({required assetAddress,required text,required onTap}){
         border: Border.all(color: AppColors.scoButtonColor)
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           SvgPicture.asset(assetAddress ?? ''),
           const SizedBox.square(dimension: 3),

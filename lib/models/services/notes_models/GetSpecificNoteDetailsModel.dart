@@ -188,8 +188,8 @@ class AdviseeNote {
       String? access, 
       String? contactType, 
       String? subject, 
-      num? createdOn, 
-      num? updatedOn, 
+      dynamic? createdOn, 
+      dynamic? updatedOn, 
       List<NoteDetailList>? noteDetailList, 
       List<ActionList>? actionList, 
       List<ListOfAttachments>? listOfAttachments,}){
@@ -279,8 +279,8 @@ class AdviseeNote {
   String? _access;
   String? _contactType;
   String? _subject;
-  num? _createdOn;
-  num? _updatedOn;
+  dynamic? _createdOn;
+  dynamic? _updatedOn;
   List<NoteDetailList>? _noteDetailList;
   List<ActionList>? _actionList;
   List<ListOfAttachments>? _listOfAttachments;
@@ -303,8 +303,8 @@ AdviseeNote copyWith({  String? emplId,
   String? access,
   String? contactType,
   String? subject,
-  num? createdOn,
-  num? updatedOn,
+  dynamic? createdOn,
+  dynamic? updatedOn,
   List<NoteDetailList>? noteDetailList,
   List<ActionList>? actionList,
   List<ListOfAttachments>? listOfAttachments,
@@ -352,8 +352,8 @@ AdviseeNote copyWith({  String? emplId,
   String? get access => _access;
   String? get contactType => _contactType;
   String? get subject => _subject;
-  num? get createdOn => _createdOn;
-  num? get updatedOn => _updatedOn;
+  dynamic? get createdOn => _createdOn;
+  dynamic? get updatedOn => _updatedOn;
   List<NoteDetailList>? get noteDetailList => _noteDetailList;
   List<ActionList>? get actionList => _actionList;
   List<ListOfAttachments>? get listOfAttachments => _listOfAttachments;
@@ -409,7 +409,7 @@ class ListOfAttachments {
   ListOfAttachments({
       String? attachmentSeqNumber, 
       String? description, 
-      num? date, 
+      dynamic? date, 
       String? attachSysfileName, 
       String? attachUserFile, 
       dynamic base64String, 
@@ -434,14 +434,14 @@ class ListOfAttachments {
   }
   String? _attachmentSeqNumber;
   String? _description;
-  num? _date;
+  dynamic? _date;
   String? _attachSysfileName;
   String? _attachUserFile;
   dynamic _base64String;
   bool? _newRecord;
 ListOfAttachments copyWith({  String? attachmentSeqNumber,
   String? description,
-  num? date,
+  dynamic? date,
   String? attachSysfileName,
   String? attachUserFile,
   dynamic base64String,
@@ -456,7 +456,7 @@ ListOfAttachments copyWith({  String? attachmentSeqNumber,
 );
   String? get attachmentSeqNumber => _attachmentSeqNumber;
   String? get description => _description;
-  num? get date => _date;
+  dynamic? get date => _date;
   String? get attachSysfileName => _attachSysfileName;
   String? get attachUserFile => _attachUserFile;
   dynamic get base64String => _base64String;
@@ -488,10 +488,10 @@ String actionListToJson(ActionList data) => json.encode(data.toJson());
 class ActionList {
   ActionList({
       String? itemSeq, 
-      num? itemDate, 
+      dynamic? itemDate, 
       String? desc, 
       String? status, 
-      num? dueDate, 
+      dynamic? dueDate, 
       bool? newRecord,}){
     _itemSeq = itemSeq;
     _itemDate = itemDate;
@@ -510,16 +510,16 @@ class ActionList {
     _newRecord = json['newRecord'];
   }
   String? _itemSeq;
-  num? _itemDate;
+  dynamic? _itemDate;
   String? _desc;
   String? _status;
-  num? _dueDate;
+  dynamic? _dueDate;
   bool? _newRecord;
 ActionList copyWith({  String? itemSeq,
-  num? itemDate,
+  dynamic? itemDate,
   String? desc,
   String? status,
-  num? dueDate,
+  dynamic? dueDate,
   bool? newRecord,
 }) => ActionList(  itemSeq: itemSeq ?? _itemSeq,
   itemDate: itemDate ?? _itemDate,
@@ -529,10 +529,10 @@ ActionList copyWith({  String? itemSeq,
   newRecord: newRecord ?? _newRecord,
 );
   String? get itemSeq => _itemSeq;
-  num? get itemDate => _itemDate;
+  dynamic? get itemDate => _itemDate;
   String? get desc => _desc;
   String? get status => _status;
-  num? get dueDate => _dueDate;
+  dynamic? get dueDate => _dueDate;
   bool? get newRecord => _newRecord;
 
   Map<String, dynamic> toJson() {

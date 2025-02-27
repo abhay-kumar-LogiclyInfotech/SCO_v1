@@ -48,7 +48,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
 
 
   /// address list
-  List<Address> _addressInformationList = [];  /// address type dropdown menu Item list
+  final List<Address> _addressInformationList = [];  /// address type dropdown menu Item list
   List<DropdownMenuItem> _addressTypeMenuItemsList = [];
   List<DropdownMenuItem> _nationalityMenuItemsList = [];
 
