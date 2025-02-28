@@ -163,7 +163,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
     return Directionality(
       textDirection: getTextDirection(provider),
       child: Text(
-        AppLocalizations.of(context)!.generate_new_password,
+        AppLocalizations.of(context)!.change_password,
         style: const TextStyle(
           color: AppColors.scoButtonColor,
           fontSize: 16,
@@ -261,7 +261,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
     child: Consumer<ChangePasswordViewModel>(builder: (context,provider,_){
       return CustomButton(
         textDirection: getTextDirection(langProvider),
-        buttonName: AppLocalizations.of(context)!.submit,
+        buttonName: AppLocalizations.of(context)!.update,
         isLoading: false,
         onTap: ()async {
           setProcessing(true);
@@ -291,21 +291,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
   }
 
   Widget _cancelButton(LanguageChangeViewModel provider) {
-    final localization = AppLocalizations.of(context)!;
-
-    // return CustomButton(
-    //   textDirection: getTextDirection(provider),
-    //   buttonName: localization.back,
-    //   isLoading: false,
-    //   onTap: () {
-    //     _navigationServices.goBack();
-    //   },
-    //   fontSize: 16,
-    //   buttonColor: Colors.white,
-    //   borderColor: AppColors.scoThemeColor,
-    //   textColor: AppColors.scoThemeColor,
-    //   elevation: 0,
-    // );
     return const KReturnButton();
   }
 

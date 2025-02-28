@@ -907,7 +907,12 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           value: phoneNumber.preferred,
                           onChanged: (onChanged) {
                             setState(() {
-                              phoneNumber.preferred = !phoneNumber.preferred;
+                              // setting all as false
+                              for( var ele in _phoneNumberDetailsList){
+                                ele.preferred = false;
+                              }
+                              // setting new as selected
+                              phoneNumber.preferred = true;
                             });
                           },
                           text: localization.submissionPreferred),
@@ -1098,14 +1103,17 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       ),
 
                       /// ****************************************************************************************************************************************************
-                      kFormHeight,
+                      kSmallSpace,
 
                       /// Preferred
                       CustomGFCheckbox(
                           value: email.prefferd,
                           onChanged: (onChanged) {
                             setState(() {
-                              email.prefferd = !email.prefferd;
+                              for(var ele in _emailDetailsList){
+                                ele.prefferd = false;
+                              }
+                              email.prefferd = true;
                             });
                           },
                           text: localization.submissionPreferred),

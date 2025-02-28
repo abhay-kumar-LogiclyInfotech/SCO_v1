@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sco_v1/resources/app_colors.dart';import 'package:getwidget/getwidget.dart';
 
 
@@ -88,20 +89,20 @@ class _CustomGFCheckboxState extends State<CustomGFCheckbox> {
             focusNode: widget.focusNode,
             size: 20,
             type: widget.type ?? GFCheckboxType.custom,
-            // activeBgColor: AppColors.WHITE,
-            // inactiveBorderColor: AppColors.checkBoxBorderColor,
-            // activeBorderColor: AppColors.checkBoxBorderColor,
-            // activeIcon: Padding(
-            //   padding: const EdgeInsets.all(2.0),
-            //   child: Container(decoration: BoxDecoration(color: AppColors.SUCCESS,borderRadius: BorderRadius.circular(180)),),
-            // ),
+            activeBgColor: AppColors.WHITE,
+            inactiveBorderColor: AppColors.checkBoxBorderColor,
+            activeBorderColor: AppColors.darkGrey,
+            activeIcon: Padding(
+              padding: const EdgeInsets.all(0),
+              child: Container(decoration: BoxDecoration(color: AppColors.SUCCESS,borderRadius: BorderRadius.circular(180)),),
+            ),
             onChanged: widget.onChanged,
             value: widget.value,
             inactiveIcon: null,
           ),
-          const SizedBox(width: 8),
+          // const SizedBox(width: 8),
           Expanded(
-            child: Text(widget.text,style: widget.textStyle,),
+            child: Text(widget.text,style: widget.textStyle ?? GoogleFonts.roboto(fontSize: 14,fontWeight: FontWeight.w500,color: AppColors.scoButtonColor)),
           ),
 
         ],

@@ -147,7 +147,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
           width: double.infinity,
           height: double.infinity,
           margin: EdgeInsets.only(top: orientation == Orientation.portrait ? screenHeight / 3 : screenHeight / 3,),
-          padding: EdgeInsets.symmetric(horizontal: kPadding),
+          padding: EdgeInsets.symmetric(horizontal: kPadding+kPadding,vertical: kPadding),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.elliptical(60, 60)),
