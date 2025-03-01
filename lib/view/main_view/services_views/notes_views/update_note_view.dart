@@ -407,19 +407,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                       _attachmentsList.removeAt(index);
                     });
                   }),
-              // const SizedBox.square(dimension: 5),
-              // scholarshipFormTextField(
-              //     maxLines: 3,
-              //     textInputType: TextInputType.multiline,
-              //     currentFocusNode: attachment.attachUserFileFocusNode,
-              //     controller: attachment.attachUserFileController,
-              //     hintText: "Comment",
-              //     onChanged: (value) {}),
-              // kFormHeight,
-              // const MyDivider(
-              //   color: AppColors.lightGrey,
-              // ),
-              const SizedBox.square(dimension: 20),
+               SizedBox.square(dimension: kCardSpace),
             ],
           );
         });
