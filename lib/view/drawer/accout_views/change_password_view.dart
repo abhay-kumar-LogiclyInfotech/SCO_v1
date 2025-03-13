@@ -11,9 +11,14 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/account/change_password_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
+import '../../../resources/app_text_styles.dart';
+import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/components/kButtons/kReturnButton.dart';
-import '../../../viewModel/services/navigation_services.dart';
+import '../../../viewModel/services/navigation_services.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../authentication/signup/update_security_question_view.dart';
+
 
 
 class ChangePasswordView extends StatefulWidget {
@@ -73,40 +78,33 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      appBar: CustomSimpleAppBar(
+          title: Text(
+            localization.change_password,
+            style: AppTextStyles.appBarTitleStyle(),
+          )
+              ),
       body: Utils.modelProgressHud(processing: _processing,child: Stack(
         alignment: Alignment.topLeft,
         children: [
-          SizedBox(
+          Container(
+            height: double.infinity,
             width: double.infinity,
-            child: Image.asset(
-              'assets/login_bg.png',
-              fit: BoxFit.fill,
-            ),
+            color: const Color(0xfff8f8fa),
           ),
+          SafeArea(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: bgLogo(),
+              )),
           Container(
             width: double.infinity,
             height: double.infinity,
-            margin: EdgeInsets.only(
-              top: orientation == Orientation.portrait
-                  ? screenHeight / 3
-                  : screenHeight / 3,
-            ),
-            padding: EdgeInsets.only(
-              left: orientation == Orientation.portrait
-                  ? screenWidth * 0.08
-                  : screenWidth / 100,
-              right: orientation == Orientation.portrait
-                  ? screenWidth * 0.08
-                  : screenWidth / 100,
-              top: orientation == Orientation.portrait
-                  ? screenWidth * 0.05
-                  : screenWidth / 100 * 5,
-              bottom: orientation == Orientation.portrait
-                  ? screenWidth / 100 * 1
-                  : screenWidth / 100 * 1,
-            ),
+            margin: EdgeInsets.only(top: orientation == Orientation.portrait ? screenHeight / 3 : screenHeight / 3,),
+            padding: EdgeInsets.symmetric(horizontal: kPadding+kPadding,vertical: kPadding),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius:
@@ -114,13 +112,13 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
             ),
             child: Column(
               children: [
-                SizedBox(
-                    child: SvgPicture.asset(
-                      "assets/sco_logo.svg",
-                      fit: BoxFit.fill,
-                      height: 55,
-                      width: 110,
-                    )),
+                // SizedBox(
+                //     child: SvgPicture.asset(
+                //       "assets/sco_logo.svg",
+                //       fit: BoxFit.fill,
+                //       height: 55,
+                //       width: 110,
+                //     )),
                 Expanded(
                   child: Consumer<LanguageChangeViewModel>(
                     builder: (context, langProvider, _) {
@@ -144,7 +142,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
                             //Login Button:
                             _submitButton(langProvider),
                             kFormHeight,
-                            _cancelButton(langProvider)
                           ],
                         ),
                       );
@@ -177,70 +174,88 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
   String? confirmPasswordErrorText;
 
 
-  Widget _newPasswordField(LanguageChangeViewModel provider) {
-    return ValueListenableBuilder(
-        valueListenable: _newPasswordValueNotifier,
-        builder: (context, newPasswordValueNotifier, child) {
-          return CustomTextField(
-            currentFocusNode: _newPasswordFocusNode,
-            nextFocusNode: _confirmPasswordFocusNode,
-            controller: _newPasswordController,
-            hintText: AppLocalizations.of(context)!.newPassword,
-            textInputType: TextInputType.visiblePassword,
-            errorText: newPasswordErrorText,
-            leading: SvgPicture.asset(
-              "assets/lock.svg",
-              // height: 18,
-              // width: 18,
-            ),
-            obscureText: newPasswordValueNotifier,
-            trailing: GestureDetector(
-                onTap: () {
-                  _newPasswordValueNotifier.value =
-                  !_newPasswordValueNotifier.value;
+  Widget _newPasswordField(LanguageChangeViewModel langProvider) {
+    final localization = AppLocalizations.of(context)!;
+    return Column(
+      children: [
+        fieldHeading(title: localization.newPassword, important: true, langProvider: langProvider),
+        ValueListenableBuilder(
+            valueListenable: _newPasswordValueNotifier,
+            builder: (context, newPasswordValueNotifier, child) {
+              return CustomTextField(
+                currentFocusNode: _newPasswordFocusNode,
+                nextFocusNode: _confirmPasswordFocusNode,
+                controller: _newPasswordController,
+                hintText: localization.newPasswordWatermark,
+                textInputType: TextInputType.visiblePassword,
+                errorText: newPasswordErrorText,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: const BorderSide(color: AppColors.darkGrey)),
+                // leading: SvgPicture.asset(
+                //   "assets/lock.svg",
+                //   // height: 18,
+                //   // width: 18,
+                // ),
+                obscureText: newPasswordValueNotifier,
+                trailing: GestureDetector(
+                    onTap: () {
+                      _newPasswordValueNotifier.value =
+                      !_newPasswordValueNotifier.value;
+                    },
+                    child: _visibilityIcon(newPasswordValueNotifier)),
+                onChanged: (value) {
+                  if(_newPasswordFocusNode.hasFocus){
+                    setState(() {
+                      newPasswordErrorText = ErrorText.getPasswordError(password: _newPasswordController.text, context: context);
+                    });
+                  }
                 },
-                child: _visibilityIcon(newPasswordValueNotifier)),
-            onChanged: (value) {
-              if(_newPasswordFocusNode.hasFocus){
-                setState(() {
-                  newPasswordErrorText = ErrorText.getPasswordError(password: _newPasswordController.text, context: context);
-                });
-              }
-            },
-          );
-        });
+              );
+            }),
+      ],
+    );
   }
 
-  Widget _confirmPasswordField(LanguageChangeViewModel provider) {
-    return ValueListenableBuilder(
-        valueListenable: _confirmPasswordValueNotifier,
-        builder: (context, confirmPasswordValueNotifier, child) {
-          return CustomTextField(
-            currentFocusNode: _confirmPasswordFocusNode,
-            controller: _confirmPasswordController,
-            hintText: AppLocalizations.of(context)!.confirmPassword,
-            textInputType: TextInputType.visiblePassword,
-            leading: SvgPicture.asset(
-              "assets/lock.svg",
-            ),
-            obscureText: confirmPasswordValueNotifier,
-            trailing: GestureDetector(
-                onTap: () {
-                  _confirmPasswordValueNotifier.value =
-                  !_confirmPasswordValueNotifier.value;
-                },
-                child:  _visibilityIcon(confirmPasswordValueNotifier),),
-            errorText: confirmPasswordErrorText,
-            onChanged: (value) {
+  Widget _confirmPasswordField(LanguageChangeViewModel langProvider) {
+    final localization = AppLocalizations.of(context)!;
+    return Column(
+      children: [
+        fieldHeading(title: localization.confirmPassword, important: true, langProvider: langProvider),
+        ValueListenableBuilder(
+            valueListenable: _confirmPasswordValueNotifier,
+            builder: (context, confirmPasswordValueNotifier, child) {
+              return CustomTextField(
+                currentFocusNode: _confirmPasswordFocusNode,
+                controller: _confirmPasswordController,
+                hintText: localization.confirmPasswordWatermark,
+                textInputType: TextInputType.visiblePassword,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: const BorderSide(color: AppColors.darkGrey)),
+                // leading: SvgPicture.asset(
+                //   "assets/lock.svg",
+                // ),
+                obscureText: confirmPasswordValueNotifier,
+                trailing: GestureDetector(
+                    onTap: () {
+                      _confirmPasswordValueNotifier.value =
+                      !_confirmPasswordValueNotifier.value;
+                    },
+                    child:  _visibilityIcon(confirmPasswordValueNotifier),),
+                errorText: confirmPasswordErrorText,
+                onChanged: (value) {
 
-              if(_confirmPasswordFocusNode.hasFocus){
-                setState(() {
-                  confirmPasswordErrorText = ErrorText.getPasswordError(password: _confirmPasswordController.text, context: context);
-                });
-              }
-            },
-          );
-        });
+                  if(_confirmPasswordFocusNode.hasFocus){
+                    setState(() {
+                      confirmPasswordErrorText = ErrorText.getPasswordError(password: _confirmPasswordController.text, context: context);
+                    });
+                  }
+                },
+              );
+            }),
+      ],
+    );
   }
 
   Widget _visibilityIcon(bool show){
@@ -261,7 +276,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
     child: Consumer<ChangePasswordViewModel>(builder: (context,provider,_){
       return CustomButton(
         textDirection: getTextDirection(langProvider),
-        buttonName: AppLocalizations.of(context)!.update,
+        buttonName: AppLocalizations.of(context)!.updatePassword,
         isLoading: false,
         onTap: ()async {
           setProcessing(true);

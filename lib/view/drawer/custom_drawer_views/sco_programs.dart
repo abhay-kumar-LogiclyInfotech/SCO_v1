@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
+import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
@@ -51,13 +52,13 @@ class _ScoProgramsState extends State<ScoPrograms>
       {
         'title': localization?.scholarshipInternal,
         'subTitle': localization?.internalScholarshipDesc,
-        'imagePath': "assets/sidemenu/scholarships_uae.jpg",
+        'imagePath': Constants.scholarshipInUae,
        "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipsInUaeView()))
       },
     {
     'title': localization?.scholarshipExternal,
     'subTitle': localization?.externalScholarshipDesc,
-    'imagePath': "assets/sidemenu/scholarships_abroad.jpg",
+    'imagePath': Constants.scholarshipInAbroad,
       "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipInAbroadView()))
       },
     ];

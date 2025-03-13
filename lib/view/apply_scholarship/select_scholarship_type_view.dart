@@ -58,6 +58,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
         .map((element) {
       return DropdownMenuItem(
         value: element!.configurationKey.toString(),
+        alignment: textDirection == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight,
         child: Text(
           textDirection == TextDirection.ltr
               ? element.configurationNameEng.toString()
@@ -211,7 +212,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
                       // submit button section:
                       CustomButton(
-                          buttonName: AppLocalizations.of(context)!.submit,
+                          buttonName: AppLocalizations.of(context)!.apply_for_scholarship,
                           isLoading: false,
                           textDirection: textDirection,
                           // buttonColor: AppColors.scoButtonColor,

@@ -41,10 +41,8 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
   String? _imageUrl;
 
   void _initializeData() async {
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
-    final provider =
-        Provider.of<IndividualImageViewModel>(context, listen: false);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final provider = Provider.of<IndividualImageViewModel>(context, listen: false);
 
     // Schedule the data fetch to avoid direct async calls in build phase
     WidgetsBinding.instance.addPostFrameCallback((_) async {

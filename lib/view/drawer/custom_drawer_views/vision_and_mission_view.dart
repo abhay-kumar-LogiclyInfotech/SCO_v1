@@ -40,7 +40,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(
-          AppLocalizations.of(context)!.aBriefAboutSCO,
+          AppLocalizations.of(context)!.aboutSCO,
           style: AppTextStyles.appBarTitleStyle(),
         ),
       ),
@@ -62,10 +62,14 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
             children: [
               //*--------- about sco Title---------*/
               titleDescription(text: localization.aboutSCO,isTitle: true),
-              const SizedBox(height: 10,),
+              // const SizedBox(height: 10,),
               //*--------- about sco Description---------*/
-              titleDescription(text:  '''انطلاقًا من التوجيهات السديدة والرؤية الحكيمة للمغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان "طيّب الله ثراه"، وتجسيدًا لمقولة سموه المأثورة "إن أكبر استثمار للمال هو استثماره في بناء أجيال من المتعلّمين والمثقفين"، وفي إطار النهج الذي اختطّه الشيخ محمد بن زايد آل نهيان رئيس الدولة "حفظه الله" في السير على خُطى الوالد القائد في دعم وتعزيز دور ومكانة العلم والتعليم، يحظى مكتب البعثات الدراسية اليوم بمكانة مرموقة ودور فعال في دعم المسيرة التعليمية التي تشهدها الدولة، ويهدف المكتب الذي تأسّس سنة 1999 بإشراف ومتابعة مباشرة من سمو الشيخ منصور بن زايد آل نهيان نائب رئيس الدولة، نائب رئيس مجلس الوزراء رئيس ديوان الرئاسة، إلى اختيار نخبة الطلبة الإماراتيين المتميزين في مسيرتهم الدراسية، وإيفادهم في بعثات دراسية إلى الجامعات المحلية والعالمية المرموقة، من أجل التخصّص في شتى المجالات التي تلبّي احتياجات التنمية في الدولة ورفدها بكوادر مواطنة وجيل مؤهل وفق أرفع المستويات العلمية لمواصلة مسيرة البناء والتطوير التي تشهدها دولة الإمارات العربية المتحدة، ويشرف مكتب البعثات الدراسية على إدارة البعثات الدراسية خارج الدولة والمنح الدراسية داخل الدولة.'''),
-
+              CustomVisionAndMissionContainer(
+                title: '',
+                showTitle: false,
+                description: '''انطلاقًا من التوجيهات السديدة والرؤية الحكيمة للمغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان "طيّب الله ثراه"، وتجسيدًا لمقولة سموه المأثورة "إن أكبر استثمار للمال هو استثماره في بناء أجيال من المتعلّمين والمثقفين"، وفي إطار النهج الذي اختطّه الشيخ محمد بن زايد آل نهيان رئيس الدولة "حفظه الله" في السير على خُطى الوالد القائد في دعم وتعزيز دور ومكانة العلم والتعليم، يحظى مكتب البعثات الدراسية اليوم بمكانة مرموقة ودور فعال في دعم المسيرة التعليمية التي تشهدها الدولة، ويهدف المكتب الذي تأسّس سنة 1999 بإشراف ومتابعة مباشرة من سمو الشيخ منصور بن زايد آل نهيان نائب رئيس الدولة، نائب رئيس مجلس الوزراء رئيس ديوان الرئاسة، إلى اختيار نخبة الطلبة الإماراتيين المتميزين في مسيرتهم الدراسية، وإيفادهم في بعثات دراسية إلى الجامعات المحلية والعالمية المرموقة، من أجل التخصّص في شتى المجالات التي تلبّي احتياجات التنمية في الدولة ورفدها بكوادر مواطنة وجيل مؤهل وفق أرفع المستويات العلمية لمواصلة مسيرة البناء والتطوير التي تشهدها دولة الإمارات العربية المتحدة، ويشرف مكتب البعثات الدراسية على إدارة البعثات الدراسية خارج الدولة والمنح الدراسية داخل الدولة.''',
+              ),
+              const SizedBox(height: 10,),
 
               Consumer<VisionAndMissionViewModel>(
                 builder: (context, provider, _) {
@@ -90,19 +94,19 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                           //Vision and mission top image:
                           // Image.asset("assets/vision_and_mission.png"),
 
-                          const SizedBox(height: 20),
+                          kLargeSpace,
 
                           //*---------Vision Title---------*/
                           titleDescription(text:provider.content?.visionMission.visionTitle.toString() ?? "",isTitle: true),
 
-                          const SizedBox(height: 10),
+                          kSmallSpace,
                           //*--------Vision Description--------*/
                           titleDescription(text: provider.content?.visionMission.visionText.toString() ??""),
-                          const SizedBox(height: 20),
+                          kLargeSpace,
 
                           //*---------Values Title--------*/
                           titleDescription(text: provider.content?.values.valuesTitle.toString() ?? "",isTitle: true),
-                          const SizedBox(height: 10),
+                          kSmallSpace,
 
                           //*---------Values List----------*/
                           ListView.builder(
@@ -121,12 +125,12 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                                   ),
                                 );
                               }),
-                          const SizedBox(height: 20),
+                          kLargeSpace,
 
                           //*---------Goals Title---------*/
                           titleDescription(text: provider.content?.goals.goalsTitle.toString() ?? "",isTitle: true),
 
-                          const SizedBox(height: 10),
+                          kSmallSpace,
                           //*-------Goals List-----------*/
                           ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
@@ -138,8 +142,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
 
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 10.0),
-                                  child: CustomVisionAndMissionContainer(
-                                      title: goal),
+                                  child: CustomVisionAndMissionContainer(title: goal),
                                 );
                               }),
                         ],

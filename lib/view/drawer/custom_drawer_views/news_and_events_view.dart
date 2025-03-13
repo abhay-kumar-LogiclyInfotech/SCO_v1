@@ -41,11 +41,9 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
   Future<void> _onRefresh() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
 
-      final provider =
-        Provider.of<NewsAndEventsViewmodel>(context, listen: false);
-    final langProvider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
-    await provider.newsAndEvents(context: context, langProvider: langProvider);
+      final provider = Provider.of<NewsAndEventsViewmodel>(context, listen: false);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+    await provider.newsAndEvents(context: context);
     });
 
   }
@@ -55,7 +53,7 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        title: Text(AppLocalizations.of(context)!.newsAndEvents,
+        title: Text(AppLocalizations.of(context)!.news,
             style: AppTextStyles.appBarTitleStyle()),
       ),
       body: Utils.modelProgressHud(
@@ -96,13 +94,14 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
                         title: item.getTitle(languageId),
                         imageId: item.coverImageFileEntryId,
                         subTitle: item.getDescription(languageId),
-                        date: item.getFormattedDate(),
+                        date: item.getFormattedDate(langProvider),
                         onTap: () {
+                          print(item.coverImageFileEntryId);
                           _navigationServices
                               .pushCupertino(CupertinoPageRoute(
                             builder: (context) => NewsAndEventsDetailView(
                                 imageId: item.coverImageFileEntryId,
-                                date: item.getFormattedDate().toString(),
+                                date: item.getFormattedDate(langProvider).toString(),
                                 title: item.getTitle(languageId),
                                 subTitle: item.getDescription(languageId),
                                 content: item.getContent(languageId)),

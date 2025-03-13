@@ -1,4 +1,6 @@
-import 'package:intl/intl.dart';
+import 'dart:ui';
+
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:xml/xml.dart' as xml;
 
 import '../../resources/validations_and_errorText.dart';
@@ -178,11 +180,24 @@ class ParseNewsAndEventsModel {
     return Validations.stripHtml(rawTitle);
   }
 
-  String getFormattedDate() {
+
+
+
+  String getFormattedDate(langProvider) {
+
+    final textDirection = getTextDirection(langProvider);
+    final bool isLtr = textDirection == TextDirection.ltr;
     final date = DateTime.fromMillisecondsSinceEpoch(publishDate);
-    final formatter = DateFormat('d MMMM yyyy');
-    return formatter.format(date);
+
+    // Separate formatters to control the output
+    final yearFormatter = DateFormat('yyyy', 'en'); // English year
+    final monthFormatter = DateFormat('MMMM', isLtr ? 'en' : 'ar'); // Arabic month
+    final dayFormatter = DateFormat('d', 'en'); // English day
+
+    String year = yearFormatter.format(date); // 2019
+    String arabicMonth = monthFormatter.format(date); // سبتمبر
+    String day = dayFormatter.format(date); // 15
+
+    return '$day $arabicMonth $year';
   }
-
-
 }
