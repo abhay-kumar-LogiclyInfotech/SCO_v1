@@ -6,9 +6,10 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 class CustomVisionAndMissionContainer extends StatelessWidget {
   final String title;
+  final bool showTitle;
   String? description;
   CustomVisionAndMissionContainer(
-      {super.key, required this.title, this.description});
+      {super.key, required this.title,this.showTitle = true, this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +31,18 @@ class CustomVisionAndMissionContainer extends StatelessWidget {
             width: double.infinity,
             decoration: const BoxDecoration(
                 color: Colors.white,
-                border: Border(
-                    bottom: BorderSide(color: AppColors.darkGrey, width: 1.5)),
+                border: Border(bottom: BorderSide(color: AppColors.darkGrey, width: 0.3)),
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(8),
                     bottomRight: Radius.circular(8))),
             child: CustomPaint(
-              painter: DashedBottomBorderPainter(),
+              // painter: DashedBottomBorderPainter(),
               child: Padding(
-                padding: const EdgeInsets.only(
-                    right: 15, left: 15, top: 10, bottom: 10),
+                padding: const EdgeInsets.only(right: 15, left: 15, top: 10, bottom: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                   if(showTitle) Text(
                       title,
                       style: description != null
                           ? const TextStyle(color: AppColors.scoThemeColor)

@@ -141,7 +141,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         SafeArea(
             child: Align(
           alignment: Alignment.topCenter,
-          child: _bgLogo(),
+          child: bgLogo(),
         )),
         Container(
           width: double.infinity,
@@ -209,15 +209,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     );
   }
 
-  //background static picture:
-  Widget _bgLogo() {
-    return Padding(
-      padding: const EdgeInsets.all(50.0),
-      child: SvgPicture.asset(
-        "assets/security_question_bg1.svg",
-      ),
-    );
-  }
+
 
   //title:
   Widget _title() {
@@ -321,4 +313,13 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
     return true;
   }
+}
+//background static picture:
+Widget bgLogo() {
+  return Padding(
+    padding: const EdgeInsets.all(50.0),
+    child: SvgPicture.asset(
+      "assets/security_question_bg1.svg",
+    ),
+  );
 }

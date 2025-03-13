@@ -159,7 +159,7 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
-        titleAsString: localization.employmentStatus,
+        titleAsString: localization.employmentStatusTitle,
       ),
       body: Utils.modelProgressHud(
           processing: _isProcessing,

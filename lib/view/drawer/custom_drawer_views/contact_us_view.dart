@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -211,17 +212,22 @@ class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
               ),
 
               //*----Address Image From Map ----*
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomRight: Radius.circular(15),
-                  bottomLeft: Radius.circular(15),
-                ),
-                child: Image.asset(
-                  "assets/sidemenu/img.png",
-                  filterQuality: FilterQuality.high,
-                  width: double.infinity,
-                  height: 150,
-                  fit: BoxFit.cover,
+              InkWell(
+                onTap: (){
+                 Platform.isIOS ?  Utils.openAppleMaps(latitude: Constants.latitude,longitude: Constants.longitude) : Utils.openGoogleMapsApp(latitude: Constants.latitude,longitude: Constants.longitude) ; // Starts navigation to Dubai
+                },
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                  ),
+                  child: Image.asset(
+                    "assets/sidemenu/img.png",
+                    filterQuality: FilterQuality.high,
+                    width: double.infinity,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
 

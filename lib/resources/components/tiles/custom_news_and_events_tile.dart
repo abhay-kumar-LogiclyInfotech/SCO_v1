@@ -218,6 +218,7 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile>
                   color: Color(0xff747D85),
                   fontSize: 10,
                 ),
+                textDirection: TextDirection.rtl,
               ),
             ],
           ),
@@ -233,39 +234,39 @@ class _CustomNewsAndEventsTileState extends State<CustomNewsAndEventsTile>
           ),
           const SizedBox.square(dimension: 8),
           Text(
-            // widget.subTitle.length < 100
-            //     ?
-            widget.subTitle,
-            // : "${widget.subTitle.substring(0, 100)}...",
-            overflow: TextOverflow.ellipsis,
+            widget.subTitle.length < 100
+                ?
+            widget.subTitle
+            : "${widget.subTitle.substring(0, 100)}...",
+            // overflow: TextOverflow.ellipsis,
             style: AppTextStyles.subTitleTextStyle(),
           ),
-          kFormHeight,
-          Directionality(
-            textDirection:
-                getTextDirection(context.read<LanguageChangeViewModel>()),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.readMore,
-                  style: const TextStyle(
-                      color: Colors.blue,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600),
-                ),
-                Icon(
-                  getTextDirection(context.read<LanguageChangeViewModel>()) ==
-                          TextDirection.rtl
-                      ? Icons.keyboard_arrow_left_sharp
-                      : Icons.keyboard_arrow_right_sharp,
-                  size: 12,
-                  color: Colors.blue,
-                  weight: 50,
-                )
-              ],
-            ),
-          ),
+          // kFormHeight,
+          // Directionality(
+          //   textDirection:
+          //       getTextDirection(context.read<LanguageChangeViewModel>()),
+          //   child: Row(
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       Text(
+          //         AppLocalizations.of(context)!.readMore,
+          //         style: const TextStyle(
+          //             color: Colors.blue,
+          //             fontSize: 10,
+          //             fontWeight: FontWeight.w600),
+          //       ),
+          //       Icon(
+          //         getTextDirection(context.read<LanguageChangeViewModel>()) ==
+          //                 TextDirection.rtl
+          //             ? Icons.keyboard_arrow_left_sharp
+          //             : Icons.keyboard_arrow_right_sharp,
+          //         size: 12,
+          //         color: Colors.blue,
+          //         weight: 50,
+          //       )
+          //     ],
+          //   ),
+          // ),
           const SizedBox.square(dimension: 8),
         ],
       ),

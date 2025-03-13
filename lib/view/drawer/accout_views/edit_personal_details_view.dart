@@ -195,15 +195,19 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
         setIsProcessing(true);
 
-        bool canUpload = await Utils.compareFileSize(file: file, maxSizeInBytes: 200);
+        bool canUpload =
+            await Utils.compareFileSize(file: file, maxSizeInBytes: 200);
 
         if (canUpload) {
           _profileImageFile = file;
           final myFile = await Utils.saveFileToLocal(file);
           final base64String = base64Encode(myFile.readAsBytesSync());
 
-          final updateProfilePictureProvider = Provider.of<UpdateProfilePictureViewModel>(context, listen: false);
-          await updateProfilePictureProvider.updateProfilePicture(base64String: base64String);
+          final updateProfilePictureProvider =
+              Provider.of<UpdateProfilePictureViewModel>(context,
+                  listen: false);
+          await updateProfilePictureProvider.updateProfilePicture(
+              base64String: base64String);
           setIsProcessing(false);
           await _initializeData();
           setState(() {});
@@ -252,10 +256,12 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
           final userInfo = provider.apiResponse.data?.data?.userInfo;
 
           return Directionality(
-            textDirection: getTextDirection(langProvider),
+            textDirection: getTextDirection(
+              langProvider,
+            ),
             child: SingleChildScrollView(
               child: Padding(
-                padding:  EdgeInsets.all(kPadding),
+                padding: EdgeInsets.all(kPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -425,9 +431,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
           children: [
             /// First name
             fieldHeading(
-                title: localization.registrationFirstName,
-                important: true,
-                langProvider: langProvider),
+              title: localization.registrationFirstName,
+              important: true,
+              langProvider: langProvider,
+            ),
             scholarshipFormTextField(
                 readOnly: peopleSoft,
                 filled: peopleSoft,
@@ -450,9 +457,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: localization.registrationMiddleName,
-                important: false,
-                langProvider: langProvider),
+              title: localization.registrationMiddleName,
+              important: false,
+              langProvider: langProvider,
+            ),
             scholarshipFormTextField(
                 readOnly: peopleSoft,
                 filled: peopleSoft,
@@ -475,9 +483,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: localization.thirdFourthName,
-                important: false,
-                langProvider: langProvider),
+              title: localization.thirdFourthName,
+              important: false,
+              langProvider: langProvider,
+            ),
             scholarshipFormTextField(
                 readOnly: peopleSoft,
                 filled: peopleSoft,
@@ -500,9 +509,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: localization.registrationLastName,
-                important: true,
-                langProvider: langProvider),
+              title: localization.registrationLastName,
+              important: true,
+              langProvider: langProvider,
+            ),
             scholarshipFormTextField(
                 readOnly: peopleSoft,
                 filled: peopleSoft,
@@ -525,9 +535,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: localization.emiratesId,
-                important: false,
-                langProvider: langProvider),
+              title: localization.emiratesId,
+              important: false,
+              langProvider: langProvider,
+            ),
             scholarshipFormTextField(
                 readOnly: true,
                 filled: true,
@@ -553,9 +564,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: localization.emailAddress,
-                      important: true,
-                      langProvider: langProvider),
+                    title: localization.emailAddress,
+                    important: true,
+                    langProvider: langProvider,
+                  ),
                   scholarshipFormTextField(
                       currentFocusNode: _emailFocusNode,
                       nextFocusNode: _nationalityFocusNode,
@@ -577,9 +589,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: localization.country,
-                important: true,
-                langProvider: langProvider),
+              title: localization.country,
+              important: true,
+              langProvider: langProvider,
+            ),
             scholarshipFormDropdown(
                 currentFocusNode: _nationalityFocusNode,
                 controller: _nationalityController,
@@ -602,9 +615,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: localization.phoneNo,
-                      important: true,
-                      langProvider: langProvider),
+                    title: localization.phoneNo,
+                    important: true,
+                    langProvider: langProvider,
+                  ),
                   scholarshipFormTextField(
                       currentFocusNode: _mobileNumberFocusNode,
                       nextFocusNode: _genderFocusNode,
@@ -627,9 +641,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: localization.gender,
-                important: true,
-                langProvider: langProvider),
+              title: localization.gender,
+              important: true,
+              langProvider: langProvider,
+            ),
             scholarshipFormDropdown(
                 currentFocusNode: _genderFocusNode,
                 controller: _genderController,
@@ -652,9 +667,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 children: [
                   kFormHeight,
                   fieldHeading(
-                      title: localization.maritalStatus,
-                      important: true,
-                      langProvider: langProvider),
+                    title: localization.maritalStatus,
+                    important: true,
+                    langProvider: langProvider,
+                  ),
                   scholarshipFormDropdown(
                       currentFocusNode: _maritalStatusFocusNode,
                       controller: _maritalStatusController,
@@ -676,9 +692,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
             /// ****************************************************************
             kFormHeight,
             fieldHeading(
-                title: localization.brithDate,
-                important: true,
-                langProvider: langProvider),
+              title: localization.brithDate,
+              important: true,
+              langProvider: langProvider,
+            ),
             scholarshipFormDateField(
                 currentFocusNode: _dobFocusNode,
                 controller: _dobController,
@@ -705,9 +722,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                     children: [
                       kFormHeight,
                       fieldHeading(
-                          title: "Default Interface Language",
-                          important: true,
-                          langProvider: langProvider),
+                        title: "Default Interface Language",
+                        important: true,
+                        langProvider: langProvider,
+                      ),
                       scholarshipFormTextField(
                           currentFocusNode: _languageFocusNode,
                           controller: _languageController,
@@ -793,9 +811,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                     children: [
                       /// phone Type
                       fieldHeading(
-                          title: localization.submissionPhoneType,
-                          important: true,
-                          langProvider: langProvider),
+                        title: localization.submissionPhoneType,
+                        important: true,
+                        langProvider: langProvider,
+                      ),
                       scholarshipFormDropdown(
                         context: context,
                         readOnly: phoneNumber.isExisting,
@@ -834,9 +853,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: localization.studentMobileNumber,
-                          important: true,
-                          langProvider: langProvider),
+                        title: localization.studentMobileNumber,
+                        important: true,
+                        langProvider: langProvider,
+                      ),
                       scholarshipFormTextField(
                           currentFocusNode: phoneNumber.phoneNumberFocusNode,
                           nextFocusNode: phoneNumber.countryCodeFocusNode,
@@ -873,9 +893,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: localization.countryCode,
-                          important: false,
-                          langProvider: langProvider),
+                        title: localization.countryCode,
+                        important: false,
+                        langProvider: langProvider,
+                      ),
                       scholarshipFormTextField(
                           currentFocusNode: phoneNumber.countryCodeFocusNode,
                           nextFocusNode:
@@ -908,7 +929,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           onChanged: (onChanged) {
                             setState(() {
                               // setting all as false
-                              for( var ele in _phoneNumberDetailsList){
+                              for (var ele in _phoneNumberDetailsList) {
                                 ele.preferred = false;
                               }
                               // setting new as selected
@@ -946,7 +967,6 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 }),
 
             /// Add more Phones Numbers
-            /// Add More Information container
             _phoneNumberDetailsList.isNotEmpty
                 ? addRemoveMoreSection(
                     title: localization.addRowPhone,
@@ -1023,9 +1043,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
                       /// phone Type
                       fieldHeading(
-                          title: localization.emailType,
-                          important: true,
-                          langProvider: langProvider),
+                        title: localization.emailType,
+                        important: true,
+                        langProvider: langProvider,
+                      ),
                       scholarshipFormDropdown(
                         context: context,
                         readOnly: email.existing,
@@ -1064,9 +1085,10 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       /// ****************************************************************************************************************************************************
                       kFormHeight,
                       fieldHeading(
-                          title: localization.emailAddress,
-                          important: true,
-                          langProvider: langProvider),
+                        title: localization.emailAddress,
+                        important: true,
+                        langProvider: langProvider,
+                      ),
                       scholarshipFormTextField(
                         currentFocusNode: email.emailIdFocusNode,
                         nextFocusNode: index < _emailDetailsList.length - 1
@@ -1110,7 +1132,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                           value: email.prefferd,
                           onChanged: (onChanged) {
                             setState(() {
-                              for(var ele in _emailDetailsList){
+                              for (var ele in _emailDetailsList) {
                                 ele.prefferd = false;
                               }
                               email.prefferd = true;
@@ -1179,7 +1201,9 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                 isLoading: updateProvider?.apiResponse.status == Status.LOADING,
                 borderColor: Colors.transparent,
                 // buttonColor: AppColors.scoThemeColor,
-                textDirection: getTextDirection(langProvider),
+                textDirection: getTextDirection(
+                  langProvider,
+                ),
                 onTap: () async {
                   bool result = validateForm(
                       langProvider: langProvider,
@@ -1190,7 +1214,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
                     /// Create Form
                     createForm(provider: provider);
-                    bool upResult = await updateProvider.updatePersonalDetails(form: form);
+                    bool upResult =
+                        await updateProvider.updatePersonalDetails(form: form);
                     if (upResult) {
                       setIsProcessing(false);
 

@@ -182,21 +182,21 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                                           FontWeight.w500,
                                                       color: Colors.white),
                                                 ),
-                                                const SizedBox(height: 5),
-                                                SelectableText(
-                                                  // _roles.where((role){
-                                                  //  return role.isNotEmpty;
-                                                  // }).join(', ')
-                                                  _roles.any((role) =>
-                                                          role.toLowerCase() ==
-                                                          'students')
-                                                      ? "Student"
-                                                      : "User Type",
-
-                                                  style: TextStyle(
-                                                      color: Colors.white
-                                                          .withOpacity(0.65)),
-                                                )
+                                                // const SizedBox(height: 5),
+                                                // SelectableText(
+                                                //   // _roles.where((role){
+                                                //   //  return role.isNotEmpty;
+                                                //   // }).join(', ')
+                                                //   _roles.any((role) =>
+                                                //           role.toLowerCase() ==
+                                                //           'students')
+                                                //       ? "Student"
+                                                //       : "User Type",
+                                                //
+                                                //   style: TextStyle(
+                                                //       color: Colors.white
+                                                //           .withOpacity(0.65)),
+                                                // )
                                               ],
                                             ),
                                           ),
@@ -272,7 +272,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             ListTile(
                               contentPadding: EdgeInsets.zero,
                               title: Text(
-                                localization.aboutSco,
+                                localization.aboutSCO,
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 14),
                               ),
@@ -334,7 +334,7 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                             //*------News------*/
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              title: Text(localization.newsAndEvents,
+                              title: Text(localization.news,
                                   style: AppTextStyles.drawerButtonsStyle()),
                               leading:
                                   SvgPicture.asset("assets/sidemenu/news.svg"),

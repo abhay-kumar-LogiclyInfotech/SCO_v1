@@ -156,8 +156,7 @@ class _WebViewState extends State<WebView> {
     );
   }
 
-  String getScholarshipTypeText(
-      String scholarshipType, AppLocalizations localization) {
+  String getScholarshipTypeText(String scholarshipType, AppLocalizations localization) {
     switch (scholarshipType) {
       case 'EXT':
         return localization.scholarshipTypeExternal;

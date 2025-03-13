@@ -95,6 +95,41 @@ class Utils {
     }
   }
 
+  static Future<void> openGoogleMaps(double latitude, double longitude) async {
+    final Uri googleMapsUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=$latitude,$longitude");
+
+    if (await canLaunchUrl(googleMapsUri)) {
+      await launchUrl(googleMapsUri);
+    } else {
+      throw 'Could not open Google Maps';
+    }
+  }
+
+ static Future<void> openGoogleMapsApp({required double latitude,required double longitude}) async {
+    final Uri googleMapsAppUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude");
+
+    if (await canLaunchUrl(googleMapsAppUri)) {
+      await launchUrl(googleMapsAppUri);
+    } else {
+      // Open in browser if app is not installed
+      await openGoogleMaps(latitude, longitude);
+    }
+  }
+
+ static Future<void> openAppleMaps({required double latitude, required double longitude}) async {
+    final Uri appleMapsUri = Uri.parse("https://maps.apple.com/?q=$latitude,$longitude");
+
+    if (await canLaunchUrl(appleMapsUri)) {
+      await launchUrl(appleMapsUri);
+    } else {
+      throw 'Could not open Apple Maps';
+    }
+  }
+
+
+
+
+
   /// Saves the given file to a local directory.
   static Future<File> saveFileToLocal(File myFile) async {
     try {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/models/drawer/news_and_events_model.dart';
 
 import '../../data/response/ApiResponse.dart';
@@ -42,9 +43,9 @@ class NewsAndEventsViewmodel with ChangeNotifier {
 
 
   Future<bool> newsAndEvents(
-      {required BuildContext context,
-      required LanguageChangeViewModel langProvider}) async {
+      {required BuildContext context}) async {
     try {
+      final langProvider = context.read<LanguageChangeViewModel>();
       _setNewsAndEventsResponse = ApiResponse.loading();
 
       //*-----Create Headers-----*

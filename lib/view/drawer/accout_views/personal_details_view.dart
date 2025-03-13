@@ -33,17 +33,14 @@ class PersonalDetailsView extends StatefulWidget {
   State<PersonalDetailsView> createState() => _PersonalDetailsViewState();
 }
 
-class _PersonalDetailsViewState extends State<PersonalDetailsView>
-    with MediaQueryMixin {
+class _PersonalDetailsViewState extends State<PersonalDetailsView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
 
   Future<void> _fetchData() async {
     // fetch student profile Information t prefill the user information
-    final studentProfileProvider =
-        Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
-    final studentProfilePictureProvider =
-        Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
+    final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
+    final studentProfilePictureProvider = Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
 
     // Getting Fresh Roles
     final getRolesProvider = Provider.of<GetRoleViewModel>(context,listen:false);
@@ -81,7 +78,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView>
       child: Scaffold(
           backgroundColor: AppColors.bgColor,
           appBar: CustomSimpleAppBar(
-            titleAsString: localization.personalDetails,
+            titleAsString: localization.personalDetailsTitle,
           ),
           body: Utils.pageRefreshIndicator(
               child: _buildUi(localization), onRefresh: _fetchData)),
