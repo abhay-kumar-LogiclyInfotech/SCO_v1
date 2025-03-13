@@ -390,11 +390,12 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
                                   await HiveManager.clearName();
                                   await HiveManager.clearRole();
 
+                                  // _navigationServices.pushReplacementCupertino(
+                                  //     CupertinoPageRoute(
+                                  //         builder: (context) =>
+                                  //             const MainView()));
+                                  _navigationServices.goBackUntilFirstScreen();
                                   _navigationServices.pushReplacementCupertino(
-                                      CupertinoPageRoute(
-                                          builder: (context) =>
-                                              const MainView()));
-                                  _navigationServices.pushCupertino(
                                       CupertinoPageRoute(
                                           builder: (context) =>
                                               const LoginView()));
