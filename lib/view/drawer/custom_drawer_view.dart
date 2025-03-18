@@ -50,7 +50,7 @@ class CustomDrawerView extends StatefulWidget {
 }
 
 class _CustomDrawerViewState extends State<CustomDrawerView> {
-  String _name = "User Name";
+   String _name = "";
   List<String> _roles = ["User Type"];
 
   late NavigationServices _navigationServices;
@@ -85,12 +85,11 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
       /// Getting profile picture and  name and userTypes
       if (_toLogin) {
         // SETTING USERNAME AND ROLES
-        _name = HiveManager.getName() ?? 'User Name';
+        _name = HiveManager.getName() ?? '';
         _roles = HiveManager.getRole() ?? [];
 
         // Getting Fresh Roles
-        final getRolesProvider =
-            Provider.of<GetRoleViewModel>(context, listen: false);
+        final getRolesProvider = Provider.of<GetRoleViewModel>(context, listen: false);
         await getRolesProvider.getRoles();
       }
     });
