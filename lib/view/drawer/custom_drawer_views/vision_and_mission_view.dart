@@ -62,14 +62,11 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
             children: [
               //*--------- about sco Title---------*/
               titleDescription(text: localization.aboutSCO,isTitle: true),
-              // const SizedBox(height: 10,),
-              //*--------- about sco Description---------*/
+              kSmallSpace,              //*--------- about sco Description---------*/
               CustomVisionAndMissionContainer(
-                title: '',
-                showTitle: false,
-                description: '''انطلاقًا من التوجيهات السديدة والرؤية الحكيمة للمغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان "طيّب الله ثراه"، وتجسيدًا لمقولة سموه المأثورة "إن أكبر استثمار للمال هو استثماره في بناء أجيال من المتعلّمين والمثقفين"، وفي إطار النهج الذي اختطّه الشيخ محمد بن زايد آل نهيان رئيس الدولة "حفظه الله" في السير على خُطى الوالد القائد في دعم وتعزيز دور ومكانة العلم والتعليم، يحظى مكتب البعثات الدراسية اليوم بمكانة مرموقة ودور فعال في دعم المسيرة التعليمية التي تشهدها الدولة، ويهدف المكتب الذي تأسّس سنة 1999 بإشراف ومتابعة مباشرة من سمو الشيخ منصور بن زايد آل نهيان نائب رئيس الدولة، نائب رئيس مجلس الوزراء رئيس ديوان الرئاسة، إلى اختيار نخبة الطلبة الإماراتيين المتميزين في مسيرتهم الدراسية، وإيفادهم في بعثات دراسية إلى الجامعات المحلية والعالمية المرموقة، من أجل التخصّص في شتى المجالات التي تلبّي احتياجات التنمية في الدولة ورفدها بكوادر مواطنة وجيل مؤهل وفق أرفع المستويات العلمية لمواصلة مسيرة البناء والتطوير التي تشهدها دولة الإمارات العربية المتحدة، ويشرف مكتب البعثات الدراسية على إدارة البعثات الدراسية خارج الدولة والمنح الدراسية داخل الدولة.''',
+                title: '''انطلاقًا من التوجيهات السديدة والرؤية الحكيمة للمغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان "طيّب الله ثراه"، وتجسيدًا لمقولة سموه المأثورة "إن أكبر استثمار للمال هو استثماره في بناء أجيال من المتعلّمين والمثقفين"، وفي إطار النهج الذي اختطّه الشيخ محمد بن زايد آل نهيان رئيس الدولة "حفظه الله" في السير على خُطى الوالد القائد في دعم وتعزيز دور ومكانة العلم والتعليم، يحظى مكتب البعثات الدراسية اليوم بمكانة مرموقة ودور فعال في دعم المسيرة التعليمية التي تشهدها الدولة، ويهدف المكتب الذي تأسّس سنة 1999 بإشراف ومتابعة مباشرة من سمو الشيخ منصور بن زايد آل نهيان نائب رئيس الدولة، نائب رئيس مجلس الوزراء رئيس ديوان الرئاسة، إلى اختيار نخبة الطلبة الإماراتيين المتميزين في مسيرتهم الدراسية، وإيفادهم في بعثات دراسية إلى الجامعات المحلية والعالمية المرموقة، من أجل التخصّص في شتى المجالات التي تلبّي احتياجات التنمية في الدولة ورفدها بكوادر مواطنة وجيل مؤهل وفق أرفع المستويات العلمية لمواصلة مسيرة البناء والتطوير التي تشهدها دولة الإمارات العربية المتحدة، ويشرف مكتب البعثات الدراسية على إدارة البعثات الدراسية خارج الدولة والمنح الدراسية داخل الدولة.''',
               ),
-              const SizedBox(height: 10,),
+              kSmallSpace,
 
               Consumer<VisionAndMissionViewModel>(
                 builder: (context, provider, _) {
@@ -93,16 +90,17 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                         children: [
                           //Vision and mission top image:
                           // Image.asset("assets/vision_and_mission.png"),
+                          // kSmallSpace,
 
-                          kLargeSpace,
 
                           //*---------Vision Title---------*/
                           titleDescription(text:provider.content?.visionMission.visionTitle.toString() ?? "",isTitle: true),
 
                           kSmallSpace,
                           //*--------Vision Description--------*/
-                          titleDescription(text: provider.content?.visionMission.visionText.toString() ??""),
-                          kLargeSpace,
+                          // titleDescription(text: provider.content?.visionMission.visionText.toString() ??""),
+                          CustomVisionAndMissionContainer(title: provider.content?.visionMission.visionText.toString() ??"",),
+                          kSmallSpace,
 
                           //*---------Values Title--------*/
                           titleDescription(text: provider.content?.values.valuesTitle.toString() ?? "",isTitle: true),
@@ -112,20 +110,23 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                           ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
+                              padding: EdgeInsets.zero,
                               itemCount: provider.content?.values.valueItems.length,
                               itemBuilder: (context, index) {
                                 ValueItem value =
                                     provider.content!.values.valueItems[index];
 
                                 return Padding(
-                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  padding: EdgeInsets.only(
+                                    bottom: (index < ((provider.content?.values?.valueItems?.length ?? 1) - 1)) ? 10.0 : 0,
+                                  ),
                                   child: CustomVisionAndMissionContainer(
                                       title: value.title,
                                   description: value.text,
                                   ),
                                 );
                               }),
-                          kLargeSpace,
+                          kSmallSpace,
 
                           //*---------Goals Title---------*/
                           titleDescription(text: provider.content?.goals.goalsTitle.toString() ?? "",isTitle: true),
@@ -135,7 +136,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                           ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-
+                              padding: EdgeInsets.zero,
                               itemCount: provider.content?.goals.goals.length,
                               itemBuilder: (context, index) {
                                 String goal = provider.content?.goals.goals[index] ?? '';
@@ -164,8 +165,8 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
 
   Widget titleDescription({required text, bool isTitle = false}){
     return Text(
-      textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
       text,
+      textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
       style:isTitle ? AppTextStyles.titleBoldTextStyle()  : AppTextStyles.normalTextStyle(),
       textAlign: TextAlign.justify,
 

@@ -44,6 +44,7 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
   double get kCardPadding => 15;
 
   Widget get kFormHeight => const SizedBox.square(dimension: 15,);
+  Widget get kMinorSpace => const SizedBox.square(dimension: 5,);
   Widget get kSmallSpace => const SizedBox.square(dimension: 10,);
   Widget get kLargeSpace => const SizedBox.square(dimension: 20,);
 
@@ -838,8 +839,33 @@ String convertTimestampToDateTime(int timestamp) {
 }
 
 // get full name from lov Code
-String getFullNameFromLov(
-    {String? lovCode, String? code, required langProvider}) {
+// String getFullNameFromLov(
+//     {String? lovCode, String? code, required langProvider}) {
+//   if (lovCode == null || code == null || lovCode.isEmpty || code.isEmpty) {
+//     return '';
+//   }
+//
+//   List lovList = [];
+//   if (Constants.lovCodeMap[lovCode]?.values != null) {
+//     lovList = populateUniqueSimpleValuesFromLOV(
+//         menuItemsList: Constants.lovCodeMap[lovCode]!.values!,
+//         provider: langProvider,
+//         textColor: AppColors.scoButtonColor);
+//   }
+//
+//   dynamic element = lovList.firstWhere((element) {
+//     return element.code == code;
+//   });
+//
+//   return getTextDirection(langProvider) == TextDirection.rtl
+//       ? element.valueArabic
+//       : element.value;
+// }
+String getFullNameFromLov({
+  String? lovCode,
+  String? code,
+  required langProvider,
+}) {
   if (lovCode == null || code == null || lovCode.isEmpty || code.isEmpty) {
     return '';
   }
@@ -847,19 +873,27 @@ String getFullNameFromLov(
   List lovList = [];
   if (Constants.lovCodeMap[lovCode]?.values != null) {
     lovList = populateUniqueSimpleValuesFromLOV(
-        menuItemsList: Constants.lovCodeMap[lovCode]!.values!,
-        provider: langProvider,
-        textColor: AppColors.scoButtonColor);
+      menuItemsList: Constants.lovCodeMap[lovCode]!.values!,
+      provider: langProvider,
+      textColor: AppColors.scoButtonColor,
+    );
   }
 
-  dynamic element = lovList.firstWhere((element) {
-    return element.code == code;
-  });
+  // Prevent "Bad state: No element" by providing a default value
+  dynamic element = lovList.firstWhere(
+        (element) => element.code == code,
+    orElse: () => null, // Return null if no match is found
+  );
+
+  if (element == null) {
+    return ''; // Return an empty string if no match is found
+  }
 
   return getTextDirection(langProvider) == TextDirection.rtl
       ? element.valueArabic
       : element.value;
 }
+
 
 String xmlToJson(String xmlContent) {
   // Parse the XML content

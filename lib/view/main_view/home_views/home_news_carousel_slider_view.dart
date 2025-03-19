@@ -15,14 +15,14 @@ import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../drawer/custom_drawer_views/news_and_events_details_view.dart';
 
-class NewsCarouselSliderView extends StatefulWidget {
-  const NewsCarouselSliderView({super.key});
+class HomeNewsCarouselSliderView extends StatefulWidget {
+  const HomeNewsCarouselSliderView({super.key});
 
   @override
-  State<NewsCarouselSliderView> createState() => _NewsCarouselSliderViewState();
+  State<HomeNewsCarouselSliderView> createState() => _HomeNewsCarouselSliderViewState();
 }
 
-class _NewsCarouselSliderViewState extends State<NewsCarouselSliderView> with MediaQueryMixin {
+class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView> with MediaQueryMixin {
   @override
   Widget build(BuildContext context) {
     return Consumer<NewsAndEventsViewmodel>(

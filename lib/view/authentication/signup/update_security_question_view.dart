@@ -267,7 +267,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
       builder: (context, provider, _) {
         return CustomButton(
           textDirection: getTextDirection(langProvider),
-          buttonName: AppLocalizations.of(context)!.submit,
+          buttonName: AppLocalizations.of(context)!.submitSecurityQuestion,
           isLoading:
               provider.updateSecurityQuestionResponse.status == Status.LOADING
                   ? true

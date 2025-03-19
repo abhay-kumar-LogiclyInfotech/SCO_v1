@@ -505,7 +505,8 @@ class _CustomDrawerViewState extends State<CustomDrawerView> {
   Future<void> _loadAppVersion(AppLocalizations localization) async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      _appVersion = '${localization.version} ${packageInfo.version} (${packageInfo.buildNumber})';
+      _appVersion = '${localization.version} 1.0.1';
+      // _appVersion = '${localization.version} ${packageInfo.version} (${packageInfo.buildNumber})';
       // _appVersion = 'Version ${packageInfo.version}';
     });
   }

@@ -69,8 +69,8 @@
   "enterFirstName": "أدخل اسمك الأول",
   "enterSecondName": "أدخل اسمك الثاني",
   "enterThirdFourthName": "أدخل اسمك الثالث/الرابع",
-  "enterFamilyName": "أدخل اسم العائلة أو الاسم الأخير",
-  "enterDateOfBirth": "أدخل تاريخ ميلادك",
+  "enterFamilyName": "ادخل اسم العائلة او القبيلة",
+  "enterDateOfBirth": "ادخل تاريخ الميلاد",
   "enterValidDay": "أدخل يومًا صحيحًا",
   "enterValidMonth": "أدخل شهرًا صحيحًا",
   "enterValidYear": "أدخل سنة صحيحة",
@@ -1127,7 +1127,8 @@
   "deleteRowAddress": "حذف العنوان",
   "newPasswordWatermark": "ادخل كلمة المرور الجديدة",
   "confirmPasswordWatermark": "ادخل تأكيد كلمة المرور الجديدة",
-  "updatePassword": "تأكيد"
+  "updatePassword": "تأكيد",
+  "submitSecurityQuestion": "تأكيد"
 
 }
 

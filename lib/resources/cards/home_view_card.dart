@@ -6,7 +6,6 @@ import '../../viewModel/language_change_ViewModel.dart';
 import '../app_text_styles.dart';
 
 class HomeViewCard extends StatefulWidget {
-
   final String title;
   final Widget? icon;
   final Widget content;
@@ -14,26 +13,27 @@ class HomeViewCard extends StatefulWidget {
   final LanguageChangeViewModel langProvider;
   final EdgeInsets? contentPadding;
   final VoidCallback? onTap;
+  final bool showTitle;
 
-   const HomeViewCard({super.key
-  ,
-    required  this.title,
+  const HomeViewCard({
+    super.key,
+    required this.title,
     this.icon,
     required this.content,
     this.headerExtraContent,
     required this.langProvider,
-    this.onTap, this.contentPadding,
-
+    this.onTap,
+    this.contentPadding,
+    this.showTitle = true,
   });
 
   @override
   State<HomeViewCard> createState() => _HomeViewCardState();
 }
 
-class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin{
+class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
   @override
   Widget build(BuildContext context) {
-
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
 
     return GestureDetector(
@@ -56,37 +56,41 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin{
                     right: kCardPadding,
                     bottom: 0,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                          child: Row(
-                            children: [
-                              widget.icon ?? showVoid,
-                              if (widget.icon != null) const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  widget.title,
-                                  style: AppTextStyles.titleBoldTextStyle()
-                                      .copyWith(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                  child: widget.showTitle
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                                child: Row(
+                              children: [
+                                widget.icon ?? showVoid,
+                                if (widget.icon != null)
+                                  const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    widget.title,
+                                    style: AppTextStyles.titleBoldTextStyle()
+                                        .copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 5),
-                              widget.headerExtraContent ?? showVoid,
-                            ],
-                          )),
-                      Icon(
-                        getTextDirection(langProvider) == TextDirection.rtl
-                            ? Icons.keyboard_arrow_left_outlined
-                            : Icons.keyboard_arrow_right_outlined,
-                        color: Colors.grey,
-                      )
-                    ],
-                  ),
+                                const SizedBox(width: 5),
+                                widget.headerExtraContent ?? showVoid,
+                              ],
+                            )),
+                            Icon(
+                              getTextDirection(langProvider) ==
+                                      TextDirection.rtl
+                                  ? Icons.keyboard_arrow_left_outlined
+                                  : Icons.keyboard_arrow_right_outlined,
+                              color: Colors.grey,
+                            )
+                          ],
+                        )
+                      : showVoid,
                 ),
                 // kFormHeight,
                 Padding(
@@ -103,6 +107,7 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin{
           ),
         ),
       ),
-    );;
+    );
+    ;
   }
 }

@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/main_view/home_view.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../../data/response/status.dart';
@@ -16,14 +15,14 @@ import '../notifications/notifications_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
-class AnnouncementsView extends StatefulWidget {
-  const AnnouncementsView({super.key});
+class HomeAnnouncementsView extends StatefulWidget {
+  const HomeAnnouncementsView({super.key});
 
   @override
-  State<AnnouncementsView> createState() => _AnnouncementsViewState();
+  State<HomeAnnouncementsView> createState() => _HomeAnnouncementsViewState();
 }
 
-class _AnnouncementsViewState extends State<AnnouncementsView> with MediaQueryMixin {
+class _HomeAnnouncementsViewState extends State<HomeAnnouncementsView> with MediaQueryMixin {
 
 
 

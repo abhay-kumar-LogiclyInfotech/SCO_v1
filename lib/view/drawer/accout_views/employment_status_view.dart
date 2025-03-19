@@ -83,19 +83,18 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
     await getEmploymentStatusProvider.getEmploymentStatus();
 
     if (getEmploymentStatusProvider.apiResponse.status == Status.COMPLETED) {
-      final status =
-          getEmploymentStatusProvider.apiResponse.data?.data?.employmentStatus;
+      final status = getEmploymentStatusProvider.apiResponse.data?.data?.employmentStatus;
 
       /// prefilling the form
       _employmentStatusController.text = status?.employmentStatus ?? '';
       _employerController.text = status?.employerName ?? '';
       _commentsController.text = status?.comment ?? '';
 
+
       if (status?.listOfFiles != null && status?.listOfFiles != []) {
         _attachmentsList.clear();
         for (int i = 0; i < status!.listOfFiles!.length; i++) {
-          _attachmentsList
-              .add(ListOfFiles.fromJson(status!.listOfFiles![i].toJson()));
+          _attachmentsList.add(ListOfFiles.fromJson(status!.listOfFiles![i].toJson()));
         }
       }
 
