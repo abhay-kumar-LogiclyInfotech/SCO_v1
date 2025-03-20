@@ -72,11 +72,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                 builder: (context, provider, _) {
                   switch (provider.visionAndMissionResponse.status) {
                     case Status.LOADING:
-                      return const Center(
-                        child: CupertinoActivityIndicator (
-                        color: AppColors.scoThemeColor,
-                                    ),
-                      );
+                      return Utils.spinkitThreeBounce();
 
                     case Status.ERROR:
                       return Text(

@@ -218,11 +218,11 @@ class Utils {
 
   // *-----Show Loading more data from server-----*/
 
-  static Widget spinkitThreeBounce() => const Center(
+  static Widget spinkitThreeBounce() =>  const Center(
           child: Padding(
         padding: EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 10),
         child: SpinKitThreeBounce(
-          color: Colors.black,
+          color: AppColors.scoThemeColor,
           size: 23,
         ),
       ));
