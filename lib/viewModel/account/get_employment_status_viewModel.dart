@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:sco_v1/controller/internet_controller.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/repositories/home/home_repository.dart';
@@ -71,6 +72,7 @@ class GetEmploymentStatusViewModel with ChangeNotifier {
         };
 
         GetEmploymentStatusModel response = await _myRepo.getEmploymentStatus(userId: _userId ?? '',headers: headers);
+
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);

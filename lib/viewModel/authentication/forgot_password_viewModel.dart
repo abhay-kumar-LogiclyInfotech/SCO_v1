@@ -45,11 +45,11 @@ class ForgotPasswordViewModel with ChangeNotifier {
       // required BuildContext context,
       required LanguageChangeViewModel langProvider}) async {
     try {
-
-      if (email.isEmpty) {
-        _alertServices.showErrorSnackBar("something went wrong...");
-        return false;
-      }
+      //
+      // if (email.isEmpty) {
+      //   _alertServices.showErrorSnackBar("something went wrong...");
+      //   return false;
+      // }
 
       _setGetSecurityQuestionResponse = ApiResponse.loading();
 

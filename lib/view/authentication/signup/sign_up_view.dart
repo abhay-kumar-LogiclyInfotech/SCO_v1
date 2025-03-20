@@ -172,7 +172,7 @@ class _SignUpViewState extends State<SignUpView>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: CustomSimpleAppBar(titleAsString: "Sign Up",titleAsStringStyle: AppTextStyles.appBarTitleStyle().copyWith(color: Colors.black),showChangeLanguageButton: true,),
+      appBar: CustomSimpleAppBar(titleAsString: AppLocalizations.of(context)!.signUp,titleAsStringStyle: AppTextStyles.appBarTitleStyle().copyWith(color: Colors.black),showChangeLanguageButton: true,),
       body:  _buildUI(),
     );
   }
@@ -488,7 +488,7 @@ class _SignUpViewState extends State<SignUpView>
       nextFocusNode: _genderFocusNode,
       controller: _dobController,
       obscureText: false,
-      hintText: localization.brithDateWatermark,
+      hintText: localization.enterDateOfBirth,
       textInputType: TextInputType.datetime,
       textCapitalization: true,
       leading: SvgPicture.asset(
@@ -605,7 +605,7 @@ class _SignUpViewState extends State<SignUpView>
               currentFocusNode: _passwordFocusNode,
               nextFocusNode: _confirmPasswordFocusNode,
               controller: _passwordController,
-              hintText: localization.registrationPassword,
+              hintText: localization.registrationPasswordWatermark,
               textInputType: TextInputType.visiblePassword,
               leading: SvgPicture.asset(
                 "assets/lock.svg",
@@ -647,7 +647,7 @@ class _SignUpViewState extends State<SignUpView>
             currentFocusNode: _confirmPasswordFocusNode,
             nextFocusNode: _countryFocusNode,
             controller: _confirmPasswordController,
-            hintText: localization.registrationConfPassword,
+            hintText: localization.registrationConfPasswordWatermark,
             textInputType: TextInputType.text,
             leading: SvgPicture.asset(
               "assets/lock.svg",
@@ -690,7 +690,7 @@ class _SignUpViewState extends State<SignUpView>
       useScreenWidthToAdjustDropdown: true,
       menuItemsList: _countryMenuItemsList,
       currentFocusNode: _countryFocusNode,
-      hintText: localization.country,
+      hintText: localization.countryWatermark,
       errorText: _countryError,
       onChanged: (value) {
         setState(() {

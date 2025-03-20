@@ -126,8 +126,8 @@ class LoginViewModel with ChangeNotifier {
         await HiveManager.storeName(
             [
               userData.firstName?.trim() ?? '',  // Trim and handle null
-              userData.middleName?.trim() ?? '',
-              userData.middleName2?.trim() ?? '',
+              // userData.middleName?.trim() ?? '',
+              // userData.middleName2?.trim() ?? '',
               userData.lastName?.trim() ?? ''
             ]
                 .where((name) => name.isNotEmpty) // Exclude empty strings

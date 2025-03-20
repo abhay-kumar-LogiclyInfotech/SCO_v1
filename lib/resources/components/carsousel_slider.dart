@@ -1,11 +1,13 @@
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rename_app/constants.dart';
 import 'package:sco_v1/utils/utils.dart';
 
 class CustomCarouselSlider extends StatefulWidget {
   final List<Widget> items;
   Function(int,CarouselPageChangedReason)? onPageChanged;
-   CustomCarouselSlider({super.key,required this.items, this.onPageChanged});
+  final double height;
+   CustomCarouselSlider({super.key,required this.items, this.onPageChanged,this.height = 100});
 
   @override
   State<CustomCarouselSlider> createState() => _CustomCarouselSliderState();
@@ -16,7 +18,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> with MediaQ
   Widget build(BuildContext context) {
     return CarouselSlider(
         options: CarouselOptions(
-          height: 100,
+          height: widget.height,
           aspectRatio: 16 / 9,
           viewportFraction: 1,
           initialPage: 0,
@@ -31,6 +33,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> with MediaQ
           scrollDirection: Axis.horizontal,
           onPageChanged: widget.onPageChanged
         ),
-        items: widget.items);
+        items: widget.items,
+    );
   }
 }

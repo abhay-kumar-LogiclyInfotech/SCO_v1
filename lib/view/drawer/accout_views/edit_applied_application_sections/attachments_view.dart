@@ -253,9 +253,7 @@ class _AttachmentsViewState extends State<AttachmentsView>
         ),
         body: Utils.modelProgressHud(
           processing: _isProcessing,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: _buildUi()),
+          child: _buildUi(),
         ));
   }
 
@@ -273,8 +271,7 @@ class _AttachmentsViewState extends State<AttachmentsView>
           case Status.COMPLETED:
             return SingleChildScrollView(
               child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: kPadding-8, vertical: 5),
+                padding: EdgeInsets.all(kPadding),
                 child: Column(
                   children: [
                     _buildAttachmentsSection(langProvider),

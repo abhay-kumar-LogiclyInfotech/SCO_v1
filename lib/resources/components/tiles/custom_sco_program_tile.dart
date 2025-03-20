@@ -17,12 +17,17 @@ class CustomScoProgramTile extends StatefulWidget {
   final String title;
   final String subTitle;
   final void Function() onTap;
+  final double imageSize;
+  final Widget? trailing;
+
 
   const CustomScoProgramTile({super.key,
     required this.imagePath,
     required this.title,
     required this.subTitle,
-    required this.onTap
+    required this.onTap,
+    this.imageSize = 76,
+    this.trailing
   });
 
   @override
@@ -80,8 +85,8 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
             widget.imagePath,
             filterQuality: FilterQuality.high,
             fit: BoxFit.fill,
-            height: 76,
-            width: 76,
+            height: widget.imageSize,
+            width: widget.imageSize,
             // width: screenWidth / 4,
             // height: screenHeight / 11,
             errorBuilder: (BuildContext context, Object, StackTrace) {
@@ -89,8 +94,8 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
                 "assets/sidemenu/scholarships_uae.jpg",
                 filterQuality: FilterQuality.high,
                 fit: BoxFit.fill,
-                height: 76,
-                width: 76,
+                height: widget.imageSize,
+                width: widget.imageSize,
                 // width: screenWidth / 4,
                 // height: screenHeight / 11,
               );
@@ -98,37 +103,37 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
           ),
         ),
         // green tick
-        Container(
-            height: 17,
-            width: 19,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  bottomRight: Radius.circular(10)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 1.0,
-                left: 1,
-              ),
-              child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10),
-                        topLeft: Radius.circular(5)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: SvgPicture.asset(
-                      "assets/sidemenu/correct.svg",
-                      width: 7,
-                      height: 5,
-                      fit: BoxFit.fill,
-                    ),
-                  )),
-            ))
+        // Container(
+        //     height: 17,
+        //     width: 19,
+        //     decoration: const BoxDecoration(
+        //       color: Colors.white,
+        //       borderRadius: BorderRadius.only(
+        //           topLeft: Radius.circular(5),
+        //           bottomRight: Radius.circular(10)),
+        //     ),
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(
+        //         top: 1.0,
+        //         left: 1,
+        //       ),
+        //       child: Container(
+        //           decoration: const BoxDecoration(
+        //             color: Colors.green,
+        //             borderRadius: BorderRadius.only(
+        //                 bottomRight: Radius.circular(10),
+        //                 topLeft: Radius.circular(5)),
+        //           ),
+        //           child: Padding(
+        //             padding: const EdgeInsets.all(2.0),
+        //             child: SvgPicture.asset(
+        //               "assets/sidemenu/correct.svg",
+        //               width: 7,
+        //               height: 5,
+        //               fit: BoxFit.fill,
+        //             ),
+        //           )),
+        //     ))
       ],
     );
   }
@@ -150,16 +155,13 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
           ),
          if(widget.subTitle.isNotEmpty) Column(
             children: [
-              const SizedBox(height: 5),
+              // const SizedBox(height: 5),
               Text(
-                widget.subTitle.length < (screenWidth < 420 ? 25 : 25) ?
-                widget.subTitle
-                    : "${widget.subTitle.substring(0, ((screenWidth < 420 ? 25 : 25)))}...",
+                // widget.subTitle.length < (screenWidth < 420 ? 25 : 25) ? widget.subTitle : "${widget.subTitle.substring(0, ((screenWidth < 420 ? 25 : 25)))}...",
+                widget.subTitle,
                 // textAlign: TextAlign.left,
-                style: const TextStyle(
-                    color: Colors.black,fontSize: 12,height: 1.5
-                ),
-                // overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.black,fontSize: 12,height: 1.5,decoration: TextDecoration.none),
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -176,7 +178,7 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
 
-        Transform.rotate(angle: getTextDirection(langProvider) == TextDirection.rtl ? pi : 0,child: SvgPicture.asset(
+       widget.trailing ??  Transform.rotate(angle: getTextDirection(langProvider) == TextDirection.rtl ? pi : 0,child: SvgPicture.asset(
           "assets/sidemenu/goForward.svg",
           width: 20,
           height: 20,

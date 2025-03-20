@@ -1115,5 +1115,6 @@
   "officeLocation": "Office Location",
   "newPasswordWatermark": "Enter new password",
   "confirmPasswordWatermark": "Enter confirm password",
-  "updatePassword": "Update Password"
+  "updatePassword": "Update Password",
+  "submitSecurityQuestion": "Update"
 }

@@ -17,6 +17,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../data/response/status.dart';
 import '../../../resources/components/change_language_button.dart';
+import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/validations_and_errorText.dart';
 import '../../../viewModel/services/alert_services.dart';
@@ -92,105 +93,153 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LanguageChangeViewModel>(context);
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Stack(
-        alignment: Alignment.topLeft,
-        children: [
-          const KLoginSignupBg(),
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            margin: EdgeInsets.only(
-              top: orientation == Orientation.portrait
-                  ? screenHeight / 2.5
-                  : screenHeight / 3,
-            ),
-            padding: EdgeInsets.only(
-              left: orientation == Orientation.portrait
-                  ? screenWidth * 0.08
-                  : screenWidth / 100,
-              right: orientation == Orientation.portrait
-                  ? screenWidth * 0.08
-                  : screenWidth / 100,
-              top: orientation == Orientation.portrait
-                  ? screenWidth * 0.05
-                  : screenWidth / 100 * 5,
-              bottom: orientation == Orientation.portrait
-                  ? screenWidth / 100 * 1
-                  : screenWidth / 100 * 1,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius:
-                  BorderRadius.vertical(top: Radius.elliptical(60, 60)),
-            ),
+        resizeToAvoidBottomInset: true,
+        appBar: CustomSimpleAppBar(
+          titleAsString: AppLocalizations.of(context)!.forgotPasswordTitle,
+          titleAsStringStyle:
+              AppTextStyles.appBarTitleStyle().copyWith(color: Colors.black),
+          showChangeLanguageButton: true,
+        ),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          padding: EdgeInsets.symmetric(
+            horizontal: kPadding,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                    child: SvgPicture.asset(
-                  "assets/sco_logo.svg",
-                  fit: BoxFit.fill,
-                  height: 55,
-                  width: 110,
-                )),
-                Expanded(
-                  child: Consumer<LanguageChangeViewModel>(
-                    builder: (context, provider, _) {
-                      return SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            kSmallSpace,
+                kSmallSpace,
+                // email Address Field
+                _emailAddressField(provider),
+                const SizedBox(height: 10),
 
-                            // heading:
-                            _heading(provider),
+                //create Captcha by rotating:
+                _createCaptcha(),
 
-                            // subheading
-                            _subHeading(provider),
-                            kFormHeight,
+                //Enter Captcha:
+                _captchaField(provider),
 
-                            // email Address Field
-                            _emailAddressField(provider),
-                            const SizedBox(height: 10),
+                const SizedBox(height: 35),
 
-                            //create Captcha by rotating:
-                            _createCaptcha(),
+                //Submit Button:
+                _submitButton(provider),
+                const SizedBox(height: 20),
+                //giving or option:
+                _or(),
+                const SizedBox(height: 20),
 
-                            //Enter Captcha:
-                            _captchaField(provider),
-
-                            const SizedBox(height: 35),
-
-                            //Submit Button:
-                            _submitButton(provider),
-                            const SizedBox(height: 20),
-                            //giving or option:
-                            _or(),
-                            const SizedBox(height: 20),
-
-                            //sign up link:
-                            _signUpLink(provider),
-                            const SizedBox(height: 23),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                //sign up link:
+                _signUpLink(provider),
+                const SizedBox(height: 23),
               ],
             ),
           ),
-          Positioned(left: 10,right:10,child: SafeArea(child: ChangeLanguageButton(showBackButton: true,))),
-        ],
-      ),
-    );
+        ));
+    // Stack(
+    //   alignment: Alignment.topLeft,
+    //   children: [
+    //     const KLoginSignupBg(),
+    //     Container(
+    //       width: double.infinity,
+    //       height: double.infinity,
+    //       margin: EdgeInsets.only(
+    //         top: orientation == Orientation.portrait
+    //             ? screenHeight / 2.5
+    //             : screenHeight / 3,
+    //       ),
+    //       padding: EdgeInsets.only(
+    //         left: orientation == Orientation.portrait
+    //             ? screenWidth * 0.08
+    //             : screenWidth / 100,
+    //         right: orientation == Orientation.portrait
+    //             ? screenWidth * 0.08
+    //             : screenWidth / 100,
+    //         top: orientation == Orientation.portrait
+    //             ? screenWidth * 0.05
+    //             : screenWidth / 100 * 5,
+    //         bottom: orientation == Orientation.portrait
+    //             ? screenWidth / 100 * 1
+    //             : screenWidth / 100 * 1,
+    //       ),
+    //       decoration: const BoxDecoration(
+    //         color: Colors.white,
+    //         borderRadius:
+    //             BorderRadius.vertical(top: Radius.elliptical(60, 60)),
+    //       ),
+    //       child: Column(
+    //         children: [
+    //           SizedBox(
+    //               child: SvgPicture.asset(
+    //             "assets/sco_logo.svg",
+    //             fit: BoxFit.fill,
+    //             height: 55,
+    //             width: 110,
+    //           )),
+    //           Expanded(
+    //             child: Consumer<LanguageChangeViewModel>(
+    //               builder: (context, provider, _) {
+    //                 return SingleChildScrollView(
+    //                   child: Column(
+    //                     mainAxisSize: MainAxisSize.max,
+    //                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //                     crossAxisAlignment: CrossAxisAlignment.center,
+    //                     children: [
+    //                       kSmallSpace,
+    //
+    //                       // heading:
+    //                       _heading(provider),
+    //
+    //                       // subheading
+    //                       _subHeading(provider),
+    //                       kFormHeight,
+    //
+    //                       // email Address Field
+    //                       _emailAddressField(provider),
+    //                       const SizedBox(height: 10),
+    //
+    //                       //create Captcha by rotating:
+    //                       _createCaptcha(),
+    //
+    //                       //Enter Captcha:
+    //                       _captchaField(provider),
+    //
+    //                       const SizedBox(height: 35),
+    //
+    //                       //Submit Button:
+    //                       _submitButton(provider),
+    //                       const SizedBox(height: 20),
+    //                       //giving or option:
+    //                       _or(),
+    //                       const SizedBox(height: 20),
+    //
+    //                       //sign up link:
+    //                       _signUpLink(provider),
+    //                       const SizedBox(height: 23),
+    //                     ],
+    //                   ),
+    //                 );
+    //               },
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //     Positioned(left: 10,right:10,child: SafeArea(child: ChangeLanguageButton(showBackButton: true,))),
+    //   ],
+    // ),
+    // );
   }
 
   Widget _heading(LanguageChangeViewModel langProvider) {
-    return Utils.authViewTitle(langProvider: langProvider, text: AppLocalizations.of(context)!.forgotPasswordTitle);
+    return Utils.authViewTitle(
+        langProvider: langProvider,
+        text: AppLocalizations.of(context)!.forgotPasswordTitle);
   }
 
   Widget _subHeading(LanguageChangeViewModel provider) {
@@ -238,8 +287,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
         Container(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           decoration: BoxDecoration(
-              border: Border.all(color: AppColors.darkGrey),
-              borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.darkGrey),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
             _captchaText ?? '',
@@ -287,18 +336,39 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
             bool validated = _validateForm(langProvider: langProvider);
 
             if (validated) {
-              bool result = await provider.getSecurityQuestion(email: _emailController.text.trim(),
+              bool result = await provider.getSecurityQuestion(
+                  email: _emailController.text.trim(),
                   // context: context,
                   langProvider: langProvider);
 
               if (result) {
-                final String securityQuestion = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.securityQuestion.toString() ?? "";
-                final String securityAnswer = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.securityAnswer.toString() ?? "";
-                final String userId = provider.getSecurityQuestionResponse.data?.data?.securityQuestion?.userId.toString() ?? "";
+                final String securityQuestion = provider
+                        .getSecurityQuestionResponse
+                        .data
+                        ?.data
+                        ?.securityQuestion
+                        ?.securityQuestion
+                        .toString() ??
+                    "";
+                final String securityAnswer = provider
+                        .getSecurityQuestionResponse
+                        .data
+                        ?.data
+                        ?.securityQuestion
+                        ?.securityAnswer
+                        .toString() ??
+                    "";
+                final String userId = provider.getSecurityQuestionResponse.data
+                        ?.data?.securityQuestion?.userId
+                        .toString() ??
+                    "";
 
-                if (securityQuestion.isNotEmpty && securityAnswer.isNotEmpty && userId.isNotEmpty) {
+                if (securityQuestion.isNotEmpty &&
+                    securityAnswer.isNotEmpty &&
+                    userId.isNotEmpty) {
                   _navigationServices.pushReplacementCupertino(
-                      CupertinoPageRoute(builder: (context) => AnswerSecurityQuestionView(
+                      CupertinoPageRoute(
+                          builder: (context) => AnswerSecurityQuestionView(
                               securityQuestion: securityQuestion,
                               securityAnswer: securityAnswer,
                               userId: userId)));
@@ -388,16 +458,19 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
 
   bool _validateForm({required LanguageChangeViewModel langProvider}) {
     if (_emailController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.pleaseEnterYourEmailAddress);
+      _alertServices.showErrorSnackBar(
+          AppLocalizations.of(context)!.pleaseEnterYourEmailAddress);
       return false;
     }
     if (_captchaController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.pleaseEnterCaptcha);
+      _alertServices
+          .showErrorSnackBar(AppLocalizations.of(context)!.pleaseEnterCaptcha);
       return false;
     }
     if (_captchaText != _captchaController.text) {
       _rotate();
-      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.incorrectCaptcha);
+      _alertServices
+          .showErrorSnackBar(AppLocalizations.of(context)!.incorrectCaptcha);
       return false;
     }
     return true;

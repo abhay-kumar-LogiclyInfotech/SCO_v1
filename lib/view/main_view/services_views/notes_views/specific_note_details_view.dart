@@ -132,7 +132,7 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
         expandedContent: Column(
           children: [
             CustomInformationContainerField(title: localization.institution, description: noteInfo?.institution ?? '- -'),
-            CustomInformationContainerField(title: localization.type, description: getFullNameFromLov(langProvider: langProvider,lovCode: "CATEGORY",code:  noteInfo?.noteType ?? '- -' )),
+              CustomInformationContainerField(title: localization.type, description: getFullNameFromLov(langProvider: langProvider,lovCode: "CATEGORY",code:  noteInfo?.noteType ?? '- -' )),
             CustomInformationContainerField(title: localization.subType,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'SUB_CATEGORY#${noteInfo?.noteType}',code: noteInfo?.noteSubType ?? '- -') ),
             CustomInformationContainerField(title: localization.contactType, description: getFullNameFromLov(langProvider: langProvider,lovCode: "CONTACT_TYPE",code:  noteInfo?.contactType )),
             CustomInformationContainerField(title: localization.noteStatus, description: getFullNameFromLov(langProvider: langProvider,lovCode: "NOTE_STATUS",code:  noteInfo?.noteStatus )),

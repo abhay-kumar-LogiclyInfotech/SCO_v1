@@ -7,8 +7,6 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/login/login_view.dart';
-import 'package:sco_v1/view/drawer/custom_drawer_views/account_view.dart';
-import 'package:sco_v1/view/drawer/custom_drawer_view.dart';
 import 'package:sco_v1/view/main_view/services_view.dart';
 import 'package:sco_v1/view/main_view/home_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
@@ -18,7 +16,7 @@ import '../resources/app_colors.dart';
 import '../resources/components/custom_main_view_app_bar.dart';
 import '../viewModel/services/auth_services.dart';
 import '../viewModel/services/navigation_services.dart';
-import 'main_view/about_us_view.dart';
+import 'drawer/drawer_view.dart';
 import 'main_view/support _view.dart';
 
 class MainView extends StatefulWidget {
@@ -64,9 +62,6 @@ class _MainViewState extends State<MainView> {
         setState(() {
           _isLoggedIn = isLoggedIn;
         });
-
-
-
     });
 
     super.initState();
@@ -86,159 +81,17 @@ class _MainViewState extends State<MainView> {
               : scaffoldState.currentState!.openEndDrawer();
         },
       ),
-      drawer: CustomDrawerView(
+      drawer: DrawerView(
         textDirection: getTextDirection(langProvider),
         scaffoldState: scaffoldState,
       ),
       drawerEnableOpenDragGesture: langProvider.appLocale == const Locale('en') ? true : false,
-      endDrawer: CustomDrawerView(textDirection: getTextDirection(langProvider), scaffoldState: scaffoldState),
+      endDrawer: DrawerView(textDirection: getTextDirection(langProvider), scaffoldState: scaffoldState),
       endDrawerEnableOpenDragGesture: langProvider.appLocale == const Locale('ar') ? true : false,
       body:  IndexedStack(index: currentIndex,children: screens) ,
-      // body:_buildUI(),
-      // bottomNavigationBar: Material(
-      //   color: Colors.white,
-      //   elevation: 0.3,
-      //   child: Column(
-      //     mainAxisSize: MainAxisSize.min,
-      //     children: [
-      //       Padding(
-      //         padding: const EdgeInsets.only(top: 20.0),
-      //         child: SafeArea(
-      //           child: Row(
-      //             mainAxisSize: MainAxisSize.max,
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               GestureDetector(
-      //                 onTap: () {
-      //                   if(_isLoggedIn){
-      //                     setState(() {
-      //                       services = true;
-      //                       home = false;
-      //                       support = false;
-      //                     });
-      //                   }else{
-      //                     _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>const LoginView()));
-      //                     _alertServices.showCustomSnackBar("Please Login to use services",
-      //                         // context,
-      //                     );
-      //                   }
-      //
-      //                 },
-      //                 child: Container(
-      //                   color: Colors.transparent,
-      //                   width: MediaQuery.sizeOf(context).width * .25,
-      //                   child: Column(
-      //                     mainAxisSize: MainAxisSize.max,
-      //                     mainAxisAlignment: MainAxisAlignment.center,
-      //                     children: [
-      //                       SizedBox(
-      //                           height: 30,
-      //                           child: SvgPicture.asset(
-      //                             services
-      //                                 ? "assets/services_selected.svg"
-      //                                 : "assets/services.svg",
-      //                           )),
-      //                       Text(
-      //                         // AppLocalizations.of(context)!.services,
-      //                         "Services",
-      //                         style: TextStyle(
-      //                             color: services
-      //                                 ? Colors.black
-      //                                 : const Color(0xfff9AA6B2),
-      //                             fontSize: 12,
-      //                             fontWeight: services
-      //                                 ? FontWeight.w900
-      //                                 : FontWeight.w900),
-      //                       ),
-      //                     ],
-      //                   ),
-      //                 ),
-      //               ),
-      //               GestureDetector(
-      //                 onTap: () {
-      //                   setState(() {
-      //                     services = false;
-      //                     home = true;
-      //                     support = false;
-      //                   });
-      //                 },
-      //                 child: Container(
-      //                   color: Colors.transparent,
-      //                   width: MediaQuery.sizeOf(context).width * .25,
-      //                   child: Column(
-      //                     mainAxisSize: MainAxisSize.max,
-      //                     mainAxisAlignment: MainAxisAlignment.center,
-      //                     children: [
-      //                       SizedBox(
-      //                           height: 30,
-      //                           child: SvgPicture.asset(
-      //                             home
-      //                                 ? "assets/home_selected.svg"
-      //                                 : "assets/home.svg",
-      //                           )),
-      //                       Text(
-      //                         AppLocalizations.of(context)!.home,
-      //                         style: TextStyle(
-      //                             color: home
-      //                                 ? Colors.black
-      //                                 : const Color(0xfff9AA6B2),
-      //                             fontSize: 12,
-      //                             fontWeight: home
-      //                                 ? FontWeight.w900
-      //                                 : FontWeight.w900),
-      //                       ),
-      //                     ],
-      //                   ),
-      //                 ),
-      //               ),
-      //               GestureDetector(
-      //                 onTap: () {
-      //                   setState(() {
-      //                     services = false;
-      //                     home = false;
-      //                     support = true;
-      //                   });
-      //                 },
-      //                 child: Container(
-      //                   color: Colors.transparent,
-      //                   width: MediaQuery.sizeOf(context).width * .25,
-      //                   child: Column(
-      //                     mainAxisSize: MainAxisSize.max,
-      //                     mainAxisAlignment: MainAxisAlignment.center,
-      //                     children: [
-      //                       SizedBox(
-      //                           height: 30,
-      //                           child: SvgPicture.asset(
-      //                             support
-      //                                 ? "assets/support_selected.svg"
-      //                                 : "assets/support.svg",
-      //                           )),
-      //                       Text(
-      //                         // AppLocalizations.of(context)!.support,
-      //                         "Support",
-      //                         style: TextStyle(
-      //                             color: support
-      //                                 ? Colors.black
-      //                                 : const Color(0xfff9AA6B2),
-      //                             fontSize: 12,
-      //                             fontWeight:
-      //                             support ? FontWeight.w900 : FontWeight.w900),
-      //                       ),
-      //                     ],
-      //                   ),
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-        bottomNavigationBar: Directionality(
+      bottomNavigationBar: Directionality(
           textDirection: getTextDirection(langProvider),
           child: BottomNavigationBar(
-
             selectedItemColor: AppColors.scoThemeColor,
             backgroundColor: Colors.white,
               currentIndex: currentIndex,
@@ -270,19 +123,7 @@ class _MainViewState extends State<MainView> {
           
      BottomNavigationBarItem(icon:  SvgPicture.asset("assets/support.svg"),activeIcon:SvgPicture.asset("assets/support_selected.svg"),label: localization.support),
           ]),
-        )
+        ),
     );
-  }
-
-  Widget _buildUI() {
-    if (services) {
-     return screens[0];
-    }
-
-    if (home) {
-      return screens[1];
-    }
-
-    return screens[2];
   }
 }
