@@ -64,7 +64,7 @@ class _WarningDetailsViewState extends State<WarningDetailsView> with MediaQuery
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: localization.myFinance),
+      appBar: CustomSimpleAppBar(titleAsString: localization.warningDetails),
       body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
     );
   }

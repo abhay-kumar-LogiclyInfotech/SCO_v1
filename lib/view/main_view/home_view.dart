@@ -216,7 +216,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
               Column(
                 children: [
                   //// This will show the top salary only
-                  const HomeScholarshipApprovedView(),
+                  // const HomeScholarshipApprovedView(),
                   const HomeAnnouncementsView(),
                   const HomeFinanceView(),
                   const HomeRequestsView(),

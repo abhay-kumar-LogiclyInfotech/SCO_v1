@@ -59,7 +59,7 @@ class _MyScholarshipViewState extends State<MyScholarshipView> with MediaQueryMi
 
     return Scaffold(
         backgroundColor: AppColors.bgColor,
-        appBar: CustomSimpleAppBar(titleAsString: localization.myScholarship),
+        appBar: CustomSimpleAppBar(titleAsString: localization.my_scholarship),
         body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
       );
   }

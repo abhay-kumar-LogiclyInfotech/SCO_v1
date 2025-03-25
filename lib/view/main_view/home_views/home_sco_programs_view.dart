@@ -110,7 +110,7 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
                 overflow: TextOverflow.ellipsis,
               ),
             ],
-          ),
+          ),kMinorSpace,
           Column(
             children: [
               // carousel slider
@@ -124,7 +124,7 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
                     });
                   },
                 ),
-              kFormHeight, // animated moving dots
+              kSmallSpace, // animated moving dots
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _scoProgramsList.asMap().entries.map((entry) {

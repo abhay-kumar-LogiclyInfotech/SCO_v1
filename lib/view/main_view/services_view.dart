@@ -28,6 +28,9 @@ import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../drawer/accout_views/addresses_view.dart';
+import '../drawer/accout_views/application_status_view.dart';
+
 
 class ServicesView extends StatefulWidget {
   const ServicesView({super.key});
@@ -103,14 +106,14 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const SelectScholarshipTypeView()))
       },
       {
+        'title': appLocalizations?.myApplications,
+        'assetAddress': "assets/myAccount/application_status.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ApplicationStatusView()))
+      },
+      {
         'title': appLocalizations?.my_scholarship,
         'assetAddress': "assets/services/my_scholarship.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const MyScholarshipView()))
-      },
-      {
-        'title': appLocalizations?.request,
-        'assetAddress': "assets/services/request.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const RequestView()))
       },
       {
         'title': appLocalizations?.academic_advisor,
@@ -118,9 +121,14 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const AcademicAdvisorView()))
       },
       {
-        'title': appLocalizations?.work_status,
-        'assetAddress': "assets/services/work_status.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const WorkStatusView()))
+        'title': appLocalizations?.request,
+        'assetAddress': "assets/services/request.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const RequestView()))
+      },
+      {
+        'title': appLocalizations?.guidance_notes,
+        'assetAddress': "assets/services/guidance_notes.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const GuidanceNotesView()))
       },
       {
         'title': appLocalizations?.finance,
@@ -128,10 +136,19 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const FinanceView()))
       },
       {
-        'title': appLocalizations?.guidance_notes,
-        'assetAddress': "assets/services/guidance_notes.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const GuidanceNotesView()))
+        'title': appLocalizations?.employmentStatusTitle,
+        'assetAddress': "assets/services/work_status.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const WorkStatusView()))
       },
+      if (role == UserRole.scholarStudent || role == UserRole.applicants)
+        {
+          'title': appLocalizations?.address,
+          'assetAddress': "assets/myAccount/addresses.svg",
+          "routeBuilder": () => _navigationServices
+              .pushSimpleWithAnimationRoute(createRoute(const AddressesView()))
+        },
+
+
     ];
 
     List<SimpleTileModel> itemsList = [];
