@@ -323,10 +323,10 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                   title: localization.university,
                                   description: application?.scholarship?.university?.toString() ?? '- -',
                                 ),
-                                CustomInformationContainerField(
-                                  title: localization.majors,
-                                  description: application?.scholarship?.academicPlan?.toString() ?? '- -',
-                                ),
+                                // CustomInformationContainerField(
+                                //   title: localization.majors,
+                                //   description: application?.scholarship?.academicPlan?.toString() ?? '- -',
+                                // ),
                                 CustomInformationContainerField(
                                   title: localization.scholarshipApprovedDate,
                                   description: application?.scholarship?.scholarshipApprovedDate?.toString() ?? '- -',
