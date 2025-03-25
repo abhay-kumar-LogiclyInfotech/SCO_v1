@@ -62,7 +62,6 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
               : null;
           return Column(
             children: [
-              kSmallSpace,
               HomeViewCard(
                   onTap: () {
                     _navigationServices.pushCupertino(CupertinoPageRoute(
