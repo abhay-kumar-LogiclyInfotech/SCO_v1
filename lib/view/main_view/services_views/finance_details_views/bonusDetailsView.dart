@@ -64,7 +64,7 @@ class _BonusDetailsViewState extends State<BonusDetailsView> with MediaQueryMixi
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: localization.myFinance),
+      appBar: CustomSimpleAppBar(titleAsString: localization.bonusDetails),
       body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
     );
   }

@@ -77,13 +77,11 @@ class _EditAddressesViewState extends State<EditAddressesView>
 
   Future _initializeData() async {
     /// fetch student profile Information t prefill the user information
-    final studentProfileProvider =
-    Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
+    final studentProfileProvider = Provider.of<GetPersonalDetailsViewModel>(context, listen: false);
     await studentProfileProvider.getPersonalDetails();
 
     /// *------------------------------------------ Initialize dropdowns start ------------------------------------------------------------------*
-    final langProvider =
-    Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final langProvider = context.read<LanguageChangeViewModel>();
 
     /// Check and populate dropdowns only if the values exist
     if (Constants.lovCodeMap['COUNTRY']?.values != null) {
@@ -141,6 +139,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Building");
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
