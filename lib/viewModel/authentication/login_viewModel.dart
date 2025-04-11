@@ -10,7 +10,8 @@ import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
 import '../services/auth_services.dart';
-import '../services/navigation_services.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../services/navigation_services.dart';
+import '../../l10n/app_localizations.dart';
 
 
 class LoginViewModel with ChangeNotifier {

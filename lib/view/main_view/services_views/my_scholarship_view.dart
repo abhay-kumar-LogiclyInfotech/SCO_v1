@@ -14,7 +14,7 @@ import '../../../resources/components/account/Custom_inforamtion_container.dart'
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../utils/utils.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../viewModel/services/navigation_services.dart';
 

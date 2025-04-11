@@ -12,7 +12,8 @@ import '../../../resources/components/custom_button.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../apply_scholarship/select_scholarship_type_view.dart';
 import '../../authentication/login/login_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
+
 
 class HomeApplyForScholarshipView extends StatefulWidget {
   const HomeApplyForScholarshipView({super.key});

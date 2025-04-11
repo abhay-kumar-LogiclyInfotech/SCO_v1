@@ -12,7 +12,7 @@ import '../../../utils/utils.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../scholarship_in_abroad/scholarship_in_abroad_view.dart';
 import '../scholarship_in_uae/scholarship_in_uae_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 class HomeScoProgramsView extends StatefulWidget {
   const HomeScoProgramsView({super.key});

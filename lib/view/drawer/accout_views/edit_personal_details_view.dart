@@ -38,7 +38,7 @@ import '../../../utils/utils.dart';
 import '../../../viewModel/account/personal_details/get_personal_details_viewmodel.dart';
 import '../../../viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../viewModel/services/media_services.dart';
 import '../../../viewModel/services/navigation_services.dart';

@@ -103,7 +103,7 @@ flutter_launcher_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
-  generate: true
+  generate: true # for localization
 
 
   uses-material-design: true

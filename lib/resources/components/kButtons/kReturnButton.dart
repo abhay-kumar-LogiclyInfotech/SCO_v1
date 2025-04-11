@@ -8,7 +8,7 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import '../../../utils/utils.dart';
 import '../../app_colors.dart';
 import '../custom_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 
 class KReturnButton extends StatefulWidget {

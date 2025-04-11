@@ -4,10 +4,10 @@ import 'package:sco_v1/models/authentication/forgot_password/forgot_password_get
 import 'package:sco_v1/models/authentication/forgot_password/forgot_password_send_mail_model.dart';
 import 'package:sco_v1/models/authentication/forgot_password/forgot_security_question_otp_verification_model.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 import '../../data/response/ApiResponse.dart';
+import '../../l10n/app_localizations.dart';
 import '../../repositories/auth_repo/auth_repository.dart';
 import '../../utils/constants.dart';
 import '../services/alert_services.dart';

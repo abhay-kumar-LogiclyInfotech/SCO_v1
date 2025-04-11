@@ -5,12 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
-import '../../../resources/app_colors.dart';
-import '../../../resources/app_text_styles.dart';
-import '../../../resources/components/account/Custom_inforamtion_container.dart';
-import '../../../resources/components/custom_button.dart';
-import '../../../resources/components/myDivider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';

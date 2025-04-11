@@ -11,7 +11,7 @@ import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/viewModel/account/get_base64String_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 
 import '../../data/response/status.dart';

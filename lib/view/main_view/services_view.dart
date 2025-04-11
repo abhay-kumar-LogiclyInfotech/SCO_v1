@@ -26,7 +26,7 @@ import '../../resources/components/tiles/simple_tile.dart';
 import '../../resources/getRoles.dart';
 import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 import '../drawer/accout_views/addresses_view.dart';
 import '../drawer/accout_views/application_status_view.dart';

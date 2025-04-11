@@ -15,7 +15,7 @@ import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../form_view_Utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 
 class GraduationInformationView extends StatefulWidget {

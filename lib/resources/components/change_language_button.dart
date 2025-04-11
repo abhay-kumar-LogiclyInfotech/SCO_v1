@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../viewModel/language_change_ViewModel.dart';
 import '../app_colors.dart';
-import 'custom_advanced_switch.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'custom_advanced_switch.dart';import '../../l10n/app_localizations.dart';
 
 
 class ChangeLanguageButton extends StatefulWidget

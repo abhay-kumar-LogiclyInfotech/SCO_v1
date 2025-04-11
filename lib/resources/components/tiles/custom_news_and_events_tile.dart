@@ -14,7 +14,7 @@ import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import '../../../data/response/status.dart';
 import '../../app_colors.dart';
 import '../../app_text_styles.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 class CustomNewsAndEventsTile extends StatefulWidget {
   final String imageId;

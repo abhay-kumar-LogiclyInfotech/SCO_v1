@@ -20,7 +20,7 @@ import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/add_comment_to_note_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/get_all_notes_viewModel.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/get_specific_note_details_view_Model.dart';

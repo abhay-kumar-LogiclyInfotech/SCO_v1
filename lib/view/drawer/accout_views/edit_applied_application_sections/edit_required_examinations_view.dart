@@ -19,7 +19,7 @@ import '../../../../resources/components/custom_button.dart';
 import '../../../../resources/components/custom_simple_app_bar.dart';
 import '../../../../resources/components/kButtons/kReturnButton.dart';
 import '../../../../utils/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';

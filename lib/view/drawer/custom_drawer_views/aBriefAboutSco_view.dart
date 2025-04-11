@@ -1,13 +1,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
 import '../../../data/response/status.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../resources/app_colors.dart';
 import '../../../utils/utils.dart';
 import '../../../viewModel/language_change_ViewModel.dart';

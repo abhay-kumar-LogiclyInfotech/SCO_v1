@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +15,7 @@ import '../../../resources/app_text_styles.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/components/kButtons/kReturnButton.dart';
-import '../../../viewModel/services/navigation_services.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../viewModel/services/navigation_services.dart';
 
 import '../../authentication/signup/update_security_question_view.dart';
 

@@ -8,7 +8,7 @@ import '../../../resources/cards/home_view_card.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../services_views/finance_details_views/salaryDetailsView.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 
 class HomeScholarshipAppliedView extends StatefulWidget {

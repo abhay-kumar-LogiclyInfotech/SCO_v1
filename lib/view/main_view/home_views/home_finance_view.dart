@@ -14,7 +14,7 @@ import '../../../resources/components/custom_vertical_divider.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
 import '../services_views/finance.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 class HomeFinanceView extends StatefulWidget {
   const HomeFinanceView({super.key});

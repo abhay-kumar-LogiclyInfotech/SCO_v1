@@ -14,7 +14,7 @@ import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../viewModel/services_viewmodel/get_all_requests_viewModel.dart';
 import '../services_views/request_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 class HomeRequestsView extends StatefulWidget {
   const HomeRequestsView({super.key});

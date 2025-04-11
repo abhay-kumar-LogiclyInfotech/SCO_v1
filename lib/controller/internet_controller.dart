@@ -23,8 +23,7 @@ class InternetController extends GetxController {
       // No network connection available
       isConnected.value = false;
       Get.rawSnackbar(
-        messageText: const Text("PLEASE CONNECT TO THE INTERNET",
-            style: TextStyle(color: Colors.white, fontSize: 14)),
+        messageText: const Text("PLEASE CONNECT TO THE INTERNET", style: TextStyle(color: Colors.white, fontSize: 14)),
         icon: const Icon(Icons.wifi_off,color: Colors.white,),
         isDismissible: false,
         duration:  const Duration(days: 1),

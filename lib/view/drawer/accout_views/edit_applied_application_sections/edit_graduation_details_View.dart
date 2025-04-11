@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
 import '../../../../data/response/status.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/account/GetListApplicationStatusModel.dart';
 import '../../../../models/account/edit_application_sections_model/GetApplicationSectionsModel.dart';
 import '../../../../models/apply_scholarship/FillScholarshipFormModels.dart';
@@ -18,7 +19,6 @@ import '../../../../utils/utils.dart';
 import '../../../../viewModel/account/edit_application_sections_view_Model/edit_application/edit_application_sections_viewModel.dart';
 import '../../../../viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../viewModel/services/alert_services.dart';

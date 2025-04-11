@@ -10,7 +10,7 @@ import '../../../resources/app_colors.dart';
 import '../../../resources/app_text_styles.dart';
 import '../../../resources/components/custom_vision_and_mission_container.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 
 class VisionAndMissionView extends StatefulWidget {

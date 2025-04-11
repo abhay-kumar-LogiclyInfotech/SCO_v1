@@ -25,7 +25,7 @@ import '../../../../viewModel/language_change_ViewModel.dart';
 import '../../../../viewModel/services/media_services.dart';
 import '../../../../viewModel/services/navigation_services.dart';
 import '../../../../viewModel/services/permission_checker_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../apply_scholarship/form_view_Utils.dart';
 

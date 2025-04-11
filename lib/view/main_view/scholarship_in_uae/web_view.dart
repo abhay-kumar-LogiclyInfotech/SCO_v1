@@ -16,7 +16,7 @@ import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.d
 import '../../../viewModel/get_page_content_by_urls_viewModels/Internal/get_page_content_by_url_viewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 class WebView extends StatefulWidget {
   final String url;

@@ -7,7 +7,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../resources/cards/home_view_card.dart';
 import '../../../viewModel/services/navigation_services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../drawer/custom_drawer_views/faq_view.dart';
 

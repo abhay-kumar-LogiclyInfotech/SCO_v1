@@ -21,7 +21,7 @@ import '../../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../accout_views/change_password_view.dart';
 import '../accout_views/personal_details_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 class AccountView extends StatefulWidget {
   const AccountView({super.key});

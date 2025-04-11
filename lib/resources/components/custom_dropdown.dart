@@ -6,7 +6,7 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../view/apply_scholarship/form_view_Utils.dart';
-import '../app_colors.dart';import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../app_colors.dart';import '../../l10n/app_localizations.dart';
 
 
 class CustomDropdown extends StatefulWidget {

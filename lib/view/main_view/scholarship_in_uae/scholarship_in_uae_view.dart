@@ -12,7 +12,7 @@ import '../../../resources/app_urls.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
 import '../../../viewModel/services/navigation_services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 
 class ScholarshipsInUaeView extends StatefulWidget {

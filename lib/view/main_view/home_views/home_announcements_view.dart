@@ -12,7 +12,7 @@ import '../../../resources/cards/home_view_card.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/notifications_view_models/get_all_notifications_viewModel.dart';
 import '../notifications/notifications_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 
 class HomeAnnouncementsView extends StatefulWidget {

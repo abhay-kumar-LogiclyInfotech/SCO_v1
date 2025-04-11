@@ -1,18 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/resources/cards/simple_card.dart';
-import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/myDivider.dart';
-import 'package:sco_v1/viewModel/services/media_services.dart';
-import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
-import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../../data/response/status.dart';
 import '../../../../resources/app_colors.dart';
@@ -20,7 +13,6 @@ import '../../../../resources/components/account/Custom_inforamtion_container.da
 import '../../../../resources/components/custom_simple_app_bar.dart';
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
-import '../../../../viewModel/services/navigation_services.dart';
 
 
 class BonusDetailsView extends StatefulWidget {

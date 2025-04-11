@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sco_v1/models/splash/commonData_model.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 import '../models/apply_scholarship/FillScholarshipFormModels.dart';
 

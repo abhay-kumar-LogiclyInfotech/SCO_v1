@@ -15,7 +15,7 @@
 // import '../../resources/getRoles.dart';
 // import '../../viewModel/authentication/get_roles_viewModel.dart';
 // import '../../viewModel/language_change_ViewModel.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import '../../l10n/app_localizations.dart';
 //
 // class SupportView extends StatefulWidget {
 //   const SupportView({super.key});
@@ -149,7 +149,7 @@ import '../../resources/app_colors.dart';
 import '../../resources/getRoles.dart';
 import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 class SupportView extends StatefulWidget {
   const SupportView({super.key});

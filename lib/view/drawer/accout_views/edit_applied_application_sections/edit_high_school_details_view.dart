@@ -19,7 +19,7 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/account/edit_application_sections_view_Model/get_application_sections_view_model.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 
 
 class EditHighSchoolDetailsView extends StatefulWidget {

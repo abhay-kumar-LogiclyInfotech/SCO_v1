@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../view/apply_scholarship/form_view_Utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 
 class AttachmentAddFileButton extends StatefulWidget {

@@ -18,7 +18,7 @@ import 'package:xml/xml.dart';
 import 'dart:convert';
 import 'package:xml/xml.dart' as xml;
 import 'package:html/parser.dart' as html;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 import '../resources/app_colors.dart';
 import 'constants.dart';

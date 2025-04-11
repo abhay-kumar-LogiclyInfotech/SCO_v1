@@ -1,10 +1,7 @@
 
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
@@ -15,6 +12,7 @@ import 'package:sco_v1/viewModel/account/edit_application_sections_view_Model/ge
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../../../data/response/status.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/account/edit_application_sections_model/GetApplicationSectionsModel.dart';
 import '../../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../../resources/app_colors.dart';
@@ -22,7 +20,6 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
 import '../../../apply_scholarship/form_views/employment_history_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class EditEmploymentHistoryView extends StatefulWidget {
