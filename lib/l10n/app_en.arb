@@ -1116,5 +1116,9 @@
   "newPasswordWatermark": "Enter new password",
   "confirmPasswordWatermark": "Enter confirm password",
   "updatePassword": "Update Password",
-  "submitSecurityQuestion": "Update"
+  "submitSecurityQuestion": "Update",
+  "forgotPasswordEmailWatermark" : "Enter email address",
+  "forgotPasswordCaptchaWatermark": "Enter captcha",
+  "forgotPasswordSubmitButtonLabel": "Submit"
+
 }

@@ -3361,4 +3361,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submitSecurityQuestion => 'Update';
+
+  @override
+  String get forgotPasswordEmailWatermark => 'Enter email address';
+
+  @override
+  String get forgotPasswordCaptchaWatermark => 'Enter captcha';
+
+  @override
+  String get forgotPasswordSubmitButtonLabel => 'Submit';
 }

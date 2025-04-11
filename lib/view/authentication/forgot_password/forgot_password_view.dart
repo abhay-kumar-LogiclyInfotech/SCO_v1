@@ -9,14 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
-import 'package:sco_v1/resources/kBackgrounds/kLoginSignUpBg.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/forgot_password/answer_security_question_view.dart';
 import 'package:sco_v1/viewModel/authentication/forgot_password_viewModel.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../data/response/status.dart';
-import '../../../resources/components/change_language_button.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
 import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/validations_and_errorText.dart';
@@ -98,9 +96,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
         resizeToAvoidBottomInset: true,
         appBar: CustomSimpleAppBar(
           titleAsString: AppLocalizations.of(context)!.forgotPasswordTitle,
-          titleAsStringStyle:
-              AppTextStyles.appBarTitleStyle().copyWith(color: Colors.black),
-          showChangeLanguageButton: true,
+          titleAsStringStyle: AppTextStyles.appBarTitleStyle().copyWith(color: Colors.black),
+          showChangeLanguageButton: false,
         ),
         body: Container(
           width: double.infinity,
@@ -260,19 +257,16 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       nextFocusNode: _captchaFocusNode,
       controller: _emailController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.emailAddress,
+      hintText: AppLocalizations.of(context)!.forgotPasswordEmailWatermark,
       textInputType: TextInputType.emailAddress,
       leading: SvgPicture.asset(
         "assets/email.svg",
-        // height: 18,
-        // width: 18,
       ),
       errorText: _emailError,
       onChanged: (value) {
         if (_emailFocusNode.hasFocus) {
           setState(() {
-            _emailError =
-                ErrorText.getEmailError(email: value!, context: context);
+            _emailError = ErrorText.getEmailError(email: value!, context: context);
           });
         }
       },
@@ -313,7 +307,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       currentFocusNode: _captchaFocusNode,
       controller: _captchaController,
       obscureText: false,
-      hintText: AppLocalizations.of(context)!.enterCaptcha,
+      hintText: AppLocalizations.of(context)!.forgotPasswordCaptchaWatermark,
       textInputType: TextInputType.number,
       leading: SvgPicture.asset(
         "assets/captcha.svg",
@@ -327,7 +321,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       builder: (context, provider, _) {
         return CustomButton(
           textDirection: getTextDirection(langProvider),
-          buttonName: AppLocalizations.of(context)!.submit,
+          buttonName: AppLocalizations.of(context)!.forgotPasswordSubmitButtonLabel,
           isLoading:
               provider.getSecurityQuestionResponse.status == Status.LOADING
                   ? true

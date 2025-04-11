@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,8 +63,8 @@ class _ChangeLanguageButtonState extends State<ChangeLanguageButton> with MediaQ
 
             /// language change button
            widget.showBackButton ?  Expanded(
-              child: changeLanguageButtonWidget(),
-            ) : changeLanguageButtonWidget(),
+              child: newChangeLanguageWidget(),
+            ) : newChangeLanguageWidget(),
           ],
         ),
       ),
@@ -104,6 +105,32 @@ Widget changeLanguageButtonWidget(){
       ),
       const SizedBox(width: 10),
       const  Text("عربي",style: TextStyle(color: Colors.black),),
+    ],
+  );
+}
+
+Widget newChangeLanguageWidget(){
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.end,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Consumer<LanguageChangeViewModel>(
+        builder: (context, provider, _) {
+          return MaterialButton(onPressed: (){
+            if (context.read<LanguageChangeViewModel>().appLocale == const Locale('en')) {
+              context.read<LanguageChangeViewModel>().changeLanguage(const Locale('ar'));
+            } else {
+              context.read<LanguageChangeViewModel>().changeLanguage(const Locale('en'));
+            }
+          },
+              color: AppColors.scoThemeColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+              visualDensity: VisualDensity.compact,
+          child: Text(context.read<LanguageChangeViewModel>().appLocale == const Locale('en') ? "عربي" : "English",style: const TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold),)
+          );
+        },
+      ),
     ],
   );
 }

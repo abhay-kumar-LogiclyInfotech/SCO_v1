@@ -1701,7 +1701,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registrationMiddleName => 'الاسم الثاني';
 
   @override
-  String get registrationMiddleNameWatermark => 'حقل الاسم الثاني اجباري';
+  String get registrationMiddleNameWatermark => 'ادخل الاسم الثاني';
 
   @override
   String get registrationMiddleNameRequired => 'ادخل الاسم الثاني';
@@ -3361,4 +3361,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get submitSecurityQuestion => 'تأكيد';
+
+  @override
+  String get forgotPasswordEmailWatermark => 'البريد الالكتروني';
+
+  @override
+  String get forgotPasswordCaptchaWatermark => 'ادخل كود التحقق';
+
+  @override
+  String get forgotPasswordSubmitButtonLabel => 'تأكيد ';
 }

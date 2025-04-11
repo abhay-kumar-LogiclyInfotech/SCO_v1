@@ -9,7 +9,6 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/change_language_button.dart';
-import 'package:sco_v1/resources/components/custom_advanced_switch.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/kBackgrounds/kLoginSignUpBg.dart';
 import 'package:sco_v1/utils/utils.dart';

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/resources/components/account/custom_account_grid_container.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/drawer/accout_views/addresses_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/application_status_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/employment_status_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/security_questions_view.dart';
-import 'package:sco_v1/view/main_view/services_view.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
 import '../../../data/response/status.dart';
@@ -81,33 +79,33 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
             createRoute(const PersonalDetailsView()))
       },
-      if (role == UserRole.scholarStudent)
-        {
-          'title': localization.employmentStatusTitle,
-          'assetAddress': "assets/myAccount/employment_status.svg",
-          "routeBuilder": () =>
-              _navigationServices.pushSimpleWithAnimationRoute(
-                  createRoute(const EmploymentStatusView()))
-        },
-      {
-        'title': localization.myApplications,
-        'assetAddress': "assets/myAccount/application_status.svg",
-        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
-            createRoute(const ApplicationStatusView()))
-      },
+      // if (role == UserRole.scholarStudent)
+      //   {
+      //     'title': localization.employmentStatusTitle,
+      //     'assetAddress': "assets/myAccount/employment_status.svg",
+      //     "routeBuilder": () =>
+      //         _navigationServices.pushSimpleWithAnimationRoute(
+      //             createRoute(const EmploymentStatusView()))
+      //   },
+      // {
+      //   'title': localization.myApplications,
+      //   'assetAddress': "assets/myAccount/application_status.svg",
+      //   "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
+      //       createRoute(const ApplicationStatusView()))
+      // },
       {
         'title': localization.change_password,
         'assetAddress': "assets/myAccount/change_password.svg",
         "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
             createRoute(const ChangePasswordView()))
       },
-      if (role == UserRole.scholarStudent || role == UserRole.applicants)
-        {
-          'title': localization.address,
-          'assetAddress': "assets/myAccount/addresses.svg",
-          "routeBuilder": () => _navigationServices
-              .pushSimpleWithAnimationRoute(createRoute(const AddressesView()))
-        },
+      // if (role == UserRole.scholarStudent || role == UserRole.applicants)
+      //   {
+      //     'title': localization.address,
+      //     'assetAddress': "assets/myAccount/addresses.svg",
+      //     "routeBuilder": () => _navigationServices
+      //         .pushSimpleWithAnimationRoute(createRoute(const AddressesView()))
+      //   },
       {
         'title': localization.securityQuestion,
         'assetAddress': "assets/myAccount/security_questions.svg",

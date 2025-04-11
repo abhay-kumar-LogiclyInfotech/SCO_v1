@@ -1,16 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../../l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
-import 'package:sco_v1/resources/kBackgrounds/kLoginSignUpBg.dart';
 import 'package:sco_v1/resources/validations_and_errorText.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/authentication/signup/signup_otp_verification_view.dart';
@@ -20,7 +17,6 @@ import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../../data/response/status.dart';
 import '../../../resources/app_text_styles.dart';
-import '../../../resources/components/change_language_button.dart';
 import '../../../resources/components/custom_dropdown.dart';
 import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/input_formatters/emirates_id_input_formatter.dart';
@@ -71,8 +67,7 @@ class _SignUpViewState extends State<SignUpView>
   final FocusNode _studentPhoneNumberFocusNode = FocusNode();
 
   final ValueNotifier<bool> _passwordVisibility = ValueNotifier<bool>(true);
-  final ValueNotifier<bool> _confirmPasswordVisibility =
-      ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _confirmPasswordVisibility = ValueNotifier<bool>(true);
 
   List<DropdownMenuItem> _genderMenuItemsList = [];
   List<DropdownMenuItem> _countryMenuItemsList = [];
@@ -95,8 +90,7 @@ class _SignUpViewState extends State<SignUpView>
   @override
   void initState() {
 
-    final provider =
-        Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final provider = Provider.of<LanguageChangeViewModel>(context, listen: false);
     _genderMenuItemsList = populateCommonDataDropdown(
         menuItemsList: Constants.lovCodeMap['GENDER']!.values!,
         provider: provider);
@@ -172,7 +166,7 @@ class _SignUpViewState extends State<SignUpView>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: CustomSimpleAppBar(titleAsString: AppLocalizations.of(context)!.signUp,titleAsStringStyle: AppTextStyles.appBarTitleStyle().copyWith(color: Colors.black),showChangeLanguageButton: true,),
+      appBar: CustomSimpleAppBar(titleAsString: AppLocalizations.of(context)!.signUp,titleAsStringStyle: AppTextStyles.appBarTitleStyle().copyWith(color: Colors.black),showChangeLanguageButton: false,),
       body:  _buildUI(),
     );
   }

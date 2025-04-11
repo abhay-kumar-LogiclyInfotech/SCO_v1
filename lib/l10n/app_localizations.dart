@@ -6802,6 +6802,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update'**
   String get submitSecurityQuestion;
+
+  /// No description provided for @forgotPasswordEmailWatermark.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter email address'**
+  String get forgotPasswordEmailWatermark;
+
+  /// No description provided for @forgotPasswordCaptchaWatermark.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter captcha'**
+  String get forgotPasswordCaptchaWatermark;
+
+  /// No description provided for @forgotPasswordSubmitButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get forgotPasswordSubmitButtonLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
