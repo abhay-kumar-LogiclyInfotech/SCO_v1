@@ -14,6 +14,9 @@ class HomeViewCard extends StatefulWidget {
   final EdgeInsets? contentPadding;
   final VoidCallback? onTap;
   final bool showTitle;
+  final bool showArrow;
+  final BorderSide? borderSide;
+  final double? titleSize;
 
   const HomeViewCard({
     super.key,
@@ -25,6 +28,9 @@ class HomeViewCard extends StatefulWidget {
     this.onTap,
     this.contentPadding,
     this.showTitle = true,
+    this.borderSide,
+    this.showArrow = true,
+    this.titleSize,
   });
 
   @override
@@ -42,7 +48,7 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
         elevation: 0.5,
         color: Colors.white,
         shadowColor: Colors.grey.shade400,
-        borderRadius: BorderRadius.circular(kCardRadius),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius),side: widget.borderSide ?? BorderSide.none),
         child: Directionality(
           textDirection: getTextDirection(langProvider),
           child: Padding(
@@ -57,7 +63,9 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                     bottom: 0,
                   ),
                   child: widget.showTitle
-                      ? Row(
+                      ? Row
+
+                    (
                           mainAxisAlignment: MainAxisAlignment.end,
                           // crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
@@ -73,7 +81,7 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                                     widget.title,
                                     style: AppTextStyles.titleBoldTextStyle()
                                         .copyWith(
-                                            fontSize: 20,
+                                            fontSize: widget.titleSize ??  20,
                                             fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -81,7 +89,7 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                                 widget.headerExtraContent ?? showVoid,
                               ],
                             )),
-                            Icon(
+                           if(widget.showArrow) Icon(
                               getTextDirection(langProvider) ==
                                       TextDirection.rtl
                                   ? Icons.keyboard_arrow_left_outlined
@@ -99,6 +107,7 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                         bottom: kCardPadding,
                         left: kCardPadding,
                         right: kCardPadding,
+                        top: 8
                       ),
                   child: widget.content,
                 )

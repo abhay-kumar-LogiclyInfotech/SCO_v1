@@ -69,7 +69,7 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
                         );
                       }).toList(),
                     )),
-                kFormHeight,
+                kSmallSpace,
               ],
             );
           default:

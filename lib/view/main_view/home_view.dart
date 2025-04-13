@@ -196,6 +196,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
             if (isLogged && role == UserRole.applicants)
               Column(
                 children: [
+                  const HomeNewsCarouselSliderView(),
                   const HomeScholarshipAppliedView(), /// Scholarship applied container If a user is Applicant then show this and move the user to application statuses view
                   const HomeUploadDocumentsView(), /// AFTER SCHOLARSHIP APPLIED THIS WILL APPEAR IF THERE IS ANY APPROVED DOCUMENTS LIST AVAILABLE.
                   const HomeFaqView(),

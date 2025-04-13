@@ -65,11 +65,8 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
                       icon: SvgPicture.asset("assets/request.svg"),
                       langProvider: langProvider,
                       // headerExtraContent: RequestsCountContainer(color: Colors.blue.shade600, count: totalRequests),
-                      contentPadding: EdgeInsets.zero,
-                      onTap: () {
-                        _navigationServices.pushCupertino(CupertinoPageRoute(
-                            builder: (context) => const RequestView()));
-                      },
+                      // contentPadding: EdgeInsets.zero,
+                      onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()));},
                       content: Column(
                         children: [
                           //  Padding(
@@ -80,13 +77,12 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
                           //   ),
                           // ),
                           // kFormHeight,
-                          const SizedBox(height: 8),
-                          const Divider(),
+                          // const SizedBox(height: 8),
+                          // const Divider(),
                           Container(
                             width: double.infinity,
                             color: Colors.transparent,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
+                            // padding:  EdgeInsets.all(kCardPadding),
                             child: screenWidth < 370
                                 ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

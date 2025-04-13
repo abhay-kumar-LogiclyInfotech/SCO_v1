@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/cards/home_view_card.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/drawer/vision_and_mission_viewModel.dart';
@@ -61,11 +61,13 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //*--------- about sco Title---------*/
-              titleDescription(text: localization.aboutSCO,isTitle: true),
-              kSmallSpace,              //*--------- about sco Description---------*/
-              CustomVisionAndMissionContainer(
-                title: '''انطلاقًا من التوجيهات السديدة والرؤية الحكيمة للمغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان "طيّب الله ثراه"، وتجسيدًا لمقولة سموه المأثورة "إن أكبر استثمار للمال هو استثماره في بناء أجيال من المتعلّمين والمثقفين"، وفي إطار النهج الذي اختطّه الشيخ محمد بن زايد آل نهيان رئيس الدولة "حفظه الله" في السير على خُطى الوالد القائد في دعم وتعزيز دور ومكانة العلم والتعليم، يحظى مكتب البعثات الدراسية اليوم بمكانة مرموقة ودور فعال في دعم المسيرة التعليمية التي تشهدها الدولة، ويهدف المكتب الذي تأسّس سنة 1999 بإشراف ومتابعة مباشرة من سمو الشيخ منصور بن زايد آل نهيان نائب رئيس الدولة، نائب رئيس مجلس الوزراء رئيس ديوان الرئاسة، إلى اختيار نخبة الطلبة الإماراتيين المتميزين في مسيرتهم الدراسية، وإيفادهم في بعثات دراسية إلى الجامعات المحلية والعالمية المرموقة، من أجل التخصّص في شتى المجالات التي تلبّي احتياجات التنمية في الدولة ورفدها بكوادر مواطنة وجيل مؤهل وفق أرفع المستويات العلمية لمواصلة مسيرة البناء والتطوير التي تشهدها دولة الإمارات العربية المتحدة، ويشرف مكتب البعثات الدراسية على إدارة البعثات الدراسية خارج الدولة والمنح الدراسية داخل الدولة.''',
-              ),
+
+              aboutScoCustomCard(title:  localization.aboutSCO, content: const Text( '''انطلاقًا من التوجيهات السديدة والرؤية الحكيمة للمغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان "طيّب الله ثراه"، وتجسيدًا لمقولة سموه المأثورة "إن أكبر استثمار للمال هو استثماره في بناء أجيال من المتعلّمين والمثقفين"، وفي إطار النهج الذي اختطّه الشيخ محمد بن زايد آل نهيان رئيس الدولة "حفظه الله" في السير على خُطى الوالد القائد في دعم وتعزيز دور ومكانة العلم والتعليم، يحظى مكتب البعثات الدراسية اليوم بمكانة مرموقة ودور فعال في دعم المسيرة التعليمية التي تشهدها الدولة، ويهدف المكتب الذي تأسّس سنة 1999 بإشراف ومتابعة مباشرة من سمو الشيخ منصور بن زايد آل نهيان نائب رئيس الدولة، نائب رئيس مجلس الوزراء رئيس ديوان الرئاسة، إلى اختيار نخبة الطلبة الإماراتيين المتميزين في مسيرتهم الدراسية، وإيفادهم في بعثات دراسية إلى الجامعات المحلية والعالمية المرموقة، من أجل التخصّص في شتى المجالات التي تلبّي احتياجات التنمية في الدولة ورفدها بكوادر مواطنة وجيل مؤهل وفق أرفع المستويات العلمية لمواصلة مسيرة البناء والتطوير التي تشهدها دولة الإمارات العربية المتحدة، ويشرف مكتب البعثات الدراسية على إدارة البعثات الدراسية خارج الدولة والمنح الدراسية داخل الدولة.''',textAlign: TextAlign.justify,), langProvider: langProvider),
+              // titleDescription(text: localization.aboutSCO,isTitle: true),
+              // kSmallSpace,              //*--------- about sco Description---------*/
+              // CustomVisionAndMissionContainer(
+              //   title: '''انطلاقًا من التوجيهات السديدة والرؤية الحكيمة للمغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان "طيّب الله ثراه"، وتجسيدًا لمقولة سموه المأثورة "إن أكبر استثمار للمال هو استثماره في بناء أجيال من المتعلّمين والمثقفين"، وفي إطار النهج الذي اختطّه الشيخ محمد بن زايد آل نهيان رئيس الدولة "حفظه الله" في السير على خُطى الوالد القائد في دعم وتعزيز دور ومكانة العلم والتعليم، يحظى مكتب البعثات الدراسية اليوم بمكانة مرموقة ودور فعال في دعم المسيرة التعليمية التي تشهدها الدولة، ويهدف المكتب الذي تأسّس سنة 1999 بإشراف ومتابعة مباشرة من سمو الشيخ منصور بن زايد آل نهيان نائب رئيس الدولة، نائب رئيس مجلس الوزراء رئيس ديوان الرئاسة، إلى اختيار نخبة الطلبة الإماراتيين المتميزين في مسيرتهم الدراسية، وإيفادهم في بعثات دراسية إلى الجامعات المحلية والعالمية المرموقة، من أجل التخصّص في شتى المجالات التي تلبّي احتياجات التنمية في الدولة ورفدها بكوادر مواطنة وجيل مؤهل وفق أرفع المستويات العلمية لمواصلة مسيرة البناء والتطوير التي تشهدها دولة الإمارات العربية المتحدة، ويشرف مكتب البعثات الدراسية على إدارة البعثات الدراسية خارج الدولة والمنح الدراسية داخل الدولة.''',
+              // ),
               kSmallSpace,
 
               Consumer<VisionAndMissionViewModel>(
@@ -90,46 +92,104 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
 
 
                           //*---------Vision Title---------*/
-                          titleDescription(text:provider.content?.visionMission.visionTitle.toString() ?? "",isTitle: true),
+                          // titleDescription(text:provider.content?.visionMission.visionTitle.toString() ?? "",isTitle: true),
+                          //
+                          // kSmallSpace,
+                          // //*--------Vision Description--------*/
+                          // // titleDescription(text: provider.content?.visionMission.visionText.toString() ??""),
+                          // CustomVisionAndMissionContainer(title: provider.content?.visionMission.visionText.toString() ??"",),
 
-                          kSmallSpace,
-                          //*--------Vision Description--------*/
-                          // titleDescription(text: provider.content?.visionMission.visionText.toString() ??""),
-                          CustomVisionAndMissionContainer(title: provider.content?.visionMission.visionText.toString() ??"",),
+                          aboutScoCustomCard(title: provider.content?.visionMission.visionTitle.toString() ?? "", content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Row(),
+                              Text(provider.content?.visionMission.visionText.toString() ??"",textAlign: TextAlign.start,),
+                            ],
+                          ), langProvider: langProvider),
+
+
                           kSmallSpace,
 
                           //*---------Values Title--------*/
-                          titleDescription(text: provider.content?.values.valuesTitle.toString() ?? "",isTitle: true),
-                          kSmallSpace,
+                          // titleDescription(text: provider.content?.values.valuesTitle.toString() ?? "",isTitle: true),
+                          // kSmallSpace,
+                          //
+                          // //*---------Values List----------*/
+                          // ListView.builder(
+                          //     physics: const NeverScrollableScrollPhysics(),
+                          //     shrinkWrap: true,
+                          //     padding: EdgeInsets.zero,
+                          //     itemCount: provider.content?.values.valueItems.length,
+                          //     itemBuilder: (context, index) {
+                          //       ValueItem value =
+                          //           provider.content!.values.valueItems[index];
+                          //
+                          //       return Padding(
+                          //         padding: EdgeInsets.only(
+                          //           bottom: (index < ((provider.content?.values?.valueItems?.length ?? 1) - 1)) ? 10.0 : 0,
+                          //         ),
+                          //         child: CustomVisionAndMissionContainer(
+                          //             title: value.title,
+                          //         description: value.text,
+                          //         ),
+                          //       );
+                          //     }),
+                          // kSmallSpace,
 
-                          //*---------Values List----------*/
-                          ListView.builder(
+                          aboutScoCustomCard(title: provider.content?.values.valuesTitle.toString() ?? "", content: ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               padding: EdgeInsets.zero,
                               itemCount: provider.content?.values.valueItems.length,
                               itemBuilder: (context, index) {
-                                ValueItem value =
-                                    provider.content!.values.valueItems[index];
-
+                                ValueItem value = provider.content!.values.valueItems[index];
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                    bottom: (index < ((provider.content?.values?.valueItems?.length ?? 1) - 1)) ? 10.0 : 0,
+                                    bottom: (index < ((provider.content?.values?.valueItems?.length ?? 1) - 1)) ? kCardPadding : 0,
                                   ),
-                                  child: CustomVisionAndMissionContainer(
-                                      title: value.title,
-                                  description: value.text,
-                                  ),
+                                  child:
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                       Text(
+                                        value.title,
+                                        style: value.text != null
+                                            ? const TextStyle(color: AppColors.scoThemeColor)
+                                            : null,
+                                        textAlign: TextAlign.justify,
+                                      ),
+                                      value.text != null
+                                          ? Text(value.text!,textAlign: TextAlign.justify,)
+                                          : const SizedBox.shrink()
+                                    ],
+                                  )
+                                  ,
                                 );
-                              }),
+                              }), langProvider: langProvider),
+
+
+                          // //*---------Goals Title---------*/
+                          // titleDescription(text: provider.content?.goals.goalsTitle.toString() ?? "",isTitle: true),
+                          //
+                          // kSmallSpace,
+                          // //*-------Goals List-----------*/
+                          // ListView.builder(
+                          //     physics: const NeverScrollableScrollPhysics(),
+                          //     shrinkWrap: true,
+                          //     padding: EdgeInsets.zero,
+                          //     itemCount: provider.content?.goals.goals.length,
+                          //     itemBuilder: (context, index) {
+                          //       String goal = provider.content?.goals.goals[index] ?? '';
+                          //
+                          //       return Padding(
+                          //         padding: const EdgeInsets.only(bottom: 10.0),
+                          //         child: CustomVisionAndMissionContainer(title: goal),
+                          //       );
+                          //     })
+
                           kSmallSpace,
 
-                          //*---------Goals Title---------*/
-                          titleDescription(text: provider.content?.goals.goalsTitle.toString() ?? "",isTitle: true),
-
-                          kSmallSpace,
-                          //*-------Goals List-----------*/
-                          ListView.builder(
+                          aboutScoCustomCard(title: provider.content?.goals.goalsTitle.toString() ?? "", content:  ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               padding: EdgeInsets.zero,
@@ -138,10 +198,11 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                                 String goal = provider.content?.goals.goals[index] ?? '';
 
                                 return Padding(
-                                  padding: const EdgeInsets.only(bottom: 10.0),
-                                  child: CustomVisionAndMissionContainer(title: goal),
+                                  padding:  EdgeInsets.only(bottom: kCardPadding),
+                                  child: Text(goal),
                                 );
-                              }),
+                              }), langProvider: langProvider)
+
                         ],
                       );
                     case null:
@@ -167,6 +228,11 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
       textAlign: TextAlign.justify,
 
     );
+  }
+
+  Widget aboutScoCustomCard({required title,required content, required langProvider}){
+    return  HomeViewCard(title: title,titleSize: 16,showArrow: false,contentPadding: EdgeInsets.only(left: kCardPadding,right: kCardPadding,bottom: kCardPadding,top: 8), content: content , langProvider: langProvider);
+
   }
 
 }

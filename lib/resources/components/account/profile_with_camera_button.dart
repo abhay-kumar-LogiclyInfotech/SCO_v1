@@ -49,6 +49,7 @@ class ProfileWithCameraButton extends StatelessWidget {
           image: profileImage,
           onTap: onTap,
           onLongPress: onLongPress,
+
         ),
        cameraEnabled ? Positioned(
           bottom: 0, // Positions the button at the bottom

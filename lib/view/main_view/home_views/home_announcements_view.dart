@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/app_colors.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 
@@ -49,17 +50,10 @@ class _HomeAnnouncementsViewState extends State<HomeAnnouncementsView> with Medi
             case Status.COMPLETED:
             // Check if there's any notification with `isNew == true`
               final hasNewNotification =
-                  allNotificationsProvider.apiResponse.data?.any(
-                        (notification) => notification.isNew == true,
-                  ) ??
-                      false;
+                  allNotificationsProvider.apiResponse.data?.any((notification) => notification.isNew == true,) ?? false;
 
-// Get the first notification with `isNew == true` if available
-              final firstNotification = hasNewNotification
-                  ? allNotificationsProvider.apiResponse.data?.firstWhere(
-                    (notification) => notification.isNew == true,
-              )
-                  : null;
+              // Get the first notification with `isNew == true` if available
+              final firstNotification = hasNewNotification ? allNotificationsProvider.apiResponse.data?.firstWhere((notification) => notification.isNew == true,) : null;
 
               return hasNewNotification
                   ?
@@ -67,24 +61,21 @@ class _HomeAnnouncementsViewState extends State<HomeAnnouncementsView> with Medi
                 children: [
                   // kSmallSpace,
                   HomeViewCard(
-                    onTap: () {
-                      _navigationServices.pushCupertino(CupertinoPageRoute(
-                          builder: (context) => const NotificationsView()));
-                    },
+                    onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const NotificationsView()));},
                     title: AppLocalizations.of(context)!.announcement,
                     icon: SvgPicture.asset("assets/announcements.svg"),
+                    borderSide:  const BorderSide(color: AppColors.scoMidThemeColor),
                     langProvider: langProvider,
+                    // contentPadding: EdgeInsets.all(kCardPadding),
                     content: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        kFormHeight,
+                        // kCardTitleContentSpace,
                         Text(
-                          firstNotification?.subject ?? '',
-                          style: AppTextStyles.titleTextStyle()
-                              .copyWith(fontSize: 15),
+                          firstNotification?.subject ?? '', style: AppTextStyles.titleTextStyle().copyWith(fontSize: 15),
                         ),
-                        kFormHeight,
-                        const Divider(),
+                        kMinorSpace,
+                        // const Divider(),
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,26 +87,15 @@ class _HomeAnnouncementsViewState extends State<HomeAnnouncementsView> with Medi
                               size: 15,
                             ),
                             const SizedBox(width: 5),
-                            Text(
-                              convertTimestampToDate(
-                                  firstNotification?.createDate ?? 0),
-                              style: AppTextStyles.subTitleTextStyle()
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
+                            Text(convertTimestampToDate(firstNotification?.createDate ?? 0), style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.bold),),
                             const SizedBox(width: 5),
-                            Text(
-                              convertTimestampToTime(
-                                  firstNotification?.createDate ?? 0),
-                              style: AppTextStyles.subTitleTextStyle()
-                                  .copyWith(fontWeight: FontWeight.normal),
-                            ),
+                            Text(convertTimestampToTime(firstNotification?.createDate ?? 0), style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.normal),),
                           ],
                         )
                       ],
                     ),
                   ),
                   kSmallSpace,
-
                 ],
               )
                   : showVoid;

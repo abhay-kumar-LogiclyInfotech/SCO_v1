@@ -38,10 +38,20 @@ class Constants {
 
 
   static const String newsImageUrl = "https://lh3.googleusercontent.com/NCE_l5_GJBa2YT_XNhAUf0aAH7-T5gWc15JfQKZ9YINax0698zDeFK64OnPbun9XDVGd=s142";
-  static const String scholarshipInUae = "assets/sidemenu/scholarships_uae.jpg";
-  static const String scholarshipInAbroad= "assets/sidemenu/scholarships_abroad.jpg";
   static const double latitude = 24.4525803;
   static const double longitude = 54.3112618;
+
+  static const String scholarshipInUae = "assets/sidemenu/scholarships_uae.jpg";
+  static const String scholarshipInAbroad= "assets/sidemenu/scholarships_abroad.jpg";
+
+  static const String bachelorsInUae = "assets/sidemenu/sco_programs_images/bachelors_in_uae.jpg";
+  static const String graduatesInUAE = "assets/sidemenu/sco_programs_images/graduates_in_uae.png";
+  static const String meteorologicalInUAE = "assets/sidemenu/sco_programs_images/meteorological_in_uae.png";
+
+  static const String bachelorsOutsideUae = "assets/sidemenu/sco_programs_images/bachelors_outside_uae.png";
+  static const String graduatesOutsideUae = "assets/sidemenu/sco_programs_images/graduates_outside_uae.png";
+  static const String distinguishedDoctorsOutsideUae = "assets/sidemenu/sco_programs_images/distinguished_doctors_outside_uae.png";
+
 
 
 

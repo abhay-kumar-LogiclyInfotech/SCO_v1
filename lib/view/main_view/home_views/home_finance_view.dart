@@ -48,26 +48,14 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
           return showVoid;
         case Status.COMPLETED:
           final financeData = financeStatusProvider.apiResponse.data?.data;
-          final salary = financeData?.listSalaryDetials?.isNotEmpty == true
-              ? financeData?.listSalaryDetials?.first
-              : null;
-          final deduction = financeData?.listDeduction?.isNotEmpty == true
-              ? financeData?.listDeduction?.first
-              : null;
-          final bonus = financeData?.listBonus?.isNotEmpty == true
-              ? financeData?.listBonus?.first
-              : null;
-          final warning = financeData?.listWarnings?.isNotEmpty == true
-              ? financeData?.listWarnings?.first
-              : null;
+          final salary = financeData?.listSalaryDetials?.isNotEmpty == true ? financeData?.listSalaryDetials?.first : null;
+          final deduction = financeData?.listDeduction?.isNotEmpty == true ? financeData?.listDeduction?.first : null;
+          final bonus = financeData?.listBonus?.isNotEmpty == true ? financeData?.listBonus?.first : null;
+          final warning = financeData?.listWarnings?.isNotEmpty == true ? financeData?.listWarnings?.first : null;
           return Column(
             children: [
               HomeViewCard(
-                  onTap: () {
-                    _navigationServices.pushCupertino(CupertinoPageRoute(
-                        builder: (context) => const FinanceView()));
-                  },
-                  contentPadding: EdgeInsets.zero,
+                  onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));},
                   title: AppLocalizations.of(context)!.myFinance,
                   icon: SvgPicture.asset("assets/my_finance.svg"),
                   langProvider: langProvider,
@@ -75,11 +63,9 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                     // crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      kSmallSpace,
                       Container(
                         color: Colors.transparent,
-                        padding: const EdgeInsets.only(
-                            left: 15, right: 15, bottom: 10),
+                        // padding:  EdgeInsets.only(top: kCardPadding,left: kCardPadding, right: kCardPadding, bottom: 10),
                         width: double.infinity,
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -87,7 +73,8 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                           children: _financeElements(
                               salary: salary,
                               deduction: deduction,
-                              bonus: bonus),
+                              bonus: bonus,
+                          ),
                         ),
                       ),
                       // warning
@@ -100,25 +87,20 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Divider(),
+                            // const Divider(),
+                            const Row(),
                             Padding(
-                              padding: EdgeInsets.only(
-                                  top: 8,
-                                  bottom: 15,
-                                  left: kCardPadding,
-                                  right: kCardPadding),
+                              // padding: EdgeInsets.only(top: 8, bottom: 15, left: kCardPadding, right: kCardPadding),
+                              padding: const EdgeInsets.only(top: 8,
+                                  // bottom: kCardPadding, left: kCardPadding, right: kCardPadding,
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(AppLocalizations.of(context)!.warning,
-                                      style: AppTextStyles.subTitleTextStyle()
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold)),
+                                  Text(AppLocalizations.of(context)!.warning, style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.bold)),
                                   Text(
-                                    warning!.termDescription!,
-                                    // Using `!` because the null check ensures it's safe
-                                    style: AppTextStyles.titleBoldTextStyle()
-                                        .copyWith(fontSize: 18),
+                                    warning!.termDescription!, // Using `!` because the null check ensures it's safe
+                                    style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 18),
                                     textAlign: TextAlign.start,
                                   ),
                                 ],

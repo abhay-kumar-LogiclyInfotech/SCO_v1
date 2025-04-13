@@ -81,37 +81,37 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           {
             'title': localization.bachelor_degree_scholarship_terms_and_conditions,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeTermsAndConditions, title: localization.bachelor_degree_scholarship_terms_and_conditions,))),
           },
           {
             'title': localization.sco_accredited_universities_and_specializations_list,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeScoAccredited, title: localization.sco_accredited_universities_and_specializations_list,))),
           },
           {
             'title': localization.bachelor_degree_scholarship_privileges,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreePrivileges, title: localization.bachelor_degree_scholarship_privileges,))),
           },
           {
             'title': localization.student_obligations_for_bachelor_degree_scholarship,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeStudentObligations, title: localization.student_obligations_for_bachelor_degree_scholarship,))),
           },
           {
             'title': localization.important_guidelines_for_high_school_students,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeImportantGuidelines, title: localization.important_guidelines_for_high_school_students,))),
           },
           {
             'title': localization.bachelor_degree_applying_procedures,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeApplyingProcedure, title: localization.bachelor_degree_applying_procedures,))),
           },
         ];
@@ -120,32 +120,32 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           {
             'title': localization.graduate_outside_uae_terms_and_conditions,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeTermsAndConditions, title: localization.graduate_outside_uae_terms_and_conditions,))),
           },
           {
             'title': localization.sco_accredited_universities_and_specializations_list,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
           },
           {
             'title': localization.graduate_outside_uae_scholarship_privileges,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreePrivileges, title: localization.graduate_outside_uae_scholarship_privileges,))),
           },
           {
             'title': localization.student_obligations_for_graduate_outside_uae_scholarship,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeStudentObligations, title: localization.student_obligations_for_graduate_outside_uae_scholarship,))),
           },
 
           {
             'title': localization.graduate_outside_uae_scholarship_applying_procedures,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeApplyingProcedure, title: localization.graduate_outside_uae_scholarship_applying_procedures,))),
           },
         ];
@@ -154,32 +154,32 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           {
             'title': localization.distinguished_doctors_scholarship_terms_and_conditions,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedTermsAndConditions, title: localization.distinguished_doctors_scholarship_terms_and_conditions,))),
           },
           {
             'title': localization.distinguished_doctors_scholarship_privileges,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreePrivileges,title: localization.distinguished_doctors_scholarship_privileges,))),
           },
           {
             'title': localization.student_obligations_for_distinguished_doctors_scholarship,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeStudentObligations, title: localization.student_obligations_for_distinguished_doctors_scholarship,))),
           },
           {
             'title': localization.distinguished_doctors_scholarship_applying_procedures,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeApplyingProcedure, title: localization.distinguished_doctors_scholarship_applying_procedures,))),
           },
 
           {
             'title': localization.medical_licensing_exams,
             'subTitle': "",
-            'imagePath': Constants.scholarshipInAbroad,
+            //'imagePath': Constants.scholarshipInAbroad,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeMedicalLicensingExam, title: localization.medical_licensing_exams,))),
           },
         ];
@@ -187,20 +187,23 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
         return [
           {
             'title': localization.externalBachelor,
-            'subTitle': localization.scholarship_for_outstanding_students,
-            'imagePath': Constants.scholarshipInAbroad,
+            // 'subTitle': localization.scholarship_for_outstanding_students,
+            'subTitle': '',
+            'imagePath': Constants.bachelorsOutsideUae,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'UGRDEXT',title: localization.externalBachelor,))),
           },
           {
             'title': localization.externalPostgraduate,
-            'subTitle': localization.scholarship_for_postgraduate_studies,
-            'imagePath': Constants.scholarshipInAbroad,
+            // 'subTitle': localization.scholarship_for_postgraduate_studies,
+            'subTitle': '',
+            'imagePath': Constants.graduatesOutsideUae,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'PGRDEXT',title: localization.externalPostgraduate,))),
           },
           {
             'title': localization.externalDoctors,
-            'subTitle': localization.scholarship_for_outstanding_medical_students,
-            'imagePath': Constants.scholarshipInAbroad,
+            // 'subTitle': localization.scholarship_for_outstanding_medical_students,
+            'subTitle': '',
+            'imagePath': Constants.distinguishedDoctorsOutsideUae,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'DDSEXT',title: localization.externalDoctors,))),
           },
         ];
@@ -222,7 +225,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
     for (var model in _scoProgramsModelsList) {
       _scholarshipsInUaeList.add(
         CustomScoProgramTile(
-          imagePath: model.imagePath!,
+          imagePath: model.imagePath,
           title: model.title!,
           subTitle: model.subTitle!,
           onTap: model.onTap!,

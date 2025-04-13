@@ -1011,7 +1011,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get poboxRequired => 'PO Box is required';
 
   @override
-  String get poboxWatermark => 'Enter PO Box';
+  String get poboxWatermark => 'أدخل صندوق البريد';
 
   @override
   String get poboxValidate => 'Please enter valid PO Box';
@@ -2415,13 +2415,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deleteRowExamination => 'Delete Examination';
 
   @override
-  String get emirateidExpiryDate => 'Emirates Id Expiry Date';
+  String get emirateidExpiryDate => 'تاريخ انتهاء بطاقة الهوية الإماراتية';
 
   @override
-  String get emirateidExpiryDateRequired => 'Please select emirates id expiry date';
+  String get emirateidExpiryDateRequired => 'يرجى تحديد تاريخ انتهاء بطاقة الهوية الإماراتية';
 
   @override
-  String get emirateidExpiryDateWatermark => 'Enter emirates id expiry date';
+  String get emirateidExpiryDateWatermark => 'أدخل تاريخ انتهاء بطاقة الهوية الإماراتية';
 
   @override
   String get duplicateMajorFound => 'هذا التخصص تم اضافته من قبل. يرجي اختيار تخصص اخر.';
@@ -3216,7 +3216,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get internalScholarshipDesc => 'يهدف مكتب البعثات الدراسية، عبر \"برنامج المنح الدراسية داخل الدولة\"، إلى إتاحة الفرصة للمتميّزين من الطلبة المواطنين للالتحاق بجامعات ومؤسّسات التعليم العالي الخاص في الدولة، وفقًا للمعايير المعتمدة لدى نظام \"المنح الدراسية\" في المكتب.';
 
   @override
-  String get externalScholarshipDesc => '\nتسعى بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا إلى إتاحة الفرصة أمام الطلبة المواطنين المتميزين علمياً لاستكمال دراستهم للحصول على درجة البكالوريوس، أو الدراسات العليا في الجامعات العالمية المرموقة';
+  String get externalScholarshipDesc => 'تسعى بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا إلى إتاحة الفرصة أمام الطلبة المواطنين المتميزين علمياً لاستكمال دراستهم للحصول على درجة البكالوريوس، أو الدراسات العليا في الجامعات العالمية المرموقة';
 
   @override
   String get scholarshipStatusApplied => 'حالة الطلب';

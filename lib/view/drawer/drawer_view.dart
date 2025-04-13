@@ -68,6 +68,9 @@ class _DrawerViewState extends State<DrawerView> {
     });
   }
 
+  _openAccountView() => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const AccountView(),),);
+
+
   @override
   void initState() {
     super.initState();
@@ -88,8 +91,7 @@ class _DrawerViewState extends State<DrawerView> {
         _roles = HiveManager.getRole() ?? [];
 
         // Getting Fresh Roles
-        final getRolesProvider =
-            Provider.of<GetRoleViewModel>(context, listen: false);
+        final getRolesProvider = Provider.of<GetRoleViewModel>(context, listen: false);
         await getRolesProvider.getRoles();
       }
     });
@@ -136,80 +138,75 @@ class _DrawerViewState extends State<DrawerView> {
                               if (_toLogin)
                                 Column(
                                   children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Consumer<GetProfilePictureUrlViewModel>(
-                                          builder: (context, provider, _) {
-                                            return ProfileWithCameraButton(
-                                                profileSize: 55,
-                                                cameraEnabled: false,
-                                                profileImage: provider
-                                                            .apiResponse
-                                                            .data
-                                                            ?.url !=
-                                                        null
-                                                    ? NetworkImage(provider
-                                                        .apiResponse.data!.url!
-                                                        .toString())
-                                                    : const AssetImage(
-                                                        'assets/personal_details/dummy_profile_pic.png'),
-                                                onTap: () {},
-                                                onLongPress: () {});
-                                          },
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: SizedBox(
-                                            // color: Colors.green,
-                                            height: 55,
-                                            // width: MediaQuery.sizeOf(context).width * 0.5,
-                                            child: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    _name,
-                                                    style: const TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.white),
-                                                  ),
-                                                  // const SizedBox(height: 5),
-                                                  // SelectableText(
-                                                  //   // _roles.where((role){
-                                                  //   //  return role.isNotEmpty;
-                                                  //   // }).join(', ')
-                                                  //   _roles.any((role) =>
-                                                  //           role.toLowerCase() ==
-                                                  //           'students')
-                                                  //       ? "Student"
-                                                  //       : "User Type",
-                                                  //
-                                                  //   style: TextStyle(
-                                                  //       color: Colors.white
-                                                  //           .withOpacity(0.65)),
-                                                  // )
-                                                ],
+                                    GestureDetector(
+                                      onTap: _openAccountView,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Consumer<GetProfilePictureUrlViewModel>(
+                                            builder: (context, provider, _) {
+                                              return ProfileWithCameraButton(
+                                                  profileSize: 55,
+                                                  cameraEnabled: false,
+                                                  profileImage: provider.apiResponse.data?.url != null ? NetworkImage(provider.apiResponse.data!.url!.toString()) : const AssetImage('assets/personal_details/dummy_profile_pic.png'),
+                                                  onTap: () => _openAccountView(),
+                                                  onLongPress: () {},
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: SizedBox(
+                                              // color: Colors.green,
+                                              height: 55,
+                                              // width: MediaQuery.sizeOf(context).width * 0.5,
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      _name,
+                                                      style: const TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Colors.white),
+                                                    ),
+                                                    // const SizedBox(height: 5),
+                                                    // SelectableText(
+                                                    //   // _roles.where((role){
+                                                    //   //  return role.isNotEmpty;
+                                                    //   // }).join(', ')
+                                                    //   _roles.any((role) =>
+                                                    //           role.toLowerCase() ==
+                                                    //           'students')
+                                                    //       ? "Student"
+                                                    //       : "User Type",
+                                                    //
+                                                    //   style: TextStyle(
+                                                    //       color: Colors.white
+                                                    //           .withOpacity(0.65)),
+                                                    // )
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                      ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                     const SizedBox(height: 20),
                                   ],
                                 ),
+
+
 
                               //*------Menu Items Section------*/
                               //*------Login------*/
@@ -230,14 +227,8 @@ class _DrawerViewState extends State<DrawerView> {
                               if (_toLogin)
                                 _drawerListTile(
                                   title: localization.myAccount,
-                                  leadingAssetAddress:
-                                      "assets/sidemenu/account.svg",
-                                  onTap: () =>
-                                      _navigationServices.pushCupertino(
-                                    CupertinoPageRoute(
-                                      builder: (context) => const AccountView(),
-                                    ),
-                                  ),
+                                  leadingAssetAddress: "assets/sidemenu/account.svg",
+                                  onTap: () => _openAccountView(),
                                 ),
                               //*------Home------*/
                               _drawerListTile(
@@ -259,9 +250,7 @@ class _DrawerViewState extends State<DrawerView> {
                                     "assets/sidemenu/aboutUs.svg",
                                 onTap: () => _navigationServices.pushCupertino(
                                   CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const VisionAndMissionView(),
-
+                                    builder: (context) => const VisionAndMissionView(),
                                     /// vision_and_mission and about sco is now merged.
                                   ),
                                 ),
@@ -447,7 +436,7 @@ class _DrawerViewState extends State<DrawerView> {
   Future<void> _loadAppVersion(AppLocalizations localization) async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      _appVersion = '${localization.version} 1.0.2';
+      _appVersion = '${localization.version} 1.0.3';
       // _appVersion = '${localization.version} ${packageInfo.version} (${packageInfo.buildNumber})';
       // _appVersion = 'Version ${packageInfo.version}';
     });

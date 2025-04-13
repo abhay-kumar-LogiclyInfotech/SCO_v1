@@ -13,7 +13,7 @@ import '../../app_text_styles.dart';
 
 class CustomScoProgramTile extends StatefulWidget {
 
-  final String imagePath;
+  final String? imagePath;
   final String title;
   final String subTitle;
   final void Function() onTap;
@@ -22,7 +22,7 @@ class CustomScoProgramTile extends StatefulWidget {
 
 
   const CustomScoProgramTile({super.key,
-    required this.imagePath,
+     this.imagePath,
     required this.title,
     required this.subTitle,
     required this.onTap,
@@ -79,10 +79,12 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
+
+        if(widget.imagePath != null)
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            widget.imagePath,
+          child:  Image.asset(
+            widget.imagePath ?? '',
             filterQuality: FilterQuality.high,
             fit: BoxFit.fill,
             height: widget.imageSize,
@@ -162,6 +164,7 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
                 // textAlign: TextAlign.left,
                 style: const TextStyle(color: Colors.black,fontSize: 12,height: 1.5,decoration: TextDecoration.none),
                 overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ],
           ),
@@ -178,12 +181,18 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
 
-       widget.trailing ??  Transform.rotate(angle: getTextDirection(langProvider) == TextDirection.rtl ? pi : 0,child: SvgPicture.asset(
-          "assets/sidemenu/goForward.svg",
-          width: 20,
-          height: 20,
-          fit: BoxFit.fill,
-        ),),
+       widget.trailing ??   Icon(
+         getTextDirection(context.read<LanguageChangeViewModel>()) == TextDirection.rtl
+             ? Icons.keyboard_arrow_left_outlined
+             : Icons.keyboard_arrow_right_outlined,
+         color: Colors.grey,
+       ),
+        //    Transform.rotate(angle: getTextDirection(langProvider) == TextDirection.rtl ? pi : 0,child: SvgPicture.asset(
+        //   "assets/sidemenu/goForward.svg",
+        //   width: 20,
+        //   height: 20,
+        //   fit: BoxFit.fill,
+        // ),),
 
       ],
     );

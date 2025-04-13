@@ -46,11 +46,8 @@ class _HomeScholarshipApprovedViewState extends State<HomeScholarshipApprovedVie
         case Status.ERROR:
           return showVoid;
         case Status.COMPLETED:
-          final listOfSalaries =
-              financeStatusProvider.apiResponse.data?.data?.listSalaryDetials ??
-                  [];
-          final topSalaryDetails =
-              listOfSalaries.isNotEmpty ? listOfSalaries[0] : null;
+          final listOfSalaries = financeStatusProvider.apiResponse.data?.data?.listSalaryDetials ?? [];
+          final topSalaryDetails = listOfSalaries.isNotEmpty ? listOfSalaries[0] : null;
 
           return Column(
             children: [
@@ -80,9 +77,9 @@ class _HomeScholarshipApprovedViewState extends State<HomeScholarshipApprovedVie
                       if ((topSalaryDetails?.salaryMonth ?? '').isNotEmpty)
                         Column(
                           children: [
-                            const SizedBox(height: 5),
-                            const Divider(),
-                            const SizedBox(height: 5),
+                            // const SizedBox(height: 5),
+                            // const Divider(),
+                            kSmallSpace,
                             // Date Information
                             _buildDateInfo(
                                 langProvider: langProvider,
@@ -91,6 +88,7 @@ class _HomeScholarshipApprovedViewState extends State<HomeScholarshipApprovedVie
                         ),
                     ],
                   )),
+              kSmallSpace,
             ],
           );
         case Status.NONE:

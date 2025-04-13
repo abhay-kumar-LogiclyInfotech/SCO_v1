@@ -46,16 +46,16 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
 
     final scoProgramsMapList = [
       {
-        'title': localization.scholarshipInternal,
-        'subTitle': localization.internalScholarshipDesc,
+        'title': localization?.scholarshipInternal,
+        'subTitle': localization?.internalScholarshipDesc,
         'imagePath': Constants.scholarshipInUae,
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
           createRoute(ScholarshipsInUaeView()),
         ),
       },
       {
-        'title': localization.scholarshipExternal,
-        'subTitle': localization.externalScholarshipDesc,
+        'title': localization?.scholarshipExternal,
+        'subTitle': localization?.externalScholarshipDesc,
         'imagePath': Constants.scholarshipInAbroad,
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
           createRoute(ScholarshipInAbroadView()),
@@ -74,10 +74,10 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
           key: ValueKey(model.title), // Ensure uniqueness
           imagePath: model.imagePath!,
           title: model.title!,
-          // subTitle: model.subTitle!,
-          subTitle: "",
+          subTitle: model.subTitle!,
+          // subTitle: "",
           onTap: model.onTap!,
-          imageSize: 55,
+          // imageSize: 55,
           trailing:  Icon(
             getTextDirection(context.read<LanguageChangeViewModel>()) == TextDirection.rtl
                 ? Icons.keyboard_arrow_left_outlined
@@ -114,34 +114,48 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
           Column(
             children: [
               // carousel slider
+              // if (_scoProgramsList.isNotEmpty)
+              //   CustomCarouselSlider(
+              //     height: 75,
+              //     items: _scoProgramsList,
+              //     onPageChanged: (index, reason) {
+              //       setState(() {
+              //         _scoProgramCurrentIndex = index;
+              //       });
+              //     },
+              //   ),
+              // kSmallSpace, // animated moving dots
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: _scoProgramsList.asMap().entries.map((entry) {
+              //     return AnimatedContainer(
+              //       duration: const Duration(milliseconds: 250),
+              //       width: _scoProgramCurrentIndex == entry.key ? 7.0 : 5.0,
+              //       height: 7.0,
+              //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              //       decoration: BoxDecoration(
+              //         shape: BoxShape.circle,
+              //         color: _scoProgramCurrentIndex == entry.key
+              //             ? Colors.black
+              //             : Colors.grey,
+              //       ),
+              //     );
+              //   }).toList(),
+              // )
+
               if (_scoProgramsList.isNotEmpty)
-                CustomCarouselSlider(
-                  height: 75,
-                  items: _scoProgramsList,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _scoProgramCurrentIndex = index;
-                    });
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _scoProgramsList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: index < _scoProgramsList.length - 1 ? kTileSpace : 0),
+                      child: _scoProgramsList[index],
+                    );
                   },
-                ),
-              kSmallSpace, // animated moving dots
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: _scoProgramsList.asMap().entries.map((entry) {
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    width: _scoProgramCurrentIndex == entry.key ? 7.0 : 5.0,
-                    height: 7.0,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _scoProgramCurrentIndex == entry.key
-                          ? Colors.black
-                          : Colors.grey,
-                    ),
-                  );
-                }).toList(),
-              )
+                )
+
             ],
           )
         ],

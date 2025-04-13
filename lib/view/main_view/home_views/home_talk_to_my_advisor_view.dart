@@ -59,81 +59,47 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                     children: [
                       kSmallSpace,
                       HomeViewCard(
-                          onTap: () {
-                            _navigationServices.pushCupertino(
-                                CupertinoPageRoute(
-                                    builder: (context) =>
-                                        const AcademicAdvisorView()));
-                          },
+                          onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const AcademicAdvisorView()));},
                           title: AppLocalizations.of(context)!.talkToMyAdvisor,
-                          icon:
-                              SvgPicture.asset("assets/talk_to_my_advisor.svg"),
+                          icon: SvgPicture.asset("assets/talk_to_my_advisor.svg"),
                           langProvider: langProvider,
-                          contentPadding: EdgeInsets.zero,
+                          // contentPadding: EdgeInsets.zero,
                           content: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 50.0, right: 50),
-                                child: Text(
-                                  AppLocalizations.of(context)!
-                                      .youCanSeeListOfAdvisors,
-                                  style: const TextStyle(
-                                      fontSize: 14, height: 2.5),
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(left: 50.0, right: 50),
+                              //   child: Text(AppLocalizations.of(context)!.youCanSeeListOfAdvisors, style: const TextStyle(fontSize: 14, height: 2.5),),
+                              // ),
                               // kFormHeight,
-                              const Divider(),
+                              // const Divider(),
                               homeViewCardBottomContainer(
-                                  padding: const EdgeInsets.all(10),
+                                  // padding:  EdgeInsets.all(kCardPadding),
                                   backGroundColor: Colors.transparent,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       // image of the academic advisor
                                       Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Container(
                                               alignment: Alignment.center,
                                               height: 40,
                                               width: 40,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  image: const DecorationImage(
-                                                      image: AssetImage(
-                                                          "assets/login_bg.png")))),
-                                          kFormHeight,
-
+                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), image: const DecorationImage(image: AssetImage("assets/login_bg.png")))),
+                                          kMediumSpace,
                                           /// Title and subtitle
                                           Container(
-                                            constraints: const BoxConstraints(
-                                                maxWidth: 120),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                            constraints: const BoxConstraints(maxWidth: 120),
+                                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   topAdvisor?.advisorName ?? '',
-                                                  style: AppTextStyles
-                                                          .titleBoldTextStyle()
-                                                      .copyWith(
-                                                          fontSize: 14,
-                                                          height: 1.2),
-                                                ),
+                                                  style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14, height: 1.2),),
                                                 Text(
-                                                    topAdvisor
-                                                            ?.advisorRoleDescription
-                                                            ?.toString() ??
-                                                        '',
-                                                    style: const TextStyle(
-                                                        fontSize: 12,
-                                                        height: 2,
-                                                        overflow: TextOverflow
-                                                            .ellipsis)),
+                                                    topAdvisor?.advisorRoleDescription?.toString() ?? '',
+                                                    style: const TextStyle(fontSize: 12, height: 2, overflow: TextOverflow.ellipsis)),
                                               ],
                                             ),
                                           ),

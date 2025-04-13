@@ -7,6 +7,7 @@ import '../../../resources/app_colors.dart';
 import '../../../resources/cards/home_view_card.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import '../../drawer/accout_views/application_status_view.dart';
 import '../services_views/finance_details_views/salaryDetailsView.dart';
 import '../../../l10n/app_localizations.dart';
 
@@ -35,16 +36,13 @@ class _HomeScholarshipAppliedViewState extends State<HomeScholarshipAppliedView>
     final localization = AppLocalizations.of(context)!;
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     return HomeViewCard(
-        onTap: () {
-          _navigationServices.pushCupertino(CupertinoPageRoute(
-              builder: (context) => const SalaryDetailsView()));
-        },
+        onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const ApplicationStatusView()));},
         langProvider: langProvider,
         title: localization.scholarshipOffice,
+        // contentPadding: EdgeInsets.zero,
         // icon: Image.asset("assets/scholarship_office.png"),
         content: Column(
           children: [
-            kSmallSpace,
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,12 +56,10 @@ class _HomeScholarshipAppliedViewState extends State<HomeScholarshipAppliedView>
                     children: [
                       Text(
                         localization.scholarshipStatusApplied,
-                        style: const TextStyle(
-                            fontSize: 12, color: AppColors.hintDarkGrey),
+                        style: const TextStyle(fontSize: 12, color: AppColors.hintDarkGrey),
                         textAlign: TextAlign.start,
                       ),
-                      Text(localization.scholarshipAppliedApplied,
-                          style: const TextStyle(
+                      Text(localization.scholarshipAppliedApplied, style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.greenColor,
                               fontWeight: FontWeight.bold),
@@ -80,7 +76,6 @@ class _HomeScholarshipAppliedViewState extends State<HomeScholarshipAppliedView>
                 // )
               ],
             ),
-            kSmallSpace,
           ],
         ));
   }
