@@ -34,6 +34,7 @@ import '../../../data/response/status.dart';
 import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/account/Custom_inforamtion_container.dart';
+import '../../../resources/components/custom_button.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
 
 import '../../../utils/utils.dart';
@@ -464,11 +465,9 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
     required bool draftTab,
     required AppLocalizations localization
   }) {
-    return Utils.pageRefreshIndicator(onRefresh: _onRefresh,child:
-    _draftApplicationStatus.isEmpty ?? true
-        ?  Utils.showOnNoDataAvailable(context: context,text: localization.youDontHaveDraft)
+    return Utils.pageRefreshIndicator(onRefresh: _onRefresh,
+        child: _draftApplicationStatus.isEmpty ?? true ?  Utils.showOnNoDataAvailable(context: context,text: localization.youDontHaveDraft)
     :
-
     CustomInformationContainer(
       title: localization.applicationDetails,
       expandedContentPadding: EdgeInsets.zero,
@@ -533,32 +532,20 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                               {
                                 return [
                                   /// delete draft
-                                  IconsButton(
-                                    text: localization.deleteDraftApplication,
-                                    iconData: Icons.arrow_circle_right_outlined,
-                                    color: Colors.red,
-                                    textStyle: const TextStyle(color: Colors.white),
-                                    iconColor: Colors.white,
-                                    onPressed: ()async{
+                                CustomButton(buttonName: localization.deleteDraftApplication, isLoading: false, textDirection: getTextDirection(langProvider), onTap:  ()async{
 
-                                      setProcessing(true);
-                                      _navigationServices.goBack();
-                                      await provider.deleteDraft(draftId: application.applicationProgramNumber ?? '',);
-                                      await _onRefresh();
-                                      setProcessing(false);
-                                    } ,
-                                  ),
+                              setProcessing(true);
+                              _navigationServices.goBack();
+                              await provider.deleteDraft(draftId: application.applicationProgramNumber ?? '',);
+                              setProcessing(false);
+                              await _onRefresh();}),
+
+
                                   // Cancel deletion
-                                  IconsButton(
-                                    text: localization.no,
-                                    iconData: Icons.cancel,
-                                    color: Colors.green,
-                                    textStyle: const TextStyle(color: Colors.white),
-                                    iconColor: Colors.white,
-                                    onPressed: (){
-                                      _navigationServices.goBack();
-                                    } ,
-                                  ),
+                              CustomButton(buttonName: localization.no, isLoading: false,buttonColor: Colors.white,borderColor: Colors.grey,textColor: Colors.grey, textDirection: getTextDirection(langProvider), onTap: (){
+                                    _navigationServices.goBack();
+                                  },),
+
                                 ];
                               }
 

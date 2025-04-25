@@ -162,9 +162,9 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
                     padding: EdgeInsets.symmetric(horizontal: kCardPadding),
                     child: Column(
                       children: [
-                        CustomInformationContainerField(
-                          title: localization.advisorId,
-                          description: element?.advisorId ?? ''),
+                        // CustomInformationContainerField(
+                        //   title: localization.advisorId,
+                        //   description: element?.advisorId ?? ''),
                         CustomInformationContainerField(
                             title: localization.role,
                             description: element?.advisorRoleDescription ?? ''),

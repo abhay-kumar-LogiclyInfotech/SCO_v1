@@ -188,9 +188,9 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: widget._navigationServices.navigationStateKey,
               routes: widget._navigationServices.routes,
               initialRoute: "/splashView",
-              // home: UpdateSecurityQuestionView()
             );
           },
-        ));
+        ),
+    );
   }
 }

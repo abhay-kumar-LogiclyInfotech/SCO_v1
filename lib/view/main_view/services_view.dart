@@ -119,11 +119,11 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
                   createRoute(const MyScholarshipView()))
         },
         {
-          'title': appLocalizations?.academic_advisor,
-          'assetAddress': "assets/services/academic_advisor.svg",
+          'title': appLocalizations?.finance,
+          'assetAddress': "assets/services/finance.svg",
           "routeBuilder": () =>
               _navigationServices.pushSimpleWithAnimationRoute(
-                  createRoute(const AcademicAdvisorView()))
+                  createRoute(const FinanceView()))
         },
         {
           'title': appLocalizations?.request,
@@ -133,18 +133,19 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
                   createRoute(const RequestView()))
         },
         {
+          'title': appLocalizations?.academic_advisor,
+          'assetAddress': "assets/services/academic_advisor.svg",
+          "routeBuilder": () =>
+              _navigationServices.pushSimpleWithAnimationRoute(
+                  createRoute(const AcademicAdvisorView()))
+        },
+        {
           'title': appLocalizations?.guidance_notes,
           'assetAddress': "assets/services/guidance_notes.svg",
           "routeBuilder": () =>
               _navigationServices.pushSimpleWithAnimationRoute(createRoute(const GuidanceNotesView()))
         },
-        {
-          'title': appLocalizations?.finance,
-          'assetAddress': "assets/services/finance.svg",
-          "routeBuilder": () =>
-              _navigationServices.pushSimpleWithAnimationRoute(
-                  createRoute(const FinanceView()))
-        },
+
         {
           'title': appLocalizations?.employmentStatusTitle,
           'assetAddress': "assets/services/work_status.svg",
