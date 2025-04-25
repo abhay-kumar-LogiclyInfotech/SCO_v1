@@ -41,8 +41,8 @@ class Constants {
   static const double latitude = 24.4525803;
   static const double longitude = 54.3112618;
 
-  static const String scholarshipInUae = "assets/sidemenu/scholarships_uae.jpg";
-  static const String scholarshipInAbroad= "assets/sidemenu/scholarships_abroad.jpg";
+  static const String scholarshipInUae = "assets/sidemenu/sco_programs_images/internal_scholarship.png";
+  static const String scholarshipInAbroad= "assets/sidemenu/sco_programs_images/external_scholarship.png";
 
   static const String bachelorsInUae = "assets/sidemenu/sco_programs_images/bachelors_in_uae.jpg";
   static const String graduatesInUAE = "assets/sidemenu/sco_programs_images/graduates_in_uae.png";

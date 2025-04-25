@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
+import 'package:sco_v1/resources/components/tiles/custom_expansion_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 
@@ -226,6 +227,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
           subTitle: model.subTitle!,
           onTap: model.onTap!,
         ),
+        // CustomExpansionTile(title: model.title!, expandedContent: Column())
       );
     }
   }

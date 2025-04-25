@@ -5,7 +5,6 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../models/home/ScoProgramsTileModel.dart';
 import '../../../resources/app_text_styles.dart';
-import '../../../resources/components/carsousel_slider.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
@@ -23,7 +22,6 @@ class HomeScoProgramsView extends StatefulWidget {
 
 class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
-  int _scoProgramCurrentIndex = 0;
 
   final List<Widget> _scoProgramsList = [];
   final List<ScoProgramTileModel> _scoProgramsModelsList = [];
@@ -46,16 +44,16 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
 
     final scoProgramsMapList = [
       {
-        'title': localization?.scholarshipInternal,
-        'subTitle': localization?.internalScholarshipDesc,
+        'title': localization.scholarshipInternal,
+        'subTitle': localization.internalScholarshipDesc,
         'imagePath': Constants.scholarshipInUae,
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
           createRoute(ScholarshipsInUaeView()),
         ),
       },
       {
-        'title': localization?.scholarshipExternal,
-        'subTitle': localization?.externalScholarshipDesc,
+        'title': localization.scholarshipExternal,
+        'subTitle': localization.externalScholarshipDesc,
         'imagePath': Constants.scholarshipInAbroad,
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
           createRoute(ScholarshipInAbroadView()),
@@ -94,7 +92,6 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
-
     return Directionality(
       textDirection: getTextDirection(langProvider),
       child: Column(
