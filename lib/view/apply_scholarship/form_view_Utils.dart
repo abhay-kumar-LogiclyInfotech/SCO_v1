@@ -125,10 +125,13 @@ dynamic addRemoveMoreSection(
         String? errorText,
         required Function(String? value) onChanged,
         required Function()? onTap,
-        bool? filled}) {
+        bool? filled = true,
+        Color? fillColor = Colors.white,
+      }) {
     return CustomTextField(
       readOnly: true,
       filled: filled,
+      fillColor: fillColor,
       // Prevent manual typing
       currentFocusNode: currentFocusNode,
       controller: controller,
@@ -155,10 +158,15 @@ dynamic scholarshipFormTimeField(
       String? errorText,
       required Function(String? value) onChanged,
       required Function()? onTap,
-      bool? filled}) {
+      bool? filled = true,
+      Color? fillColor = Colors.white,
+
+    }) {
   return CustomTextField(
     readOnly: true,
     filled: filled,
+    fillColor: fillColor,
+
     // Prevent manual typing
     currentFocusNode: currentFocusNode,
     controller: controller,
@@ -186,7 +194,8 @@ dynamic scholarshipFormTimeField(
     required dynamic menuItemsList,
     required String hintText,
     String? errorText,
-    bool? filled,
+    bool? filled = true,
+    Color? fillColor = Colors.white,
     required void Function(dynamic value) onChanged,
     required dynamic context,
   }) {
@@ -200,6 +209,7 @@ dynamic scholarshipFormTimeField(
       hintText: hintText,
       textColor: AppColors.scoButtonColor,
       filled: filled,
+      fillColor: fillColor,
       outlinedBorder: true,
       errorText: errorText,
       onChanged: onChanged,
