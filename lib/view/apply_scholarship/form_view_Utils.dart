@@ -90,7 +90,8 @@ dynamic addRemoveMoreSection(
     String? errorText,
     int? maxLines,
     int? maxLength,
-    bool? filled,
+    bool? filled = true,
+     Color? fillColor = Colors.white,
     bool? readOnly,
     TextInputType? textInputType,
     List<TextInputFormatter>? inputFormat,
@@ -103,6 +104,7 @@ dynamic addRemoveMoreSection(
       nextFocusNode: nextFocusNode,
       controller: controller,
       filled: filled,
+      fillColor: fillColor,
       obscureText: false,
       border: border ?? Utils.outlinedInputBorder(),
       hintText: hintText,
@@ -210,6 +212,16 @@ dynamic scholarshipFormTimeField(
       title,
       style: AppTextStyles.titleBoldTextStyle(),
     );
+  }
+
+  Widget sectionBackground( {required Widget? child}){
+  return Container(
+      decoration: BoxDecoration(
+      color: AppColors.extraLightGrey,
+      borderRadius: BorderRadius.circular(2),
+    ),
+    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+    child: child,);
   }
 
 

@@ -14,7 +14,6 @@ import 'controller/dependency_injection.dart';
 import 'hive/hive_manager.dart';
 
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -29,7 +28,6 @@ Future<void> main() async {
   await registerServices();
   runApp(MyApp(locale: languageCode));
 }
-
 
 class MyApp extends StatefulWidget {
   late NavigationServices _navigationServices;
