@@ -511,7 +511,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                       if (isDraft)
                       actionButtonHolder(actionButtons: [
                         /// Edit Action Button
-                        actionButton(backgroundColor: AppColors.INFO, text: localization.edit, onPressed: () {
+                        actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.edit, onPressed: () {
                              _navigationServices.pushCupertino(
                              CupertinoPageRoute(
                               builder: (context) =>
@@ -519,8 +519,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                     draftId: application.applicationProgramNumber ?? '',),),);}),
                        /// Delete Action Button
                         Consumer<DeleteDraftViewmodel>(builder: (context, provider, _) {
-                          return actionButton(backgroundColor: AppColors.DANGER, text: localization.deleteDraftApplication, onPressed: () async {
-
+                          return actionButton(backgroundColor: AppColors.scoThemeColor, text: localization.deleteDraftApplication, onPressed: () async {
 
                             Dialogs.materialDialog(
                               barrierDismissible: false,
@@ -545,7 +544,6 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                               CustomButton(buttonName: localization.no, isLoading: false,buttonColor: Colors.white,borderColor: Colors.grey,textColor: Colors.grey, textDirection: getTextDirection(langProvider), onTap: (){
                                     _navigationServices.goBack();
                                   },),
-
                                 ];
                               }
 
@@ -555,7 +553,6 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
 
                             });}),
                       ])
-
                     ],
                   ),
                 ),

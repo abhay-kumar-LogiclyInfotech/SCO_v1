@@ -186,9 +186,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
           /// if selected scholarship matches the condition then high school details section else don't
           (widget.academicCareer != 'SCHL' && widget.academicCareer != 'HCHL')
               ? CustomInformationContainer(
-                  title: widget.academicCareer == 'DDS'
-                      ? localization.ddsGraduationTitle
-                      : localization.graduationDetails,
+                  title: widget.academicCareer == 'DDS' ? localization.ddsGraduationTitle : localization.graduationDetails,
                   expandedContent: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -209,190 +207,205 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                                   children: [
                                     /// ****************************************************************************************************************************************************
                                     sectionTitle(title: widget.academicCareer == 'DDS' ? '${localization.ddsGraduationTitle} ${index + 1}' : "${localization.graduationDetails} ${index + 1}"),
+                                    kMinorSpace,
+                                    sectionBackground(child:
+                                        Column(
+                                          children: [
+                                            if(graduationInfo.levelController.text == markHighestGraduationQualification(Constants.referenceValuesGraduation, graduationRecord))
+                                              Column(children: [
+                                                kMinorSpace,
+                                                /// title
+                                                fieldHeading(
+                                                    title: localization.currentlyStudying,
+                                                    important: true,
+                                                    langProvider: langProvider),
+
+                                                /// ****************************************************************************************************************************************************
+                                                /// radiobuttons for yes or no
+                                                /// Yes or no : Show round radio
+                                                CustomRadioListTile(
+                                                  value: true,
+                                                  groupValue: graduationInfo.currentlyStudying,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      /// graduationInfo.showCurrentlyStudying = value;
+                                                      graduationInfo.currentlyStudying = value;
+                                                      _updateShowCurrentlyStudyingWithYes(graduationInfo);
+                                                      /// populate LAST term
+                                                      _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: index);
+                                                    });
+                                                  },
+                                                  title: localization.yes,
+                                                  textStyle: textFieldTextStyle,
+                                                ),
+
+                                                /// ****************************************************************************************************************************************************
+                                                CustomRadioListTile(
+                                                    value: false,
+                                                    groupValue: graduationInfo
+                                                        .currentlyStudying,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        /// graduationInfo.showCurrentlyStudying = value;
+                                                        graduationInfo.currentlyStudying = value;
+
+                                                        /// showing selection option that you are currently doing this course or not
+                                                        // _updateShowCurrentlyStudyingWithFalse(graduationInfo);
+                                                        graduationInfo.graduationEndDateController.clear();
+                                                        graduationInfo.lastTermController.clear();
+                                                      });
+                                                    },
+                                                    title: localization.no,
+                                                    textStyle: textFieldTextStyle),
+                                              ]),
 
 
-                                    graduationInfo.levelController.text == markHighestGraduationQualification(Constants.referenceValuesGraduation, graduationRecord)
-                                        ? Column(children: [
-                                      kFormHeight,
-                                      /// title
-                                      fieldHeading(
-                                          title: localization.currentlyStudying,
-                                          important: true,
-                                          langProvider: langProvider),
 
-                                      /// ****************************************************************************************************************************************************
-                                      /// radiobuttons for yes or no
-                                      /// Yes or no : Show round radio
-                                      CustomRadioListTile(
-                                        value: true,
-                                        groupValue: graduationInfo.currentlyStudying,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            /// graduationInfo.showCurrentlyStudying = value;
-                                            graduationInfo.currentlyStudying = value;
-                                            _updateShowCurrentlyStudyingWithYes(graduationInfo);
-                                            /// populate LAST term
-                                            _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: index);
-                                          });
-                                        },
-                                        title: localization.yes,
-                                        textStyle: textFieldTextStyle,
-                                      ),
 
-                                      /// ****************************************************************************************************************************************************
-                                      CustomRadioListTile(
-                                          value: false,
-                                          groupValue: graduationInfo
-                                              .currentlyStudying,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              /// graduationInfo.showCurrentlyStudying = value;
-                                              graduationInfo.currentlyStudying = value;
+                                            // graduationInfo.showCurrentlyStudying
+                                            //     ? Column(children: [
+                                            //         kFormHeight,
+                                            //         /// title
+                                            //         fieldHeading(
+                                            //             title: localization.currentlyStudying,
+                                            //             important: true,
+                                            //             langProvider: langProvider),
+                                            //
+                                            //         /// ****************************************************************************************************************************************************
+                                            //         /// radiobuttons for yes or no
+                                            //         /// Yes or no : Show round radio
+                                            //         CustomRadioListTile(
+                                            //           value: true,
+                                            //           groupValue: graduationInfo.currentlyStudying,
+                                            //           onChanged: (value) {
+                                            //             setState(() {
+                                            //               /// graduationInfo.showCurrentlyStudying = value;
+                                            //               graduationInfo.currentlyStudying = value;
+                                            //               _updateShowCurrentlyStudyingWithYes(graduationInfo);
+                                            //               /// populate LAST term
+                                            //               _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: index);
+                                            //             });
+                                            //           },
+                                            //           title: localization.yes,
+                                            //           textStyle: textFieldTextStyle,
+                                            //         ),
+                                            //
+                                            //         /// ****************************************************************************************************************************************************
+                                            //         CustomRadioListTile(
+                                            //             value: false,
+                                            //             groupValue: graduationInfo
+                                            //                 .currentlyStudying,
+                                            //             onChanged: (value) {
+                                            //               setState(() {
+                                            //                 /// graduationInfo.showCurrentlyStudying = value;
+                                            //                 graduationInfo.currentlyStudying = value;
+                                            //
+                                            //                 /// showing selection option that you are currently doing this course or not
+                                            //                 _updateShowCurrentlyStudyingWithFalse(graduationInfo);
+                                            //                 graduationInfo.graduationEndDateController.clear();
+                                            //                 graduationInfo.lastTermController.clear();
+                                            //               });
+                                            //             },
+                                            //             title: localization.no,
+                                            //             textStyle: textFieldTextStyle),
+                                            //       ])
+                                            //     : showVoid,
 
-                                              /// showing selection option that you are currently doing this course or not
-                                              // _updateShowCurrentlyStudyingWithFalse(graduationInfo);
-                                              graduationInfo.graduationEndDateController.clear();
-                                              graduationInfo.lastTermController.clear();
-                                            });
-                                          },
-                                          title: localization.no,
-                                          textStyle: textFieldTextStyle),
-                                    ])
-                                        : showVoid,
+                                            /// ****************************************************************************************************************************************************
 
-                                    // graduationInfo.showCurrentlyStudying
-                                    //     ? Column(children: [
-                                    //         kFormHeight,
-                                    //         /// title
-                                    //         fieldHeading(
-                                    //             title: localization.currentlyStudying,
-                                    //             important: true,
-                                    //             langProvider: langProvider),
-                                    //
-                                    //         /// ****************************************************************************************************************************************************
-                                    //         /// radiobuttons for yes or no
-                                    //         /// Yes or no : Show round radio
-                                    //         CustomRadioListTile(
-                                    //           value: true,
-                                    //           groupValue: graduationInfo.currentlyStudying,
-                                    //           onChanged: (value) {
-                                    //             setState(() {
-                                    //               /// graduationInfo.showCurrentlyStudying = value;
-                                    //               graduationInfo.currentlyStudying = value;
-                                    //               _updateShowCurrentlyStudyingWithYes(graduationInfo);
-                                    //               /// populate LAST term
-                                    //               _populateGraduationLastTermMenuItemsList(langProvider: langProvider, index: index);
-                                    //             });
-                                    //           },
-                                    //           title: localization.yes,
-                                    //           textStyle: textFieldTextStyle,
-                                    //         ),
-                                    //
-                                    //         /// ****************************************************************************************************************************************************
-                                    //         CustomRadioListTile(
-                                    //             value: false,
-                                    //             groupValue: graduationInfo
-                                    //                 .currentlyStudying,
-                                    //             onChanged: (value) {
-                                    //               setState(() {
-                                    //                 /// graduationInfo.showCurrentlyStudying = value;
-                                    //                 graduationInfo.currentlyStudying = value;
-                                    //
-                                    //                 /// showing selection option that you are currently doing this course or not
-                                    //                 _updateShowCurrentlyStudyingWithFalse(graduationInfo);
-                                    //                 graduationInfo.graduationEndDateController.clear();
-                                    //                 graduationInfo.lastTermController.clear();
-                                    //               });
-                                    //             },
-                                    //             title: localization.no,
-                                    //             textStyle: textFieldTextStyle),
-                                    //       ])
-                                    //     : showVoid,
+                                            kFormHeight,
 
-                                    /// ****************************************************************************************************************************************************
 
-                                    kFormHeight,
 
-                                    /// last term
-                                    graduationInfo.currentlyStudying && graduationInfo.showCurrentlyStudying
-                                        ? Column(
-                                            children: [
-                                              fieldHeading(
-                                                  title: localization.lastTerm,
-                                                  important: graduationInfo.currentlyStudying,
-                                                  langProvider: langProvider),
-                                              scholarshipFormDropdown(
-                                                context: context,
-                                                controller: graduationInfo.lastTermController,
-                                                currentFocusNode: graduationInfo.lastTermFocusNode,
-                                                menuItemsList: graduationInfo.lastTerm ?? [],
-                                                hintText: localization.lastTermRequired,
-                                                errorText: graduationInfo.lastTermError,
-                                                onChanged: (value) {
-                                                  graduationInfo.lastTermError = null;
-                                                  setState(() {
-                                                    /// setting the value for address type
-                                                    graduationInfo.lastTermController.text = value!;
 
-                                                    ///This thing is creating error: don't know how to fix it:
-                                                    Utils.requestFocus(focusNode: graduationInfo.levelFocusNode, context: context);
-                                                  });
-                                                },
-                                              ),
-                                              kFormHeight,
-                                            ],
-                                          )
-                                        : showVoid,
+                                            /// last term
+                                            graduationInfo.currentlyStudying && graduationInfo.showCurrentlyStudying
+                                                ? Column(
+                                              children: [
+                                                fieldHeading(
+                                                    title: localization.lastTerm,
+                                                    important: graduationInfo.currentlyStudying,
+                                                    langProvider: langProvider),
+                                                scholarshipFormDropdown(
+                                                  context: context,
+                                                  controller: graduationInfo.lastTermController,
+                                                  currentFocusNode: graduationInfo.lastTermFocusNode,
+                                                  menuItemsList: graduationInfo.lastTerm ?? [],
+                                                  hintText: localization.lastTermRequired,
+                                                  errorText: graduationInfo.lastTermError,
+                                                  onChanged: (value) {
+                                                    graduationInfo.lastTermError = null;
+                                                    setState(() {
+                                                      /// setting the value for address type
+                                                      graduationInfo.lastTermController.text = value!;
 
-                                    /// ****************************************************************************************************************************************************
+                                                      ///This thing is creating error: don't know how to fix it:
+                                                      Utils.requestFocus(focusNode: graduationInfo.levelFocusNode, context: context);
+                                                    });
+                                                  },
+                                                ),
+                                                kFormHeight,
+                                              ],
+                                            )
+                                                : showVoid,
 
-                                    (widget.academicCareer == 'UGRD') ? (graduationInfo.currentlyStudying ?
+                                            /// ****************************************************************************************************************************************************
+
+                                            (widget.academicCareer == 'UGRD') ? (graduationInfo.currentlyStudying ?
 
                                             /// copy paste full below code
-                                           /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
+                                            /// for "UGRD" Specially We are not willing to provide add more graduation information. so we will give static option to fill graduation details for bachelor
                                             _graduationInformation(
                                                 index: index,
                                                 langProvider: langProvider,
                                                 graduationInfo: graduationInfo)
-                                            : showVoid)
-                                        : _graduationInformation(
-                                            index: index,
-                                            langProvider: langProvider,
-                                            graduationInfo: graduationInfo),
+                                                : showVoid)
+                                                : _graduationInformation(
+                                                index: index,
+                                                langProvider: langProvider,
+                                                graduationInfo: graduationInfo),
 
-                                    /// ****************************************************************************************************************************************************
+                                            /// ****************************************************************************************************************************************************
 
-                                    (!(widget.scholarshipType == 'INT' && widget.academicCareer == 'UGRD') && index != 0)
-                                        ? addRemoveMoreSection(
-                                            title: localization.deleteRowGraduation,
-                                            add: false,
-                                            onChanged: () {
-                                              setState(() {
-                                                _deleteGraduationDetail(index);
-                                              });
-                                            })
-                                        : showVoid,
 
-                                    /// ****************************************************************************************************************************************************
-                                    kFormHeight,
-                                    const MyDivider(
-                                      color: AppColors.lightGrey,
+
+                                            (!(widget.scholarshipType == 'INT' && widget.academicCareer == 'UGRD') && index != 0)
+                                                ? addRemoveMoreSection(
+                                                title: localization.deleteRowGraduation,
+                                                add: false,
+                                                onChanged: () {
+                                                  setState(() {
+                                                    _deleteGraduationDetail(index);
+                                                  });
+                                                })
+                                                : showVoid,
+
+
+
+
+                                            /// ****************************************************************************************************************************************************
+                                            kMinorSpace,
+                                            const Divider(),
+                                            kMinorSpace,
+                                            /// ****************************************************************************************************************************************************
+                                            (!(widget.scholarshipType == 'INT' && widget.academicCareer == 'UGRD') && widget.academicCareer != 'UGRD')
+                                                ? addRemoveMoreSection(
+                                                title: localization.addRowGraduation,
+                                                add: true,
+                                                onChanged: () {
+                                                  setState(() {
+                                                    widget.addGraduation();
+                                                  });
+                                                })
+                                                : showVoid,
+                                          ],
+                                        )
                                     ),
                                     kFormHeight,
 
-                                    /// ****************************************************************************************************************************************************
                                   ]);
                             }),
-                        (!(widget.scholarshipType == 'INT' && widget.academicCareer == 'UGRD') && widget.academicCareer != 'UGRD')
-                            ? addRemoveMoreSection(
-                                title: localization.addRowGraduation,
-                                add: true,
-                                onChanged: () {
-                                  setState(() {
-                                    widget.addGraduation();
-                                  });
-                                })
-                            : showVoid,
+
                       ]),
                     ],
                   ))
@@ -439,7 +452,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                           /// If duplicate is found, show an error and clear the controller
                           _alertService.showToast(
                             // context: context,
-                            message: "This level has already been selected. Please choose another one.",
+                            message: "تم تحديد هذا المستوى بالفعل. يرجى اختيار واحد آخر.",
                           );
                           graduationInfo.levelError = localization.hsGraduationLevelValidate;
                         } else {
@@ -498,7 +511,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                           /// If duplicate is found, show an error and clear the controller
                           _alertService.showToast(
                             // context: context,
-                            message: "This level has already been selected. Please choose another one.",
+                            message: "تم تحديد هذا المستوى بالفعل. يرجى اختيار واحد آخر.",
                           );
                           graduationInfo.levelError = localization.hsGraduationLevelValidate;
                         } else {
@@ -565,7 +578,8 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                       langProvider: langProvider),
                   scholarshipFormDropdown(
                     context: context,
-                    filled:(graduationInfo.university?.isEmpty ?? false),
+                    filled:true,
+                    fillColor: (graduationInfo.university?.isEmpty ?? false) ? AppColors.lightGrey : Colors.white,
                     controller: graduationInfo.universityController,
                     currentFocusNode: graduationInfo.universityFocusNode,
                     menuItemsList: graduationInfo.university ?? [],
@@ -733,8 +747,8 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                 graduationInfo.levelController.text.isNotEmpty),
             langProvider: langProvider),
         scholarshipFormDateField(
-          filled: !(!graduationInfo.currentlyStudying &&
-              graduationInfo.levelController.text.isNotEmpty),
+          filled: true,
+          fillColor: !(!graduationInfo.currentlyStudying && graduationInfo.levelController.text.isNotEmpty) ? AppColors.lightGrey : Colors.white,
           currentFocusNode: graduationInfo.graduationEndDateFocusNode,
           controller: graduationInfo.graduationEndDateController,
           hintText: localization.hsGraducationEndDateWatermark,

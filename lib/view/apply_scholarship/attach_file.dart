@@ -133,13 +133,13 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
           hintText: localization.commentsWatermark,
           onChanged: (value) {}),
 
-      kFormHeight,
+      kMinorSpace,
       // light grey divider
-      const MyDivider(
+      const Divider(
         color: AppColors.lightGrey,
       ),
 
-      kFormHeight,
+      kMinorSpace,
       // Action
       Row(
         mainAxisSize: MainAxisSize.max,
@@ -156,7 +156,7 @@ class _AttachFileState extends State<AttachFile> with MediaQueryMixin {
       ),
       
       kFormHeight,
-      const MyDivider(),
+      const Divider(color: AppColors.scoButtonColor,),
       kFormHeight
     ]);
   }

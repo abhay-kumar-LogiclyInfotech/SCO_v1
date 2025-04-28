@@ -24,7 +24,7 @@ class SimpleTile extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         title: Text(item?.title ?? '',style: AppTextStyles.titleBoldTextStyle(),),
         tileColor: Colors.white,
-        leading: SvgPicture.asset(item.assetAddress ?? ''),
+        leading: SvgPicture.asset(item.assetAddress ?? '',height: 50,width: 50,),
         trailing:  Icon(
           getTextDirection(langProvider) == TextDirection.rtl ? Icons.keyboard_arrow_left_sharp : Icons.keyboard_arrow_right_sharp,
           color: Colors.grey,

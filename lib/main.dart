@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_major_and_universities_view.dart';
 import 'l10n/app_localizations.dart';
 import 'viewModel/view_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
