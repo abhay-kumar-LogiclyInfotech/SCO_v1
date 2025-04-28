@@ -90,7 +90,8 @@ dynamic addRemoveMoreSection(
     String? errorText,
     int? maxLines,
     int? maxLength,
-    bool? filled,
+    bool? filled = true,
+     Color? fillColor = Colors.white,
     bool? readOnly,
     TextInputType? textInputType,
     List<TextInputFormatter>? inputFormat,
@@ -103,6 +104,7 @@ dynamic addRemoveMoreSection(
       nextFocusNode: nextFocusNode,
       controller: controller,
       filled: filled,
+      fillColor: fillColor,
       obscureText: false,
       border: border ?? Utils.outlinedInputBorder(),
       hintText: hintText,
@@ -123,10 +125,13 @@ dynamic addRemoveMoreSection(
         String? errorText,
         required Function(String? value) onChanged,
         required Function()? onTap,
-        bool? filled}) {
+        bool? filled = true,
+        Color? fillColor = Colors.white,
+      }) {
     return CustomTextField(
       readOnly: true,
       filled: filled,
+      fillColor: fillColor,
       // Prevent manual typing
       currentFocusNode: currentFocusNode,
       controller: controller,
@@ -153,10 +158,15 @@ dynamic scholarshipFormTimeField(
       String? errorText,
       required Function(String? value) onChanged,
       required Function()? onTap,
-      bool? filled}) {
+      bool? filled = true,
+      Color? fillColor = Colors.white,
+
+    }) {
   return CustomTextField(
     readOnly: true,
     filled: filled,
+    fillColor: fillColor,
+
     // Prevent manual typing
     currentFocusNode: currentFocusNode,
     controller: controller,
@@ -184,7 +194,8 @@ dynamic scholarshipFormTimeField(
     required dynamic menuItemsList,
     required String hintText,
     String? errorText,
-    bool? filled,
+    bool? filled = true,
+    Color? fillColor = Colors.white,
     required void Function(dynamic value) onChanged,
     required dynamic context,
   }) {
@@ -198,6 +209,7 @@ dynamic scholarshipFormTimeField(
       hintText: hintText,
       textColor: AppColors.scoButtonColor,
       filled: filled,
+      fillColor: fillColor,
       outlinedBorder: true,
       errorText: errorText,
       onChanged: onChanged,
@@ -210,6 +222,16 @@ dynamic scholarshipFormTimeField(
       title,
       style: AppTextStyles.titleBoldTextStyle(),
     );
+  }
+
+  Widget sectionBackground( {required Widget? child}){
+  return Container(
+      decoration: BoxDecoration(
+      color: AppColors.extraLightGrey,
+      borderRadius: BorderRadius.circular(2),
+    ),
+    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+    child: child,);
   }
 
 

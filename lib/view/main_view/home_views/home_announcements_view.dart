@@ -12,6 +12,7 @@ import '../../../resources/app_text_styles.dart';
 import '../../../resources/cards/home_view_card.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/notifications_view_models/get_all_notifications_viewModel.dart';
+import '../notifications/notification_detail_view.dart';
 import '../notifications/notifications_view.dart';
 import '../../../l10n/app_localizations.dart';
 
@@ -49,8 +50,7 @@ class _HomeAnnouncementsViewState extends State<HomeAnnouncementsView> with Medi
               return showVoid;
             case Status.COMPLETED:
             // Check if there's any notification with `isNew == true`
-              final hasNewNotification =
-                  allNotificationsProvider.apiResponse.data?.any((notification) => notification.isNew == true,) ?? false;
+              final hasNewNotification = allNotificationsProvider.apiResponse.data?.any((notification) => notification.isNew == true,) ?? false;
 
               // Get the first notification with `isNew == true` if available
               final firstNotification = hasNewNotification ? allNotificationsProvider.apiResponse.data?.firstWhere((notification) => notification.isNew == true,) : null;
@@ -61,7 +61,14 @@ class _HomeAnnouncementsViewState extends State<HomeAnnouncementsView> with Medi
                 children: [
                   // kSmallSpace,
                   HomeViewCard(
-                    onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const NotificationsView()));},
+                    onTap: () {
+                      _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const NotificationsView()));
+                      _navigationServices.pushCupertino(
+                        CupertinoPageRoute(
+                          builder: (context) => NotificationDetailView(notification: firstNotification!),
+                        ),
+                      );
+                      },
                     title: AppLocalizations.of(context)!.announcement,
                     icon: SvgPicture.asset("assets/announcements.svg"),
                     borderSide:  const BorderSide(color: AppColors.scoMidThemeColor),

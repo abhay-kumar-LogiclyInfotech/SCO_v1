@@ -22,6 +22,7 @@ class CustomDropdown extends StatefulWidget {
 
   final TextDirection textDirection;
   bool? filled;
+  Color? fillColor;
   Color? textColor;
   String? errorText;
   bool? readOnly;
@@ -44,6 +45,7 @@ class CustomDropdown extends StatefulWidget {
     this.value,
     this.nextFocusNode,
     this.filled,
+    this.fillColor,
     this.textColor,
     this.hintText,
     this.errorText,
@@ -128,7 +130,7 @@ class _CustomDropdownState extends State<CustomDropdown>
                 ? Utils.outlinedInputBorder()
                 : Utils.underLinedInputBorder(),
             filled: widget.filled,
-            fillColor: Colors.grey.shade200,
+            fillColor: widget.fillColor ??  Colors.grey.shade200,
           ),
 
           // cursorColor: AppColors.darkGrey,

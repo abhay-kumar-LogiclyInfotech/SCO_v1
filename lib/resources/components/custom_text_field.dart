@@ -134,8 +134,7 @@ class _CustomTextFieldState extends State<CustomTextField>
         ),
         inputFormatters: widget.inputFormat,
         cursorColor: AppColors.hintDarkGrey,
-        style:
-            widget.textStyle ?? const TextStyle(color: AppColors.hintDarkGrey),
+        style: widget.textStyle ?? const TextStyle(color: AppColors.hintDarkGrey),
         keyboardType: widget.textInputType ?? TextInputType.text,
         onSubmitted: (_) {
           widget.nextFocusNode != null

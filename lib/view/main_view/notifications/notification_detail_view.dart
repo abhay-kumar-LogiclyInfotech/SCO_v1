@@ -42,9 +42,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       try {
         /// Decrease the notification count:
-        final decreaseCountProvider =
-            Provider.of<DecreaseNotificationCountViewModel>(context,
-                listen: false);
+        final decreaseCountProvider = Provider.of<DecreaseNotificationCountViewModel>(context, listen: false);
         final notification = widget.notification;
         final form = {
           "userId": notification.userId ?? '',
@@ -190,24 +188,24 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
                   title: localization.createdOn,
                   description:
                       convertTimestampToDateTime(provider?.createDate ?? 0)),
-              CustomInformationContainerField(
-                  title: localization.status,
-                  description: getFullNameFromLov(
-                      langProvider: langProvider,
-                      lovCode: 'NOTIFICATION_STS',
-                      code: provider?.status ?? '')),
+              // CustomInformationContainerField(
+              //     title: localization.status,
+              //     description: getFullNameFromLov(
+              //         langProvider: langProvider,
+              //         lovCode: 'NOTIFICATION_STS',
+              //         code: provider?.status ?? '')),
               CustomInformationContainerField(
                   title: localization.notificationType,
                   description: getFullNameFromLov(
                       langProvider: langProvider,
                       lovCode: 'NOTIFICATION_TYPE',
                       code: provider?.notificationType ?? '')),
-              CustomInformationContainerField(
-                  title: localization.importance,
-                  description: getFullNameFromLov(
-                      langProvider: langProvider,
-                      lovCode: 'NOTIF_IMPORTANCE',
-                      code: provider?.importance ?? '')),
+              // CustomInformationContainerField(
+              //     title: localization.importance,
+              //     description: getFullNameFromLov(
+              //         langProvider: langProvider,
+              //         lovCode: 'NOTIF_IMPORTANCE',
+              //         code: provider?.importance ?? '')),
               CustomInformationContainerField(
                   title: localization.subject,
                   description: provider?.subject ?? ''),

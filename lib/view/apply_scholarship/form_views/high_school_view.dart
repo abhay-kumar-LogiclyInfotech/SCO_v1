@@ -281,7 +281,6 @@ class _HighSchoolViewState extends State<HighSchoolView> with MediaQueryMixin {
         child: SingleChildScrollView(
             child: Column(children: [
               widget.draftPrevNextButtons,
-              /// kFormHeight,
 
               /// *--------------------------------------------------------------- High School Details Section Start ----------------------------------------------------------------------------*
               CustomInformationContainer(
@@ -304,525 +303,544 @@ class _HighSchoolViewState extends State<HighSchoolView> with MediaQueryMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    /// ****************************************************************************************************************************************************
-
                                     sectionTitle(title: "${localization.highSchoolDetails} ${index + 1}"),
-                                    kFormHeight,
-                                    /// title
-                                    fieldHeading(
-                                        title: localization.hsLevel,
-                                        important: true,
-                                        langProvider: langProvider),
+                                    kMinorSpace,
+                                    sectionBackground(child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
 
-                                    /// dropdowns on the basis of selected one
-                                    if (((admitType == 'MOS' ||
-                                        admitType == 'MOP') &&
-                                        index == 1) ||
-                                        index <= 1) /// Todo: before <=2 did by me is <=1
-                                      Column(children: [
-                                        scholarshipFormDropdown(context:context,
-                                          readOnly: true,
-                                          filled: true,
-                                          controller:
-                                          highSchoolInfo.hsLevelController,
-                                          currentFocusNode:
-                                          highSchoolInfo.hsLevelFocusNode,
-                                          menuItemsList: _highSchoolLevelMenuItemsList,
-                                          hintText: localization.hsLevelWatermark,
-                                          errorText: highSchoolInfo.hsLevelError,
-                                          onChanged: (value) {
-                                            highSchoolInfo.hsLevelError = null;
-                                            setState(() {
-                                              /// setting the value for address type
-                                              highSchoolInfo.hsLevelController.text = value!;
+                                      /// title
+                                      fieldHeading(
+                                          title: localization.hsLevel,
+                                          important: true,
+                                          langProvider: langProvider),
 
-
-                                              ///This thing is creating error: don't know how to fix it:
-                                              Utils.requestFocus(focusNode: highSchoolInfo.hsCountryFocusNode, context: context);
-                                            });
-                                          },
-                                        )
-                                      ]),
-                                    // if (((admitType == 'MOS' || admitType == 'MOP') && index > 0) || (_selectedScholarship?.acadmicCareer == 'HCHL' && index >= 1) || index >= 2)
-                                    if (((admitType == 'MOS' ||
-                                        admitType == 'MOP') &&
-                                        index > 0) ||
-                                        (academicCareer == 'HCHL' &&
-                                            index >= 2) ||
-                                        index >= 2)
-                                      scholarshipFormDropdown(context:context,
-                                        controller: highSchoolInfo.hsLevelController,
-                                        currentFocusNode: highSchoolInfo.hsLevelFocusNode,
-                                        menuItemsList: _highSchoolLevelMenuItemsList,
-                                        hintText:localization.hsLevelWatermark,
-                                        errorText: highSchoolInfo.hsLevelError,
-                                        onChanged: (value) {highSchoolInfo.hsLevelError = null;
-                                        setState(() {
-                                          bool alreadySelected = widget.highSchoolList.any((info) {
-                                            return info != highSchoolInfo && info.hsLevelController.text == value!;
-                                          });
-                                          if (alreadySelected) {
-                                            /// If duplicate is found, show an error and clear the controller
-                                            _alertServices.showToast(
-                                              // context: context,
-                                              message: "This level has already been selected. Please choose another one.",
-                                            );
-                                            highSchoolInfo.hsLevelError = localization.hsTypeValidate;
-                                          } else {
-                                            /// Assign the value only if it's not already selected
-                                            highSchoolInfo.hsLevelController.text = value!;
-                                            /// Move focus to the next field
-                                            Utils.requestFocus(focusNode: highSchoolInfo.hsCountryFocusNode, context: context,
-                                            );
-                                          }
-                                        });
-                                        },
-                                      ),
-                                    kFormHeight,
-                                    /// ****************************************************************************************************************************************************
-
-                                    /// country
-                                    fieldHeading(
-                                        title: localization.schoolCountry,
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    scholarshipFormDropdown(context:context,
-                                      controller: highSchoolInfo.hsCountryController,
-                                      currentFocusNode: highSchoolInfo.hsCountryFocusNode,
-                                      menuItemsList: _nationalityMenuItemsList,
-                                      hintText: localization.countryWatermark,
-                                      errorText: highSchoolInfo.hsCountryError,
-                                      onChanged: (value) {
-                                        highSchoolInfo.hsCountryError = null;
-                                        highSchoolInfo.hsStateError = null;
-                                        highSchoolInfo.hsNameError = null;
-                                        setState(() {
-                                          /// setting the value for address type
-                                          highSchoolInfo.hsCountryController.text = value!;
-                                          highSchoolInfo.hsStateController.clear();
-                                          highSchoolInfo.hsNameController.clear();
-                                          highSchoolInfo.schoolStateDropdownMenuItems?.clear();
-                                          highSchoolInfo.schoolNameDropdownMenuItems?.clear();
-                                          /// populating the high school state dropdown
-                                          _populateHighSchoolStateDropdown(langProvider: langProvider, index: index);
-
-                                          ///This thing is creating error: don't know how to fix it:
-                                          Utils.requestFocus(focusNode: highSchoolInfo.hsStateFocusNode, context: context);
-                                        });
-                                      },
-                                    ),
-
-                                    kFormHeight,
-                                    /// ****************************************************************************************************************************************************
-
-                                    /// state
-                                    fieldHeading(
-                                        title: localization.emirates,
-                                        /// important: true,
-                                        important: highSchoolInfo.schoolStateDropdownMenuItems?.isNotEmpty ?? false,
-                                        langProvider: langProvider),
-
-                                    scholarshipFormDropdown(context:context,
-                                      filled: highSchoolInfo.schoolStateDropdownMenuItems?.isEmpty ?? false,
-                                      readOnly: highSchoolInfo.schoolStateDropdownMenuItems?.isEmpty ?? false,
-                                      controller: highSchoolInfo.hsStateController,
-                                      currentFocusNode: highSchoolInfo.hsStateFocusNode,
-                                      menuItemsList: highSchoolInfo.schoolStateDropdownMenuItems ?? [],
-                                      hintText: localization.emiratesWatermark,
-                                      errorText: highSchoolInfo.hsStateError,
-                                      onChanged: (value) {
-                                        highSchoolInfo.hsStateError = null;
-                                        highSchoolInfo.hsNameError = null;
-                                        setState(() {
-                                          highSchoolInfo.hsStateController.text = value!;
-
-                                          highSchoolInfo.hsNameController.clear();
-                                          highSchoolInfo.schoolNameDropdownMenuItems?.clear();
-
-                                          /// populating the high school state dropdown
-                                          _populateHighSchoolNameDropdown(langProvider: langProvider, index: index);
-
-                                          ///This thing is creating error: don't know how to fix it:
-                                          Utils.requestFocus(focusNode: highSchoolInfo.hsNameFocusNode, context: context);
-                                        });
-                                      },
-                                    ),
-
-                                    kFormHeight,
-                                    /// ****************************************************************************************************************************************************
-                                    /// high school name
-                                    if (highSchoolInfo.hsCountryController.text == 'ARE')
-                                      Column(
-                                        children: [
-                                          /// school name from Dropdown selection
-                                          fieldHeading(
-                                              title: localization.hsName,
-                                              important: highSchoolInfo.hsCountryController.text == 'ARE',
-                                              langProvider: langProvider),
+                                      /// dropdowns on the basis of selected one
+                                      if (((admitType == 'MOS' ||
+                                          admitType == 'MOP') &&
+                                          index == 1) ||
+                                          index <= 1) /// Todo: before <=2 did by me is <=1
+                                        Column(children: [
                                           scholarshipFormDropdown(context:context,
-                                            controller: highSchoolInfo.hsNameController,
-                                            currentFocusNode: highSchoolInfo.hsNameFocusNode,
-                                            menuItemsList: highSchoolInfo.schoolNameDropdownMenuItems ?? [],
-                                            hintText: localization.hsNameWatermark,
-                                            errorText: highSchoolInfo.hsNameError,
+                                            readOnly: true,
+                                            filled: true,
+                                            fillColor: AppColors.lightGrey,
+                                            controller:
+                                            highSchoolInfo.hsLevelController,
+                                            currentFocusNode:
+                                            highSchoolInfo.hsLevelFocusNode,
+                                            menuItemsList: _highSchoolLevelMenuItemsList,
+                                            hintText: localization.hsLevelWatermark,
+                                            errorText: highSchoolInfo.hsLevelError,
                                             onChanged: (value) {
-                                              highSchoolInfo.hsNameError = null;
+                                              highSchoolInfo.hsLevelError = null;
                                               setState(() {
                                                 /// setting the value for address type
-                                                highSchoolInfo.hsNameController.text = value!;
-                                                Utils.requestFocus(focusNode: highSchoolInfo.hsTypeFocusNode, context: context);
+                                                highSchoolInfo.hsLevelController.text = value!;
+
+
+                                                ///This thing is creating error: don't know how to fix it:
+                                                Utils.requestFocus(focusNode: highSchoolInfo.hsCountryFocusNode, context: context);
                                               });
                                             },
-                                          ),
-                                        ],
-                                      ),
+                                          )
+                                        ]),
+                                      // if (((admitType == 'MOS' || admitType == 'MOP') && index > 0) || (_selectedScholarship?.acadmicCareer == 'HCHL' && index >= 1) || index >= 2)
+                                      if (((admitType == 'MOS' ||
+                                          admitType == 'MOP') &&
+                                          index > 0) ||
+                                          (academicCareer == 'HCHL' &&
+                                              index >= 2) ||
+                                          index >= 2)
+                                        scholarshipFormDropdown(context:context,
+                                          controller: highSchoolInfo.hsLevelController,
+                                          currentFocusNode: highSchoolInfo.hsLevelFocusNode,
+                                          menuItemsList: _highSchoolLevelMenuItemsList,
+                                          hintText:localization.hsLevelWatermark,
+                                          errorText: highSchoolInfo.hsLevelError,
+                                          onChanged: (value) {highSchoolInfo.hsLevelError = null;
+                                          setState(() {
+                                            bool alreadySelected = widget.highSchoolList.any((info) {
+                                              return info != highSchoolInfo && info.hsLevelController.text == value!;
+                                            });
+                                            if (alreadySelected) {
+                                              /// If duplicate is found, show an error and clear the controller
+                                              _alertServices.showToast(
+                                                // context: context,
+                                                message: "This level has already been selected. Please choose another one.",
+                                              );
+                                              highSchoolInfo.hsLevelError = localization.hsTypeValidate;
+                                            } else {
+                                              /// Assign the value only if it's not already selected
+                                              highSchoolInfo.hsLevelController.text = value!;
+                                              /// Move focus to the next field
+                                              Utils.requestFocus(focusNode: highSchoolInfo.hsCountryFocusNode, context: context,
+                                              );
+                                            }
+                                          });
+                                          },
+                                        ),
+                                      kFormHeight,
+                                      /// ****************************************************************************************************************************************************
 
-                                    /// ****************************************************************************************************************************************************
-                                    /// school name or other school name will be shown based on the conditions
-                                    /// If selected country is not UAE or if selected from high school name dropdown as other school
-                                    /// show school input filed based on the condition
-                                    /// No other high school will go in otherHigSchool of list of Hign school
-                                    if (highSchoolInfo.hsCountryController.text != 'ARE' || highSchoolInfo.hsNameController.text == 'OTH')
-                                      Column(
-                                        children: [
-                                          kFormHeight,
-                                          fieldHeading(
-                                              title: highSchoolInfo.hsCountryController.text == 'ARE' ? localization.hsnameOther : localization.hsName,
-                                              important: true,
-                                              langProvider: langProvider),
-                                          scholarshipFormTextField(
-                                              currentFocusNode: highSchoolInfo.otherHsNameFocusNode,
-                                              nextFocusNode: highSchoolInfo.hsTypeFocusNode,
-                                              controller: highSchoolInfo.otherHsNameController,
-                                              hintText: highSchoolInfo.hsCountryController.text == 'ARE' ? localization.hsnameOtherRequired : localization.hsNameWatermark,
-                                              errorText: highSchoolInfo.otherHsNameError,
-                                              onChanged: (value) {
-                                                /// live error display for  high school name
-                                                if (highSchoolInfo.otherHsNameFocusNode.hasFocus) {
-                                                  setState(() {
-                                                    highSchoolInfo.otherHsNameError =
-                                                        ErrorText.getNameArabicEnglishValidationError(name: highSchoolInfo.otherHsNameController.text, context: context);
-                                                  });
-                                                }
+                                      /// country
+                                      fieldHeading(
+                                          title: localization.schoolCountry,
+                                          important: true,
+                                          langProvider: langProvider),
 
-                                                /// live error display for other high school name
-                                                if (highSchoolInfo.otherHsNameFocusNode.hasFocus) {
-                                                  setState(() {
-                                                    highSchoolInfo.otherHsNameError = ErrorText.getNameArabicEnglishValidationError(name: highSchoolInfo.otherHsNameController.text, context: context);
-                                                  });
-                                                }
-                                              }),
-                                        ],
-                                      ),
-
-                                    /// ****************************************************************************************************************************************************
-                                    /// school type
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: localization.hsType,
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    scholarshipFormDropdown(context:context,
-                                      controller: highSchoolInfo.hsTypeController,
-                                      currentFocusNode: highSchoolInfo.hsTypeFocusNode,
-                                      menuItemsList: _highSchoolTypeMenuItemsList ?? [],
-                                      hintText: localization.hsTypeWatermark,
-                                      errorText: highSchoolInfo.hsTypeError,
-                                      onChanged: (value) {
-                                        highSchoolInfo.hsTypeError = null;
-                                        highSchoolInfo.curriculumTypeError = null;
-                                        setState(() {
-                                          /// setting the value for high school type
-                                          highSchoolInfo.hsTypeController.text =
-                                          value!;
-
-                                          highSchoolInfo.curriculumTypeController
-                                              .clear();
-                                          highSchoolInfo
-                                              .schoolCurriculumTypeDropdownMenuItems
-                                              ?.clear();
-
-                                          /// populating the high school curriculum dropdown
-                                          _populateHighSchoolCurriculumTypeDropdown(
-                                              langProvider: langProvider,
-                                              index: index);
-
-                                          Utils.requestFocus(
-                                              focusNode: highSchoolInfo
-                                                  .curriculumTypeFocusNode,
-                                              context: context);
-                                        });
-                                      },
-                                    ),
-
-                                    /// ****************************************************************************************************************************************************
-                                    /// curriculum Type
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: localization.curriculumTypes,
-                                        important: true,
-                                        langProvider: langProvider),
-
-                                    scholarshipFormDropdown(context:context,
-                                      controller: highSchoolInfo.curriculumTypeController,
-                                      currentFocusNode: highSchoolInfo.curriculumTypeFocusNode,
-                                      menuItemsList: highSchoolInfo.schoolCurriculumTypeDropdownMenuItems ?? [],
-                                      hintText: localization.curriculumTypesWatermark,
-                                      errorText: highSchoolInfo.curriculumTypeError,
-                                      onChanged: (value) {
-                                        highSchoolInfo.curriculumTypeError = null;
-                                        setState(() {
-                                          /// setting the value for high school type
-                                          highSchoolInfo.curriculumTypeController.text = value!;
-                                          Utils.requestFocus(focusNode: highSchoolInfo.curriculumAverageFocusNode, context: context);
-                                        });
-                                      },
-                                    ),
-                                    /// ****************************************************************************************************************************************************
-
-                                    kFormHeight,
-                                    fieldHeading(
-                                        title: localization.curriculumAverage,
-                                        important: true,
-                                        langProvider: langProvider),
-                                    scholarshipFormTextField(
-                                        currentFocusNode: highSchoolInfo
-                                            .curriculumAverageFocusNode,
-                                        nextFocusNode:
-                                        highSchoolInfo.yearOfPassingFocusNode,
-                                        controller: highSchoolInfo
-                                            .curriculumAverageController,
-                                        hintText: localization.curriculumAverageWatermark,
-                                        maxLength: highSchoolInfo.curriculumTypeController.text != 'BRT' ? 4 : 6,
-                                        errorText:
-                                        highSchoolInfo.curriculumAverageError,
+                                      scholarshipFormDropdown(context:context,
+                                        controller: highSchoolInfo.hsCountryController,
+                                        currentFocusNode: highSchoolInfo.hsCountryFocusNode,
+                                        menuItemsList: _nationalityMenuItemsList,
+                                        hintText: localization.countryWatermark,
+                                        errorText: highSchoolInfo.hsCountryError,
                                         onChanged: (value) {
-                                          if (highSchoolInfo
-                                              .curriculumAverageFocusNode
-                                              .hasFocus) {
+                                          highSchoolInfo.hsCountryError = null;
+                                          highSchoolInfo.hsStateError = null;
+                                          highSchoolInfo.hsNameError = null;
+                                          setState(() {
+                                            /// setting the value for address type
+                                            highSchoolInfo.hsCountryController.text = value!;
+                                            highSchoolInfo.hsStateController.clear();
+                                            highSchoolInfo.hsNameController.clear();
+                                            highSchoolInfo.schoolStateDropdownMenuItems?.clear();
+                                            highSchoolInfo.schoolNameDropdownMenuItems?.clear();
+                                            /// populating the high school state dropdown
+                                            _populateHighSchoolStateDropdown(langProvider: langProvider, index: index);
+
+                                            ///This thing is creating error: don't know how to fix it:
+                                            Utils.requestFocus(focusNode: highSchoolInfo.hsStateFocusNode, context: context);
+                                          });
+                                        },
+                                      ),
+                                      kFormHeight,
+                                      /// ****************************************************************************************************************************************************
+
+                                      /// state
+                                      fieldHeading(
+                                          title: localization.emirates,
+                                          important: highSchoolInfo.schoolStateDropdownMenuItems?.isNotEmpty ?? false,
+                                          langProvider: langProvider),
+
+                                      scholarshipFormDropdown(
+                                        context:context,
+                                        // filled: highSchoolInfo.schoolStateDropdownMenuItems?.isEmpty ?? false,
+                                        filled: true,
+                                        readOnly: highSchoolInfo.schoolStateDropdownMenuItems?.isEmpty ?? false,
+                                        fillColor: highSchoolInfo.schoolStateDropdownMenuItems?.isEmpty ?? false ? AppColors.lightGrey : Colors.white,
+                                        controller: highSchoolInfo.hsStateController,
+                                        currentFocusNode: highSchoolInfo.hsStateFocusNode,
+                                        menuItemsList: highSchoolInfo.schoolStateDropdownMenuItems ?? [],
+                                        hintText: localization.emiratesWatermark,
+                                        errorText: highSchoolInfo.hsStateError,
+                                        onChanged: (value) {
+                                          highSchoolInfo.hsStateError = null;
+                                          highSchoolInfo.hsNameError = null;
+                                          setState(() {
+                                            highSchoolInfo.hsStateController.text = value!;
+
+                                            highSchoolInfo.hsNameController.clear();
+                                            highSchoolInfo.schoolNameDropdownMenuItems?.clear();
+
+                                            /// populating the high school state dropdown
+                                            _populateHighSchoolNameDropdown(langProvider: langProvider, index: index);
+
+                                            ///This thing is creating error: don't know how to fix it:
+                                            Utils.requestFocus(focusNode: highSchoolInfo.hsNameFocusNode, context: context);
+                                          });
+                                        },
+                                      ),
+
+                                      kFormHeight,
+                                      /// ****************************************************************************************************************************************************
+                                      /// high school name
+                                      if (highSchoolInfo.hsCountryController.text == 'ARE')
+                                        Column(
+                                          children: [
+                                            /// school name from Dropdown selection
+                                            fieldHeading(
+                                                title: localization.hsName,
+                                                important: highSchoolInfo.hsCountryController.text == 'ARE',
+                                                langProvider: langProvider),
+                                            scholarshipFormDropdown(context:context,
+                                              controller: highSchoolInfo.hsNameController,
+                                              currentFocusNode: highSchoolInfo.hsNameFocusNode,
+                                              menuItemsList: highSchoolInfo.schoolNameDropdownMenuItems ?? [],
+                                              hintText: localization.hsNameWatermark,
+                                              errorText: highSchoolInfo.hsNameError,
+                                              onChanged: (value) {
+                                                highSchoolInfo.hsNameError = null;
+                                                setState(() {
+                                                  /// setting the value for address type
+                                                  highSchoolInfo.hsNameController.text = value!;
+                                                  Utils.requestFocus(focusNode: highSchoolInfo.hsTypeFocusNode, context: context);
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+
+                                      /// ****************************************************************************************************************************************************
+                                      /// school name or other school name will be shown based on the conditions
+                                      /// If selected country is not UAE or if selected from high school name dropdown as other school
+                                      /// show school input filed based on the condition
+                                      /// No other high school will go in otherHigSchool of list of Hign school
+                                      if (highSchoolInfo.hsCountryController.text != 'ARE' || highSchoolInfo.hsNameController.text == 'OTH')
+                                        Column(
+                                          children: [
+                                            kFormHeight,
+                                            fieldHeading(
+                                                title: highSchoolInfo.hsCountryController.text == 'ARE' ? localization.hsnameOther : localization.hsName,
+                                                important: true,
+                                                langProvider: langProvider),
+                                            scholarshipFormTextField(
+                                                currentFocusNode: highSchoolInfo.otherHsNameFocusNode,
+                                                nextFocusNode: highSchoolInfo.hsTypeFocusNode,
+                                                controller: highSchoolInfo.otherHsNameController,
+                                                hintText: highSchoolInfo.hsCountryController.text == 'ARE' ? localization.hsnameOtherRequired : localization.hsNameWatermark,
+                                                errorText: highSchoolInfo.otherHsNameError,
+                                                onChanged: (value) {
+                                                  /// live error display for  high school name
+                                                  if (highSchoolInfo.otherHsNameFocusNode.hasFocus) {
+                                                    setState(() {
+                                                      highSchoolInfo.otherHsNameError =
+                                                          ErrorText.getNameArabicEnglishValidationError(name: highSchoolInfo.otherHsNameController.text, context: context);
+                                                    });
+                                                  }
+
+                                                  /// live error display for other high school name
+                                                  if (highSchoolInfo.otherHsNameFocusNode.hasFocus) {
+                                                    setState(() {
+                                                      highSchoolInfo.otherHsNameError = ErrorText.getNameArabicEnglishValidationError(name: highSchoolInfo.otherHsNameController.text, context: context);
+                                                    });
+                                                  }
+                                                }),
+                                          ],
+                                        ),
+
+
+
+                                      /// ****************************************************************************************************************************************************
+                                      /// school type
+                                      kFormHeight,
+                                      fieldHeading(
+                                          title: localization.hsType,
+                                          important: true,
+                                          langProvider: langProvider),
+
+                                      scholarshipFormDropdown(context:context,
+                                        controller: highSchoolInfo.hsTypeController,
+                                        currentFocusNode: highSchoolInfo.hsTypeFocusNode,
+                                        menuItemsList: _highSchoolTypeMenuItemsList ?? [],
+                                        hintText: localization.hsTypeWatermark,
+                                        errorText: highSchoolInfo.hsTypeError,
+                                        onChanged: (value) {
+                                          highSchoolInfo.hsTypeError = null;
+                                          highSchoolInfo.curriculumTypeError = null;
+                                          setState(() {
+                                            /// setting the value for high school type
+                                            highSchoolInfo.hsTypeController.text =
+                                            value!;
+
+                                            highSchoolInfo.curriculumTypeController
+                                                .clear();
+                                            highSchoolInfo
+                                                .schoolCurriculumTypeDropdownMenuItems
+                                                ?.clear();
+
+                                            /// populating the high school curriculum dropdown
+                                            _populateHighSchoolCurriculumTypeDropdown(
+                                                langProvider: langProvider,
+                                                index: index);
+
+                                            Utils.requestFocus(
+                                                focusNode: highSchoolInfo
+                                                    .curriculumTypeFocusNode,
+                                                context: context);
+                                          });
+                                        },
+                                      ),
+
+                                      /// ****************************************************************************************************************************************************
+                                      /// curriculum Type
+                                      kFormHeight,
+                                      fieldHeading(
+                                          title: localization.curriculumTypes,
+                                          important: true,
+                                          langProvider: langProvider),
+
+                                      scholarshipFormDropdown(context:context,
+                                        controller: highSchoolInfo.curriculumTypeController,
+                                        currentFocusNode: highSchoolInfo.curriculumTypeFocusNode,
+                                        menuItemsList: highSchoolInfo.schoolCurriculumTypeDropdownMenuItems ?? [],
+                                        hintText: localization.curriculumTypesWatermark,
+                                        errorText: highSchoolInfo.curriculumTypeError,
+                                        onChanged: (value) {
+                                          highSchoolInfo.curriculumTypeError = null;
+                                          setState(() {
+                                            /// setting the value for high school type
+                                            highSchoolInfo.curriculumTypeController.text = value!;
+                                            Utils.requestFocus(focusNode: highSchoolInfo.curriculumAverageFocusNode, context: context);
+                                          });
+                                        },
+                                      ),
+                                      /// ****************************************************************************************************************************************************
+
+
+
+                                      kFormHeight,
+                                      fieldHeading(
+                                          title: localization.curriculumAverage,
+                                          important: true,
+                                          langProvider: langProvider),
+                                      scholarshipFormTextField(
+                                          currentFocusNode: highSchoolInfo
+                                              .curriculumAverageFocusNode,
+                                          nextFocusNode:
+                                          highSchoolInfo.yearOfPassingFocusNode,
+                                          controller: highSchoolInfo
+                                              .curriculumAverageController,
+                                          hintText: localization.curriculumAverageWatermark,
+                                          maxLength: highSchoolInfo.curriculumTypeController.text != 'BRT' ? 4 : 6,
+                                          errorText:
+                                          highSchoolInfo.curriculumAverageError,
+                                          onChanged: (value) {
+                                            if (highSchoolInfo
+                                                .curriculumAverageFocusNode
+                                                .hasFocus) {
+                                              setState(() {
+                                                highSchoolInfo
+                                                    .curriculumAverageError =
+                                                    ErrorText.getGradeValidationError(
+                                                        grade: highSchoolInfo
+                                                            .curriculumAverageController
+                                                            .text,
+                                                        context: context);
+                                              });
+                                            }
+                                          },
+                                      ),
+
+
+                                      /// ****************************************************************************************************************************************************
+                                      /// year of passing
+                                      fieldHeading(
+                                          title: localization.hsYearOfPassing,
+                                          important: (highSchoolInfo.curriculumAverageController.text.isNotEmpty),
+                                          langProvider: langProvider),
+                                      scholarshipFormDateField(
+                                        /// Prevent manual typing
+                                        currentFocusNode: highSchoolInfo.yearOfPassingFocusNode,
+                                        controller: highSchoolInfo.yearOfPassingController,
+                                        hintText: localization.hsYearOfPassingWatermark,
+                                        errorText: highSchoolInfo.yearOfPassingError,
+                                        /// Display error text if any
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (highSchoolInfo.yearOfPassingFocusNode.hasFocus) {
+                                              /// Check if the year of passing field is empty or invalid
+                                              highSchoolInfo.yearOfPassingError = ErrorText.getEmptyFieldError(name: highSchoolInfo.yearOfPassingController.text, context: context);
+                                            }
+                                          });
+                                        },
+                                        onTap: () async {
+                                          /// Clear the error message when a date is selected
+                                          highSchoolInfo.yearOfPassingError = null;
+                                          /// Define the initial date as today's date
+                                          final DateTime initialDate = DateTime.now();
+
+                                          /// Define the maximum date (current date plus 1 year)
+                                          final DateTime maxDate = DateTime.now().add(const Duration(days: 365));
+
+                                          /// Define the minimum date (20 years before the current date)
+                                          final DateTime firstDate = DateTime.now().subtract(const Duration(days: 20 * 365));
+
+                                          DateTime? date = await showDatePicker(
+                                            context: context,
+                                            barrierColor: AppColors.scoButtonColor.withOpacity(0.1),
+                                            barrierDismissible: false,
+                                            locale: Provider.of<LanguageChangeViewModel>(context, listen: false).appLocale,
+                                            initialDate: initialDate, // Default to today's date
+                                            firstDate: firstDate,     // Allow selection from 20 years ago
+                                            lastDate: maxDate,        // Allow selection up to 1 year in the future
+                                          );
+
+                                          if (date != null) {
                                             setState(() {
-                                              highSchoolInfo
-                                                  .curriculumAverageError =
-                                                  ErrorText.getGradeValidationError(
-                                                      grade: highSchoolInfo
-                                                          .curriculumAverageController
-                                                          .text,
-                                                      context: context);
+                                              /// Set the selected date in the controller (format to show only the year)
+                                              highSchoolInfo.yearOfPassingController.text = DateFormat("yyyy-MM-dd").format(date).toString();
+
+                                              /// Get the current year
+                                              String currentYear = DateFormat('yyyy').format(date);
+
+                                              /// Get the next year
+                                              String nextYear = DateFormat('yyyy').format(date.add(const Duration(days: 365))); /// Adding 365 days to get to next year
+
+                                              /// Combine current and next year
+                                              String yearOfGraduation = '$currentYear-$nextYear';
+
+                                              /// Print the passing year
+                                              highSchoolInfo.passingYearController.text = yearOfGraduation;
                                             });
                                           }
-                                        }),
+                                        },
+                                      ),
 
-                                    /// ****************************************************************************************************************************************************
-                                    /// year of passing
-                                    fieldHeading(
-                                        title: localization.hsYearOfPassing,
-                                        important: (highSchoolInfo.curriculumAverageController.text.isNotEmpty),
-                                        langProvider: langProvider),
-                                    scholarshipFormDateField(
-                                      /// Prevent manual typing
-                                      currentFocusNode: highSchoolInfo.yearOfPassingFocusNode,
-                                      controller: highSchoolInfo.yearOfPassingController,
-                                      hintText: localization.hsYearOfPassingWatermark,
-                                      errorText: highSchoolInfo.yearOfPassingError,
-                                      /// Display error text if any
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (highSchoolInfo.yearOfPassingFocusNode.hasFocus) {
-                                            /// Check if the year of passing field is empty or invalid
-                                            highSchoolInfo.yearOfPassingError = ErrorText.getEmptyFieldError(name: highSchoolInfo.yearOfPassingController.text, context: context);
-                                          }
-                                        });
-                                      },
-                                      onTap: () async {
-                                        /// Clear the error message when a date is selected
-                                        highSchoolInfo.yearOfPassingError = null;
-                                        /// Define the initial date as today's date
-                                        final DateTime initialDate = DateTime.now();
-
-                                        /// Define the maximum date (current date plus 1 year)
-                                        final DateTime maxDate = DateTime.now().add(const Duration(days: 365));
-
-                                        /// Define the minimum date (20 years before the current date)
-                                        final DateTime firstDate = DateTime.now().subtract(const Duration(days: 20 * 365));
-
-                                        DateTime? date = await showDatePicker(
-                                          context: context,
-                                          barrierColor: AppColors.scoButtonColor.withOpacity(0.1),
-                                          barrierDismissible: false,
-                                          locale: Provider.of<LanguageChangeViewModel>(context, listen: false).appLocale,
-                                          initialDate: initialDate, // Default to today's date
-                                          firstDate: firstDate,     // Allow selection from 20 years ago
-                                          lastDate: maxDate,        // Allow selection up to 1 year in the future
-                                        );
-
-                                        if (date != null) {
-                                          setState(() {
-                                            /// Set the selected date in the controller (format to show only the year)
-                                            highSchoolInfo.yearOfPassingController.text = DateFormat("yyyy-MM-dd").format(date).toString();
-
-                                            /// Get the current year
-                                            String currentYear = DateFormat('yyyy').format(date);
-
-                                            /// Get the next year
-                                            String nextYear = DateFormat('yyyy').format(date.add(const Duration(days: 365))); /// Adding 365 days to get to next year
-
-                                            /// Combine current and next year
-                                            String yearOfGraduation = '$currentYear-$nextYear';
-
-                                            /// Print the passing year
-                                            highSchoolInfo.passingYearController.text = yearOfGraduation;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    /// ****************************************************************************************************************************************************
-                                    /// year of graduation:
-                                    kFormHeight,
-                                    const MyDivider(),
-                                    Container(
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.all(8),
-                                        color: AppColors.lightBlue1.withOpacity(0.4),
-                                        child: Row(children: [
-                                          sectionTitle(title: localization.hsDateOfGraduation),
-                                          kFormHeight,
-                                          Expanded(child: Text(highSchoolInfo.passingYearController.text))
-                                        ])),
-
-                                    kFormHeight,
-                                    /// ****************************************************************************************************************************************************
-
-                                    const MyDivider(color: AppColors.lightGrey),
-                                    /// ****************************************************************************************************************************************************
-
-                                    kFormHeight,
-                                    sectionTitle(title: localization.highschoolSubjects),
-                                    kFormHeight,
-                                    /// ****************************************************************************************************************************************************
-                                    /// regular subjects
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemCount: highSchoolInfo.hsDetails.length,
-                                      itemBuilder: (context, index) {
-                                        var element = highSchoolInfo.hsDetails[index];
-                                        return Column(
-                                          children: [
-                                            /// Subject Title
-                                            _subjectTitle(element.subjectTypeController.text.toString()),
-                                            /// Grade input Field
-                                            scholarshipFormTextField(
-                                              currentFocusNode: element.gradeFocusNode,
-                                              nextFocusNode: index + 1 < highSchoolInfo.hsDetails.length ? highSchoolInfo.hsDetails[index + 1].gradeFocusNode : null,
-                                              controller: element.gradeController,
-                                              hintText: localization.gradeWatermark,
-                                              maxLength: 4,
-                                              errorText: element.gradeError,
-                                              onChanged: (value) {
-                                                if (element.gradeFocusNode.hasFocus) {
-                                                  setState(() {
-                                                    // element.gradeError = ErrorText.getGradeValidationError(grade: element.gradeController.text, context: context);
-                                                  });
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-
-                                    /// ****************************************************************************************************************************************************
-
-                                    const MyDivider(
-                                      color: AppColors.lightGrey,
-                                    ),
-                                    kFormHeight,
-
-                                    /// ****************************************************************************************************************************************************
-                                    /// OTHER SUBJECTS OF THE HIGH SCHOOL DETAILS
-                                    /// other subjects
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemCount: highSchoolInfo.otherHSDetails.length,
-                                      itemBuilder: (context, index) {
-                                        var element = highSchoolInfo.otherHSDetails[index];
-                                        return Column(
-                                          children: [
-                                            _subjectTitle(element.subjectTypeController.text.toString()),
-
-                                            /// subject Name
-                                            scholarshipFormTextField(
-                                              currentFocusNode: element.otherSubjectNameFocusNode,
-                                              nextFocusNode: element.gradeFocusNode,
-                                              controller: element.otherSubjectNameController,
-                                              hintText: localization.otherSubjectName,
-                                              errorText: element.otherSubjectNameError,
-                                              onChanged: (value) {
-                                                if (element.otherSubjectNameFocusNode?.hasFocus ?? false) {
-                                                  setState(() {
-                                                    // element.otherSubjectNameError = ErrorText.getNameArabicEnglishValidationError(name: element.otherSubjectNameController!.text, context: context);
-                                                  });
-                                                }
-                                              },
-                                            ),
+                                      /// ****************************************************************************************************************************************************
+                                      /// year of graduation:
+                                      kFormHeight,
+                                      // const MyDivider(),
+                                      Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.all(8),
+                                          color: AppColors.lightBlue1.withOpacity(0.4),
+                                          child: Row(children: [
+                                            sectionTitle(title: localization.hsDateOfGraduation),
                                             kFormHeight,
-                                            /// grade
-                                            scholarshipFormTextField(
-                                              currentFocusNode: element.gradeFocusNode,
-                                              nextFocusNode: index + 1 < highSchoolInfo.otherHSDetails.length ? highSchoolInfo.otherHSDetails[index + 1].otherSubjectNameFocusNode : null,
-                                              controller: element.gradeController,
-                                              hintText: localization.gradeWatermark,
-                                              maxLength: 4,
-                                              errorText: element.gradeError,
-                                              onChanged: (value) {
-                                                if (element.gradeFocusNode.hasFocus) {
-                                                  setState(() {
-                                                    // element.gradeError = ErrorText.getGradeValidationError(grade: element.gradeController.text, context: context);
-                                                  });
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
+                                            Expanded(child: Text(highSchoolInfo.passingYearController.text))
+                                          ])),
 
-                                    /// ****************************************************************************************************************************************************
-                                    /// if it obeys the constraints of showing dropdown only then it will be visible to the user to delete the item
-                                    /// Todo: Condition Applied by me that index check should only for greater then not equal to
-                                    (admitType == 'MOS' || admitType == 'MOP') || (academicCareer == 'HCHL' && index >= 1) || index > 1
-                                        ? addRemoveMoreSection(
-                                        title: localization.deleteRowHighschool,
-                                        add: false,
-                                        onChanged: () {
-                                          setState(() {
-                                            _removeHighSchool(index);
-                                          });
-                                        })
-                                        : showVoid,
+                                      /// ****************************************************************************************************************************************************
+                                        kMinorSpace,
+                                        const Divider(),
+                                        kMinorSpace,
+                                        /// ****************************************************************************************************************************************************
+
+                                      sectionTitle(title: localization.highschoolSubjects),
+                                      kMinorSpace,
+                                      /// ****************************************************************************************************************************************************
+                                      /// regular subjects
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemCount: highSchoolInfo.hsDetails.length,
+                                        itemBuilder: (context, index) {
+                                          var element = highSchoolInfo.hsDetails[index];
+                                          return Column(
+                                            children: [
+                                              /// Subject Title
+                                              _subjectTitle(element.subjectTypeController.text.toString()),
+                                              /// Grade input Field
+                                              scholarshipFormTextField(
+                                                currentFocusNode: element.gradeFocusNode,
+                                                nextFocusNode: index + 1 < highSchoolInfo.hsDetails.length ? highSchoolInfo.hsDetails[index + 1].gradeFocusNode : null,
+                                                controller: element.gradeController,
+                                                hintText: localization.gradeWatermark,
+                                                maxLength: 4,
+                                                errorText: element.gradeError,
+                                                onChanged: (value) {
+                                                  if (element.gradeFocusNode.hasFocus) {
+                                                    setState(() {
+                                                      // element.gradeError = ErrorText.getGradeValidationError(grade: element.gradeController.text, context: context);
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                        /// ****************************************************************************************************************************************************
+                                        kMinorSpace,
+                                        const Divider(),
+                                        kMinorSpace,
+                                        /// ****************************************************************************************************************************************************
+                                        /// OTHER SUBJECTS OF THE HIGH SCHOOL DETAILS
+                                        /// other subjects
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemCount: highSchoolInfo.otherHSDetails.length,
+                                          itemBuilder: (context, index) {
+                                            var element = highSchoolInfo.otherHSDetails[index];
+                                            return Column(
+                                              children: [
+                                                _subjectTitle(element.subjectTypeController.text.toString()),
+
+                                                /// subject Name
+                                                scholarshipFormTextField(
+                                                  currentFocusNode: element.otherSubjectNameFocusNode,
+                                                  nextFocusNode: element.gradeFocusNode,
+                                                  controller: element.otherSubjectNameController,
+                                                  hintText: localization.otherSubjectName,
+                                                  errorText: element.otherSubjectNameError,
+                                                  onChanged: (value) {
+                                                    if (element.otherSubjectNameFocusNode?.hasFocus ?? false) {
+                                                      setState(() {
+                                                        // element.otherSubjectNameError = ErrorText.getNameArabicEnglishValidationError(name: element.otherSubjectNameController!.text, context: context);
+                                                      });
+                                                    }
+                                                  },
+                                                ),
+                                                kFormHeight,
+                                                /// grade
+                                                scholarshipFormTextField(
+                                                  currentFocusNode: element.gradeFocusNode,
+                                                  nextFocusNode: index + 1 < highSchoolInfo.otherHSDetails.length ? highSchoolInfo.otherHSDetails[index + 1].otherSubjectNameFocusNode : null,
+                                                  controller: element.gradeController,
+                                                  hintText: localization.gradeWatermark,
+                                                  maxLength: 4,
+                                                  errorText: element.gradeError,
+                                                  onChanged: (value) {
+                                                    if (element.gradeFocusNode.hasFocus) {
+                                                      setState(() {
+                                                        // element.gradeError = ErrorText.getGradeValidationError(grade: element.gradeController.text, context: context);
+                                                      });
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        ),
+
+                                        /// ****************************************************************************************************************************************************
+                                        /// if it obeys the constraints of showing dropdown only then it will be visible to the user to delete the item
+                                        /// Todo: Condition Applied by me that index check should only for greater then not equal to
+                                        if ((admitType == 'MOS' || admitType == 'MOP') || (academicCareer == 'HCHL' && index >= 1) || index > 1)
+                                          addRemoveMoreSection(
+                                              title: localization.deleteRowHighschool,
+                                              add: false,
+                                              onChanged: () {
+                                                setState(() {
+                                                  _removeHighSchool(index);
+                                                });
+                                              }),
+
+
+                                        /// ****************************************************************************************************************************************************
+                                        const Divider(),
+                                        /// ****************************************************************************************************************************************************
+                                        /// ADD HIGH SCHOOL BUTTON
+                                        addRemoveMoreSection(
+                                            title: localization.addRowHighschool,
+                                            add: true,
+                                            onChanged: () {
+                                              setState(() {
+                                                _addHighSchool();
+                                              });
+                                            }),
+                                      ],
+                                    ),),
+                                   if(index < widget.highSchoolList.length - 1) kFormHeight,
+
+
+
+
+
+
+
+
+
                                   ]);
                             }),
-                        /// ****************************************************************************************************************************************************
-                        const MyDivider(color: AppColors.lightGrey),
-                        kFormHeight,
-                        /// ****************************************************************************************************************************************************
-                        /// ADD HIGH SCHOOL BUTTON
-                        addRemoveMoreSection(
-                            title: localization.addRowHighschool,
-                            add: true,
-                            onChanged: () {
-                              setState(() {
-                                _addHighSchool();
-                              });
-                            }),
+
                       ]),
                       /// _highSchoolInformationSection()
                     ],
                   ))
-            ])));;
+            ])));
   }
 
   Widget _subjectTitle(String subjectCode) {
