@@ -1,23 +1,23 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_urls.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
+import 'package:sco_v1/resources/components/tiles/custom_expansion_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/apply_scholarship/form_view_Utils.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
-import '../../../data/response/status.dart';
 import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import '../../../models/home/ScoProgramsTileModel.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
-import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../l10n/app_localizations.dart';
+import 'bachelor_outside_uae/bachelors_outside_uae.dart';
 
 
 class ScholarshipInAbroadView extends StatefulWidget {
@@ -57,16 +57,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
 
 
 
-  @override
-  Widget build(BuildContext context) {
-    final localization = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: widget.title ??  localization.scholarshipExternal,),
-      body: _buildUI(),
-    );
-  }
 
   final List<Widget> _scholarshipsInUaeList = [];
   final List<ScoProgramTileModel> _scoProgramsModelsList = [];
@@ -82,6 +73,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
             'title': localization.bachelor_degree_scholarship_terms_and_conditions,
             'subTitle': "",
             //'imagePath': Constants.scholarshipInAbroad,
+            'content' : getTermsAndConditions(context),
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeTermsAndConditions, title: localization.bachelor_degree_scholarship_terms_and_conditions,))),
           },
           {
@@ -223,31 +215,83 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
 
     // Create widgets based on models
     for (var model in _scoProgramsModelsList) {
+
+      final isExternalScholarship = widget.code == 'UGRDEXT' || widget.code == 'PGRDEXT' || widget.code == 'DDSEXT';
+
+
       _scholarshipsInUaeList.add(
-        CustomScoProgramTile(
-          imagePath: model.imagePath,
-          title: model.title!,
-          subTitle: model.subTitle!,
-          onTap: model.onTap!,
-        ),
+          isExternalScholarship ? CustomExpansionTile(
+              title: model.title!,
+              expandedContent: model.content ?? const SizedBox(),
+              trailing: const Icon(Icons.keyboard_arrow_down,color: Colors.white,),
+          ) :  CustomScoProgramTile(
+            imagePath: model.imagePath,
+            title: model.title!,
+            subTitle: model.subTitle!,
+            onTap: model.onTap!,
+          )
+
+       ,
       );
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
 
-  Widget _buildUI() {
-    return   Padding(
-      padding:  EdgeInsets.all(kPadding),
-      child: ListView.builder(
-        itemCount: _scholarshipsInUaeList.length ?? 0,
-        itemBuilder: (context, index) {
-          final scholarshipType = _scholarshipsInUaeList[index];
-          return Padding(
-            padding:   EdgeInsets.only(bottom: kTileSpace),
-            child: scholarshipType,
-          );
-        },
+    return Scaffold(
+      backgroundColor: AppColors.bgColor,
+      // appBar: CustomSimpleAppBar(titleAsString: widget.title ??  localization.scholarshipExternal,),
+      appBar: CustomSimpleAppBar(titleAsString:  localization.scholarshipExternal,),
+      body: _buildUI(localization),
+    );
+  }
+
+  Widget _buildUI(localization) {
+    final isExternalScholarship = widget.code == 'UGRDEXT' || widget.code == 'PGRDEXT' || widget.code == 'DDSEXT';
+
+    return Directionality(
+      textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding:  EdgeInsets.all(kPadding),
+          child: isExternalScholarship
+              ? Material(
+              color: Colors.white,
+            shadowColor: Colors.grey.shade400,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius),side:  const BorderSide(color: AppColors.lightGrey)),
+            child: Padding(
+              padding: EdgeInsets.all(kCardPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  sectionTitle(title: widget.title ?? localization.scholarshipExternal),
+                  const SizedBox(height: 8),
+                  ..._scholarshipsInUaeList.map((scholarshipType) => Padding(
+                    padding:  EdgeInsets.only(bottom: kTileSpace),
+                    child: scholarshipType,
+                  )),
+                ],
+              ),
+            ),
+          )
+              : ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _scholarshipsInUaeList.length,
+            itemBuilder: (context, index) {
+              final scholarshipType = _scholarshipsInUaeList[index];
+              return Padding(
+                padding:  EdgeInsets.only(bottom: kTileSpace),
+                child: scholarshipType,
+              );
+            },
+          ),
+        ),
       ),
     );
   }
+
 }

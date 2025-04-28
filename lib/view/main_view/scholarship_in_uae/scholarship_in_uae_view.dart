@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/tiles/custom_expansion_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
@@ -12,8 +13,11 @@ import '../../../resources/app_colors.dart';
 import '../../../resources/app_urls.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
+import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../apply_scholarship/form_view_Utils.dart';
+import 'bachelor_inside_uae/bachelor_inside_uae.dart';
 
 
 class ScholarshipsInUaeView extends StatefulWidget {
@@ -52,15 +56,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
 
 
-  @override
-  Widget build(BuildContext context) {
-    final localization = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      appBar: CustomSimpleAppBar(titleAsString: widget.title ?? localization.scholarshipInternal,),
-      body: _buildUI(),
-    );
-  }
+
 
 
   final List<Widget> _scholarshipsInUaeList = [];
@@ -74,10 +70,12 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
       case 'UGRDINT':
         return [
           {
-            'title': localization.bachelors_degree_scholarship_admission_terms,
+            // 'title': localization.bachelors_degree_scholarship_admission_terms,
+            'title': ' شروط ومتطلبات التقديم للمنحة - درجة البكالوريوس ',
             'subTitle': "",
+            'content': getBachelorTermsAndConditionsInternal(context),
             // 'imagePath': null,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsTermsAndConditions,title: localization.bachelors_degree_scholarship_admission_terms,))),
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsTermsAndConditions,title: localization.bachelors_degree_scholarship_admission_terms,))),
           },
           {
             'title': localization.sco_accredited_universities_and_specializations_list,
@@ -220,32 +218,98 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
     // Create widgets based on models
     for (var model in _scoProgramsModelsList) {
+
+
+      final isInternalScholarship = widget.code == 'UGRDINT' || widget.code == 'PGRDINT' || widget.code == 'METLOGINT';
+
+
       _scholarshipsInUaeList.add(
-        CustomScoProgramTile(
+        isInternalScholarship ? CustomExpansionTile(
+          title: model.title!,
+          expandedContent: model.content ?? const SizedBox(),
+          trailing: const Icon(Icons.keyboard_arrow_down,color: Colors.white,),
+        ) :  CustomScoProgramTile(
           imagePath: model.imagePath,
           title: model.title!,
           subTitle: model.subTitle!,
           onTap: model.onTap!,
         ),
-        // CustomExpansionTile(title: model.title!, expandedContent: Column())
       );
+
     }
   }
 
-
-  Widget _buildUI() {
-   return Padding(
-     padding:  EdgeInsets.all(kPadding),
-     child: ListView.builder(
-       itemCount: _scholarshipsInUaeList.length ?? 0,
-       itemBuilder: (context, index) {
-         final scholarshipType = _scholarshipsInUaeList[index];
-         return Padding(
-           padding:   EdgeInsets.only(bottom: kTileSpace),
-           child: scholarshipType,
-         );
-       },
-     ),
-   );
+  @override
+  Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    return Scaffold(
+      backgroundColor: AppColors.bgColor,
+      // appBar: CustomSimpleAppBar(titleAsString: widget.title ?? localization.scholarshipInternal,),
+      appBar: CustomSimpleAppBar(titleAsString: localization.scholarshipInternal,),
+      body: _buildUI(localization),
+    );
   }
+
+  // Widget _buildUI() {
+  //  return Padding(
+  //    padding:  EdgeInsets.all(kPadding),
+  //    child: ListView.builder(
+  //      itemCount: _scholarshipsInUaeList.length ?? 0,
+  //      itemBuilder: (context, index) {
+  //        final scholarshipType = _scholarshipsInUaeList[index];
+  //        return Padding(
+  //          padding:   EdgeInsets.only(bottom: kTileSpace),
+  //          child: scholarshipType,
+  //        );
+  //      },
+  //    ),
+  //  );
+  // }
+
+  Widget _buildUI(AppLocalizations localization) {
+    final isInternalScholarship = widget.code == 'UGRDINT' || widget.code == 'PGRDINT' || widget.code == 'METLOGINT';
+
+    return Directionality(
+      textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding:  EdgeInsets.all(kPadding),
+          child: isInternalScholarship
+              ? Material(
+            color: Colors.white,
+            shadowColor: Colors.grey.shade400,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius),side:  const BorderSide(color: AppColors.lightGrey)),
+            child: Padding(
+              padding: EdgeInsets.all(kCardPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  sectionTitle(title: widget.title ?? localization.scholarshipInternal),
+                  const SizedBox(height: 8),
+                  ..._scholarshipsInUaeList.map((scholarshipType) => Padding(
+                    padding:  EdgeInsets.only(bottom: kTileSpace),
+                    child: scholarshipType,
+                  )),
+                ],
+              ),
+            ),
+          )
+              : ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _scholarshipsInUaeList.length,
+            itemBuilder: (context, index) {
+              final scholarshipType = _scholarshipsInUaeList[index];
+              return Padding(
+                padding:  EdgeInsets.only(bottom: kTileSpace),
+                child: scholarshipType,
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
 }
