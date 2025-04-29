@@ -3,22 +3,30 @@
 import 'package:flutter/material.dart';
 
 class FullScreenImagePage extends StatelessWidget {
-  final String imageUrl;
+  final String imagePath;
+  final bool isNetwork ;
 
-  const FullScreenImagePage({Key? key, required this.imageUrl}) : super(key: key);
+  const FullScreenImagePage({
+    super.key,
+    required this.imagePath,
+     this.isNetwork = true,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final image = isNetwork
+        ? Image.network(imagePath)
+        : Image.asset(imagePath);
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Center(
-        child: InteractiveViewer( // allows pinch-zoom and pan
-          child: Image.network(imageUrl),
+        child: InteractiveViewer(
+          child: image,
         ),
       ),
     );

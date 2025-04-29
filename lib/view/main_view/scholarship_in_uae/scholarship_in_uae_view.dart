@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/tiles/custom_expansion_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_uae/post_graduation_inside_uae/post_graduation_inside_uae.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 
 import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
@@ -18,6 +19,7 @@ import '../../../viewModel/services/navigation_services.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../apply_scholarship/form_view_Utils.dart';
 import 'bachelor_inside_uae/bachelor_inside_uae.dart';
+import 'meteorological_inside_uae/meteorological_inside_uae.dart';
 
 
 class ScholarshipsInUaeView extends StatefulWidget {
@@ -78,103 +80,164 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsTermsAndConditions,title: localization.bachelors_degree_scholarship_admission_terms,))),
           },
           {
-            'title': localization.sco_accredited_universities_and_specializations_list,
+            // 'title': localization.sco_accredited_universities_and_specializations_list,
+            'title' : " قائمة الجامعات والتخصصات المعتمدة ",
             'subTitle': "",
+            'content': getBachelorUniversityAndMajorsInternal(context),
+
             // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
           },
           {
-            'title': localization.bachelors_degree_scholarship_privileges,
+            // 'title': localization.bachelors_degree_scholarship_privileges,
+            'title' : ' قائمة الجامعات المعتمدة لدى المكتب ',
             'subTitle': "",
             // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreePrivileges,title: localization.bachelors_degree_scholarship_privileges,))),
+            'content': getBachelorUniversityAndSpecializationsInternal(context),
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreePrivileges,title: localization.bachelors_degree_scholarship_privileges,))),
           },
           {
-            'title': localization.student_obligations_for_the_bachelors_degree_scholarship,
+            // 'title': localization.student_obligations_for_the_bachelors_degree_scholarship,
+            'title': ' قائمة التخصّصات المعتمدة لدى المكتب ',
+            'content': getBachelorApprovedSpecializationInternal(context),
             'subTitle': "",
             // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreeStudentObligations, title: localization.student_obligations_for_the_bachelors_degree_scholarship,))),
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreeStudentObligations, title: localization.student_obligations_for_the_bachelors_degree_scholarship,))),
           },
           {
-            'title': localization.important_guidelines_for_high_school_students,
-            'subTitle': "",
+            'title': ' امتيازات المنحة - درجة البكالوريوس ',
+            'content': getBachelorScholarshipPrivilegesInternal(context),
+            // 'subTitle': "",
             // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreeImportantGuidelines, title: localization.important_guidelines_for_high_school_students,))),
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreeImportantGuidelines, title: localization.important_guidelines_for_high_school_students,))),
           },
           {
-            'title': localization.bachelors_degree_applying_procedures,
+            // 'title': localization.bachelors_degree_applying_procedures,
+            'title': " التزامات الطالب للمنحة - درجة البكالوريوس ",
+            'content': getBachelorStudentObligationsInternal(context),
             'subTitle': "",
             // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreeApplyingProcedure, title: localization.bachelor_degree_applying_procedures,))),
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreeApplyingProcedure, title: localization.bachelor_degree_applying_procedures,))),
           },
-        ];
+          {
+            // 'title': localization.bachelors_degree_applying_procedures,
+            'title': " إجراءات التقديم للمنحة - درجة البكالوريوس ",
+            'content': getBachelorApplyingProcedureInternal(context),
+            'subTitle': "",
+          },
+
+
+    ];
 
      case 'PGRDINT':
         return [
           {
-            'title': localization.graduate_studies_scholarship_admission_terms,
-            'subTitle': "",
+            // 'title': localization.graduate_studies_scholarship_admission_terms,
+            'title': " شروط ومتطلبات التقديم للمنحة - الدراسات العليا ",
+            'content': getGraduateTermsAndConditionsInternal(context),
+            // 'subTitle': "",
             // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateTermsAndConditions, title: localization.graduate_studies_scholarship_admission_terms,))),
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateTermsAndConditions, title: localization.graduate_studies_scholarship_admission_terms,))),
           },
           {
-            'title': localization.sco_accredited_universities_and_specializations_list,
-            'subTitle': "",
+            // 'title': localization.sco_accredited_universities_and_specializations_list,
+
+            'title':  " قائمة الجامعات والتخصصات المعتمدة ",
+            'content': getGraduateUniversityAndMajorsInternal(context),
+
+            // 'subTitle': "",
             // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
           },
           {
-            'title': localization.graduate_studies_scholarship_privileges,
-            'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateDegreePrivileges, title: localization.graduate_studies_scholarship_privileges,))),
+
+            'title':  " قائمة الجامعات المعتمدة لدى المكتب ",
+            'content': getGraduateUniversityAndSpecializationsInternal(context),
+
+            // 'title': localization.graduate_studies_scholarship_privileges,
+            // 'subTitle': "",
+            // // 'imagePath': Constants.scholarshipInUae,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateDegreePrivileges, title: localization.graduate_studies_scholarship_privileges,))),
           },
           {
-            'title': localization.student_obligations_for_the_graduate_studies_scholarship,
-            'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateDegreeStudentObligations, title: localization.student_obligations_for_the_graduate_studies_scholarship,))),
+            'title':  " قائمة التخصّصات المعتمدة لدى المكتب ",
+            'content': getGraduateApprovedSpecializationInternal(context),
+            // 'title': localization.student_obligations_for_the_graduate_studies_scholarship,
+            // 'subTitle': "",
+            // // 'imagePath': Constants.scholarshipInUae,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateDegreeStudentObligations, title: localization.student_obligations_for_the_graduate_studies_scholarship,))),
           },
 
           {
-            'title': localization.graduate_studies_scholarship_applying_procedures,
-            'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateDegreeApplyingProcedure, title: localization.graduate_studies_scholarship_applying_procedures,))),
+            'title': ' امتيازات المنحة - الدراسات العليا ',
+            'content': getGraduateScholarshipPrivilegesInternal(context),
+            // 'title': localization.graduate_studies_scholarship_applying_procedures,
+            // 'subTitle': "",
+            // // 'imagePath': Constants.scholarshipInUae,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateDegreeApplyingProcedure, title: localization.graduate_studies_scholarship_applying_procedures,))),
           },
+          {
+            'title': " التزامات الطالب للمنحة - الدراسات العليا ",
+            'content': getGraduateStudentObligationsInternal(context),
+          },
+          {
+            'title': " إجراءات التقديم للمنحة - الدراسات العليا ",
+            'content': getGraduateApplyingProcedureInternal(context),
+          }
+
+
+
+
+
+
+
         ];
       case 'METLOGINT':
         return [
           {
-            'title': localization.meteorological_scholarship_admission_terms,
-            'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalTermsAndConditions, title: localization.meteorological_scholarship_admission_terms,))),
+          'title': " شروط ومتطلبات القبول لمنحة الأرصاد الجوية ",
+          'content': getMeteorologicalTermsAndConditionsInternal(context),
+            // 'title': localization.meteorological_scholarship_admission_terms,
+            // 'subTitle': "",
+            // // 'imagePath': Constants.scholarshipInUae,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalTermsAndConditions, title: localization.meteorological_scholarship_admission_terms,))),
           },
           {
-            'title': localization.sco_accredited_universities_and_specializations_list,
-            'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalUniversityAndSpecializationList, title:  localization.sco_accredited_universities_and_specializations_list,))),
+            'title': " قائمة الجامعات والتخصصات المعتمدة للمنح لدى المكتب ",
+            'content': getMeteorologicalUniversityAndSpecializationsInternal(context),
+
+            // 'title': localization.sco_accredited_universities_and_specializations_list,
+            // 'subTitle': "",
+            // // 'imagePath': Constants.scholarshipInUae,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalUniversityAndSpecializationList, title:  localization.sco_accredited_universities_and_specializations_list,))),
+          },
+
+
+          {
+            'title': " امتيازات منحة الأرصاد الجوية ",
+            'content': getMeteorologicalScholarshipPrivilegesInternal(context),
+
+            // 'title': localization.meteorological_scholarship_privileges,
+            // 'subTitle': "",
+            // // 'imagePath': Constants.scholarshipInUae,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalDegreePrivileges, title: localization.meteorological_scholarship_privileges,))),
           },
           {
-            'title': localization.meteorological_scholarship_privileges,
-            'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalDegreePrivileges, title: localization.meteorological_scholarship_privileges,))),
-          },
-          {
-            'title': localization.student_obligations_for_the_meteorological_scholarship,
-            'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalDegreeStudentObligations, title: localization.student_obligations_for_the_meteorological_scholarship,))),
+            'title':  " التزامات الطالب لمنحة الأرصاد الجوية ",
+            'content': getMeteorologicalStudentObligationsInternal(context),
+            // 'title': localization.student_obligations_for_the_meteorological_scholarship,
+            // 'subTitle': "",
+            // // 'imagePath': Constants.scholarshipInUae,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalDegreeStudentObligations, title: localization.student_obligations_for_the_meteorological_scholarship,))),
           },
 
           {
-            'title': localization.meteorological_scholarship_applying_procedures,
-            'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalDegreeApplyingProcedure, title: localization.meteorological_scholarship_applying_procedures,))),
+            'title':  " إجراءات التقديم لمنحة الأرصاد الجوية ",
+            'content': getMeteorologicalApplyingProcedureInternal(context),
+            // 'title': localization.meteorological_scholarship_applying_procedures,
+            // 'subTitle': "",
+            // // 'imagePath': Constants.scholarshipInUae,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalDegreeApplyingProcedure, title: localization.meteorological_scholarship_applying_procedures,))),
           },
         ];
       case null:

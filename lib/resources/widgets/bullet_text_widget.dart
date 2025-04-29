@@ -1,6 +1,5 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_uae/bachelor_inside_uae/bachelor_inside_uae.dart';
 
 Widget getBulletText(text,{bool? squareBullet = false}){
   return Row(
@@ -12,7 +11,10 @@ Widget getBulletText(text,{bool? squareBullet = false}){
       ),
       const SizedBox(width: 8),
       Expanded(
-        child: Text(text),
+        child: CustomRichText(spans: [
+          TextSpan(text: text),
+        ],
+        ),
       ),
     ],
   );
