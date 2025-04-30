@@ -128,7 +128,6 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
 
     ];
-
      case 'PGRDINT':
         return [
           {

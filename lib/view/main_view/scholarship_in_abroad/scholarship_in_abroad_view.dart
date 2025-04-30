@@ -7,6 +7,7 @@ import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/tiles/custom_expansion_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/form_view_Utils.dart';
+import 'package:sco_v1/view/main_view/scholarship_in_abroad/post_graduation_outside_uae/post_graduation_outside_uae.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
@@ -18,6 +19,7 @@ import '../../../utils/constants.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../l10n/app_localizations.dart';
 import 'bachelor_outside_uae/bachelors_outside_uae.dart';
+import 'doctor_of_medicine_outside_uae/doctor_of_medicine_outside_uae.dart';
 
 
 class ScholarshipInAbroadView extends StatefulWidget {
@@ -70,110 +72,172 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
       case 'UGRDEXT':
         return [
           {
-            'title': localization.bachelor_degree_scholarship_terms_and_conditions,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'content' : getTermsAndConditions(context),
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeTermsAndConditions, title: localization.bachelor_degree_scholarship_terms_and_conditions,))),
+            'title': " شروط ومتطلبات التقديم للبعثة - درجة البكالوريوس ",
+            'content' : getBachelorTermsAndConditionsExternal(context),
+            // 'title': localization.bachelor_degree_scholarship_terms_and_conditions,
+            // 'subTitle': "",
+            // //'imagePath': Constants.scholarshipInAbroad,
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeTermsAndConditions, title: localization.bachelor_degree_scholarship_terms_and_conditions,))),
           },
           {
-            'title': localization.sco_accredited_universities_and_specializations_list,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeScoAccredited, title: localization.sco_accredited_universities_and_specializations_list,))),
+            'title': " قائمة الجامعات المعتمدة لدى المكتب ",
+            'content' : getBachelorApprovedUniversitiesExternal(context),
           },
           {
-            'title': localization.bachelor_degree_scholarship_privileges,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreePrivileges, title: localization.bachelor_degree_scholarship_privileges,))),
+            'title': " قائمة التخصّصات المعتمدة لدى المكتب ",
+            'content' : getBachelorApprovedMajorsExternal(context),
           },
           {
-            'title': localization.student_obligations_for_bachelor_degree_scholarship,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeStudentObligations, title: localization.student_obligations_for_bachelor_degree_scholarship,))),
+            'title': " امتيازات البعثة - درجة البكالوريوس ",
+            'content' : getBachelorScholarshipPrivilegesExternal(context),
           },
           {
-            'title': localization.important_guidelines_for_high_school_students,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeImportantGuidelines, title: localization.important_guidelines_for_high_school_students,))),
+            'title': " التزامات الطالب للبعثة - درجة البكالوريوس ",
+            'content' : getBachelorStudentObligationsExternal(context),
           },
           {
-            'title': localization.bachelor_degree_applying_procedures,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeApplyingProcedure, title: localization.bachelor_degree_applying_procedures,))),
+            'title': " إجراءات التقديم للبعثة - درجة البكالوريوس ",
+            'content' : getBachelorApplyingProcedureExternal(context),
           },
+
+          // {
+          //   'title': localization.sco_accredited_universities_and_specializations_list,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeScoAccredited, title: localization.sco_accredited_universities_and_specializations_list,))),
+          // },
+          // {
+          //   'title': localization.bachelor_degree_scholarship_privileges,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreePrivileges, title: localization.bachelor_degree_scholarship_privileges,))),
+          // },
+          // {
+          //   'title': localization.student_obligations_for_bachelor_degree_scholarship,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeStudentObligations, title: localization.student_obligations_for_bachelor_degree_scholarship,))),
+          // },
+          // {
+          //   'title': localization.important_guidelines_for_high_school_students,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeImportantGuidelines, title: localization.important_guidelines_for_high_school_students,))),
+          // },
+          // {
+          //   'title': localization.bachelor_degree_applying_procedures,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeApplyingProcedure, title: localization.bachelor_degree_applying_procedures,))),
+          // },
         ];
       case 'PGRDEXT':
         return [
           {
-            'title': localization.graduate_outside_uae_terms_and_conditions,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeTermsAndConditions, title: localization.graduate_outside_uae_terms_and_conditions,))),
+            'title': " شروط ومتطلبات التقديم للبعثة - الدراسات العليا ",
+            'content': getGraduateTermsAndConditionsExternal(context),
           },
           {
-            'title': localization.sco_accredited_universities_and_specializations_list,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
+            'title': " قائمة الجامعات المعتمدة لدى المكتب " ,
+            'content': getGraduateApprovedUniversitiesExternal(context),
           },
           {
-            'title': localization.graduate_outside_uae_scholarship_privileges,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreePrivileges, title: localization.graduate_outside_uae_scholarship_privileges,))),
+            'title': "  قائمة التخصّصات المعتمدة لدى المكتب " ,
+            'content': getGraduateApprovedMajorsExternal(context),
           },
           {
-            'title': localization.student_obligations_for_graduate_outside_uae_scholarship,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeStudentObligations, title: localization.student_obligations_for_graduate_outside_uae_scholarship,))),
+            'title': " امتيازات البعثة - الدراسات العليا  " ,
+            'content': getGraduateScholarshipPrivilegesExternal(context),
           },
-
           {
-            'title': localization.graduate_outside_uae_scholarship_applying_procedures,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeApplyingProcedure, title: localization.graduate_outside_uae_scholarship_applying_procedures,))),
+            'title': " التزامات الطالب للبعثة - الدراسات العليا " ,
+            'content': getGraduateStudentObligationsExternal(context),
           },
+          {
+            'title': " إجراءات التقديم للبعثة - الدراسات العليا " ,
+            'content': getGraduateApplyingProcedureExternal(context),
+          },
+          // {
+          //   'title': localization.graduate_outside_uae_terms_and_conditions,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeTermsAndConditions, title: localization.graduate_outside_uae_terms_and_conditions,))),
+          // },
+          // {
+          //   'title': localization.sco_accredited_universities_and_specializations_list,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
+          // },
+          // {
+          //   'title': localization.graduate_outside_uae_scholarship_privileges,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreePrivileges, title: localization.graduate_outside_uae_scholarship_privileges,))),
+          // },
+          // {
+          //   'title': localization.student_obligations_for_graduate_outside_uae_scholarship,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeStudentObligations, title: localization.student_obligations_for_graduate_outside_uae_scholarship,))),
+          // },
+          //
+          // {
+          //   'title': localization.graduate_outside_uae_scholarship_applying_procedures,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeApplyingProcedure, title: localization.graduate_outside_uae_scholarship_applying_procedures,))),
+          // },
         ];
       case 'DDSEXT':
         return [
           {
-            'title': localization.distinguished_doctors_scholarship_terms_and_conditions,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedTermsAndConditions, title: localization.distinguished_doctors_scholarship_terms_and_conditions,))),
+            'title': " نبذة عن برنامج دكتور فى الطب ",
+            'content': getDoctorAboutTheProgramExternal(context),
           },
           {
-            'title': localization.distinguished_doctors_scholarship_privileges,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreePrivileges,title: localization.distinguished_doctors_scholarship_privileges,))),
+            'title': " شروط ومتطلبات القبول فى البعثة ",
+            'content': getDoctorTermsAndConditionsExternal(context),
           },
           {
-            'title': localization.student_obligations_for_distinguished_doctors_scholarship,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeStudentObligations, title: localization.student_obligations_for_distinguished_doctors_scholarship,))),
+            'title': " معايير القبول في الجامعات العالمية ",
+            'content': getDoctorAdmissionCriteriaExternal(context),
           },
           {
-            'title': localization.distinguished_doctors_scholarship_applying_procedures,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeApplyingProcedure, title: localization.distinguished_doctors_scholarship_applying_procedures,))),
+            'title': " الجامعات المعتمدة ",
+            'content': getDoctorAccreditedUniversitiesExternal(context),
           },
-
-          {
-            'title': localization.medical_licensing_exams,
-            'subTitle': "",
-            //'imagePath': Constants.scholarshipInAbroad,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeMedicalLicensingExam, title: localization.medical_licensing_exams,))),
-          },
+          // {
+          //   'title': localization.distinguished_doctors_scholarship_terms_and_conditions,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedTermsAndConditions, title: localization.distinguished_doctors_scholarship_terms_and_conditions,))),
+          // },
+          // {
+          //   'title': localization.distinguished_doctors_scholarship_privileges,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreePrivileges,title: localization.distinguished_doctors_scholarship_privileges,))),
+          // },
+          // {
+          //   'title': localization.student_obligations_for_distinguished_doctors_scholarship,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeStudentObligations, title: localization.student_obligations_for_distinguished_doctors_scholarship,))),
+          // },
+          // {
+          //   'title': localization.distinguished_doctors_scholarship_applying_procedures,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeApplyingProcedure, title: localization.distinguished_doctors_scholarship_applying_procedures,))),
+          // },
+          //
+          // {
+          //   'title': localization.medical_licensing_exams,
+          //   'subTitle': "",
+          //   //'imagePath': Constants.scholarshipInAbroad,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeMedicalLicensingExam, title: localization.medical_licensing_exams,))),
+          // },
         ];
       case null:
         return [
@@ -202,7 +266,6 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
       default:
         return [];
     }
-
   }
 
   void _initializeScoPrograms() {
