@@ -9,8 +9,13 @@ import '../../app_text_styles.dart';
 
 class SimpleTile extends StatelessWidget {
 
-  final SimpleTileModel item;
-  const SimpleTile({super.key,required this.item});
+  final SimpleTileModel? item;
+  final double? leadingHeight ;
+  final double? leadingWidth ;
+  const SimpleTile({super.key,required this.item,
+    this.leadingHeight,
+    this.leadingWidth,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +29,13 @@ class SimpleTile extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         title: Text(item?.title ?? '',style: AppTextStyles.titleBoldTextStyle(),),
         tileColor: Colors.white,
-        leading: SvgPicture.asset(item.assetAddress ?? '',height: 50,width: 50,),
+        leading: SvgPicture.asset(item?.assetAddress ?? '',height: leadingHeight,width: leadingWidth,),
         trailing:  Icon(
           getTextDirection(langProvider) == TextDirection.rtl ? Icons.keyboard_arrow_left_sharp : Icons.keyboard_arrow_right_sharp,
           color: Colors.grey,
           size: 28,
         ),
-        onTap: item.routeBuilder,
+        onTap: item?.routeBuilder,
       ),
     );
   }
