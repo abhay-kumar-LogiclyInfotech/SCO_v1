@@ -233,6 +233,7 @@ class _SignUpViewState extends State<SignUpView>
                             _signUpWithUaePassButton(
                                 langProvider: langProvider,
                                 localization: localization),
+                            kSmallSpace,
                             // const SizedBox(height: 20),
                             // //or
                             // _or(),
