@@ -627,13 +627,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidEnglishName => 'يرجى إدخال اسم إنجليزي صحيح';
 
   @override
-  String get apply_for_scholarship => 'تقديم طلب';
+  String get apply_for_scholarship => 'تقديم طلب جديد';
 
   @override
   String get my_scholarship => 'بعثتي الدراسية';
 
   @override
-  String get request => 'الطلبات';
+  String get request => 'الخدمات الطلابية';
 
   @override
   String get academic_advisor => 'مرشدي الأكاديمي';
@@ -2109,7 +2109,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get myScholarship => 'بعثتي الدراسية';
 
   @override
-  String get myApplications => 'طلباتي';
+  String get myApplications => 'طلبات التقديم';
 
   @override
   String get myAccount => 'حسابي';

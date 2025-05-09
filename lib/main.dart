@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_major_and_universities_view.dart';
 import 'l10n/app_localizations.dart';
 import 'viewModel/view_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,9 +16,10 @@ import 'controller/dependency_injection.dart';
 import 'hive/hive_manager.dart';
 
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
+
 
   await HiveManager.init();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -29,7 +32,6 @@ Future<void> main() async {
   await registerServices();
   runApp(MyApp(locale: languageCode));
 }
-
 
 class MyApp extends StatefulWidget {
   late NavigationServices _navigationServices;
@@ -188,9 +190,17 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: widget._navigationServices.navigationStateKey,
               routes: widget._navigationServices.routes,
               initialRoute: "/splashView",
-              // home: UpdateSecurityQuestionView()
             );
           },
-        ));
+        ),
+    );
+  }
+}
+
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

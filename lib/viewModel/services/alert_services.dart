@@ -58,7 +58,7 @@ class AlertServices {
         backgroundColor: AppColors.scoButtonColor,
         messageColor: Colors.white,
         message: message,
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 3),
         borderRadius: BorderRadius.circular(15),
         textDirection: getTextDirection(Provider.of<LanguageChangeViewModel>(myContext,listen: false)),
         icon: const Icon(
@@ -103,7 +103,7 @@ class AlertServices {
           ),
         ),
         behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 3),
       ),
     );
   }
@@ -123,7 +123,7 @@ class AlertServices {
           ),
         ),
         behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 3),
       ),
     );
   }

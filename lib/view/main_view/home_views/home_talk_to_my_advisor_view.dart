@@ -110,7 +110,8 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                                       Expanded(
                                         child: ConstrainedBox(
                                           constraints: const BoxConstraints(
-                                              minWidth: 200, maxWidth: 200),
+                                              minWidth: 200, maxWidth: 200,
+                                          ),
                                           child: Wrap(
                                             runSpacing: 0,
                                             spacing: -30,
@@ -126,8 +127,7 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                                                   },
                                                   isEnabled: false,
                                                   shape: const CircleBorder(),
-                                                  child: SvgPicture.asset(
-                                                      "assets/message_advisor.svg")),
+                                                  child: SvgPicture.asset("assets/services/Email.svg",height: 13,width: 13,)),
                                               // Call advisor
                                               CustomMaterialButton(
                                                   onPressed: () async {
@@ -139,8 +139,7 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                                                   },
                                                   isEnabled: false,
                                                   shape: const CircleBorder(),
-                                                  child: SvgPicture.asset(
-                                                      "assets/call_advisor.svg")),
+                                                  child: SvgPicture.asset("assets/call_advisor.svg",height: 15,width: 15,)),
                                             ],
                                           ),
                                         ),

@@ -156,7 +156,7 @@ _alertServices = getIt.get<AlertServices>();
                   title: widget.acadmicCareer == 'DDS'
                       ? localization.ddsExams
                       : localization.examinationForUniversities,
-                  expandedContent: Column(
+                  expandedContent: sectionBackground(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -377,9 +377,7 @@ _alertServices = getIt.get<AlertServices>();
                                         })
                                         : showVoid,
                                     kFormHeight,
-                                    const MyDivider(
-                                      color: AppColors.lightGrey,
-                                    ),
+                                    const Divider(),
                                     kFormHeight,
                                     /// ****************************************************************************************************************************************************
                                   ],
@@ -398,7 +396,7 @@ _alertServices = getIt.get<AlertServices>();
                           /// ****************************************************************************************************************************************************
                           ,
                         ])
-                      ])),
+                      ]))),
 
 widget.draftPrevNextButtons            ])));
   }

@@ -39,7 +39,6 @@ class _ScoProgramsState extends State<ScoPrograms>
       final localization = AppLocalizations.of(context);
       _initializeScoPrograms(localization);
     });
-
   }
 
 
@@ -75,9 +74,7 @@ class _ScoProgramsState extends State<ScoPrograms>
         ),
       );
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
