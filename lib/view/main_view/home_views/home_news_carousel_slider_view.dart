@@ -36,8 +36,7 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
             return Column(
               children: [
                 Directionality(
-                    textDirection:
-                    getTextDirection(context.read<LanguageChangeViewModel>()),
+                    textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
                     child: CarouselSlider(
                       options: CarouselOptions(
                         height: orientation == Orientation.portrait ? 190.0 : 210,
@@ -128,164 +127,167 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap:  () {
-        _navigationServices.pushCupertino(CupertinoPageRoute(
-          builder: (context) => NewsAndEventsDetailView(
-              imageId: widget.item.coverImageFileEntryId,
-              date: widget.item
-                  .getFormattedDate(
-                  context.read<LanguageChangeViewModel>())
-                  .toString(),
-              title: widget.item.getTitle(widget.languageId),
-              subTitle: widget.item
-                  .getDescription(widget.languageId),
-              content:
-              widget.item.getContent(widget.languageId)),
-        ));
-      },
-      child: Stack(
-        children: [
-          // Background Image
-          SizedBox(
-              height: 190,
-              child: Consumer<IndividualImageViewModel>(
-                builder: (context, imageProvider, _) {
-                  switch (imageProvider.individualImageResponse.status) {
-                    case Status.LOADING:
-                      return Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey.withOpacity(0.3),
-                        ),
-                        child: const Center(
-                          child: CupertinoActivityIndicator(
-                            color: AppColors.scoThemeColor,
+    return Directionality(
+      textDirection: getTextDirection(Provider.of<LanguageChangeViewModel>(context)),
+      child: InkWell(
+        onTap:  () {
+          _navigationServices.pushCupertino(CupertinoPageRoute(
+            builder: (context) => NewsAndEventsDetailView(
+                imageId: widget.item.coverImageFileEntryId,
+                date: widget.item
+                    .getFormattedDate(
+                    context.read<LanguageChangeViewModel>())
+                    .toString(),
+                title: widget.item.getTitle(widget.languageId),
+                subTitle: widget.item
+                    .getDescription(widget.languageId),
+                content:
+                widget.item.getContent(widget.languageId)),
+          ));
+        },
+        child: Stack(
+          children: [
+            // Background Image
+            SizedBox(
+                height: 190,
+                child: Consumer<IndividualImageViewModel>(
+                  builder: (context, imageProvider, _) {
+                    switch (imageProvider.individualImageResponse.status) {
+                      case Status.LOADING:
+                        return Container(
+                          height: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey.withOpacity(0.3),
                           ),
-                        ),
-                      );
-                    case Status.ERROR:
-                    case Status.COMPLETED:
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child:  CachedNetworkImage(
-                          cacheKey: imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl,
-                          imageUrl: "${imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl}?v=${DateTime.now().millisecondsSinceEpoch}",
-                          fit: BoxFit.fill,
-                          height: double.infinity,
-                          width: double.infinity,
-                          errorWidget: (context,object,_){
-                            return Image.asset(Constants.newsImageUrl);
-                          },
-                          errorListener: (object){
-                            Image.asset(Constants.newsImageUrl);
-                          },
-                        ), // Show loader while fetching
-                      );
+                          child: const Center(
+                            child: CupertinoActivityIndicator(
+                              color: AppColors.scoThemeColor,
+                            ),
+                          ),
+                        );
+                      case Status.ERROR:
+                      case Status.COMPLETED:
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child:  CachedNetworkImage(
+                            cacheKey: imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl,
+                            imageUrl: "${imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl}?v=${DateTime.now().millisecondsSinceEpoch}",
+                            fit: BoxFit.fill,
+                            height: double.infinity,
+                            width: double.infinity,
+                            errorWidget: (context,object,_){
+                              return Image.asset(Constants.newsImageUrl);
+                            },
+                            errorListener: (object){
+                              Image.asset(Constants.newsImageUrl);
+                            },
+                          ), // Show loader while fetching
+                        );
 
-                    default:
-                      return Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey.withOpacity(0.3),
-                        ),
-                      );
-                  }
-                },
-              )),
+                      default:
+                        return Container(
+                          height: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey.withOpacity(0.3),
+                          ),
+                        );
+                    }
+                  },
+                )),
 
-          // Gradient Overlay
-          Container(
-            width: double.infinity,
-            height: 190,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: [Colors.black, Colors.black87.withOpacity(0.2)],
-                begin: Alignment.bottomCenter,
-                end: Alignment.center,
+            // Gradient Overlay
+            Container(
+              width: double.infinity,
+              height: 190,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  colors: [Colors.black, Colors.black87.withOpacity(0.2)],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.center,
+                ),
               ),
             ),
-          ),
 
-          // Content Layer
-          Container(
-            height: 190,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 17),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // "Read More" Section
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     Row(
-                //       mainAxisSize: MainAxisSize.min,
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       children: [
-                //         const Icon(Icons.arrow_back_ios,
-                //             color: Color(0xffAD8138), size: 14),
-                //         const SizedBox(width: 2),
-                //         InkWell(
-                //           onTap: () {
-                //             _navigationServices.pushCupertino(CupertinoPageRoute(
-                //               builder: (context) => NewsAndEventsDetailView(
-                //                   imageId: widget.item.coverImageFileEntryId,
-                //                   date: widget.item
-                //                       .getFormattedDate(
-                //                           context.read<LanguageChangeViewModel>())
-                //                       .toString(),
-                //                   title: widget.item.getTitle(widget.languageId),
-                //                   subTitle: widget.item
-                //                       .getDescription(widget.languageId),
-                //                   content:
-                //                       widget.item.getContent(widget.languageId)),
-                //             ));
-                //           },
-                //           child: Text(
-                //             AppLocalizations.of(context)!.readMore,
-                //             style: const TextStyle(
-                //               fontSize: 12,
-                //               fontWeight: FontWeight.w600,
-                //               color: Color(0xffAD8138),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ],
-                // ),
+            // Content Layer
+            Container(
+              height: 190,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 17),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // "Read More" Section
+                  // Column(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     Row(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       crossAxisAlignment: CrossAxisAlignment.center,
+                  //       children: [
+                  //         const Icon(Icons.arrow_back_ios,
+                  //             color: Color(0xffAD8138), size: 14),
+                  //         const SizedBox(width: 2),
+                  //         InkWell(
+                  //           onTap: () {
+                  //             _navigationServices.pushCupertino(CupertinoPageRoute(
+                  //               builder: (context) => NewsAndEventsDetailView(
+                  //                   imageId: widget.item.coverImageFileEntryId,
+                  //                   date: widget.item
+                  //                       .getFormattedDate(
+                  //                           context.read<LanguageChangeViewModel>())
+                  //                       .toString(),
+                  //                   title: widget.item.getTitle(widget.languageId),
+                  //                   subTitle: widget.item
+                  //                       .getDescription(widget.languageId),
+                  //                   content:
+                  //                       widget.item.getContent(widget.languageId)),
+                  //             ));
+                  //           },
+                  //           child: Text(
+                  //             AppLocalizations.of(context)!.readMore,
+                  //             style: const TextStyle(
+                  //               fontSize: 12,
+                  //               fontWeight: FontWeight.w600,
+                  //               color: Color(0xffAD8138),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
 
-                // const SizedBox(width: 15),
+                  // const SizedBox(width: 15),
 
-                // Right Side Content
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        widget.item.getDescription(widget.languageId),
-                        textAlign: TextAlign.end,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                  // Right Side Content
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          widget.item.getDescription(widget.languageId),
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2, // Limits to 2 lines to prevent overflow
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2, // Limits to 2 lines to prevent overflow
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

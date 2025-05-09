@@ -71,6 +71,7 @@ class _ScoProgramsState extends State<ScoPrograms>
           title: model.title ?? '',
           subTitle: model.subTitle ?? '',
           onTap: model.onTap ?? (){},
+          imageSize: 45,
         ),
       );
     }

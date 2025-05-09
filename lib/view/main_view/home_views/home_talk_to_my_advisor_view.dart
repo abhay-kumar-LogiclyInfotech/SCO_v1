@@ -80,38 +80,36 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       // image of the academic advisor
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                              alignment: Alignment.center,
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), image: const DecorationImage(image: AssetImage("assets/login_bg.png")))),
-                                          kMediumSpace,
-                                          /// Title and subtitle
-                                          Container(
-                                            constraints: const BoxConstraints(maxWidth: 120),
-                                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  topAdvisor?.advisorName ?? '',
-                                                  style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14, height: 1.2),),
-                                                Text(
-                                                    topAdvisor?.advisorRoleDescription?.toString() ?? '',
-                                                    style: const TextStyle(fontSize: 12, height: 2, overflow: TextOverflow.ellipsis)),
-                                              ],
+                                      // Container(
+                                      //     alignment: Alignment.center,
+                                      //     height: 40,
+                                      //     width: 40,
+                                      //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), image: const DecorationImage(image: AssetImage("assets/login_bg.png")))),
+                                      // kMediumSpace,
+                                      Flexible(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              (topAdvisor?.advisorName ?? ''),
+                                              style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14, height: 1.2),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                          ),
-                                        ],
+                                            Text(
+                                              topAdvisor?.advisorRoleDescription?.toString() ?? '',
+                                              style: const TextStyle(fontSize: 12, height: 2),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
                                       ),
 
                                       /// call and message buttons
-                                      Expanded(
+                                      Flexible(
                                         child: ConstrainedBox(
-                                          constraints: const BoxConstraints(
-                                              minWidth: 200, maxWidth: 200,
-                                          ),
+                                          constraints: const BoxConstraints(minWidth: 200, maxWidth: 200,),
                                           child: Wrap(
                                             runSpacing: 0,
                                             spacing: -30,

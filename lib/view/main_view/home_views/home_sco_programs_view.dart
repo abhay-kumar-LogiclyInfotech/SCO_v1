@@ -75,7 +75,7 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
           subTitle: model.subTitle!,
           // subTitle: "",
           onTap: model.onTap!,
-          // imageSize: 55,
+          imageSize: 45,
           trailing:  Icon(
             getTextDirection(context.read<LanguageChangeViewModel>()) == TextDirection.rtl
                 ? Icons.keyboard_arrow_left_outlined
