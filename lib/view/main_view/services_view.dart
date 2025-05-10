@@ -110,39 +110,33 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
         {
           'title': appLocalizations?.finance,
           'assetAddress': "assets/services/Finance 2.svg",
-          "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
-                  createRoute(const FinanceView()))
+          "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const FinanceView()))
         },
         {
           'title': appLocalizations?.request,
           'assetAddress': "assets/services/Request 2.svg",
-          "routeBuilder": () =>
-              _navigationServices.pushSimpleWithAnimationRoute(
-                  createRoute(const RequestView()))
+          "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const RequestView()))
         },
         {
           'title': appLocalizations?.academic_advisor,
           'assetAddress': "assets/services/Academic Advisor.svg",
-          "routeBuilder": () =>
-              _navigationServices.pushSimpleWithAnimationRoute(
-                  createRoute(const AcademicAdvisorView()))
+          "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const AcademicAdvisorView()))
         },
         {
           'title': appLocalizations?.guidance_notes,
           'assetAddress': "assets/services/Guidance Notes.svg",
           "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const GuidanceNotesView()))
         },
-
         {
           'title': appLocalizations?.employmentStatusTitle,
           'assetAddress': "assets/services/Work Status.svg",
           "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const WorkStatusView()))
         },
-          {
+        {
             'title': appLocalizations?.address,
             'assetAddress': "assets/services/Address.svg",
             "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const AddressesView()))
-          },
+        },
       }
     ];
 
@@ -168,9 +162,8 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
               //     : (index == itemsList.length - 1)
               //     ? const EdgeInsets.only(top: 10,bottom: 10)
               //     : EdgeInsets.zero,
-              child: SimpleTile(item: item,
-                leadingHeight: 40,
-                leadingWidth: 40,
+              child: SimpleTile(
+                item: item,
               ),
             );
           },

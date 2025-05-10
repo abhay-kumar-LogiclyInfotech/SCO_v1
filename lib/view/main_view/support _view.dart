@@ -189,22 +189,19 @@ class _SupportViewState extends State<SupportView> with MediaQueryMixin {
     return [
       SimpleTileModel.fromJson({
         'title': localization.contactUs,
-        'assetAddress': "assets/support/contact_us.svg",
-        "routeBuilder": () => _navigationServices
-            .pushSimpleWithAnimationRoute(createRoute(const ContactUsView())),
+        'assetAddress': "assets/support/support_1_0_1/Contact Us.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const ContactUsView())),
       }),
       SimpleTileModel.fromJson({
         'title': localization.faqs,
-        'assetAddress': "assets/support/faq.svg",
-        "routeBuilder": () => _navigationServices
-            .pushSimpleWithAnimationRoute(createRoute(const FaqView())),
+        'assetAddress': "assets/support/support_1_0_1/FAQ.svg",
+        "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const FaqView())),
       }),
       if (role == UserRole.scholarStudent)
         SimpleTileModel.fromJson({
           'title': localization.academic_advisor,
-          'assetAddress': "assets/support/advisor_contact_details.svg",
-          "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(
-              createRoute(const AcademicAdvisorView())),
+          'assetAddress': "assets/support/support_1_0_1/Academic Advisor.svg",
+          "routeBuilder": () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(const AcademicAdvisorView())),
         }),
     ];
   }
@@ -236,11 +233,11 @@ class _SupportViewState extends State<SupportView> with MediaQueryMixin {
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: itemsList
-              .map(
-                (item) => Padding(
+          children: itemsList.map((item) => Padding(
               padding:  EdgeInsets.only(bottom: kTileSpace),
-              child: SimpleTile(item: item),
+              child: SimpleTile(
+                item: item,
+              ),
             ),
           )
            .toList(),

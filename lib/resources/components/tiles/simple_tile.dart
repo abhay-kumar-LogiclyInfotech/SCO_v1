@@ -13,8 +13,8 @@ class SimpleTile extends StatelessWidget {
   final double? leadingHeight ;
   final double? leadingWidth ;
   const SimpleTile({super.key,required this.item,
-    this.leadingHeight,
-    this.leadingWidth,
+    this.leadingHeight = 40,
+    this.leadingWidth = 40,
   });
 
   @override
