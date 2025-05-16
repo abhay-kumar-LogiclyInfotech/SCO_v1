@@ -217,19 +217,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                           textDirection: textDirection,
                           // buttonColor: AppColors.scoButtonColor,
                           onTap: () {
-                            _selectedAcademicCareer.isNotEmpty
-                                ? _navigationService.pushCupertino(
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            FillScholarshipFormView(
-                                              selectedScholarshipConfigurationKey:
-                                                  _selectedAcademicCareer,
-                                              getAllActiveScholarships:
-                                                  provider.apiResponse.data,
-                                            )))
-                                : _alertService.showErrorSnackBar(
-                                    "${localization.select} ${localization.academicCareer}",
-                                  );
+                            _selectedAcademicCareer.isNotEmpty ? _navigationService.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(selectedScholarshipConfigurationKey: _selectedAcademicCareer, getAllActiveScholarships: provider.apiResponse.data,))) : _alertService.showErrorSnackBar("${localization.select} ${localization.academicCareer}",);
                           }),
                     ],
                   ),

@@ -511,12 +511,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                       if (isDraft)
                       actionButtonHolder(actionButtons: [
                         /// Edit Action Button
-                        actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.edit, onPressed: () {
-                             _navigationServices.pushCupertino(
-                             CupertinoPageRoute(
-                              builder: (context) =>
-                                  FillScholarshipFormView(
-                                    draftId: application.applicationProgramNumber ?? '',),),);}),
+                        actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.edit, onPressed: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(draftId: application.applicationProgramNumber ?? '',),),);}),
                        /// Delete Action Button
                         Consumer<DeleteDraftViewmodel>(builder: (context, provider, _) {
                           return actionButton(backgroundColor: AppColors.scoThemeColor, text: localization.deleteDraftApplication, onPressed: () async {
@@ -532,7 +527,6 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                                 return [
                                   /// delete draft
                                 CustomButton(buttonName: localization.deleteDraftApplication, isLoading: false, textDirection: getTextDirection(langProvider), onTap:  ()async{
-
                               setProcessing(true);
                               _navigationServices.goBack();
                               await provider.deleteDraft(draftId: application.applicationProgramNumber ?? '',);
@@ -541,7 +535,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
 
 
                                   // Cancel deletion
-                              CustomButton(buttonName: localization.no, isLoading: false,buttonColor: Colors.white,borderColor: Colors.grey,textColor: Colors.grey, textDirection: getTextDirection(langProvider), onTap: (){
+                                 CustomButton(buttonName: localization.no, isLoading: false,buttonColor: Colors.white,borderColor: Colors.grey,textColor: Colors.grey, textDirection: getTextDirection(langProvider), onTap: (){
                                     _navigationServices.goBack();
                                   },),
                                 ];
