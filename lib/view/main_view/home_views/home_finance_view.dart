@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
@@ -52,104 +53,145 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
           final deduction = financeData?.listDeduction?.isNotEmpty == true ? financeData?.listDeduction?.first : null;
           final bonus = financeData?.listBonus?.isNotEmpty == true ? financeData?.listBonus?.first : null;
           final warning = financeData?.listWarnings?.isNotEmpty == true ? financeData?.listWarnings?.first : null;
-          return Column(
+          return HomeViewCard(
+              title: AppLocalizations.of(context)!.myFinance,
+              icon: SvgPicture.asset("assets/my_finance.svg"),
+              onTap: () {
+                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
+              },
+              content: Column(
             children: [
+              // Row(
+              //   mainAxisSize: MainAxisSize.max,
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   children: [
+              //     SvgPicture.asset("assets/my_finance.svg"),
+              //     kSmallSpace,
+              //     Expanded(child: Text( AppLocalizations.of(context)!.myFinance,style: AppTextStyles.titleBoldTextStyle()
+              //         .copyWith(
+              //         fontSize:  20,
+              //         fontWeight: FontWeight.bold),))
+              //   ],
+              // ),
 
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(kCardRadius),
-                ),
-                padding: EdgeInsets.all(kCardPadding),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.wallet,color: Colors.orange,),
-                        kSmallSpace,
-                        Expanded(child: Text("My Finance"))
-                      ],
+              const Divider(),
+              Column(
+                children: [
+                  kMinorSpace,
+                  salaryContainer([
+                    Expanded(child: RichText(text: TextSpan(text: AppLocalizations.of(context)!.salary,style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 18)),)),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text : salary?.amount?.toString() ?? '0',
+                              style: const TextStyle(color: Colors.green,fontWeight: FontWeight.bold,fontSize: 28),
+                            ),
+                            TextSpan(
+                              text: ' ${salary?.currency?.toString() ?? ''}' ,
+                              style: const TextStyle(color: Colors.green,fontWeight: FontWeight.normal,fontSize: 17),
+                            )
+                          ]
+                      ),),
+                  ]),
+                  salaryContainer( [
+                    Expanded(child: RichText(text: const TextSpan(text: "Paid",style: TextStyle(color: Colors.grey,fontSize: 14,fontWeight: FontWeight.normal)),)),
+                    RichText(
+                      text: TextSpan(
+                          style: const TextStyle(color: Colors.grey),
+                          children: [
+                            TextSpan(
+                                text: salary?.salaryMonth?.toString() ?? ''
+                            )
+                          ]
+                      ),),
+                  ]),
+                  kSmallSpace,
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      bonusOrDeductionContainer(
+                          AppLocalizations.of(context)!.deduction,
+                          deduction?.totalDeducted?.toString() ?? '0',
+                          Colors.red
+                      ),
+                      bonusOrDeductionContainer(
+                        AppLocalizations.of(context)!.bonus,
+                        bonus?.amount?.toString() ?? '0',
+                      ),
+
+                    ],
+                  ),
+                  kSmallSpace,
+                  MaterialButton(onPressed: (){
+                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
+
+                  },
+                    minWidth: double.infinity,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(color: AppColors.lightGrey),
+                        borderRadius: BorderRadius.circular(8)
                     ),
+                    child: Text( "More",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: Colors.grey),),
 
-                    const Divider(),
-                    kMediumSpace,
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-
-                      ],
-                    )
-
-                  ],
-                ),
+                  ),
+                ],
               ),
 
-              HomeViewCard(
-                  onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));},
-                  title: AppLocalizations.of(context)!.myFinance,
-                  icon: SvgPicture.asset("assets/my_finance.svg"),
-                  langProvider: langProvider,
-                  content: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        color: Colors.transparent,
-                        // padding:  EdgeInsets.only(top: kCardPadding,left: kCardPadding, right: kCardPadding, bottom: 10),
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: _financeElements(
-                              salary: salary,
-                              deduction: deduction,
-                              bonus: bonus,
-                          ),
-                        ),
-                      ),
-                      // warning
-                      // Text(
-                      //  AppLocalizations.of(context)!.warning,
-                      //   style: AppTextStyles.subTitleTextStyle()
-                      //       .copyWith(fontWeight: FontWeight.bold),
-                      // ),
-                      if ((warning?.termDescription ?? '').isNotEmpty)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // const Divider(),
-                            const Row(),
-                            Padding(
-                              // padding: EdgeInsets.only(top: 8, bottom: 15, left: kCardPadding, right: kCardPadding),
-                              padding: const EdgeInsets.only(top: 8,
-                                  // bottom: kCardPadding, left: kCardPadding, right: kCardPadding,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(AppLocalizations.of(context)!.warning, style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.bold)),
-                                  Text(
-                                    warning!.termDescription!, // Using `!` because the null check ensures it's safe
-                                    style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 18),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  )),
+
             ],
-          );
+          ), langProvider: langProvider);
         case null:
           return showVoid;
       }
     });
   }
+
+
+
+
+  Widget bonusOrDeductionContainer(title,amount,[Color? color]){
+    return Container(
+      decoration: BoxDecoration(
+          color:  AppColors.bgColor,
+          borderRadius: BorderRadius.circular(14)
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 15),
+      child: Column(
+          children:[
+            RichText(text: TextSpan(
+                text: amount,
+                style:  TextStyle(fontSize: 21,fontWeight: FontWeight.bold,color: color ?? Colors.green)
+            )),
+            RichText(text: TextSpan(
+                text: title,
+                style: const TextStyle(fontSize: 14,color: Colors.grey)
+            )),
+
+          ]
+      ),
+    );
+  }
+
+  Widget salaryContainer(children){
+    return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+      children: children,
+
+
+    );
+  }
+
+
+
+
+
+
+
+
 
   List<Widget> _financeElements({salary, deduction, bonus}) {
     return [
@@ -180,7 +222,8 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
       {String title = "",
       String iconAddress = '',
       String subTitle = "",
-      Color titleColor = AppColors.scoButtonColor}) {
+      Color titleColor = AppColors.scoButtonColor})
+  {
     // Condition to check if the subtitle is at least 5 characters long
     String displayedSubtitle = (subTitle.length >= 5)
         ? "${subTitle.substring(0, 5)}+" // Extract first 5 characters
@@ -228,4 +271,62 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
     );
   }
 }
+
+// HomeViewCard(
+// onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));},
+// title: AppLocalizations.of(context)!.myFinance,
+// icon: SvgPicture.asset("assets/my_finance.svg"),
+// langProvider: langProvider,
+// content: Column(
+// // crossAxisAlignment: CrossAxisAlignment.center,
+// mainAxisSize: MainAxisSize.max,
+// children: [
+// Container(
+// color: Colors.transparent,
+// // padding:  EdgeInsets.only(top: kCardPadding,left: kCardPadding, right: kCardPadding, bottom: 10),
+// width: double.infinity,
+// child: Row(
+// mainAxisSize: MainAxisSize.max,
+// mainAxisAlignment: MainAxisAlignment.spaceAround,
+// children: _financeElements(
+// salary: salary,
+// deduction: deduction,
+// bonus: bonus,
+// ),
+// ),
+// ),
+// // warning
+// // Text(
+// //  AppLocalizations.of(context)!.warning,
+// //   style: AppTextStyles.subTitleTextStyle()
+// //       .copyWith(fontWeight: FontWeight.bold),
+// // ),
+// if ((warning?.termDescription ?? '').isNotEmpty)
+// Column(
+// crossAxisAlignment: CrossAxisAlignment.start,
+// children: [
+// // const Divider(),
+// const Row(),
+// Padding(
+// // padding: EdgeInsets.only(top: 8, bottom: 15, left: kCardPadding, right: kCardPadding),
+// padding: const EdgeInsets.only(top: 8,
+// // bottom: kCardPadding, left: kCardPadding, right: kCardPadding,
+// ),
+// child: Column(
+// crossAxisAlignment: CrossAxisAlignment.start,
+// children: [
+// Text(AppLocalizations.of(context)!.warning, style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.bold)),
+// Text(
+// warning!.termDescription!, // Using `!` because the null check ensures it's safe
+// style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 18),
+// textAlign: TextAlign.start,
+// ),
+// ],
+// ),
+// ),
+// ],
+// ),
+// ],
+// )),
+
 

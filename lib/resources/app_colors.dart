@@ -9,7 +9,7 @@ class AppColors {
   static const Color scoThemeColor = Color(0xff9A6F32);
   static const Color scoMidThemeColor = Color(0xffCC9240);
   static const Color scoLightThemeColor = Color(0xffCDB383);
-  static const Color bgColor = Color(0xffF5F5F5);
+  static const Color bgColor = Color(0xffEEF1F5);
   static const Color greenColor = Color(0xff0B9967);
   static const Color lightBlue0 = Color(0xffE8F7FF);
   static const Color lightBlue1 = Color(0xff3FD4FA);

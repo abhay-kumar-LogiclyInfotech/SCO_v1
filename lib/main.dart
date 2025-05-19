@@ -177,6 +177,7 @@ class _MyAppState extends State<MyApp> {
               debugShowCheckedModeBanner: false,
               title: 'SCO',
               locale: provider.appLocale,
+              themeMode: ThemeMode.light,
               //when enters the app;
               localizationsDelegates: const [
                 AppLocalizations.delegate,
@@ -185,7 +186,10 @@ class _MyAppState extends State<MyApp> {
                 GlobalCupertinoLocalizations.delegate,
               ],
               supportedLocales: const [Locale('en'), Locale('ar')],
-              theme: ThemeData(fontFamily: 'droidArabicKufi',),
+              theme: ThemeData(fontFamily: 'droidArabicKufi',
+              // scaffoldBackgroundColor: const Color(0xffEEF1F5),
+              ),
+
               navigatorKey: widget._navigationServices.navigationStateKey,
               routes: widget._navigationServices.routes,
               initialRoute: "/splashView",

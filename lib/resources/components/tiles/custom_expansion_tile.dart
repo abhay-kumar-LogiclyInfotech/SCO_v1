@@ -65,12 +65,15 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                     }
                   });
                 },
-                child: Container(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
                   width: double.maxFinite,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(15),
-                    ),
+                  decoration:  BoxDecoration(
+                    borderRadius:
+                  _isExpanded ? const BorderRadius.vertical(
+                    top: Radius.circular(15),
+                  ):   const BorderRadius.all(Radius.circular(15))
+                    ,
                     color: AppColors.scoButtonColor,
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -100,8 +103,9 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                   child: Container(
                     width: double.maxFinite,
                     padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: AppColors.lightBlue0,
+                    decoration:  const BoxDecoration(
+                      // color: AppColors.lightBlue0,
+                      color: AppColors.bgColor,
                       borderRadius: BorderRadius.vertical(
                         bottom: Radius.circular(15),
                       ),
