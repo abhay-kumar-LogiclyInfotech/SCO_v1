@@ -54,6 +54,39 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
           final warning = financeData?.listWarnings?.isNotEmpty == true ? financeData?.listWarnings?.first : null;
           return Column(
             children: [
+
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(kCardRadius),
+                ),
+                padding: EdgeInsets.all(kCardPadding),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.wallet,color: Colors.orange,),
+                        kSmallSpace,
+                        Expanded(child: Text("My Finance"))
+                      ],
+                    ),
+
+                    const Divider(),
+                    kMediumSpace,
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+
+                      ],
+                    )
+
+                  ],
+                ),
+              ),
+
               HomeViewCard(
                   onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));},
                   title: AppLocalizations.of(context)!.myFinance,
@@ -195,3 +228,4 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
     );
   }
 }
+

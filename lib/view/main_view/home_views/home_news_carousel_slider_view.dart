@@ -39,7 +39,7 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
                     textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
                     child: CarouselSlider(
                       options: CarouselOptions(
-                        height: orientation == Orientation.portrait ? 190.0 : 210,
+                        height: orientation == Orientation.portrait ? 220.0 : 210,
                         aspectRatio: 16 / 9,
                         viewportFraction: 1,
                         initialPage: 0,
@@ -47,11 +47,10 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
                         reverse: false,
                         autoPlay: true,
                         autoPlayInterval: const Duration(seconds: 5),
-                        autoPlayAnimationDuration:
-                        const Duration(milliseconds: 100),
+                        autoPlayAnimationDuration: const Duration(milliseconds: 300),
                         autoPlayCurve: Curves.linear,
                         enlargeCenterPage: true,
-                        enlargeFactor: 0,
+                        enlargeFactor: 1,
                         scrollDirection: Axis.horizontal,
                       ),
                       items: provider.parsedNewsAndEventsModelList
@@ -149,7 +148,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
           children: [
             // Background Image
             SizedBox(
-                height: 190,
+                height: 220,
                 child: Consumer<IndividualImageViewModel>(
                   builder: (context, imageProvider, _) {
                     switch (imageProvider.individualImageResponse.status) {
@@ -173,7 +172,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
                           child:  CachedNetworkImage(
                             cacheKey: imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl,
                             imageUrl: "${imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl}?v=${DateTime.now().millisecondsSinceEpoch}",
-                            fit: BoxFit.fill,
+                            // fit: BoxFit.fill,
                             height: double.infinity,
                             width: double.infinity,
                             errorWidget: (context,object,_){
@@ -200,7 +199,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
             // Gradient Overlay
             Container(
               width: double.infinity,
-              height: 190,
+              // height: 220,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
@@ -213,7 +212,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
 
             // Content Layer
             Container(
-              height: 190,
+              // height: 220,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 17),
               child: Row(

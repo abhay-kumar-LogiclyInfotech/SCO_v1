@@ -19,6 +19,7 @@ class CustomScoProgramTile extends StatefulWidget {
   final void Function() onTap;
   final double imageSize;
   final Widget? trailing;
+  final int maxLines;
 
 
   const CustomScoProgramTile({super.key,
@@ -27,7 +28,8 @@ class CustomScoProgramTile extends StatefulWidget {
     required this.subTitle,
     required this.onTap,
     this.imageSize = 76,
-    this.trailing
+    this.trailing,
+    this.maxLines = 2
   });
 
   @override
@@ -164,7 +166,7 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
                 // textAlign: TextAlign.left,
                 style: const TextStyle(color: Colors.black,fontSize: 12,height: 1.5,decoration: TextDecoration.none),
                 overflow: TextOverflow.ellipsis,
-                maxLines: 2,
+                maxLines: widget.maxLines,
               ),
             ],
           ),

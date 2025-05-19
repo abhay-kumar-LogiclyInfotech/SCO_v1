@@ -75,7 +75,7 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                               children: [
                                 widget.icon ?? showVoid,
                                 if (widget.icon != null)
-                                  const SizedBox(width: 10),
+                                  kSmallSpace,
                                 Expanded(
                                   child: Text(
                                     widget.title,
