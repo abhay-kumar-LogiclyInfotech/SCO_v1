@@ -77,7 +77,7 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                                   // padding:  EdgeInsets.all(kCardPadding),
                                   backGroundColor: Colors.transparent,
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       // image of the academic advisor
                                       // Container(

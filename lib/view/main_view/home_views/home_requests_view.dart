@@ -4,11 +4,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
+import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 
 import '../../../resources/app_colors.dart';
 import '../../../resources/cards/home_view_card.dart';
 import '../../../resources/components/custom_vertical_divider.dart';
+import '../../../resources/components/kButtons/simple_button.dart';
 import '../../../resources/components/requests_count_container.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
@@ -37,6 +39,7 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
     return Consumer<GetAllRequestsViewModel>(
         builder: (context, requestsProvider, _) {
           switch (requestsProvider.apiResponse.status) {
@@ -63,52 +66,85 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
                   HomeViewCard(
                       title: AppLocalizations.of(context)!.requests,
                       icon: SvgPicture.asset("assets/request.svg"),
+                      showArrow: false,
                       langProvider: langProvider,
                       // headerExtraContent: RequestsCountContainer(color: Colors.blue.shade600, count: totalRequests),
                       // contentPadding: EdgeInsets.zero,
-                      onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()));},
-                      content: Column(
-                        children: [
-                          //  Padding(
-                          //   padding: const EdgeInsets.only(left: 50.0,right: 50),
-                          //   child: Text(
-                          //     AppLocalizations.of(context)!.totalNumberOfRequests,
-                          //     style: const TextStyle(fontSize: 14, height: 2.5),
-                          //   ),
-                          // ),
-                          // kFormHeight,
-                          // const SizedBox(height: 8),
-                          // const Divider(),
-                          Container(
-                            width: double.infinity,
-                            color: Colors.transparent,
-                            // padding:  EdgeInsets.all(kCardPadding),
-                            child: screenWidth < 370
-                                ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _requestElementList(
-                                  approvedRequests: approvedRequests,
-                                  pendingRequests: pendingRequests,
-                                  rejectedRequests: rejectedRequests),
-                            )
-                                : Row(
-                              // crossAxisAlignment: WrapCrossAlignment.center,
-                              // runAlignment: WrapAlignment.start,
-                              // alignment: WrapAlignment.spaceAround,
-                              // runSpacing: 10,
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceAround,
-                              children: _requestElementList(
-                                  approvedRequests: approvedRequests,
-                                  pendingRequests: pendingRequests,
-                                  rejectedRequests: rejectedRequests),
-                            ),
-                          )
-                          // kFormHeight,
-                          // kFormHeight,
-                        ],
-                      )),
+                      onTap: () {
+                        // _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()));
+                        },
+
+                      content:
+
+                          Column(
+                            children: [
+
+                              const Divider(),
+
+
+                              kSmallSpace,
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  requestElement(title: localization.approved,color: Colors.green,icon: Icon(Icons.document_scanner_rounded), count: approvedRequests.toString()),
+                                  const DashedVerticalLine(height: 80),
+                                  requestElement(title: localization.pending,color: const Color(0xffF4AA73),icon: Icon(Icons.access_time_filled_rounded), count: pendingRequests.toString()),
+                                  const DashedVerticalLine(height: 80),
+                                  requestElement( title: localization.rejected,color: AppColors.DANGER, count: rejectedRequests.toString()),
+                                ],
+                              ),
+                              kSmallSpace,
+                              SimpleButton(onPressed: (){
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()));                              }, title: "More")
+                            ],
+                          ),
+
+
+                      // Column(
+                      //   children: [
+                      //     //  Padding(
+                      //     //   padding: const EdgeInsets.only(left: 50.0,right: 50),
+                      //     //   child: Text(
+                      //     //     AppLocalizations.of(context)!.totalNumberOfRequests,
+                      //     //     style: const TextStyle(fontSize: 14, height: 2.5),
+                      //     //   ),
+                      //     // ),
+                      //     // kFormHeight,
+                      //     // const SizedBox(height: 8),
+                      //     // const Divider(),
+                      //     Container(
+                      //       width: double.infinity,
+                      //       color: Colors.transparent,
+                      //       // padding:  EdgeInsets.all(kCardPadding),
+                      //       child: screenWidth < 370
+                      //           ? Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: _requestElementList(
+                      //             approvedRequests: approvedRequests,
+                      //             pendingRequests: pendingRequests,
+                      //             rejectedRequests: rejectedRequests),
+                      //       )
+                      //           : Row(
+                      //         // crossAxisAlignment: WrapCrossAlignment.center,
+                      //         // runAlignment: WrapAlignment.start,
+                      //         // alignment: WrapAlignment.spaceAround,
+                      //         // runSpacing: 10,
+                      //         mainAxisSize: MainAxisSize.max,
+                      //         mainAxisAlignment:
+                      //         MainAxisAlignment.spaceAround,
+                      //         children: _requestElementList(
+                      //             approvedRequests: approvedRequests,
+                      //             pendingRequests: pendingRequests,
+                      //             rejectedRequests: rejectedRequests),
+                      //       ),
+                      //     )
+                      //     // kFormHeight,
+                      //     // kFormHeight,
+                      //   ],
+                      // )
+                  ),
                 ],
               );
             case null:
@@ -118,6 +154,27 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
 
 
   }
+
+
+
+
+
+
+
+  requestElement({Icon? icon,Color? color,required title,required count,}){
+    return  Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        icon ??  const Icon(  Icons.document_scanner_rounded),
+        Text(title,style: const TextStyle(fontSize: 12,color: Colors.grey,height: 2.2),),
+        Text(count,style: TextStyle(color: color ?? Colors.grey,fontSize: 21,fontWeight: FontWeight.bold),),
+      ],
+    );
+  }
+
+
+
 
   List<Widget> _requestElementList(
       {approvedRequests, pendingRequests, rejectedRequests}) {
@@ -193,3 +250,44 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
     );
   }
 }
+
+
+
+class DashedVerticalLine extends StatelessWidget {
+  final double height;
+  final double dashHeight;
+  final double dashWidth;
+  final double space;
+  final Color color;
+
+  const DashedVerticalLine({
+    Key? key,
+    required this.height,
+    this.dashHeight = 8.0,
+    this.dashWidth = 1.0,
+    this.space = 2.0,
+    this.color = Colors.grey,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    int dashCount = (height / (dashHeight + space)).floor();
+
+    return SizedBox(
+      height: height,
+      child: Column(
+        children: List.generate(dashCount, (_) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: space),
+            child: Container(
+              width: dashWidth,
+              height: dashHeight,
+              color: color,
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+

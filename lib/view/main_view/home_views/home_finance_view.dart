@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/components/kButtons/simple_button.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
@@ -56,8 +58,9 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
           return HomeViewCard(
               title: AppLocalizations.of(context)!.myFinance,
               icon: SvgPicture.asset("assets/my_finance.svg"),
+              showArrow: false,
               onTap: () {
-                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
+                // _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
               },
               content: Column(
             children: [
@@ -124,18 +127,11 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                     ],
                   ),
                   kSmallSpace,
-                  MaterialButton(onPressed: (){
+
+                  SimpleButton(onPressed: (){
                     _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
 
-                  },
-                    minWidth: double.infinity,
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(color: AppColors.lightGrey),
-                        borderRadius: BorderRadius.circular(8)
-                    ),
-                    child: Text( "More",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: Colors.grey),),
-
-                  ),
+                  }, title: "More"),
                 ],
               ),
 
@@ -169,6 +165,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                 style: const TextStyle(fontSize: 14,color: Colors.grey)
             )),
 
+
           ]
       ),
     );
@@ -180,8 +177,6 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
       children: children,
-
-
     );
   }
 
