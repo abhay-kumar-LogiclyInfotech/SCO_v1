@@ -216,7 +216,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 17),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // "Read More" Section
                   // Column(
@@ -263,7 +263,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
                   // const SizedBox(width: 15),
 
                   // Right Side Content
-                  Expanded(
+                  Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
