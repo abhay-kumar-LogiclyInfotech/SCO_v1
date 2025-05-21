@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sco_v1/resources/cards/simple_card.dart';
 import '../../l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -45,6 +46,15 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
   // Academic career menuItemList
   List<GetAllActiveScholarshipsModel?>? academicCareerMenuItemList = [];
 
+
+  /// Internal scholarship list
+  List<GetAllActiveScholarshipsModel?>? internalScholarshipMenuItemList = [];
+  /// external scholarship list
+  List<GetAllActiveScholarshipsModel?>? externalScholarshipMenuItemList = [];
+  /// doctor's scholarship list
+  List<GetAllActiveScholarshipsModel?>? doctorScholarshipMenuItemList = [];
+
+
   // Preparing dropdown items
   List<DropdownMenuItem> populateAcademicCareer({
     required List<GetAllActiveScholarshipsModel?> menuItemsList,
@@ -84,12 +94,13 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       // fetching all active scholarships:
-      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context,
-          listen: false);
-      await provider.getAllActiveScholarships(
-          context: context,
-          langProvider:
-              Provider.of<LanguageChangeViewModel>(context, listen: false));
+      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context, listen: false);
+      await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
+
+
+     internalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'INT' && element.isActive == true).toList();
+     externalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'EXT' && element.acadmicCareer.toString() != 'DDS' && element.isActive == true).toList();
+     doctorScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.acadmicCareer.toString() == 'DDS' && element.isActive == true).toList();
     });
   }
 
@@ -97,7 +108,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
+    backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(localization.apply_for_scholarship,
             style: AppTextStyles.appBarTitleStyle()),
@@ -119,106 +130,166 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
+
+
+                      Directionality(
+                        textDirection: getTextDirection(langProvider),
+                        child: SimpleCard(expandedContent:
+                        Column(
+                          children: Constants.scholarshipRequestType.map<Widget>((element) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffF1F3F5),
+                                    borderRadius: BorderRadius.circular(kCardRadius),
+                                  ),
+                                  margin: EdgeInsets.only(bottom: kCardPadding),
+                                  padding: EdgeInsets.all(kCardPadding),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Image.asset(
+                                        element['image'] ?? Constants.scholarshipInAbroad,
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      kSmallSpace,
+                                      Text(
+                                        getTextDirection(langProvider) == TextDirection.ltr ? element['value'] : element['valueArabic'],
+                                        style: AppTextStyles.titleBoldTextStyle(),
+                                      ),
+
+                                      kSmallSpace,
+                                      Text(
+                                        element['description'],
+                                        style: AppTextStyles.subTitleTextStyle(),
+                                      ),
+                                      kSmallSpace,
+
+                                      CustomDropdown(
+                                        textDirection: textDirection,
+                                        menuItemsList: populateAcademicCareer(menuItemsList:
+
+                                            element['code'] == 'INT' ? internalScholarshipMenuItemList! : element['code'] == 'EXT' ? externalScholarshipMenuItemList! : doctorScholarshipMenuItemList!  , provider: Provider.of<LanguageChangeViewModel>(context)),
+                                        currentFocusNode: _requestTypeFocusNode,
+                                        hintText: localization.select,
+                                        textColor: AppColors.scoButtonColor,
+                                        outlinedBorder: true,
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        onChanged: (value) {
+                                          // Handle academic career selection
+                                          setState(() {
+                                            _selectedAcademicCareer = value;
+                                          });
+                                        },
+                                      ),
+                                      kSmallSpace,
+                                      CustomButton(
+                                          buttonName: AppLocalizations.of(context)!.apply_for_scholarship,
+                                          isLoading: false,
+                                          textDirection: getTextDirection(langProvider),
+                                          // buttonColor: AppColors.scoButtonColor,
+                                          borderRadius: BorderRadius.circular(10),
+                                          onTap: () {
+                                            _selectedAcademicCareer.isNotEmpty ?
+                                            _navigationService.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(selectedScholarshipConfigurationKey: _selectedAcademicCareer, getAllActiveScholarships: provider.apiResponse.data,)))
+                                                : _alertService.showErrorSnackBar("${localization.select} ${localization.academicCareer}",);
+                                          }),
+
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                        )),
+                      )
+
+                      ,
+
+
                       // submit application section:
-                      CustomInformationContainer(
-                          title: localization.submitApplication,
-                          leading: SvgPicture.asset("assets/scholarships.svg"),
-                          expandedContent: Column(
-                            children: [
-                              kFormHeight,
+                      // CustomInformationContainer(
+                      //     title: localization.submitApplication,
+                      //     leading: SvgPicture.asset("assets/scholarships.svg"),
+                      //     expandedContent: Column(
+                      //       children: [
+                      //         kFormHeight,
+                      //
+                      //         // Heading
+                      //         fieldHeading(
+                      //             title: localization.requestType,
+                      //             important: false,
+                      //             langProvider: langProvider),
+                      //
+                      //         // Dropdown for Request Type
+                      //         CustomDropdown(
+                      //           textDirection: textDirection,
+                      //           menuItemsList: populateNormalDropdownWithValue(menuItemsList: Constants.scholarshipRequestType, provider: langProvider),
+                      //           currentFocusNode: _requestTypeFocusNode,
+                      //           hintText: localization.select,
+                      //           textColor: AppColors.scoButtonColor,
+                      //           outlinedBorder: true,
+                      //           onChanged: (value) {
+                      //             setState(() {
+                      //               // Reset academicCareerMenuItemList when Request Type changes
+                      //               _selectedAcademicCareer = ''; // Reset the selected academic career
+                      //
+                      //               // Filter the list of active scholarships based on the selected request type
+                      //               academicCareerMenuItemList = provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == value.toString() && element.isActive == true).toList();
+                      //
+                      //               // request next focus
+                      //               Utils.requestFocus(
+                      //                   focusNode: _academicCareerFocusNode,
+                      //                   context: context);
+                      //             });
+                      //           },
+                      //         ),
+                      //
+                      //         kFormHeight,
+                      //
+                      //         // Heading
+                      //         fieldHeading(
+                      //             title: localization.academicCareer,
+                      //             important: false,
+                      //             langProvider: langProvider),
+                      //
+                      //         // Dropdown for Academic Career
+                      //         CustomDropdown(
+                      //           filled: (academicCareerMenuItemList == null ||
+                      //               academicCareerMenuItemList!.isEmpty),
+                      //           textDirection: textDirection,
+                      //           menuItemsList: populateAcademicCareer(
+                      //               menuItemsList:
+                      //                   (academicCareerMenuItemList == null ||
+                      //                           academicCareerMenuItemList!
+                      //                               .isEmpty)
+                      //                       ? []
+                      //                       : academicCareerMenuItemList!,
+                      //               provider: langProvider),
+                      //           currentFocusNode: _academicCareerFocusNode,
+                      //           hintText: localization.select,
+                      //           textColor: AppColors.scoButtonColor,
+                      //           outlinedBorder: true,
+                      //           value: _selectedAcademicCareer.isEmpty
+                      //               ? null
+                      //               : _selectedAcademicCareer,
+                      //           // Set the value properly
+                      //           onChanged: (value) {
+                      //             // Handle academic career selection
+                      //             setState(() {
+                      //               _selectedAcademicCareer = value;
+                      //             });
+                      //           },
+                      //         ),
+                      //         kFormHeight,
+                      //       ],
+                      //     )),
 
-                              // Heading
-                              fieldHeading(
-                                  title: localization.requestType,
-                                  important: false,
-                                  langProvider: langProvider),
-
-                              // Dropdown for Request Type
-                              CustomDropdown(
-                                textDirection: textDirection,
-                                menuItemsList: populateNormalDropdownWithValue(
-                                    menuItemsList:
-                                        Constants.scholarshipRequestType,
-                                    provider: langProvider),
-                                currentFocusNode: _requestTypeFocusNode,
-                                hintText: localization.select,
-                                textColor: AppColors.scoButtonColor,
-                                outlinedBorder: true,
-                                onChanged: (value) {
-                                  setState(() {
-                                    // Reset academicCareerMenuItemList when Request Type changes
-                                    _selectedAcademicCareer =
-                                        ''; // Reset the selected academic career
-
-                                    // Filter the list of active scholarships based on the selected request type
-                                    academicCareerMenuItemList = provider
-                                        .apiResponse.data
-                                        ?.where((element) =>
-                                            element.scholarshipType
-                                                    .toString() ==
-                                                value.toString() &&
-                                            element.isActive == true)
-                                        .toList();
-
-                                    // request next focus
-                                    Utils.requestFocus(
-                                        focusNode: _academicCareerFocusNode,
-                                        context: context);
-                                  });
-                                },
-                              ),
-
-                              kFormHeight,
-
-                              // Heading
-                              fieldHeading(
-                                  title: localization.academicCareer,
-                                  important: false,
-                                  langProvider: langProvider),
-
-                              // Dropdown for Academic Career
-                              CustomDropdown(
-                                filled: (academicCareerMenuItemList == null ||
-                                    academicCareerMenuItemList!.isEmpty),
-                                textDirection: textDirection,
-                                menuItemsList: populateAcademicCareer(
-                                    menuItemsList:
-                                        (academicCareerMenuItemList == null ||
-                                                academicCareerMenuItemList!
-                                                    .isEmpty)
-                                            ? []
-                                            : academicCareerMenuItemList!,
-                                    provider: langProvider),
-                                currentFocusNode: _academicCareerFocusNode,
-                                hintText: localization.select,
-                                textColor: AppColors.scoButtonColor,
-                                outlinedBorder: true,
-                                value: _selectedAcademicCareer.isEmpty
-                                    ? null
-                                    : _selectedAcademicCareer,
-                                // Set the value properly
-                                onChanged: (value) {
-                                  // Handle academic career selection
-                                  setState(() {
-                                    _selectedAcademicCareer = value;
-                                  });
-                                },
-                              ),
-                              kFormHeight,
-                            ],
-                          )),
-
-                      kSubmitButtonHeight,
-
-                      // submit button section:
-                      CustomButton(
-                          buttonName: AppLocalizations.of(context)!.apply_for_scholarship,
-                          isLoading: false,
-                          textDirection: textDirection,
-                          // buttonColor: AppColors.scoButtonColor,
-                          onTap: () {
-                            _selectedAcademicCareer.isNotEmpty ? _navigationService.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(selectedScholarshipConfigurationKey: _selectedAcademicCareer, getAllActiveScholarships: provider.apiResponse.data,))) : _alertService.showErrorSnackBar("${localization.select} ${localization.academicCareer}",);
-                          }),
+                      // kSubmitButtonHeight,
+                      //
+                      //
+                      //
+                      // kSubmitButtonHeight,
                     ],
                   ),
                 );
@@ -226,4 +297,6 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
       ),
     );
   }
+
+
 }

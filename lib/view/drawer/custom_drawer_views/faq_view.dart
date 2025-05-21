@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:sco_v1/resources/components/custom_button.dart';
 import '../../../l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
@@ -25,43 +27,43 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((callback)async{
-     await _onRefresh();
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
+      await _onRefresh();
     });
   }
 
-  Future<void> _onRefresh()async{
-    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+  Future<void> _onRefresh() async {
+    final langProvider =
+        Provider.of<LanguageChangeViewModel>(context, listen: false);
     final provider = Provider.of<FaqViewModel>(context, listen: false);
-      await provider.getFaq(context: context, langProvider: langProvider);
+    await provider.getFaq(context: context, langProvider: langProvider);
   }
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomSimpleAppBar(
         title: Text(localization.faqs, style: AppTextStyles.appBarTitleStyle()),
       ),
-      body: Utils.pageRefreshIndicator(child: _buildUi(context), onRefresh: _onRefresh) ,
+      body: Utils.pageRefreshIndicator(child: _buildUi(context), onRefresh: _onRefresh),
     );
   }
 
-  Widget _buildUi(context) {
+  Widget _buildUi(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.all(kPadding),
+      padding: EdgeInsets.all(kPadding),
       child: Consumer<FaqViewModel>(
         builder: (context, provider, _) {
           switch (provider.faqResponse.status) {
             case Status.LOADING:
-              return  Utils.pageLoadingIndicator(context: context);
+              return Utils.pageLoadingIndicator(context: context);
             case Status.ERROR:
               return Center(
-                child: Text(
-                  AppLocalizations.of(context)!.somethingWentWrong
-                )
-              );
+                  child: Text(
+                      AppLocalizations.of(context)!.somethingWentWrong));
             case Status.COMPLETED:
               return ListView.builder(
                   shrinkWrap: true,

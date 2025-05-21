@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -11,13 +12,17 @@ import 'package:sco_v1/view/main_view/scholarship_in_abroad/post_graduation_outs
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
+import '../../../data/response/status.dart';
 import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import '../../../models/home/ScoProgramsTileModel.dart';
 import '../../../resources/app_colors.dart';
+import '../../../resources/components/custom_button.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
+import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../apply_scholarship/fill_scholarship_form_view.dart';
 import 'bachelor_outside_uae/bachelors_outside_uae.dart';
 import 'doctor_of_medicine_outside_uae/doctor_of_medicine_outside_uae.dart';
 
@@ -69,7 +74,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
   List<Map<String, dynamic>> createScholarshipList(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     switch(widget.code){
-      case 'UGRDEXT':
+      case 'SCOUGRDEXT':
         return [
           {
             'title': " شروط ومتطلبات التقديم للبعثة - درجة البكالوريوس ",
@@ -131,7 +136,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeDegreeApplyingProcedure, title: localization.bachelor_degree_applying_procedures,))),
           // },
         ];
-      case 'PGRDEXT':
+      case 'SCOPGRDEXT':
         return [
           {
             'title': " شروط ومتطلبات التقديم للبعثة - الدراسات العليا ",
@@ -189,7 +194,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeApplyingProcedure, title: localization.graduate_outside_uae_scholarship_applying_procedures,))),
           // },
         ];
-      case 'DDSEXT':
+      case 'SCODDSEXT':
         return [
           {
             'title': " نبذة عن برنامج دكتور فى الطب ",
@@ -246,26 +251,31 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
             // 'subTitle': localization.scholarship_for_outstanding_students,
             'subTitle': '',
             'imagePath': Constants.bachelorsOutsideUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'UGRDEXT',title: localization.externalBachelor,))),
+            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCOUGRDEXT',title: localization.externalBachelor,))),
           },
           {
             'title': localization.externalPostgraduate,
             // 'subTitle': localization.scholarship_for_postgraduate_studies,
             'subTitle': '',
             'imagePath': Constants.graduatesOutsideUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'PGRDEXT',title: localization.externalPostgraduate,))),
+            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCOPGRDEXT',title: localization.externalPostgraduate,))),
           },
           {
             'title': localization.externalDoctors,
             // 'subTitle': localization.scholarship_for_outstanding_medical_students,
             'subTitle': '',
             'imagePath': Constants.distinguishedDoctorsOutsideUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'DDSEXT',title: localization.externalDoctors,))),
+            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCODDSEXT',title: localization.externalDoctors,))),
           },
         ];
       default:
         return [];
     }
+  }
+
+
+ bool isExternalScholarship(){
+    return   ( widget.code == 'SCOUGRDEXT' || widget.code == 'SCOPGRDEXT' || widget.code == 'SCODDSEXT');
   }
 
   void _initializeScoPrograms() {
@@ -279,11 +289,11 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
     // Create widgets based on models
     for (var model in _scoProgramsModelsList) {
 
-      final isExternalScholarship = widget.code == 'UGRDEXT' || widget.code == 'PGRDEXT' || widget.code == 'DDSEXT';
+
 
 
       _scholarshipsInUaeList.add(
-          isExternalScholarship ? CustomExpansionTile(
+        isExternalScholarship() ? CustomExpansionTile(
               title: model.title!,
               expandedContent: model.content ?? const SizedBox(),
               trailing: const Icon(Icons.keyboard_arrow_down,color: Colors.white,),
@@ -302,24 +312,55 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final langProvider = context.read<LanguageChangeViewModel>();
 
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       // appBar: CustomSimpleAppBar(titleAsString: widget.title ??  localization.scholarshipExternal,),
       appBar: CustomSimpleAppBar(titleAsString:  localization.scholarshipExternal,),
-      body: _buildUI(localization),
-    );
+      body: Consumer<GetAllActiveScholarshipsViewModel>(
+    builder: (context,provider,_) {
+      if (provider.apiResponse.status == Status.LOADING) {
+        return Utils.pageLoadingIndicator(context: context);
+      }
+      return Stack(
+        children: [
+          Container(
+            color: Colors.white,
+            height: screenHeight,
+            width: screenWidth,
+          ),
+          _buildUI(localization),
+          if (isExternalScholarship() && (context.read<GetAllActiveScholarshipsViewModel>().apiResponse.data?.any((element) => element.configurationKey == widget.code && element.isActive == true,) ?? false))Positioned(
+            bottom: 0,
+            child: Container(
+              // width: double.infinity,
+              width: screenWidth,
+              padding: EdgeInsets.all(kPadding),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+              ),
+              child:  CustomButton(buttonName: localization.submit, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()async{ // fetching all active scholarships:
+
+                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(selectedScholarshipConfigurationKey: widget.code, getAllActiveScholarships: provider.apiResponse.data,)));
+
+
+              }),
+            ),
+          )
+        ],
+      );
+    }));
+
   }
 
   Widget _buildUI(localization) {
-    final isExternalScholarship = widget.code == 'UGRDEXT' || widget.code == 'PGRDEXT' || widget.code == 'DDSEXT';
-
     return Directionality(
       textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
       child: SingleChildScrollView(
         child: Padding(
           padding:  EdgeInsets.all(kPadding),
-          child: isExternalScholarship
+          child: isExternalScholarship()
               ? Material(
               color: Colors.white,
             shadowColor: Colors.grey.shade400,

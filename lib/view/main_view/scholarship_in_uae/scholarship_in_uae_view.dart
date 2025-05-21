@@ -8,15 +8,19 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/post_graduation_inside_uae/post_graduation_inside_uae.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 
+import '../../../data/response/status.dart';
 import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import '../../../models/home/ScoProgramsTileModel.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/app_urls.dart';
+import '../../../resources/components/custom_button.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
+import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/language_change_ViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../apply_scholarship/fill_scholarship_form_view.dart';
 import '../../apply_scholarship/form_view_Utils.dart';
 import 'bachelor_inside_uae/bachelor_inside_uae.dart';
 import 'meteorological_inside_uae/meteorological_inside_uae.dart';
@@ -34,7 +38,8 @@ class ScholarshipsInUaeView extends StatefulWidget {
 class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
     with MediaQueryMixin<ScholarshipsInUaeView> {
   late NavigationServices _navigationServices;
-  List<GetAllActiveScholarshipsModel?> academicCareerMenuItemList = [];
+
+
 
   @override
   void initState() {
@@ -44,6 +49,11 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
+
+      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context, listen: false);
+      await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
+
+
       _scholarshipsInUaeList.clear();
       _scoProgramsModelsList.clear();
       _initializeScoPrograms();
@@ -69,7 +79,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
   List<Map<String, dynamic>> createScholarshipList(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     switch(widget.code){
-      case 'UGRDINT':
+      case 'SCOUGRDINT':
         return [
           {
             // 'title': localization.bachelors_degree_scholarship_admission_terms,
@@ -128,7 +138,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
 
     ];
-     case 'PGRDINT':
+     case 'SCOPGRDINT':
         return [
           {
             // 'title': localization.graduate_studies_scholarship_admission_terms,
@@ -191,7 +201,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
 
         ];
-      case 'METLOGINT':
+      case 'SCOMETLOGINT':
         return [
           {
           'title': " شروط ومتطلبات القبول لمنحة الأرصاد الجوية ",
@@ -246,21 +256,21 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
           // 'subTitle': localization.internal_scholarships_for_local_students,
           'subTitle': '',
           'imagePath': Constants.bachelorsInUae,
-          'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'UGRDINT',title: localization.internalBachelor,))),
+          'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'SCOUGRDINT',title: localization.internalBachelor,))),
         },
         {
           'title': localization.internalPostgraduate,
           // 'subTitle': localization.internal_scholarships_for_postgraduate_studies,
           'subTitle': '',
           'imagePath': Constants.graduatesInUAE,
-          'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'PGRDINT',title: localization.internalPostgraduate,))),
+          'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'SCOPGRDINT',title: localization.internalPostgraduate,))),
         },
         {
           'title': localization.internalMeterological,
           // 'subTitle': localization.meteorological_scholarships_for_high_school_graduates,
           'subTitle': '',
           'imagePath': Constants.meteorologicalInUAE,
-          'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'METLOGINT',title: localization.internalMeterological,))),
+          'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'SCOMETLOGINT',title: localization.internalMeterological,))),
         },
       ];
       default:
@@ -268,6 +278,12 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
     }
 
   }
+
+
+ bool isInternalScholarship(){
+    return  (widget.code == 'SCOUGRDINT' || widget.code == 'SCOPGRDINT' || widget.code == 'SCOMETLOGINT');
+  }
+
 
 
   void _initializeScoPrograms() {
@@ -280,13 +296,8 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
     // Create widgets based on models
     for (var model in _scoProgramsModelsList) {
-
-
-      final isInternalScholarship = widget.code == 'UGRDINT' || widget.code == 'PGRDINT' || widget.code == 'METLOGINT';
-
-
       _scholarshipsInUaeList.add(
-        isInternalScholarship ? CustomExpansionTile(
+        isInternalScholarship() ? CustomExpansionTile(
           title: model.title!,
           expandedContent: model.content ?? const SizedBox(),
           trailing: const Icon(Icons.keyboard_arrow_down,color: Colors.white,),
@@ -301,14 +312,55 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final langProvider = context.read<LanguageChangeViewModel>();
+
+
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       // appBar: CustomSimpleAppBar(titleAsString: widget.title ?? localization.scholarshipInternal,),
       appBar: CustomSimpleAppBar(titleAsString: localization.scholarshipInternal,),
-      body: _buildUI(localization),
+      body: Consumer<GetAllActiveScholarshipsViewModel>(
+        builder: (context,provider,_){
+          if(provider.apiResponse.status == Status.LOADING){
+            return Utils.pageLoadingIndicator(context: context);
+          }
+          return Stack(
+            children: [
+              Container(
+                color: Colors.white,
+                height: screenHeight,
+                width: screenWidth,
+              ),
+              _buildUI(localization,isInternalScholarship()),
+              if (
+              isInternalScholarship() && (context.read<GetAllActiveScholarshipsViewModel>().apiResponse.data?.any((element) => element.configurationKey == widget.code && element.isActive == true,) ?? false)
+              )Positioned(
+                bottom: 0,
+                child: Container(
+                  // width: double.infinity,
+                  width: screenWidth,
+                  padding: EdgeInsets.all(kPadding),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child:  CustomButton(buttonName: localization.submit, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()async{ // fetching all active scholarships:
+
+                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(selectedScholarshipConfigurationKey: widget.code, getAllActiveScholarships: provider.apiResponse.data,)));
+
+
+                  }),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -328,8 +380,9 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
   //  );
   // }
 
-  Widget _buildUI(AppLocalizations localization) {
-    final isInternalScholarship = widget.code == 'UGRDINT' || widget.code == 'PGRDINT' || widget.code == 'METLOGINT';
+  Widget _buildUI(AppLocalizations localization, bool isInternalScholarship) {
+    final langProvider = context.read<LanguageChangeViewModel>();
+
 
     return Directionality(
       textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
@@ -357,18 +410,22 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
               ),
             ),
           )
-              : ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _scholarshipsInUaeList.length,
-            itemBuilder: (context, index) {
-              final scholarshipType = _scholarshipsInUaeList[index];
-              return Padding(
-                padding:  EdgeInsets.only(bottom: kTileSpace),
-                child: scholarshipType,
-              );
-            },
-          ),
+              : Stack(
+                children: [
+                  ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _scholarshipsInUaeList.length,
+                              itemBuilder: (context, index) {
+                  final scholarshipType = _scholarshipsInUaeList[index];
+                  return Padding(
+                    padding:  EdgeInsets.only(bottom: kTileSpace),
+                    child: scholarshipType,
+                  );
+                              },
+                            ),
+                ],
+              ),
         ),
       ),
     );

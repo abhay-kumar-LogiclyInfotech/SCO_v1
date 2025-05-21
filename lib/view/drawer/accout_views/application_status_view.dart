@@ -94,26 +94,35 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
   final List<ApplicationStatus> _otherApplicationStatus = [];
 
   Future<void> _onRefresh() async {
-    /// fetch list of application status
-   final applicationStatusProvider = Provider.of<GetListApplicationStatusViewModel>(context, listen: false);
-    await applicationStatusProvider.getListApplicationStatus();
+    try{
 
-    if(applicationStatusProvider.apiResponse.status == Status.COMPLETED){
-      if(applicationStatusProvider.apiResponse.data?.data?.applicationStatus != null ){
-        if(applicationStatusProvider.apiResponse.data?.data?.applicationStatus.isNotEmpty ?? false){
-          _draftApplicationStatus.clear();
-          _otherApplicationStatus.clear();
-          for(var element in applicationStatusProvider.apiResponse.data!.data!.applicationStatus){
-            if(element.applicationStatus.programAction == 'DRAFT'){
-              _draftApplicationStatus.add(element);
-            }
-            else{
-              _otherApplicationStatus.add(element);
+      _draftApplicationStatus.clear();
+      _otherApplicationStatus.clear();
+      /// fetch list of application status
+      final applicationStatusProvider = Provider.of<GetListApplicationStatusViewModel>(context, listen: false);
+      await applicationStatusProvider.getListApplicationStatus();
+
+      if(applicationStatusProvider.apiResponse.status == Status.COMPLETED){
+        if(applicationStatusProvider.apiResponse.data?.data?.applicationStatus != null ){
+          if(applicationStatusProvider.apiResponse.data?.data?.applicationStatus.isNotEmpty ?? false){
+            _draftApplicationStatus.clear();
+            _otherApplicationStatus.clear();
+            for(var element in applicationStatusProvider.apiResponse.data!.data!.applicationStatus){
+              if(element.applicationStatus.programAction == 'DRAFT'){
+                _draftApplicationStatus.add(element);
+              }
+              else{
+                _otherApplicationStatus.add(element);
+              }
             }
           }
         }
       }
     }
+    catch (e,stackTrace){
+      print(stackTrace);
+    }
+
   }
 
 
@@ -531,7 +540,8 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                               _navigationServices.goBack();
                               await provider.deleteDraft(draftId: application.applicationProgramNumber ?? '',);
                               setProcessing(false);
-                              await _onRefresh();}),
+                              await _onRefresh();
+                                }),
 
 
                                   // Cancel deletion
