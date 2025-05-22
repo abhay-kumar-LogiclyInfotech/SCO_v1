@@ -43,6 +43,7 @@ class Constants {
 
   static const String scholarshipInUae = "assets/sidemenu/sco_programs_images/INT.png";
   static const String scholarshipInAbroad= "assets/sidemenu/sco_programs_images/EXT.png";
+  static const String doctorsScholarship = "assets/sidemenu/sco_programs_images/doctors_scholarship.png";
 
   static const String bachelorsInUae = "assets/sidemenu/sco_programs_images/bachelors_in_uae.jpg";
   static const String graduatesInUAE = "assets/sidemenu/sco_programs_images/graduates_in_uae.png";
@@ -76,7 +77,8 @@ class Constants {
       "code":"DDS",
       "value":"Distinguished Doctor",
       "valueArabic":"المهن الطبية",
-      "description": "انطلاقًـا مـن حـرص وزارة شـؤون الرئاسـة علـى رفـع المسـتوى الأكاديمـي والعلمـي للمواطنيـن، وإعـداد كـوادر وطنيـة مؤهّلـة أكاديميًّـا وعمليًّـا، تلبـّي متطلبـات سـوق العمـل المتطـوّرة والمتغيّـرة فـي الدولـة، وتسـهم فـي دفـع مسـيرة التنميـة الحضاريـة وتنهــض بالوطــن والمجتمــع، تــمّ إطــلاق برنامــج «المنــح الدراســية داخــل الدولــة» ســنة 2000، ولا زال البرنامــج مســتمرًا تحــت إشـراف إدارة البعثـات الداخليـة فـي مكتـب البعثـات الدراسـية التابـع لـوزارة شـؤون الرئاسـة."
+      "description": "انطلاقًـا مـن حـرص وزارة شـؤون الرئاسـة علـى رفـع المسـتوى الأكاديمـي والعلمـي للمواطنيـن، وإعـداد كـوادر وطنيـة مؤهّلـة أكاديميًّـا وعمليًّـا، تلبـّي متطلبـات سـوق العمـل المتطـوّرة والمتغيّـرة فـي الدولـة، وتسـهم فـي دفـع مسـيرة التنميـة الحضاريـة وتنهــض بالوطــن والمجتمــع، تــمّ إطــلاق برنامــج «المنــح الدراســية داخــل الدولــة» ســنة 2000، ولا زال البرنامــج مســتمرًا تحــت إشـراف إدارة البعثـات الداخليـة فـي مكتـب البعثـات الدراسـية التابـع لـوزارة شـؤون الرئاسـة.",
+      "image": doctorsScholarship
     },
 
 
