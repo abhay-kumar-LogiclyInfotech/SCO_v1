@@ -436,7 +436,7 @@ class _DrawerViewState extends State<DrawerView> {
   Future<void> _loadAppVersion(AppLocalizations localization) async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      _appVersion = '${localization.version} 1.0.4';
+      _appVersion = '${localization.version} 1.0.5';
       // _appVersion = '${localization.version} ${packageInfo.version} (${packageInfo.buildNumber})';
       // _appVersion = 'Version ${packageInfo.version}';
     });
