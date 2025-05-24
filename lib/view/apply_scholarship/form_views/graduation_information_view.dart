@@ -180,7 +180,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
         child: SingleChildScrollView(
             child: Column(children: [
           if (!widget.displayHighSchool)
-            widget.draftPrevNextButtons,
+            kSmallSpace,
           kFormHeight,
 
           /// if selected scholarship matches the condition then high school details section else don't
@@ -410,7 +410,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                     ],
                   ))
               : showVoid,
-          widget.draftPrevNextButtons
+          const SizedBox(height: 100,)
         ])));
   }
 

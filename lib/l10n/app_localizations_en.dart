@@ -2796,7 +2796,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studentUndertakingRequired => 'You cannot proceed with the application without the acknowledgement and undertaking.';
 
   @override
-  String get studentUndertaking => '.أقر بموافقتي والتعليق علي ما ورد اعلاه';
+  String get studentUndertaking => 'Student Undertaking';
 
   @override
   String get documentUploaded => 'Document Uploaded';
@@ -3370,4 +3370,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordSubmitButtonLabel => 'Submit';
+
+  @override
+  String get areYouSure => 'Are you sure?';
 }

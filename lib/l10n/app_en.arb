@@ -928,7 +928,7 @@
   "stepSubmit": "\u0627\u0628\u062F\u0623",
   "titleStep": "Student undertaking",
   "studentUndertakingRequired": "You cannot proceed with the application without the acknowledgement and undertaking.",
-  "studentUndertaking": ".\u0623\u0642\u0631 \u0628\u0645\u0648\u0627\u0641\u0642\u062A\u064A \u0648\u0627\u0644\u062A\u0639\u0644\u064A\u0642 \u0639\u0644\u064A \u0645\u0627 \u0648\u0631\u062F\u0020\u0627\u0639\u0644\u0627\u0647",
+  "studentUndertaking": "Student Undertaking",
   "documentUploaded": "Document Uploaded",
   "requestAttachFile1": "Status",
   "scholarshipTypeInternal": "Scholarship In UAE",
@@ -1119,6 +1119,7 @@
   "submitSecurityQuestion": "Update",
   "forgotPasswordEmailWatermark" : "Enter email address",
   "forgotPasswordCaptchaWatermark": "Enter captcha",
-  "forgotPasswordSubmitButtonLabel": "Submit"
+  "forgotPasswordSubmitButtonLabel": "Submit",
+  "areYouSure": "Are you sure?"
 
 }

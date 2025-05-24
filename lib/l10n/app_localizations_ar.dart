@@ -3370,4 +3370,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get forgotPasswordSubmitButtonLabel => 'تأكيد ';
+
+  @override
+  String get areYouSure => 'هل أنت متأكد؟';
 }

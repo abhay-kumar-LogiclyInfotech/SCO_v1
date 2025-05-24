@@ -103,7 +103,8 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-              widget.draftPrevNextButtons,
+              // widget.draftPrevNextButtons,
+              kSmallSpace,
               CustomInformationContainer(
                   title: localization.employmentHistory,
                   expandedContent: Column(
@@ -590,7 +591,8 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
 
                             ])
                       ])),
-              widget.draftPrevNextButtons
+              // widget.draftPrevNextButtons
+              const SizedBox(height: 100,),
             ])));
   }
 }

@@ -280,7 +280,8 @@ class _HighSchoolViewState extends State<HighSchoolView> with MediaQueryMixin {
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-              widget.draftPrevNextButtons,
+              // widget.draftPrevNextButtons,
+              kSmallSpace,
 
               /// *--------------------------------------------------------------- High School Details Section Start ----------------------------------------------------------------------------*
               CustomInformationContainer(

@@ -151,7 +151,8 @@ _alertServices = getIt.get<AlertServices>();
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
-              widget.draftPrevNextButtons,
+              kSmallSpace,
+              // widget.draftPrevNextButtons,
               CustomInformationContainer(
                   title: widget.acadmicCareer == 'DDS'
                       ? localization.ddsExams
@@ -398,6 +399,8 @@ _alertServices = getIt.get<AlertServices>();
                         ])
                       ]))),
 
-widget.draftPrevNextButtons            ])));
+              const SizedBox(height: 100,),
+
+            ])));
   }
 }

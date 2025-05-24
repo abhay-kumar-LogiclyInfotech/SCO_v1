@@ -5672,7 +5672,7 @@ abstract class AppLocalizations {
   /// No description provided for @studentUndertaking.
   ///
   /// In en, this message translates to:
-  /// **'.أقر بموافقتي والتعليق علي ما ورد اعلاه'**
+  /// **'Student Undertaking'**
   String get studentUndertaking;
 
   /// No description provided for @documentUploaded.
@@ -6820,6 +6820,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submit'**
   String get forgotPasswordSubmitButtonLabel;
+
+  /// No description provided for @areYouSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get areYouSure;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

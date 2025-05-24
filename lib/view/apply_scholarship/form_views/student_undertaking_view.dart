@@ -80,7 +80,9 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
                   isLoading: false,
                   textDirection: getTextDirection(langProvider),
                   onTap: widget.onSubmit),
-            )
+            ),
+
+            const SizedBox(height: 100,),
           ],
         ),
       ),

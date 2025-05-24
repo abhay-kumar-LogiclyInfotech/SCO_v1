@@ -62,28 +62,31 @@ class _StepsProgressViewState extends State<StepsProgressView>
       return displayEmploymentHistory();
     }
 
-    // Switch case for text based on step
-    switch (step) {
-      case 0:
-        return localization.studentUndertaking;
 
-      case 1:
+    print("Print: ${widget.totalSections}");
+
+
+    switch (step)
+    {
+
+
+      case 0:
         return localization.studentDetails;
 
-      case 2:
+      case 1:
         if (shouldShowHighSchoolDetails()) {
           return localization.highSchoolDetails;
         }
         // Graduation Details Section as fallback
         return localization.graduationDetails;
 
-      case 3:
+      case 2:
         if (isUniversityAndMajorsRequired()) {
           return localization.universityAndMajor;
         }
-        return "Not Applicable for University and Majors";
+        return '';
 
-      case 4:
+      case 3:
         if (isAttachmentSectionForExt()) {
           return localization.attachments;
         } else if (isRequiredExaminationDetailsRequired()) {
@@ -91,8 +94,8 @@ class _StepsProgressViewState extends State<StepsProgressView>
         }
         return "No Examination Required";
 
-      case 5:
-        // Attachments Section if UGRD key or show Employment History if applicable
+      case 4:
+      // Attachments Section if UGRD key or show Employment History if applicable
         if (acadmicCareer == 'UGRD') {
           return localization.attachments;
         } else if (shouldDisplayEmploymentHistory()) {
@@ -102,24 +105,94 @@ class _StepsProgressViewState extends State<StepsProgressView>
         }
         return localization.confirmation_title;
 
-      case 6:
-        // Final Confirmation or Attachments Section based on key
+      case 5:
+      // Final Confirmation or Attachments Section based on key
         if (key == 'SCOACTUGRD' ||
             key == 'SCOUGRDINT' ||
             key == 'SCOMETLOGINT' ||
             key == 'SCOUGRDEXT') {
           return localization.confirmation_title;
-        } else {
+        } else if (isAttachmentSectionForExt()){
+          return localization.studentUndertaking;
+        }
+        else {
           return localization.attachments;
         }
 
-      case 7:
-        // Confirmation at the end
+      case 6:
+        if (key == 'SCOACTUGRD' ||
+            key == 'SCOUGRDINT' ||
+            key == 'SCOMETLOGINT' ||
+            key == 'SCOUGRDEXT') {
+          return localization.studentUndertaking;
+        }
         return localization.confirmation_title;
+
+      case 7:
+        return localization.studentUndertaking;
 
       default:
         return "Unknown"; // Default case for unexpected step values
     }
+
+    // Switch case for text based on step
+    // switch (step) {
+    //   case 0:
+    //     return localization.studentUndertaking;
+    //
+    //   case 1:
+    //     return localization.studentDetails;
+    //
+    //   case 2:
+    //     if (shouldShowHighSchoolDetails()) {
+    //       return localization.highSchoolDetails;
+    //     }
+    //     // Graduation Details Section as fallback
+    //     return localization.graduationDetails;
+    //
+    //   case 3:
+    //     if (isUniversityAndMajorsRequired()) {
+    //       return localization.universityAndMajor;
+    //     }
+    //     return "Not Applicable for University and Majors";
+    //
+    //   case 4:
+    //     if (isAttachmentSectionForExt()) {
+    //       return localization.attachments;
+    //     } else if (isRequiredExaminationDetailsRequired()) {
+    //       return localization.requiredExamination;
+    //     }
+    //     return "No Examination Required";
+    //
+    //   case 5:
+    //     // Attachments Section if UGRD key or show Employment History if applicable
+    //     if (acadmicCareer == 'UGRD') {
+    //       return localization.attachments;
+    //     } else if (shouldDisplayEmploymentHistory()) {
+    //       return localization.employmentHistory;
+    //     } else if (isAttachmentSectionForExt()) {
+    //       return localization.confirmation_title;
+    //     }
+    //     return localization.confirmation_title;
+    //
+    //   case 6:
+    //     // Final Confirmation or Attachments Section based on key
+    //     if (key == 'SCOACTUGRD' ||
+    //         key == 'SCOUGRDINT' ||
+    //         key == 'SCOMETLOGINT' ||
+    //         key == 'SCOUGRDEXT') {
+    //       return localization.confirmation_title;
+    //     } else {
+    //       return localization.attachments;
+    //     }
+    //
+    //   case 7:
+    //     // Confirmation at the end
+    //     return localization.confirmation_title;
+    //
+    //   default:
+    //     return "Unknown"; // Default case for unexpected step values
+    // }
   }
 
   @override
@@ -131,14 +204,14 @@ class _StepsProgressViewState extends State<StepsProgressView>
       child: AnimatedContainer(duration: const Duration(milliseconds: 100),
         // height: 150,
         padding: EdgeInsets.only(top:5,left: kPadding,right: kPadding),
-        decoration:  BoxDecoration(
+        decoration:  const BoxDecoration(
 
             // color: AppColors.bgColor,
             gradient: LinearGradient(colors: [
               Color(0xff074976),
               Color(0xff042C46),
             ]),
-            border: const Border(bottom: BorderSide(color: AppColors.darkGrey))),
+            border:  Border(bottom: BorderSide(color: AppColors.darkGrey))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,6 +231,9 @@ class _StepsProgressViewState extends State<StepsProgressView>
                 scrollDirection: Axis.horizontal,
                 itemCount: widget.totalSections,
                 itemBuilder: (context, index) {
+
+                  print("Index: $index, Total Sections: ${widget.totalSections}");
+
                   return SizedBox(
                       // padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       width: 140,
