@@ -1136,7 +1136,9 @@
   "emirateidExpiryDateRequired": "يرجى تحديد تاريخ انتهاء بطاقة الهوية الإماراتية",
   "emirateidExpiryDateWatermark": "أدخل تاريخ انتهاء بطاقة الهوية الإماراتية",
   "poboxWatermark": "أدخل صندوق البريد",
-  "areYouSure": "هل أنت متأكد؟"
+  "areYouSure": "هل أنت متأكد؟",
+  "more": "المزيد",
+  "paid": "مدفوع"
 
 
 

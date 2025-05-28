@@ -6826,6 +6826,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure?'**
   String get areYouSure;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
+  /// No description provided for @paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paid;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

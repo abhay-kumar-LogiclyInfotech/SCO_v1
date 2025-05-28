@@ -55,17 +55,18 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
               final totalRequests =
                   requestsProvider.apiResponse.data?.data?.listOfRequest?.length;
               final approvedRequests =
-                  requests?.where((r) => r.status == "APPROV")?.length ?? 0;
+                  requests?.where((r) => r.status == "APPROV").length ?? 0;
               final pendingRequests =
-                  requests?.where((r) => r.status == "RECVD")?.length ?? 0;
+                  requests?.where((r) => r.status == "RECVD").length ?? 0;
               final rejectedRequests =
-                  requests?.where((r) => r.status == "DENY")?.length ?? 0;
+                  requests?.where((r) => r.status == "DENY").length ?? 0;
               return Column(
                 children: [
                   kSmallSpace,
                   HomeViewCard(
                       title: AppLocalizations.of(context)!.requests,
-                      icon: SvgPicture.asset("assets/request.svg"),
+                      // icon: SvgPicture.asset("assets/request.svg"),
+                      icon: Image.asset("assets/home/Path 369.png",height: 20,width: 20,),
                       showArrow: false,
                       langProvider: langProvider,
                       // headerExtraContent: RequestsCountContainer(color: Colors.blue.shade600, count: totalRequests),
@@ -88,16 +89,17 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  requestElement(title: localization.approved,color: Colors.green,icon: Icon(Icons.document_scanner_rounded), count: approvedRequests.toString()),
+                                  requestElement(title: localization.approved,color: Colors.green,icon: image("assets/home/Group 402.png"), count: approvedRequests.toString()),
                                   const DashedVerticalLine(height: 80),
-                                  requestElement(title: localization.pending,color: const Color(0xffF4AA73),icon: Icon(Icons.access_time_filled_rounded), count: pendingRequests.toString()),
+                                  requestElement(title: localization.pending,color: const Color(0xffF4AA73),icon:  image("assets/home/Group 403.png"), count: pendingRequests.toString()),
                                   const DashedVerticalLine(height: 80),
-                                  requestElement( title: localization.rejected,color: AppColors.DANGER, count: rejectedRequests.toString()),
+                                  requestElement( title: localization.rejected,color: AppColors.DANGER, icon: image("assets/home/Group 404.png"), count: rejectedRequests.toString()),
                                 ],
                               ),
                               kSmallSpace,
                               SimpleButton(onPressed: (){
-                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()));                              }, title: "More")
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()),);
+                                }, title: localization.more)
                             ],
                           ),
 
@@ -159,9 +161,12 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
 
 
 
+  Widget image(String address){
+    return Image.asset(address,height: 25,width: 25,);
+  }
 
 
-  requestElement({Icon? icon,Color? color,required title,required count,}){
+  requestElement({Widget? icon,Color? color,required title,required count,}){
     return  Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,

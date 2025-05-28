@@ -40,6 +40,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
+    final localization = AppLocalizations.of(context)!;
     return Consumer<MyFinanceStatusViewModel>(
         builder: (context, financeStatusProvider, _) {
       switch (financeStatusProvider.apiResponse.status) {
@@ -57,7 +58,9 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
           final warning = financeData?.listWarnings?.isNotEmpty == true ? financeData?.listWarnings?.first : null;
           return HomeViewCard(
               title: AppLocalizations.of(context)!.myFinance,
-              icon: SvgPicture.asset("assets/my_finance.svg"),
+              icon: Image.asset("assets/home/finance_icon.png",height: 20,width: 20,),
+
+              // icon: SvgPicture.asset("assets/my_finance.svg"),
               showArrow: false,
               onTap: () {
                 // _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
@@ -82,7 +85,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                 children: [
                   kMinorSpace,
                   salaryContainer([
-                    Expanded(child: RichText(text: TextSpan(text: AppLocalizations.of(context)!.salary,style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 18)),)),
+                    Expanded(child: RichText(text: TextSpan(text: localization.salary,style: const TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 18)),)),
                     RichText(
                       text: TextSpan(
                           children: [
@@ -98,7 +101,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                       ),),
                   ]),
                   salaryContainer( [
-                    Expanded(child: RichText(text: const TextSpan(text: "Paid",style: TextStyle(color: Colors.grey,fontSize: 14,fontWeight: FontWeight.normal)),)),
+                    Expanded(child: RichText(text:  TextSpan(text: localization.paid,style: const TextStyle(color: Colors.grey,fontSize: 14,fontWeight: FontWeight.normal)),)),
                     RichText(
                       text: TextSpan(
                           style: const TextStyle(color: Colors.grey),
@@ -115,12 +118,12 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       bonusOrDeductionContainer(
-                          AppLocalizations.of(context)!.deduction,
+                          localization.deduction,
                           deduction?.totalDeducted?.toString() ?? '0',
                           Colors.red
                       ),
                       bonusOrDeductionContainer(
-                        AppLocalizations.of(context)!.bonus,
+                        localization.bonus,
                         bonus?.amount?.toString() ?? '0',
                       ),
 
@@ -131,7 +134,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                   SimpleButton(onPressed: (){
                     _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
 
-                  }, title: "More"),
+                  }, title: localization.more),
                 ],
               ),
 

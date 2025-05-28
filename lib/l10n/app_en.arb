@@ -1120,6 +1120,8 @@
   "forgotPasswordEmailWatermark" : "Enter email address",
   "forgotPasswordCaptchaWatermark": "Enter captcha",
   "forgotPasswordSubmitButtonLabel": "Submit",
-  "areYouSure": "Are you sure?"
+  "areYouSure": "Are you sure?",
+  "more": "More",
+  "paid": "Paid"
 
 }

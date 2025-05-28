@@ -66,12 +66,14 @@ class GetRoleViewModel with ChangeNotifier {
         userId: _userId ?? '',
         headers: headers,
       );
+
       //*-----Calling Api End-----*
 
       _setResponse = ApiResponse.completed(response);
 
       final data = response.data!;
       final userData = response.data!.user!;
+
 
       await  HiveManager.storeRole(data.roles ?? []);
       // _alertServices.toastMessage(response.message.toString(),);

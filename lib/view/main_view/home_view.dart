@@ -96,6 +96,9 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
       final getRolesProvider = Provider.of<GetRoleViewModel>(context, listen: false);
       await getRolesProvider.getRoles();
       role = getRoleFromList(HiveManager.getRole());
+
+
+
       final profilePictureProvider = Provider.of<GetProfilePictureUrlViewModel>(context, listen: false);
 
       /// Fetching profile picture url

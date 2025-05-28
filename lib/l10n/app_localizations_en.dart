@@ -3373,4 +3373,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get areYouSure => 'Are you sure?';
+
+  @override
+  String get more => 'More';
+
+  @override
+  String get paid => 'Paid';
 }

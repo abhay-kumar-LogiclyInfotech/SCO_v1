@@ -187,7 +187,6 @@ class _MyAppState extends State<MyApp> {
               ],
               supportedLocales: const [Locale('en'), Locale('ar')],
               theme: ThemeData(fontFamily: 'droidArabicKufi',
-              // scaffoldBackgroundColor: const Color(0xffEEF1F5),
               ),
 
               navigatorKey: widget._navigationServices.navigationStateKey,
