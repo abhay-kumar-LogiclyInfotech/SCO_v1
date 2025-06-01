@@ -315,7 +315,6 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
     final langProvider = context.read<LanguageChangeViewModel>();
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       // appBar: CustomSimpleAppBar(titleAsString: widget.title ??  localization.scholarshipExternal,),
       appBar: CustomSimpleAppBar(titleAsString:  localization.scholarshipExternal,),
       body: Consumer<GetAllActiveScholarshipsViewModel>(
@@ -326,7 +325,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
       return Stack(
         children: [
           Container(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             height: screenHeight,
             width: screenWidth,
           ),

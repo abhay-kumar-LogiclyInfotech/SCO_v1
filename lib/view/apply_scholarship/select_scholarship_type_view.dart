@@ -108,7 +108,6 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-    backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(localization.apply_for_scholarship,
             style: AppTextStyles.appBarTitleStyle()),

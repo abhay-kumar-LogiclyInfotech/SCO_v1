@@ -37,7 +37,6 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         title: Text(
           AppLocalizations.of(context)!.aboutSCO,

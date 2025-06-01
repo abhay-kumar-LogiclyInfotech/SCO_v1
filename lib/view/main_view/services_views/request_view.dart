@@ -76,7 +76,6 @@ class _RequestViewState extends State<RequestView> with MediaQueryMixin {
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.request),
       body: Utils.modelProgressHud(
           processing: _isProcessing,

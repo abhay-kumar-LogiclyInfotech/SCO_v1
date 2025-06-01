@@ -560,68 +560,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
 
 
-  /// Get majors function
-  List<dynamic> getMajors({
-    required String academicCareer,
-    required String? admitType,
-    required String? scholarshipType,
-    required bool isStudyCountry,
-    required bool isSpecialCase,
-    String? configurationKey,
-  })
-  {
-    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
 
-    // Step 1: Define the majorCriteria based on academic career
-    String majorCriteria = (academicCareer.toUpperCase() == "PGRD")
-        ? "MAJORSPGRD#$academicCareer#${isStudyCountry ? 'N' : 'Y'}"
-        : "MAJORS#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
-
-    // Step 2: Fetch items based on majorCriteria
-    List<dynamic> items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
-
-    // Step 3: Handle admit types and scholarship types
-    if (admitType?.toUpperCase() == "ACT") {
-      majorCriteria = "MAJORSACT#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
-      items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
-    }
-    else if (admitType?.toUpperCase() == "NLU") {
-      majorCriteria = "MAJORSNL#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
-      items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
-    }
-    else if (scholarshipType?.toUpperCase() == "INT" && admitType?.toUpperCase() != "MET") {
-      items = _filterItemsForINT(items, admitType, configurationKey);
-    }
-    else if (scholarshipType?.toUpperCase() == "EXT") {
-      // Items remain unchanged for "EXT" scholarship type
-    } else {
-      // Default case to filter only "BAM" items
-      items = items.where((item) => item.code?.toUpperCase() == "BAM").toList();
-    }
-    // Step 4: Handle special cases
-    if (isSpecialCase) {
-      items.add({'value': 'OTH', 'label': 'آخر'}); // Append special case "OTH"
-    }
-    // Return the final list of dropdown menu items
-    // return populateCommonDataDropdown(menuItemsList: items, provider: langProvider);
-    return items;
-  }
-
-  /// Helper method to filter items for "INT" scholarship type
-  List<dynamic> _filterItemsForINT(List<dynamic> items, String? admitType, String? configurationKey) {
-    return items.where((item) {
-      if (item.code?.toUpperCase() == "OTH") {
-        return _isValidAdmitTypeForINT(admitType, configurationKey);
-      }
-      return true; // Include other items
-    }).toList();
-  }
-
-  /// Helper method to validate "INT" admit type
-  bool _isValidAdmitTypeForINT(String? admitType, String? configurationKey) {
-    return ["MOP", "MOS"].contains(admitType?.toUpperCase()) ||
-        configurationKey?.toUpperCase() == "SCOUGRDINTHH";
-  }
 
 
 
@@ -1554,7 +1493,7 @@ Widget _graduationInformation({required int index,
 
 
 /// Function to get full name for majors
-dynamic getFullNameForMajor(value){
+String getFullNameForMajor(value){
   _majorsMenuItemsList =   getMajors(academicCareer: widget.applicationStatusDetails.acadCareer, admitType: widget.applicationStatusDetails.admitType, scholarshipType: widget.applicationStatusDetails.scholarshipType, isStudyCountry: isStudyCountry, isSpecialCase: isSpecialCase);
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     bool  isLTR =  getTextDirection(langProvider) == TextDirection.ltr;
@@ -1600,4 +1539,66 @@ Widget _sectionsWithPadding({required String title,required List<Widget> childre
       ),
     );
 }
+}
+
+/// Get majors function
+List<dynamic> getMajors({
+  required String academicCareer,
+  required String? admitType,
+  required String? scholarshipType,
+  required bool isStudyCountry,
+  required bool isSpecialCase,
+  String? configurationKey,
+})
+{
+
+  // Step 1: Define the majorCriteria based on academic career
+  String majorCriteria = (academicCareer.toUpperCase() == "PGRD")
+      ? "MAJORSPGRD#$academicCareer#${isStudyCountry ? 'N' : 'Y'}"
+      : "MAJORS#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
+
+  // Step 2: Fetch items based on majorCriteria
+  List<dynamic> items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+
+  // Step 3: Handle admit types and scholarship types
+  if (admitType?.toUpperCase() == "ACT") {
+    majorCriteria = "MAJORSACT#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
+    items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+  }
+  else if (admitType?.toUpperCase() == "NLU") {
+    majorCriteria = "MAJORSNL#$academicCareer#${isStudyCountry ? 'N' : 'Y'}";
+    items = Constants.lovCodeMap[majorCriteria]?.values ?? [];
+  }
+  else if (scholarshipType?.toUpperCase() == "INT" && admitType?.toUpperCase() != "MET") {
+    items = _filterItemsForINT(items, admitType, configurationKey);
+  }
+  else if (scholarshipType?.toUpperCase() == "EXT") {
+    // Items remain unchanged for "EXT" scholarship type
+  } else {
+    // Default case to filter only "BAM" items
+    items = items.where((item) => item.code?.toUpperCase() == "BAM").toList();
+  }
+  // Step 4: Handle special cases
+  if (isSpecialCase) {
+    items.add({'value': 'OTH', 'label': 'آخر'}); // Append special case "OTH"
+  }
+  // Return the final list of dropdown menu items
+  // return populateCommonDataDropdown(menuItemsList: items, provider: langProvider);
+  return items;
+}
+
+/// Helper method to filter items for "INT" scholarship type
+List<dynamic> _filterItemsForINT(List<dynamic> items, String? admitType, String? configurationKey) {
+  return items.where((item) {
+    if (item.code?.toUpperCase() == "OTH") {
+      return _isValidAdmitTypeForINT(admitType, configurationKey);
+    }
+    return true; // Include other items
+  }).toList();
+}
+
+/// Helper method to validate "INT" admit type
+bool _isValidAdmitTypeForINT(String? admitType, String? configurationKey) {
+  return ["MOP", "MOS"].contains(admitType?.toUpperCase()) ||
+      configurationKey?.toUpperCase() == "SCOUGRDINTHH";
 }

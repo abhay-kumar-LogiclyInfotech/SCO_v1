@@ -76,7 +76,6 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView> with MediaQue
     final localization = AppLocalizations.of(context)!;
     return PopScope(
       child: Scaffold(
-          backgroundColor: AppColors.bgColor,
           appBar: CustomSimpleAppBar(
             titleAsString: localization.personalDetailsTitle,
           ),

@@ -44,7 +44,6 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: CustomSimpleAppBar(
         title: Text(localization.faqs, style: AppTextStyles.appBarTitleStyle()),
       ),

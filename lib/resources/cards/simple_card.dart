@@ -21,13 +21,14 @@ class _SimpleCardState extends State<SimpleCard> with MediaQueryMixin {
       onTap: widget.onTap,
       child: Material(
 
-        color: widget.cardColor ?? Colors.white,
+        // color: widget.cardColor ?? Colors.white,
         borderRadius: const BorderRadius.all(Radius.circular(15)),
         child: Container(
           width: double.maxFinite,
           padding: widget.contentPadding ??   EdgeInsets.all(kCardPadding),
           decoration:  BoxDecoration(
             // color: Colors.white,
+            color: widget.cardColor ?? Colors.white,
             border: Border.all(color: AppColors.lightGrey),
             borderRadius: const BorderRadius.all(
               Radius.circular(15)

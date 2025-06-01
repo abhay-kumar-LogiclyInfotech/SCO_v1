@@ -6838,6 +6838,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Paid'**
   String get paid;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

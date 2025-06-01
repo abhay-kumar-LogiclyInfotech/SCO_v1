@@ -68,7 +68,6 @@ class _FinanceViewState extends State<FinanceView> with MediaQueryMixin {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.finance),
       body: Utils.modelProgressHud(
           processing: _isProcessing,

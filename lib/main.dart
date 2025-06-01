@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/app_colors.dart';
 import 'l10n/app_localizations.dart';
 import 'viewModel/view_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -168,7 +169,7 @@ class _MyAppState extends State<MyApp> {
           builder: (context, provider, _) {
             if (provider.appLocale == null) {
               if (widget.locale.isEmpty) {
-                provider.changeLanguage(const Locale('en'));
+                provider.changeLanguage(const Locale('ar'));
               } else {
                 provider.changeLanguage(Locale(widget.locale));
               }
@@ -178,6 +179,7 @@ class _MyAppState extends State<MyApp> {
               title: 'SCO',
               locale: provider.appLocale,
               themeMode: ThemeMode.light,
+
               //when enters the app;
               localizationsDelegates: const [
                 AppLocalizations.delegate,
@@ -187,6 +189,7 @@ class _MyAppState extends State<MyApp> {
               ],
               supportedLocales: const [Locale('en'), Locale('ar')],
               theme: ThemeData(fontFamily: 'droidArabicKufi',
+                scaffoldBackgroundColor: AppColors.bgColor
               ),
 
               navigatorKey: widget._navigationServices.navigationStateKey,

@@ -322,7 +322,6 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       // appBar: CustomSimpleAppBar(titleAsString: widget.title ?? localization.scholarshipInternal,),
       appBar: CustomSimpleAppBar(titleAsString: localization.scholarshipInternal,),
       body: Consumer<GetAllActiveScholarshipsViewModel>(
@@ -333,7 +332,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
           return Stack(
             children: [
               Container(
-                color: Colors.white,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 height: screenHeight,
                 width: screenWidth,
               ),

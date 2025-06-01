@@ -69,7 +69,6 @@ class _SpecificNoteDetailsViewState extends State<SpecificNoteDetailsView> with 
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.guidance_notes),
       body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization: localization), onRefresh: _initializeData) ),
     );

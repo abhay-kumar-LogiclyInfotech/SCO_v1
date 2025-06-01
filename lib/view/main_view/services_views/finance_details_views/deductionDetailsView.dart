@@ -21,6 +21,7 @@ import '../../../../resources/components/custom_simple_app_bar.dart';
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
 import '../../../../viewModel/services/navigation_services.dart';
+import 'finance_card.dart';
 
 
 class DeductionDetailsView extends StatefulWidget {
@@ -63,7 +64,6 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.deductionDetails),
       body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
     );
@@ -131,7 +131,7 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
               return
               Column(
                 children: [
-                  financeCard(
+                  FinanceCard(
                       color: index%2 != 0 ? const Color(0xffF9F9F9) : Colors.white,
                       content:  [
                         CustomInformationContainerField(title: localization.sr, description: (index+1).toString() ?? '- -'),
@@ -141,27 +141,11 @@ class _DeductionDetailsViewState extends State<DeductionDetailsView> with MediaQ
                         CustomInformationContainerField(title: localization.currency, description: topDeduction?.currencyCode.toString() ?? '- -' ,isLastItem: true),
                         kFormHeight,
                       ],  langProvider: langProvider,isLastTerm: index == listOfDeduction.length -1),
-                  if(index < listOfDeduction.length-1 ) const MyDivider(color: AppColors.darkGrey),
+                  if(index < listOfDeduction.length-1 )const NoMarginDivider(),
+                    // const MyDivider(color: AppColors.darkGrey),
                 ],
               );})
     );
 
-  }
-
-  Widget financeCard({required color,required List<Widget> content,required langProvider,bool isLastTerm = false})
-  {
-    return Container(
-      decoration: BoxDecoration(
-          color: color,
-          borderRadius: isLastTerm ? const BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)) : null,
-          border: Border.all(color: Colors.transparent)
-      ),
-      child: Padding(
-        padding:  EdgeInsets.only(left: kCardPadding,right: kCardPadding,top: kCardPadding),
-        child: Column(
-          children: content,
-        ),
-      ),
-    );
   }
 }

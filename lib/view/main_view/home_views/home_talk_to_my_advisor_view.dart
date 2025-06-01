@@ -61,7 +61,7 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                       HomeViewCard(
                           onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const AcademicAdvisorView()));},
                           title: AppLocalizations.of(context)!.talkToMyAdvisor,
-                          icon: SvgPicture.asset("assets/talk_to_my_advisor.svg"),
+                          icon: SvgPicture.asset("assets/support/support_1_0_1/Academic Advisor.svg",height: 20,width: 20,),
                           langProvider: langProvider,
                           // contentPadding: EdgeInsets.zero,
                           content: Column(

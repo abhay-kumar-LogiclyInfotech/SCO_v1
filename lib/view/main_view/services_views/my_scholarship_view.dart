@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
 import 'package:sco_v1/utils/constants.dart';
+import 'package:sco_v1/view/drawer/accout_views/application_status_view.dart';
 import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
@@ -58,7 +59,6 @@ class _MyScholarshipViewState extends State<MyScholarshipView> with MediaQueryMi
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-        backgroundColor: AppColors.bgColor,
         appBar: CustomSimpleAppBar(titleAsString: localization.my_scholarship),
         body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
       );
@@ -127,15 +127,18 @@ class _MyScholarshipViewState extends State<MyScholarshipView> with MediaQueryMi
               /// ------------ MY SCHOLARSHIP (APPROVED SCHOLARSHIP) DETAILS ------------
               CustomInformationContainerField(
                 title: localization.scholarship,
-                description:  Constants.getNameOfScholarshipByConfigurationKey(localization: localization, configurationKey: "SCO${element.academicCareer}${element.scholarshipType}") ,
+                description: getFullNameFromLov(langProvider: langProvider,code: element.scholarshipType,lovCode: 'MY_SCHOLARSHIP')
+
+                // Constants.getNameOfScholarshipByConfigurationKey(localization: localization, configurationKey: "SCO${element.academicCareer}${element.scholarshipType}") ,
               ),
               CustomInformationContainerField(
                 title: localization.countryAndUniversity,
-                description: getFullNameFromLov(
-                  lovCode: 'EXT_ORG_ID',
-                  code: '${element.university}',
-                  langProvider: langProvider,
-                ) ,
+                description: getFullNameForUniversity(value: element.university, country: element.country, admitType: element.admitType, scholarshipType: element.scholarshipType, context: context),
+                // description: getFullNameFromLov(
+                //   lovCode: 'EXT_ORG_ID',
+                //   code: '${element.university}',
+                //   langProvider: langProvider,
+                // ) ,
               ),
               CustomInformationContainerField(
                 title:  localization.country,

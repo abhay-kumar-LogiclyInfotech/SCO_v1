@@ -42,25 +42,20 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
                         height: orientation == Orientation.portrait ? 220.0 : 210,
                         aspectRatio: 16 / 9,
                         viewportFraction: 1,
+                        enlargeFactor: 0,
                         initialPage: 0,
                         enableInfiniteScroll: true,
                         reverse: false,
                         autoPlay: true,
                         autoPlayInterval: const Duration(seconds: 5),
-                        autoPlayAnimationDuration: const Duration(milliseconds: 300),
+                        autoPlayAnimationDuration: const Duration(milliseconds: 400),
                         autoPlayCurve: Curves.linear,
                         enlargeCenterPage: true,
-                        enlargeFactor: 1,
+
                         scrollDirection: Axis.horizontal,
                       ),
-                      items: provider.parsedNewsAndEventsModelList
-                          .map<Widget>((item) {
-                        final languageId = getTextDirection(
-                            context.read<LanguageChangeViewModel>()) ==
-                            TextDirection.rtl
-                            ? 'ar_SA'
-                            : 'en_US';
-
+                      items: provider.parsedNewsAndEventsModelList.map<Widget>((item) {
+                        final languageId = getTextDirection(context.read<LanguageChangeViewModel>()) == TextDirection.rtl ? 'ar_SA' : 'en_US';
                         return CarouselItemBuilder(
                           item: item,
                           languageId: languageId,
@@ -97,10 +92,8 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
   late NavigationServices _navigationServices;
 
   void _initializeData() async {
-    final langProvider =
-    Provider.of<LanguageChangeViewModel>(context, listen: false);
-    final provider =
-    Provider.of<IndividualImageViewModel>(context, listen: false);
+    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+    final provider = Provider.of<IndividualImageViewModel>(context, listen: false);
 
     // Schedule the data fetch to avoid direct async calls in build phase
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -156,7 +149,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
                         return Container(
                           height: 100,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                             color: Colors.grey.withOpacity(0.3),
                           ),
                           child: const Center(
@@ -188,7 +181,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
                         return Container(
                           height: 100,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                             color: Colors.grey.withOpacity(0.3),
                           ),
                         );

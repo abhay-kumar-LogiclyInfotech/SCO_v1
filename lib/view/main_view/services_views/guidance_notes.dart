@@ -4,18 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
 import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/custom_text_field.dart';
-import 'package:sco_v1/view/main_view/services_views/create_request_view.dart';
 import 'package:sco_v1/view/main_view/services_views/notes_views/specific_note_details_view.dart';
-import 'package:sco_v1/view/main_view/services_views/request_details_view.dart';
-import 'package:sco_v1/viewModel/services/media_services.dart';
-import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
-import 'package:sco_v1/viewModel/services_viewmodel/get_all_requests_viewModel.dart';
-import 'package:sco_v1/viewModel/services_viewmodel/my_scholarship_viewmodel.dart';
 
 import '../../../data/response/status.dart';
 import '../../../resources/app_colors.dart';
@@ -75,7 +68,6 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.guidance_notes),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
@@ -267,11 +259,15 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
                     const SizedBox(height: 15),
                     Row(
                       children: [
-                        actionButton(text: localization.view,assetAddress: "assets/services/status.svg",onTap: (){
+                        actionButton(text: localization.view,assetAddress: "assets/services/status.svg",
+                            backgroundColor: AppColors.scoThemeColor,
+                            onTap: (){
                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> SpecificNoteDetailsView(noteId: element.noteId.toString())));
                         }),
                         kFormHeight,
-                        actionButton(text:localization.update,assetAddress: "assets/services/update_note.svg",onTap: (){
+                        actionButton(text:localization.update,assetAddress: "assets/services/update_note.svg",
+                            backgroundColor: AppColors.scoButtonColor,
+                            onTap: (){
                           _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> UpdateNoteView(noteId: element.noteId.toString())));
                         }),
                       ],
@@ -284,29 +280,31 @@ class _GuidanceNotesViewState extends State<GuidanceNotesView> with MediaQueryMi
   }
 }
 
-Widget actionButton({required assetAddress,required text,required onTap}){
-  return GestureDetector(
-    onTap: onTap,
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.scoButtonColor)
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SvgPicture.asset(assetAddress ?? ''),
-          const SizedBox.square(dimension: 3),
-          Text(
-            text ?? '',
-            style: AppTextStyles.normalTextStyle().copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                color: AppColors.scoButtonColor),
-          )
-        ],
-      ),
-    ),
-  );
+Widget actionButton({required assetAddress,required text,required onTap,required Color backgroundColor}){
+  return CustomMaterialButton(onPressed: onTap,backgroundColor: backgroundColor ,visualDensity: VisualDensity.compact,child: Text(text,style: AppTextStyles.myApplicationsEditButton()));
+
+  // GestureDetector(
+    // onTap: onTap,
+    // Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 5),
+    //   decoration: BoxDecoration(
+    //     borderRadius: BorderRadius.circular(20),
+    //     border: Border.all(color: AppColors.scoButtonColor)
+    //   ),
+    //   child: Row(
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: [
+    //       SvgPicture.asset(assetAddress ?? ''),
+    //       const SizedBox.square(dimension: 3),
+    //       Text(
+    //         text ?? '',
+    //         style: AppTextStyles.normalTextStyle().copyWith(
+    //             fontWeight: FontWeight.w600,
+    //             fontSize: 14,
+    //             color: AppColors.scoButtonColor),
+    //       )
+    //     ],
+    //   ),
+    // ),
+  // );
 }

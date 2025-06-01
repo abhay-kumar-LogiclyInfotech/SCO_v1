@@ -216,7 +216,6 @@ class _SupportViewState extends State<SupportView> with MediaQueryMixin {
     final itemsList = _buildItemsList(localization);
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       body: Utils.modelProgressHud(
         child: Utils.pageRefreshIndicator(
           child: _buildUI(itemsList),

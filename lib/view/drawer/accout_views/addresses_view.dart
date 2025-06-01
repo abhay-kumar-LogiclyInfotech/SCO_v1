@@ -68,7 +68,6 @@ class _AddressesViewState extends State<AddressesView> with MediaQueryMixin {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.address),
       body: Utils.modelProgressHud(
           processing: _isProcessing,

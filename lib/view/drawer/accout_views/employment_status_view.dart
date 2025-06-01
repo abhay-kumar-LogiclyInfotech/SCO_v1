@@ -156,7 +156,6 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         titleAsString: localization.employmentStatusTitle,
       ),

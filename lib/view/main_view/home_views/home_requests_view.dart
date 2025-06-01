@@ -64,7 +64,7 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
                 children: [
                   kSmallSpace,
                   HomeViewCard(
-                      title: AppLocalizations.of(context)!.requests,
+                      title: AppLocalizations.of(context)!.request,
                       // icon: SvgPicture.asset("assets/request.svg"),
                       icon: Image.asset("assets/home/Path 369.png",height: 20,width: 20,),
                       showArrow: false,
