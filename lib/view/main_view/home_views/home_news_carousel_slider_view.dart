@@ -41,8 +41,8 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
                       options: CarouselOptions(
                         height: orientation == Orientation.portrait ? 220.0 : 210,
                         aspectRatio: 16 / 9,
-                        viewportFraction: 1,
-                        enlargeFactor: 0,
+                        viewportFraction: 0.9,
+                        enlargeFactor: 0.1,
                         initialPage: 0,
                         enableInfiniteScroll: true,
                         reverse: false,
