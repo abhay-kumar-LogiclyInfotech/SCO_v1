@@ -86,7 +86,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             'title': ' شروط ومتطلبات التقديم للمنحة - درجة البكالوريوس ',
             'subTitle': "",
             'content': getBachelorTermsAndConditionsInternal(context),
-            // 'imagePath': null,
+            'imagePath': Constants.conditions,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsTermsAndConditions,title: localization.bachelors_degree_scholarship_admission_terms,))),
           },
           {
@@ -94,15 +94,14 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             'title' : " قائمة الجامعات والتخصصات المعتمدة ",
             'subTitle': "",
             'content': getBachelorUniversityAndMajorsInternal(context),
-
-            // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.universityList,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
           },
           {
             // 'title': localization.bachelors_degree_scholarship_privileges,
             'title' : ' قائمة الجامعات المعتمدة لدى المكتب ',
             'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.universityList,
             'content': getBachelorUniversityAndSpecializationsInternal(context),
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreePrivileges,title: localization.bachelors_degree_scholarship_privileges,))),
           },
@@ -118,7 +117,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             'title': ' امتيازات المنحة - درجة البكالوريوس ',
             'content': getBachelorScholarshipPrivilegesInternal(context),
             // 'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.privileges,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorsDegreeImportantGuidelines, title: localization.important_guidelines_for_high_school_students,))),
           },
           {
@@ -134,6 +133,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             'title': " إجراءات التقديم للمنحة - درجة البكالوريوس ",
             'content': getBachelorApplyingProcedureInternal(context),
             'subTitle': "",
+            "imagePath": Constants.applyingProcedure,
           },
 
 
@@ -145,7 +145,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             'title': " شروط ومتطلبات التقديم للمنحة - الدراسات العليا ",
             'content': getGraduateTermsAndConditionsInternal(context),
             // 'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.conditions,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateTermsAndConditions, title: localization.graduate_studies_scholarship_admission_terms,))),
           },
           {
@@ -155,7 +155,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             'content': getGraduateUniversityAndMajorsInternal(context),
 
             // 'subTitle': "",
-            // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.universityList,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateUniversityAndSpecializationList, title: localization.sco_accredited_universities_and_specializations_list,))),
           },
           {
@@ -165,7 +165,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
             // 'title': localization.graduate_studies_scholarship_privileges,
             // 'subTitle': "",
-            // // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.universityList,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateDegreePrivileges, title: localization.graduate_studies_scholarship_privileges,))),
           },
           {
@@ -182,7 +182,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             'content': getGraduateScholarshipPrivilegesInternal(context),
             // 'title': localization.graduate_studies_scholarship_applying_procedures,
             // 'subTitle': "",
-            // // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.privileges,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateDegreeApplyingProcedure, title: localization.graduate_studies_scholarship_applying_procedures,))),
           },
           {
@@ -192,14 +192,8 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
           {
             'title': " إجراءات التقديم للمنحة - الدراسات العليا ",
             'content': getGraduateApplyingProcedureInternal(context),
+            "imagePath": Constants.applyingProcedure
           }
-
-
-
-
-
-
-
         ];
       case 'SCOMETLOGINT':
         return [
@@ -208,7 +202,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
           'content': getMeteorologicalTermsAndConditionsInternal(context),
             // 'title': localization.meteorological_scholarship_admission_terms,
             // 'subTitle': "",
-            // // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.conditions,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalTermsAndConditions, title: localization.meteorological_scholarship_admission_terms,))),
           },
           {
@@ -217,7 +211,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
             // 'title': localization.sco_accredited_universities_and_specializations_list,
             // 'subTitle': "",
-            // // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.universityList,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalUniversityAndSpecializationList, title:  localization.sco_accredited_universities_and_specializations_list,))),
           },
 
@@ -228,7 +222,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
 
             // 'title': localization.meteorological_scholarship_privileges,
             // 'subTitle': "",
-            // // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.privileges,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalDegreePrivileges, title: localization.meteorological_scholarship_privileges,))),
           },
           {
@@ -245,7 +239,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
             'content': getMeteorologicalApplyingProcedureInternal(context),
             // 'title': localization.meteorological_scholarship_applying_procedures,
             // 'subTitle': "",
-            // // 'imagePath': Constants.scholarshipInUae,
+            'imagePath': Constants.applyingProcedure,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.meteorologicalDegreeApplyingProcedure, title: localization.meteorological_scholarship_applying_procedures,))),
           },
         ];
@@ -298,6 +292,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
     for (var model in _scoProgramsModelsList) {
       _scholarshipsInUaeList.add(
         isInternalScholarship() ? CustomExpansionTile(
+          leading: Image.asset(model.imagePath ?? Constants.fallback,height: 20,width: 20,),
           title: model.title!,
           expandedContent: model.content ?? const SizedBox(),
           trailing: const Icon(Icons.keyboard_arrow_down,color: Colors.white,),

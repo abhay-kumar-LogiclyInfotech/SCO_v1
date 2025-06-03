@@ -90,9 +90,12 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                           height: 20,
                           width: 20,
                         ),
-                        kMinorSpace,
+                        kSmallSpace,
                       ] else
+                        ...[
                         widget.leading!,
+                          kSmallSpace,
+                        ],
 
 
                       Expanded(

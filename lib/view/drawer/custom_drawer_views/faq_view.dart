@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/utils/constants.dart';
 import '../../../l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
@@ -83,6 +84,7 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
                         padding: EdgeInsets.only(bottom: kTileSpace),
                         child: CustomExpansionTile(
                             title: question,
+                            leading: Image.asset(Constants.faq,height: 20,width: 20,),
                             trailing: const Icon(
                               Icons.keyboard_arrow_down_rounded,
                               size: 35,
