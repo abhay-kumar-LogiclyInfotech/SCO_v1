@@ -38,7 +38,8 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
   Future _initializeData() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       /// get personal details to show addresses
-      await Provider.of<GetMyAdvisorViewModel>(context, listen: false).getMyAdvisor();
+      await Provider.of<GetMyAdvisorViewModel>(context, listen: false)
+          .getMyAdvisor();
     });
   }
 
@@ -65,7 +66,6 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.academic_advisor),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
@@ -89,12 +89,13 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
             ),
           );
         case Status.COMPLETED:
-      final listOfAdvisors =   provider.apiResponse.data?.data?.listOfAdvisor ?? [];
+          final listOfAdvisors =
+              provider.apiResponse.data?.data?.listOfAdvisor ?? [];
           return Directionality(
             textDirection: getTextDirection(langProvider),
             child: SingleChildScrollView(
               child: Padding(
-                padding:  EdgeInsets.all(kPadding),
+                padding: EdgeInsets.all(kPadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,51 +140,37 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
         physics: const NeverScrollableScrollPhysics(),
         itemCount: provider.apiResponse?.data?.data?.listOfAdvisor?.length ?? 0,
         itemBuilder: (context, index) {
-          final element = provider.apiResponse?.data?.data?.listOfAdvisor?[index];
+          final element =
+              provider.apiResponse?.data?.data?.listOfAdvisor?[index];
           return Padding(
             padding: EdgeInsets.only(bottom: kCardSpace),
             child: SimpleCard(
-                contentPadding: EdgeInsets.zero,
                 expandedContent: Column(mainAxisSize: MainAxisSize.max, children: [
-                  /// ------------ Advisor's Section ------------
-                  CustomInformationContainerField(
-                      title: "",
-                      descriptionAsWidget: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: kCardPadding),
-                        child: Text(
-                          element?.advisorName ?? '',
-                          style: AppTextStyles.normalTextStyle().copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: AppColors.scoButtonColor),
-                        ),
-                      )),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: kCardPadding),
-                    child: Column(
-                      children: [
-                        // CustomInformationContainerField(
-                        //   title: localization.advisorId,
-                        //   description: element?.advisorId ?? ''),
-                        CustomInformationContainerField(
-                            title: localization.role,
-                            description: element?.advisorRoleDescription ?? ''),
-                        CustomInformationContainerField(
-                            title: localization.contactNumber,
-                            description: element?.phoneNo ?? ''),
-                        CustomInformationContainerField(
-                            title: localization.email,
-                            description: element?.email ?? '',
-                            isLastItem: true),
-                        kFormHeight,
-                      ],
-                    ),
-                  ),
-                ])),
+              /// ------------ Advisor's Section ------------
+              CustomInformationContainerField(
+                title: localization.name,
+                description: element?.advisorName ?? '',
+              ),
+              // CustomInformationContainerField(
+              //   title: localization.advisorId,
+              //   description: element?.advisorId ?? ''),
+              CustomInformationContainerField(
+                title: localization.role,
+                description: element?.advisorRoleDescription ?? '',
+              ),
+              CustomInformationContainerField(
+                title: localization.contactNumber,
+                description: element?.phoneNo ?? '',
+              ),
+              CustomInformationContainerField(
+                title: localization.email,
+                description: element?.email ?? '',
+                isLastItem: true,
+              ),
+            ])),
           );
         });
   }
-
 
   /// Meeting Request Button
   Widget _meetingRequestButton(
@@ -197,11 +184,12 @@ class _AcademicAdvisorViewState extends State<AcademicAdvisorView>
         // buttonColor: AppColors.scoButtonColor,
         textDirection: getTextDirection(langProvider),
         onTap: () {
-          _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>CreateRequestView(
-            requestCategory: "AA",
-            requestType: "AA",
-            requestSubType: "10",
-          )));
+          _navigationServices.pushCupertino(CupertinoPageRoute(
+              builder: (context) => CreateRequestView(
+                    requestCategory: "AA",
+                    requestType: "AA",
+                    requestSubType: "10",
+                  )));
         });
   }
 }

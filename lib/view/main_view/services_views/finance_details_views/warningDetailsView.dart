@@ -21,6 +21,7 @@ import '../../../../resources/components/custom_simple_app_bar.dart';
 import '../../../../utils/utils.dart';
 import '../../../../viewModel/language_change_ViewModel.dart';
 import '../../../../viewModel/services/navigation_services.dart';
+import 'finance_card.dart';
 
 
 class WarningDetailsView extends StatefulWidget {
@@ -63,7 +64,6 @@ class _WarningDetailsViewState extends State<WarningDetailsView> with MediaQuery
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.warningDetails),
       body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization), onRefresh: _initializeData) ),
     );
@@ -130,7 +130,7 @@ class _WarningDetailsViewState extends State<WarningDetailsView> with MediaQuery
               return
                 Column(
                   children: [
-                    financeCard(
+                    FinanceCard(
                         color: index%2 != 0 ? const Color(0xffF9F9F9) : Colors.white,
                         content:  [
                           CustomInformationContainerField(title: localization.sr, description: (index+1).toString() ?? '- -'),
@@ -138,27 +138,11 @@ class _WarningDetailsViewState extends State<WarningDetailsView> with MediaQuery
                           CustomInformationContainerField(title: localization.certificateDescription, description: topWarning?.warningCertificate.toString() ?? '- -' ,isLastItem: true),
                           kFormHeight,
                         ],  langProvider: langProvider,isLastTerm: index == listOfWarnings.length -1),
-                    if(index < listOfWarnings.length-1 ) const MyDivider(color: AppColors.darkGrey),
+                    if(index < listOfWarnings.length-1 ) const NoMarginDivider(),
                   ],
                 );})
     );
 
   }
 
-  Widget financeCard({required color,required List<Widget> content,required langProvider,bool isLastTerm = false})
-  {
-    return Container(
-      decoration: BoxDecoration(
-          color: color,
-          borderRadius: isLastTerm ? const BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)) : null,
-          border: Border.all(color: Colors.transparent)
-      ),
-      child: Padding(
-        padding:  EdgeInsets.only(left: kCardPadding,right: kCardPadding,top: kCardPadding),
-        child: Column(
-          children: content,
-        ),
-      ),
-    );
-  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../app_colors.dart';
+
 class MyDivider extends StatelessWidget {
   const MyDivider({Key? key, this.height = 1, this.color = Colors.black})
       : super(key: key);
@@ -28,6 +30,22 @@ class MyDivider extends StatelessWidget {
           }),
         );
       },
+    );
+  }
+}
+
+
+class NoMarginDivider extends StatelessWidget {
+  const NoMarginDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  const Divider(
+      indent: 0,
+      endIndent: 0,
+      color: AppColors.darkGrey, // or AppColors.darkGrey
+      thickness: 1,
+      height: 1, // eliminates top and bottom margin
     );
   }
 }

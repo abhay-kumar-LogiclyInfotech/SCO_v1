@@ -115,7 +115,6 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         titleAsString: localization.request,
       ),

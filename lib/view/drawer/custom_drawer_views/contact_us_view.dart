@@ -169,7 +169,6 @@ class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: CustomSimpleAppBar(
         title: Text(
           localization.contactUs,

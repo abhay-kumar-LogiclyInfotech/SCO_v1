@@ -6,40 +6,30 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
-import 'package:sco_v1/resources/components/change_language_button.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/sco_programs.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/vision_and_mission_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/account_view.dart';
 import 'package:sco_v1/view/main_view.dart';
-import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/viewModel/account/personal_details/get_profile_picture_url_viewModel.dart';
-import 'package:sco_v1/viewModel/services/alert_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../l10n/app_localizations.dart';
 
 import '../../resources/app_colors.dart';
-import '../../resources/app_urls.dart';
 import '../../resources/components/account/profile_with_camera_button.dart';
 import '../../resources/components/custom_advanced_switch.dart';
-import '../../resources/getRoles.dart';
 import '../../viewModel/authentication/get_roles_viewModel.dart';
 import '../../viewModel/language_change_ViewModel.dart';
 import '../../viewModel/services/auth_services.dart';
 import '../../viewModel/services/navigation_services.dart';
 import '../authentication/login/login_view.dart';
-import '../responsive.dart';
 import 'custom_drawer_views/contact_us_view.dart';
-import 'custom_drawer_views/faq_view.dart';
 import 'custom_drawer_views/news_and_events_view.dart';
-import '../main_view/services_view.dart';
 
 class DrawerView extends StatefulWidget {
   final TextDirection? textDirection;
-  dynamic scaffoldState;
+  final dynamic scaffoldState;
 
-  DrawerView({
+  const DrawerView({
     super.key,
     this.textDirection,
     this.scaffoldState,
@@ -78,6 +68,11 @@ class _DrawerViewState extends State<DrawerView> {
     _navigationServices = getIt.get<NavigationServices>();
     _authService = getIt.get<AuthService>();
 
+
+    /// to get roles of current user
+    final getRolesProvider = Provider.of<GetRoleViewModel>(context, listen: false);
+
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _loadAppVersion(AppLocalizations.of(context)!);
 
@@ -91,7 +86,6 @@ class _DrawerViewState extends State<DrawerView> {
         _roles = HiveManager.getRole() ?? [];
 
         // Getting Fresh Roles
-        final getRolesProvider = Provider.of<GetRoleViewModel>(context, listen: false);
         await getRolesProvider.getRoles();
       }
     });
@@ -436,9 +430,9 @@ class _DrawerViewState extends State<DrawerView> {
   Future<void> _loadAppVersion(AppLocalizations localization) async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      _appVersion = '${localization.version} 1.0.5';
+      // _appVersion = '${localization.version} 1.0.6';
+      _appVersion = '${localization.version} ${packageInfo.version}';
       // _appVersion = '${localization.version} ${packageInfo.version} (${packageInfo.buildNumber})';
-      // _appVersion = 'Version ${packageInfo.version}';
     });
   }
 

@@ -81,20 +81,23 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
             'content' : getBachelorTermsAndConditionsExternal(context),
             // 'title': localization.bachelor_degree_scholarship_terms_and_conditions,
             // 'subTitle': "",
-            // //'imagePath': Constants.scholarshipInAbroad,
+            'imagePath': Constants.conditions,
             // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeTermsAndConditions, title: localization.bachelor_degree_scholarship_terms_and_conditions,))),
           },
           {
             'title': " قائمة الجامعات المعتمدة لدى المكتب ",
             'content' : getBachelorApprovedUniversitiesExternal(context),
+            'imagePath': Constants.universityList,
           },
           {
             'title': " قائمة التخصّصات المعتمدة لدى المكتب ",
             'content' : getBachelorApprovedMajorsExternal(context),
+            // 'imagePath': Constants.universityList,
           },
           {
             'title': " امتيازات البعثة - درجة البكالوريوس ",
             'content' : getBachelorScholarshipPrivilegesExternal(context),
+            'imagePath': Constants.privileges,
           },
           {
             'title': " التزامات الطالب للبعثة - درجة البكالوريوس ",
@@ -103,6 +106,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           {
             'title': " إجراءات التقديم للبعثة - درجة البكالوريوس ",
             'content' : getBachelorApplyingProcedureExternal(context),
+            'imagePath': Constants.applyingProcedure,
           },
 
           // {
@@ -141,10 +145,12 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           {
             'title': " شروط ومتطلبات التقديم للبعثة - الدراسات العليا ",
             'content': getGraduateTermsAndConditionsExternal(context),
+            'imagePath': Constants.conditions,
           },
           {
             'title': " قائمة الجامعات المعتمدة لدى المكتب " ,
             'content': getGraduateApprovedUniversitiesExternal(context),
+            'imagePath': Constants.universityList,
           },
           {
             'title': "  قائمة التخصّصات المعتمدة لدى المكتب " ,
@@ -153,6 +159,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           {
             'title': " امتيازات البعثة - الدراسات العليا  " ,
             'content': getGraduateScholarshipPrivilegesExternal(context),
+            'imagePath': Constants.privileges,
           },
           {
             'title': " التزامات الطالب للبعثة - الدراسات العليا " ,
@@ -161,6 +168,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           {
             'title': " إجراءات التقديم للبعثة - الدراسات العليا " ,
             'content': getGraduateApplyingProcedureExternal(context),
+            'imagePath': Constants.applyingProcedure,
           },
           // {
           //   'title': localization.graduate_outside_uae_terms_and_conditions,
@@ -199,18 +207,25 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           {
             'title': " نبذة عن برنامج دكتور فى الطب ",
             'content': getDoctorAboutTheProgramExternal(context),
+            // 'imagePath': Constants.faq,
+
           },
           {
             'title': " شروط ومتطلبات القبول فى البعثة ",
             'content': getDoctorTermsAndConditionsExternal(context),
+            'imagePath': Constants.conditions,
+
           },
           {
             'title': " معايير القبول في الجامعات العالمية ",
             'content': getDoctorAdmissionCriteriaExternal(context),
+            'imagePath': Constants.applyingProcedure,
           },
           {
             'title': " الجامعات المعتمدة ",
             'content': getDoctorAccreditedUniversitiesExternal(context),
+            'imagePath': Constants.universityList,
+
           },
           // {
           //   'title': localization.distinguished_doctors_scholarship_terms_and_conditions,
@@ -294,6 +309,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
 
       _scholarshipsInUaeList.add(
         isExternalScholarship() ? CustomExpansionTile(
+              leading: Image.asset(model.imagePath ?? Constants.fallback,height: 20,width: 20,),
               title: model.title!,
               expandedContent: model.content ?? const SizedBox(),
               trailing: const Icon(Icons.keyboard_arrow_down,color: Colors.white,),
@@ -315,7 +331,6 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
     final langProvider = context.read<LanguageChangeViewModel>();
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       // appBar: CustomSimpleAppBar(titleAsString: widget.title ??  localization.scholarshipExternal,),
       appBar: CustomSimpleAppBar(titleAsString:  localization.scholarshipExternal,),
       body: Consumer<GetAllActiveScholarshipsViewModel>(
@@ -326,7 +341,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
       return Stack(
         children: [
           Container(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             height: screenHeight,
             width: screenWidth,
           ),

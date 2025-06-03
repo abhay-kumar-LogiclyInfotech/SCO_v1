@@ -9,14 +9,18 @@ import '../../app_colors.dart';
 
 class CustomExpansionTile extends StatefulWidget {
   final String title;
-   Widget? trailing;
+  final Widget? trailing;
+  final Widget? leading;
   final Widget expandedContent;
 
-  CustomExpansionTile({
+  const CustomExpansionTile({
+    super.key,
+    this.leading, // no default value here
     required this.title,
     this.trailing,
     required this.expandedContent,
   });
+
 
   @override
   _CustomExpansionTileState createState() => _CustomExpansionTileState();
@@ -80,6 +84,20 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      if (widget.leading == null) ...[
+                        Image.asset(
+                          "assets/home/Group 457.png",
+                          height: 20,
+                          width: 20,
+                        ),
+                        kSmallSpace,
+                      ] else
+                        ...[
+                        widget.leading!,
+                          kSmallSpace,
+                        ],
+
+
                       Expanded(
                         child: Text(widget.title,
                             style: const TextStyle(

@@ -93,7 +93,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView>
           Container(
             height: double.infinity,
             width: double.infinity,
-            color: const Color(0xfff8f8fa),
+            color: Theme.of(context).scaffoldBackgroundColor,
+            // color: const Color(0xfff8f8fa),
           ),
           SafeArea(
               child: Align(

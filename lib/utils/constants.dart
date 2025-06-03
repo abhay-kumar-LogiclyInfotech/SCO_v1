@@ -54,6 +54,16 @@ class Constants {
   static const String distinguishedDoctorsOutsideUae = "assets/sidemenu/sco_programs_images/distinguished_doctors_outside_uae.png";
 
 
+  /// sco_programs_expansion_tile_images
+  static const String applyingProcedure = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/applying procedures.png";
+  static const String conditions = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/conditions.png";
+  static const String faq = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/FAQ.png";
+  static const String privileges = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/privileges.png";
+  static const String universityList = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/university list.png";
+  static const String useFullWebsites = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/Userful websites.png";
+  static const String fallback = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/Group 328.png";
+
+
 
 
   static const dynamic scholarshipRequestType= [

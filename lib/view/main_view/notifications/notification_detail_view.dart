@@ -87,7 +87,6 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         titleAsString: localization.notificationDetails,
         inNotifications: true,

@@ -63,7 +63,6 @@ class _AccountViewState extends State<AccountView> with MediaQueryMixin {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.myAccount),
       body: _buildUi(localization),
     );

@@ -71,7 +71,6 @@ class _NotificationsViewState extends State<NotificationsView>
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-        backgroundColor: AppColors.bgColor,
         appBar: CustomSimpleAppBar(titleAsString: localization.notificationCenter,inNotifications: true,),
         body: Utils.modelProgressHud(processing: _isProcessing, child: Utils.pageRefreshIndicator(child: _buildUi(localization: localization), onRefresh: _initializeData) ),
       );

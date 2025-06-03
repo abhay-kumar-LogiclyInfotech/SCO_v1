@@ -142,7 +142,6 @@ class _EditAddressesViewState extends State<EditAddressesView>
     debugPrint("Building");
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
         titleAsString: localization.editAddresses,
       ),

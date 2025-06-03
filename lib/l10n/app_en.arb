@@ -1122,6 +1122,7 @@
   "forgotPasswordSubmitButtonLabel": "Submit",
   "areYouSure": "Are you sure?",
   "more": "More",
-  "paid": "Paid"
+  "paid": "Paid",
+  "name": "Name"
 
 }

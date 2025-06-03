@@ -111,7 +111,6 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(
           title: widget.updatingSecurityQuestion
               ? Text(
@@ -136,7 +135,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
         Container(
           height: double.infinity,
           width: double.infinity,
-          color: const Color(0xfff8f8fa),
+          color: Theme.of(context).scaffoldBackgroundColor,
         ),
         SafeArea(
             child: Align(

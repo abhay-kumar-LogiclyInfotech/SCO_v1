@@ -181,7 +181,6 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
 
 
     return Scaffold(
-        backgroundColor: AppColors.bgColor,
         body: Utils.modelProgressHud(processing: isProcessing, child: Utils.pageRefreshIndicator(child: _buildUI(), onRefresh: _onRefresh)));
   }
 
@@ -202,6 +201,7 @@ class _HomeViewState extends State<HomeView> with MediaQueryMixin<HomeView> {
                   const HomeNewsCarouselSliderView(),
                   const HomeScholarshipAppliedView(), /// Scholarship applied container If a user is Applicant then show this and move the user to application statuses view
                   const HomeUploadDocumentsView(), /// AFTER SCHOLARSHIP APPLIED THIS WILL APPEAR IF THERE IS ANY APPROVED DOCUMENTS LIST AVAILABLE.
+                  const HomeScoProgramsView(),
                   const HomeFaqView(),
                   kSmallSpace,
                 ],

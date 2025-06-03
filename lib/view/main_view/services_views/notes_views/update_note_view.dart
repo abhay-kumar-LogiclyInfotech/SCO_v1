@@ -114,7 +114,6 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: CustomSimpleAppBar(titleAsString: localization.updateAdvisorNote),
       body: Utils.modelProgressHud(
           processing: _isProcessing,
@@ -163,12 +162,16 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                         _attachmentsUploadSection(),
 
                         /// ****************************************************************
-                        kFormHeight,
 
                         /// ****************************************************************
-                        const MyDivider(
-                          color: AppColors.lightGrey,
-                        ),
+                       if(_attachmentsList.isNotEmpty) Column(
+                         children: [
+                           kFormHeight,
+                           const MyDivider(
+                              color: AppColors.lightGrey,
+                            ),
+                         ],
+                       ),
                         // This section is to add file
                         AttachmentAddFileButton(addFile: () async {
                           await _addFile();
@@ -347,6 +350,7 @@ class _UpdateNoteViewState extends State<UpdateNoteView> with MediaQueryMixin {
                             actionButton(
                                 assetAddress: "assets/services/bin.svg",
                                 text: localization.delete,
+                                backgroundColor: AppColors.scoThemeColor,
                                 onTap: () {
                                   setState(() {
                                     _deleteComment(index);

@@ -3379,4 +3379,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paid => 'Paid';
+
+  @override
+  String get name => 'Name';
 }
