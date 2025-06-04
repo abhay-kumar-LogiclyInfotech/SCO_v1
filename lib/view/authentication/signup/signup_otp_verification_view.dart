@@ -16,9 +16,7 @@ import 'package:sco_v1/viewModel/authentication/otp_verification_viewModel.dart'
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../data/response/status.dart';
-import '../../../main.dart';
-import '../../../resources/components/change_language_button.dart';
-import '../../../utils/constants.dart';
+import '../../../resources/themes/pin_theme.dart';
 import '../../../viewModel/services/alert_services.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
@@ -184,9 +182,9 @@ class _OtpVerificationViewState extends State<OtpVerificationView>
             length: 7,
             // obscureText: true,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            defaultPinTheme: Constants.defaultPinTheme,
-            focusedPinTheme: Constants.defaultPinTheme.copyWith(
-                decoration: Constants.defaultPinTheme.decoration!
+            defaultPinTheme: PinInputTheme.defaultPinTheme,
+            focusedPinTheme: PinInputTheme.defaultPinTheme.copyWith(
+                decoration: PinInputTheme.defaultPinTheme.decoration!
                     .copyWith(border: Border.all(color: Colors.green))),
             onCompleted: (pin) async {
               setState(() {
