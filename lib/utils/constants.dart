@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
 import 'package:sco_v1/models/splash/commonData_model.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -19,22 +18,6 @@ class Constants {
 
   static RegExp get emiratesIdRegex => RegExp(r'\b784-[0-9]{4}-[0-9]{7}-[0-9]{1}\b');
 
-  static PinTheme defaultPinTheme = PinTheme(
-      width: 44,
-      height: 44,
-      textStyle: const TextStyle(fontSize: 18, color: Colors.black),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.transparent),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              spreadRadius: -1,
-              blurRadius: 4,
-              offset: const Offset(0, 2), // changes position of shadow
-            ),
-          ]));
 
 
   static const String newsImageUrl = "https://lh3.googleusercontent.com/NCE_l5_GJBa2YT_XNhAUf0aAH7-T5gWc15JfQKZ9YINax0698zDeFK64OnPbun9XDVGd=s142";
@@ -45,13 +28,13 @@ class Constants {
   static const String scholarshipInAbroad= "assets/sidemenu/sco_programs_images/EXT.png";
   static const String doctorsScholarship = "assets/sidemenu/sco_programs_images/doctors_scholarship.png";
 
-  static const String bachelorsInUae = "assets/sidemenu/sco_programs_images/bachelors_in_uae.jpg";
-  static const String graduatesInUAE = "assets/sidemenu/sco_programs_images/graduates_in_uae.png";
-  static const String meteorologicalInUAE = "assets/sidemenu/sco_programs_images/meteorological_in_uae.png";
+  static const String bachelorsInUae = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/UGRD.png";
+  static const String graduatesInUAE = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/PGRD.png";
+  static const String meteorologicalInUAE = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/MET.png";
 
-  static const String bachelorsOutsideUae = "assets/sidemenu/sco_programs_images/bachelors_outside_uae.png";
-  static const String graduatesOutsideUae = "assets/sidemenu/sco_programs_images/graduates_outside_uae.png";
-  static const String distinguishedDoctorsOutsideUae = "assets/sidemenu/sco_programs_images/distinguished_doctors_outside_uae.png";
+  static const String bachelorsOutsideUae = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/UGRD.png";
+  static const String graduatesOutsideUae = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/PGRD.png";
+  static const String distinguishedDoctorsOutsideUae = "assets/sidemenu/sco_programs_images/sco_programs_expansion_tile_images/DOCTORS.png";
 
 
   /// sco_programs_expansion_tile_images

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sco_v1/resources/themes/pin_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -14,7 +15,6 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import '../../../data/response/status.dart';
 import '../../../resources/components/custom_simple_app_bar.dart';
-import '../../../utils/constants.dart';
 import '../../../viewModel/authentication/forgot_password_viewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
@@ -180,9 +180,9 @@ class _ForgotSecurityQuestionOtpVerificationViewState
               length: 7,
               // obscureText: true,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              defaultPinTheme: Constants.defaultPinTheme,
-              focusedPinTheme: Constants.defaultPinTheme.copyWith(
-                  decoration: Constants.defaultPinTheme.decoration!
+              defaultPinTheme: PinInputTheme.defaultPinTheme,
+              focusedPinTheme: PinInputTheme.defaultPinTheme.copyWith(
+                  decoration: PinInputTheme.defaultPinTheme.decoration!
                       .copyWith(border: Border.all(color: Colors.green))),
               onCompleted: (pin) async {
                 setState(() {
