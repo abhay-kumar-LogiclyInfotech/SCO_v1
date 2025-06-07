@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
-import 'package:sco_v1/models/TestModel.dart';
 import 'package:sco_v1/models/account/GetBase64StringModel.dart';
 import 'package:sco_v1/models/account/GetEmploymentStatusModel.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
@@ -79,7 +77,7 @@ class HomeRepository {
       // return list of scholarships
       return list;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -91,7 +89,7 @@ class HomeRepository {
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
       url:
-          '${AppUrls.baseUrl}e-services/${userId}/draft-application/${applicationNumber}',
+          '${AppUrls.baseUrl}e-services/$userId/draft-application/$applicationNumber',
       body: body,
       headers: headers,
     );
@@ -139,7 +137,7 @@ class HomeRepository {
       required String draftId,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioDeleteApiService(
-      url: '${AppUrls.baseUrl}e-services/${userId}/delete-draft/${draftId}',
+      url: '${AppUrls.baseUrl}e-services/$userId/delete-draft/$draftId',
       headers: headers,
     );
     return DeleteDraftModel.fromJson(response);
@@ -280,9 +278,7 @@ class HomeRepository {
       case AttachmentType.updateNote:
         url = AppUrls.getUpdateNoteFileContent;
         break;
-      default:
-        throw Exception("Invalid attachment type: $attachmentType");
-    }
+      }
 
     try {
       // Make the API call

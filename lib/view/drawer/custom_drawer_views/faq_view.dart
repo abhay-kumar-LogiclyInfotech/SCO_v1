@@ -85,12 +85,9 @@ class _FaqViewState extends State<FaqView> with MediaQueryMixin {
                         child: CustomExpansionTile(
                             title: question,
                             leading: Image.asset(Constants.faq,height: 20,width: 20,),
-                            trailing: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              size: 35,
-                              color: Colors.white,
-                            ),
-                            expandedContent: Text(answer)),
+                            expandedContent: Text(answer),
+                            contentBackgroundColor: Colors.white,
+                        ),
                       );
                     }
                   });

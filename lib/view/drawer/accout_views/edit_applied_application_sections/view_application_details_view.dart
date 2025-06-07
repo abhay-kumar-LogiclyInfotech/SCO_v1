@@ -891,7 +891,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
             /// Address Information
             ListView.builder(
                 shrinkWrap: true,
-                padding: EdgeInsets.all(kPadding),
+                padding: EdgeInsets.all(kCardPadding),
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: _addressInformationList.length,
                 itemBuilder: (context, index) {
@@ -1528,7 +1528,7 @@ dynamic getFullNameForUniversity({required value,required universityInfo}){
 
 Widget _sectionsWithPadding({required String title,required List<Widget> children }) {
     return Padding(
-      padding: EdgeInsets.all(kPadding),
+      padding: EdgeInsets.all(kCardPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
       children: [

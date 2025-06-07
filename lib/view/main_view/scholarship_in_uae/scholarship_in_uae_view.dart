@@ -6,13 +6,10 @@ import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/tiles/custom_expansion_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_uae/post_graduation_inside_uae/post_graduation_inside_uae.dart';
-import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 
 import '../../../data/response/status.dart';
-import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import '../../../models/home/ScoProgramsTileModel.dart';
 import '../../../resources/app_colors.dart';
-import '../../../resources/app_urls.dart';
 import '../../../resources/components/custom_button.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
@@ -22,7 +19,7 @@ import '../../../viewModel/services/navigation_services.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../apply_scholarship/fill_scholarship_form_view.dart';
 import '../../apply_scholarship/form_view_Utils.dart';
-import 'bachelor_inside_uae/bachelor_inside_uae.dart';
+import 'bachelor_inside_uae/bachelor_inside_uae.dart' hide kSmallSpace,kMinorSpace;
 import 'meteorological_inside_uae/meteorological_inside_uae.dart';
 
 
@@ -295,7 +292,6 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
           leading: Image.asset(model.imagePath ?? Constants.fallback,height: 20,width: 20,),
           title: model.title!,
           expandedContent: model.content ?? const SizedBox(),
-          trailing: const Icon(Icons.keyboard_arrow_down,color: Colors.white,),
         ) :  CustomScoProgramTile(
           imagePath: model.imagePath,
           title: model.title!,
@@ -343,7 +339,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
-                  child:  CustomButton(buttonName: localization.submit, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()async{ // fetching all active scholarships:
+                  child:  CustomButton(buttonName: localization.submitNewApplication, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()async{ // fetching all active scholarships:
 
                     _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(selectedScholarshipConfigurationKey: widget.code, getAllActiveScholarships: provider.apiResponse.data,)));
 
@@ -375,7 +371,6 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
   // }
 
   Widget _buildUI(AppLocalizations localization, bool isInternalScholarship) {
-    final langProvider = context.read<LanguageChangeViewModel>();
 
 
     return Directionality(
@@ -395,7 +390,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   sectionTitle(title: widget.title ?? localization.scholarshipInternal),
-                  const SizedBox(height: 8),
+                  kSmallSpace,
                   ..._scholarshipsInUaeList.map((scholarshipType) => Padding(
                     padding:  EdgeInsets.only(bottom: kTileSpace),
                     child: scholarshipType,
@@ -404,22 +399,18 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
               ),
             ),
           )
-              : Stack(
-                children: [
-                  ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _scholarshipsInUaeList.length,
-                              itemBuilder: (context, index) {
-                  final scholarshipType = _scholarshipsInUaeList[index];
-                  return Padding(
-                    padding:  EdgeInsets.only(bottom: kTileSpace),
-                    child: scholarshipType,
-                  );
-                              },
-                            ),
-                ],
-              ),
+              : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _scholarshipsInUaeList.length,
+                          itemBuilder: (context, index) {
+              final scholarshipType = _scholarshipsInUaeList[index];
+              return Padding(
+                padding:  EdgeInsets.only(bottom: kTileSpace),
+                child: scholarshipType,
+              );
+                          },
+                        ),
         ),
       ),
     );

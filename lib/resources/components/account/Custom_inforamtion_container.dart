@@ -54,18 +54,17 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
         children: [
           Container(
             width: double.maxFinite,
-            decoration: const BoxDecoration(
+            decoration: const  BoxDecoration(
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(10),
               ),
               color: AppColors.scoButtonColor,
             ),
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            padding:  EdgeInsets.all(kCardPadding),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-             widget.leading == null ? const SizedBox.shrink():  widget.leading!,
-                const SizedBox(width: 10),
+             widget.leading == null ? const SizedBox.shrink(): Row(children:[widget.leading!,const SizedBox(width: 10)]),
                 Expanded(
                   child: Text(widget.title,
                       style: const TextStyle(
@@ -173,7 +172,7 @@ class CustomInformationContainerField extends StatelessWidget {
         padding: !isLastItem ? bottomPadding ?? const  EdgeInsets.only(bottom: 15.0) : EdgeInsets.zero,
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.only(bottom: 10),
+          padding:  EdgeInsets.only(bottom: !isLastItem ?  10 : 0),
           decoration:  BoxDecoration(
             color: Colors.transparent,
             border: !isLastItem ? const Border(bottom: BorderSide(color: AppColors.darkGrey, width: 1)) : null,

@@ -1,21 +1,18 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sco_v1/resources/cards/simple_card.dart';
 import '../../l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
-import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
 import 'package:sco_v1/resources/components/custom_dropdown.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
-import 'package:sco_v1/resources/components/user_info_container.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
 import 'package:sco_v1/viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
-import 'package:sco_v1/viewModel/drawer/a_brief_about_sco_viewModel.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 import '../../../data/response/status.dart';
 import '../../../resources/app_colors.dart';
@@ -85,12 +82,19 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
     }).toList();
   }
 
+
+  late List<Map<String, dynamic>> _scholarshipRequestTypeMutable;
+
+
   @override
   void initState() {
     super.initState();
     final GetIt getIt = GetIt.instance;
     _navigationService = getIt.get<NavigationServices>();
     _alertService = getIt.get<AlertServices>();
+
+
+
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       // fetching all active scholarships:
@@ -101,7 +105,9 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
      internalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'INT' && element.isActive == true).toList();
      externalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'EXT' && element.acadmicCareer.toString() != 'DDS' && element.isActive == true).toList();
      doctorScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.acadmicCareer.toString() == 'DDS' && element.isActive == true).toList();
+
     });
+
   }
 
   @override
@@ -129,19 +135,17 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-
-
                       Directionality(
                         textDirection: getTextDirection(langProvider),
                         child: SimpleCard(expandedContent:
                         Column(
-                          children: Constants.scholarshipRequestType.map<Widget>((element) {
+                          children: provider.scholarshipRequestType.map<Widget>((element) {
                                 return Container(
                                   decoration: BoxDecoration(
                                     color: const Color(0xffF1F3F5),
                                     borderRadius: BorderRadius.circular(kCardRadius),
                                   ),
-                                  margin: EdgeInsets.only(bottom: kCardPadding),
+                                  margin: EdgeInsets.only(bottom: provider.scholarshipRequestType.indexOf(element) < provider.scholarshipRequestType.length - 1 ? kCardPadding : 0),
                                   padding: EdgeInsets.all(kCardPadding),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -152,18 +156,31 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                         height: 50,
                                         width: 50,
                                       ),
-                                      kSmallSpace,
+                                      kMinorSpace,
                                       Text(
                                         getTextDirection(langProvider) == TextDirection.ltr ? element['value'] : element['valueArabic'],
                                         style: AppTextStyles.titleBoldTextStyle(),
                                       ),
 
-                                      kSmallSpace,
-                                      Text(
-                                        element['description'],
-                                        style: AppTextStyles.subTitleTextStyle(),
+                                      kMinorSpace,
+                                      RichText(
+                                        text: TextSpan(
+                                            style: AppTextStyles.subTitleTextStyle(),
+                                            children: [
+                                            TextSpan(
+                                              text: element['seeMore']
+                                                  ? element['description']
+                                                  : element['description'].toString().substring(0, element['description'].toString().length > 200 ? 200 : element['description'].toString().length),
+                                            ),
+                                            TextSpan(
+                                                style: AppTextStyles.subTitleTextStyle().copyWith(fontWeight: FontWeight.w600,color: AppColors.scoLightThemeColor),
+                                                text: element['seeMore'] ? localization.seeLess : localization.seeMore,
+                                                recognizer: TapGestureRecognizer()..onTap = ()=> provider.toggleSeeMore(provider.scholarshipRequestType.indexOf(element))
+                                            )
+                                          ]
+                                        ),
                                       ),
-                                      kSmallSpace,
+                                      kMinorSpace,
 
                                       CustomDropdown(
                                         textDirection: textDirection,
@@ -200,7 +217,8 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                   ),
                                 );
                               }).toList(),
-                        )),
+                        )
+                        ),
                       )
 
                       ,

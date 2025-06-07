@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/data/response/status.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';
+import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/utils/utils.dart';
 
 import '../../../resources/app_colors.dart';
@@ -62,7 +63,7 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
                   requests?.where((r) => r.status == "DENY").length ?? 0;
               return Column(
                 children: [
-                  kSmallSpace,
+                  kHomeCardSpace,
                   HomeViewCard(
                       title: AppLocalizations.of(context)!.request,
                       // icon: SvgPicture.asset("assets/request.svg"),
@@ -75,15 +76,13 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
                         // _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()));
                         },
 
-                      content:
-
-                          Column(
+                      content: Column(
                             children: [
 
-                              const Divider(),
+                              const NoMarginDivider(color: AppColors.lightGrey),
+                              SizedBox(height: kCardPadding,),
+                              kMinorSpace,
 
-
-                              kSmallSpace,
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -167,14 +166,17 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
 
 
   requestElement({Widget? icon,Color? color,required title,required count,}){
-    return  Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        icon ??  const Icon(  Icons.document_scanner_rounded),
-        Text(title,style: const TextStyle(fontSize: 12,color: Colors.grey,height: 2.2),),
-        Text(count,style: TextStyle(color: color ?? Colors.grey,fontSize: 21,fontWeight: FontWeight.bold),),
-      ],
+    return  ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: screenWidth/5),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          icon ??  const Icon(  Icons.document_scanner_rounded),
+          Text(title,style: const TextStyle(fontSize: 12,color: Colors.grey,height: 2.2),),
+          Text(count,style: TextStyle(color: color ?? Colors.grey,fontSize: 21,fontWeight: FontWeight.bold,),maxLines: 1,overflow: TextOverflow.ellipsis,),
+        ],
+      ),
     );
   }
 
@@ -271,7 +273,7 @@ class DashedVerticalLine extends StatelessWidget {
     this.dashHeight = 8.0,
     this.dashWidth = 1.0,
     this.space = 2.0,
-    this.color = Colors.grey,
+    this.color = AppColors.lightGrey,
   }) : super(key: key);
 
   @override

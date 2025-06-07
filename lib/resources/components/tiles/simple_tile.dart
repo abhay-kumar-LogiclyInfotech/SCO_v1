@@ -7,7 +7,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../app_text_styles.dart';
 
-class SimpleTile extends StatelessWidget {
+class SimpleTile extends StatefulWidget {
 
   final SimpleTileModel? item;
   final double? leadingHeight ;
@@ -18,24 +18,29 @@ class SimpleTile extends StatelessWidget {
   });
 
   @override
+  State<SimpleTile> createState() => _SimpleTileState();
+}
+
+class _SimpleTileState extends State<SimpleTile> with MediaQueryMixin {
+  @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context,listen:false);
     return Directionality(
       textDirection: getTextDirection(langProvider),
       child: ListTile(
-        minTileHeight: 80,
+        // minTileHeight: 10,
         splashColor: Colors.grey.shade200,
-        contentPadding: const EdgeInsets.only(left: 10,right: 5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: Text(item?.title ?? '',style: AppTextStyles.titleBoldTextStyle(),),
+        contentPadding:  EdgeInsets.all(kTilePadding),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius)),
+        title: Text(widget.item?.title ?? '',style: AppTextStyles.titleBoldTextStyle(),),
         tileColor: Colors.white,
-        leading: SvgPicture.asset(item?.assetAddress ?? '',height: leadingHeight,width: leadingWidth,),
+        leading: SvgPicture.asset(widget.item?.assetAddress ?? '',height: widget.leadingHeight,width: widget.leadingWidth,),
         trailing:  Icon(
           getTextDirection(langProvider) == TextDirection.rtl ? Icons.keyboard_arrow_left_sharp : Icons.keyboard_arrow_right_sharp,
           color: Colors.grey,
           size: 28,
         ),
-        onTap: item?.routeBuilder,
+        onTap: widget.item?.routeBuilder,
       ),
     );
   }

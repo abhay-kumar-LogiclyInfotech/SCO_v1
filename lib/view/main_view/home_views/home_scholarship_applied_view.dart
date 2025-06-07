@@ -41,41 +41,37 @@ class _HomeScholarshipAppliedViewState extends State<HomeScholarshipAppliedView>
         title: localization.scholarshipOffice,
         // contentPadding: EdgeInsets.zero,
         // icon: Image.asset("assets/scholarship_office.png"),
-        content: Column(
+        content: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Scholarship status:
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        localization.scholarshipStatusApplied,
-                        style: const TextStyle(fontSize: 12, color: AppColors.hintDarkGrey),
-                        textAlign: TextAlign.start,
-                      ),
-                      Text(localization.scholarshipAppliedApplied, style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.greenColor,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.start),
-                    ],
+            // Scholarship status:
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    localization.scholarshipStatusApplied,
+                    style: const TextStyle(fontSize: 12, color: AppColors.hintDarkGrey),
+                    textAlign: TextAlign.start,
                   ),
-                ),
-                // readMoreButton(
-                //   langProvider: langProvider,
-                //   onTap: () {
-                //     _navigationServices.pushCupertino(CupertinoPageRoute(
-                //         builder: (context) => const ApplicationStatusView()));
-                //   },
-                // )
-              ],
+                  Text(localization.scholarshipAppliedApplied, style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.greenColor,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.start),
+                ],
+              ),
             ),
+            // readMoreButton(
+            //   langProvider: langProvider,
+            //   onTap: () {
+            //     _navigationServices.pushCupertino(CupertinoPageRoute(
+            //         builder: (context) => const ApplicationStatusView()));
+            //   },
+            // )
           ],
         ));
   }

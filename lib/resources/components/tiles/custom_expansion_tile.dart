@@ -12,6 +12,7 @@ class CustomExpansionTile extends StatefulWidget {
   final Widget? trailing;
   final Widget? leading;
   final Widget expandedContent;
+  final Color? contentBackgroundColor;
 
   const CustomExpansionTile({
     super.key,
@@ -19,6 +20,7 @@ class CustomExpansionTile extends StatefulWidget {
     required this.title,
     this.trailing,
     required this.expandedContent,
+    this.contentBackgroundColor,
   });
 
 
@@ -107,7 +109,11 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                       ),
                       Transform.rotate(
                         angle: _isExpanded ? pi : 2*pi, // 270° or 90°
-                        child:  widget.trailing ?? const SizedBox.shrink() ,
+                        child:  widget.trailing ?? const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 35,
+                          color: Colors.white,
+                        ),
                       )
                     ],
                   ),
@@ -121,10 +127,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                   child: Container(
                     width: double.maxFinite,
                     padding: const EdgeInsets.all(10),
-                    decoration:  const BoxDecoration(
+                    decoration:   BoxDecoration(
                       // color: AppColors.lightBlue0,
-                      color: AppColors.bgColor,
-                      borderRadius: BorderRadius.vertical(
+                      color: widget.contentBackgroundColor ?? AppColors.bgColor,
+                      borderRadius: const BorderRadius.vertical(
                         bottom: Radius.circular(15),
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const Color veryLightGrey = Color(0xFFF9F9F9); // lighter than shade100
   static const Color hintDarkGrey = Color(0xff8491A8);
   static const Color darkGrey = Color(0xffB7BFCC);
   static const Color lightGrey = Color(0xffDFDFDF);
@@ -16,6 +17,7 @@ class AppColors {
   static const Color lightBlue2 = Color(0xff3F85AF);
   static const Color fieldTitleDarkGrey = Color(0xff8591A9);
   static const Color checkBoxBorderColor = Color(0xffE5E5E5);
+
 
 
   static const Color PRIMARY = Color(0xff3880FF);

@@ -221,7 +221,7 @@ class _StepsProgressViewState extends State<StepsProgressView>
               widget.scholarshipTitle,
               style: AppTextStyles.titleBoldTextStyle().copyWith(color: Colors.white),
             ),
-            const SizedBox(height: 8),
+            kSmallSpace,
             SizedBox(
               height: 70,
               width: double.infinity,
@@ -231,8 +231,6 @@ class _StepsProgressViewState extends State<StepsProgressView>
                 scrollDirection: Axis.horizontal,
                 itemCount: widget.totalSections,
                 itemBuilder: (context, index) {
-
-                  print("Index: $index, Total Sections: ${widget.totalSections}");
 
                   return SizedBox(
                       // padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),

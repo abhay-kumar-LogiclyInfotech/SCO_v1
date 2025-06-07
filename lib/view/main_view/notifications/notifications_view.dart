@@ -181,7 +181,7 @@ class _NotificationsViewState extends State<NotificationsView>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: kCardPadding),
+                  padding: EdgeInsets.only(left: kCardPadding,right: kCardPadding,bottom: kCardPadding),
                   child: Column(
                     children: [
                       CustomInformationContainerField(
@@ -201,7 +201,6 @@ class _NotificationsViewState extends State<NotificationsView>
                         description: convertTimestampToDateTime(element.createDate ?? 0),
                         isLastItem: true,
                       ),
-                      kFormHeight,
                     ],
                   ),
                 ),

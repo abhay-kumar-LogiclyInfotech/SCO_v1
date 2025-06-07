@@ -3,13 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:sco_v1/resources/app_urls.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/resources/components/tiles/custom_expansion_tile.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/form_view_Utils.dart';
 import 'package:sco_v1/view/main_view/scholarship_in_abroad/post_graduation_outside_uae/post_graduation_outside_uae.dart';
-import 'package:sco_v1/view/main_view/scholarship_in_uae/web_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
 import '../../../data/response/status.dart';
@@ -312,7 +310,6 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
               leading: Image.asset(model.imagePath ?? Constants.fallback,height: 20,width: 20,),
               title: model.title!,
               expandedContent: model.content ?? const SizedBox(),
-              trailing: const Icon(Icons.keyboard_arrow_down,color: Colors.white,),
           ) :  CustomScoProgramTile(
             imagePath: model.imagePath,
             title: model.title!,
@@ -355,7 +352,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
-              child:  CustomButton(buttonName: localization.submit, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()async{ // fetching all active scholarships:
+              child:  CustomButton(buttonName: localization.submitNewApplication, isLoading: false, textDirection: getTextDirection(langProvider), onTap: ()async{ // fetching all active scholarships:
 
                 _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(selectedScholarshipConfigurationKey: widget.code, getAllActiveScholarships: provider.apiResponse.data,)));
 
@@ -387,7 +384,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   sectionTitle(title: widget.title ?? localization.scholarshipExternal),
-                  const SizedBox(height: 8),
+                  kSmallSpace,
                   ..._scholarshipsInUaeList.map((scholarshipType) => Padding(
                     padding:  EdgeInsets.only(bottom: kTileSpace),
                     child: scholarshipType,

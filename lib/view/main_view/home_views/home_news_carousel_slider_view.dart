@@ -35,6 +35,7 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
           case Status.COMPLETED:
             return Column(
               children: [
+                kMinorSpace,
                 Directionality(
                     textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
                     child: CarouselSlider(
@@ -62,7 +63,7 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
                         );
                       }).toList(),
                     )),
-                kSmallSpace,
+                kHomeCardSpace,
               ],
             );
           default:

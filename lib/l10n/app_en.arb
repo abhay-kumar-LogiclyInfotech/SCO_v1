@@ -1123,6 +1123,12 @@
   "areYouSure": "Are you sure?",
   "more": "More",
   "paid": "Paid",
-  "name": "Name"
+  "name": "Name",
+  "draftDatesOver": "Draft submission date is over. Please try later.",
+  "submitNewApplication": "Submit",
+  "homeSalary": "Salary",
+  "seeMore": "...See more",
+  "seeLess": " See less"
+
 
 }

@@ -1,16 +1,8 @@
-import 'dart:io';
-
-import 'package:date_picker_plus/date_picker_plus.dart';
-import 'package:filesize/filesize.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:material_dialogs/dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/account/GetListApplicationStatusModel.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
@@ -19,7 +11,6 @@ import 'package:sco_v1/resources/components/Custom_Material_Button.dart';
 import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
-import 'package:sco_v1/view/apply_scholarship/form_views/high_school_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/attachments_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_employment_history_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/edit_applied_application_sections/edit_graduation_details_View.dart';
@@ -31,8 +22,6 @@ import 'package:sco_v1/viewModel/services/media_services.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 
 import '../../../data/response/status.dart';
-import '../../../models/apply_scholarship/FillScholarshipFormModels.dart';
-import '../../../models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import '../../../models/splash/commonData_model.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/account/Custom_inforamtion_container.dart';
@@ -300,7 +289,8 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _allApplications.length,
-              separatorBuilder: (context,int){
+              padding: EdgeInsets.zero,
+              separatorBuilder: (context,index){
                 return  SizedBox(height: kCardSpace,);
               },
               itemBuilder: (context, index) {
@@ -313,250 +303,244 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                   cardColor: isNotDraft ? AppColors.greenColor.withAlpha(800) : AppColors.scoThemeColor.withAlpha(800),
                   expandedContent: Column(
                     children: isNotDraft ? [
-                      Padding(
-                        padding: EdgeInsets.all(kPadding),
-                        child: Column(
-                          children: [
-                            // CustomInformationContainerField(
-                            //   title: localization.sr,
-                            //   description: (index+1).toString() ?? '- -',
-                            // ),
+                      Column(
+                        children: [
+                          // CustomInformationContainerField(
+                          //   title: localization.sr,
+                          //   description: (index+1).toString() ?? '- -',
+                          // ),
 
-                            CustomInformationContainerField(
-                              title: localization.applicationType,
-                              description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
+                          CustomInformationContainerField(
+                            title: localization.applicationType,
+                            description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
+                          ),
+                          CustomInformationContainerField(
+                            title: localization.applicationNumber,
+                            description: application?.admApplicationNumber ?? '- -',
+                          ),
+                          CustomInformationContainerField(
+                            title: localization.applicationStatus,
+                            description: getFullNameFromLov(
+                              langProvider: langProvider,
+                              lovCode: 'PROGRAM_ACTION',
+                              code: application.programAction
+                                  ?.toString()
+                                  .toUpperCase()
+                                  .trim() ??
+                                  '',
                             ),
-                            CustomInformationContainerField(
-                              title: localization.applicationNumber,
-                              description: application?.admApplicationNumber ?? '- -',
-                            ),
-                            CustomInformationContainerField(
-                              title: localization.applicationStatus,
-                              description: getFullNameFromLov(
-                                langProvider: langProvider,
-                                lovCode: 'PROGRAM_ACTION',
-                                code: application.programAction
-                                    ?.toString()
-                                    .toUpperCase()
-                                    .trim() ??
-                                    '',
-                              ),
-                            ),
-                            CustomInformationContainerField(
-                                title: localization.scholarshipType,
-                                description: getFullNameFromLov(langProvider: langProvider,code: application.scholarshipType,lovCode: 'SCHOLARSHIP_TYPE')
-                            ),
+                          ),
+                          CustomInformationContainerField(
+                              title: localization.scholarshipType,
+                              description: getFullNameFromLov(langProvider: langProvider,code: application.scholarshipType,lovCode: 'SCHOLARSHIP_TYPE')
+                          ),
 
-                            if(showOnStatusBasis(application))
-                              Column(
-                                children: [
-                                  CustomInformationContainerField(
-                                    title: localization.country,
-                                    description: application.scholarship?.country != null ? getFullNameFromLov(langProvider: langProvider,lovCode: 'COUNTRY',code: application?.scholarship?.country) : '- -',
-                                  ),
-                                  CustomInformationContainerField(
-                                    title: localization.university,
-                                    // description: application?.scholarship?.university?.toString() ?? '- -',
-                                    description: getFullNameForUniversity(context: context,value: applicationScholarship?.university?.toString(), country: applicationScholarship?.country ?? '', admitType: applicationScholarship?.admitType, scholarshipType: applicationScholarship?.scholarshipType),
-                                  ),
+                          if(showOnStatusBasis(application))
+                            Column(
+                              children: [
+                                CustomInformationContainerField(
+                                  title: localization.country,
+                                  description: application.scholarship?.country != null ? getFullNameFromLov(langProvider: langProvider,lovCode: 'COUNTRY',code: application?.scholarship?.country) : '- -',
+                                ),
+                                CustomInformationContainerField(
+                                  title: localization.university,
+                                  // description: application?.scholarship?.university?.toString() ?? '- -',
+                                  description: getFullNameForUniversity(context: context,value: applicationScholarship?.university?.toString(), country: applicationScholarship?.country ?? '', admitType: applicationScholarship?.admitType, scholarshipType: applicationScholarship?.scholarshipType),
+                                ),
 
-                                  // CustomInformationContainerField(
-                                  //   title: localization.majors,
-                                  //   description: getFullNameForMajor(value: applicationScholarship?.academicPlan?.toString(),
-                                  //       isStudyCountry: applicationScholarship?.country == 'UAE',
-                                  //       isSpecialCase: false,
-                                  //       academicCareer: element.applicationStatus.acadCareer ??'',
-                                  //       scholarshipType: element.applicationStatus.scholarshipType ??'',
-                                  //       admitType: element.applicationStatus.admitType ?? '',
-                                  //       context: context,
-                                  //   )
-                                  //
-                                  // application?.scholarship?.academicPlan?.toString() ?? '- -',
-                                  // ),
-                                  CustomInformationContainerField(
-                                    title: localization.scholarshipApprovedDate,
-                                    description: application.scholarship?.scholarshipApprovedDate?.toString() ?? '- -',
-                                  ),
-                                  CustomInformationContainerField(
-                                    title: localization.scholarshipStartDate,
-                                    description: application.scholarship?.studyStartDate?.toString() ?? '- -',
-                                  ),
-                                  CustomInformationContainerField(
-                                    title: localization.scholarshipEndDate,
-                                    description: application.scholarship?.scholarshipEndDate?.toString() ?? '- -',
-                                  ),
-                                  CustomInformationContainerField(
-                                    title: localization.academicCareer,
-                                    description: getFullNameFromLov(langProvider: langProvider,code: element.applicationStatus.acadCareer?.toString() ?? '- -',lovCode: 'ACADEMIC_CAREER')
+                                // CustomInformationContainerField(
+                                //   title: localization.majors,
+                                //   description: getFullNameForMajor(value: applicationScholarship?.academicPlan?.toString(),
+                                //       isStudyCountry: applicationScholarship?.country == 'UAE',
+                                //       isSpecialCase: false,
+                                //       academicCareer: element.applicationStatus.acadCareer ??'',
+                                //       scholarshipType: element.applicationStatus.scholarshipType ??'',
+                                //       admitType: element.applicationStatus.admitType ?? '',
+                                //       context: context,
+                                //   )
+                                //
+                                // application?.scholarship?.academicPlan?.toString() ?? '- -',
+                                // ),
+                                CustomInformationContainerField(
+                                  title: localization.scholarshipApprovedDate,
+                                  description: application.scholarship?.scholarshipApprovedDate?.toString() ?? '- -',
+                                ),
+                                CustomInformationContainerField(
+                                  title: localization.scholarshipStartDate,
+                                  description: application.scholarship?.studyStartDate?.toString() ?? '- -',
+                                ),
+                                CustomInformationContainerField(
+                                  title: localization.scholarshipEndDate,
+                                  description: application.scholarship?.scholarshipEndDate?.toString() ?? '- -',
+                                ),
+                                CustomInformationContainerField(
+                                  title: localization.academicCareer,
+                                  description: getFullNameFromLov(langProvider: langProvider,code: element.applicationStatus.acadCareer?.toString() ?? '- -',lovCode: 'ACADEMIC_CAREER')
 
-                                    ,isLastItem: true,
-                                  ),
-                                ],
-                              ),
-                            actionButtonHolder(actionButtons: [
-                              /// VIEW APPLICATION
-                              actionButton(backgroundColor: AppColors.scoThemeColor, text: localization.viewDetails, onPressed: (){
-                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> ViewApplicationDetailsView(
+                                  ,isLastItem: true,
+                                ),
+                              ],
+                            ),
+                          actionButtonHolder(actionButtons: [
+                            /// VIEW APPLICATION
+                            actionButton(backgroundColor: AppColors.scoThemeColor, text: localization.viewDetails, onPressed: (){
+                              _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> ViewApplicationDetailsView(
+                                applicationStatusDetails: application,
+                                configurationKey:configurationKey,
+                              )));
+                            }),
+                            /// UPLOAD APPROVED ATTACHMENTS
+                            if(application?.attachmentAllowed ?? false)
+                              actionButton(backgroundColor: AppColors.INFO, text: localization.attachments, onPressed: (){
+                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> AttachmentsView(
                                   applicationStatusDetails: application,
-                                  configurationKey:configurationKey,
+                                  configurationKey: configurationKey,
                                 )));
                               }),
-                              /// UPLOAD APPROVED ATTACHMENTS
-                              if(application?.attachmentAllowed ?? false)
-                                actionButton(backgroundColor: AppColors.INFO, text: localization.attachments, onPressed: (){
-                                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> AttachmentsView(
-                                    applicationStatusDetails: application,
-                                    configurationKey: configurationKey,
-                                  )));
-                                }),
-                              /// UNIVERSITY WISHLIST
-                              // actionButton(backgroundColor: AppColors.scoMidThemeColor, text: localization.universityWishlist, onPressed: (){
-                              //   _alertServices.toastMessage(localization.comingSoon);
-                              // }),
-                              /// EDIT BUTTON
-                              /// SHOW EDIT BUTTON IF EDITING IS ALLOWED
-                              if(application.editAllowed || application.editAllowed.toString() == 'true')
-                                actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.edit, onPressed: (){
+                            /// UNIVERSITY WISHLIST
+                            // actionButton(backgroundColor: AppColors.scoMidThemeColor, text: localization.universityWishlist, onPressed: (){
+                            //   _alertServices.toastMessage(localization.comingSoon);
+                            // }),
+                            /// EDIT BUTTON
+                            /// SHOW EDIT BUTTON IF EDITING IS ALLOWED
+                            if(application.editAllowed || application.editAllowed.toString() == 'true')
+                              actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.edit, onPressed: (){
 
-                                  /// show options which are available to edit for specific application
-                                  showModalBottomSheet
-                                    (context: context,
-                                      builder: (context){return
-                                        Container(
-                                          // height: screenHeight/4,
-                                          width: screenWidth,
-                                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: kPadding),
-                                          decoration: const BoxDecoration(
-                                              color: Colors.white
+                                /// show options which are available to edit for specific application
+                                showModalBottomSheet
+                                  (context: context,
+                                    builder: (context){return
+                                      Container(
+                                        // height: screenHeight/4,
+                                        width: screenWidth,
+                                        padding: EdgeInsets.symmetric(vertical: 10,horizontal: kPadding),
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white
+                                        ),
+                                        child: SafeArea(
+                                          child: GridView(
+                                            shrinkWrap: true,
+                                            padding: const EdgeInsets.symmetric(vertical: 10),
+                                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing:10,childAspectRatio: 5),
+                                            children: [
+                                              /// EDIT HIGH-SCHOOL DETAILS
+                                              if(application.schoolEditAllowed.toString().toUpperCase() == 'Y' && shouldShowHighSchoolDetails(application.acadCareer))
+                                                actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.highSchoolDetails, onPressed: (){
+                                                  /// Move to required examinations list
+                                                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditHighSchoolDetailsView(
+                                                    applicationStatusDetails: application,
+                                                  )));
+                                                }),
+
+                                              /// EDIT GRADUATION DETAILS
+                                              if(application.graduationEditAllowed.toString().toUpperCase() == 'Y' && shouldShowGraduationSection(application.acadCareer))
+                                                actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.graduationDetails, onPressed: (){
+                                                  /// Move to Edit Graduation Details
+                                                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditGraduationDetailsView(
+                                                    applicationStatusDetails: application,
+                                                  )));
+                                                }),
+
+                                              /// EDIT UNIVERSITY AND MAJORS DETAILS
+                                              if(application.wishListEditAllowed.toString().toUpperCase() == 'Y' && shouldShowUniversityAndMajors(application.acadCareer))
+                                                actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.universityAndMajor, onPressed: (){
+                                                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditMajorsAndUniversityView(
+                                                    applicationStatusDetails: application,
+                                                    configurationKey: configurationKey,
+                                                  )));
+                                                }),
+
+                                              /// EDIT UNIVERSITY AND MAJORS DETAILS
+                                              if(application.testEditAllowed.toString().toUpperCase() == 'Y' && shouldShowRequiredExaminations(application.acadCareer))
+                                                actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.requiredExamination, onPressed: (){
+                                                  /// Move to required examinations list
+                                                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditRequiredExaminationsView(
+                                                    applicationStatusDetails: application,
+                                                  )));
+                                                }),
+
+                                              /// EDIT EMPLOYMENT HISTORY DETAILS
+                                              if(application.workExpEditAllowed.toString().toUpperCase() == 'Y' && shouldShowEmploymentHistory(configurationKey))
+                                                actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.employmentHistory, onPressed: (){
+                                                  /// move to edit employment history
+                                                  _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditEmploymentHistoryView(
+                                                    applicationStatusDetails: application,
+                                                  )));
+                                                }),
+                                            ],
                                           ),
-                                          child: SafeArea(
-                                            child: GridView(
-                                              shrinkWrap: true,
-                                              padding: const EdgeInsets.symmetric(vertical: 10),
-                                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 10,crossAxisSpacing:10,childAspectRatio: 5),
-                                              children: [
-                                                /// EDIT HIGH-SCHOOL DETAILS
-                                                if(application.schoolEditAllowed.toString().toUpperCase() == 'Y' && shouldShowHighSchoolDetails(application.acadCareer))
-                                                  actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.highSchoolDetails, onPressed: (){
-                                                    /// Move to required examinations list
-                                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditHighSchoolDetailsView(
-                                                      applicationStatusDetails: application,
-                                                    )));
-                                                  }),
-
-                                                /// EDIT GRADUATION DETAILS
-                                                if(application.graduationEditAllowed.toString().toUpperCase() == 'Y' && shouldShowGraduationSection(application.acadCareer))
-                                                  actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.graduationDetails, onPressed: (){
-                                                    /// Move to Edit Graduation Details
-                                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditGraduationDetailsView(
-                                                      applicationStatusDetails: application,
-                                                    )));
-                                                  }),
-
-                                                /// EDIT UNIVERSITY AND MAJORS DETAILS
-                                                if(application.wishListEditAllowed.toString().toUpperCase() == 'Y' && shouldShowUniversityAndMajors(application.acadCareer))
-                                                  actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.universityAndMajor, onPressed: (){
-                                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditMajorsAndUniversityView(
-                                                      applicationStatusDetails: application,
-                                                      configurationKey: configurationKey,
-                                                    )));
-                                                  }),
-
-                                                /// EDIT UNIVERSITY AND MAJORS DETAILS
-                                                if(application.testEditAllowed.toString().toUpperCase() == 'Y' && shouldShowRequiredExaminations(application.acadCareer))
-                                                  actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.requiredExamination, onPressed: (){
-                                                    /// Move to required examinations list
-                                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditRequiredExaminationsView(
-                                                      applicationStatusDetails: application,
-                                                    )));
-                                                  }),
-
-                                                /// EDIT EMPLOYMENT HISTORY DETAILS
-                                                if(application.workExpEditAllowed.toString().toUpperCase() == 'Y' && shouldShowEmploymentHistory(configurationKey))
-                                                  actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.employmentHistory, onPressed: (){
-                                                    /// move to edit employment history
-                                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=> EditEmploymentHistoryView(
-                                                      applicationStatusDetails: application,
-                                                    )));
-                                                  }),
-                                              ],
-                                            ),
-                                          ),
-                                        );});
-                                }),
-                            ]
-                            )
-                          ],
-                        ),
+                                        ),
+                                      );});
+                              }),
+                          ]
+                          )
+                        ],
                       ),
                       if(index < _otherApplicationStatus.length - 1 ) const MyDivider(color: AppColors.darkGrey)
                     ] : [
-                      Padding(
-                        padding:  EdgeInsets.all(kPadding),
-                        child: Column(
-                          children: [
-                            // CustomInformationContainerField(
-                            //   title: localization.sr,
-                            //   description: (index+1).toString() ?? '- -',
-                            // ),
-                            CustomInformationContainerField(
-                              title: localization.applicationType,
-                              description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
-                            ),
+                      Column(
+                        children: [
+                          // CustomInformationContainerField(
+                          //   title: localization.sr,
+                          //   description: (index+1).toString() ?? '- -',
+                          // ),
+                          CustomInformationContainerField(
+                            title: localization.applicationType,
+                            description: Constants.getNameOfScholarshipByConfigurationKey(localization: localization,configurationKey: configurationKey)  ?? '- -',
+                          ),
 
-                            CustomInformationContainerField(
-                              title: localization.applicationStatus,
-                              description: application.programAction?.toString(),
-                            ),
-                            CustomInformationContainerField(
-                              title: localization.academicCareer, /// We will show application name here
-                              // description: configurationKey,
-                              description: getFullNameFromLov(langProvider: langProvider,code: application.acadCareer,lovCode: 'ACADEMIC_CAREER'),
-                              isLastItem: false,
-                            ),
-                            if (true)
-                              actionButtonHolder(actionButtons: [
-                                /// Delete Action Button
-                                Consumer<DeleteDraftViewmodel>(builder: (context, provider, _) {
-                                  return actionButton(backgroundColor: AppColors.scoThemeColor, text: localization.deleteDraftApplication, onPressed: () async {
+                          CustomInformationContainerField(
+                            title: localization.applicationStatus,
+                            description: application.programAction?.toString(),
+                          ),
+                          CustomInformationContainerField(
+                            title: localization.academicCareer, /// We will show application name here
+                            // description: configurationKey,
+                            description: getFullNameFromLov(langProvider: langProvider,code: application.acadCareer,lovCode: 'ACADEMIC_CAREER'),
+                            isLastItem: false,
+                          ),
+                          if (true)
+                            actionButtonHolder(actionButtons: [
+                              /// Delete Action Button
+                              Consumer<DeleteDraftViewmodel>(builder: (context, provider, _) {
+                                return actionButton(backgroundColor: AppColors.scoThemeColor, text: localization.deleteDraftApplication, onPressed: () async {
 
-                                    Dialogs.materialDialog(
-                                        barrierDismissible: false,
-                                        title: localization.deleteDraftApplication,
-                                        msg:localization.deleteDraftConfirmation,
-                                        color: Colors.white,
-                                        context: context,
-                                        actionsBuilder: (context)
-                                        {
-                                          return [
-                                            /// delete draft
-                                            CustomButton(buttonName: localization.deleteDraftApplication, isLoading: false, textDirection: getTextDirection(langProvider), onTap:  ()async{
-                                              setProcessing(true);
-                                              _navigationServices.goBack();
-                                              await provider.deleteDraft(draftId: application.applicationProgramNumber ?? '',);
-                                              setProcessing(false);
-                                              await _onRefresh();
-                                            }),
+                                  Dialogs.materialDialog(
+                                      barrierDismissible: false,
+                                      title: localization.deleteDraftApplication,
+                                      msg:localization.deleteDraftConfirmation,
+                                      color: Colors.white,
+                                      context: context,
+                                      actionsBuilder: (context)
+                                      {
+                                        return [
+                                          /// delete draft
+                                          CustomButton(buttonName: localization.deleteDraftApplication, isLoading: false, textDirection: getTextDirection(langProvider), onTap:  ()async{
+                                            setProcessing(true);
+                                            _navigationServices.goBack();
+                                            await provider.deleteDraft(draftId: application.applicationProgramNumber ?? '',);
+                                            setProcessing(false);
+                                            await _onRefresh();
+                                          }),
 
 
-                                            // Cancel deletion
-                                            CustomButton(buttonName: localization.no, isLoading: false,buttonColor: Colors.white,borderColor: Colors.grey,textColor: Colors.grey, textDirection: getTextDirection(langProvider), onTap: (){
-                                              _navigationServices.goBack();
-                                            },),
-                                          ];
-                                        }
+                                          // Cancel deletion
+                                          CustomButton(buttonName: localization.no, isLoading: false,buttonColor: Colors.white,borderColor: Colors.grey,textColor: Colors.grey, textDirection: getTextDirection(langProvider), onTap: (){
+                                            _navigationServices.goBack();
+                                          },),
+                                        ];
+                                      }
 
 
-                                    );
+                                  );
 
 
-                                  });}),
-                                /// Edit Action Button
-                                actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.edit, onPressed: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(draftId: application.applicationProgramNumber ?? '',),),);}),
+                                });}),
+                              /// Edit Action Button
+                              actionButton(backgroundColor: AppColors.scoButtonColor, text: localization.edit, onPressed: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => FillScholarshipFormView(draftId: application.applicationProgramNumber ?? '',),),);}),
 
-                              ])
-                          ],
-                        ),
+                            ])
+                        ],
                       ),
                       if(index < _draftApplicationStatus.length - 1 ) const MyDivider(color: AppColors.darkGrey)
                     ]

@@ -46,32 +46,48 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
       textDirection: getTextDirection(langProvider),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: Material(
-          elevation: 7,
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.transparent,
-          shadowColor: Colors.black.withOpacity(0.2),
-          child: Container(
-            padding: const EdgeInsets.only(left:10,top: 10,bottom: 10,right: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Expanded(flex:3,child: _imageSection()),
-                // Expanded(flex:10,child: _titleSection()),
-                // Expanded(flex:1,child: _endSection())
-                _imageSection(),
-                Expanded(child: _titleSection()),
-                _endSection()
-              ],
-            ),
+        child:
+
+        Material(
+          elevation: 0.5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius)),
+          child: ListTile(
+            tileColor: Colors.white,
+            contentPadding: EdgeInsets.all(kTilePadding),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius)),
+            leading: _imageSection(),
+            title: _titleSection(),
+            trailing: _endSection(),
           ),
         ),
+
+
+        // Material(
+        //   elevation: 7,
+        //   borderRadius: BorderRadius.circular(10),
+        //   color: Colors.transparent,
+        //   shadowColor: Colors.black.withOpacity(0.2),
+        //   child: Container(
+        //     padding: const EdgeInsets.only(left:10,top: 10,bottom: 10,right: 10),
+        //     decoration: BoxDecoration(
+        //       color: Colors.white,
+        //       borderRadius: BorderRadius.circular(10),
+        //     ),
+        //     child: Row(
+        //       mainAxisSize: MainAxisSize.max,
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       crossAxisAlignment: CrossAxisAlignment.center,
+        //       children: [
+        //         // Expanded(flex:3,child: _imageSection()),
+        //         // Expanded(flex:10,child: _titleSection()),
+        //         // Expanded(flex:1,child: _endSection())
+        //         _imageSection(),
+        //         Expanded(child: _titleSection()),
+        //         _endSection()
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ),
     )
     ;
@@ -144,7 +160,8 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
 
   Widget _titleSection() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10,right: 20),
+      // padding: const EdgeInsets.only(left: 10,right: 20),
+      padding: EdgeInsets.zero,
       child:  Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -159,6 +176,7 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
           ),
          if(widget.subTitle.isNotEmpty) Column(
             children: [
+              kMinorSpace,
               // const SizedBox(height: 5),
               Text(
                 // widget.subTitle.length < (screenWidth < 420 ? 25 : 25) ? widget.subTitle : "${widget.subTitle.substring(0, ((screenWidth < 420 ? 25 : 25)))}...",

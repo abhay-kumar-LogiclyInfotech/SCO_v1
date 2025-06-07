@@ -6844,6 +6844,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Name'**
   String get name;
+
+  /// No description provided for @draftDatesOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft submission date is over. Please try later.'**
+  String get draftDatesOver;
+
+  /// No description provided for @submitNewApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submitNewApplication;
+
+  /// No description provided for @homeSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary'**
+  String get homeSalary;
+
+  /// No description provided for @seeMore.
+  ///
+  /// In en, this message translates to:
+  /// **'...See more'**
+  String get seeMore;
+
+  /// No description provided for @seeLess.
+  ///
+  /// In en, this message translates to:
+  /// **' See less'**
+  String get seeLess;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

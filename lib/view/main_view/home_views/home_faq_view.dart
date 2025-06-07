@@ -34,12 +34,12 @@ class _HomeFaqViewState extends State<HomeFaqView> with MediaQueryMixin {
     final localization = AppLocalizations.of(context)!;
     return Column(
       children: [
-        kSmallSpace,
+        kHomeCardSpace,
         HomeViewCard(
             title: localization.faqs,
-            contentPadding: const EdgeInsets.symmetric(vertical: 8),
-            // contentPadding:  EdgeInsets.zero,
-            icon: SvgPicture.asset("assets/faq_1.svg"),
+            contentPadding:  EdgeInsets.zero,
+            icon: SvgPicture.asset("assets/support/support_1_0_1/FAQ.svg",height: 20,width: 20,),
+
             content: const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,

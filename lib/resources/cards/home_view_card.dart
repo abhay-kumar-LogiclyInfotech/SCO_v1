@@ -48,24 +48,24 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
         elevation: 0.5,
         color: Colors.white,
         shadowColor: Colors.grey.shade400,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius),side: widget.borderSide ?? BorderSide.none),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kCardRadius),
+            side: widget.borderSide ?? BorderSide.none),
         child: Directionality(
           textDirection: getTextDirection(langProvider),
           child: Padding(
             padding: EdgeInsets.zero,
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: kCardPadding,
-                    left: kCardPadding,
-                    right: kCardPadding,
-                    bottom: 0,
-                  ),
-                  child: widget.showTitle
-                      ? Row
-
-                    (
+                widget.showTitle
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                          top: kCardPadding,
+                          left: kCardPadding,
+                          right: kCardPadding,
+                          bottom: kCardPadding,
+                        ),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           // crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
@@ -74,14 +74,13 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                                 child: Row(
                               children: [
                                 widget.icon ?? showVoid,
-                                if (widget.icon != null)
-                                  kSmallSpace,
+                                if (widget.icon != null) kSmallSpace,
                                 Expanded(
                                   child: Text(
                                     widget.title,
                                     style: AppTextStyles.titleBoldTextStyle()
                                         .copyWith(
-                                            fontSize: widget.titleSize ??  20,
+                                            fontSize: widget.titleSize ?? 20,
                                             fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -89,17 +88,19 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                                 widget.headerExtraContent ?? showVoid,
                               ],
                             )),
-                           if(widget.showArrow) Icon(
-                              getTextDirection(langProvider) ==
-                                      TextDirection.rtl
-                                  ? Icons.keyboard_arrow_left_outlined
-                                  : Icons.keyboard_arrow_right_outlined,
-                              color: Colors.grey,
-                            )
+                            if (widget.showArrow)
+                              Icon(
+                                getTextDirection(langProvider) ==
+                                        TextDirection.rtl
+                                    ? Icons.keyboard_arrow_left_outlined
+                                    : Icons.keyboard_arrow_right_outlined,
+                                color: Colors.grey,
+                              )
                           ],
-                        )
-                      : showVoid,
-                ),
+                        ),
+                      )
+                    : showVoid,
+
                 // kFormHeight,
                 Padding(
                   padding: widget.contentPadding ??
@@ -107,7 +108,6 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                         bottom: kCardPadding,
                         left: kCardPadding,
                         right: kCardPadding,
-                        top: 8
                       ),
                   child: widget.content,
                 )

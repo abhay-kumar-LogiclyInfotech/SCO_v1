@@ -9,6 +9,7 @@ class CustomMaterialButton extends StatelessWidget {
   final bool isEnabled;
   final ShapeBorder shape;
   VisualDensity? visualDensity;
+  final EdgeInsetsGeometry? padding;
 
    CustomMaterialButton(
       {super.key,
@@ -18,11 +19,14 @@ class CustomMaterialButton extends StatelessWidget {
       this.textColor = Colors.black,
       this.shape = const RoundedRectangleBorder(),
       this.visualDensity,
-      required this.child});
+      required this.child,
+        this.padding
+      });
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
+      padding: padding,
       onPressed: isEnabled ? () {} : onPressed,
       elevation: 0.3,
       color: backgroundColor,

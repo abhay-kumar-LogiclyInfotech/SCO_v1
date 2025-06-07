@@ -3382,4 +3382,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get name => 'Name';
+
+  @override
+  String get draftDatesOver => 'Draft submission date is over. Please try later.';
+
+  @override
+  String get submitNewApplication => 'Submit';
+
+  @override
+  String get homeSalary => 'Salary';
+
+  @override
+  String get seeMore => '...See more';
+
+  @override
+  String get seeLess => ' See less';
 }

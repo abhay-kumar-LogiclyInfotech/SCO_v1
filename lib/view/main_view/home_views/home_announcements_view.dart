@@ -59,7 +59,6 @@ class _HomeAnnouncementsViewState extends State<HomeAnnouncementsView> with Medi
                   ?
               Column(
                 children: [
-                  // kSmallSpace,
                   HomeViewCard(
                     onTap: () {
                       _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const NotificationsView()));
@@ -102,7 +101,7 @@ class _HomeAnnouncementsViewState extends State<HomeAnnouncementsView> with Medi
                       ],
                     ),
                   ),
-                  kSmallSpace,
+                  kHomeCardSpace,
                 ],
               )
                   : showVoid;

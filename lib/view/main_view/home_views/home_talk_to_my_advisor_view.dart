@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/utils/utils.dart';
 
 import '../../../data/response/status.dart';
@@ -16,7 +17,6 @@ import '../../../viewModel/services_viewmodel/get_my_advisor_viewModel.dart';
 import '../services_views/academic_advisor.dart';
 import '../../../l10n/app_localizations.dart';
 
-
 class HomeTalkToMyAdvisorView extends StatefulWidget {
   const HomeTalkToMyAdvisorView({super.key});
 
@@ -25,9 +25,10 @@ class HomeTalkToMyAdvisorView extends StatefulWidget {
       _HomeTalkToMyAdvisorViewState();
 }
 
-class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with MediaQueryMixin {
-
+class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView>
+    with MediaQueryMixin {
   late NavigationServices _navigationServices;
+
   @override
   void initState() {
     super.initState();
@@ -57,11 +58,20 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                 ? showVoid
                 : Column(
                     children: [
-                      kSmallSpace,
+                      kHomeCardSpace,
                       HomeViewCard(
-                          onTap: () {_navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const AcademicAdvisorView()));},
+                          onTap: () {
+                            _navigationServices.pushCupertino(
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        const AcademicAdvisorView()));
+                          },
                           title: AppLocalizations.of(context)!.talkToMyAdvisor,
-                          icon: SvgPicture.asset("assets/support/support_1_0_1/Academic Advisor.svg",height: 20,width: 20,),
+                          icon: SvgPicture.asset(
+                            "assets/support/support_1_0_1/Academic Advisor.svg",
+                            height: 20,
+                            width: 20,
+                          ),
                           langProvider: langProvider,
                           // contentPadding: EdgeInsets.zero,
                           content: Column(
@@ -72,78 +82,81 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView> with 
                               //   child: Text(AppLocalizations.of(context)!.youCanSeeListOfAdvisors, style: const TextStyle(fontSize: 14, height: 2.5),),
                               // ),
                               // kFormHeight,
-                              // const Divider(),
-                              homeViewCardBottomContainer(
-                                  // padding:  EdgeInsets.all(kCardPadding),
-                                  backGroundColor: Colors.transparent,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      // image of the academic advisor
-                                      // Container(
-                                      //     alignment: Alignment.center,
-                                      //     height: 40,
-                                      //     width: 40,
-                                      //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), image: const DecorationImage(image: AssetImage("assets/login_bg.png")))),
-                                      // kMediumSpace,
-                                      Flexible(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              (topAdvisor?.advisorName ?? ''),
-                                              style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14, height: 1.2),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              topAdvisor?.advisorRoleDescription?.toString() ?? '',
-                                              style: const TextStyle(fontSize: 12, height: 2),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
+                              const NoMarginDivider(color: AppColors.lightGrey),
+                              SizedBox(height: kCardPadding,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          (topAdvisor?.advisorName ?? ''),
+                                          style:
+                                              AppTextStyles.titleBoldTextStyle()
+                                                  .copyWith(
+                                                      fontSize: 14,
+                                                      height: 1.2),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                      ),
+                                        Text(
+                                          topAdvisor?.advisorRoleDescription
+                                                  ?.toString() ??
+                                              '',
+                                          style: const TextStyle(
+                                              fontSize: 12, height: 2),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
 
-                                      /// call and message buttons
-                                      Flexible(
-                                        child: ConstrainedBox(
-                                          constraints: const BoxConstraints(minWidth: 200, maxWidth: 200,),
-                                          child: Wrap(
-                                            runSpacing: 0,
-                                            spacing: -30,
-                                            runAlignment: WrapAlignment.end,
-                                            alignment: WrapAlignment.end,
-                                            children: [
-                                              // message Advisor
-                                              CustomMaterialButton(
-                                                  onPressed: () async {
-                                                    await Utils.launchEmail(
-                                                        topAdvisor?.email ??
-                                                            '');
-                                                  },
-                                                  isEnabled: false,
-                                                  shape: const CircleBorder(),
-                                                  child: SvgPicture.asset("assets/services/Email.svg",height: 13,width: 13,)),
-                                              // Call advisor
-                                              CustomMaterialButton(
-                                                  onPressed: () async {
-                                                    await Utils.makePhoneCall(
-                                                        phoneNumber: topAdvisor
-                                                                ?.phoneNo ??
-                                                            '',
-                                                        context: context);
-                                                  },
-                                                  isEnabled: false,
-                                                  shape: const CircleBorder(),
-                                                  child: SvgPicture.asset("assets/call_advisor.svg",height: 15,width: 15,)),
-                                            ],
-                                          ),
-                                        ),
-                                      )
+                                  /// call and message buttons
+
+                                  Wrap(
+                                    runSpacing: 0,
+                                    spacing: -30,
+                                    runAlignment: WrapAlignment.end,
+                                    alignment: WrapAlignment.end,
+                                    children: [
+                                      // message Advisor
+                                      CustomMaterialButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () async {
+                                            await Utils.launchEmail(
+                                                topAdvisor?.email ?? '');
+                                          },
+                                          isEnabled: false,
+                                          shape: const CircleBorder(),
+                                          child: SvgPicture.asset(
+                                            "assets/services/Email.svg",
+                                            height: 13,
+                                            width: 13,
+                                          )),
+                                      // Call advisor
+                                      CustomMaterialButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () async {
+                                            await Utils.makePhoneCall(
+                                                phoneNumber:
+                                                    topAdvisor?.phoneNo ?? '',
+                                                context: context);
+                                          },
+                                          isEnabled: false,
+                                          shape: const CircleBorder(),
+                                          child: SvgPicture.asset(
+                                            "assets/call_advisor.svg",
+                                            height: 15,
+                                            width: 15,
+                                          )),
                                     ],
-                                  ))
+                                  )
+                                ],
+                              )
                             ],
                           )),
                     ],

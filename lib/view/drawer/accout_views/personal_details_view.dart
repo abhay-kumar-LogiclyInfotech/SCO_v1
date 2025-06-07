@@ -189,8 +189,7 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView> with MediaQue
           children: [
             CustomInformationContainerField(
               title: localization.fullName,
-              description:
-                  "${user?.firstName} ${user?.middleName} ${user?.middleName2} ${user?.lastName}",
+              description: "${user?.firstName ?? ''} ${user?.middleName ?? ''} ${user?.middleName2 ?? ''} ${user?.lastName ?? ''}",
             ),
             CustomInformationContainerField(
               title: localization.emiratesId,

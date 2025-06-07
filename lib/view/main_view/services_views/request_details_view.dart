@@ -164,7 +164,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
           children: [
 
             /// ****************************************************************
-            kFormHeight,
+            kSmallSpace,
 
             /// Basic information of request
             Padding(
@@ -202,6 +202,7 @@ class _RequestDetailsViewState extends State<RequestDetailsView> with MediaQuery
 
                   /// attachments
                   _attachmentsUploadSection(),
+                  kSmallSpace,
                 ],
               ),
             )

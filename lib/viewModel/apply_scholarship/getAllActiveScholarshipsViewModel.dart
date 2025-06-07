@@ -1,21 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:html/parser.dart' as html_parser;
 import 'package:sco_v1/controller/internet_controller.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
-import 'package:sco_v1/models/drawer/a_brief_about_sco_model.dart';
 import 'package:sco_v1/repositories/home/home_repository.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
-import 'package:xml/xml.dart' as xml;
 
 import '../../data/response/ApiResponse.dart';
-import '../../repositories/drawer_repo/drawer_repository.dart';
 import '../../utils/constants.dart';
-import '../../utils/utils.dart';
 import '../language_change_ViewModel.dart';
 
 class GetAllActiveScholarshipsViewModel with ChangeNotifier {
+
+
+
+
+
   //*------Accessing Api Services------*
 
   late AlertServices _alertServices;
@@ -38,9 +38,9 @@ class GetAllActiveScholarshipsViewModel with ChangeNotifier {
   Future<bool> getAllActiveScholarships(
       {required BuildContext context,
       required LanguageChangeViewModel langProvider}) async {
-    InternetController _internetController =  Get.find<InternetController>();
+    InternetController internetController =  Get.find<InternetController>();
 
-    if (_internetController.isConnected.value) {
+    if (internetController.isConnected.value) {
       try {
         _setApiResponse = ApiResponse.loading();
 
@@ -69,4 +69,44 @@ class GetAllActiveScholarshipsViewModel with ChangeNotifier {
       return false;
     }
   }
+
+///************************************************************************************
+
+ final List<Map<String,dynamic>> scholarshipRequestType= [
+    {
+      "code":"INT",
+      "value":"Scholarships In UAE",
+      "valueArabic":"المنح الدراسية في الإمارات العربية المتحدة",
+      "description": "انطلاقًـا مـن حـرص وزارة شـؤون الرئاسـة علـى رفـع المسـتوى الأكاديمـي والعلمـي للمواطنيـن، وإعـداد كـوادر وطنيـة مؤهّلـة أكاديميًّـا وعمليًّـا، تلبـّي متطلبـات سـوق العمـل المتطـوّرة والمتغيّـرة فـي الدولـة، وتسـهم فـي دفـع مسـيرة التنميـة الحضاريـة وتنهــض بالوطــن والمجتمــع، تــمّ إطــلاق برنامــج «المنــح الدراســية داخــل الدولــة» ســنة 2000، ولا زال البرنامــج مســتمرًا تحــت إشـراف إدارة البعثـات الداخليـة فـي مكتـب البعثـات الدراسـية التابـع لـوزارة شـؤون الرئاسـة.",
+      "image": Constants.scholarshipInUae,
+      "seeMore":false
+    },
+    {
+      "code":"EXT",
+      "value":"Scholarships Abroad",
+      "valueArabic":"المنح الدراسية في الخارج",
+      "description": "تسعى بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا إلى إتاحة الفرصة أمام الطلبة المواطنين المتميزين علميًا لاستكمال دراستهم للحصول على درجة البكالوريوس، أو الدراسات العليا في الجامعات العالمية المرموقة، التي يتنافس على الدراسة فيها نخبة الطلبة في جميع أنحاء العالم، وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في دولة الإمارات العربية المتحدة الذي يعدّ عماد التنمية والركيزة التي يُبنى عليها حاضر ومستقبل الدولة",
+      "image": Constants.scholarshipInAbroad,
+      "seeMore":false
+
+
+    },
+    {
+      "code":"DDS",
+      "value":"Distinguished Doctor",
+      "valueArabic":"المهن الطبية",
+      "description": "انطلاقًـا مـن حـرص وزارة شـؤون الرئاسـة علـى رفـع المسـتوى الأكاديمـي والعلمـي للمواطنيـن، وإعـداد كـوادر وطنيـة مؤهّلـة أكاديميًّـا وعمليًّـا، تلبـّي متطلبـات سـوق العمـل المتطـوّرة والمتغيّـرة فـي الدولـة، وتسـهم فـي دفـع مسـيرة التنميـة الحضاريـة وتنهــض بالوطــن والمجتمــع، تــمّ إطــلاق برنامــج «المنــح الدراســية داخــل الدولــة» ســنة 2000، ولا زال البرنامــج مســتمرًا تحــت إشـراف إدارة البعثـات الداخليـة فـي مكتـب البعثـات الدراسـية التابـع لـوزارة شـؤون الرئاسـة.",
+      "image": Constants.doctorsScholarship,
+      "seeMore":false
+    },
+  ];
+
+
+  void toggleSeeMore(int index){
+    scholarshipRequestType[index]["seeMore"] = !scholarshipRequestType[index]["seeMore"];
+    notifyListeners();
+  }
+
+///************************************************************************************
+
 }

@@ -12,13 +12,14 @@ class SimpleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
+      height: 45,
       onPressed: onPressed,
       minWidth: double.infinity,
       shape: RoundedRectangleBorder(
           side: const BorderSide(color: AppColors.lightGrey),
-          borderRadius: BorderRadius.circular(8)
+          borderRadius: BorderRadius.circular(10)
       ),
-      child: Text( title,style: const TextStyle(fontSize: 12,fontWeight: FontWeight.bold,color: Colors.grey),),
+      child: Text( title,style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.grey),),
 
     );
   }

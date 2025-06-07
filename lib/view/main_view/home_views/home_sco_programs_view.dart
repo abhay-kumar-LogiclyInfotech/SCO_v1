@@ -98,7 +98,7 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          kSmallSpace,
+          kHomeCardSpace,
           Row(
             children: [
               Text(

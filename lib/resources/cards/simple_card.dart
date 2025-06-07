@@ -25,7 +25,7 @@ class _SimpleCardState extends State<SimpleCard> with MediaQueryMixin {
         borderRadius: const BorderRadius.all(Radius.circular(15)),
         child: Container(
           width: double.maxFinite,
-          padding: widget.contentPadding ??   EdgeInsets.all(kCardPadding),
+          padding: widget.contentPadding ?? EdgeInsets.all(kCardPadding),
           decoration:  BoxDecoration(
             // color: Colors.white,
             color: widget.cardColor ?? Colors.white,

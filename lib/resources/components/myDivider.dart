@@ -36,14 +36,15 @@ class MyDivider extends StatelessWidget {
 
 
 class NoMarginDivider extends StatelessWidget {
-  const NoMarginDivider({super.key});
+  final Color color;
+  const NoMarginDivider({super.key,this.color = AppColors.darkGrey});
 
   @override
   Widget build(BuildContext context) {
-    return  const Divider(
+    return   Divider(
       indent: 0,
       endIndent: 0,
-      color: AppColors.darkGrey, // or AppColors.darkGrey
+      color: color, // or AppColors.darkGrey
       thickness: 1,
       height: 1, // eliminates top and bottom margin
     );

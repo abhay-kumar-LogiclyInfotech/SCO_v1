@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/components/kButtons/simple_button.dart';
+import 'package:sco_v1/resources/components/myDivider.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 
@@ -39,6 +40,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
 
   @override
   Widget build(BuildContext context) {
+
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
     final localization = AppLocalizations.of(context)!;
     return Consumer<MyFinanceStatusViewModel>(
@@ -80,54 +82,73 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
               //   ],
               // ),
 
-              const Divider(),
+              const NoMarginDivider(color: AppColors.lightGrey),
+              SizedBox(height: kCardPadding,),
               Column(
                 children: [
-                  kMinorSpace,
-                  salaryContainer([
-                    Expanded(child: RichText(text: TextSpan(text: localization.salary,style: const TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 18)),)),
-                    RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text : salary?.amount?.toString() ?? '0',
-                              style: const TextStyle(color: Colors.green,fontWeight: FontWeight.bold,fontSize: 28),
-                            ),
-                            TextSpan(
-                              text: ' ${salary?.currency?.toString() ?? ''}' ,
-                              style: const TextStyle(color: Colors.green,fontWeight: FontWeight.normal,fontSize: 17),
-                            )
-                          ]
-                      ),),
-                  ]),
-                  salaryContainer( [
-                    Expanded(child: RichText(text:  TextSpan(text: localization.paid,style: const TextStyle(color: Colors.grey,fontSize: 14,fontWeight: FontWeight.normal)),)),
-                    RichText(
-                      text: TextSpan(
-                          style: const TextStyle(color: Colors.grey),
-                          children: [
-                            TextSpan(
-                                text: salary?.salaryMonth?.toString() ?? ''
-                            )
-                          ]
-                      ),),
+                  Row(children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(text: TextSpan(text: localization.homeSalary,style: const TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 14)),),
+                          RichText(text:  TextSpan(text: localization.paid,style: const TextStyle(color: Colors.grey,fontSize: 14)),),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text : salary?.amount?.toString() ?? '0',
+                                  style: const TextStyle(color: Colors.green,fontWeight: FontWeight.bold,fontSize: 28),
+                                ),
+                                TextSpan(
+                                  text: ' ${salary?.currency?.toString() ?? ''}' ,
+                                  style: const TextStyle(color: Colors.green,fontWeight: FontWeight.normal,fontSize: 17),
+                                )
+                              ]
+                          ),),
+                        RichText(
+                          text: TextSpan(
+                              style: const TextStyle(color: Colors.grey,fontSize: 13),
+                              children: [
+                                TextSpan(
+                                    text: salary?.salaryMonth?.toString() ?? ''
+                                )
+                              ]
+                          ),),
+                      ],
+                    ),
+
                   ]),
                   kSmallSpace,
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      bonusOrDeductionContainer(
-                          localization.deduction,
-                          deduction?.totalDeducted?.toString() ?? '0',
-                          Colors.red
-                      ),
-                      bonusOrDeductionContainer(
-                        localization.bonus,
-                        bonus?.amount?.toString() ?? '0',
-                      ),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minWidth: double.infinity),
+                    child: Wrap(
+                      runSpacing: kTileSpace,
+                      alignment: WrapAlignment.spaceBetween,
+                      // spacing: screenWidth < 600 ? : 15,
+                      // alignment: WrapAlignment.spaceBetween,
+                      // runAlignment: WrapAlignment.spaceBetween,
+                      // mainAxisSize: MainAxisSize.max,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        bonusOrDeductionContainer(
+                            localization.deduction,
+                            deduction?.totalDeducted?.toString() ?? '0',
+                            Colors.red
+                        ),
+                        bonusOrDeductionContainer(
+                          localization.bonus,
+                          bonus?.amount?.toString() ?? '0',
+                        ),
 
-                    ],
+                      ],
+                    ),
                   ),
                   kSmallSpace,
 
@@ -137,8 +158,6 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                   }, title: localization.more),
                 ],
               ),
-
-
             ],
           ), langProvider: langProvider);
         case null:
@@ -156,32 +175,27 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
           color:  AppColors.bgColor,
           borderRadius: BorderRadius.circular(14)
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 15),
+      width: screenWidth/2.33,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(20),
       child: Column(
           children:[
-            RichText(text: TextSpan(
+            RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
                 text: amount,
-                style:  TextStyle(fontSize: 21,fontWeight: FontWeight.bold,color: color ?? Colors.green)
+                style:  TextStyle(fontSize: 21,fontWeight: FontWeight.bold,color: color ?? Colors.green),
             )),
             RichText(text: TextSpan(
                 text: title,
-                style: const TextStyle(fontSize: 14,color: Colors.grey)
+                style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.grey)
             )),
-
 
           ]
       ),
     );
   }
 
-  Widget salaryContainer(children){
-    return Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-      children: children,
-    );
-  }
 
 
 

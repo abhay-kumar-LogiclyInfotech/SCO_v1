@@ -2796,7 +2796,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studentUndertakingRequired => '.لايمكن تقديم الطلب بدون الموافقة الاقرار و التعهد';
 
   @override
-  String get studentUndertaking => '.أقر بموافقتي واطلاعي علي ما ورد اعلاه';
+  String get studentUndertaking => 'لإقرار والتعهد';
 
   @override
   String get documentUploaded => ' تم تحميل المستند';
@@ -3382,4 +3382,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get name => 'الإسم';
+
+  @override
+  String get draftDatesOver => 'انتهى تاريخ تقديم المسودة. يرجى المحاولة لاحقًا';
+
+  @override
+  String get submitNewApplication => 'قديم طلب جديد';
+
+  @override
+  String get homeSalary => 'معلومات الراتب';
+
+  @override
+  String get seeMore => '...عرض المزيد';
+
+  @override
+  String get seeLess => ' عرض أقل';
 }

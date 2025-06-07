@@ -46,9 +46,9 @@ class _HomeApplyForScholarshipViewState extends State<HomeApplyForScholarshipVie
         title: AppLocalizations.of(context)!.scholarshipOffice,
         // icon: SvgPicture.asset("assets/sco_office.svg"),
         showTitle: false,
+        contentPadding: EdgeInsets.all(kCardPadding),
         content: Column(
           children: [
-            kSmallSpace,
             Consumer(
               builder: (context, provider, _) {
                 return CustomButton(
@@ -76,7 +76,6 @@ class _HomeApplyForScholarshipViewState extends State<HomeApplyForScholarshipVie
                 );
               },
             ),
-            kSmallSpace,
           ],
         ));
   }
