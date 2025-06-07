@@ -817,7 +817,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       scholarshipFormDropdown(
                         context: context,
                         readOnly: phoneNumber.isExisting,
-                        filled: phoneNumber.isExisting,
+                        filled: true,
+                        fillColor: phoneNumber.isExisting ? AppColors.lightGrey : Colors.white,
                         controller: phoneNumber.phoneTypeController,
                         currentFocusNode: phoneNumber.phoneTypeFocusNode,
                         menuItemsList: _phoneNumberTypeMenuItemsList,
@@ -1049,7 +1050,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       scholarshipFormDropdown(
                         context: context,
                         readOnly: email.existing,
-                        filled: email.existing,
+                        filled: true,
+                        fillColor: email.existing ? AppColors.lightGrey : Colors.white,
                         controller: email.emailTypeController,
                         currentFocusNode: email.emailTypeFocusNode,
                         menuItemsList: _emailTypeMenuItemsList,

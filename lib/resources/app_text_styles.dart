@@ -79,4 +79,19 @@ class AppTextStyles {
       fontSize: 14,
     );
   }
+
+  static TextStyle errorTextStyle(){
+    return const TextStyle(
+      color: AppColors.DANGER,
+      fontSize: 12,
+    );
+  }
+
+  static TextStyle fieldHeadingTextStyle(){
+    return const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: AppColors.fieldTitleDarkGrey,
+    );
+  }
 }

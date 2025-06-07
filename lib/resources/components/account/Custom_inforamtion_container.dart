@@ -60,17 +60,13 @@ class _CustomInformationContainerState extends State<CustomInformationContainer>
               ),
               color: AppColors.scoButtonColor,
             ),
-            padding:  EdgeInsets.all(kCardPadding),
+            padding:  EdgeInsets.all(kPadding),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
              widget.leading == null ? const SizedBox.shrink(): Row(children:[widget.leading!,const SizedBox(width: 10)]),
                 Expanded(
-                  child: Text(widget.title,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                      )),
+                  child: Text(widget.title, style: AppTextStyles.titleBoldTextStyle().copyWith(color: Colors.white)),
                 ),
                 widget.trailing == null ? const SizedBox.shrink():  widget.trailing!,
 

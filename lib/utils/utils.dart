@@ -21,6 +21,7 @@ import 'package:html/parser.dart' as html;
 import '../../l10n/app_localizations.dart';
 
 import '../resources/app_colors.dart';
+import '../resources/app_text_styles.dart';
 import 'constants.dart';
 
 mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
@@ -392,10 +393,7 @@ fieldHeading(
           Expanded(
             child: RichText(
                 text: TextSpan(
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.fieldTitleDarkGrey),
+                    style: AppTextStyles.fieldHeadingTextStyle(),
                     children: <TextSpan>[
                   TextSpan(
                     text: title,

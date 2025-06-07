@@ -37,6 +37,9 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   late TextEditingController _usernameController;
   late TextEditingController _passwordController;
 
+  String? usernameErrorText;
+  String? passwordErrorText;
+
   late FocusNode _emailFocusNode;
   late FocusNode _passwordFocusNode;
 
@@ -369,6 +372,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
         // height: 18,
         // width: 18,
       ),
+      errorText: usernameErrorText,
       onChanged: (value) {},
     );
   }
@@ -401,6 +405,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
                         Icons.visibility_rounded,
                         color: AppColors.darkGrey,
                       )),
+            errorText: passwordErrorText,
             onChanged: (value) {},
           );
         });
@@ -557,21 +562,18 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   bool _validateFields({required LanguageChangeViewModel langProvider}) {
     final localization = AppLocalizations.of(context)!;
+    usernameErrorText = null;
+    passwordErrorText = null;
+    bool result = true;
     if (_usernameController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-
-          localization.loginUsernameRequired,
-          // // context: context,
-          // provider: langProvider
-          );
-
-      return false;
+      usernameErrorText = localization.loginUsernameRequired;
+      result = false;
     }
 
     if (_passwordController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(localization.registrationPasswordValidate);
-      return false;
+      passwordErrorText = localization.registrationPasswordValidate;
+      result = false;
     }
-    return true;
+    return result;
   }
 }

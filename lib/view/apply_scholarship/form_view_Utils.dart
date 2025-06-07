@@ -220,7 +220,8 @@ dynamic scholarshipFormTimeField(
    dynamic sectionTitle({required String title}) {
     return Text(
       title,
-      style: AppTextStyles.titleBoldTextStyle(),
+      style: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14,height: 2),
+      // style:  AppTextStyles.fieldHeadingTextStyle().copyWith(color: AppColors.scoButtonColor),
     );
   }
 

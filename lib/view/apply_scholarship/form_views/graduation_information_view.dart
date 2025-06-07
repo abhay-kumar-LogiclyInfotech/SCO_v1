@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/widgets/show_error_text.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
 import '../../../models/apply_scholarship/FillScholarshipFormModels.dart';
@@ -31,6 +32,7 @@ class GraduationInformationView extends StatefulWidget {
   List<DropdownMenuItem> graduationLevelDDSMenuItems;
   List<DropdownMenuItem> caseStudyYearDropdownMenuItems;
   final Function(String) onUpdateHavingSponsor;
+  final String? selectSponsorshipErrorText;
 
   GraduationInformationView(
       {super.key,
@@ -45,7 +47,9 @@ class GraduationInformationView extends StatefulWidget {
       required this.havingSponsor,
       this.nationalityMenuItemsList,
       required this.addGraduation,
-      required this.onUpdateHavingSponsor});
+      required this.onUpdateHavingSponsor,
+        this.selectSponsorshipErrorText
+      });
 
   @override
   State<GraduationInformationView> createState() =>
@@ -176,12 +180,12 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
     final localization = AppLocalizations.of(context)!;
     return Container(
         padding: EdgeInsets.symmetric(horizontal: kPadding),
+        margin: const EdgeInsets.only(bottom: 100),
         color: Colors.grey.shade200,
         child: SingleChildScrollView(
             child: Column(children: [
           if (!widget.displayHighSchool)
-            kSmallSpace,
-          kFormHeight,
+            ...[kSmallSpace, kFormHeight],
 
           /// if selected scholarship matches the condition then high school details section else don't
           (widget.academicCareer != 'SCHL' && widget.academicCareer != 'HCHL')
@@ -410,7 +414,6 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                     ],
                   ))
               : showVoid,
-          const SizedBox(height: 100,)
         ])));
   }
 
@@ -840,6 +843,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
                 ],
               )
             : showVoid,
+        showErrorText(widget.selectSponsorshipErrorText),
 
         /// ****************************************************************************************************************************************************
 

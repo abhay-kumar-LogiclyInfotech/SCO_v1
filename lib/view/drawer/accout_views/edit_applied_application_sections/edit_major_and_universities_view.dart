@@ -39,7 +39,7 @@ class EditMajorsAndUniversityView extends StatefulWidget {
 
 class _EditMajorsAndUniversityViewState
     extends State<EditMajorsAndUniversityView> with MediaQueryMixin{
-  late AlertServices _alertServicess;
+  late AlertServices _alertServices;
 
 
   PsApplication? peopleSoftApplication;
@@ -48,7 +48,7 @@ class _EditMajorsAndUniversityViewState
   void initState() {
 
     final GetIt getIt = GetIt.instance;
-    _alertServicess = getIt.get<AlertServices>();
+    _alertServices = getIt.get<AlertServices>();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
       await _refreshView();
     });
@@ -561,9 +561,7 @@ class _EditMajorsAndUniversityViewState
                                           majorInfo.majorController.clear();
                                           // majorInfo.isNewController.text = "false";
 
-                                          // Display a toast message
-                                          _alertServicess.toastMessage("This major has already been selected. Please choose another one.",
-                                          );
+
                                         });
                                       } else {
                                         // If the major is valid, update the field and show a success message
@@ -571,7 +569,6 @@ class _EditMajorsAndUniversityViewState
                                           majorInfo.majorController.text = value!;
                                           // majorInfo.isNewController.text = "true"; // Mark entry as valid
                                           // Optionally, display a success toast
-                                          _alertServicess.toastMessage("Major selected successfully.");
                                         });
                                       }
                                     }
@@ -799,11 +796,7 @@ class _EditMajorsAndUniversityViewState
                                               });
 
                                               if (alreadySelected) {
-                                                /// If the university is already selected, show a toast message and set an error
-                                                _alertServicess.showToast(
-                                                  // context: context,
-                                                  message: "This university has already been selected. Please choose another one.",
-                                                );
+
                                                 universityInfo.universityIdError = localization.duplicateWishUniversity;
 
                                                 /// Clear the selected university value in the controller

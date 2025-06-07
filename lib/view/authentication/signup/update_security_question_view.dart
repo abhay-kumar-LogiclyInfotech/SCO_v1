@@ -46,6 +46,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
   List<DropdownMenuItem> _securityQuestionItemsList = [];
 
+  String? _questionError;
   String? _answerError;
   String? _userId;
 
@@ -223,6 +224,7 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
     return CustomDropdown(
       textDirection: getTextDirection(langProvider),
       menuItemsList: _securityQuestionItemsList,
+      errorText: _questionError,
       onChanged: (value) {
         setState(() {
           _questionController.text = value!;
@@ -301,16 +303,20 @@ class _UpdateSecurityQuestionViewState extends State<UpdateSecurityQuestionView>
 
   //Extra validations for better user Experience:
   bool validateForm({required LanguageChangeViewModel langProvider}) {
+    _questionError = null;
+    _answerError = null;
+    bool result = true;
     if (_questionController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.selectSecurityQuestion);
-      return false;
+      _questionError = AppLocalizations.of(context)!.selectSecurityQuestion;
+      result = false;
     }
     if (_answerController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(AppLocalizations.of(context)!.writeSecurityAnswer);
-      return false;
+      _answerError = AppLocalizations.of(context)!.writeSecurityAnswer;
+      result = false;
+
     }
 
-    return true;
+    return result;
   }
 }
 //background static picture:

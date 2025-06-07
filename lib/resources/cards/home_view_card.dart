@@ -79,9 +79,9 @@ class _HomeViewCardState extends State<HomeViewCard> with MediaQueryMixin {
                                   child: Text(
                                     widget.title,
                                     style: AppTextStyles.titleBoldTextStyle()
-                                        .copyWith(
-                                            fontSize: widget.titleSize ?? 20,
-                                            fontWeight: FontWeight.bold),
+                                        // .copyWith(
+                                        //     fontSize: widget.titleSize ?? 20,
+                                        //     fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 const SizedBox(width: 5),

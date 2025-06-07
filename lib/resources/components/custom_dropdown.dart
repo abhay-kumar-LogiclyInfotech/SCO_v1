@@ -104,7 +104,7 @@ class _CustomDropdownState extends State<CustomDropdown>
             isDense: false,
             contentPadding: EdgeInsets.symmetric(
                 vertical: screenWidth * 0.03,
-                horizontal: widget.leading == null ? screenWidth * 0.03 : 0),
+                horizontal: widget.leading == null ? screenWidth * 0.01 : 0),
             prefixIcon: widget.leading,
             prefixIconConstraints: const BoxConstraints(
               minWidth: 30,
@@ -113,7 +113,7 @@ class _CustomDropdownState extends State<CustomDropdown>
             // alignLabelWithHint: false,
             hintText: widget.hintText,
             hintFadeDuration: const Duration(milliseconds: 500),
-            hintStyle: const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14,fontWeight: FontWeight.w500),
+            hintStyle: const TextStyle(color: AppColors.hintDarkGrey, fontSize: 14,fontWeight: FontWeight.normal),
             border: widget.outlinedBorder
                 ? Utils.outlinedInputBorder()
                 : Utils.underLinedInputBorder(),
@@ -127,7 +127,7 @@ class _CustomDropdownState extends State<CustomDropdown>
                 ? Utils.outlinedInputBorder()
                 : Utils.underLinedInputBorder(),
             focusedErrorBorder: widget.outlinedBorder
-                ? Utils.outlinedInputBorder()
+                ? Utils.outlinedInputBorder().copyWith(borderSide: const BorderSide(color: Colors.red))
                 : Utils.underLinedInputBorder(),
             filled: widget.filled,
             fillColor: widget.fillColor ??  Colors.grey.shade200,

@@ -39,7 +39,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   late FocusNode _emailFocusNode;
   late FocusNode _captchaFocusNode;
 
+
+
   String? _emailError;
+  String? _captchaError;
 
   double _angle = 0;
   String? _captchaText;
@@ -312,6 +315,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
       leading: SvgPicture.asset(
         "assets/captcha.svg",
       ),
+      errorText: _captchaError,
       onChanged: (value) {},
     );
   }
@@ -451,22 +455,25 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView>
   }
 
   bool _validateForm({required LanguageChangeViewModel langProvider}) {
-    if (_emailController.text.isEmpty) {
-      _alertServices.showErrorSnackBar(
-          AppLocalizations.of(context)!.pleaseEnterYourEmailAddress);
-      return false;
+    _emailError = null;
+    _captchaError = null;
+    bool result = true;
+    if (_emailController.text.isEmpty || !Validations.isEmailValid(_emailController.text)) {
+      _emailError = AppLocalizations.of(context)!.pleaseEnterYourEmailAddress;
+      result = false;
     }
     if (_captchaController.text.isEmpty) {
-      _alertServices
-          .showErrorSnackBar(AppLocalizations.of(context)!.pleaseEnterCaptcha);
-      return false;
+      _captchaError = AppLocalizations.of(context)!.pleaseEnterCaptcha;
+      result = false;
     }
     if (_captchaText != _captchaController.text) {
       _rotate();
-      _alertServices
-          .showErrorSnackBar(AppLocalizations.of(context)!.incorrectCaptcha);
-      return false;
+      _captchaError = AppLocalizations.of(context)!.incorrectCaptcha;
+      result = false;
     }
-    return true;
+    setState(() {
+    });
+
+      return result;
   }
 }

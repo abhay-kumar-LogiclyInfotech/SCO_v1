@@ -136,6 +136,7 @@ dynamic form ;
 
   /// current Employment status
   String? _employmentStatus;
+  String? _selectEmploymentHistoryErrorText;
 
 
   /// employment history list
@@ -185,7 +186,10 @@ dynamic form ;
           return SingleChildScrollView(
             child: Column(
               children: [
-                EmploymentHistoryView(onEmploymentStatusChanged: (value) {
+                EmploymentHistoryView(
+                    selectEmploymentHistoryErrorText: _selectEmploymentHistoryErrorText,
+                    onEmploymentStatusChanged: (value) {
+                      _selectEmploymentHistoryErrorText = null;
                   setState(() {
                     _employmentStatus = value;
                     if (_employmentStatus == 'N') {
@@ -261,10 +265,16 @@ dynamic form ;
     /// validate employment history
 
     /// select employment status
+    _selectEmploymentHistoryErrorText = null;
     if (_employmentStatus == null || _employmentStatus == '') {
-      _alertServices.showToast(message: "${localization.previouslyEmployed} ?",
+      setState(() {
+        _selectEmploymentHistoryErrorText = localization.employmentStatusRequired;
+        firstErrorFocusNode ??= null;
+      });
+
+      // _alertServices.showToast(message: "${localization.previouslyEmployed} ?",
         // context: context,
-      );
+      // );
     }
 
     if (_employmentStatus != null &&

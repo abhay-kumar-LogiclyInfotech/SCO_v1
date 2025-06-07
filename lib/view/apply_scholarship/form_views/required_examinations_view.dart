@@ -180,7 +180,9 @@ _alertServices = getIt.get<AlertServices>();
                                         title: localization.examination,
                                         important: false,
                                         langProvider: langProvider),
-                                    scholarshipFormDropdown(context:context,
+                                    scholarshipFormDropdown(
+                                        context:context,
+                                        filled: true,
                                         controller: requiredExamInfo.examinationController,
                                         currentFocusNode:
                                         requiredExamInfo.examinationFocusNode,
@@ -244,7 +246,8 @@ _alertServices = getIt.get<AlertServices>();
                                         important: requiredExamInfo.examinationController.text.isNotEmpty && (requiredExamInfo.examinationTypeDropdown?.isNotEmpty ?? false || requiredExamInfo.examinationTypeDropdown != null),
                                         langProvider: langProvider),
                                     scholarshipFormDropdown(
-                                      filled: !(requiredExamInfo.examinationController.text.isNotEmpty && (requiredExamInfo.examinationTypeDropdown?.isNotEmpty ?? false || requiredExamInfo.examinationTypeDropdown != null)),
+                                      filled: true,
+                                      fillColor: !(requiredExamInfo.examinationController.text.isNotEmpty && (requiredExamInfo.examinationTypeDropdown?.isNotEmpty ?? false || requiredExamInfo.examinationTypeDropdown != null)) ? AppColors.lightGrey : Colors.white,
                                       context:context,
                                       controller: requiredExamInfo.examinationTypeIdController,
                                       currentFocusNode: requiredExamInfo.examinationTypeIdFocusNode,

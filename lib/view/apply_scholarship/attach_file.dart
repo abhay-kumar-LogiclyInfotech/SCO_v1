@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/widgets/show_error_text.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';

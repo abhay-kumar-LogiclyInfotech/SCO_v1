@@ -248,10 +248,12 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
 
   /// sponsorship question for dds (One student can have only have one sponsor)
   String havingSponsor = '';
+  String? _selectSponsorshipErrorText;
 
   void updateHavingSponsor(String value) {
     setState(() {
       havingSponsor = value;
+      _selectSponsorshipErrorText = null;
     });
   }
 
@@ -359,6 +361,7 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
                 child: Column(
                   children: [
                     GraduationInformationView(
+                      selectSponsorshipErrorText: _selectSponsorshipErrorText,
                       onUpdateHavingSponsor: updateHavingSponsor,
                       graduationDetailsList: _graduationDetailsList,
                       graduationLevelMenuItems: _graduationLevelMenuItems,
@@ -564,12 +567,12 @@ class _EditGraduationDetailsViewState extends State<EditGraduationDetailsView> w
           }
           /// #################################################################
           /// Are you currently receiving scholarship or grant from other university
+          _selectSponsorshipErrorText = null;
           if (academicCareer == 'DDS') {
             if (havingSponsor.isEmpty) {
-              _alertServices.flushBarErrorMessages(
-                  message: localization.ddsGradQuestion,
-                  // context: context,
-                  provider: langProvider);
+              _selectSponsorshipErrorText = localization.ddsGradQuestion;
+              // _alertServices.flushBarErrorMessages(message: localization.ddsGradQuestion, // context: context,
+              //     provider: langProvider);
               firstErrorFocusNode = FocusNode();
               return false;
             }

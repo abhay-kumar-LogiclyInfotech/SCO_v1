@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
+import 'package:sco_v1/resources/widgets/show_error_text.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import '../../../l10n/app_localizations.dart';
@@ -12,12 +13,13 @@ import '../../../resources/components/custom_checkbox_tile.dart';
 
 class StudentUndertakingView extends StatefulWidget {
   bool acceptStudentUndertaking;
-   int step;
+  final String? errorText;
+  int step;
     GetAllActiveScholarshipsModel? selectedScholarship;
    dynamic filledSections;
    final VoidCallback onSubmit;
    final Function(bool?) onAcceptTerms;
-   StudentUndertakingView({super.key,required this.acceptStudentUndertaking, this.selectedScholarship,required this.step,required this.onSubmit,required this.filledSections,required this.onAcceptTerms});
+   StudentUndertakingView({super.key,this.errorText,required this.acceptStudentUndertaking, this.selectedScholarship,required this.step,required this.onSubmit,required this.filledSections,required this.onAcceptTerms});
 
   @override
   State<StudentUndertakingView> createState() => _StudentUndertakingViewState();
@@ -70,6 +72,7 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
               text: localization.studentUndertaking,
               textStyle: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14,fontWeight: FontWeight.w600),
             ),
+            showErrorText(widget.errorText),
 
             Padding(
               padding: EdgeInsets.all(kPadding),

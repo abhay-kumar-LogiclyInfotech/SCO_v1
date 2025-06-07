@@ -35,7 +35,6 @@ class EditRequiredExaminationsView extends StatefulWidget {
 
 class _EditRequiredExaminationsViewState
     extends State<EditRequiredExaminationsView> with MediaQueryMixin{
-  late AlertServices _alertServices;
 
 
   PsApplication? peopleSoftApplication;
@@ -44,7 +43,6 @@ class _EditRequiredExaminationsViewState
   void initState() {
 
     final GetIt getIt = GetIt.instance;
-    _alertServices = getIt.get<AlertServices>();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
      await _refreshView();
     });

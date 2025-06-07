@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:provider/provider.dart';
+import 'package:sco_v1/resources/widgets/show_error_text.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import '../../../l10n/app_localizations.dart';
@@ -20,7 +21,8 @@ class EmploymentHistoryView extends StatefulWidget {
   dynamic employmentStatusItemsList;
   dynamic draftPrevNextButtons;
   final  void Function(dynamic?) onEmploymentStatusChanged;
-  EmploymentHistoryView({super.key,this.employmentStatus,this.employmentHistoryList,this.employmentStatusItemsList,this.draftPrevNextButtons,required this.onEmploymentStatusChanged});
+  final String? selectEmploymentHistoryErrorText;
+  EmploymentHistoryView({super.key,this.selectEmploymentHistoryErrorText,this.employmentStatus,this.employmentHistoryList,this.employmentStatusItemsList,this.draftPrevNextButtons,required this.onEmploymentStatusChanged});
 
   @override
   State<EmploymentHistoryView> createState() => _EmploymentHistoryViewState();
@@ -126,6 +128,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                       shrinkWrap: true,
                                       physics: const NeverScrollableScrollPhysics(),
                                       itemCount: widget.employmentStatusItemsList.length,
+                                      padding: EdgeInsets.zero,
                                       itemBuilder: (context, index) {
                                         final element = widget.employmentStatusItemsList[index];
                                         return CustomRadioListTile(
@@ -139,6 +142,7 @@ class _EmploymentHistoryViewState extends State<EmploymentHistoryView> with Medi
                                           textStyle: textFieldTextStyle,
                                         );
                                       }),
+                                  showErrorText(widget.selectEmploymentHistoryErrorText),
                                   /// ****************************************************************************************************************************************************
 
                                   /// employment history details section

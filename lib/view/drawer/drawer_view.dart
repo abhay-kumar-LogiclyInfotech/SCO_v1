@@ -144,7 +144,11 @@ class _DrawerViewState extends State<DrawerView> {
                                               return ProfileWithCameraButton(
                                                   profileSize: 55,
                                                   cameraEnabled: false,
-                                                  profileImage: provider.apiResponse.data?.url != null ? NetworkImage(provider.apiResponse.data!.url!.toString()) : const AssetImage('assets/personal_details/dummy_profile_pic.png'),
+                                                  profileImage: provider.apiResponse.data?.url != null ?
+                                                  NetworkImage(
+                                                    provider.apiResponse.data!.url!.toString(),
+
+                                                  ) : const AssetImage('assets/personal_details/dummy_profile_pic.png'),
                                                   onTap: () => _openAccountView(),
                                                   onLongPress: () {},
                                               );
