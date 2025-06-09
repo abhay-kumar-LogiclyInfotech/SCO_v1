@@ -69,18 +69,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
               },
               content: Column(
             children: [
-              // Row(
-              //   mainAxisSize: MainAxisSize.max,
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: [
-              //     SvgPicture.asset("assets/my_finance.svg"),
-              //     kSmallSpace,
-              //     Expanded(child: Text( AppLocalizations.of(context)!.myFinance,style: AppTextStyles.titleBoldTextStyle()
-              //         .copyWith(
-              //         fontSize:  20,
-              //         fontWeight: FontWeight.bold),))
-              //   ],
-              // ),
+
 
               const NoMarginDivider(color: AppColors.lightGrey),
               SizedBox(height: kCardPadding,),
@@ -90,9 +79,10 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          RichText(text: TextSpan(text: localization.homeSalary,style: const TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 14)),),
-                          RichText(text:  TextSpan(text: localization.paid,style: const TextStyle(color: Colors.grey,fontSize: 14)),),
+                          RichText(text: TextSpan(text: localization.homeSalary,style: AppTextStyles.titleBoldTextStyle().copyWith(color: Colors.grey)),),
+                          RichText(text:  TextSpan(text: localization.paid,style: AppTextStyles.titleBoldTextStyle().copyWith(color: Colors.grey,height: 0.9)),),
                         ],
                       ),
                     ),
@@ -114,7 +104,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                           ),),
                         RichText(
                           text: TextSpan(
-                              style: const TextStyle(color: Colors.grey,fontSize: 13),
+                              style: const TextStyle(color: Colors.grey,fontSize: 13,height: 0.9),
                               children: [
                                 TextSpan(
                                     text: salary?.salaryMonth?.toString() ?? ''
@@ -125,7 +115,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                     ),
 
                   ]),
-                  kSmallSpace,
+                  kMediumSpace,
                   ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
                     child: Wrap(
