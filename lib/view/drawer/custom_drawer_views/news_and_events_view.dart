@@ -95,9 +95,7 @@ class _NewsAndEventsViewState extends State<NewsAndEventsView>
                         subTitle: item.getDescription(languageId),
                         date: item.getFormattedDate(langProvider),
                         onTap: () {
-                          print(item.coverImageFileEntryId);
-                          _navigationServices
-                              .pushCupertino(CupertinoPageRoute(
+                          _navigationServices.pushCupertino(CupertinoPageRoute(
                             builder: (context) => NewsAndEventsDetailView(
                                 imageId: item.coverImageFileEntryId,
                                 date: item.getFormattedDate(langProvider).toString(),

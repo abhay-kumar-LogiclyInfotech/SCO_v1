@@ -39,34 +39,38 @@ mixin MediaQueryMixin<T extends StatefulWidget> on State<T> {
 
   double get verticalPadding => MediaQuery.of(context).padding.vertical;
 
-  double get kPadding => 12;
-  double get kTileSpace => 8;
-  double get kCardSpace => 10;
-  double get kCardPadding => 15;
-  double get kTilePadding => 15;
-
-
-  double get kMediumCardPadding => 20;
-  double get kCardTitleContentSpacing => 15;
-
-  Widget get kFormHeight => const SizedBox.square(dimension: 15,);
-  Widget get kMinorSpace => const SizedBox.square(dimension: 5,);
-  Widget get kSmallSpace => const SizedBox.square(dimension: 10,);
-  Widget get kMediumSpace => const SizedBox.square(dimension: 15,);
-  Widget get kLargeSpace => const SizedBox.square(dimension: 20,);
-  Widget get kHomeCardSpace => const SizedBox.square(dimension: 13,);
-
-
-
-  Widget get kCardTitleContentSpace =>  SizedBox.square(dimension: kCardTitleContentSpacing);
-
-  // shrink box
-  Widget get showVoid => const SizedBox.shrink();
-
-  double get kCardRadius => 15;
-
-  Widget get kSubmitButtonHeight => const SizedBox.square(dimension: 30,) ;
 }
+
+
+
+double get kPadding => 12;
+double get kTileSpace => 8;
+double get kCardSpace => 10;
+double get kCardPadding => 15;
+double get kTilePadding => 15;
+
+
+double get kMediumCardPadding => 20;
+double get kCardTitleContentSpacing => 15;
+
+Widget get kFormHeight => const SizedBox.square(dimension: 15,);
+Widget get kMinorSpace => const SizedBox.square(dimension: 5,);
+Widget get kSmallSpace => const SizedBox.square(dimension: 10,);
+Widget get kMediumSpace => const SizedBox.square(dimension: 15,);
+Widget get kLargeSpace => const SizedBox.square(dimension: 20,);
+Widget get kHomeCardSpace => const SizedBox.square(dimension: 13,);
+
+
+
+Widget get kCardTitleContentSpace =>  SizedBox.square(dimension: kCardTitleContentSpacing);
+
+// shrink box
+Widget get showVoid => const SizedBox.shrink();
+
+double get kCardRadius => 15;
+
+Widget get kSubmitButtonHeight => const SizedBox.square(dimension: 30,) ;
+double kSmallButtonRadius = 5;
 
 class Utils {
   static  launchingUrl(dynamic url) async {

@@ -28,6 +28,8 @@ class IndividualImageViewModel with ChangeNotifier {
       required LanguageChangeViewModel langProvider,
       required imageId}) async {
     try {
+
+      print("---------------->>>>>>>>>>>>>>>Individual Image Called $imageId");
       setIndividualImageResponse = ApiResponse.loading();
 
       //*-----Create Headers-----*
@@ -39,6 +41,8 @@ class IndividualImageViewModel with ChangeNotifier {
       //*-----Calling Api Start-----*
       final response = await _drawerRepository.individualImage(
           headers: headers, imageId: imageId);
+
+      print(response.data?.imageUrl.toString());
       //*-----Calling Api End-----*
 
       setIndividualImageResponse = ApiResponse.completed(response);

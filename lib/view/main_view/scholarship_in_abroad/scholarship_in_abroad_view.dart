@@ -391,6 +391,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
                     padding:  EdgeInsets.only(bottom: kTileSpace),
                     child: scholarshipType,
                   )),
+                  const SizedBox(height: 200,)
                 ],
               ),
             ),

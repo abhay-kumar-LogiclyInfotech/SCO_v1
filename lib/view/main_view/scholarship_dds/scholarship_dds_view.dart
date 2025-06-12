@@ -248,6 +248,8 @@ class _ScholarshipDdsViewState extends State<ScholarshipDdsView>
                     padding:  EdgeInsets.only(bottom: kTileSpace),
                     child: scholarshipType,
                   )),
+                  const SizedBox(height: 200,)
+
                 ],
               ),
             ),

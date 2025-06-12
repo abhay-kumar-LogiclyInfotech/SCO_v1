@@ -46,9 +46,10 @@ dynamic addRemoveMoreSection(
       MaterialButton(
         onPressed: onChanged,
         color: add ? AppColors.scoThemeColor : AppColors.DANGER,
-        height: double.minPositive,
+        // height: double.minPositive,
+        height: 40,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(kSmallButtonRadius)),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

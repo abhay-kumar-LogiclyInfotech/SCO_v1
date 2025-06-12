@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,11 +25,26 @@ class HomeNewsCarouselSliderView extends StatefulWidget {
 }
 
 class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView> with MediaQueryMixin {
+  late NavigationServices _navigationServices;
   bool _isVisible = true;
 
   @override
+  void initState() {
+    super.initState();
+    final GetIt getIt = GetIt.instance;
+    _navigationServices = getIt.get<NavigationServices>();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print("Is visible: $_isVisible");
+
+
     return VisibilityDetector(
       key: const Key('carousel-visibility-key'),
       onVisibilityChanged: (info) {
@@ -39,59 +55,87 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
           });
         }
       },
-      child: Consumer<NewsAndEventsViewmodel>(
-        builder: (context, provider, _) {
-          switch (provider.newsAndEventsResponse.status) {
-            case Status.LOADING:
-              return showVoid;
-            case Status.ERROR:
-              return showVoid;
-            case Status.COMPLETED:
-              return Column(
-                children: [
-                  kMinorSpace,
-                  Directionality(
-                      textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          height: orientation == Orientation.portrait ? 220.0 : 210,
-                          aspectRatio: 16 / 9,
-                          viewportFraction: 0.9,
-                          enlargeFactor: 0.1,
-                          initialPage: 0,
-                          enableInfiniteScroll: true,
-                          reverse: false,
-                          autoPlay: _isVisible,
-                          autoPlayInterval: const Duration(seconds: 7),
-                          autoPlayAnimationDuration: const Duration(milliseconds: 500),
-                          autoPlayCurve: Curves.linear,
-                          enlargeCenterPage: true,
-      
-                          scrollDirection: Axis.horizontal,
+      child: Consumer<LanguageChangeViewModel>(
+        builder: (context,langProvider,_){
+
+          final languageId = getTextDirection(langProvider) == TextDirection.rtl
+              ? 'ar_SA'
+              : 'en_US';
+
+
+          return Consumer<NewsAndEventsViewmodel>(
+            builder: (context, provider, _) {
+              switch (provider.newsAndEventsResponse.status) {
+                case Status.LOADING:
+                case Status.ERROR:
+                  return showVoid;
+
+                case Status.COMPLETED:
+
+                  final List<Widget> items = provider.parsedNewsAndEventsModelList.map<Widget>((item) {
+                    return ChangeNotifierProvider(
+                      create: (_) => IndividualImageViewModel(),
+                      child: GestureDetector(
+                        onTap: () {
+                          _navigationServices.pushCupertino(CupertinoPageRoute(
+                            builder: (context) => NewsAndEventsDetailView(
+                              imageId: item.coverImageFileEntryId,
+                              date: item.getFormattedDate(context.read<LanguageChangeViewModel>()).toString(),
+                              title: item.getTitle(languageId),
+                              subTitle: item.getDescription(languageId),
+                              content: item.getContent(languageId),
+                            ),
+                          ));
+                        },
+                        child: CarouselItemBuilder(item: item, languageId: languageId),
+                      ),
+                    );
+                  }).toList();
+
+                  return Column(
+                    children: [
+                      kMinorSpace,
+                      Directionality(
+                        textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            height: orientation == Orientation.portrait ? 220.0 : 210,
+                            aspectRatio: 16 / 9,
+                            viewportFraction: 0.9,
+                            enlargeFactor: 0.1,
+                            initialPage: 0,
+                            enableInfiniteScroll: true,
+                            reverse: false,
+                            autoPlay: _isVisible,
+                            autoPlayInterval: const Duration(seconds: 7),
+                            autoPlayAnimationDuration: const Duration(milliseconds: 500),
+                            autoPlayCurve: Curves.linear,
+                            enlargeCenterPage: true,
+                            scrollDirection: Axis.horizontal,
+                          ),
+                          items: items,
                         ),
-                        items: provider.parsedNewsAndEventsModelList.map<Widget>((item) {
-                          final languageId = getTextDirection(context.read<LanguageChangeViewModel>()) == TextDirection.rtl ? 'ar_SA' : 'en_US';
-                          return CarouselItemBuilder(
-                            item: item,
-                            languageId: languageId,
-                          );
-                        }).toList(),
-                      )),
-                  kHomeCardSpace,
-                ],
-              );
-            default:
-              return showVoid;
-          }
+                      ),
+                      kHomeCardSpace,
+                    ],
+                  );
+
+                default:
+                  return showVoid;
+              }
+            },
+          );
         },
-      ),
+      )
+
+      ,
     );
   }
 }
 
 class CarouselItemBuilder extends StatefulWidget {
   final dynamic item;
-  final dynamic languageId;
+  final String languageId;
 
   const CarouselItemBuilder({
     super.key,
@@ -104,193 +148,110 @@ class CarouselItemBuilder extends StatefulWidget {
 }
 
 class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
-
-  late NavigationServices _navigationServices;
-
-  void _initializeData() async {
-    final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
-    final provider = Provider.of<IndividualImageViewModel>(context, listen: false);
-
-    // Schedule the data fetch to avoid direct async calls in build phase
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-     await provider.individualImage(
-          context: context,
-          langProvider: langProvider,
-          imageId: widget.item.coverImageFileEntryId);
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    //register services:
-    final GetIt getIt = GetIt.instance;
-    _navigationServices = getIt.get<NavigationServices>();
-
-    //Initialize the image url;
-    _initializeData();
-
-    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Provider.of<IndividualImageViewModel>(context, listen: false).individualImage(
+        context: context,
+        langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false),
+        imageId: widget.item.coverImageFileEntryId,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: getTextDirection(Provider.of<LanguageChangeViewModel>(context)),
-      child: InkWell(
-        onTap:  () {
-          _navigationServices.pushCupertino(CupertinoPageRoute(
-            builder: (context) => NewsAndEventsDetailView(
-                imageId: widget.item.coverImageFileEntryId,
-                date: widget.item.getFormattedDate(context.read<LanguageChangeViewModel>()).toString(),
-                title: widget.item.getTitle(widget.languageId),
-                subTitle: widget.item.getDescription(widget.languageId),
-                content: widget.item.getContent(widget.languageId)),
-          ));
-        },
-        child: Stack(
-          children: [
-            // Background Image
-            SizedBox(
-                height: 220,
-                child: Consumer<IndividualImageViewModel>(
-                  builder: (context, imageProvider, _) {
-                    switch (imageProvider.individualImageResponse.status) {
-                      case Status.LOADING:
-                        return Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey.withOpacity(0.3),
-                          ),
-                          child: const Center(
-                            child: CupertinoActivityIndicator(
-                              color: AppColors.scoThemeColor,
-                            ),
-                          ),
-                        );
-                      case Status.ERROR:
-                      case Status.COMPLETED:
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child:  CachedNetworkImage(
-                            cacheKey: imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl,
-                            imageUrl: "${imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl}?v=${DateTime.now().millisecondsSinceEpoch}",
-                            // fit: BoxFit.fill,
-                            height: double.infinity,
-                            width: double.infinity,
-                            errorWidget: (context,object,_){
-                              return Image.asset(Constants.newsImageUrl);
-                            },
-                            errorListener: (object){
-                              Image.asset(Constants.newsImageUrl);
-                            },
-                          ), // Show loader while fetching
-                        );
+      child: Stack(
+        children: [
+          SizedBox(
+            height: 220,
+            child: Consumer<IndividualImageViewModel>(
+              builder: (context, imageProvider, _) {
+                switch (imageProvider.individualImageResponse.status) {
+                  case Status.LOADING:
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey.withOpacity(0.3),
+                      ),
+                      child: const Center(
+                        child: CupertinoActivityIndicator(color: AppColors.scoThemeColor),
+                      ),
+                    );
 
-                      default:
-                        return Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey.withOpacity(0.3),
-                          ),
-                        );
-                    }
-                  },
-                )),
+                  case Status.ERROR:
+                  case Status.COMPLETED:
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: CachedNetworkImage(
+                        imageUrl: imageProvider.individualImageResponse.data?.data?.imageUrl ??
+                            Constants.newsImageUrl,
+                        height: double.infinity,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, object, _) {
+                          return Image.asset(Constants.newsImageUrl, fit: BoxFit.cover);
+                        },
+                      ),
+                    );
 
-            // Gradient Overlay
-            Container(
-              width: double.infinity,
-              // height: 220,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                  colors: [Colors.black, Colors.black87.withOpacity(0.2)],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.center,
-                ),
+                  default:
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey.withOpacity(0.3),
+                      ),
+                    );
+                }
+              },
+            ),
+          ),
+
+          // Gradient Overlay
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                colors: [Colors.black, Colors.black87.withOpacity(0.2)],
+                begin: Alignment.bottomCenter,
+                end: Alignment.center,
               ),
             ),
+          ),
 
-            // Content Layer
-            Container(
-              // height: 220,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 17),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // "Read More" Section
-                  // Column(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     Row(
-                  //       mainAxisSize: MainAxisSize.min,
-                  //       crossAxisAlignment: CrossAxisAlignment.center,
-                  //       children: [
-                  //         const Icon(Icons.arrow_back_ios,
-                  //             color: Color(0xffAD8138), size: 14),
-                  //         const SizedBox(width: 2),
-                  //         InkWell(
-                  //           onTap: () {
-                  //             _navigationServices.pushCupertino(CupertinoPageRoute(
-                  //               builder: (context) => NewsAndEventsDetailView(
-                  //                   imageId: widget.item.coverImageFileEntryId,
-                  //                   date: widget.item
-                  //                       .getFormattedDate(
-                  //                           context.read<LanguageChangeViewModel>())
-                  //                       .toString(),
-                  //                   title: widget.item.getTitle(widget.languageId),
-                  //                   subTitle: widget.item
-                  //                       .getDescription(widget.languageId),
-                  //                   content:
-                  //                       widget.item.getContent(widget.languageId)),
-                  //             ));
-                  //           },
-                  //           child: Text(
-                  //             AppLocalizations.of(context)!.readMore,
-                  //             style: const TextStyle(
-                  //               fontSize: 12,
-                  //               fontWeight: FontWeight.w600,
-                  //               color: Color(0xffAD8138),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ],
-                  // ),
-
-                  // const SizedBox(width: 15),
-
-                  // Right Side Content
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          widget.item.getDescription(widget.languageId),
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2, // Limits to 2 lines to prevent overflow
+          // Content Layer
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 17),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        widget.item.getDescription(widget.languageId),
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
-                    ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

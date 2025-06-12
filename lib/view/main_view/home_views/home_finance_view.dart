@@ -98,7 +98,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                                 ),
                                 TextSpan(
                                   text: ' ${salary?.currency?.toString() ?? ''}' ,
-                                  style: const TextStyle(color: Colors.green,fontWeight: FontWeight.normal,fontSize: 17),
+                                  style: const TextStyle(color: Colors.grey,fontWeight: FontWeight.normal,fontSize: 17),
                                 )
                               ]
                           ),),
@@ -130,7 +130,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                         bonusOrDeductionContainer(
                             localization.deduction,
                             deduction?.totalDeducted?.toString() ?? '0',
-                            Colors.red
+                            AppColors.DANGER
                         ),
                         bonusOrDeductionContainer(
                           localization.bonus,

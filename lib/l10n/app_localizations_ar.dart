@@ -2259,7 +2259,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get existingSubmissionFound => 'We found your previous submitted record. Do you want to fill application with it?';
 
   @override
-  String get draftApplicationFound => 'لقد تم العثور على مسودة طلب محفوزة مسبقاً. هل ترغب في استئناف تعبئة نموزج الطلب من هزه المسودة؟';
+  String get draftApplicationFound => 'لقد تم العثور على مسودة طلب محفوظة مسبقاً. هل ترغب في استئناف تعبئة نموذج الطلب من هذه المسودة؟';
 
   @override
   String get draftSaveConfirmation => 'تم حفظ مسودة الطلب بنجاح';

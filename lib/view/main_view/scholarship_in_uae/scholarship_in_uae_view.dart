@@ -397,6 +397,8 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
                     padding:  EdgeInsets.only(bottom: kTileSpace),
                     child: scholarshipType,
                   )),
+
+                  const SizedBox(height: 200,)
                 ],
               ),
             ),

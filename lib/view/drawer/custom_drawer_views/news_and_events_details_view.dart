@@ -41,6 +41,9 @@ class _NewsAndEventsDetailViewState extends State<NewsAndEventsDetailView>
   String? _imageUrl;
 
   void _initializeData() async {
+
+
+
     final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
     final provider = Provider.of<IndividualImageViewModel>(context, listen: false);
 
