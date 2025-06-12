@@ -36,6 +36,13 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView>
     _navigationServices = getIt.get<NavigationServices>();
   }
 
+  ButtonStyle _buttonStyle() => const ButtonStyle(
+  backgroundColor:
+  WidgetStatePropertyAll(
+  Colors.white),
+  shape: WidgetStatePropertyAll(
+  CircleBorder()));
+
   @override
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
@@ -83,7 +90,9 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView>
                               // ),
                               // kFormHeight,
                               const NoMarginDivider(color: AppColors.lightGrey),
-                              SizedBox(height: kCardPadding,),
+                              SizedBox(
+                                height: kCardPadding,
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -119,40 +128,44 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView>
 
                                   Wrap(
                                     runSpacing: 0,
-                                    spacing: -30,
+                                    spacing: -10,
                                     runAlignment: WrapAlignment.end,
                                     alignment: WrapAlignment.end,
                                     children: [
                                       // message Advisor
-                                      CustomMaterialButton(
-                                          padding: EdgeInsets.zero,
+                                      ElevatedButton(
                                           onPressed: () async {
                                             await Utils.launchEmail(
                                                 topAdvisor?.email ?? '');
                                           },
-                                          isEnabled: false,
-                                          shape: const CircleBorder(),
+                                          style: _buttonStyle(),
                                           child: SvgPicture.asset(
                                             "assets/services/Email.svg",
                                             height: 13,
                                             width: 13,
                                           )),
                                       // Call advisor
-                                      CustomMaterialButton(
-                                          padding: EdgeInsets.zero,
-                                          onPressed: () async {
-                                            await Utils.makePhoneCall(
-                                                phoneNumber:
-                                                    topAdvisor?.phoneNo ?? '',
-                                                context: context);
-                                          },
-                                          isEnabled: false,
-                                          shape: const CircleBorder(),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          await Utils.makePhoneCall(
+                                              phoneNumber:
+                                                  topAdvisor?.phoneNo ?? '',
+                                              context: context);
+                                        },
+                                        style: _buttonStyle(),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                          ),
                                           child: SvgPicture.asset(
                                             "assets/call_advisor.svg",
                                             height: 15,
                                             width: 15,
-                                          )),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   )
                                 ],

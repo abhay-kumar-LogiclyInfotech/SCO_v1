@@ -812,7 +812,7 @@
   "externalBachelor": "Bachelor scholarship outside UAE",
   "universityAndMajor": "Universities and Majors",
   "externalPostgraduate": "Post graduation scholarship outside UAE",
-  "externalDoctors": "Doctorate Graduation outside UAE",
+  "externalDoctors": "Distinguished Doctor",
   "allowedFileTypePdf": "Select only pdf file",
   "allowedFileTypeImage": "Select only image file with following jpeg,jpg extension",
   "allowedFileTypeBoth": "Allowed file extensions are jpeg,jpg,png,pdf",
@@ -1053,7 +1053,7 @@
   "talkToMyAdvisor": "Talk to My Advisor",
   "youCanSeeListOfAdvisors": "You can see the list of advisors",
   "services": "Services",
-  "service": "Service",
+  "service": "Services",
   "support": "Support",
   "aboutSCO": "About SCO",
   "registrationSuccess": "Your account is successfully registered.",
@@ -1069,6 +1069,7 @@
   "noApplication": "You have not applied for any application",
   "internalScholarshipDesc": "The Scholarship Office, through the 'Internal Scholarship Program,' aims to provide an opportunity for outstanding national students to enroll in private universities and higher education institutions within the country, in accordance with the standards adopted by the 'Scholarship System' at the office.",
   "externalScholarshipDesc": "The President's Scholarship for Academically Outstanding Students seeks to provide opportunities for distinguished national students to pursue their undergraduate or postgraduate studies at prestigious international universities.",
+  "doctorScholarshipDesc": "سعى مكتب البعثات الدراسية إلى إتاحة الفرصة أمام الأطباء المواطنين المتميزين، لاستكمال دراستهم، وتدريبهم السريري، للحصول على أعلى الدرجات والشهادات في مختلف التخصصات الطبية والصحية. وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في قطاع الرعاية الصحية في دولة الإمارات العربية المتحدة، والذي يعتبر من أهم القطاعات الاقتصادية الخدمية",
   "scholarshipStatusApplied": "Scholarship Status",
   "scholarshipAppliedApplied": "Scholarship Applied",
   "uploadDocuments": "Upload Documents",
@@ -1128,7 +1129,8 @@
   "submitNewApplication": "Submit",
   "homeSalary": "Salary",
   "seeMore": "...See more",
-  "seeLess": " See less"
+  "seeLess": " See less",
+  "externalDoctorsOutsideUae": "Doctors graduation outside UAE"
 
 
 }

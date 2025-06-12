@@ -2448,7 +2448,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalPostgraduate => 'Post graduation scholarship outside UAE';
 
   @override
-  String get externalDoctors => 'Doctorate Graduation outside UAE';
+  String get externalDoctors => 'Distinguished Doctor';
 
   @override
   String get allowedFileTypePdf => 'Select only pdf file';
@@ -3171,7 +3171,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get services => 'Services';
 
   @override
-  String get service => 'Service';
+  String get service => 'Services';
 
   @override
   String get support => 'Support';
@@ -3217,6 +3217,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get externalScholarshipDesc => 'The President\'s Scholarship for Academically Outstanding Students seeks to provide opportunities for distinguished national students to pursue their undergraduate or postgraduate studies at prestigious international universities.';
+
+  @override
+  String get doctorScholarshipDesc => 'سعى مكتب البعثات الدراسية إلى إتاحة الفرصة أمام الأطباء المواطنين المتميزين، لاستكمال دراستهم، وتدريبهم السريري، للحصول على أعلى الدرجات والشهادات في مختلف التخصصات الطبية والصحية. وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في قطاع الرعاية الصحية في دولة الإمارات العربية المتحدة، والذي يعتبر من أهم القطاعات الاقتصادية الخدمية';
 
   @override
   String get scholarshipStatusApplied => 'Scholarship Status';
@@ -3397,4 +3400,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seeLess => ' See less';
+
+  @override
+  String get externalDoctorsOutsideUae => 'Doctors graduation outside UAE';
 }

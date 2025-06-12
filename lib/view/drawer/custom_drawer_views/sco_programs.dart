@@ -5,6 +5,7 @@ import 'package:sco_v1/resources/app_text_styles.dart';
 import 'package:sco_v1/resources/components/custom_simple_app_bar.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/main_view/scholarship_dds/scholarship_dds_view.dart';
 import '../../../l10n/app_localizations.dart';
 
 
@@ -55,6 +56,12 @@ class _ScoProgramsState extends State<ScoPrograms>
     'subTitle': localization?.externalScholarshipDesc,
     'imagePath': Constants.scholarshipInAbroad,
       "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipInAbroadView()))
+      },
+      {
+        'title': localization?.externalDoctors,
+        'subTitle': localization?.doctorScholarshipDesc,
+        'imagePath': Constants.doctorsScholarship,
+        "onTap": () => _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context)=>  ScholarshipDdsView()))
       },
     ];
 

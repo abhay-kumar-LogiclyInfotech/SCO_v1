@@ -4976,7 +4976,7 @@ abstract class AppLocalizations {
   /// No description provided for @externalDoctors.
   ///
   /// In en, this message translates to:
-  /// **'Doctorate Graduation outside UAE'**
+  /// **'Distinguished Doctor'**
   String get externalDoctors;
 
   /// No description provided for @allowedFileTypePdf.
@@ -6422,7 +6422,7 @@ abstract class AppLocalizations {
   /// No description provided for @service.
   ///
   /// In en, this message translates to:
-  /// **'Service'**
+  /// **'Services'**
   String get service;
 
   /// No description provided for @support.
@@ -6514,6 +6514,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The President\'s Scholarship for Academically Outstanding Students seeks to provide opportunities for distinguished national students to pursue their undergraduate or postgraduate studies at prestigious international universities.'**
   String get externalScholarshipDesc;
+
+  /// No description provided for @doctorScholarshipDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'سعى مكتب البعثات الدراسية إلى إتاحة الفرصة أمام الأطباء المواطنين المتميزين، لاستكمال دراستهم، وتدريبهم السريري، للحصول على أعلى الدرجات والشهادات في مختلف التخصصات الطبية والصحية. وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في قطاع الرعاية الصحية في دولة الإمارات العربية المتحدة، والذي يعتبر من أهم القطاعات الاقتصادية الخدمية'**
+  String get doctorScholarshipDesc;
 
   /// No description provided for @scholarshipStatusApplied.
   ///
@@ -6874,6 +6880,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **' See less'**
   String get seeLess;
+
+  /// No description provided for @externalDoctorsOutsideUae.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctors graduation outside UAE'**
+  String get externalDoctorsOutsideUae;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

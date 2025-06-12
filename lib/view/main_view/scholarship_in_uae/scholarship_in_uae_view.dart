@@ -380,11 +380,13 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
           padding:  EdgeInsets.all(kPadding),
           child: isInternalScholarship
               ? Material(
-            color: Colors.white,
-            shadowColor: Colors.grey.shade400,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius),side:  const BorderSide(color: AppColors.lightGrey)),
+            color: Colors.transparent,
+            //   color: Colors.white,
+            // shadowColor: Colors.grey.shade400,
+            // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius),side:  const BorderSide(color: AppColors.lightGrey)),
             child: Padding(
-              padding: EdgeInsets.all(kCardPadding),
+              // padding: EdgeInsets.all(kCardPadding),
+              padding: const EdgeInsets.all(0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,

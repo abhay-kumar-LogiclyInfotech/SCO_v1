@@ -63,7 +63,6 @@ class _StepsProgressViewState extends State<StepsProgressView>
     }
 
 
-    print("Print: ${widget.totalSections}");
 
 
     switch (step)
@@ -203,7 +202,7 @@ class _StepsProgressViewState extends State<StepsProgressView>
       textDirection: getTextDirection(langProvider),
       child: AnimatedContainer(duration: const Duration(milliseconds: 100),
         // height: 150,
-        padding: EdgeInsets.only(top:5,left: kPadding,right: kPadding),
+        padding: EdgeInsets.all(kPadding),
         decoration:  const BoxDecoration(
 
             // color: AppColors.bgColor,
@@ -221,10 +220,10 @@ class _StepsProgressViewState extends State<StepsProgressView>
               widget.scholarshipTitle,
               style: AppTextStyles.titleBoldTextStyle().copyWith(color: Colors.white),
             ),
-            kSmallSpace,
-            SizedBox(
-              height: 70,
-              width: double.infinity,
+            kMediumSpace,
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 70,minWidth: double.infinity),
+              // width: double.infinity,
               child: ListView.builder(
                 // shrinkWrap: true,
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -310,7 +309,7 @@ class _StepsProgressViewState extends State<StepsProgressView>
                             ],
                           ),
 
-                          const SizedBox(height: 8),
+                          kSmallSpace,
                           Flexible(
                             child: SizedBox(
                               width: 120,

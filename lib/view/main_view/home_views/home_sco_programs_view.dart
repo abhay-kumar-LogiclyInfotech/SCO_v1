@@ -9,6 +9,7 @@ import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
 import '../../../viewModel/services/navigation_services.dart';
+import '../scholarship_dds/scholarship_dds_view.dart';
 import '../scholarship_in_abroad/scholarship_in_abroad_view.dart';
 import '../scholarship_in_uae/scholarship_in_uae_view.dart';
 import '../../../l10n/app_localizations.dart';
@@ -20,7 +21,8 @@ class HomeScoProgramsView extends StatefulWidget {
   State<HomeScoProgramsView> createState() => _HomeScoProgramsViewState();
 }
 
-class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQueryMixin {
+class _HomeScoProgramsViewState extends State<HomeScoProgramsView>
+    with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
   final List<Widget> _scoProgramsList = [];
@@ -44,20 +46,28 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
 
     final scoProgramsMapList = [
       {
-        'title': localization.scholarshipInternal,
-        'subTitle': localization.internalScholarshipDesc,
+        'title': localization?.scholarshipInternal,
+        'subTitle': localization?.internalScholarshipDesc,
         'imagePath': Constants.scholarshipInUae,
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
-          createRoute(ScholarshipsInUaeView()),
-        ),
+              createRoute(ScholarshipsInUaeView()),
+            ),
       },
       {
-        'title': localization.scholarshipExternal,
-        'subTitle': localization.externalScholarshipDesc,
+        'title': localization?.scholarshipExternal,
+        'subTitle': localization?.externalScholarshipDesc,
         'imagePath': Constants.scholarshipInAbroad,
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
-          createRoute(ScholarshipInAbroadView()),
-        ),
+              createRoute(ScholarshipInAbroadView()),
+            ),
+      },
+      {
+        'title': localization?.externalDoctors,
+        'subTitle': localization?.doctorScholarshipDesc,
+        'imagePath': Constants.doctorsScholarship,
+        "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
+              createRoute(ScholarshipDdsView()),
+            ),
       },
     ];
 
@@ -69,7 +79,8 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
       _scoProgramsModelsList.add(model);
       _scoProgramsList.add(
         CustomScoProgramTile(
-          key: ValueKey(model.title), // Ensure uniqueness
+          key: ValueKey(model.title),
+          // Ensure uniqueness
           imagePath: model.imagePath!,
           title: model.title!,
           subTitle: model.subTitle!,
@@ -77,8 +88,9 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
           onTap: model.onTap!,
           maxLines: 3,
           imageSize: 45,
-          trailing:  Icon(
-            getTextDirection(context.read<LanguageChangeViewModel>()) == TextDirection.rtl
+          trailing: Icon(
+            getTextDirection(context.read<LanguageChangeViewModel>()) ==
+                    TextDirection.rtl
                 ? Icons.keyboard_arrow_left_outlined
                 : Icons.keyboard_arrow_right_outlined,
             color: Colors.grey,
@@ -108,7 +120,8 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
                 overflow: TextOverflow.ellipsis,
               ),
             ],
-          ),kMinorSpace,
+          ),
+          kSmallSpace,
           Column(
             children: [
               // carousel slider
@@ -148,12 +161,14 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQue
                   itemCount: _scoProgramsList.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: EdgeInsets.only(bottom: index < _scoProgramsList.length - 1 ? kTileSpace : 0),
+                      padding: EdgeInsets.only(
+                          bottom: index < _scoProgramsList.length - 1
+                              ? kTileSpace
+                              : 0),
                       child: _scoProgramsList[index],
                     );
                   },
                 )
-
             ],
           )
         ],

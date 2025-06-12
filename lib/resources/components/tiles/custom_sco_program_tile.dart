@@ -99,28 +99,25 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
       children: [
 
         if(widget.imagePath != null)
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child:  Image.asset(
-            widget.imagePath ?? '',
-            filterQuality: FilterQuality.high,
-            fit: BoxFit.fill,
-            height: widget.imageSize,
-            width: widget.imageSize,
-            // width: screenWidth / 4,
-            // height: screenHeight / 11,
-            errorBuilder: (BuildContext context, Object, StackTrace) {
-              return Image.asset(
-                "assets/sidemenu/scholarships_uae.jpg",
-                filterQuality: FilterQuality.high,
-                fit: BoxFit.fill,
-                height: widget.imageSize,
-                width: widget.imageSize,
-                // width: screenWidth / 4,
-                // height: screenHeight / 11,
-              );
-            },
-          ),
+        Image.asset(
+          widget.imagePath ?? '',
+          filterQuality: FilterQuality.high,
+          fit: BoxFit.fill,
+          height: widget.imageSize,
+          width: widget.imageSize,
+          // width: screenWidth / 4,
+          // height: screenHeight / 11,
+          errorBuilder: (BuildContext context, Object, StackTrace) {
+            return Image.asset(
+              "assets/sidemenu/scholarships_uae.jpg",
+              filterQuality: FilterQuality.high,
+              fit: BoxFit.fill,
+              height: widget.imageSize,
+              width: widget.imageSize,
+              // width: screenWidth / 4,
+              // height: screenHeight / 11,
+            );
+          },
         ),
         // green tick
         // Container(

@@ -82,7 +82,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           RichText(text: TextSpan(text: localization.homeSalary,style: AppTextStyles.titleBoldTextStyle().copyWith(color: Colors.grey)),),
-                          RichText(text:  TextSpan(text: localization.paid,style: AppTextStyles.titleBoldTextStyle().copyWith(color: Colors.grey,height: 0.9)),),
+                          RichText(text:  TextSpan(text: localization.paid,style: AppTextStyles.titleBoldTextStyle().copyWith(color: Colors.grey,fontWeight: FontWeight.normal)),),
                         ],
                       ),
                     ),
@@ -104,7 +104,7 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                           ),),
                         RichText(
                           text: TextSpan(
-                              style: const TextStyle(color: Colors.grey,fontSize: 13,height: 0.9),
+                              style: const TextStyle(color: Colors.grey,fontSize: 13,),
                               children: [
                                 TextSpan(
                                     text: salary?.salaryMonth?.toString() ?? ''

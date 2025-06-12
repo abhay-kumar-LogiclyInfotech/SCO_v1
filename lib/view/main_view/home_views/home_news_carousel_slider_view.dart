@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/utils/utils.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../data/response/status.dart';
 import '../../../resources/app_colors.dart';
@@ -23,53 +24,67 @@ class HomeNewsCarouselSliderView extends StatefulWidget {
 }
 
 class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView> with MediaQueryMixin {
+  bool _isVisible = true;
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<NewsAndEventsViewmodel>(
-      builder: (context, provider, _) {
-        switch (provider.newsAndEventsResponse.status) {
-          case Status.LOADING:
-            return showVoid;
-          case Status.ERROR:
-            return showVoid;
-          case Status.COMPLETED:
-            return Column(
-              children: [
-                kMinorSpace,
-                Directionality(
-                    textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                        height: orientation == Orientation.portrait ? 220.0 : 210,
-                        aspectRatio: 16 / 9,
-                        viewportFraction: 0.9,
-                        enlargeFactor: 0.1,
-                        initialPage: 0,
-                        enableInfiniteScroll: true,
-                        reverse: false,
-                        autoPlay: true,
-                        autoPlayInterval: const Duration(seconds: 5),
-                        autoPlayAnimationDuration: const Duration(milliseconds: 400),
-                        autoPlayCurve: Curves.linear,
-                        enlargeCenterPage: true,
-
-                        scrollDirection: Axis.horizontal,
-                      ),
-                      items: provider.parsedNewsAndEventsModelList.map<Widget>((item) {
-                        final languageId = getTextDirection(context.read<LanguageChangeViewModel>()) == TextDirection.rtl ? 'ar_SA' : 'en_US';
-                        return CarouselItemBuilder(
-                          item: item,
-                          languageId: languageId,
-                        );
-                      }).toList(),
-                    )),
-                kHomeCardSpace,
-              ],
-            );
-          default:
-            return showVoid;
+    print("Is visible: $_isVisible");
+    return VisibilityDetector(
+      key: const Key('carousel-visibility-key'),
+      onVisibilityChanged: (info) {
+        final isNowVisible = info.visibleFraction > 0;
+        if (_isVisible != isNowVisible) {
+          setState(() {
+            _isVisible = isNowVisible;
+          });
         }
       },
+      child: Consumer<NewsAndEventsViewmodel>(
+        builder: (context, provider, _) {
+          switch (provider.newsAndEventsResponse.status) {
+            case Status.LOADING:
+              return showVoid;
+            case Status.ERROR:
+              return showVoid;
+            case Status.COMPLETED:
+              return Column(
+                children: [
+                  kMinorSpace,
+                  Directionality(
+                      textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                          height: orientation == Orientation.portrait ? 220.0 : 210,
+                          aspectRatio: 16 / 9,
+                          viewportFraction: 0.9,
+                          enlargeFactor: 0.1,
+                          initialPage: 0,
+                          enableInfiniteScroll: true,
+                          reverse: false,
+                          autoPlay: _isVisible,
+                          autoPlayInterval: const Duration(seconds: 7),
+                          autoPlayAnimationDuration: const Duration(milliseconds: 500),
+                          autoPlayCurve: Curves.linear,
+                          enlargeCenterPage: true,
+      
+                          scrollDirection: Axis.horizontal,
+                        ),
+                        items: provider.parsedNewsAndEventsModelList.map<Widget>((item) {
+                          final languageId = getTextDirection(context.read<LanguageChangeViewModel>()) == TextDirection.rtl ? 'ar_SA' : 'en_US';
+                          return CarouselItemBuilder(
+                            item: item,
+                            languageId: languageId,
+                          );
+                        }).toList(),
+                      )),
+                  kHomeCardSpace,
+                ],
+              );
+            default:
+              return showVoid;
+          }
+        },
+      ),
     );
   }
 }
@@ -98,7 +113,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
 
     // Schedule the data fetch to avoid direct async calls in build phase
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      provider.individualImage(
+     await provider.individualImage(
           context: context,
           langProvider: langProvider,
           imageId: widget.item.coverImageFileEntryId);
@@ -127,15 +142,10 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
           _navigationServices.pushCupertino(CupertinoPageRoute(
             builder: (context) => NewsAndEventsDetailView(
                 imageId: widget.item.coverImageFileEntryId,
-                date: widget.item
-                    .getFormattedDate(
-                    context.read<LanguageChangeViewModel>())
-                    .toString(),
+                date: widget.item.getFormattedDate(context.read<LanguageChangeViewModel>()).toString(),
                 title: widget.item.getTitle(widget.languageId),
-                subTitle: widget.item
-                    .getDescription(widget.languageId),
-                content:
-                widget.item.getContent(widget.languageId)),
+                subTitle: widget.item.getDescription(widget.languageId),
+                content: widget.item.getContent(widget.languageId)),
           ));
         },
         child: Stack(

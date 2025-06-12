@@ -77,8 +77,12 @@ class AlertServices {
 
   // FlutterToast
   void toastMessage(String message) {
+    dynamic myContext = _navigationServices.navigationStateKey.currentContext;
+
+    var myMessage = (message.toLowerCase() == "operation completed successfully" && getTextDirection(Provider.of(myContext,listen: false)) ==  TextDirection.rtl) ? "م حفظ المسودة بنجاح" : message;
+
     Fluttertoast.showToast(
-      msg: message,
+      msg:  myMessage,
       backgroundColor: AppColors.scoThemeColor,
       textColor: Colors.white,
       fontSize: 15,

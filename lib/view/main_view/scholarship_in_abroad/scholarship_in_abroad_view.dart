@@ -200,63 +200,63 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeApplyingProcedure, title: localization.graduate_outside_uae_scholarship_applying_procedures,))),
           // },
         ];
-      case 'SCODDSEXT':
-        return [
-          {
-            'title': " نبذة عن برنامج دكتور فى الطب ",
-            'content': getDoctorAboutTheProgramExternal(context),
-            // 'imagePath': Constants.faq,
-
-          },
-          {
-            'title': " شروط ومتطلبات القبول فى البعثة ",
-            'content': getDoctorTermsAndConditionsExternal(context),
-            'imagePath': Constants.conditions,
-
-          },
-          {
-            'title': " معايير القبول في الجامعات العالمية ",
-            'content': getDoctorAdmissionCriteriaExternal(context),
-            'imagePath': Constants.applyingProcedure,
-          },
-          {
-            'title': " الجامعات المعتمدة ",
-            'content': getDoctorAccreditedUniversitiesExternal(context),
-            'imagePath': Constants.universityList,
-
-          },
-          // {
-          //   'title': localization.distinguished_doctors_scholarship_terms_and_conditions,
-          //   'subTitle': "",
-          //   //'imagePath': Constants.scholarshipInAbroad,
-          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedTermsAndConditions, title: localization.distinguished_doctors_scholarship_terms_and_conditions,))),
-          // },
-          // {
-          //   'title': localization.distinguished_doctors_scholarship_privileges,
-          //   'subTitle': "",
-          //   //'imagePath': Constants.scholarshipInAbroad,
-          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreePrivileges,title: localization.distinguished_doctors_scholarship_privileges,))),
-          // },
-          // {
-          //   'title': localization.student_obligations_for_distinguished_doctors_scholarship,
-          //   'subTitle': "",
-          //   //'imagePath': Constants.scholarshipInAbroad,
-          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeStudentObligations, title: localization.student_obligations_for_distinguished_doctors_scholarship,))),
-          // },
-          // {
-          //   'title': localization.distinguished_doctors_scholarship_applying_procedures,
-          //   'subTitle': "",
-          //   //'imagePath': Constants.scholarshipInAbroad,
-          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeApplyingProcedure, title: localization.distinguished_doctors_scholarship_applying_procedures,))),
-          // },
-          //
-          // {
-          //   'title': localization.medical_licensing_exams,
-          //   'subTitle': "",
-          //   //'imagePath': Constants.scholarshipInAbroad,
-          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeMedicalLicensingExam, title: localization.medical_licensing_exams,))),
-          // },
-        ];
+      // case 'SCODDSEXT':
+      //   return [
+      //     {
+      //       'title': " نبذة عن برنامج دكتور فى الطب ",
+      //       'content': getDoctorAboutTheProgramExternal(context),
+      //       // 'imagePath': Constants.faq,
+      //
+      //     },
+      //     {
+      //       'title': " شروط ومتطلبات القبول فى البعثة ",
+      //       'content': getDoctorTermsAndConditionsExternal(context),
+      //       'imagePath': Constants.conditions,
+      //
+      //     },
+      //     {
+      //       'title': " معايير القبول في الجامعات العالمية ",
+      //       'content': getDoctorAdmissionCriteriaExternal(context),
+      //       'imagePath': Constants.applyingProcedure,
+      //     },
+      //     {
+      //       'title': " الجامعات المعتمدة ",
+      //       'content': getDoctorAccreditedUniversitiesExternal(context),
+      //       'imagePath': Constants.universityList,
+      //
+      //     },
+      //     // {
+      //     //   'title': localization.distinguished_doctors_scholarship_terms_and_conditions,
+      //     //   'subTitle': "",
+      //     //   //'imagePath': Constants.scholarshipInAbroad,
+      //     //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedTermsAndConditions, title: localization.distinguished_doctors_scholarship_terms_and_conditions,))),
+      //     // },
+      //     // {
+      //     //   'title': localization.distinguished_doctors_scholarship_privileges,
+      //     //   'subTitle': "",
+      //     //   //'imagePath': Constants.scholarshipInAbroad,
+      //     //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreePrivileges,title: localization.distinguished_doctors_scholarship_privileges,))),
+      //     // },
+      //     // {
+      //     //   'title': localization.student_obligations_for_distinguished_doctors_scholarship,
+      //     //   'subTitle': "",
+      //     //   //'imagePath': Constants.scholarshipInAbroad,
+      //     //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeStudentObligations, title: localization.student_obligations_for_distinguished_doctors_scholarship,))),
+      //     // },
+      //     // {
+      //     //   'title': localization.distinguished_doctors_scholarship_applying_procedures,
+      //     //   'subTitle': "",
+      //     //   //'imagePath': Constants.scholarshipInAbroad,
+      //     //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeApplyingProcedure, title: localization.distinguished_doctors_scholarship_applying_procedures,))),
+      //     // },
+      //     //
+      //     // {
+      //     //   'title': localization.medical_licensing_exams,
+      //     //   'subTitle': "",
+      //     //   //'imagePath': Constants.scholarshipInAbroad,
+      //     //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.distinguishedDegreeMedicalLicensingExam, title: localization.medical_licensing_exams,))),
+      //     // },
+      //   ];
       case null:
         return [
           {
@@ -273,13 +273,13 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
             'imagePath': Constants.graduatesOutsideUae,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCOPGRDEXT',title: localization.externalPostgraduate,))),
           },
-          {
-            'title': localization.externalDoctors,
-            // 'subTitle': localization.scholarship_for_outstanding_medical_students,
-            'subTitle': '',
-            'imagePath': Constants.distinguishedDoctorsOutsideUae,
-            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCODDSEXT',title: localization.externalDoctors,))),
-          },
+          // {
+          //   'title': localization.externalDoctors,
+          //   // 'subTitle': localization.scholarship_for_outstanding_medical_students,
+          //   'subTitle': '',
+          //   'imagePath': Constants.distinguishedDoctorsOutsideUae,
+          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCODDSEXT',title: localization.externalDoctors,))),
+          // },
         ];
       default:
         return [];
@@ -374,11 +374,13 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           padding:  EdgeInsets.all(kPadding),
           child: isExternalScholarship()
               ? Material(
-              color: Colors.white,
-            shadowColor: Colors.grey.shade400,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius),side:  const BorderSide(color: AppColors.lightGrey)),
+            color: Colors.transparent,
+            //   color: Colors.white,
+            // shadowColor: Colors.grey.shade400,
+            // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kCardRadius),side:  const BorderSide(color: AppColors.lightGrey)),
             child: Padding(
-              padding: EdgeInsets.all(kCardPadding),
+              // padding: EdgeInsets.all(kCardPadding),
+              padding: const EdgeInsets.all(0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
