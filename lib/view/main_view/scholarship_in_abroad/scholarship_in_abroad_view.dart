@@ -48,6 +48,9 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
 
 
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
+      final provider = Provider.of<GetAllActiveScholarshipsViewModel>(context, listen: false);
+      await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
+
       _scholarshipsInUaeList.clear();
       _scoProgramsModelsList.clear();
       _initializeScoPrograms();

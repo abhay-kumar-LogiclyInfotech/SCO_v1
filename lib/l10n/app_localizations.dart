@@ -6886,6 +6886,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Doctors graduation outside UAE'**
   String get externalDoctorsOutsideUae;
+
+  /// No description provided for @draftSavedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft Saved Successfully'**
+  String get draftSavedSuccess;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

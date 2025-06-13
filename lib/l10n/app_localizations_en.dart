@@ -3403,4 +3403,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get externalDoctorsOutsideUae => 'Doctors graduation outside UAE';
+
+  @override
+  String get draftSavedSuccess => 'Draft Saved Successfully';
 }
