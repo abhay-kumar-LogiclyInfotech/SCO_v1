@@ -71,6 +71,7 @@ double get kCardRadius => 15;
 
 Widget get kSubmitButtonHeight => const SizedBox.square(dimension: 30,) ;
 double kSmallButtonRadius = 5;
+double kMediumButtonRadius = 10;
 
 class Utils {
   static  launchingUrl(dynamic url) async {

@@ -96,9 +96,21 @@ class _HomeRequestsViewState extends State<HomeRequestsView> with MediaQueryMixi
                                 ],
                               ),
                               kSmallSpace,
-                              SimpleButton(onPressed: (){
-                                _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()),);
-                                }, title: localization.more)
+
+                              CustomButton(
+                                  buttonName: localization.more,
+                                  isLoading: false,
+                                  textDirection: getTextDirection(langProvider),
+                                  // buttonColor: AppColors.scoButtonColor,
+                                  borderRadius: BorderRadius.circular(kMediumButtonRadius),
+                                  onTap: () {
+                                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()),);
+                                  }),
+
+
+                              // SimpleButton(onPressed: (){
+                              //   _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const RequestView()),);
+                              //   }, title: localization.more)
                             ],
                           ),
 

@@ -3406,4 +3406,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get draftSavedSuccess => 'Draft Saved Successfully';
+
+  @override
+  String get employmentStatusFieldTitle => 'Employment Status';
 }

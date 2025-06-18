@@ -14,6 +14,7 @@ import '../../../data/response/status.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/app_text_styles.dart';
 import '../../../resources/cards/home_view_card.dart';
+import '../../../resources/components/custom_button.dart';
 import '../../../resources/components/custom_vertical_divider.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../viewModel/services_viewmodel/my_finanace_status_viewModel.dart';
@@ -141,11 +142,20 @@ class _HomeFinanceViewState extends State<HomeFinanceView>
                     ),
                   ),
                   kSmallSpace,
+                  CustomButton(
+                      buttonName: localization.more,
+                      isLoading: false,
+                      textDirection: getTextDirection(langProvider),
+                      // buttonColor: AppColors.scoButtonColor,
+                      borderRadius: BorderRadius.circular(kMediumButtonRadius),
+                      onTap: () {
+                        _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
+                      }),
 
-                  SimpleButton(onPressed: (){
-                    _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
-
-                  }, title: localization.more),
+                  // SimpleButton(onPressed: (){
+                  //   _navigationServices.pushCupertino(CupertinoPageRoute(builder: (context) => const FinanceView()));
+                  //
+                  // }, title: localization.more),
                 ],
               ),
             ],

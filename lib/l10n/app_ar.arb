@@ -1147,7 +1147,8 @@
   "seeMore": "...عرض المزيد",
   "seeLess": " عرض أقل",
   "externalDoctorsOutsideUae": "\u0628\u0639\u062B\u0629 \u0635\u0627\u062D\u0628 \u0627\u0644\u0633\u0645\u0648 \u0631\u0626\u064A\u0633 \u0627\u0644\u062F\u0648\u0644\u0629 \u0644\u0644\u0623\u0637\u0628\u0627\u0621 \u0627\u0644\u0645\u062A\u0645\u064A\u0651\u0632\u064A\u0646",
-  "draftSavedSuccess": "تم حفظ المسودة بنجاح"
+  "draftSavedSuccess": "تم حفظ المسودة بنجاح",
+  "employmentStatusFieldTitle": "الحالة الوظيفية"
 }
 
 

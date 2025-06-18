@@ -6892,6 +6892,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draft Saved Successfully'**
   String get draftSavedSuccess;
+
+  /// No description provided for @employmentStatusFieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Employment Status'**
+  String get employmentStatusFieldTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

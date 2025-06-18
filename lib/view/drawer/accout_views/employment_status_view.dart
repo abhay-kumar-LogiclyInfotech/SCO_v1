@@ -240,9 +240,9 @@ class _EmploymentStatusViewState extends State<EmploymentStatusView>
         expandedContent: Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        /// First name
         fieldHeading(
-            title: localization.employmentStatus,
+            title: localization.employmentStatusFieldTitle,
+            // title: '''الحالة الوظيفية''',
             important: true,
             langProvider: langProvider),
         scholarshipFormDropdown(

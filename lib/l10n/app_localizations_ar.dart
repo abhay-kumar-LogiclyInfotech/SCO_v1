@@ -3406,4 +3406,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get draftSavedSuccess => 'تم حفظ المسودة بنجاح';
+
+  @override
+  String get employmentStatusFieldTitle => 'الحالة الوظيفية';
 }
