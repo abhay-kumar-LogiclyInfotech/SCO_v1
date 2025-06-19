@@ -5,6 +5,7 @@ import '../../data/response/ApiResponse.dart';
 import '../../repositories/drawer_repo/drawer_repository.dart';
 import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
+import '../../resources/app_urls.dart';
 
 class IndividualImageViewModel with ChangeNotifier {
   //*------Accessing Api Services------*
@@ -34,7 +35,7 @@ class IndividualImageViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
 
       //*-----Calling Api Start-----*

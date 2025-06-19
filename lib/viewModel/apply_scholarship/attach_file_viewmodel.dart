@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'; import '../../../../resources/app_urls.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/controller/internet_controller.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
@@ -70,7 +70,7 @@ class AttachFileViewmodel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/json',
-          'authorization': Constants.basicAuthWithUsernamePassword
+          'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         final body = jsonEncode(file);

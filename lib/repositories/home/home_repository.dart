@@ -359,8 +359,7 @@ class HomeRepository {
   Future<GetProfilePictureUrlModel> getProfilePictureUrl(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:
-          '${AppUrls.commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/$userId',
+      url: '${AppUrls.commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/$userId',
       headers: headers,
     );
     return GetProfilePictureUrlModel.fromJson(response);

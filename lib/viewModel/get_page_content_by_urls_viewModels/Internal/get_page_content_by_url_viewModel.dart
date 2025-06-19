@@ -1,16 +1,13 @@
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/models/drawer/vision_and_mission_model.dart';
 import 'package:sco_v1/repositories/home/home_repository.dart';
-import 'package:xml/xml.dart' as xml;
-import 'package:html_unescape/html_unescape.dart';
 import 'package:html/parser.dart' as htmlParser;
 
 
 import '../../../data/response/ApiResponse.dart';
+import '../../../resources/app_urls.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
 import '../../drawer/vision_and_mission_viewModel.dart';
@@ -53,7 +50,7 @@ class GetPageContentByUrlViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuthWithUsernamePassword
+        'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Body-----*
       final body = <String, String>{

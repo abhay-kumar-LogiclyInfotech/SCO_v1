@@ -8,6 +8,7 @@ import '../../repositories/auth_repo/auth_repository.dart';
 import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
+import '../../resources/app_urls.dart';
 
 class SecurityQuestionViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -47,7 +48,7 @@ class SecurityQuestionViewModel with ChangeNotifier {
 
       final headers = {
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

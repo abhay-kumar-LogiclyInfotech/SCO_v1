@@ -9,6 +9,7 @@ import '../../resources/validations_and_errorText.dart';
 import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
+import '../../resources/app_urls.dart';
 
 class FaqViewModel with ChangeNotifier {
 //*------Necessary Services------*/
@@ -47,7 +48,7 @@ class FaqViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuthWithUsernamePassword
+        'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Body-----*
       final body = <String, String>{

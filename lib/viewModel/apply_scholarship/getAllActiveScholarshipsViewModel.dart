@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'; import '../../../../resources/app_urls.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/controller/internet_controller.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
@@ -49,7 +49,7 @@ class GetAllActiveScholarshipsViewModel with ChangeNotifier {
 
         //*-----Create Headers-----*
         final headers = <String, String>{
-          'authorization': Constants.basicAuthWithUsernamePassword
+          'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         //*-----Calling Api Start-----*

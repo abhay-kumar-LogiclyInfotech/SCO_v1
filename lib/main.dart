@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:sco_v1/utils/utils.dart'; import '../../../../resources/app_urls.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
@@ -195,6 +196,24 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: widget._navigationServices.navigationStateKey,
               routes: widget._navigationServices.routes,
               initialRoute: "/splashView",
+              // Add the diagonal banner via builder
+              builder: (context, child) {
+                Widget app = child ?? const SizedBox();
+                if (AppUrls.isStaging()) {
+                  app = Banner(
+                    message: 'STAGING',
+                    location: getTextDirection(provider) == TextDirection.ltr ? BannerLocation.topEnd : BannerLocation.topStart,
+                    color: AppColors.scoThemeColor,
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      letterSpacing: 0,
+                    ),
+                    child: app,
+                  );
+                }
+                return app;
+              },
             );
           },
         ),

@@ -9,10 +9,7 @@ import '../models/apply_scholarship/FillScholarshipFormModels.dart';
 
 
 class Constants {
-  static const String USERNAME = "liferay_access@sco.ae";
-  static const String PASSWORD = "India@1234";
-  static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('${Constants.USERNAME}:${Constants.PASSWORD}'))}';
-  static const String basicAuth = 'Basic bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=';
+
 
   static Map<String, Response> lovCodeMap = {};
 

@@ -12,6 +12,7 @@ import 'package:sco_v1/repositories/home/home_repository.dart';
 
 import '../../../data/response/ApiResponse.dart';
 import '../../../models/account/personal_details/UpdatePersonalDetailsModel.dart';
+import '../../../resources/app_urls.dart';
 import '../../../utils/constants.dart';
 import '../../services/alert_services.dart';
 import '../../services/auth_services.dart';
@@ -64,7 +65,7 @@ class UpdateProfilePictureViewModel with ChangeNotifier {
 
         final headers = {
           "Content-Type": "application/x-www-form-urlencoded",
-          'authorization': Constants.basicAuthWithUsernamePassword
+          'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         // Data in JSON format

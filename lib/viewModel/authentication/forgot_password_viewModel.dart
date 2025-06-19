@@ -9,7 +9,7 @@ import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import '../../data/response/ApiResponse.dart';
 import '../../l10n/app_localizations.dart';
 import '../../repositories/auth_repo/auth_repository.dart';
-import '../../utils/constants.dart';
+import '../../resources/app_urls.dart';
 import '../services/alert_services.dart';
 
 class ForgotPasswordViewModel with ChangeNotifier {
@@ -56,7 +56,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
       //*-----Create Headers Start-----*
 
-      final headers = <String, String>{'authorization': Constants.basicAuth};
+      final headers = <String, String>{'authorization': AppUrls.basicAuth};
       //*-----Create Headers End-----*
 
       //*-----Calling Api Start-----*
@@ -135,7 +135,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
       _setSendForgotPasswordSendMailResponse = ApiResponse.loading();
 
       //*-----Create Headers Start-----*
-      final headers = <String, String>{'authorization': Constants.basicAuth};
+      final headers = <String, String>{'authorization': AppUrls.basicAuth};
       //*-----Create Headers End-----*
 
       //*-----Calling Api Start-----*
@@ -187,7 +187,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
       _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.loading();
 
       //*-----Create Headers Start-----*
-      final headers = <String, String>{'authorization': Constants.basicAuth};
+      final headers = <String, String>{'authorization': AppUrls.basicAuth};
       //*-----Create Headers End-----*
 
       //*-----Calling Api Start-----*

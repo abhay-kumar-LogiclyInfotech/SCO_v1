@@ -7,6 +7,7 @@ import '../../repositories/auth_repo/auth_repository.dart';
 import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
+import '../../resources/app_urls.dart';
 
 class UpdateSecurityQuestionViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -58,7 +59,7 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
 
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

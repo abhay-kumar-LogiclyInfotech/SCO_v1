@@ -10,6 +10,7 @@ import 'package:sco_v1/repositories/home/home_repository.dart';
 
 import '../../../data/response/ApiResponse.dart';
 import '../../../models/account/personal_details/UpdatePersonalDetailsModel.dart';
+import '../../../resources/app_urls.dart';
 import '../../../utils/constants.dart';
 import '../../services/alert_services.dart';
 import '../../services/auth_services.dart';
@@ -71,7 +72,7 @@ class UpdatePersonalDetailsViewModel with ChangeNotifier {
         final headers = {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'authorization': Constants.basicAuth
+          'authorization': AppUrls.basicAuth
         };
 
         final body = jsonEncode(form);

@@ -11,6 +11,7 @@ import '../../repositories/drawer_repo/drawer_repository.dart';
 import '../../utils/constants.dart';
 import '../../utils/utils.dart';
 import '../language_change_ViewModel.dart';
+import '../../resources/app_urls.dart';
 
 class ContentSection {
   final String heading;
@@ -57,7 +58,7 @@ class ABriefAboutScoViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
 
       //*------Create Body------*

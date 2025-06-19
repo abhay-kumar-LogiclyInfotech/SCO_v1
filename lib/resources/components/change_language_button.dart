@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
+import 'package:sco_v1/resources/app_urls.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/services/navigation_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,7 +33,10 @@ class _ChangeLanguageButtonState extends State<ChangeLanguageButton> with MediaQ
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
+    return AppUrls.isStaging() ?
+
+
+      Directionality(
       textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
       child: SizedBox(
         width: screenWidth,
@@ -68,7 +72,7 @@ class _ChangeLanguageButtonState extends State<ChangeLanguageButton> with MediaQ
           ],
         ),
       ),
-    );
+    ) : showVoid;
   }
 
 }

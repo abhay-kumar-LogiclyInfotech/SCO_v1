@@ -1,8 +1,30 @@
+import 'dart:convert';
+
 class AppUrls {
-  // Use 'const' for a constant base URL
+
+
+  /// ********** App Credentials Start **********///
+  /// Replace the below values to change to production or vice versa
   static const String _domainUrl = "https://stg.sco.ae/";
+  static const String username = "liferay_access@sco.ae";
+  static const String password = "India@1234";
+  static const String authKey = "bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=";
+  /// ********** App Credentials End **********///
+
+
+
+
+  static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+  static const String basicAuth = 'Basic $authKey';
+
+
   static const String _commonBaseUrl = "${_domainUrl}api/";
   static const String _baseUrl = "${_domainUrl}o/mopa-sco-api/";
+
+
+  /// function to check currently using staging or production urls
+ static bool isStaging()=> _domainUrl.contains("stg");
+
 
 
   // Getting domain url

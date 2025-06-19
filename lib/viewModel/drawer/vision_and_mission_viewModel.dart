@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/models/drawer/vision_and_mission_model.dart';
-import 'package:xml/xml.dart' as xml;
-import 'package:html_unescape/html_unescape.dart';
+
 import 'package:html/parser.dart' as htmlParser;
 
 
@@ -11,9 +10,9 @@ import 'package:html/parser.dart' as htmlParser;
 
 import '../../data/response/ApiResponse.dart';
 import '../../repositories/drawer_repo/drawer_repository.dart';
-import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
+import '../../resources/app_urls.dart';
 
 class VisionAndMissionViewModel with ChangeNotifier {
 //*------Necessary Services------*/
@@ -54,7 +53,7 @@ class VisionAndMissionViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuthWithUsernamePassword
+        'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Body-----*
       final body = <String, String>{

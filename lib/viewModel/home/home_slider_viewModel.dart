@@ -1,144 +1,3 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:get_it/get_it.dart';
-// import 'package:sco_v1/models/drawer/news_and_events_model.dart';
-// import 'package:sco_v1/repositories/home/home_repository.dart';
-// import 'package:xml/xml.dart';
-//
-// import '../../data/response/ApiResponse.dart';
-// import '../../models/home/HomeSliderModel.dart';
-// import '../../repositories/drawer_repo/drawer_repository.dart';
-// import '../../utils/constants.dart';
-// import '../language_change_ViewModel.dart';
-// import '../services/alert_services.dart';
-//
-// class HomeSliderViewModel with ChangeNotifier {
-//   //*------Necessary Services------*/
-//   late AlertServices _alertServices;
-//
-//   HomeSliderViewModel() {
-//     final GetIt getIt = GetIt.instance;
-//     _alertServices = getIt.get<AlertServices>();
-//   }
-//
-//   //*------Accessing Api Services------*
-//
-//   final HomeRepository _homeRepository = HomeRepository();
-//
-//   //*------Get Security Question Method Start------*/
-//   ApiResponse<List<HomeSliderModel>> _homeSliderResponse =
-//   ApiResponse.none();
-//
-//   ApiResponse<List<HomeSliderModel>> get homeSliderResponse =>
-//       _homeSliderResponse;
-//
-//   set _setHomeSliderResponse(
-//       ApiResponse<List<HomeSliderModel>> response) {
-//     _homeSliderResponse = response;
-//     notifyListeners();
-//   }
-//
-//
-//
-//
-//
-//
-//
-//   Future<bool> newsAndEvents(
-//       {required BuildContext context,
-//         required LanguageChangeViewModel langProvider}) async {
-//     try {
-//       _setHomeSliderResponse = ApiResponse.loading();
-//
-//       //*-----Create Headers-----*
-//       final headers = <String, String>{
-//         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-//         'authorization': Constants.basicAuthWithUsernamePassword
-//       };
-//
-//       //*-----Calling Api Start-----*
-//       final response = await _homeRepository.homeSlider(headers: headers);
-//       //*-----Calling Api End-----*
-//
-//       List<Service> parseServices(String xmlString) {
-//         final document = XmlDocument.parse(xmlString);
-//         final services = <Service>[];
-//
-//         for (var element in document.findAllElements('dynamic-element')) {
-//           if (element.getAttribute('name') == 'ServiceName') {
-//             final service = Service.fromXml(element);
-//             services.add(service);
-//           }
-//         }
-//
-//         return services;
-//       }
-//
-//
-//
-//       _setHomeSliderResponse = ApiResponse.completed(response);
-//
-//       return true;
-//     } catch (error) {
-//       debugPrint('Printing Error: $error');
-//       _setHomeSliderResponse = ApiResponse.error(error.toString());
-//       // Message to show status of the operation:
-//       _alertServices.toastMessage(error.toString());
-//
-//       return false;
-//     }
-//   }
-// }
-//
-//
-// class Service {
-//   final String title;
-//   final String serviceName;
-//   final String serviceImage;
-//   final String serviceShortDescription;
-//   final String linkToPage;
-//   final String sortOrder;
-//   final String urlLink;
-//   final bool hideSlide;
-//
-//   Service({
-//     required this.title,
-//     required this.serviceName,
-//     required this.serviceImage,
-//     required this.serviceShortDescription,
-//     required this.linkToPage,
-//     required this.sortOrder,
-//     required this.urlLink,
-//     required this.hideSlide,
-//   });
-//
-//   factory Service.fromXml(XmlElement element) {
-//     return Service(
-//       title: _getDynamicContent(element, 'Title'),
-//       serviceName: _getDynamicContent(element, 'ServiceName'),
-//       serviceImage: _getDynamicContent(element, 'ServiceImage'),
-//       serviceShortDescription: _getDynamicContent(
-//           element, 'ServiceShortDescription'),
-//       linkToPage: _getDynamicContent(element, 'LinkToPage74u3'),
-//       sortOrder: _getDynamicContent(element, 'SortOrder'),
-//       urlLink: _getDynamicContent(element, 'UrlLink'),
-//       hideSlide: _getBooleanDynamicContent(element, 'HideSlide'),
-//     );
-//   }
-//
-//   static String _getDynamicContent(XmlElement element, String name) {
-//     final dynamicContent = element.findElements('dynamic-element')
-//         .where((e) => e.getAttribute('name') == name)
-//         .expand((e) => e.findElements('dynamic-content'))
-//         .map((e) => e.text)
-//         .join();
-//     return dynamicContent.replaceAll(RegExp(r'<!\[CDATA\[(.*?)\]\]>'), '${1}');
-//   }
-//
-//   static bool _getBooleanDynamicContent(XmlElement element, String name) {
-//     final dynamicContent = _getDynamicContent(element, name);
-//     return dynamicContent.toLowerCase() == 'true';
-//   }
-// }
 
 import 'dart:convert';
 
@@ -151,6 +10,7 @@ import 'package:xml/xml.dart';
 import '../../data/response/ApiResponse.dart';
 import '../../models/home/HomeSliderModel.dart';
 import '../../repositories/drawer_repo/drawer_repository.dart';
+import '../../resources/app_urls.dart';
 import '../../utils/constants.dart';
 import '../../utils/utils.dart';
 import '../language_change_ViewModel.dart';
@@ -190,7 +50,7 @@ class HomeSliderViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuthWithUsernamePassword,
+        'authorization': AppUrls.basicAuthWithUsernamePassword,
       };
 
       //*-----Calling Api Start-----*

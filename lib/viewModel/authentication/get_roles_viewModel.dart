@@ -11,6 +11,7 @@ import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
 import '../services/auth_services.dart';
 import '../services/navigation_services.dart';
+import '../../resources/app_urls.dart';
 
 class GetRoleViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -54,7 +55,7 @@ class GetRoleViewModel with ChangeNotifier {
 
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

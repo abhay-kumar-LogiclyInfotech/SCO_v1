@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'; import '../../../../resources/app_urls.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:sco_v1/controller/internet_controller.dart';
@@ -68,7 +68,7 @@ class GetEmploymentStatusViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': Constants.basicAuth
+          'authorization': AppUrls.basicAuth
         };
 
         GetEmploymentStatusModel response = await _myRepo.getEmploymentStatus(userId: _userId ?? '',headers: headers);

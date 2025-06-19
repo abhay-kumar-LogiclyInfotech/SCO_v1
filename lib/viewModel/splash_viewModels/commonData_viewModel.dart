@@ -8,6 +8,8 @@ import 'package:sco_v1/repositories/splash_repo/splash_repository.dart';
 import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/viewModel/services/alert_services.dart';
 
+import '../../resources/app_urls.dart';
+
 class CommonDataViewModel with ChangeNotifier {
 
   late AlertServices _alertServices;
@@ -27,10 +29,9 @@ class CommonDataViewModel with ChangeNotifier {
 
   Future<bool> fetchCommonData() async {
     try {
-      final String basicAuth = 'Basic ${base64Encode(utf8.encode('${Constants.USERNAME}:${Constants.PASSWORD}'))}';
       final headers = <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': basicAuth
+        'authorization': AppUrls.basicAuth
       };
 
       final response = await _myRepo.fetchCommonData(headers: headers);

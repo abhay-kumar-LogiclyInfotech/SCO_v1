@@ -9,6 +9,7 @@ import 'package:sco_v1/repositories/auth_repo/auth_repository.dart';
 
 import '../../data/response/ApiResponse.dart';
 import '../../models/account/ChangePasswordModel.dart';
+import '../../resources/app_urls.dart';
 import '../../utils/constants.dart';
 import '../services/alert_services.dart';
 import '../services/auth_services.dart';
@@ -67,7 +68,7 @@ class ChangePasswordViewModel with ChangeNotifier {
 
         final headers = {
           // 'Content-Type': 'application/json',
-          'authorization': Constants.basicAuthWithUsernamePassword
+          'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         final body = FormData.fromMap({

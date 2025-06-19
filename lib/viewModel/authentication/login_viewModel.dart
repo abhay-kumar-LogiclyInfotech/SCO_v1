@@ -13,6 +13,7 @@ import '../services/auth_services.dart';
 import '../services/navigation_services.dart';
 import '../../l10n/app_localizations.dart';
 
+import '../../resources/app_urls.dart';
 
 class LoginViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -97,7 +98,7 @@ class LoginViewModel with ChangeNotifier {
 
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

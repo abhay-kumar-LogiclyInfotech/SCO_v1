@@ -11,6 +11,7 @@ import 'package:sco_v1/viewModel/services/alert_services.dart';
 import '../../models/authentication/signup_model.dart';
 import '../../utils/constants.dart';
 import '../services/navigation_services.dart';
+import '../../resources/app_urls.dart';
 
 class SignupViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -121,7 +122,7 @@ class SignupViewModel with ChangeNotifier {
 
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

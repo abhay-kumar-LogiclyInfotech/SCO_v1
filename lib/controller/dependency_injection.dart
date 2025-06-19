@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+import 'package:get/get.dart'; import '../../../../resources/app_urls.dart';
 
 import 'internet_controller.dart';
 

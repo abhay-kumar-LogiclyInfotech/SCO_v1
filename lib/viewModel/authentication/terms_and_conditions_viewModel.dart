@@ -8,6 +8,7 @@ import '../../repositories/auth_repo/auth_repository.dart';
 import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
+import '../../resources/app_urls.dart';
 
 class TermsAndConditionsViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -59,7 +60,7 @@ class TermsAndConditionsViewModel with ChangeNotifier {
 
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

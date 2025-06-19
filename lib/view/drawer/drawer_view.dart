@@ -15,6 +15,7 @@ import 'package:sco_v1/viewModel/account/personal_details/get_profile_picture_ur
 import '../../l10n/app_localizations.dart';
 
 import '../../resources/app_colors.dart';
+import '../../resources/app_urls.dart';
 import '../../resources/components/account/profile_with_camera_button.dart';
 import '../../resources/components/custom_advanced_switch.dart';
 import '../../viewModel/authentication/get_roles_viewModel.dart';
@@ -343,6 +344,8 @@ class _DrawerViewState extends State<DrawerView> {
                     ),
 
                     //*-----Language Selection Section-----*/
+
+
                     Directionality(
                       textDirection: getTextDirection(langProvider),
                       child: Column(
@@ -350,6 +353,7 @@ class _DrawerViewState extends State<DrawerView> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           //*-----Change Language Button-----*/
+                          if(AppUrls.isStaging())
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -407,7 +411,7 @@ class _DrawerViewState extends State<DrawerView> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          kSmallSpace,
                           Directionality(
                               textDirection: getTextDirection(langProvider),
                               child: Row(

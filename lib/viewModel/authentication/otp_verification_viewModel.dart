@@ -13,6 +13,7 @@ import '../../repositories/auth_repo/auth_repository.dart';
 import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
+import '../../resources/app_urls.dart';
 
 class OtpVerificationViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -67,7 +68,7 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Create Headers Start-----*
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': Constants.basicAuth
+        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 
@@ -160,7 +161,7 @@ class OtpVerificationViewModel with ChangeNotifier {
 
       final headers = <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': Constants.basicAuthWithUsernamePassword
+        'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Headers End-----*
 
