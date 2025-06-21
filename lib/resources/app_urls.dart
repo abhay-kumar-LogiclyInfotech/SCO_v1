@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+
+
 class AppUrls {
 
 
@@ -9,6 +11,14 @@ class AppUrls {
   static const String username = "liferay_access@sco.ae";
   static const String password = "India@1234";
   static const String authKey = "bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=";
+
+
+  ///-[displayStagingBanner] Set to `true` to show a red STAGING banner.
+  ///-[displayLanguageToggleButton]:
+  ///     → `true`: Show language switch (Arabic <-> English)
+  ///     → `false`: Lock app to Arabic only and hide change language buttons
+  static const bool displayStagingBanner = true;
+  static const bool displayLanguageToggleButton = true;
   /// ********** App Credentials End **********///
 
 
@@ -17,21 +27,14 @@ class AppUrls {
   static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
   static const String basicAuth = 'Basic $authKey';
 
-
   static const String _commonBaseUrl = "${_domainUrl}api/";
   static const String _baseUrl = "${_domainUrl}o/mopa-sco-api/";
 
-
-  /// function to check currently using staging or production urls
- static bool isStaging()=> _domainUrl.contains("stg");
-
-
-
   // Getting domain url
   static const String domainUrl = _domainUrl;
-  //getting the base URL
+  // Getting the base URL
   static const String baseUrl = _baseUrl;
-  // getting common base URL
+  // Getting common base URL
   static const String commonBaseUrl = _commonBaseUrl;
 
 

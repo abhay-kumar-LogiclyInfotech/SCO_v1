@@ -353,7 +353,7 @@ class _DrawerViewState extends State<DrawerView> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           //*-----Change Language Button-----*/
-                          if(AppUrls.isStaging())
+                          if(AppUrls.displayLanguageToggleButton)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

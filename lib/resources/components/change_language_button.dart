@@ -33,10 +33,7 @@ class _ChangeLanguageButtonState extends State<ChangeLanguageButton> with MediaQ
 
   @override
   Widget build(BuildContext context) {
-    return AppUrls.isStaging() ?
-
-
-      Directionality(
+    return AppUrls.displayLanguageToggleButton ? Directionality(
       textDirection: getTextDirection(context.read<LanguageChangeViewModel>()),
       child: SizedBox(
         width: screenWidth,

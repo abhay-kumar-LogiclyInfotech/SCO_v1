@@ -188,7 +188,7 @@ class _MyAppState extends State<MyApp> {
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-              supportedLocales: const [Locale('en'), Locale('ar')],
+              supportedLocales: AppUrls.displayLanguageToggleButton ? const [Locale('en'), Locale('ar')] : const [Locale('ar')] ,
               theme: ThemeData(fontFamily: 'droidArabicKufi',
                 scaffoldBackgroundColor: AppColors.bgColor
               ),
@@ -199,7 +199,7 @@ class _MyAppState extends State<MyApp> {
               // Add the diagonal banner via builder
               builder: (context, child) {
                 Widget app = child ?? const SizedBox();
-                if (AppUrls.isStaging()) {
+                if (AppUrls.displayStagingBanner) {
                   app = Banner(
                     message: 'STAGING',
                     location: getTextDirection(provider) == TextDirection.ltr ? BannerLocation.topEnd : BannerLocation.topStart,
