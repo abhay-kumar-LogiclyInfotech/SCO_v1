@@ -86,6 +86,8 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
   late List<Map<String, dynamic>> _scholarshipRequestTypeMutable;
 
 
+
+
   @override
   void initState() {
     super.initState();
@@ -102,9 +104,9 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
       await provider.getAllActiveScholarships(context: context, langProvider: Provider.of<LanguageChangeViewModel>(context, listen: false));
 
 
-     internalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'INT' && element.isActive == true).toList();
-     externalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'EXT' && element.acadmicCareer.toString() != 'DDS' && element.isActive == true).toList();
-     doctorScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.acadmicCareer.toString() == 'DDS' && element.isActive == true).toList();
+     internalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'INT' && isScholarshipActiveInSystem(isActive: element.isActive,isSpecialCase: element.isSpecialCase) ).toList();
+     externalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'EXT' && element.acadmicCareer.toString() != 'DDS' && isScholarshipActiveInSystem(isActive: element.isActive,isSpecialCase: element.isSpecialCase) ).toList();
+     doctorScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.acadmicCareer.toString() == 'DDS' && isScholarshipActiveInSystem(isActive: element.isActive,isSpecialCase: element.isSpecialCase) ).toList();
 
     });
 

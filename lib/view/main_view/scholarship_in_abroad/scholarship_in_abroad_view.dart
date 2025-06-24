@@ -346,7 +346,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
             width: screenWidth,
           ),
           _buildUI(localization),
-          if (isExternalScholarship() && (context.read<GetAllActiveScholarshipsViewModel>().apiResponse.data?.any((element) => element.configurationKey == widget.code && element.isActive == true,) ?? false))Positioned(
+          if (isExternalScholarship() && (context.read<GetAllActiveScholarshipsViewModel>().apiResponse.data?.any((element) => element.configurationKey == widget.code && isScholarshipActiveInSystem(isActive: element.isActive,isSpecialCase: element.isSpecialCase) ,) ?? false))Positioned(
             bottom: 0,
             child: Container(
               // width: double.infinity,

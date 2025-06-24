@@ -329,7 +329,7 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
               ),
               _buildUI(localization,isInternalScholarship()),
               if (
-              isInternalScholarship() && (context.read<GetAllActiveScholarshipsViewModel>().apiResponse.data?.any((element) => element.configurationKey == widget.code && element.isActive == true,) ?? false)
+              isInternalScholarship() && (context.read<GetAllActiveScholarshipsViewModel>().apiResponse.data?.any((element) => element.configurationKey == widget.code && isScholarshipActiveInSystem(isActive: element.isActive,isSpecialCase: element.isSpecialCase) ,) ?? false)
               )Positioned(
                 bottom: 0,
                 child: Container(

@@ -958,3 +958,9 @@ String decodeHtmlEntities(String text) {
   // Decode HTML entities (e.g., &lt;, &gt;)
   return html.parse(text).body?.text ?? text;
 }
+
+
+/// function to check that scholarship is active in system for mobile case because special cases are those which comes from email invites
+bool isScholarshipActiveInSystem({required bool? isActive ,required bool? isSpecialCase }){
+  return isActive == true && isSpecialCase == false;
+}
