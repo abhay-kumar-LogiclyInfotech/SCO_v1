@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:sco_v1/utils/constants.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/viewModel/language_change_ViewModel.dart';
 import '../../resources/app_colors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../resources/app_text_styles.dart';
+
 
 class StepsProgressView extends StatefulWidget {
   final int totalSections;
@@ -30,36 +32,41 @@ class _StepsProgressViewState extends State<StepsProgressView>
   String getTextForSection({required int step}) {
     final localization = AppLocalizations.of(context)!;
 
-    String? acadmicCareer = widget.selectedScholarship?.acadmicCareer;
+    String academicCareer = widget.selectedScholarship?.acadmicCareer ?? '';
     String key = widget.selectedScholarship?.configurationKey ?? '';
 
     // Helper functions for specific text conditions
-    bool shouldShowHighSchoolDetails() {
-      return acadmicCareer == 'UG' ||
-          acadmicCareer == 'UGRD' ||
-          acadmicCareer == 'SCHL' ||
-          acadmicCareer == 'HCHL';
+    // bool shouldShowHighSchoolDetails() {
+    //   return acadmicCareer == 'UG' ||
+    //       acadmicCareer == 'UGRD' ||
+    //       acadmicCareer == 'SCHL' ||
+    //       acadmicCareer == 'HCHL';
+    // }
+
+
+    bool displayHighSchoolDetails(){
+      return shouldShowHighSchoolDetails(academicCareer);
     }
 
+    // bool isUniversityAndMajorsRequired() {
+    //   return academicCareer != 'SCHL';
+    // }
     bool isUniversityAndMajorsRequired() {
-      return acadmicCareer != 'SCHL';
+      return shouldShowUniversityAndMajors(academicCareer);
     }
 
     bool isRequiredExaminationDetailsRequired() {
-      return !(acadmicCareer == 'SCHL' || acadmicCareer == 'HCHL');
+      // return !(academicCareer == 'SCHL' || academicCareer == 'HCHL');
+      return shouldShowRequiredExaminations(academicCareer);
     }
 
     bool isAttachmentSectionForExt() {
       return key == 'SCOUPPEXT';
     }
 
-    bool displayEmploymentHistory() {
-      final key = widget.selectedScholarship?.configurationKey;
-      return (key == 'SCOPGRDINT' || key == 'SCOPGRDEXT' || key == 'SCODDSEXT');
-    }
 
-    bool shouldDisplayEmploymentHistory() {
-      return displayEmploymentHistory();
+    bool displayEmploymentHistory() {
+      return shouldShowEmploymentHistory(widget.selectedScholarship?.configurationKey ?? '');
     }
 
 
@@ -67,13 +74,11 @@ class _StepsProgressViewState extends State<StepsProgressView>
 
     switch (step)
     {
-
-
       case 0:
         return localization.studentDetails;
 
       case 1:
-        if (shouldShowHighSchoolDetails()) {
+        if (displayHighSchoolDetails()) {
           return localization.highSchoolDetails;
         }
         // Graduation Details Section as fallback
@@ -95,9 +100,9 @@ class _StepsProgressViewState extends State<StepsProgressView>
 
       case 4:
       // Attachments Section if UGRD key or show Employment History if applicable
-        if (acadmicCareer == 'UGRD') {
+        if (academicCareer == 'UGRD') {
           return localization.attachments;
-        } else if (shouldDisplayEmploymentHistory()) {
+        } else if (displayEmploymentHistory()) {
           return localization.employmentHistory;
         } else if (isAttachmentSectionForExt()) {
           return localization.confirmation_title;

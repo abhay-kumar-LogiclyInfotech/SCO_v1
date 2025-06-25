@@ -623,9 +623,12 @@ bool shouldShowRequiredExaminations(String academicCareer) {
 
 
 bool shouldShowEmploymentHistory(String configurationKey) {
-  return (configurationKey == 'SCOPGRDINT' || configurationKey == 'SCOPGRDEXT' || configurationKey == 'SCODDSEXT');}
+  return (configurationKey == 'SCOPGRDINT' || configurationKey == 'SCOPGRDEXT' || configurationKey == 'SCODDSEXT' || configurationKey == 'SCOAHCPEXT' || configurationKey == 'SCOPGRDMDEXT');}
 
 
+bool shouldShowAttachmentSectionForExt({required String configurationKey}){
+  return configurationKey == 'SCOUPPEXT';
+}
 
 
 
