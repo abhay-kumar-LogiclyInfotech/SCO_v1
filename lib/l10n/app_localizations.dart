@@ -6926,7 +6926,7 @@ abstract class AppLocalizations {
   /// No description provided for @postGraduationExternalMedicine.
   ///
   /// In en, this message translates to:
-  /// **'Post Graduation External'**
+  /// **'Post Graduation External Medicine'**
   String get postGraduationExternalMedicine;
 }
 

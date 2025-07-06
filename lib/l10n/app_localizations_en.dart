@@ -3423,5 +3423,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get medicalProfessionsProgram => 'Medical Professions Program';
 
   @override
-  String get postGraduationExternalMedicine => 'Post Graduation External';
+  String get postGraduationExternalMedicine => 'Post Graduation External Medicine';
 }
