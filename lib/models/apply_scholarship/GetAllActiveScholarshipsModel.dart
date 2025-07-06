@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 /// acadLoadAppr : "F"
 /// acadmicCareer : "DDS"
 /// acadmicPlan : "SCO-D"
@@ -41,51 +42,58 @@ import 'dart:convert';
 /// userName : "Amr . Adel"
 /// uuid : "be4d8b4a-c9f7-b69e-6af1-d565de64ae0b"
 
-GetAllActiveScholarshipsModel getAllActiveScholarshipsModelFromJson(dynamic str) => GetAllActiveScholarshipsModel.fromJson(json.decode(str));
-dynamic getAllActiveScholarshipsModelToJson(GetAllActiveScholarshipsModel data) => json.encode(data.toJson());
+GetAllActiveScholarshipsModel getAllActiveScholarshipsModelFromJson(
+        dynamic str) =>
+    GetAllActiveScholarshipsModel.fromJson(json.decode(str));
+
+dynamic getAllActiveScholarshipsModelToJson(
+        GetAllActiveScholarshipsModel data) =>
+    json.encode(data.toJson());
+
 class GetAllActiveScholarshipsModel {
-  GetAllActiveScholarshipsModel({
-      dynamic? acadLoadAppr, 
-      dynamic? acadmicCareer, 
-      dynamic? acadmicPlan, 
-      dynamic? acadmicProgram, 
-      dynamic? admApplicationCenter, 
-      dynamic? admitTerm, 
-      dynamic? admitType, 
-      dynamic? approvedChecklistCode, 
-      dynamic? campus, 
-      dynamic? checklistCode, 
-      dynamic? cohort, 
-      dynamic? companyId, 
-      dynamic? configurationId, 
-      dynamic? configurationKey, 
-      dynamic? configurationName, 
-      dynamic? configurationNameEng, 
-      dynamic? createDate, 
-      dynamic draftEndDate, 
-      dynamic? endDate, 
-      dynamic? groupId, 
-      dynamic? institution, 
-      bool? is12ThRequired, 
-      bool? isActive, 
-      bool? isDraftSubmission, 
-      bool? isRemoved, 
-      bool? isSpecialCase, 
-      dynamic lastPublishDate, 
-      dynamic? modifiedDate, 
-      dynamic? programAction, 
-      dynamic? programStatus, 
-      dynamic? scholarshipType, 
-      dynamic? startDate, 
-      dynamic? status, 
-      dynamic? statusByUserId, 
-      dynamic? statusByUserName, 
-      dynamic? statusDate, 
-      dynamic? successMessageArabic, 
-      dynamic? successMessageEnglish, 
-      dynamic? userId, 
-      dynamic? userName, 
-      dynamic? uuid,}){
+  GetAllActiveScholarshipsModel(
+      {dynamic? acadLoadAppr,
+      dynamic? acadmicCareer,
+      dynamic? acadmicPlan,
+      dynamic? acadmicProgram,
+      dynamic? admApplicationCenter,
+      dynamic? admitTerm,
+      dynamic? admitType,
+      dynamic? approvedChecklistCode,
+      dynamic? campus,
+      dynamic? checklistCode,
+      dynamic? cohort,
+      dynamic? companyId,
+      dynamic? configurationId,
+      dynamic? configurationKey,
+      dynamic? configurationName,
+      dynamic? configurationNameEng,
+      dynamic? createDate,
+      dynamic draftEndDate,
+      dynamic? endDate,
+      dynamic? groupId,
+      dynamic? institution,
+      bool? is12ThRequired,
+      bool? isActive,
+      bool? isDraftSubmission,
+      bool? isRemoved,
+      bool? isSpecialCase,
+      dynamic lastPublishDate,
+      dynamic? modifiedDate,
+      dynamic? programAction,
+      dynamic? programStatus,
+      dynamic? scholarshipType,
+      dynamic? startDate,
+      dynamic? status,
+      dynamic? statusByUserId,
+      dynamic? statusByUserName,
+      dynamic? statusDate,
+      dynamic? successMessageArabic,
+      dynamic? successMessageEnglish,
+      dynamic? userId,
+      dynamic? userName,
+      dynamic? uuid,
+      String? majorWishListLovCode}) {
     _acadLoadAppr = acadLoadAppr;
     _acadmicCareer = acadmicCareer;
     _acadmicPlan = acadmicPlan;
@@ -127,7 +135,7 @@ class GetAllActiveScholarshipsModel {
     _userId = userId;
     _userName = userName;
     _uuid = uuid;
-}
+  }
 
   GetAllActiveScholarshipsModel.fromJson(dynamic json) {
     _acadLoadAppr = json['acadLoadAppr'];
@@ -171,7 +179,9 @@ class GetAllActiveScholarshipsModel {
     _userId = json['userId'];
     _userName = json['userName'];
     _uuid = json['uuid'];
+    majorWishListLovCode = json['majorWishListLovCode'];
   }
+
   dynamic? _acadLoadAppr;
   dynamic? _acadmicCareer;
   dynamic? _acadmicPlan;
@@ -213,130 +223,181 @@ class GetAllActiveScholarshipsModel {
   dynamic? _userId;
   dynamic? _userName;
   dynamic? _uuid;
-GetAllActiveScholarshipsModel copyWith({  dynamic? acadLoadAppr,
-  dynamic? acadmicCareer,
-  dynamic? acadmicPlan,
-  dynamic? acadmicProgram,
-  dynamic? admApplicationCenter,
-  dynamic? admitTerm,
-  dynamic? admitType,
-  dynamic? approvedChecklistCode,
-  dynamic? campus,
-  dynamic? checklistCode,
-  dynamic? cohort,
-  dynamic? companyId,
-  dynamic? configurationId,
-  dynamic? configurationKey,
-  dynamic? configurationName,
-  dynamic? configurationNameEng,
-  dynamic? createDate,
-  dynamic draftEndDate,
-  dynamic? endDate,
-  dynamic? groupId,
-  dynamic? institution,
-  bool? is12ThRequired,
-  bool? isActive,
-  bool? isDraftSubmission,
-  bool? isRemoved,
-  bool? isSpecialCase,
-  dynamic lastPublishDate,
-  dynamic? modifiedDate,
-  dynamic? programAction,
-  dynamic? programStatus,
-  dynamic? scholarshipType,
-  dynamic? startDate,
-  dynamic? status,
-  dynamic? statusByUserId,
-  dynamic? statusByUserName,
-  dynamic? statusDate,
-  dynamic? successMessageArabic,
-  dynamic? successMessageEnglish,
-  dynamic? userId,
-  dynamic? userName,
-  dynamic? uuid,
-}) => GetAllActiveScholarshipsModel(  acadLoadAppr: acadLoadAppr ?? _acadLoadAppr,
-  acadmicCareer: acadmicCareer ?? _acadmicCareer,
-  acadmicPlan: acadmicPlan ?? _acadmicPlan,
-  acadmicProgram: acadmicProgram ?? _acadmicProgram,
-  admApplicationCenter: admApplicationCenter ?? _admApplicationCenter,
-  admitTerm: admitTerm ?? _admitTerm,
-  admitType: admitType ?? _admitType,
-  approvedChecklistCode: approvedChecklistCode ?? _approvedChecklistCode,
-  campus: campus ?? _campus,
-  checklistCode: checklistCode ?? _checklistCode,
-  cohort: cohort ?? _cohort,
-  companyId: companyId ?? _companyId,
-  configurationId: configurationId ?? _configurationId,
-  configurationKey: configurationKey ?? _configurationKey,
-  configurationName: configurationName ?? _configurationName,
-  configurationNameEng: configurationNameEng ?? _configurationNameEng,
-  createDate: createDate ?? _createDate,
-  draftEndDate: draftEndDate ?? _draftEndDate,
-  endDate: endDate ?? _endDate,
-  groupId: groupId ?? _groupId,
-  institution: institution ?? _institution,
-  is12ThRequired: is12ThRequired ?? _is12ThRequired,
-  isActive: isActive ?? _isActive,
-  isDraftSubmission: isDraftSubmission ?? _isDraftSubmission,
-  isRemoved: isRemoved ?? _isRemoved,
-  isSpecialCase: isSpecialCase ?? _isSpecialCase,
-  lastPublishDate: lastPublishDate ?? _lastPublishDate,
-  modifiedDate: modifiedDate ?? _modifiedDate,
-  programAction: programAction ?? _programAction,
-  programStatus: programStatus ?? _programStatus,
-  scholarshipType: scholarshipType ?? _scholarshipType,
-  startDate: startDate ?? _startDate,
-  status: status ?? _status,
-  statusByUserId: statusByUserId ?? _statusByUserId,
-  statusByUserName: statusByUserName ?? _statusByUserName,
-  statusDate: statusDate ?? _statusDate,
-  successMessageArabic: successMessageArabic ?? _successMessageArabic,
-  successMessageEnglish: successMessageEnglish ?? _successMessageEnglish,
-  userId: userId ?? _userId,
-  userName: userName ?? _userName,
-  uuid: uuid ?? _uuid,
-);
+
+  GetAllActiveScholarshipsModel copyWith({
+    dynamic? acadLoadAppr,
+    dynamic? acadmicCareer,
+    dynamic? acadmicPlan,
+    dynamic? acadmicProgram,
+    dynamic? admApplicationCenter,
+    dynamic? admitTerm,
+    dynamic? admitType,
+    dynamic? approvedChecklistCode,
+    dynamic? campus,
+    dynamic? checklistCode,
+    dynamic? cohort,
+    dynamic? companyId,
+    dynamic? configurationId,
+    dynamic? configurationKey,
+    dynamic? configurationName,
+    dynamic? configurationNameEng,
+    dynamic? createDate,
+    dynamic draftEndDate,
+    dynamic? endDate,
+    dynamic? groupId,
+    dynamic? institution,
+    bool? is12ThRequired,
+    bool? isActive,
+    bool? isDraftSubmission,
+    bool? isRemoved,
+    bool? isSpecialCase,
+    dynamic lastPublishDate,
+    dynamic? modifiedDate,
+    dynamic? programAction,
+    dynamic? programStatus,
+    dynamic? scholarshipType,
+    dynamic? startDate,
+    dynamic? status,
+    dynamic? statusByUserId,
+    dynamic? statusByUserName,
+    dynamic? statusDate,
+    dynamic? successMessageArabic,
+    dynamic? successMessageEnglish,
+    dynamic? userId,
+    dynamic? userName,
+    dynamic? uuid,
+    String? majorWishListLovCode,
+  }) =>
+      GetAllActiveScholarshipsModel(
+          acadLoadAppr: acadLoadAppr ?? _acadLoadAppr,
+          acadmicCareer: acadmicCareer ?? _acadmicCareer,
+          acadmicPlan: acadmicPlan ?? _acadmicPlan,
+          acadmicProgram: acadmicProgram ?? _acadmicProgram,
+          admApplicationCenter: admApplicationCenter ?? _admApplicationCenter,
+          admitTerm: admitTerm ?? _admitTerm,
+          admitType: admitType ?? _admitType,
+          approvedChecklistCode:
+              approvedChecklistCode ?? _approvedChecklistCode,
+          campus: campus ?? _campus,
+          checklistCode: checklistCode ?? _checklistCode,
+          cohort: cohort ?? _cohort,
+          companyId: companyId ?? _companyId,
+          configurationId: configurationId ?? _configurationId,
+          configurationKey: configurationKey ?? _configurationKey,
+          configurationName: configurationName ?? _configurationName,
+          configurationNameEng: configurationNameEng ?? _configurationNameEng,
+          createDate: createDate ?? _createDate,
+          draftEndDate: draftEndDate ?? _draftEndDate,
+          endDate: endDate ?? _endDate,
+          groupId: groupId ?? _groupId,
+          institution: institution ?? _institution,
+          is12ThRequired: is12ThRequired ?? _is12ThRequired,
+          isActive: isActive ?? _isActive,
+          isDraftSubmission: isDraftSubmission ?? _isDraftSubmission,
+          isRemoved: isRemoved ?? _isRemoved,
+          isSpecialCase: isSpecialCase ?? _isSpecialCase,
+          lastPublishDate: lastPublishDate ?? _lastPublishDate,
+          modifiedDate: modifiedDate ?? _modifiedDate,
+          programAction: programAction ?? _programAction,
+          programStatus: programStatus ?? _programStatus,
+          scholarshipType: scholarshipType ?? _scholarshipType,
+          startDate: startDate ?? _startDate,
+          status: status ?? _status,
+          statusByUserId: statusByUserId ?? _statusByUserId,
+          statusByUserName: statusByUserName ?? _statusByUserName,
+          statusDate: statusDate ?? _statusDate,
+          successMessageArabic: successMessageArabic ?? _successMessageArabic,
+          successMessageEnglish:
+              successMessageEnglish ?? _successMessageEnglish,
+          userId: userId ?? _userId,
+          userName: userName ?? _userName,
+          uuid: uuid ?? _uuid,
+          majorWishListLovCode: majorWishListLovCode);
+
   dynamic? get acadLoadAppr => _acadLoadAppr;
+
   dynamic? get acadmicCareer => _acadmicCareer;
+
   dynamic? get acadmicPlan => _acadmicPlan;
+
   dynamic? get acadmicProgram => _acadmicProgram;
+
   dynamic? get admApplicationCenter => _admApplicationCenter;
+
   dynamic? get admitTerm => _admitTerm;
+
   dynamic? get admitType => _admitType;
+
   dynamic? get approvedChecklistCode => _approvedChecklistCode;
+
   dynamic? get campus => _campus;
+
   dynamic? get checklistCode => _checklistCode;
+
   dynamic? get cohort => _cohort;
+
   dynamic? get companyId => _companyId;
+
   dynamic? get configurationId => _configurationId;
+
   dynamic? get configurationKey => _configurationKey;
+
   dynamic? get configurationName => _configurationName;
+
   dynamic? get configurationNameEng => _configurationNameEng;
+
   dynamic? get createDate => _createDate;
+
   dynamic get draftEndDate => _draftEndDate;
+
   dynamic? get endDate => _endDate;
+
   dynamic? get groupId => _groupId;
+
   dynamic? get institution => _institution;
+
   bool? get is12ThRequired => _is12ThRequired;
+
   bool? get isActive => _isActive;
+
   bool? get isDraftSubmission => _isDraftSubmission;
+
   bool? get isRemoved => _isRemoved;
+
   bool? get isSpecialCase => _isSpecialCase;
+
   dynamic get lastPublishDate => _lastPublishDate;
+
   dynamic? get modifiedDate => _modifiedDate;
+
   dynamic? get programAction => _programAction;
+
   dynamic? get programStatus => _programStatus;
+
   dynamic? get scholarshipType => _scholarshipType;
+
   dynamic? get startDate => _startDate;
+
   dynamic? get status => _status;
+
   dynamic? get statusByUserId => _statusByUserId;
+
   dynamic? get statusByUserName => _statusByUserName;
+
   dynamic? get statusDate => _statusDate;
+
   dynamic? get successMessageArabic => _successMessageArabic;
+
   dynamic? get successMessageEnglish => _successMessageEnglish;
+
   dynamic? get userId => _userId;
+
   dynamic? get userName => _userName;
+
   dynamic? get uuid => _uuid;
+
+  /// new added codes
+  String? majorWishListLovCode;
 
   Map<dynamic, dynamic> toJson() {
     final map = <dynamic, dynamic>{};
@@ -381,7 +442,7 @@ GetAllActiveScholarshipsModel copyWith({  dynamic? acadLoadAppr,
     map['userId'] = _userId;
     map['userName'] = _userName;
     map['uuid'] = _uuid;
+    map['majorWishListLovCode'] = majorWishListLovCode;
     return map;
   }
-
 }

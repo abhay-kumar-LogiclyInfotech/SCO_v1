@@ -455,7 +455,7 @@ class ErrorText {
     if (pinCode.isEmpty) {
       return null; // No error if the PIN code is empty
     } else if (!Validations.isPinCodeValid(pinCode)) {
-      return 'Only numeric characters are allowed.';
+      return AppLocalizations.of(context)!.numberOnly;
     }
     return null; // Return null if validation passes
   }
@@ -468,7 +468,7 @@ class ErrorText {
     if (grade.isEmpty) {
       return null; // No error if the grade is empty
     } else if (!Validations.isGradeValid(grade)) {
-      return 'Please enter a valid grade (A, A+, B, ...) or a number between 0 and 100.';
+      return AppLocalizations.of(context)!.enterValidGrade;
     }
     return null; // Return null if validation passes
   }

@@ -6898,6 +6898,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Employment Status'**
   String get employmentStatusFieldTitle;
+
+  /// No description provided for @enterValidGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Valid Grade'**
+  String get enterValidGrade;
+
+  /// No description provided for @pass.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get pass;
+
+  /// No description provided for @fail.
+  ///
+  /// In en, this message translates to:
+  /// **'Fail'**
+  String get fail;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

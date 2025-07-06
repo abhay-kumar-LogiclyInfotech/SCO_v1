@@ -849,7 +849,8 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
 
         /// SPONSORSHIP
         /// <div class="col-md-3 col-sm-6 col-12"style="display:#{applicationForm.applicationData.havingSponser eq 'Y' or applicationForm.applicationData.acadCareer ne 'DDS'?'block':'none'}">
-        ((widget.havingSponsor == 'Y') || widget.academicCareer != 'DDS')
+        // ((widget.havingSponsor == 'Y') || widget.academicCareer != 'DDS')
+        ((widget.havingSponsor == 'Y'))
             ? Column(
                 children: [
                   kFormHeight,
@@ -988,6 +989,7 @@ class _GraduationInformationViewState extends State<GraduationInformationView>
           context: context,
           readOnly: true,
           filled: true,
+          fillColor: AppColors.lightGrey,
           controller: graduationInfo.levelController,
           currentFocusNode: graduationInfo.levelFocusNode,
           menuItemsList: widget.graduationLevelMenuItems ?? [],

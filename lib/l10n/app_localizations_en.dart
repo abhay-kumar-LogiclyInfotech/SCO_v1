@@ -3409,4 +3409,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get employmentStatusFieldTitle => 'Employment Status';
+
+  @override
+  String get enterValidGrade => 'Please Enter Valid Grade';
+
+  @override
+  String get pass => 'Pass';
+
+  @override
+  String get fail => 'Fail';
 }

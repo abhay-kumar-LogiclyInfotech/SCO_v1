@@ -175,8 +175,13 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
 
 
+
   Future _initializeData() async {
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
+
+      final academicCareer =  widget.applicationStatusDetails.acadCareer;
+      final configurationKey =  widget.configurationKey;
+
 
 
       if (Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null) {
@@ -320,7 +325,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
 
       /// high school
-      if (cleanedDraft['highSchoolList'] != null && displayHighSchool()) {
+      if (cleanedDraft['highSchoolList'] != null && shouldShowHighSchoolDetails(academicCareer) && cleanedDraft['highSchoolList'].toString().trim().isNotEmpty) {
         _highSchoolList.clear(); /// Clear the current list
         if (cleanedDraft['highSchoolList'] is List) {
 
@@ -465,7 +470,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
       /// Employment History
       /// employment Status
       _employmentStatus = cleanedDraft['employmentStatus'] ?? '';
-      if (cleanedDraft['emplymentHistory'] != null && cleanedDraft['emplymentHistory'] != 'true' &&  displayEmploymentHistory()) {
+      if (cleanedDraft['emplymentHistory'] != null && cleanedDraft['emplymentHistory'] != 'true' &&  shouldShowEmploymentHistory(configurationKey) && cleanedDraft['emplymentHistory'].toString().trim().isNotEmpty) {
         _employmentHistoryList.clear(); /// Clear the current list
 
         if (cleanedDraft['emplymentHistory'] is List) {
@@ -536,27 +541,27 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
   }
 
 
-  /// Functions to check that eligible to show
-  bool displayHighSchool(){
-    /// We will show High school details option to UG,UGRD ,SCHL and HCHL scholarship types
-    final academicCareer = widget.applicationStatusDetails.acadCareer;
-    return (academicCareer == 'UG' ||
-        academicCareer == 'UGRD' ||
-        academicCareer == 'SCHL' ||
-        academicCareer == 'HCHL');
-  }
-  bool isUniversityAndMajorsRequired() {
-    return widget.applicationStatusDetails.acadCareer != 'SCHL';
-  }
-  bool displayEmploymentHistory() {
-    final key = widget.configurationKey;
-    return (key == 'SCOPGRDINT' || key == 'SCOPGRDEXT' || key == 'SCODDSEXT');
-  }
-
-  bool isRequiredExaminationDetailsRequired() {
-    final academicCareer = widget.applicationStatusDetails.acadCareer;
-    return !(academicCareer == 'SCHL' || academicCareer == 'HCHL');
-  }
+  // /// Functions to check that eligible to show
+  // bool displayHighSchool(){
+  //   /// We will show High school details option to UG,UGRD ,SCHL and HCHL scholarship types
+  //   final academicCareer = widget.applicationStatusDetails.acadCareer;
+  //   return (academicCareer == 'UG' ||
+  //       academicCareer == 'UGRD' ||
+  //       academicCareer == 'SCHL' ||
+  //       academicCareer == 'HCHL');
+  // }
+  // bool isUniversityAndMajorsRequired() {
+  //   return widget.applicationStatusDetails.acadCareer != 'SCHL';
+  // }
+  // bool displayEmploymentHistory() {
+  //   final key = widget.configurationKey;
+  //   return (key == 'SCOPGRDINT' || key == 'SCOPGRDEXT' || key == 'SCODDSEXT');
+  // }
+  //
+  // bool isRequiredExaminationDetailsRequired() {
+  //   final academicCareer = widget.applicationStatusDetails.acadCareer;
+  //   return !(academicCareer == 'SCHL' || academicCareer == 'HCHL');
+  // }
 
 
 
@@ -977,7 +982,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
 
         kFormHeight,
         /// High School Information
-        if(displayHighSchool())CustomInformationContainer(
+        if(shouldShowHighSchoolDetails(academicCareer))CustomInformationContainer(
               title: localization.highSchoolDetails,
               expandedContent: Column(
                 children: [
@@ -1122,7 +1127,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
         kFormHeight,
 
         /// University and majors
-        if(isUniversityAndMajorsRequired())Column(
+        if(shouldShowUniversityAndMajors(academicCareer))Column(
           children: [
             /// majors
             CustomInformationContainer(title: academicCareer == 'PGRD'
@@ -1219,7 +1224,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
 
         /// Required Examination
 
-       if(isRequiredExaminationDetailsRequired())
+       if(shouldShowRequiredExaminations(academicCareer))
         Column(
           children: [
             CustomInformationContainer(
@@ -1256,7 +1261,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
         ),
 
         /// Employment History
-        if(displayEmploymentHistory())
+        if(shouldShowEmploymentHistory(widget.configurationKey))
           Column(
             children: [
               CustomInformationContainer(

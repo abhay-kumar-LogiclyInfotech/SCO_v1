@@ -9,6 +9,7 @@ import 'package:sco_v1/viewModel/services/alert_services.dart';
 import '../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../resources/app_colors.dart';
 import '../../../resources/components/account/Custom_inforamtion_container.dart';
+import '../../../resources/components/custom_checkbox_tile.dart';
 import '../../../resources/components/myDivider.dart';
 import '../../../resources/validations_and_errorText.dart';
 import '../../../utils/constants.dart';
@@ -34,8 +35,8 @@ class _RequiredExaminationsViewState extends State<RequiredExaminationsView> wit
   @override
   void initState() {
 
-final getIt = GetIt.instance;
-_alertServices = getIt.get<AlertServices>();
+    final getIt = GetIt.instance;
+    _alertServices = getIt.get<AlertServices>();
     super.initState();
   }
   
@@ -51,8 +52,7 @@ _alertServices = getIt.get<AlertServices>();
     if (widget.testScoreVal.isNotEmpty) {
       final requiredExaminationInfo = widget.requiredExaminationList[index];
 
-      final code =
-          "${requiredExaminationInfo.examinationController.text}:${requiredExaminationInfo.examinationTypeIdController.text}";
+      final code = "${requiredExaminationInfo.examinationController.text}:${requiredExaminationInfo.examinationTypeIdController.text}";
 
       for (var element in widget.testScoreVal) {
         if (element.code.toString() == code.toString()) {
@@ -67,13 +67,10 @@ _alertServices = getIt.get<AlertServices>();
 
 
   /// get examination type
-  _populateExaminationTypeDropdown(
-      {required LanguageChangeViewModel langProvider, required int index}) {
+  _populateExaminationTypeDropdown({required LanguageChangeViewModel langProvider, required int index}) {
     setState(() {
       if (Constants
-          .lovCodeMap[
-      'EXAMINATION_TYPE#${widget.requiredExaminationList[index].examinationController.text}']
-          ?.values !=
+          .lovCodeMap['EXAMINATION_TYPE#${widget.requiredExaminationList[index].examinationController.text}']?.values !=
           null) {
         widget.requiredExaminationList[index].examinationTypeDropdown =
             populateCommonDataDropdown(
@@ -142,6 +139,90 @@ _alertServices = getIt.get<AlertServices>();
   }
 
 
+  /// change examination
+  _changeExamination({required dynamic requiredExamInfo,required dynamic value,required int index}) {
+
+    final localization = AppLocalizations.of(context)!;
+    final langProvider = Provider.of<LanguageChangeViewModel>(context,listen: false);
+
+    requiredExamInfo.examinationError = null;
+    requiredExamInfo.examinationTypeIdError = null;
+    requiredExamInfo.examinationTypeDropdown?.clear();
+    requiredExamInfo.examinationGradeController.clear();
+    requiredExamInfo.examDateController.clear();
+
+    setState(() {
+      /// Check for existing selected values and ensure non-empty comparison
+      bool alreadySelected = widget.requiredExaminationList.any((info) {
+        return info != requiredExamInfo &&
+            value != null &&
+            value.trim().isNotEmpty &&
+            info.examinationController.text.trim() == value.trim();
+      });
+
+      if (alreadySelected) {
+        /// If duplicate is found, show an error and clear the controller
+        // _alertServices.showToast(
+        //   // context: context,
+        //   message: localization.duplicateExaminationMessage,
+        // );
+        requiredExamInfo.examinationError = localization.duplicateExaminationMessage;
+      } else {
+        /// Assign the value only if it's valid and not already selected
+        requiredExamInfo.examinationController.text = value!.trim();
+
+        /// Clear dependent dropdown values
+        requiredExamInfo.examinationTypeIdController.clear();
+        requiredExamInfo.examinationTypeDropdown?.clear();
+
+        /// Populate examination type dropdown
+        _populateExaminationTypeDropdown(
+          langProvider: langProvider,
+          index: index,
+        );
+
+        /// Move focus to the next field
+        Utils.requestFocus(
+          focusNode: requiredExamInfo.examinationTypeIdFocusNode,
+          context: context,
+        );
+      }
+    });
+  }
+
+
+  /// change examination type
+  _changeExaminationType({required dynamic requiredExamInfo,required dynamic value,required int index,}){
+    {
+
+      final localization = AppLocalizations.of(context)!;
+      final langProvider = Provider.of<LanguageChangeViewModel>(context,listen: false);
+
+
+      requiredExamInfo.examinationTypeIdError = null;
+
+      setState(() {
+        /// Assign the value only if it's not already selected
+        requiredExamInfo
+            .examinationTypeIdController
+            .text = value!;
+
+        /// setting min max score for indexed item
+        _setMinMaxScore(
+            langProvider: langProvider,
+            index: index);
+
+        /// Move focus to the next field
+        Utils.requestFocus(
+          focusNode: requiredExamInfo
+              .examinationGradeFocusNode,
+          context: context,
+        );
+      });
+    }
+  }
+
+
   /// Section for Required Examinations
   Widget _requiredExaminationsDetailsSection() {
     final langProvider = Provider.of<LanguageChangeViewModel>(context);
@@ -186,54 +267,11 @@ _alertServices = getIt.get<AlertServices>();
                                         controller: requiredExamInfo.examinationController,
                                         currentFocusNode:
                                         requiredExamInfo.examinationFocusNode,
-                                        menuItemsList: widget.requiredExaminationDropdownMenuItems ??
-                                            [],
+                                        menuItemsList: widget.requiredExaminationDropdownMenuItems ?? [],
                                         hintText: localization.select,
                                         errorText: requiredExamInfo.examinationError,
-                                        onChanged: (value) {
-                                          requiredExamInfo.examinationError = null;
-                                          requiredExamInfo.examinationTypeIdError = null;
-                                          requiredExamInfo.examinationTypeDropdown?.clear();
-                                          requiredExamInfo.examinationGradeController.clear();
-                                          requiredExamInfo.examDateController.clear();
-
-                                          setState(() {
-                                            /// Check for existing selected values and ensure non-empty comparison
-                                            bool alreadySelected = widget.requiredExaminationList.any((info) {
-                                              return info != requiredExamInfo &&
-                                                  value != null &&
-                                                  value.trim().isNotEmpty &&
-                                                  info.examinationController.text.trim() == value.trim();
-                                            });
-
-                                            if (alreadySelected) {
-                                              /// If duplicate is found, show an error and clear the controller
-                                              _alertServices.showToast(
-                                                // context: context,
-                                                message: localization.duplicateExaminationMessage,
-                                              );
-                                              requiredExamInfo.examinationError = localization.duplicateExaminationMessage;
-                                            } else {
-                                              /// Assign the value only if it's valid and not already selected
-                                              requiredExamInfo.examinationController.text = value!.trim();
-
-                                              /// Clear dependent dropdown values
-                                              requiredExamInfo.examinationTypeIdController.clear();
-                                              requiredExamInfo.examinationTypeDropdown?.clear();
-
-                                              /// Populate examination type dropdown
-                                              _populateExaminationTypeDropdown(
-                                                langProvider: langProvider,
-                                                index: index,
-                                              );
-
-                                              /// Move focus to the next field
-                                              Utils.requestFocus(
-                                                focusNode: requiredExamInfo.examinationTypeIdFocusNode,
-                                                context: context,
-                                              );
-                                            }
-                                          });
+                                        onChanged: (value){
+                                          _changeExamination(requiredExamInfo: requiredExamInfo, value: value, index: index);
                                         }
 
                                     ),
@@ -255,27 +293,7 @@ _alertServices = getIt.get<AlertServices>();
                                       hintText: localization.select,
                                       errorText: requiredExamInfo.examinationTypeIdError,
                                       onChanged: (value) {
-                                        requiredExamInfo.examinationTypeIdError =
-                                        null;
-
-                                        setState(() {
-                                          /// Assign the value only if it's not already selected
-                                          requiredExamInfo
-                                              .examinationTypeIdController
-                                              .text = value!;
-
-                                          /// setting min max score for indexed item
-                                          _setMinMaxScore(
-                                              langProvider: langProvider,
-                                              index: index);
-
-                                          /// Move focus to the next field
-                                          Utils.requestFocus(
-                                            focusNode: requiredExamInfo
-                                                .examinationGradeFocusNode,
-                                            context: context,
-                                          );
-                                        });
+                                        _changeExaminationType(requiredExamInfo: requiredExamInfo, value: value, index: index);
                                       },
                                     ),
                                     /// ****************************************************************************************************************************************************
@@ -299,12 +317,41 @@ _alertServices = getIt.get<AlertServices>();
                                         onChanged: (value) {
                                           if (requiredExamInfo.examinationGradeFocusNode.hasFocus) {
                                             setState(() {
-                                              requiredExamInfo.examinationGradeError =
-                                                  ErrorText.getGradeValidationError(grade: requiredExamInfo.examinationGradeController.text, context: context);
+                                              requiredExamInfo.examinationGradeError = null;
                                             });
+                                            // setState(() {
+                                            //   requiredExamInfo.examinationGradeError = ErrorText.getGradeValidationError(grade: requiredExamInfo.examinationGradeController.text, context: context);
+                                            // });
                                           }
                                         }),
                                     /// ****************************************************************************************************************************************************
+                                    kFormHeight,
+                                    /// Pass or fail
+                                    CustomRadioListTile(
+                                      value: 'PASS',
+                                      groupValue: requiredExamInfo.examResult,
+                                      onChanged: (value){
+                                        setState(() {
+                                          requiredExamInfo.examResult = value;
+                                        });
+                                      },
+                                      title: localization.pass,
+                                      textStyle: textFieldTextStyle,
+                                    ),
+                                    CustomRadioListTile(
+                                      value: 'FAIL',
+                                      groupValue: requiredExamInfo.examResult,
+                                      onChanged: (value){
+                                        setState(() {
+                                          requiredExamInfo.examResult = value;
+                                        });
+                                      },
+                                      title: localization.fail,
+                                      textStyle: textFieldTextStyle,
+                                    ),
+
+
+                                    /// /// ****************************************************************************************************************************************************
                                     kFormHeight,
                                     /// 'Exam Date'
                                     fieldHeading(
@@ -312,10 +359,8 @@ _alertServices = getIt.get<AlertServices>();
                                         important: requiredExamInfo.examinationController.text.isNotEmpty,
                                         langProvider: langProvider),
                                     scholarshipFormDateField(
-                                      currentFocusNode:
-                                      requiredExamInfo.examDateFocusNode,
-                                      controller:
-                                      requiredExamInfo.examDateController,
+                                      currentFocusNode: requiredExamInfo.examDateFocusNode,
+                                      controller: requiredExamInfo.examDateController,
                                       hintText: localization.dateExamWatermark ,
                                       errorText: requiredExamInfo.examDateError,
                                       onChanged: (value) {

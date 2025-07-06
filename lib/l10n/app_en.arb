@@ -1132,7 +1132,11 @@
   "seeLess": " See less",
   "externalDoctorsOutsideUae": "Doctors graduation outside UAE",
   "draftSavedSuccess": "Draft Saved Successfully",
-  "employmentStatusFieldTitle": "Employment Status"
+  "employmentStatusFieldTitle": "Employment Status",
+  "enterValidGrade": "Please Enter Valid Grade",
+  "pass": "Pass",
+  "fail": "Fail"
+
 
 
 }

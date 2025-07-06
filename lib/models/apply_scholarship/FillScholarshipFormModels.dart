@@ -996,6 +996,8 @@ class RequiredExaminations {
   TextEditingController examDateController;
   TextEditingController isNewController;
   TextEditingController errorMessageController;
+  String? examResult; // Will hold "PASS" or "FAIL"
+
 
   // Focus Nodes
   FocusNode examinationFocusNode;
@@ -1025,6 +1027,7 @@ class RequiredExaminations {
     required this.examDateController,
     required this.isNewController,
     required this.errorMessageController,
+    this.examResult,
     required this.examinationFocusNode,
     required this.examinationTypeIdFocusNode,
     required this.examinationGradeFocusNode,
@@ -1054,6 +1057,7 @@ class RequiredExaminations {
       isNewController: TextEditingController(
         text: (json['isNew']?.toString() ?? json['new']?.toString() ?? 'false'),
       ),
+      examResult: json['examResult'],
       errorMessageController: TextEditingController(text: json['errorMessage']?.toString() ?? ''),
       examinationFocusNode: FocusNode(),
       examinationTypeIdFocusNode: FocusNode(),
@@ -1072,6 +1076,7 @@ class RequiredExaminations {
       'examinationGrade': examinationGradeController.text,
       'minScore': minScoreController.text,
       'maxScore': maxScoreController.text,
+      'examResult': examResult ?? '',
       'examDate': examDateController.text,
       'isNew': isNewController.text,
       'new':isNewController.text,
