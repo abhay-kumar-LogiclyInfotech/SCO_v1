@@ -3418,4 +3418,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fail => 'راسب';
+
+  @override
+  String get medicalProfessionsProgram => 'برنامج المهن الطبية في دبي';
+
+  @override
+  String get postGraduationExternalMedicine => 'بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا';
 }

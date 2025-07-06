@@ -1135,7 +1135,9 @@
   "employmentStatusFieldTitle": "Employment Status",
   "enterValidGrade": "Please Enter Valid Grade",
   "pass": "Pass",
-  "fail": "Fail"
+  "fail": "Fail",
+  "medicalProfessionsProgram": "Medical Professions Program",
+  "postGraduationExternalMedicine": "Post Graduation External"
 
 
 

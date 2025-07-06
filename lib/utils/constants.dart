@@ -555,6 +555,12 @@ static String getNameOfScholarshipByConfigurationKey({required AppLocalizations 
      case 'SCODDSEXT':
        scholarshipName = localization.externalDoctors;
        break;
+     case 'SCOAHCPEXT':
+       scholarshipName = localization.medicalProfessionsProgram;
+       break;
+     case 'SCOPGRDMDEXT':
+       scholarshipName = localization.postGraduationExternalMedicine;
+       break;
    default:
          scholarshipName = '- -';
 

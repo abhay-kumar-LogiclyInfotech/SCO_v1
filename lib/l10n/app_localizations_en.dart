@@ -3418,4 +3418,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fail => 'Fail';
+
+  @override
+  String get medicalProfessionsProgram => 'Medical Professions Program';
+
+  @override
+  String get postGraduationExternalMedicine => 'Post Graduation External';
 }

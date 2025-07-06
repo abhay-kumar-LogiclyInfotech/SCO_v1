@@ -6916,6 +6916,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fail'**
   String get fail;
+
+  /// No description provided for @medicalProfessionsProgram.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Professions Program'**
+  String get medicalProfessionsProgram;
+
+  /// No description provided for @postGraduationExternalMedicine.
+  ///
+  /// In en, this message translates to:
+  /// **'Post Graduation External'**
+  String get postGraduationExternalMedicine;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
