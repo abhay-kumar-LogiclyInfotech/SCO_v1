@@ -622,6 +622,10 @@ bool shouldShowUniversityAndMajors(String academicCareer) {
   return academicCareer != 'SCHL';
 }
 
+bool shouldShowUniversityList({required String academicCareer, required String admitType}){
+  return academicCareer != 'HCHL' || admitType == 'UPP';
+}
+
 
 bool shouldShowRequiredExaminations(String academicCareer) {
   return !(academicCareer == 'SCHL' || academicCareer == 'HCHL');

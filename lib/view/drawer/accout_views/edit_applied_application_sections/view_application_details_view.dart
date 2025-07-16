@@ -724,6 +724,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
   /// Application Details View
 Widget _applicationDetails({required langProvider,required AppLocalizations localization}){
     final academicCareer = widget.applicationStatusDetails.acadCareer;
+    final admitType = widget.applicationStatusDetails.admitType;
     return Column(
       children: [
         CustomInformationContainer(
@@ -1171,7 +1172,7 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
             kFormHeight,
 
             /// University priority List
-            if(academicCareer != 'HCHL')
+            if(shouldShowUniversityList(academicCareer: academicCareer,admitType: admitType))
               CustomInformationContainer(title: academicCareer == 'DDS' ? localization.ddsWishlist : localization.universityWishList,
                 expandedContent:  Column(
                   children: [if (academicCareer != 'HCHL') Column(
