@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/resources/app_text_styles.dart';
@@ -58,13 +59,8 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// Accept Pledge
-            Text(
-              AppLocalizations.of(context)!.studentGuidelineTitle,
-              style: AppTextStyles.titleTextStyle(),
-            ),
-            Text(
-              getStudentGuidLine(),
-            ),
+            Text(AppLocalizations.of(context)!.studentGuidelineTitle, style: AppTextStyles.titleTextStyle(),),
+            (widget.selectedScholarship?.guidelines != null) ? Html(data: widget.selectedScholarship?.guidelines?.replaceAll("<br>", "<br><br>"),) : Text(getStudentGuidLine(),),
             kFormHeight,
             CustomGFCheckbox(
               value: widget.acceptStudentUndertaking,
@@ -73,7 +69,6 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
               textStyle: AppTextStyles.titleBoldTextStyle().copyWith(fontSize: 14,fontWeight: FontWeight.w600),
             ),
             showErrorText(widget.errorText),
-
             Padding(
               padding: EdgeInsets.all(kPadding),
               child: CustomButton(
@@ -84,7 +79,6 @@ class _StudentUndertakingViewState extends State<StudentUndertakingView> with Me
                   textDirection: getTextDirection(langProvider),
                   onTap: widget.onSubmit),
             ),
-
             const SizedBox(height: 100,),
           ],
         ),

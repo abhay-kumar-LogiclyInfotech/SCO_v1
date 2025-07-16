@@ -15,6 +15,7 @@ import '../../../../data/response/status.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/account/edit_application_sections_model/GetApplicationSectionsModel.dart';
 import '../../../../models/apply_scholarship/FillScholarshipFormModels.dart';
+import '../../../../models/splash/commonData_model.dart';
 import '../../../../resources/app_colors.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/utils.dart';
@@ -56,12 +57,38 @@ dynamic form ;
       _employmentHistoryList.clear();
       _employmentStatusItemsList.clear();
       final LanguageChangeViewModel langProvider = Provider.of(context,listen: false);
-      if (Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null) {
+
+
+      if (Constants.lovCodeMap['EMPLOYMENT_STATUS']?.values != null && widget.applicationStatusDetails.admitType != "AHC") {
         _employmentStatusItemsList = populateUniqueSimpleValuesFromLOV(
             menuItemsList: Constants.lovCodeMap['EMPLOYMENT_STATUS']!.values!,
             provider: langProvider,
             textColor: AppColors.scoButtonColor);
       }
+      /// for SCOAHCPEXT only yes no will be visible
+      if(widget.applicationStatusDetails.admitType == 'AHC'){
+        _employmentStatusItemsList = populateUniqueSimpleValuesFromLOV(menuItemsList: [
+          Values(
+            code: "E",
+            value: "Yes",
+            valueArabic: "يعمل حالياً",
+            required: null,
+            hide: false,
+            order: 1,
+          ),
+          Values(
+            code: "N",
+            value: "No",
+            valueArabic: "لا يعمل",
+            required: null,
+            hide: false,
+            order: 1,
+          ),
+        ], provider: langProvider,textColor: AppColors.scoButtonColor);
+      }
+
+
+
 
 
       /// Making api call to ps-application

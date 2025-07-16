@@ -51,49 +51,51 @@ dynamic getAllActiveScholarshipsModelToJson(
     json.encode(data.toJson());
 
 class GetAllActiveScholarshipsModel {
-  GetAllActiveScholarshipsModel(
-      {dynamic? acadLoadAppr,
-      dynamic? acadmicCareer,
-      dynamic? acadmicPlan,
-      dynamic? acadmicProgram,
-      dynamic? admApplicationCenter,
-      dynamic? admitTerm,
-      dynamic? admitType,
-      dynamic? approvedChecklistCode,
-      dynamic? campus,
-      dynamic? checklistCode,
-      dynamic? cohort,
-      dynamic? companyId,
-      dynamic? configurationId,
-      dynamic? configurationKey,
-      dynamic? configurationName,
-      dynamic? configurationNameEng,
-      dynamic? createDate,
-      dynamic draftEndDate,
-      dynamic? endDate,
-      dynamic? groupId,
-      dynamic? institution,
-      bool? is12ThRequired,
-      bool? isActive,
-      bool? isDraftSubmission,
-      bool? isRemoved,
-      bool? isSpecialCase,
-      dynamic lastPublishDate,
-      dynamic? modifiedDate,
-      dynamic? programAction,
-      dynamic? programStatus,
-      dynamic? scholarshipType,
-      dynamic? startDate,
-      dynamic? status,
-      dynamic? statusByUserId,
-      dynamic? statusByUserName,
-      dynamic? statusDate,
-      dynamic? successMessageArabic,
-      dynamic? successMessageEnglish,
-      dynamic? userId,
-      dynamic? userName,
-      dynamic? uuid,
-      String? majorWishListLovCode}) {
+  GetAllActiveScholarshipsModel({
+    dynamic? acadLoadAppr,
+    dynamic? acadmicCareer,
+    dynamic? acadmicPlan,
+    dynamic? acadmicProgram,
+    dynamic? admApplicationCenter,
+    dynamic? admitTerm,
+    dynamic? admitType,
+    dynamic? approvedChecklistCode,
+    dynamic? campus,
+    dynamic? checklistCode,
+    dynamic? cohort,
+    dynamic? companyId,
+    dynamic? configurationId,
+    dynamic? configurationKey,
+    dynamic? configurationName,
+    dynamic? configurationNameEng,
+    dynamic? createDate,
+    dynamic draftEndDate,
+    dynamic? endDate,
+    dynamic? groupId,
+    dynamic? institution,
+    bool? is12ThRequired,
+    bool? isActive,
+    bool? isDraftSubmission,
+    bool? isRemoved,
+    bool? isSpecialCase,
+    dynamic lastPublishDate,
+    dynamic? modifiedDate,
+    dynamic? programAction,
+    dynamic? programStatus,
+    dynamic? scholarshipType,
+    dynamic? startDate,
+    dynamic? status,
+    dynamic? statusByUserId,
+    dynamic? statusByUserName,
+    dynamic? statusDate,
+    dynamic? successMessageArabic,
+    dynamic? successMessageEnglish,
+    dynamic? userId,
+    dynamic? userName,
+    dynamic? uuid,
+    String? majorWishListLovCode,
+    String? guidelines,
+  }) {
     _acadLoadAppr = acadLoadAppr;
     _acadmicCareer = acadmicCareer;
     _acadmicPlan = acadmicPlan;
@@ -180,6 +182,7 @@ class GetAllActiveScholarshipsModel {
     _userName = json['userName'];
     _uuid = json['uuid'];
     majorWishListLovCode = json['majorWishListLovCode'];
+    guidelines = json['guidelines'];
   }
 
   dynamic? _acadLoadAppr;
@@ -267,52 +270,53 @@ class GetAllActiveScholarshipsModel {
     dynamic? userName,
     dynamic? uuid,
     String? majorWishListLovCode,
+    String? guidelines,
   }) =>
       GetAllActiveScholarshipsModel(
-          acadLoadAppr: acadLoadAppr ?? _acadLoadAppr,
-          acadmicCareer: acadmicCareer ?? _acadmicCareer,
-          acadmicPlan: acadmicPlan ?? _acadmicPlan,
-          acadmicProgram: acadmicProgram ?? _acadmicProgram,
-          admApplicationCenter: admApplicationCenter ?? _admApplicationCenter,
-          admitTerm: admitTerm ?? _admitTerm,
-          admitType: admitType ?? _admitType,
-          approvedChecklistCode:
-              approvedChecklistCode ?? _approvedChecklistCode,
-          campus: campus ?? _campus,
-          checklistCode: checklistCode ?? _checklistCode,
-          cohort: cohort ?? _cohort,
-          companyId: companyId ?? _companyId,
-          configurationId: configurationId ?? _configurationId,
-          configurationKey: configurationKey ?? _configurationKey,
-          configurationName: configurationName ?? _configurationName,
-          configurationNameEng: configurationNameEng ?? _configurationNameEng,
-          createDate: createDate ?? _createDate,
-          draftEndDate: draftEndDate ?? _draftEndDate,
-          endDate: endDate ?? _endDate,
-          groupId: groupId ?? _groupId,
-          institution: institution ?? _institution,
-          is12ThRequired: is12ThRequired ?? _is12ThRequired,
-          isActive: isActive ?? _isActive,
-          isDraftSubmission: isDraftSubmission ?? _isDraftSubmission,
-          isRemoved: isRemoved ?? _isRemoved,
-          isSpecialCase: isSpecialCase ?? _isSpecialCase,
-          lastPublishDate: lastPublishDate ?? _lastPublishDate,
-          modifiedDate: modifiedDate ?? _modifiedDate,
-          programAction: programAction ?? _programAction,
-          programStatus: programStatus ?? _programStatus,
-          scholarshipType: scholarshipType ?? _scholarshipType,
-          startDate: startDate ?? _startDate,
-          status: status ?? _status,
-          statusByUserId: statusByUserId ?? _statusByUserId,
-          statusByUserName: statusByUserName ?? _statusByUserName,
-          statusDate: statusDate ?? _statusDate,
-          successMessageArabic: successMessageArabic ?? _successMessageArabic,
-          successMessageEnglish:
-              successMessageEnglish ?? _successMessageEnglish,
-          userId: userId ?? _userId,
-          userName: userName ?? _userName,
-          uuid: uuid ?? _uuid,
-          majorWishListLovCode: majorWishListLovCode);
+        acadLoadAppr: acadLoadAppr ?? _acadLoadAppr,
+        acadmicCareer: acadmicCareer ?? _acadmicCareer,
+        acadmicPlan: acadmicPlan ?? _acadmicPlan,
+        acadmicProgram: acadmicProgram ?? _acadmicProgram,
+        admApplicationCenter: admApplicationCenter ?? _admApplicationCenter,
+        admitTerm: admitTerm ?? _admitTerm,
+        admitType: admitType ?? _admitType,
+        approvedChecklistCode: approvedChecklistCode ?? _approvedChecklistCode,
+        campus: campus ?? _campus,
+        checklistCode: checklistCode ?? _checklistCode,
+        cohort: cohort ?? _cohort,
+        companyId: companyId ?? _companyId,
+        configurationId: configurationId ?? _configurationId,
+        configurationKey: configurationKey ?? _configurationKey,
+        configurationName: configurationName ?? _configurationName,
+        configurationNameEng: configurationNameEng ?? _configurationNameEng,
+        createDate: createDate ?? _createDate,
+        draftEndDate: draftEndDate ?? _draftEndDate,
+        endDate: endDate ?? _endDate,
+        groupId: groupId ?? _groupId,
+        institution: institution ?? _institution,
+        is12ThRequired: is12ThRequired ?? _is12ThRequired,
+        isActive: isActive ?? _isActive,
+        isDraftSubmission: isDraftSubmission ?? _isDraftSubmission,
+        isRemoved: isRemoved ?? _isRemoved,
+        isSpecialCase: isSpecialCase ?? _isSpecialCase,
+        lastPublishDate: lastPublishDate ?? _lastPublishDate,
+        modifiedDate: modifiedDate ?? _modifiedDate,
+        programAction: programAction ?? _programAction,
+        programStatus: programStatus ?? _programStatus,
+        scholarshipType: scholarshipType ?? _scholarshipType,
+        startDate: startDate ?? _startDate,
+        status: status ?? _status,
+        statusByUserId: statusByUserId ?? _statusByUserId,
+        statusByUserName: statusByUserName ?? _statusByUserName,
+        statusDate: statusDate ?? _statusDate,
+        successMessageArabic: successMessageArabic ?? _successMessageArabic,
+        successMessageEnglish: successMessageEnglish ?? _successMessageEnglish,
+        userId: userId ?? _userId,
+        userName: userName ?? _userName,
+        uuid: uuid ?? _uuid,
+        majorWishListLovCode: majorWishListLovCode,
+        guidelines: guidelines,
+      );
 
   dynamic? get acadLoadAppr => _acadLoadAppr;
 
@@ -398,6 +402,7 @@ class GetAllActiveScholarshipsModel {
 
   /// new added codes
   String? majorWishListLovCode;
+  String? guidelines;
 
   Map<dynamic, dynamic> toJson() {
     final map = <dynamic, dynamic>{};
@@ -443,6 +448,7 @@ class GetAllActiveScholarshipsModel {
     map['userName'] = _userName;
     map['uuid'] = _uuid;
     map['majorWishListLovCode'] = majorWishListLovCode;
+    map['guidelines'] = guidelines;
     return map;
   }
 }

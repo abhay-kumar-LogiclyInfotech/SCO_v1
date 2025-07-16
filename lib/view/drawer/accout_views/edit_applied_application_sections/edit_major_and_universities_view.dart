@@ -313,11 +313,8 @@ class _EditMajorsAndUniversityViewState
   /// List to store UniversityPriority items
   final List<UniversityPriority> _universityPriorityList = [];
 
-  List<DropdownMenuItem> populateUniversitiesWishList(
-      UniversityPriority universityInfo)
+  List<DropdownMenuItem> populateUniversitiesWishList(UniversityPriority universityInfo)
   {
-
-
     final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
     final academicCareer = widget.applicationStatusDetails.acadCareer;
     final admitType = widget.applicationStatusDetails.admitType;
@@ -387,8 +384,7 @@ class _EditMajorsAndUniversityViewState
     /// Create a new UniversityPriority instance with only countryId set
     UniversityPriority newPriority = UniversityPriority(
       /// countryIdController: TextEditingController(text: _selectedScholarship?.acadmicCareer == 'UGRD' ? "ARE" : ''),
-      countryIdController:
-      TextEditingController(text: isStudyCountry ? "ARE" : ''),
+      countryIdController: TextEditingController(text: isStudyCountry ? "ARE" : ''),
       universityIdController: TextEditingController(),
       otherUniversityNameController: TextEditingController(),
       majorsController: TextEditingController(),
@@ -403,6 +399,10 @@ class _EditMajorsAndUniversityViewState
       majorsFocusNode: FocusNode(),
       otherMajorsFocusNode: FocusNode(),
       statusFocusNode: FocusNode(),
+      startDateController: TextEditingController(),
+      endDateController: TextEditingController(),
+      startDateFocusNode: FocusNode(),
+      endDateFocusNode: FocusNode(),
     );
 
     /// Add the new instance to the list
@@ -474,9 +474,7 @@ class _EditMajorsAndUniversityViewState
     return Column(
       children: [
         CustomInformationContainer(
-            title: academicCareer == 'PGRD'
-                ? localization.pgrdMajorWishlist
-                : localization.majorWishlist,
+            title: academicCareer == 'PGRD' ? localization.pgrdMajorWishlist : localization.majorWishlist,
             expandedContent:
 
                 sectionBackground(child: Column(

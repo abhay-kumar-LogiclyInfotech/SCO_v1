@@ -139,7 +139,6 @@ class _EditAddressesViewState extends State<EditAddressesView>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Building");
     final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomSimpleAppBar(

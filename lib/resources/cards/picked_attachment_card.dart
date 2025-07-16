@@ -112,8 +112,8 @@ class _PickedAttachmentCardState extends State<PickedAttachmentCard> with MediaQ
         case AttachmentType.request:
           await _fetchRequestFile();
           break;
-        default:
-          debugPrint("Unsupported attachment type.");
+        // default:
+          // debugPrint("Unsupported attachment type.");
       }
     } catch (e, stackTrace) {
       // Log the error and show user feedback

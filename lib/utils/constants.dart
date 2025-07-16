@@ -735,7 +735,7 @@ String getHighestQualification(
     log(jsonEncode(graduationRecords));
   }
 
-  debugPrint("Printing the Highest Level: $highestQualification");
+  // debugPrint("Printing the Highest Level: $highestQualification");
   return highestQualification;
 }
 

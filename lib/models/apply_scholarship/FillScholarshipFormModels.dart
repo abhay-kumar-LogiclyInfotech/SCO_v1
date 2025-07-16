@@ -1307,9 +1307,14 @@ class UniversityPriority {
   TextEditingController? sequenceNumberController;
 
 
+
   TextEditingController statusController;
   TextEditingController errorMessageController;
   TextEditingController isNewController;
+
+
+  TextEditingController startDateController;
+  TextEditingController endDateController;
 
   // Focus Nodes
   FocusNode countryIdFocusNode;
@@ -1319,6 +1324,12 @@ class UniversityPriority {
   FocusNode otherMajorsFocusNode;
   FocusNode statusFocusNode;
 
+
+  FocusNode startDateFocusNode;
+  FocusNode endDateFocusNode;
+
+
+
   // Error Text Variables
   String? countryIdError;
   String? universityIdError;
@@ -1327,6 +1338,8 @@ class UniversityPriority {
   String? otherMajorsError;
   String? statusError;
   String? errorMessageError;
+  String? startDateError;
+  String? endDateError;
 
 
   List<DropdownMenuItem>? universityDropdown;
@@ -1340,6 +1353,8 @@ class UniversityPriority {
     required this.otherMajorsController,
     required this.statusController,
     required this.errorMessageController,
+    required this.startDateController,
+    required this.endDateController,
     required this.isNewController,
     required this.countryIdFocusNode,
     required this.universityIdFocusNode,
@@ -1347,6 +1362,8 @@ class UniversityPriority {
     required this.majorsFocusNode,
     required this.otherMajorsFocusNode,
     required this.statusFocusNode,
+    required this.startDateFocusNode,
+    required this.endDateFocusNode,
     this.sequenceNumberController,
     this.countryIdError,
     this.universityIdError,
@@ -1374,12 +1391,22 @@ class UniversityPriority {
       sequenceNumberController: TextEditingController(text: json['sequenceNumber'] ?? ''),
 
 
+      startDateController: TextEditingController(text:  formatDateOnly(json['startDate'].toString()) ?? ''),
+      endDateController: TextEditingController(text: formatDateOnly(json['endDate'].toString()) ?? ''),
+
+
+
+
+
+
       countryIdFocusNode: FocusNode(),
       universityIdFocusNode: FocusNode(),
       otherUniversityNameFocusNode: FocusNode(),
       majorsFocusNode: FocusNode(),
       otherMajorsFocusNode: FocusNode(),
       statusFocusNode: FocusNode(),
+      startDateFocusNode: FocusNode(),
+      endDateFocusNode: FocusNode(),
     );
   }
 
@@ -1395,6 +1422,8 @@ class UniversityPriority {
       'errorMessage': errorMessageController.text,
       'isNew': isNewController.text,
       'new': isNewController.text,
+      'startDate': startDateController.text,
+      'endDate': endDateController.text,
     };
   }
   // To JSON
@@ -1408,6 +1437,8 @@ class UniversityPriority {
       'status': statusController.text,
       'errorMessage': errorMessageController.text,
       'sequenceNumber': sequenceNumberController?.text ?? '',
+      'startDate': startDateController.text,
+      'endDate': endDateController.text,
       'new': isNewController.text,
     };
   }

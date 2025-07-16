@@ -65,15 +65,7 @@ class ContactUsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // Debug print method
-  void debugPrintFields() {
-    debugPrint('Full Name: $_fullName');
-    debugPrint('Email: $_email');
-    debugPrint('Subject: $_subject');
-    debugPrint('Comment: $_comment');
-    debugPrint('Contact Us Type: $_contactUsType');
-    debugPrint('Phone Number: $_phoneNumber');
-  }
+
 
   //*------Accessing Api Services------*
 
@@ -96,7 +88,7 @@ class ContactUsViewModel with ChangeNotifier {
       _setContactUsResponse = ApiResponse.loading();
 
       //*-----printing the values:
-      // debugPrintFields();
+
 
       //*-----Create Headers-----*
       final headers = <String, String>{

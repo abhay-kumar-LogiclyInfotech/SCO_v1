@@ -10,7 +10,6 @@ class AppUrls {
   static const String _domainUrl = "https://stg.sco.ae/";
   static const String username = "liferay_access@sco.ae";
   static const String password = "India@1234";
-  static const String authKey = "bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=";
 
 
   ///-[displayStagingBanner] Set to `true` to show a red STAGING banner.
@@ -25,7 +24,9 @@ class AppUrls {
 
 
   static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
-  static const String basicAuth = 'Basic $authKey';
+  static String basicAuth = basicAuthWithUsernamePassword;
+  // static const String authKey = "bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=";
+  // static const String basicAuth = 'Basic $authKey';
 
   static const String _commonBaseUrl = "${_domainUrl}api/";
   static const String _baseUrl = "${_domainUrl}o/mopa-sco-api/";
