@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -22,6 +25,10 @@ class _SplashViewState extends State<SplashView> {
     _splashServices.checkUserAuthentication(context);
     super.initState();
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {

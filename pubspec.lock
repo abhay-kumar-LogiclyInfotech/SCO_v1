@@ -45,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: async
-      sha256: d2872f9c19731c2e5f10444b14686eb7cc85c76274bd6c16e1816bff9a3bab63
+      sha256: "758e6d74e971c3e5aceb4110bfd6698efc7f501675bcfe0c775459a8140750eb"
       url: "https://pub.dev"
     source: hosted
-    version: "2.12.0"
+    version: "2.13.0"
   audio_session:
     dependency: transitive
     description:
@@ -285,10 +285,10 @@ packages:
     dependency: "direct main"
     description:
       name: dart_format
-      sha256: f348022f5f45de165226b947509c90e2386363fbde420ca513641599b3fe476b
+      sha256: "598035c7eab4c5ace67ca1f8862b7c3342fa7129ff3a132e31fda4e587bcfe74"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.17"
+    version: "0.0.4"
   dart_style:
     dependency: transitive
     description:
@@ -365,18 +365,18 @@ packages:
     dependency: transitive
     description:
       name: eggnstone_dart
-      sha256: "200e53b784fb37bb29f4ae623ec9965007ecd9cc6d78339c14b300287c847199"
+      sha256: c3477847864c97f11d43359595f2453cd7b731618e0f556a108f544bfe93ff8a
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.4.1"
   fake_async:
     dependency: transitive
     description:
       name: fake_async
-      sha256: "6a95e56b2449df2273fd8c45a662d6947ce1ebb7aafe80e550a3f68297f3cacc"
+      sha256: "5368f224a74523e8d2e7399ea1638b37aecfca824a3cc4dfdf77bf1fa905ac44"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.2"
+    version: "1.3.3"
   ffi:
     dependency: transitive
     description:
@@ -515,6 +515,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.20"
+  flutter_root_detection_plus:
+    dependency: "direct main"
+    description:
+      name: flutter_root_detection_plus
+      sha256: "16cf4bb4f6f2671a68609231744ccf66010866096fd335de39567d3ab9da0a31"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -641,10 +649,10 @@ packages:
     dependency: transitive
     description:
       name: freezed_annotation
-      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
+      sha256: "7294967ff0a6d98638e7acb774aac3af2550777accd8149c90af5b014e6d44d8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.1"
+    version: "3.1.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -889,10 +897,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
+      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.19.0"
+    version: "0.20.2"
   intl_phone_field:
     dependency: "direct main"
     description:
@@ -953,10 +961,10 @@ packages:
     dependency: transitive
     description:
       name: leak_tracker
-      sha256: c35baad643ba394b40aac41080300150a4f08fd0fd6a10378f8f7c6bc161acec
+      sha256: "6bb818ecbdffe216e81182c2f0714a2e62b593f4a4f13098713ff1685dfb6ab0"
       url: "https://pub.dev"
     source: hosted
-    version: "10.0.8"
+    version: "10.0.9"
   leak_tracker_flutter_testing:
     dependency: transitive
     description:
@@ -1550,18 +1558,18 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_charts
-      sha256: "0d7fc75b27269674925732f95ad7cc055a39fa566b28598ce6b1e1cfcafa9faa"
+      sha256: f0487a6315e72cca6726cba1d6a3ca8dd5701f45ec91f2d0e89d02034daa809e
       url: "https://pub.dev"
     source: hosted
-    version: "26.1.38"
+    version: "30.1.40"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "2cd3a1c59bd9c2863eee96cc5400429ecc7b42cd1e7379f3eb5ccd9fc2e9306b"
+      sha256: "27cbeb650b780d1f3ab254b26ac64e2b06e92e2d64349537b0db3f714ff1e962"
       url: "https://pub.dev"
     source: hosted
-    version: "26.1.38"
+    version: "30.1.40"
   synchronized:
     dependency: transitive
     description:
@@ -1766,10 +1774,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "0968250880a6c5fe7edc067ed0a13d4bae1577fe2771dcf3010d52c4a9d3ca14"
+      sha256: ddfa8d30d89985b96407efce8acbdd124701f96741f2d981ca860662f1c0dc02
       url: "https://pub.dev"
     source: hosted
-    version: "14.3.1"
+    version: "15.0.0"
   wakelock_plus:
     dependency: transitive
     description:
@@ -1891,5 +1899,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.7.0-0 <4.0.0"
+  dart: ">=3.8.0 <4.0.0"
   flutter: ">=3.24.0"

@@ -62,7 +62,8 @@ import 'app_localizations_en.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -70,7 +71,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,7 +84,8 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -897,13 +900,15 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Information Collection and Disclosure Policies'**
-  String get privacy_policy_heading_information_collection_and_disclosure_policies;
+  String
+      get privacy_policy_heading_information_collection_and_disclosure_policies;
 
   /// No description provided for @privacy_policy_description_information_collection_and_disclosure_policies.
   ///
   /// In en, this message translates to:
   /// **'The Scholarship Office collects personal information such as name, address, and email when provided voluntarily by the user. The office may also collect additional information such as address, date of birth, and other personal details when users create an account or request services online. Additionally, the Scholarship Office\'s web service programs automatically collect statistical information about user visits, such as pages visited and browsers used, without linking this information to individual users (see information on \'cookies\' – the pages visited by the user).'**
-  String get privacy_policy_description_information_collection_and_disclosure_policies;
+  String
+      get privacy_policy_description_information_collection_and_disclosure_policies;
 
   /// No description provided for @privacy_policy_heading_information_usage_and_disclosure_policies.
   ///
@@ -915,7 +920,8 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'The Scholarship Office may use or disclose user information and other personal data collected from the office and its affiliates for functions such as user account services, report preparation, and other user activities.'**
-  String get privacy_policy_description_information_usage_and_disclosure_policies;
+  String
+      get privacy_policy_description_information_usage_and_disclosure_policies;
 
   /// No description provided for @privacy_policy_heading_cookies.
   ///
@@ -6930,7 +6936,8 @@ abstract class AppLocalizations {
   String get postGraduationExternalMedicine;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -6939,25 +6946,25 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['ar', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ar': return AppLocalizationsAr();
-    case 'en': return AppLocalizationsEn();
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'en':
+      return AppLocalizationsEn();
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

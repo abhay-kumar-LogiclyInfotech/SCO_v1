@@ -29,8 +29,6 @@ class NavigationServices {
     "/changePasswordView": (context) => const ChangePasswordView(),
     "/forgotPasswordView": (context) => const ForgotPasswordView(),
     "/FaqView": (context) => const FaqView(),
-
-    // "/aBriefAboutScoView": (context) => const ABriefAboutScoView(),
     "/scoPrograms": (context) => const ScoPrograms(),
     "/updateSecurityQuestionView": (context) =>  UpdateSecurityQuestionView(),
     "/mainView": (context) => const MainView(),
@@ -72,4 +70,8 @@ class NavigationServices {
   void goBackUntilFirstScreen() {
     _navigationStateKey.currentState?.popUntil((route) => route.isFirst);
   }
+
+  void clearStackAndPush(dynamic route){
+    _navigationStateKey.currentState?.pushAndRemoveUntil(route, (value)=>false);
+}
 }
