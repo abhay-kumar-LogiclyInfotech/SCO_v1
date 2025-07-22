@@ -39,7 +39,6 @@ class SecurityView extends StatefulWidget {
             devMode: devMode,
           ),
         ),
-        // (route) => false,
       );
     }
   }
@@ -48,8 +47,7 @@ class SecurityView extends StatefulWidget {
   State<SecurityView> createState() => _SecurityViewState();
 }
 
-class _SecurityViewState extends State<SecurityView>
-    with SingleTickerProviderStateMixin {
+class _SecurityViewState extends State<SecurityView> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _checking = true;
 
@@ -181,7 +179,7 @@ class _SecurityTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: iconColor!, width: 1.5),
+        border: Border.all(color: iconColor, width: 1.5),
       ),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       child: Row(
