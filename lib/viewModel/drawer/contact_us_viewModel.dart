@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/models/drawer/contact_us_model.dart';
@@ -96,17 +97,17 @@ class ContactUsViewModel with ChangeNotifier {
         'authorization': AppUrls.basicAuth
       };
       //*-----Create fields-----*
-      final fields = <String, String>{
+      final data = FormData.fromMap(<String, String>{
         'fullName': _fullName,
         'email': _email,
         'subject': _subject,
         'comment': _comment,
         'contactUsType': _contactUsType,
         'phoneNumber': _phoneNumber
-      };
+      });
 
       //*-----Calling Api Start-----*
-      final response = await _drawerRepository.contactUs(headers: headers, fields: fields);
+      final response = await _drawerRepository.contactUs(headers: headers, data: data);
 
       //*-----Calling Api End-----*
 

@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http_certificate_pinning/http_certificate_pinning.dart';
 import 'package:logger/logger.dart';
 
 import '../../app_exceptions.dart';
@@ -24,7 +27,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
         logger.d('Response Data: ${response.data}');
         return handler.next(response);
       },
-      onError: (DioError e, handler) {
+      onError: (DioException e, handler) {
         logger.e('Error: ${e.message}');
         if (e.response != null) {
           logger.e('Error Response Status: ${e.response?.statusCode}');
@@ -33,7 +36,40 @@ class DioNetworkApiServices extends DioBaseApiServices {
         return handler.next(e);
       },
     ));
+
+
+
+    _dio.interceptors.add(CertificatePinningInterceptor(allowedSHAFingerprints: ["512382b53ff242ecec47530c17a443706a0e09f532a1b036d0c745aeb2bda0a0"]));
+
+
+    String proxy = Platform.isAndroid ? '192.168.213.118:9090' : '192.168.213.118:9090';
+
+
+    _dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () {
+        final client = HttpClient();
+        // If you intend to use a proxy, you can keep this.
+        // However, if the proxy tries to intercept SSL, the connection will fail
+        // because of the certificate pinning (assuming you remove badCertificateCallback).
+        client.findProxy = (uri) {
+          return 'PROXY $proxy';
+        };
+        // *** DO NOT ADD client.badCertificateCallback = (X509Certificate cert, String host, int port) => true; ***
+        return client;
+      },
+      // This validateCertificate callback for IOHttpClientAdapter is generally
+      // for low-level custom validation. For standard pinning, the
+      // CertificatePinningInterceptor is more suitable.
+      // If you're relying on the CertificatePinningInterceptor, you can often
+      // leave this as true or remove it if not needed for other custom logic.
+      validateCertificate: (cert, host, port) {
+        return true;
+      },
+    );
+
   }
+
+
 
   @override
   Future<dynamic> dioGetApiService({
@@ -52,7 +88,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
           },
         ),
         queryParameters: queryParams,
-      );
+      ).timeout(const Duration(minutes: 5));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -73,7 +109,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
           headers: headers,
           responseType: ResponseType.json,
         ),
-      );
+      ).timeout(const Duration(minutes: 2));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -94,7 +130,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
           headers: headers,
           responseType: ResponseType.json,
         ),
-      );
+      ).timeout(const Duration(minutes: 2));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -115,7 +151,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
           headers: headers,
           responseType: ResponseType.json,
         ),
-      );
+      ).timeout(const Duration(minutes: 2));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -135,7 +171,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
           headers: headers,
           responseType: ResponseType.json,
         ),
-      );
+      ).timeout(const Duration(minutes: 2));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -158,7 +194,8 @@ class DioNetworkApiServices extends DioBaseApiServices {
           method: method,
           responseType: ResponseType.json,
         ),
-      );
+      ).timeout(const Duration(minutes: 2));
+      if(kDebugMode){debugPrint(response.statusCode.toString());}
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);

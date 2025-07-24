@@ -186,9 +186,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
 
                                       CustomDropdown(
                                         textDirection: textDirection,
-                                        menuItemsList: populateAcademicCareer(menuItemsList:
-
-                                            element['code'] == 'INT' ? internalScholarshipMenuItemList! : element['code'] == 'EXT' ? externalScholarshipMenuItemList! : doctorScholarshipMenuItemList!  , provider: Provider.of<LanguageChangeViewModel>(context)),
+                                        menuItemsList: populateAcademicCareer(menuItemsList: element['code'] == 'INT' ? internalScholarshipMenuItemList ?? [] : element['code'] == 'EXT' ? externalScholarshipMenuItemList ?? [] : doctorScholarshipMenuItemList ?? []  , provider: Provider.of<LanguageChangeViewModel>(context)),
                                         currentFocusNode: _requestTypeFocusNode,
                                         hintText: localization.select,
                                         textColor: AppColors.scoButtonColor,

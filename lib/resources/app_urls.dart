@@ -92,9 +92,8 @@ class AppUrls {
   // Update profile image size must be less then 200kb
   static String get updateProfilePicture   => "${_domainUrl}api/jsonws/userext.userextension/update-user-portrait";
 
-
   ///  DECREASE NOTIFICATIONS COUNT
-static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
+  static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
 
 
 

@@ -1,4 +1,3 @@
-import 'package:sco_v1/data/network/BaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
 import 'package:sco_v1/models/account/GetBase64StringModel.dart';
@@ -26,7 +25,6 @@ import 'package:sco_v1/models/services/UpdateRequestModel.dart';
 import 'package:sco_v1/models/services/notes_models/GetSpecificNoteDetailsModel.dart';
 import 'package:sco_v1/models/services/notes_models/UploadAttachmentToNoteModel.dart';
 
-import '../../data/network/NetworkApiServices.dart';
 import '../../models/account/CreateUpdateEmploymentStatusModel.dart';
 import '../../models/account/personal_details/PersonalDetailsModel.dart';
 import '../../models/apply_scholarship/AttachFileModel.dart';
@@ -37,12 +35,11 @@ import '../../resources/app_urls.dart';
 import '../../utils/constants.dart';
 
 class HomeRepository {
-  final BaseApiServices _apiServices = NetworkApiServices();
   final DioBaseApiServices _dioBaseApiServices = DioNetworkApiServices();
 
   //*------Home Slider Method-------*
   Future<List<HomeSliderModel>> homeSlider({required dynamic headers}) async {
-    dynamic response = await _apiServices.getGetApiServices(
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
       url: AppUrls.homeSlider,
       headers: headers,
     );
@@ -393,7 +390,7 @@ class HomeRepository {
   //*------Faq's API method------*/
   Future<VisionAndMissionModel> getPageContentByUrl(
       {required dynamic headers, required dynamic body}) async {
-    dynamic response = await _apiServices.getPostApiServices(
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
       url: AppUrls.getPageContentByUrl,
       headers: headers,
       body: body,
@@ -458,8 +455,7 @@ class HomeRepository {
     final List<GetAllNotificationsModel> listOfNotifications = [];
 
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:
-          '${AppUrls.commonBaseUrl}jsonws/mopanotification.mopanotification/get-all-notification-for-user/user-id/$userId',
+      url: '${AppUrls.commonBaseUrl}jsonws/mopanotification.mopanotification/get-all-notification-for-user/user-id/$userId',
       headers: headers,
     );
 
@@ -524,7 +520,8 @@ class HomeRepository {
       {required dynamic body,
       required String userId,
       required bool isUpdating,
-      required dynamic headers}) async {
+      required dynamic headers}) async
+  {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
         // https://stg.sco.ae/o/mopa-sco-api/e-services/985182/upload-file
 // https://stg.sco.ae/o/mopa-sco-api/e-services/985182/update-file

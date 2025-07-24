@@ -73,6 +73,7 @@ dependencies:
   cached_network_image: ^3.4.1
   visibility_detector:
   flutter_root_detection_plus: ^0.0.1
+  http_certificate_pinning: ^3.0.1
 
 
 
