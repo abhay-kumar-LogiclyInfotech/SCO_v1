@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http_certificate_pinning/http_certificate_pinning.dart';
 import 'package:logger/logger.dart';
 
+import '../../../resources/app_urls.dart';
 import '../../app_exceptions.dart';
 import 'DioBaseApiServices.dart';
 
@@ -40,22 +41,22 @@ class DioNetworkApiServices extends DioBaseApiServices {
 
 
     /// ssl pinning
-    _dio.interceptors.add(CertificatePinningInterceptor(allowedSHAFingerprints: ["512382b53ff242ecec47530c17a443706a0e09f532a1b036d0c745aeb2bda0a0"]));
+    _dio.interceptors.add(CertificatePinningInterceptor(allowedSHAFingerprints: [AppUrls.sha256SslFingerPrints]));
 
 
     /// ########################### To intercept traffic on Proxy Man using proxy ip and port ###########################
-    String proxy = Platform.isAndroid ? '192.168.213.118:9090' : '192.168.213.118:9090';
+    // String proxy = Platform.isAndroid ? '172.29.236.246:9090' : '172.29.236.246:9090';
     _dio.httpClientAdapter = IOHttpClientAdapter(
       createHttpClient: () {
         final client = HttpClient();
         // If you intend to use a proxy, you can keep this.
         // However, if the proxy tries to intercept SSL, the connection will fail
         // because of the certificate pinning (assuming you remove badCertificateCallback).
-        if(kDebugMode){
-          client.findProxy = (uri) {
-            return 'PROXY $proxy';
-          };
-        }
+        // if(kDebugMode){
+        //   client.findProxy = (uri) {
+        //     return 'PROXY $proxy';
+        //   };
+        // }
         // *** DO NOT ADD client.badCertificateCallback = (X509Certificate cert, String host, int port) => true; ***
         return client;
       },

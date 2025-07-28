@@ -60,7 +60,7 @@ class GetPageContentByUrlViewModel with ChangeNotifier {
       //*-----Calling Api Start-----*
       final response = await _homeRepository.getPageContentByUrl(headers: headers, body: body);
       // log(response.content!);
-      
+
       // log(cleanDraftXmlToJson(response.content!));
 
       final jsonOutput = xmlToJson(response.content ?? '');

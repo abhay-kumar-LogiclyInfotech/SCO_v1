@@ -108,21 +108,18 @@ class HomeRepository {
   Future<FindDraftByConfigurationKeyModel> findDraftByDraftId(
       {required dynamic headers, required dynamic draftId}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:
-          "${AppUrls.commonBaseUrl}jsonws/application.applicationdetails/fetch-by-application-id/application-no/$draftId",
+      url: AppUrls.getDraftApplicationByDraftId + draftId,
       headers: headers,
     );
     return FindDraftByConfigurationKeyModel.fromJson(response);
   }
 
   // *------ Fetch submitted application details By application number ------*/
-  Future<FindDraftByConfigurationKeyModel>
-      getSubmittedApplicationDetailsByApplicationNumber(
+  Future<FindDraftByConfigurationKeyModel> getSubmittedApplicationDetailsByApplicationNumber(
           {required dynamic headers,
           required dynamic applicationNumber}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:
-          "${AppUrls.commonBaseUrl}jsonws/application.applicationdetails/find-by-application-number/application-no/$applicationNumber",
+      url:  AppUrls.getSubmittedApplicationDetailsByApplicationNumber + applicationNumber,
       headers: headers,
     );
     return FindDraftByConfigurationKeyModel.fromJson(response);
@@ -356,7 +353,7 @@ class HomeRepository {
   Future<GetProfilePictureUrlModel> getProfilePictureUrl(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/$userId',
+      url: AppUrls.getProfilePictureUrl + userId,
       headers: headers,
     );
     return GetProfilePictureUrlModel.fromJson(response);
@@ -379,15 +376,13 @@ class HomeRepository {
   Future<dynamic> getNotificationsCount(
       {required String userEmiratesId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:
-          '${AppUrls.commonBaseUrl}jsonws/mopanotification.mopanotification/get-notification-new-count-for-user/user-name/$userEmiratesId',
+      url: AppUrls.getNotificationsCount + userEmiratesId,
       headers: headers,
     );
     return response;
   }
 
   /// GET PAGE CONTENT METHODS
-  //*------Faq's API method------*/
   Future<VisionAndMissionModel> getPageContentByUrl(
       {required dynamic headers, required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
@@ -455,7 +450,7 @@ class HomeRepository {
     final List<GetAllNotificationsModel> listOfNotifications = [];
 
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.commonBaseUrl}jsonws/mopanotification.mopanotification/get-all-notification-for-user/user-id/$userId',
+      url: AppUrls.getAllNotifications + userId,
       headers: headers,
     );
 

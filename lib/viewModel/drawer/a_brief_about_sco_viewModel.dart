@@ -66,8 +66,7 @@ class ABriefAboutScoViewModel with ChangeNotifier {
       final body = <String, String>{"pageUrl": "/web/about-sco/a-brief-about-the-office"};
 
       //*-----Calling Api Start-----*
-      final response =
-          await _drawerRepository.aBriefAboutSco(headers: headers, body: body);
+      final response = await _drawerRepository.aBriefAboutSco(headers: headers, body: body);
       //*-----Calling Api End-----*
 
       //*-----Parse the Content from response-----*

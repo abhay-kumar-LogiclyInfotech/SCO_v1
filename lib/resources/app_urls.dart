@@ -10,6 +10,9 @@ class AppUrls {
   static const String _domainUrl = "https://stg.sco.ae/";
   static const String username = "liferay_access@sco.ae";
   static const String password = "India@1234";
+  static const String _stagingSha256SslFingerPrints = "512382b53ff242ecec47530c17a443706a0e09f532a1b036d0c745aeb2bda0a0";
+  static const String _productionSha256SslFingerPrints = "";
+
 
 
   ///-[displayStagingBanner] Set to `true` to show a red STAGING banner.
@@ -22,9 +25,14 @@ class AppUrls {
 
 
 
+  /// SSL Fingerprints used for ssl pinning
+  static  String sha256SslFingerPrints = displayStagingBanner ? _stagingSha256SslFingerPrints : _productionSha256SslFingerPrints;
 
   static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
   static String basicAuth = basicAuthWithUsernamePassword;
+
+
+
   // static const String authKey = "bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=";
   // static const String basicAuth = 'Basic $authKey';
 
@@ -66,11 +74,6 @@ class AppUrls {
   //individual image endpoint
   static String get individualImage => "${_baseUrl}common-data/get-image-url/";
 
-
-  //A Brief About Sco endPoint
-  static String get aBriefAboutSco => "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
-
-
   //Home Slider EndPoint endPoint
   static String get homeSlider => "${_commonBaseUrl}jsonws/journal.journalarticle/get-articles/group-id/20126/folder-id/79082";
 
@@ -92,8 +95,23 @@ class AppUrls {
   // Update profile image size must be less then 200kb
   static String get updateProfilePicture   => "${_domainUrl}api/jsonws/userext.userextension/update-user-portrait";
 
-  ///  DECREASE NOTIFICATIONS COUNT
+  ///  Decrease notifications count or mark notification as read
   static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
+
+  /// get draft application
+  static String get getDraftApplicationByDraftId => "${_commonBaseUrl}jsonws/application.applicationdetails/fetch-by-application-id/application-no/";
+
+  /// get submitted application by application number
+  static String get getSubmittedApplicationDetailsByApplicationNumber => "${_commonBaseUrl}jsonws/application.applicationdetails/find-by-application-number/application-no/";
+
+  /// get profile picture url
+  static String get getProfilePictureUrl => "${_commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/";
+
+  /// get notification count
+  static String get getNotificationsCount => "${_commonBaseUrl}jsonws/mopanotification.mopanotification/get-notification-new-count-for-user/user-name/";
+
+  /// get all notifications
+  static String get getAllNotifications => "${_commonBaseUrl}jsonws/mopanotification.mopanotification/get-all-notification-for-user/user-id/";
 
 
 
