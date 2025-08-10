@@ -46,3 +46,4 @@ export 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/get_all_not
 export 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/get_specific_note_details_view_Model.dart';
 export 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/upload_attachment_to_note_viewModel.dart';
 export 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
+export 'splash_viewModels/splash_view_model.dart';

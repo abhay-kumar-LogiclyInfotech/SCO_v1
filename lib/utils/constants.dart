@@ -11,6 +11,12 @@ import '../models/apply_scholarship/FillScholarshipFormModels.dart';
 class Constants {
 
 
+
+
+
+
+
+
   static Map<String, Response> lovCodeMap = {};
 
   static RegExp get emiratesIdRegex => RegExp(r'\b784-[0-9]{4}-[0-9]{7}-[0-9]{1}\b');
@@ -742,7 +748,6 @@ String getHighestQualification(
   // debugPrint("Printing the Highest Level: $highestQualification");
   return highestQualification;
 }
-
 
 
 

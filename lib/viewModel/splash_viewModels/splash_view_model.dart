@@ -2,46 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
-import 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
+import 'package:sco_v1/viewModel/open_authorization/open_authorization_view_model.dart';
 
 import '../../models/splash/commonData_model.dart';
 import '../../utils/constants.dart';
-import '../drawer/a_brief_about_sco_viewModel.dart';
-import '../drawer/news_and_events_viewModel.dart';
-import '../language_change_ViewModel.dart';
-import 'auth_services.dart';
-import 'navigation_services.dart';
+import '../services/auth_services.dart';
+import '../view_models.dart';
 
 
-class SplashServices {
+class SplashViewModel extends ChangeNotifier {
   late NavigationServices _navigationServices;
   late AuthService _authService;
+  final GetIt getIt = GetIt.instance;
 
-  SplashServices() {
-    final GetIt getIt = GetIt.instance;
+  SplashViewModel() {
     _navigationServices = getIt.get<NavigationServices>();
     _authService = getIt.get<AuthService>();
   }
 
   Future<void> checkUserAuthentication(BuildContext context) async {
-    //*------Making call to simple Apis--------*
-    Future<void> callBasicApis() async {
-      //*------Api call for SCO About Us-------*/
-      // Initialize data after widget build phase:
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-
-      });
-
-    }
 
     final bool isLoggedInKey = await _authService.isLoggedIn();
     final int counter = await _authService.getCounter();
 
+
+    /// First We require token for common api calls
+    await context.read<OpenAuthorizationViewModel>().getToken(grantType: GrantType.password);
+
+
     // This is for LOV's
-    final provider = context.read<CommonDataViewModel>();
+    final commonDataProvider = context.read<CommonDataViewModel>();
 
     bool isDataStored = HiveManager.isDataStored();
-    // debugPrint("Common Data Already Stored: ${isDataStored.toString()}");
     if (isLoggedInKey && isDataStored) {
       if (counter < 20) {
         final response = HiveManager.getStoredData();
@@ -54,13 +46,11 @@ class SplashServices {
           // debugPrint('Data stored');
         }
         await _authService.incrementCounter();
-        await callBasicApis();
         _navigationServices.pushReplacementNamed('/mainView');
       } else {
         await _authService.clearCounter();
-        bool commonDataFetched = await provider.fetchCommonData();
+        bool commonDataFetched = await commonDataProvider.fetchCommonData();
         if (commonDataFetched && HiveManager.isDataStored()) {
-          await callBasicApis();
           _navigationServices.pushReplacementNamed('/mainView');
         }
       }
@@ -76,15 +66,11 @@ class SplashServices {
           // debugPrint('Data stored');
         }
         await _authService.incrementCounter();
-        await callBasicApis();
-        // _navigationServices.pushReplacementNamed('/mainView');
         _navigationServices.pushReplacementNamed('/loginView');
       }
       else {
-        bool commonDataFetched = await provider.fetchCommonData();
+        bool commonDataFetched = await commonDataProvider.fetchCommonData();
         if (commonDataFetched) {
-          await callBasicApis();
-          // _navigationServices.pushReplacementNamed('/mainView');
           _navigationServices.pushReplacementNamed('/loginView');
         }
       }

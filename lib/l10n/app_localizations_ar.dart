@@ -443,12 +443,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String
-  get privacy_policy_heading_information_collection_and_disclosure_policies =>
-      'السياسات المرتبطة بجمع المعلومات والكشف عنها';
+      get privacy_policy_heading_information_collection_and_disclosure_policies =>
+          'السياسات المرتبطة بجمع المعلومات والكشف عنها';
 
   @override
-  String
-  get privacy_policy_description_information_collection_and_disclosure_policies =>
+  String get privacy_policy_description_information_collection_and_disclosure_policies =>
       'يجمع مكتب البعثات الدراسية المعلومات الشخصية – مثل: الاسم والعنوان والبريد الإلكتروني – عندما يوفرها المستخدم بإرادته لها، كما يجوز لمكتب البعثات الدراسية أن يجمع معلومات أخرى يقدّمها المستخدمون، مثل: العنوان وتاريخ الميلاد، وغيرها من المعلومات الشخصية، التي يمكنها تحديد الهوية عندما ينشئ المستخدم حسابا أو يطلب الخدمة على الإنترنت. ويجمع كذلك برامج \'مزوّد الويب\' الخاصة بمكتب البعثات الدراسية على نحو تلقائي المعلومات الإحصائية حول زيارات المستخدمين، مثل: الصفحات التي يزورونها، وبرامج المستعرض المستخدمة لزيارة موقعنا، ولا يرتبط أيّ من هذه المعلومات بالمستخدم باعتباره فردا (راجع المعلومات حول \'الكوكيز\' – ملف الصفحات التي زارها المستخدم).';
 
   @override
@@ -456,8 +455,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'السياسات المتعلقة باستخدام المعلومات والكشف عنها';
 
   @override
-  String
-  get privacy_policy_description_information_usage_and_disclosure_policies =>
+  String get privacy_policy_description_information_usage_and_disclosure_policies =>
       'يحقّ لمكتب البعثات الدراسية أن يستخدم معلومات المستخدمين أو يكشف عنها، وعن غيرها من المعلومات الشخصية التي جمعها من مكتب البعثات الدراسية والجهات التابعة له، التي تؤدي وظائف، مثل: خدمة حسابات المستخدمين، وتحضير التقارير، وغير ذلك من أنشطة المستخدمين.';
 
   @override

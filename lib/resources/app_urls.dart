@@ -10,8 +10,7 @@ class AppUrls {
   static const String _domainUrl = "https://stg.sco.ae/";
   static const String username = "liferay_access@sco.ae";
   static const String password = "India@1234";
-  static const String _stagingSha256SslFingerPrints = "512382b53ff242ecec47530c17a443706a0e09f532a1b036d0c745aeb2bda0a0";
-  static const String _productionSha256SslFingerPrints = "";
+
 
 
 
@@ -25,8 +24,6 @@ class AppUrls {
 
 
 
-  /// SSL Fingerprints used for ssl pinning
-  static  String sha256SslFingerPrints = displayStagingBanner ? _stagingSha256SslFingerPrints : _productionSha256SslFingerPrints;
 
   static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
   static String basicAuth = basicAuthWithUsernamePassword;
@@ -46,6 +43,8 @@ class AppUrls {
   // Getting common base URL
   static const String commonBaseUrl = _commonBaseUrl;
 
+
+  static String get openAuthToken => "${_baseUrl}sco-oauth/token";
 
   // Static getter for common data endpoint
   static String get commonData => "${_baseUrl}common-data/list-of-values-data";

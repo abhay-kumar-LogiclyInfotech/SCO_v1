@@ -1,29 +1,23 @@
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:sco_v1/models/authentication/login_model.dart';
 
 import '../../data/response/ApiResponse.dart';
 import '../../hive/hive_manager.dart';
 import '../../repositories/auth_repo/auth_repository.dart';
-import '../../utils/constants.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
 import '../services/auth_services.dart';
-import '../services/navigation_services.dart';
 import '../../l10n/app_localizations.dart';
 
-import '../../resources/app_urls.dart';
 
 class LoginViewModel with ChangeNotifier {
   late AlertServices _alertServices;
-  late NavigationServices _navigationServices;
   late AuthService _authService;
 
   LoginViewModel() {
     final GetIt getIt = GetIt.instance;
     _alertServices = getIt.get<AlertServices>();
-    _navigationServices = getIt.get<NavigationServices>();
     _authService = getIt.get<AuthService>();
 
   }
@@ -67,8 +61,7 @@ class LoginViewModel with ChangeNotifier {
   }
 
   //*------Accessing Api Services------*
-  final AuthenticationRepository _authenticationRepository =
-      AuthenticationRepository();
+  final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
 
   ApiResponse<LoginModel> _loginResponse = ApiResponse.none();
 
@@ -96,10 +89,7 @@ class LoginViewModel with ChangeNotifier {
 
       //*-----Create Headers Start-----*
 
-      final headers = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
-      };
+      final headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',};
       //*-----Create Headers End-----*
 
       //*-----Create Body Start----*
@@ -110,14 +100,11 @@ class LoginViewModel with ChangeNotifier {
       };
       // *-----Create Body End-----*
 
-      //*-----Calling Api Start-----*
       final response = await _authenticationRepository.login(
         headers: headers,
         body: body,
       );
-      //*-----Calling Api End-----*
 
-      _setResponse = ApiResponse.completed(response);
 
       final data = response.data!;
       final userData = response.data!.user!;
@@ -127,9 +114,7 @@ class LoginViewModel with ChangeNotifier {
         await  HiveManager.storeEmiratesId(userData.emirateId.toString().replaceAll('-', ''));
         await HiveManager.storeName(
             [
-              userData.firstName?.trim() ?? '',  // Trim and handle null
-              // userData.middleName?.trim() ?? '',
-              // userData.middleName2?.trim() ?? '',
+              userData.firstName?.trim() ?? '',
               userData.lastName?.trim() ?? ''
             ]
                 .where((name) => name.isNotEmpty) // Exclude empty strings
@@ -137,24 +122,17 @@ class LoginViewModel with ChangeNotifier {
         );
         await HiveManager.storeRole(data.roles ?? []);
         await  _authService.saveAuthState(true);
-        // _alertServices.showCustomSnackBar(localization.loginSuccess);
+        _setResponse = ApiResponse.completed(response);
         return true;
       }
       else{
-        // _alertServices.flushBarErrorMessages(message: "Please Complete your registration process through sco website.");
         _alertServices.showErrorSnackBar(localization.completeRegistration);
         return false;
       }
 
-
     } catch (error) {
-      // debugPrint(error.toString());
       _setResponse = ApiResponse.error(error.toString());
       _alertServices.showErrorSnackBar(error.toString());
-      // _alertServices.flushBarErrorMessages(
-      //     message: "${error}Please do check you password",
-      //     // context: context,
-      //     provider: langProvider);
       return false;
     }
   }

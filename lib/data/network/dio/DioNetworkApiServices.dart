@@ -3,10 +3,16 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http_certificate_pinning/http_certificate_pinning.dart';
 import 'package:logger/logger.dart';
+import 'package:path/path.dart';
+import 'package:sco_v1/resources/app_urls.dart';
+import 'package:sco_v1/utils/key_constants.dart';
+import 'package:sco_v1/viewModel/open_authorization/open_authorization_view_model.dart';
+import 'package:sco_v1/viewModel/services/secure_storage_services.dart';
 
-import '../../../resources/app_urls.dart';
 import '../../app_exceptions.dart';
 import 'DioBaseApiServices.dart';
 
@@ -14,13 +20,90 @@ class DioNetworkApiServices extends DioBaseApiServices {
   final Dio _dio = Dio();
   final Logger logger = Logger();
 
+  // DioNetworkApiServices(){
+  //
+  //   final GetIt getIt = GetIt.instance;
+  //
+  //
+  //
+  //   /// setting header by default for api calls
+  //   _dio.options.contentType = Headers.formUrlEncodedContentType;
+  //
+  //   // _dio.options.headers['authorization'] = "Bearer ${getIt.get<SecureStorageServices>().readSecureData(KeyConstants.accessTokenOfCommonApi)}";
+  //
+  //   // Initialize Logger
+  //   _dio.interceptors.add(InterceptorsWrapper(
+  //     onRequest: (options, handler) {
+  //       logger.i('Request: ${options.method} ${options.uri}');
+  //       logger.i('Request Headers: ${options.headers}');
+  //       logger.d('Request Data: ${options.data}');
+  //       return handler.next(options);
+  //     },
+  //     onResponse: (response, handler) {
+  //       logger.d('Response Status: ${response.statusCode}');
+  //       logger.d('Response Data: ${response.data}');
+  //       return handler.next(response);
+  //     },
+  //     onError: (DioException e, handler) {
+  //       logger.e('Error: ${e.message}');
+  //       if (e.response != null) {
+  //         logger.e('Error Response Status: ${e.response?.statusCode}');
+  //         logger.e('Error Response Data: ${e.response?.data}');
+  //       }
+  //       return handler.next(e);
+  //     },
+  //   ));
+  //
+  //   /// ssl pinning
+  //   _dio.interceptors.add(CertificatePinningInterceptor(
+  //       allowedSHAFingerprints: [
+  //         dotenv.env[KeyConstants.sha256SslFingerPrints]!
+  //       ]));
+  //
+  //
+  //
+  //   /// ########################### To intercept traffic on Proxy Man using proxy ip and port ###########################
+  //   // String proxy = Platform.isAndroid ? '172.29.236.246:9090' : '172.29.236.246:9090';
+  //   _dio.httpClientAdapter = IOHttpClientAdapter(
+  //     createHttpClient: () {
+  //       final client = HttpClient();
+  //       // If you intend to use a proxy, you can keep this.
+  //       // However, if the proxy tries to intercept SSL, the connection will fail
+  //       // because of the certificate pinning (assuming you remove badCertificateCallback).
+  //       // if(kDebugMode){
+  //       //   client.findProxy = (uri) {
+  //       //     return 'PROXY $proxy';
+  //       //   };
+  //       // }
+  //       // *** DO NOT ADD client.badCertificateCallback = (X509Certificate cert, String host, int port) => true; ***
+  //       return client;
+  //     }, // This validateCertificate callback for IOHttpClientAdapter is generally
+  //     // for low-level custom validation. For standard pinning, the
+  //     // CertificatePinningInterceptor is more suitable.
+  //     // If you're relying on the CertificatePinningInterceptor, you can often
+  //     // leave this as true or remove it if not needed for other custom logic.
+  //     validateCertificate: (cert, host, port) {
+  //       return true;
+  //     },
+  //   );
+  // }
+
+
   DioNetworkApiServices() {
-    // Initialize Logger
+    final getIt = GetIt.instance;
+
+    /// Base config
+    _dio.options
+      ..connectTimeout = const Duration(seconds: 30)
+      ..receiveTimeout = const Duration(seconds: 30);
+
+    /// Interceptor to set headers and content type dynamically
     _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        logger.i('Request: ${options.method} ${options.uri}');
-        logger.i('Request Headers: ${options.headers}');
+      onRequest: (options, handler) async{
+        logger.d('Request: ${options.method} ${options.uri}');
+        logger.d('Request Headers: ${options.headers}');
         logger.d('Request Data: ${options.data}');
+
         return handler.next(options);
       },
       onResponse: (response, handler) {
@@ -40,39 +123,20 @@ class DioNetworkApiServices extends DioBaseApiServices {
 
 
 
-    /// ssl pinning
-    _dio.interceptors.add(CertificatePinningInterceptor(allowedSHAFingerprints: [AppUrls.sha256SslFingerPrints]));
+    /// SSL pinning
+    _dio.interceptors.add(CertificatePinningInterceptor(
+      allowedSHAFingerprints: [dotenv.env[KeyConstants.sha256SslFingerPrints]!],
+    ));
 
-
-    /// ########################### To intercept traffic on Proxy Man using proxy ip and port ###########################
-    // String proxy = Platform.isAndroid ? '172.29.236.246:9090' : '172.29.236.246:9090';
+    /// Optional: Proxy / HTTP adapter
     _dio.httpClientAdapter = IOHttpClientAdapter(
       createHttpClient: () {
         final client = HttpClient();
-        // If you intend to use a proxy, you can keep this.
-        // However, if the proxy tries to intercept SSL, the connection will fail
-        // because of the certificate pinning (assuming you remove badCertificateCallback).
-        // if(kDebugMode){
-        //   client.findProxy = (uri) {
-        //     return 'PROXY $proxy';
-        //   };
-        // }
-        // *** DO NOT ADD client.badCertificateCallback = (X509Certificate cert, String host, int port) => true; ***
         return client;
       },
-      // This validateCertificate callback for IOHttpClientAdapter is generally
-      // for low-level custom validation. For standard pinning, the
-      // CertificatePinningInterceptor is more suitable.
-      // If you're relying on the CertificatePinningInterceptor, you can often
-      // leave this as true or remove it if not needed for other custom logic.
-      validateCertificate: (cert, host, port) {
-        return true;
-      },
+      validateCertificate: (cert, host, port) => true,
     );
-
   }
-
-
 
   @override
   Future<dynamic> dioGetApiService({
@@ -81,17 +145,19 @@ class DioNetworkApiServices extends DioBaseApiServices {
     Map<String, String?>? queryParams,
   }) async {
     try {
-      final response = await _dio.get(
-        url,
-        options: Options(
-          headers: headers,
-          responseType: ResponseType.json,
-          extra: {
-            'cache': true, // Enable cache for this request
-          },
-        ),
-        queryParameters: queryParams,
-      ).timeout(const Duration(minutes: 5));
+      final response = await _dio
+          .get(
+            url,
+            options: Options(
+              headers: headers,
+              responseType: ResponseType.json,
+              extra: {
+                'cache': true, // Enable cache for this request
+              },
+            ),
+            queryParameters: queryParams,
+          )
+          .timeout(const Duration(minutes: 5));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -101,18 +167,20 @@ class DioNetworkApiServices extends DioBaseApiServices {
   @override
   Future<dynamic> dioPostApiService({
     required String url,
-    required Map<String, dynamic> headers,
+    Map<String, dynamic>? headers,
     required dynamic body,
   }) async {
     try {
-      final response = await _dio.post(
-        url,
-        data: body,
-        options: Options(
-          headers: headers,
-          responseType: ResponseType.json,
-        ),
-      ).timeout(const Duration(minutes: 2));
+      final response = await _dio
+          .post(
+            url,
+            data: body,
+            options: Options(
+              headers: headers,
+              responseType: ResponseType.json,
+            ),
+          )
+          .timeout(const Duration(minutes: 2));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -126,14 +194,16 @@ class DioNetworkApiServices extends DioBaseApiServices {
     required dynamic body,
   }) async {
     try {
-      final response = await _dio.put(
-        url,
-        data: body,
-        options: Options(
-          headers: headers,
-          responseType: ResponseType.json,
-        ),
-      ).timeout(const Duration(minutes: 2));
+      final response = await _dio
+          .put(
+            url,
+            data: body,
+            options: Options(
+              headers: headers,
+              responseType: ResponseType.json,
+            ),
+          )
+          .timeout(const Duration(minutes: 2));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -147,20 +217,21 @@ class DioNetworkApiServices extends DioBaseApiServices {
     required dynamic body,
   }) async {
     try {
-      final response = await _dio.patch(
-        url,
-        data: body,
-        options: Options(
-          headers: headers,
-          responseType: ResponseType.json,
-        ),
-      ).timeout(const Duration(minutes: 2));
+      final response = await _dio
+          .patch(
+            url,
+            data: body,
+            options: Options(
+              headers: headers,
+              responseType: ResponseType.json,
+            ),
+          )
+          .timeout(const Duration(minutes: 2));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
     }
   }
-
 
   @override
   Future<dynamic> dioDeleteApiService({
@@ -168,13 +239,15 @@ class DioNetworkApiServices extends DioBaseApiServices {
     required Map<String, dynamic> headers,
   }) async {
     try {
-      final response = await _dio.delete(
-        url,
-        options: Options(
-          headers: headers,
-          responseType: ResponseType.json,
-        ),
-      ).timeout(const Duration(minutes: 2));
+      final response = await _dio
+          .delete(
+            url,
+            options: Options(
+              headers: headers,
+              responseType: ResponseType.json,
+            ),
+          )
+          .timeout(const Duration(minutes: 2));
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -189,16 +262,20 @@ class DioNetworkApiServices extends DioBaseApiServices {
     required Map<String, String> headers,
   }) async {
     try {
-      final response = await _dio.request(
-        url,
-        data: data,
-        options: Options(
-          headers: headers,
-          method: method,
-          responseType: ResponseType.json,
-        ),
-      ).timeout(const Duration(minutes: 2));
-      if(kDebugMode){debugPrint(response.statusCode.toString());}
+      final response = await _dio
+          .request(
+            url,
+            data: data,
+            options: Options(
+              headers: headers,
+              method: method,
+              responseType: ResponseType.json,
+            ),
+          )
+          .timeout(const Duration(minutes: 2));
+      if (kDebugMode) {
+        debugPrint(response.statusCode.toString());
+      }
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -223,7 +300,8 @@ class DioNetworkApiServices extends DioBaseApiServices {
       case 500:
         throw InternalServerErrorException(_errorMessage(response));
       default:
-        throw FetchDataException('Error occurred while communicating with server with status code ${response.statusCode}');
+        throw FetchDataException(
+            'Error occurred while communicating with server with status code ${response.statusCode}');
     }
   }
 

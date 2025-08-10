@@ -4,10 +4,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:sco_v1/utils/key_constants.dart';
 import 'package:sco_v1/utils/utils.dart';
-import 'package:sco_v1/view/app_security/security_view.dart'; import '../../../../resources/app_urls.dart';
+import 'package:sco_v1/view/app_security/security_view.dart';
+import 'package:sco_v1/viewModel/open_authorization/open_authorization_view_model.dart'; import '../../../../resources/app_urls.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
@@ -24,15 +27,21 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
 
 
+  /// initialize the Dot Env file
+  await dotenv.load(fileName: AppUrls.displayStagingBanner ? '.env.development' : '.env.production');
+
+  /// initialize hive storage
   await HiveManager.init();
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  final String languageCode = sharedPreferences.getString('language_code') ?? '';
+  final String languageCode = await SharedPreferences.getInstance().then((instance)=>instance.getString('language_code') ?? '');
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
   DependencyInjection.init();
   await registerServices();
+
+
+
   runApp(MyApp(locale: languageCode));
 }
 
@@ -87,8 +96,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
     return MultiProvider(
         providers: [
           /// Always register language viewmodel first
+          ChangeNotifierProvider(create: (_) => OpenAuthorizationViewModel()),
           ChangeNotifierProvider(create: (_) => LanguageChangeViewModel()),
           ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
+          ChangeNotifierProvider(create: (_) => SplashViewModel()),
           ChangeNotifierProvider(create: (_) => LoginViewModel()),
           ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
           ChangeNotifierProvider(create: (_) => SignupViewModel()),
@@ -102,16 +113,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
           ChangeNotifierProvider(create: (_) => IndividualImageViewModel()),
           ChangeNotifierProvider(create: (_) => ABriefAboutScoViewModel()),
           ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
-
           // Account
           ChangeNotifierProvider(create: (_) => GetPersonalDetailsViewModel()),
-
           // find Draft by Configuration Key
           ChangeNotifierProvider(create: (_) => FindDraftByConfigurationKeyViewmodel()),
-
           // find Draft by Draft ID Key
           ChangeNotifierProvider(create: (_) => FindDraftByDraftIdViewmodel()),
-
           // delete Draft
           ChangeNotifierProvider(create: (_) => DeleteDraftViewmodel()),
           // attachFile
