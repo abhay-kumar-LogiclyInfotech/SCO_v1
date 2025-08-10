@@ -444,11 +444,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String
-      get privacy_policy_heading_information_collection_and_disclosure_policies =>
-          'Information Collection and Disclosure Policies';
+  get privacy_policy_heading_information_collection_and_disclosure_policies =>
+      'Information Collection and Disclosure Policies';
 
   @override
-  String get privacy_policy_description_information_collection_and_disclosure_policies =>
+  String
+  get privacy_policy_description_information_collection_and_disclosure_policies =>
       'The Scholarship Office collects personal information such as name, address, and email when provided voluntarily by the user. The office may also collect additional information such as address, date of birth, and other personal details when users create an account or request services online. Additionally, the Scholarship Office\'s web service programs automatically collect statistical information about user visits, such as pages visited and browsers used, without linking this information to individual users (see information on \'cookies\' – the pages visited by the user).';
 
   @override
@@ -456,7 +457,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Information Usage and Disclosure Policies';
 
   @override
-  String get privacy_policy_description_information_usage_and_disclosure_policies =>
+  String
+  get privacy_policy_description_information_usage_and_disclosure_policies =>
       'The Scholarship Office may use or disclose user information and other personal data collected from the office and its affiliates for functions such as user account services, report preparation, and other user activities.';
 
   @override
