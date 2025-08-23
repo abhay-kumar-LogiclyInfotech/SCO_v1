@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:sco_v1/viewModel/services/permission_checker_service.dart';
 import 'package:sco_v1/viewModel/services/secure_storage_services.dart';
 
-import '../open_authorization/open_authorization_view_model.dart';
 import 'alert_services.dart';
 import 'auth_services.dart';
 import 'media_services.dart';

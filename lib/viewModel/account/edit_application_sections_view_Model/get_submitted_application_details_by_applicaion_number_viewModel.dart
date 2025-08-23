@@ -61,7 +61,7 @@ class GetSubmittedApplicationDetailsByApplicationNumberViewModel with ChangeNoti
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
+          // 'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
 

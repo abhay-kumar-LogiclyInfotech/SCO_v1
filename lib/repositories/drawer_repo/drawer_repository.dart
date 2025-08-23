@@ -16,10 +16,10 @@ class DrawerRepository {
   //*------Faq's API method------*/
   Future<FaqModel> faq(
       {required dynamic headers, required dynamic body}) async {
-    dynamic response = await _dioBaseApiServices.dioPostApiService(
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
       url: AppUrls.faq,
       headers: headers,
-      body: body,
+      queryParams: body,
     );
     return FaqModel.fromJson(response);
   }
@@ -36,29 +36,41 @@ class DrawerRepository {
   }
 
   //*------Contact Us methods------*/
+  // Future<ContactUsModel> contactUs(
+  //     {required Map<String, String> headers,
+  //     required FormData data}) async {
+  //   dynamic response = await _dioBaseApiServices.dioMultipartApiService(
+  //       method: 'POST',
+  //       url: AppUrls.contactUs,
+  //       headers: headers,
+  //       data: data);
+  //   return ContactUsModel.fromJson(response);
+  // }
   Future<ContactUsModel> contactUs(
       {required Map<String, String> headers,
-      required FormData data}) async {
-    dynamic response = await _dioBaseApiServices.dioMultipartApiService(
-        method: 'POST',
+      required dynamic data}) async {
+    dynamic response = await _dioBaseApiServices.dioPostApiService(
         url: AppUrls.contactUs,
         headers: headers,
-        data: data);
+        body: data,
+    );
     return ContactUsModel.fromJson(response);
   }
 
   //*------Get News and Events Method-------*
-  Future<List<NewsAndEventsModel>> newsAndEvents(
+  Future<List<NewsData>> newsAndEvents(
       {required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
       url: AppUrls.newsAndEvents,
       headers: headers,
     );
 
-    List<NewsAndEventsModel> newsAndEventsList = [];
+    final responseModel = NewsAndEventsModel.fromJson(response);
 
-    for (var item in response) {
-      newsAndEventsList.add(NewsAndEventsModel.fromJson(item));
+    List<NewsData> newsAndEventsList = [];
+
+    for (var item in responseModel.data ?? []) {
+      newsAndEventsList.add(item);
     }
 
     return newsAndEventsList;

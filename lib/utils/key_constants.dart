@@ -4,8 +4,8 @@ class KeyConstants {
   static String get clientSecret => 'CLIENT_SECRET';
   static String get usernameOfCommonApi => 'USERNAME_COMMON_API';
   static String get passwordOfCommonApi => 'PASSWORD_COMMON_API';
-  static String get accessTokenOfCommonApi => 'ACCESS_TOKEN_COMMON_API';
-  static String get refreshTokenOfCommonApi => 'REFRESH_TOKEN_COMMON_API';
-  static String get accessToken => 'ACCESS_TOKEN';
-  static String get refreshToken => 'REFRESH_TOKEN';
+  static String get commonApiAccessToken => 'COMMON_API_ACCESS_TOKEN';
+  static String get commonApiRefreshToken => 'COMMON_API_REFRESH_TOKEN';
+  static String get userApiAccessToken => 'USER_API_ACCESS_TOKE';
+  static String get userApiRefreshToken => 'USER_API_REFRESH_TOKEN';
 }

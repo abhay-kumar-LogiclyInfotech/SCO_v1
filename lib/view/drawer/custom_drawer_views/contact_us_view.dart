@@ -626,8 +626,7 @@ class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
                 provider.subject = _subjectController.text;
                 provider.comment = _messageController.text;
 
-                bool result = await provider.contactUS(
-                    context: context, langProvider: langProvider);
+                bool result = await provider.contactUS(context: context, langProvider: langProvider);
 
                 if (result) {
                   // _alertServices.showCustomSnackBar(

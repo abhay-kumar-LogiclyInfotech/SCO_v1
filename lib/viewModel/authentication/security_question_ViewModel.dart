@@ -48,7 +48,7 @@ class SecurityQuestionViewModel with ChangeNotifier {
 
       final headers = {
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
+        // 'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

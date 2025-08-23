@@ -31,6 +31,7 @@ import '../../models/apply_scholarship/AttachFileModel.dart';
 import '../../models/apply_scholarship/FindDraftByConfigurationKeyModel.dart';
 import '../../models/drawer/vision_and_mission_model.dart';
 import '../../models/notifications/DecreaseNotificationCountModel.dart';
+import '../../models/notifications/get_notifications_count_model.dart';
 import '../../resources/app_urls.dart';
 import '../../utils/constants.dart';
 
@@ -38,20 +39,20 @@ class HomeRepository {
   final DioBaseApiServices _dioBaseApiServices = DioNetworkApiServices();
 
   //*------Home Slider Method-------*
-  Future<List<HomeSliderModel>> homeSlider({required dynamic headers}) async {
-    dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: AppUrls.homeSlider,
-      headers: headers,
-    );
-
-    List<HomeSliderModel> homeSliderItemsList = [];
-
-    for (var item in response) {
-      homeSliderItemsList.add(HomeSliderModel.fromJson(item));
-    }
-
-    return homeSliderItemsList;
-  }
+  // Future<List<HomeSliderModel>> homeSlider({required dynamic headers}) async {
+  //   dynamic response = await _dioBaseApiServices.dioGetApiService(
+  //     url: AppUrls.homeSlider,
+  //     headers: headers,
+  //   );
+  //
+  //   List<HomeSliderModel> homeSliderItemsList = [];
+  //
+  //   for (var item in response) {
+  //     homeSliderItemsList.add(HomeSliderModel.fromJson(item));
+  //   }
+  //
+  //   return homeSliderItemsList;
+  // }
 
   // *------Apply Scholarship section start------*/
 
@@ -63,13 +64,14 @@ class HomeRepository {
       // defining list:
       List<GetAllActiveScholarshipsModel> list = [];
 
-      dynamic response = await _dioBaseApiServices.dioGetApiService(
-          url: AppUrls.getAllActiveScholarships, headers: headers);
+      dynamic response = await _dioBaseApiServices.dioGetApiService(url: AppUrls.getAllActiveScholarships, headers: headers);
 
       // converting response to list
-      list = (response as List).map((element) {
+      list = (response['data'] as List).map((element) {
         return GetAllActiveScholarshipsModel.fromJson(element);
       }).toList();
+
+      print(list.length);
 
       // return list of scholarships
       return list;
@@ -255,6 +257,7 @@ class HomeRepository {
 
   // *------ Get Employment Status base64String Method ------*/
   Future<GetBase64StringModel> getBase64String({
+    required dynamic userId,
     required dynamic headers,
     required dynamic body,
     required AttachmentType attachmentType,
@@ -264,13 +267,13 @@ class HomeRepository {
 
     switch (attachmentType) {
       case AttachmentType.employment:
-        url = AppUrls.getEmploymentStatusFileContent;
+        url = AppUrls.getEmploymentStatusFileContent(userId);
         break;
       case AttachmentType.request:
-        url = AppUrls.getRequestFileContent;
+        url = AppUrls.getRequestFileContent(userId);
         break;
       case AttachmentType.updateNote:
-        url = AppUrls.getUpdateNoteFileContent;
+        url = AppUrls.getUpdateNoteFileContent(userId);
         break;
       }
 
@@ -353,7 +356,8 @@ class HomeRepository {
   Future<GetProfilePictureUrlModel> getProfilePictureUrl(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: AppUrls.getProfilePictureUrl + userId,
+      // url: AppUrls.getProfilePictureUrl + userId,
+      url: "${AppUrls.baseUrl}e-services/$userId/user-portrait",
       headers: headers,
     );
     return GetProfilePictureUrlModel.fromJson(response);
@@ -365,7 +369,8 @@ class HomeRepository {
       required dynamic headers,
       required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: AppUrls.updateProfilePicture,
+      // url: AppUrls.updateProfilePicture,
+      url: "${AppUrls.domainUrl}e-services/$userId/update-user-portrait",
       headers: headers,
       body: body,
     );
@@ -373,13 +378,13 @@ class HomeRepository {
   }
 
   // *------ Get  Notifications count Method ------*/
-  Future<dynamic> getNotificationsCount(
-      {required String userEmiratesId, required dynamic headers}) async {
+  Future<GetNotificationsCountModel> getNotificationsCount(
+      {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: AppUrls.getNotificationsCount + userEmiratesId,
+      url: AppUrls.getNotificationsCount(userId),
       headers: headers,
     );
-    return response;
+    return GetNotificationsCountModel.fromJson(response);
   }
 
   /// GET PAGE CONTENT METHODS
@@ -445,18 +450,20 @@ class HomeRepository {
   }
 
   // get all Notifications Model
-  Future<List<GetAllNotificationsModel>> getAllNotifications(
+  Future<List<NotificationData>> getAllNotifications(
       {required String userId, required dynamic headers}) async {
-    final List<GetAllNotificationsModel> listOfNotifications = [];
+    final List<NotificationData> listOfNotifications = [];
 
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: AppUrls.getAllNotifications + userId,
+      url: AppUrls.getAllNotifications(userId),
       headers: headers,
     );
 
-    if (response.isNotEmpty) {
-      for (var element in response) {
-        listOfNotifications.add(GetAllNotificationsModel.fromJson(element));
+    final responseModel = GetAllNotificationsModel.fromJson(response);
+
+    if (responseModel.data?.isNotEmpty ?? false) {
+      for (var element in responseModel.data!) {
+        listOfNotifications.add(element);
       }
     }
 
@@ -465,9 +472,9 @@ class HomeRepository {
 
   /// add attachment to note
   Future<DecreaseNotificationCountModel> decreaseNotificationCount(
-      {required dynamic body, required dynamic headers}) async {
+      {required dynamic userId, required dynamic body, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-        url: AppUrls.decreaseNotificationCount, headers: headers, body: body);
+        url: AppUrls.decreaseNotificationCount(userId), headers: headers, body: body);
     return DecreaseNotificationCountModel.fromJson(response);
   }
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -7,12 +8,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http_certificate_pinning/http_certificate_pinning.dart';
 import 'package:logger/logger.dart';
-import 'package:path/path.dart';
-import 'package:sco_v1/resources/app_urls.dart';
 import 'package:sco_v1/utils/key_constants.dart';
-import 'package:sco_v1/viewModel/open_authorization/open_authorization_view_model.dart';
-import 'package:sco_v1/viewModel/services/secure_storage_services.dart';
 
+import '../../../resources/app_urls.dart';
+import '../../../viewModel/services/token_service.dart';
 import '../../app_exceptions.dart';
 import 'DioBaseApiServices.dart';
 
@@ -20,16 +19,131 @@ class DioNetworkApiServices extends DioBaseApiServices {
   final Dio _dio = Dio();
   final Logger logger = Logger();
 
+  final GetIt getIt = GetIt.instance;
+
+  bool _isRefreshing = false;
+  final List<Function(RequestOptions)> _pendingRequests = [];
+
+  DioNetworkApiServices() {
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        // Special handling for token endpoint
+        if (options.path == AppUrls.openAuthToken) {
+          options.contentType = Headers.formUrlEncodedContentType;
+        }
+
+        if(options.path.contains('common-data') || (options.path == AppUrls.login) || (options.path == AppUrls.openAuthToken)){
+          debugPrint('#################################### common token added ####################################');
+          options.headers['Authorization'] = 'Bearer ${await TokenService.instance.getCommonApiToken}';
+        }else{
+          debugPrint('#################################### user token added ####################################');
+          options.headers['Authorization'] = 'Bearer ${await TokenService.instance.getUserApiAccessToken}';
+        }
+
+        logger.i('Request: ${options.method} ${options.uri}');
+        logger.i('Request Headers: ${options.headers}');
+        logger.d('Request Data: ${options.data}');
+
+        return handler.next(options);
+      },
+      onError: (DioException e, handler) async {
+        try {
+          // Extract message safely
+          String? errorMessage;
+          final responseData = e.response?.data;
+
+          if (responseData is Map<String, dynamic> && responseData.containsKey('message')) {
+            errorMessage = responseData['message']?.toString();
+          }
+
+          // If Unauthorized or token expired
+          if (errorMessage == 'Invalid or expired token') {
+            final reqOptions = e.requestOptions;
+
+            if (!_isRefreshing) {
+              _isRefreshing = true;
+              try {
+                final commonApiTokenRefreshed = await TokenService.instance.getToken(
+                  grantType: GrantType.refreshToken,
+                  tokenAccessType: TokenAccessType.common,
+                );
+                final userApiTokenRefreshed = await TokenService.instance.getToken(
+                  grantType: GrantType.refreshToken,
+                  tokenAccessType: TokenAccessType.user,
+                );
+
+                _isRefreshing = false;
+
+                if (commonApiTokenRefreshed && userApiTokenRefreshed) {
+                  // Retry all queued requests
+                  for (var callback in _pendingRequests) {
+                    callback(reqOptions);
+                  }
+                  _pendingRequests.clear();
+
+                  // Retry original failed request
+                  final cloneReq = await _dio.fetch(reqOptions);
+                  return handler.resolve(cloneReq);
+                } else {
+                  return handler.reject(e);
+                }
+              } catch (err) {
+                _isRefreshing = false;
+                _pendingRequests.clear();
+                return handler.reject(
+                  err is DioException
+                      ? err
+                      : DioException(requestOptions: reqOptions, error: err.toString()),
+                );
+              }
+            } else {
+              // Queue request until refresh finishes
+              final completer = Completer<Response>();
+              _pendingRequests.add((requestOptions) async {
+                try {
+                  final cloneReq = await _dio.fetch(requestOptions);
+                  completer.complete(cloneReq);
+                } catch (err) {
+                  completer.completeError(err);
+                }
+              });
+              return completer.future.then((value) => handler.resolve(value));
+            }
+          }
+
+          // Log other errors
+          logger.e('Error: ${e.message}');
+          logger.e('Error Response Status: ${e.response?.statusCode}');
+          logger.e('Error Response Data: ${e.response?.data}');
+        } catch (err) {
+          // Log unexpected errors in interceptor itself
+          logger.e('Interceptor Error: $err');
+        }
+
+        return handler.next(e);
+      },
+      onResponse: (response, handler) {
+        logger.d('Response Status: ${response.statusCode}');
+        logger.d('Response Data: ${response.data}');
+        return handler.next(response);
+      },
+    ));
+
+    // SSL pinning
+    _dio.interceptors.add(CertificatePinningInterceptor(
+      allowedSHAFingerprints: [dotenv.env[KeyConstants.sha256SslFingerPrints]!],
+    ));
+
+    // HTTP adapter
+    _dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () => HttpClient(),
+      validateCertificate: (cert, host, port) => true,
+    );
+  }
+
+
+  /// SSL PINNING WORKING CODE
   // DioNetworkApiServices(){
-  //
-  //   final GetIt getIt = GetIt.instance;
-  //
-  //
-  //
-  //   /// setting header by default for api calls
-  //   _dio.options.contentType = Headers.formUrlEncodedContentType;
-  //
-  //   // _dio.options.headers['authorization'] = "Bearer ${getIt.get<SecureStorageServices>().readSecureData(KeyConstants.accessTokenOfCommonApi)}";
   //
   //   // Initialize Logger
   //   _dio.interceptors.add(InterceptorsWrapper(
@@ -53,6 +167,9 @@ class DioNetworkApiServices extends DioBaseApiServices {
   //       return handler.next(e);
   //     },
   //   ));
+  //
+  //
+  //
   //
   //   /// ssl pinning
   //   _dio.interceptors.add(CertificatePinningInterceptor(
@@ -87,56 +204,6 @@ class DioNetworkApiServices extends DioBaseApiServices {
   //     },
   //   );
   // }
-
-
-  DioNetworkApiServices() {
-    final getIt = GetIt.instance;
-
-    /// Base config
-    _dio.options
-      ..connectTimeout = const Duration(seconds: 30)
-      ..receiveTimeout = const Duration(seconds: 30);
-
-    /// Interceptor to set headers and content type dynamically
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async{
-        logger.d('Request: ${options.method} ${options.uri}');
-        logger.d('Request Headers: ${options.headers}');
-        logger.d('Request Data: ${options.data}');
-
-        return handler.next(options);
-      },
-      onResponse: (response, handler) {
-        logger.d('Response Status: ${response.statusCode}');
-        logger.d('Response Data: ${response.data}');
-        return handler.next(response);
-      },
-      onError: (DioException e, handler) {
-        logger.e('Error: ${e.message}');
-        if (e.response != null) {
-          logger.e('Error Response Status: ${e.response?.statusCode}');
-          logger.e('Error Response Data: ${e.response?.data}');
-        }
-        return handler.next(e);
-      },
-    ));
-
-
-
-    /// SSL pinning
-    _dio.interceptors.add(CertificatePinningInterceptor(
-      allowedSHAFingerprints: [dotenv.env[KeyConstants.sha256SslFingerPrints]!],
-    ));
-
-    /// Optional: Proxy / HTTP adapter
-    _dio.httpClientAdapter = IOHttpClientAdapter(
-      createHttpClient: () {
-        final client = HttpClient();
-        return client;
-      },
-      validateCertificate: (cert, host, port) => true,
-    );
-  }
 
   @override
   Future<dynamic> dioGetApiService({

@@ -7,6 +7,7 @@ import 'package:sco_v1/repositories/home/home_repository.dart';
 
 import '../../../data/response/ApiResponse.dart';
 import '../../../utils/constants.dart';
+import '../../models/notifications/get_notifications_count_model.dart';
 import '../services/alert_services.dart';
 import '../services/auth_services.dart';
 
@@ -21,10 +22,10 @@ class GetNotificationsCountViewModel with ChangeNotifier {
     _authService = getIt.get<AuthService>();
     _alertServices = getIt.get<AlertServices>();
   }
-  String? _userEmiratesId;
+  String? _userId;
 
   setEmiratesId() async {
-    _userEmiratesId =  HiveManager.getEmiratesId();
+    _userId =  HiveManager.getUserId();
   }
 
   bool _isLoading = true;
@@ -39,11 +40,11 @@ class GetNotificationsCountViewModel with ChangeNotifier {
 
   final _myRepo = HomeRepository();
 
-  ApiResponse<dynamic> _apiResponse = ApiResponse.none();
+  ApiResponse<GetNotificationsCountModel> _apiResponse = ApiResponse.none();
 
-  ApiResponse<dynamic> get apiResponse => _apiResponse;
+  ApiResponse<GetNotificationsCountModel> get apiResponse => _apiResponse;
 
-  set setApiResponse(ApiResponse<dynamic> response) {
+  set setApiResponse(ApiResponse<GetNotificationsCountModel> response) {
     _apiResponse = response;
     notifyListeners();
   }
@@ -62,10 +63,10 @@ class GetNotificationsCountViewModel with ChangeNotifier {
         // print(_userEmiratesId);
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
+          // 'authorization': AppUrls.basicAuth
         };
 
-        dynamic response = await _myRepo.getNotificationsCount(userEmiratesId: _userEmiratesId ?? '',headers: headers);
+        GetNotificationsCountModel response = await _myRepo.getNotificationsCount(userId: _userId ?? '',headers: headers);
 
         // print(response);
 

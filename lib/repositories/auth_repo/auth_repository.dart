@@ -151,9 +151,9 @@ class AuthenticationRepository {
 
   //*-----Login Method-----*
   Future<ChangePasswordModel> changePassword(
-      {required dynamic headers, required dynamic formData}) async {
+      {required dynamic headers,required String userID, required dynamic formData}) async {
     dynamic response = await _dioBaseApiServices.dioMultipartApiService(
-      url: AppUrls.changePassword,
+      url: AppUrls.changePassword(userID),
       headers: headers,
       data: formData,
       method: 'POST'

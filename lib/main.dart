@@ -7,10 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:sco_v1/utils/key_constants.dart';
 import 'package:sco_v1/utils/utils.dart';
 import 'package:sco_v1/view/app_security/security_view.dart';
-import 'package:sco_v1/viewModel/open_authorization/open_authorization_view_model.dart'; import '../../../../resources/app_urls.dart';
+import '../../../../resources/app_urls.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
@@ -67,7 +66,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
     super.initState();
     WidgetsBinding.instance.addObserver(this); // Register the observer
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
+      /// TODO: Uncomment this for production
+      // SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
     });
   }
 
@@ -83,7 +83,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-       SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
+       /// TODO: Uncomment this for production
+       // SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
       });
     }
   }
@@ -96,7 +97,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
     return MultiProvider(
         providers: [
           /// Always register language viewmodel first
-          ChangeNotifierProvider(create: (_) => OpenAuthorizationViewModel()),
           ChangeNotifierProvider(create: (_) => LanguageChangeViewModel()),
           ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
           ChangeNotifierProvider(create: (_) => SplashViewModel()),
@@ -112,7 +112,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
           ChangeNotifierProvider(create: (_) => NewsAndEventsViewmodel()),
           ChangeNotifierProvider(create: (_) => IndividualImageViewModel()),
           ChangeNotifierProvider(create: (_) => ABriefAboutScoViewModel()),
-          ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
+          // ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
           // Account
           ChangeNotifierProvider(create: (_) => GetPersonalDetailsViewModel()),
           // find Draft by Configuration Key

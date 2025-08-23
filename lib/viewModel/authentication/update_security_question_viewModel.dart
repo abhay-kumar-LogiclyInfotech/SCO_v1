@@ -60,7 +60,7 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
 
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
-        'authorization': AppUrls.basicAuth
+        // 'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

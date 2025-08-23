@@ -53,7 +53,7 @@ class VisionAndMissionViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuthWithUsernamePassword
+        // 'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Body-----*
       final body = <String, String>{

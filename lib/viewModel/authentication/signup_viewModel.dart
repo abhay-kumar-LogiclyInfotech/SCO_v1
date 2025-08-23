@@ -12,6 +12,7 @@ import '../../models/authentication/signup_model.dart';
 import '../../utils/constants.dart';
 import '../services/navigation_services.dart';
 import '../../resources/app_urls.dart';
+import '../services/token_service.dart';
 
 class SignupViewModel with ChangeNotifier {
   late AlertServices _alertServices;
@@ -157,6 +158,8 @@ class SignupViewModel with ChangeNotifier {
 
       setResponse = ApiResponse.completed(response);
       await HiveManager.storeUserId(response.data!.user!.userId.toString());
+      await  HiveManager.storeEmail(response.data?.user?.emailAddress.toString() ?? '');
+      await TokenService.instance.getToken(grantType: GrantType.password, tokenAccessType: TokenAccessType.user);
       _alertServices.toastMessage(response.message.toString());
       return true;
     } catch (error) {

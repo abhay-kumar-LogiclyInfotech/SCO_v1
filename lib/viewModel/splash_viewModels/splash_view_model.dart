@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/hive/hive_manager.dart';
-import 'package:sco_v1/viewModel/open_authorization/open_authorization_view_model.dart';
+import 'package:sco_v1/viewModel/services/token_service.dart';
 
 import '../../models/splash/commonData_model.dart';
 import '../../utils/constants.dart';
@@ -27,7 +27,7 @@ class SplashViewModel extends ChangeNotifier {
 
 
     /// First We require token for common api calls
-    await context.read<OpenAuthorizationViewModel>().getToken(grantType: GrantType.password);
+    await TokenService.instance.getToken(grantType: GrantType.password,tokenAccessType: TokenAccessType.common);
 
 
     // This is for LOV's

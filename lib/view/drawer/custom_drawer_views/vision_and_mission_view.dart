@@ -25,12 +25,9 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((callback) async {
-      final provider =
-          Provider.of<VisionAndMissionViewModel>(context, listen: false);
-      final langProvider =
-          Provider.of<LanguageChangeViewModel>(context, listen: false);
-      await provider.getVisionAndMission(
-          context: context, langProvider: langProvider);
+      final provider = Provider.of<VisionAndMissionViewModel>(context, listen: false);
+      final langProvider = Provider.of<LanguageChangeViewModel>(context, listen: false);
+      await provider.getVisionAndMission(context: context, langProvider: langProvider);
     });
   }
 

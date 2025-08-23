@@ -25,6 +25,7 @@ import '../../../data/response/status.dart';
 import '../../../models/account/personal_details/PersonalDetailsModel.dart';
 import '../../../models/apply_scholarship/FillScholarshipFormModels.dart';
 import '../../../resources/app_colors.dart';
+import '../../../resources/app_urls.dart';
 import '../../../resources/components/account/Custom_inforamtion_container.dart';
 import '../../../resources/components/account/profile_with_camera_button.dart';
 import '../../../resources/components/custom_checkbox_tile.dart';
@@ -195,19 +196,15 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
 
         setIsProcessing(true);
 
-        bool canUpload =
-            await Utils.compareFileSize(file: file, maxSizeInBytes: 200);
+        bool canUpload = await Utils.compareFileSize(file: file, maxSizeInBytes: 200);
 
         if (canUpload) {
           _profileImageFile = file;
           final myFile = await Utils.saveFileToLocal(file);
           final base64String = base64Encode(myFile.readAsBytesSync());
 
-          final updateProfilePictureProvider =
-              Provider.of<UpdateProfilePictureViewModel>(context,
-                  listen: false);
-          await updateProfilePictureProvider.updateProfilePicture(
-              base64String: base64String);
+          final updateProfilePictureProvider = Provider.of<UpdateProfilePictureViewModel>(context, listen: false);
+          await updateProfilePictureProvider.updateProfilePicture(base64String: base64String);
           setIsProcessing(false);
           await _initializeData();
           setState(() {});
@@ -271,11 +268,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                       return ProfileWithCameraButton(
                           profileImage: _profileImageFile != null
                               ? FileImage(_profileImageFile!)
-                              : provider.apiResponse.data?.url != null
-                                  ? NetworkImage(provider.apiResponse.data!.url!
-                                      .toString())
-                                  : const AssetImage(
-                                      'assets/personal_details/dummy_profile_pic.png'),
+                              : provider.apiResponse.data?.data?.url != null ? NetworkImage(AppUrls.domainUrl + provider.apiResponse.data!.data!.url!.toString()) : const AssetImage('assets/personal_details/Picture.png'),
                           onTap: () async {
                             Destination.chooseFilePickerDestination(
                                 context: context,
@@ -285,9 +278,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                                   //         .checkAndRequestPermission(
                                   //             Permission.camera, context);
                                   if (true) {
-                                    File? file = await _mediaServices
-                                        .getSingleImageFromCamera();
-                                    setProfilePictureFile(file);
+                                    File? file = await _mediaServices.getSingleImageFromCamera();setProfilePictureFile(file);
                                   }
                                 },
                                 onStorageTap: () async {
@@ -300,9 +291,7 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
                                   //                 : Permission.storage,
                                   //             context);
                                   if (true) {
-                                    File? file = await _mediaServices
-                                        .getSingleImageFromGallery();
-                                    setProfilePictureFile(file);
+                                    File? file = await _mediaServices.getSingleImageFromGallery();setProfilePictureFile(file);
                                   }
                                 });
                           },

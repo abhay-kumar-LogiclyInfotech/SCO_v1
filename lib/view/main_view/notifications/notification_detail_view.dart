@@ -28,7 +28,7 @@ import '../../../resources/app_text_styles.dart';
 import 'package:flutter_html/flutter_html.dart' as flutter_html;
 
 class NotificationDetailView extends StatefulWidget {
-  final GetAllNotificationsModel notification;
+  final NotificationData notification;
 
   const NotificationDetailView({super.key, required this.notification});
 
@@ -55,13 +55,10 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
 
         /// Refreshing the notifications now
         /// get all notifications
-        await Provider.of<GetNotificationsCountViewModel>(context,
-                listen: false)
-            .getNotificationsCount();
-        await Provider.of<GetAllNotificationsViewModel>(context, listen: false)
-            .getAllNotifications();
+        // await Provider.of<GetNotificationsCountViewModel>(context, listen: false).getNotificationsCount();
+        // await Provider.of<GetAllNotificationsViewModel>(context, listen: false).getAllNotifications();
       } catch (e) {
-        // print(e.toString());
+        print(e.toString());
       }
     });
   }
@@ -147,7 +144,7 @@ class _NotificationDetailViewState extends State<NotificationDetailView>
   ///*------ Applications Section------*
 
   Widget _notificationDetailsSection(
-      {required GetAllNotificationsModel provider,
+      {required NotificationData provider,
       required LanguageChangeViewModel langProvider,
       required AppLocalizations localization}) {
     return SimpleCard(

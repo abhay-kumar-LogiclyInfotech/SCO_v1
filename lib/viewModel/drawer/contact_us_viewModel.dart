@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
@@ -94,10 +96,23 @@ class ContactUsViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        // 'authorization': AppUrls.basicAuth
+        // 'content-Type': 'application/json',
+
+
       };
       //*-----Create fields-----*
-      final data = FormData.fromMap(<String, String>{
+      // final data = FormData.fromMap(<String, String>{
+      //   'fullName': _fullName,
+      //   'email': _email,
+      //   'subject': _subject,
+      //   'comment': _comment,
+      //   'contactUsType': _contactUsType,
+      //   'phoneNumber': _phoneNumber
+      // });
+
+      final body = jsonEncode(<String, String>{
         'fullName': _fullName,
         'email': _email,
         'subject': _subject,
@@ -107,7 +122,7 @@ class ContactUsViewModel with ChangeNotifier {
       });
 
       //*-----Calling Api Start-----*
-      final response = await _drawerRepository.contactUs(headers: headers, data: data);
+      final response = await _drawerRepository.contactUs(headers: headers, data: body);
 
       //*-----Calling Api End-----*
 

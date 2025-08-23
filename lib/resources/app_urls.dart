@@ -56,46 +56,55 @@ class AppUrls {
   static String get login => "${_baseUrl}users/login";
 
   /// change password with mopa-sco-api
-  static String get changePassword => "${_baseUrl}users/updatePassword";
+  static String changePassword(String userId) => "${_baseUrl}users/$userId/updatePassword";
 
   //faq's endpoint
-  static String get faq => "${_commonBaseUrl}jsonws/journal.journalarticle/get-latest-article";
+  // static String get faq => "${_commonBaseUrl}jsonws/journal.journalarticle/get-latest-article";
+  // static String get faq => "${_baseUrl}common-data/get-latest-article";
+  static String get faq => "https://stg.sco.ae/o/mopa-sco-api/common-data/get-latest-article/71109/20126/0";
 
   //vision and mission endpoint
-  static String get getPageContentByUrl => "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
+  // static String get getPageContentByUrl => "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
+  static String get getPageContentByUrl => "${_baseUrl}common-data/get-page-content";
 
   //contact us endpoint
-  static String get contactUs => "${_commonBaseUrl}jsonws/contactus.contactus/add-contact-us";
+  // static String get contactUs => "${_commonBaseUrl}jsonws/contactus.contactus/add-contact-us";
+  static String get contactUs => "${_baseUrl}common-data/add-contact-us";
 
   //news and events endpoint
-  static String get newsAndEvents => "${_commonBaseUrl}jsonws/newsandevents.newsandevents/find-all-published-item/group-id/20126/is-published/true/is-event/false";
+  // static String get newsAndEvents => "${_commonBaseUrl}jsonws/newsandevents.newsandevents/find-all-published-item/group-id/20126/is-published/true/is-event/false";
+  static String get newsAndEvents => "https://stg.sco.ae/o/mopa-sco-api/common-data/find-all-published-item/20126/true/false";
 
   //individual image endpoint
   static String get individualImage => "${_baseUrl}common-data/get-image-url/";
 
   //Home Slider EndPoint endPoint
-  static String get homeSlider => "${_commonBaseUrl}jsonws/journal.journalarticle/get-articles/group-id/20126/folder-id/79082";
+  // static String get homeSlider => "${_commonBaseUrl}jsonws/journal.journalarticle/get-articles/group-id/20126/folder-id/79082";
 
   // All Active scholarships endPoint
-  static String get getAllActiveScholarships => "${_commonBaseUrl}jsonws/configuration.submissionconfiguration/find-all-active-scholarship";
+  // static String get getAllActiveScholarships => "${_commonBaseUrl}jsonws/configuration.submissionconfiguration/find-all-active-scholarship";
+  static String get getAllActiveScholarships => "${_baseUrl}common-data/find-all-active-scholarship";
 
   // find-draft-by-emirate-id-and-config-key
   static String get findDraftByConfigurationKey   => "${_domainUrl}api/jsonws/application.applicationdetails/find-draft-by-emirate-id-and-config-key";
 
   // get File content of the employment status files
-  static String get getEmploymentStatusFileContent   => "${_domainUrl}o/mopa-sco-api/e-services/employment-status-file-content";
+  // static String get getEmploymentStatusFileContent   => "${_domainUrl}o/mopa-sco-api/e-services/employment-status-file-content";
+  static String  getEmploymentStatusFileContent(userId)   => "${_baseUrl}e-services/$userId/employment-status-file-content";
 
   // get File content of the Request files
-  static String get getRequestFileContent   => "${_domainUrl}o/mopa-sco-api/self-service/service-request-file-content";
+  static String  getRequestFileContent(userId)   => "${_baseUrl}self-service/$userId/service-request-file-content";
 
   // get File content of the Notes Attachment files
-  static String get getUpdateNoteFileContent   => "${_domainUrl}o/mopa-sco-api/self-service/notes-file-content";
+  // static String get getUpdateNoteFileContent   => "${_domainUrl}o/mopa-sco-api/self-service/notes-file-content";
+  static String  getUpdateNoteFileContent(userId)   => "${_baseUrl}self-service/$userId/notes-file-content";
 
   // Update profile image size must be less then 200kb
   static String get updateProfilePicture   => "${_domainUrl}api/jsonws/userext.userextension/update-user-portrait";
 
   ///  Decrease notifications count or mark notification as read
-  static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
+  // static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
+  static String  decreaseNotificationCount(userId) => "${_baseUrl}e-services/$userId/maked-as-view";
 
   /// get draft application
   static String get getDraftApplicationByDraftId => "${_commonBaseUrl}jsonws/application.applicationdetails/fetch-by-application-id/application-no/";
@@ -104,13 +113,16 @@ class AppUrls {
   static String get getSubmittedApplicationDetailsByApplicationNumber => "${_commonBaseUrl}jsonws/application.applicationdetails/find-by-application-number/application-no/";
 
   /// get profile picture url
+  // static String get getProfilePictureUrl => "${_commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/";
   static String get getProfilePictureUrl => "${_commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/";
 
   /// get notification count
-  static String get getNotificationsCount => "${_commonBaseUrl}jsonws/mopanotification.mopanotification/get-notification-new-count-for-user/user-name/";
+  // static String get getNotificationsCount => "${_commonBaseUrl}jsonws/mopanotification.mopanotification/get-notification-new-count-for-user/user-name/";
+  static String  getNotificationsCount(userId) => "${_baseUrl}e-services/$userId/user-notification-count";
 
   /// get all notifications
-  static String get getAllNotifications => "${_commonBaseUrl}jsonws/mopanotification.mopanotification/get-all-notification-for-user/user-id/";
+  // static String get getAllNotifications => "${_commonBaseUrl}jsonws/mopanotification.mopanotification/get-all-notification-for-user/user-id/";
+  static String  getAllNotifications(userId) => "${_baseUrl}e-services/$userId/user-notification";
 
 
 

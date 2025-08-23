@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/models/authentication/login_model.dart';
+import 'package:sco_v1/viewModel/services/token_service.dart';
 
 import '../../data/response/ApiResponse.dart';
 import '../../hive/hive_manager.dart';
@@ -111,6 +112,7 @@ class LoginViewModel with ChangeNotifier {
 
       if(data.redirectUrl == null){
         await  HiveManager.storeUserId(userData.userId.toString());
+        await  HiveManager.storeEmail(userData.emailAddress.toString());
         await  HiveManager.storeEmiratesId(userData.emirateId.toString().replaceAll('-', ''));
         await HiveManager.storeName(
             [
@@ -122,6 +124,8 @@ class LoginViewModel with ChangeNotifier {
         );
         await HiveManager.storeRole(data.roles ?? []);
         await  _authService.saveAuthState(true);
+        /// Getting the token saving the refresh token at the time of login.
+        await TokenService.instance.getToken(grantType: GrantType.password, tokenAccessType: TokenAccessType.user);
         _setResponse = ApiResponse.completed(response);
         return true;
       }

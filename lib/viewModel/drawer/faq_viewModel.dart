@@ -48,7 +48,7 @@ class FaqViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuthWithUsernamePassword
+        // 'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Body-----*
       final body = <String, String>{
@@ -58,12 +58,12 @@ class FaqViewModel with ChangeNotifier {
       };
 
       //*-----Calling Api Start-----*
-      final response =
-          await _drawerRepository.faq(headers: headers, body: body);
+      final response = await _drawerRepository.faq(headers: headers, body: body);
 
       //*-----Calling Api End-----*
 
-      final contentXml = response.content.toString() ?? "";
+
+      final contentXml = response.data?.content ?? '';
       final selectedLanguage = langProvider.appLocale == const Locale('en')
           ? 'en_US'
           : 'ar_SA'; // Assuming you have a way to get the selected language code
@@ -73,11 +73,13 @@ class FaqViewModel with ChangeNotifier {
       _setFaqResponse = ApiResponse.completed(response);
 
       return true;
-    } catch (error) {
+    } catch (error,stackTrace) {
       // debugPrint('Printing Error: $error');
       _setFaqResponse = ApiResponse.error(error.toString());
       // Message to show status of the operation:
       _alertServices.showErrorSnackBar(error.toString());
+      print(stackTrace);
+      print(error.toString());
 
       return false;
     }

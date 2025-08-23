@@ -452,3 +452,4 @@ class GetAllActiveScholarshipsModel {
     return map;
   }
 }
+
