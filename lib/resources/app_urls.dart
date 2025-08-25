@@ -86,7 +86,7 @@ class AppUrls {
   static String get getAllActiveScholarships => "${_baseUrl}common-data/find-all-active-scholarship";
 
   // find-draft-by-emirate-id-and-config-key
-  static String get findDraftByConfigurationKey   => "${_domainUrl}api/jsonws/application.applicationdetails/find-draft-by-emirate-id-and-config-key";
+  static String  findDraftByConfigurationKey(userId,emiratesId,configKey)   => "${_baseUrl}e-services/$userId/find-draft-by-emirate-id-and-config-key/$emiratesId/$configKey";
 
   // get File content of the employment status files
   // static String get getEmploymentStatusFileContent   => "${_domainUrl}o/mopa-sco-api/e-services/employment-status-file-content";
@@ -100,21 +100,20 @@ class AppUrls {
   static String  getUpdateNoteFileContent(userId)   => "${_baseUrl}self-service/$userId/notes-file-content";
 
   // Update profile image size must be less then 200kb
-  static String get updateProfilePicture   => "${_domainUrl}api/jsonws/userext.userextension/update-user-portrait";
+  static String  updateProfilePicture(userId)  => "${_baseUrl}e-services/$userId/update-user-portrait";
 
-  ///  Decrease notifications count or mark notification as read
-  // static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
-  static String  decreaseNotificationCount(userId) => "${_baseUrl}e-services/$userId/maked-as-view";
 
-  /// get draft application
-  static String get getDraftApplicationByDraftId => "${_commonBaseUrl}jsonws/application.applicationdetails/fetch-by-application-id/application-no/";
+  /// get draft application by application number
+  // static String get getDraftApplicationByDraftId => "${_commonBaseUrl}jsonws/application.applicationdetails/fetch-by-application-id/application-no/";
+  static String  getDraftApplicationByDraftId(userId,draftId) => "${_baseUrl}e-services/$userId/fetch-by-application-id/$draftId";
 
   /// get submitted application by application number
-  static String get getSubmittedApplicationDetailsByApplicationNumber => "${_commonBaseUrl}jsonws/application.applicationdetails/find-by-application-number/application-no/";
+  // static String get getSubmittedApplicationDetailsByApplicationNumber => "${_commonBaseUrl}jsonws/application.applicationdetails/find-by-application-number/application-no/";
+  static String  getSubmittedApplicationDetailsByApplicationNumber(userId,applicationNumber) => "${_baseUrl}e-services/$userId/find-by-application-number/$applicationNumber";
 
   /// get profile picture url
   // static String get getProfilePictureUrl => "${_commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/";
-  static String get getProfilePictureUrl => "${_commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/";
+  // static String get getProfilePictureUrl => "${_commonBaseUrl}jsonws/userext.userextension/get-user-portrait-url/user-id/";
 
   /// get notification count
   // static String get getNotificationsCount => "${_commonBaseUrl}jsonws/mopanotification.mopanotification/get-notification-new-count-for-user/user-name/";
@@ -123,6 +122,10 @@ class AppUrls {
   /// get all notifications
   // static String get getAllNotifications => "${_commonBaseUrl}jsonws/mopanotification.mopanotification/get-all-notification-for-user/user-id/";
   static String  getAllNotifications(userId) => "${_baseUrl}e-services/$userId/user-notification";
+
+  ///  Decrease notifications count or mark notification as read
+  // static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
+  static String  decreaseNotificationCount(userId) => "${_baseUrl}e-services/$userId/marked-as-view";
 
 
 

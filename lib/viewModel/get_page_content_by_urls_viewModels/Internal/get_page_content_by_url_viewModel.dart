@@ -63,7 +63,7 @@ class GetPageContentByUrlViewModel with ChangeNotifier {
 
       // log(cleanDraftXmlToJson(response.content!));
 
-      final jsonOutput = xmlToJson(response.content ?? '');
+      final jsonOutput = xmlToJson(response.data?.content ?? '');
       //*-----Calling Api End-----*
 
 

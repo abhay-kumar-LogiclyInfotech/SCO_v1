@@ -68,7 +68,7 @@ class SubmitApplicationViewmodel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/json',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
+          // 'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         final body = jsonEncode(form);
@@ -81,7 +81,7 @@ class SubmitApplicationViewmodel with ChangeNotifier {
         return true;
       } catch (error) {
         setSaveAsDraftResponse = ApiResponse.error(error.toString());
-        _alertServices.toastMessage(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
         setLoading(false);
         return false;
       }}

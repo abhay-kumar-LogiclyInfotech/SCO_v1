@@ -187,7 +187,11 @@ class ForgotPasswordViewModel with ChangeNotifier {
       _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.loading();
 
       //*-----Create Headers Start-----*
-      final headers = <String, String>{'authorization': AppUrls.basicAuth};
+      final headers = <String, String>{
+        
+         'authorization': AppUrls.basicAuth
+      
+      };
       //*-----Create Headers End-----*
 
       //*-----Calling Api Start-----*
@@ -204,6 +208,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
     } catch (e) {
       // debugPrint('Error: $e');
       _alertServices.showErrorSnackBar(e.toString());
+      _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.error(e.toString());
       return false;
     }
   }

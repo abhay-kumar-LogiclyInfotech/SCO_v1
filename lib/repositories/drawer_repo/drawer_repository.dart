@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:sco_v1/data/network/dio/DioBaseApiServices.dart';
 import 'package:sco_v1/data/network/dio/DioNetworkApiServices.dart';
 import 'package:sco_v1/models/drawer/IndividualImageModel.dart';
@@ -25,8 +24,10 @@ class DrawerRepository {
   }
 
   //*------ vision and mission -----*/
-  Future<VisionAndMissionModel> visionAndMission(
-      {required dynamic headers, required dynamic body}) async {
+  Future<VisionAndMissionModel> visionAndMission({
+    required dynamic headers,
+    required dynamic body,
+  }) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
       url: AppUrls.getPageContentByUrl,
       headers: headers,
@@ -47,19 +48,21 @@ class DrawerRepository {
   //   return ContactUsModel.fromJson(response);
   // }
   Future<ContactUsModel> contactUs(
-      {required Map<String, String> headers,
-      required dynamic data}) async {
+      {required Map<String, String> headers, required dynamic data}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-        url: AppUrls.contactUs,
-        headers: headers,
-        body: data,
+      url: AppUrls.contactUs,
+      headers: headers,
+      body: data,
     );
-    return ContactUsModel.fromJson(response);
+    if (response != null && response.toString().isNotEmpty) {
+      return ContactUsModel.fromJson(response);
+    } else {
+      return ContactUsModel(messageCode: "0000", message: "Request Submitted Successfully");
+    }
   }
 
   //*------Get News and Events Method-------*
-  Future<List<NewsData>> newsAndEvents(
-      {required dynamic headers}) async {
+  Future<List<NewsData>> newsAndEvents({required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
       url: AppUrls.newsAndEvents,
       headers: headers,
@@ -91,11 +94,7 @@ class DrawerRepository {
   Future<ABriefAboutScoModel> aBriefAboutSco(
       {required dynamic body, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      // url: "https://sco.ae/jsonws/pageview.pagecontent/get-page-content-by-page-url",
-      url: AppUrls.getPageContentByUrl,
-      headers: headers,
-      body: body
-    );
+        url: AppUrls.getPageContentByUrl, headers: headers, body: body);
     return ABriefAboutScoModel.fromJson(response);
   }
 }

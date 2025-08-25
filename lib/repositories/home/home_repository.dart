@@ -71,7 +71,6 @@ class HomeRepository {
         return GetAllActiveScholarshipsModel.fromJson(element);
       }).toList();
 
-      print(list.length);
 
       // return list of scholarships
       return list;
@@ -97,34 +96,53 @@ class HomeRepository {
 
   // *------ Fetch Draft By Configuration Key ------*/
   Future<FindDraftByConfigurationKeyModel> findDraftByConfigurationKey(
-      {required dynamic headers, required dynamic body}) async {
-    dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: AppUrls.findDraftByConfigurationKey,
-      headers: headers,
-      body: body,
+      {
+        required dynamic userId,
+        required dynamic emiratesId,
+        required dynamic configKey,}) async {
+    dynamic response = await _dioBaseApiServices.dioGetApiService(
+      url: AppUrls.findDraftByConfigurationKey(userId,emiratesId,configKey),
+      headers: null,
     );
-    return FindDraftByConfigurationKeyModel.fromJson(response);
+    if(response['data'] != null){
+      return FindDraftByConfigurationKeyModel.fromJson(response['data']);
+    }
+    else{
+      return FindDraftByConfigurationKeyModel();
+    }
   }
 
   // *------ Fetch Draft By Draft ID ------*/
   Future<FindDraftByConfigurationKeyModel> findDraftByDraftId(
-      {required dynamic headers, required dynamic draftId}) async {
+      {required dynamic userId, required dynamic draftId}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: AppUrls.getDraftApplicationByDraftId + draftId,
-      headers: headers,
+      url: AppUrls.getDraftApplicationByDraftId(userId,draftId),
+      headers: null,
     );
-    return FindDraftByConfigurationKeyModel.fromJson(response);
+    if(response['data'] != null){
+      return FindDraftByConfigurationKeyModel.fromJson(response['data']);
+    }else{
+      return FindDraftByConfigurationKeyModel();
+    }
   }
 
   // *------ Fetch submitted application details By application number ------*/
   Future<FindDraftByConfigurationKeyModel> getSubmittedApplicationDetailsByApplicationNumber(
-          {required dynamic headers,
-          required dynamic applicationNumber}) async {
+          {
+            required dynamic userId,
+          required dynamic applicationNumber,
+          }) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:  AppUrls.getSubmittedApplicationDetailsByApplicationNumber + applicationNumber,
-      headers: headers,
+      url:  AppUrls.getSubmittedApplicationDetailsByApplicationNumber(userId,applicationNumber),
+      headers: null,
     );
-    return FindDraftByConfigurationKeyModel.fromJson(response);
+
+    if(response['data'] != null){
+      return FindDraftByConfigurationKeyModel.fromJson(response['data']);
+    }
+    else{
+      return FindDraftByConfigurationKeyModel();
+    }
   }
 
   // *------ Delete Draft Method ------*/
@@ -369,8 +387,7 @@ class HomeRepository {
       required dynamic headers,
       required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      // url: AppUrls.updateProfilePicture,
-      url: "${AppUrls.domainUrl}e-services/$userId/update-user-portrait",
+      url: AppUrls.updateProfilePicture(userId),
       headers: headers,
       body: body,
     );
@@ -473,7 +490,7 @@ class HomeRepository {
   /// add attachment to note
   Future<DecreaseNotificationCountModel> decreaseNotificationCount(
       {required dynamic userId, required dynamic body, required dynamic headers}) async {
-    dynamic response = await _dioBaseApiServices.dioPostApiService(
+    dynamic response = await _dioBaseApiServices.dioPutApiService(
         url: AppUrls.decreaseNotificationCount(userId), headers: headers, body: body);
     return DecreaseNotificationCountModel.fromJson(response);
   }

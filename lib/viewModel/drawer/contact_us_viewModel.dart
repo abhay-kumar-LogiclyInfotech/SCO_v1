@@ -96,11 +96,6 @@ class ContactUsViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        // 'authorization': AppUrls.basicAuth
-        // 'content-Type': 'application/json',
-
-
       };
       //*-----Create fields-----*
       // final data = FormData.fromMap(<String, String>{
@@ -127,14 +122,13 @@ class ContactUsViewModel with ChangeNotifier {
       //*-----Calling Api End-----*
 
       _setContactUsResponse = ApiResponse.completed(response);
-      _alertServices.toastMessage("Request Submitted Successfully");
+      _alertServices.toastMessage(response.message.toString());
 
       return true;
-    } catch (error) {
-      // debugPrint('Printing Error: $error');
+    } catch (error,stackTrace) {
       _setContactUsResponse = ApiResponse.error(error.toString());
-      // Message to show status of the operation:
       _alertServices.showErrorSnackBar(error.toString());
+      print(stackTrace);
 
       return false;
     }

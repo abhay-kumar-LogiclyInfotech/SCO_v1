@@ -1,18 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sco_v1/models/drawer/vision_and_mission_model.dart';
-
 import 'package:html/parser.dart' as htmlParser;
-
-
-
-
+import 'package:sco_v1/models/drawer/vision_and_mission_model.dart';
 
 import '../../data/response/ApiResponse.dart';
 import '../../repositories/drawer_repo/drawer_repository.dart';
 import '../language_change_ViewModel.dart';
 import '../services/alert_services.dart';
-import '../../resources/app_urls.dart';
 
 class VisionAndMissionViewModel with ChangeNotifier {
 //*------Necessary Services------*/
@@ -52,13 +48,13 @@ class VisionAndMissionViewModel with ChangeNotifier {
 
       //*-----Create Headers-----*
       final headers = <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         // 'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Body-----*
-      final body = <String, String>{
-        "pageUrl": "/web/sco/about-sco/vision-mission-values-goals"
-      };
+      final body = jsonEncode(<String, String>{
+        "pageURL": "/web/sco/about-sco/vision-mission-values-goals"
+      });
 
       //*-----Calling Api Start-----*
       final response = await _drawerRepository.visionAndMission(
@@ -66,13 +62,12 @@ class VisionAndMissionViewModel with ChangeNotifier {
 
       //*-----Calling Api End-----*
 
-      final htmlContent = response.contentCurrentValue.toString() ?? "";
+      final htmlContent = response.data?.contentCurrentValue.toString() ?? "";
       final selectedLanguage = langProvider.appLocale == const Locale('en')
           ? 'en_US'
           : 'ar_SA'; // Assuming you have a way to get the selected language code
 
-
-       _content = parseHtmlContent(htmlContent,selectedLanguage);
+      _content = parseHtmlContent(htmlContent, selectedLanguage);
 
       _setVisionAndMissionResponse = ApiResponse.completed(response);
 
@@ -87,9 +82,6 @@ class VisionAndMissionViewModel with ChangeNotifier {
     }
   }
 }
-
-
-
 
 class VisionMission {
   final String visionTitle;
@@ -146,36 +138,56 @@ class Content {
   });
 }
 
-Content parseHtmlContent(String htmlString,selectedLanguage) {
+Content parseHtmlContent(String htmlString, selectedLanguage) {
   // Parse HTML
   final document = htmlParser.parse(htmlString);
 
   // Extract Vision and Mission
   final visionMissionElement = document.querySelector('.sco-vision-mission');
-  final visionElement = visionMissionElement?.querySelector('.sco-vision .flex-text-wrapper');
-  final visionTitle = visionElement?.querySelector('.the-vm-title')?.text.trim() ?? '';
-  final visionText = visionElement?.querySelector('.the-vm-text')?.text.trim() ?? '';
+  final visionElement =
+      visionMissionElement?.querySelector('.sco-vision .flex-text-wrapper');
+  final visionTitle =
+      visionElement?.querySelector('.the-vm-title')?.text.trim() ?? '';
+  final visionText =
+      visionElement?.querySelector('.the-vm-text')?.text.trim() ?? '';
 
-  final missionElement = visionMissionElement?.querySelector('.sco-mission .flex-text-wrapper');
-  final missionTitle = missionElement?.querySelector('.the-vm-title')?.text.trim() ?? '';
-  final missionText = missionElement?.querySelector('.the-vm-text')?.text.trim() ?? '';
+  final missionElement =
+      visionMissionElement?.querySelector('.sco-mission .flex-text-wrapper');
+  final missionTitle =
+      missionElement?.querySelector('.the-vm-title')?.text.trim() ?? '';
+  final missionText =
+      missionElement?.querySelector('.the-vm-text')?.text.trim() ?? '';
 
   // Extract Values
-  final valuesElement = visionMissionElement?.querySelector('.sco-values .the-vls-content');
-  final valuesTitle = valuesElement?.querySelector('.the-vls-title')?.text.trim() ?? ''; // Extract values title
-  final valueItems = valuesElement?.querySelectorAll('.sco-value').map((element) {
-    final title = element.querySelector('.sco-val-title')?.text.trim() ?? '';
-    final text = element.querySelector('.sco-val-text')?.text.trim() ?? '';
-    return ValueItem(title: title, text: text);
-  }).toList() ?? [];
+  final valuesElement =
+      visionMissionElement?.querySelector('.sco-values .the-vls-content');
+  final valuesTitle =
+      valuesElement?.querySelector('.the-vls-title')?.text.trim() ??
+          ''; // Extract values title
+  final valueItems =
+      valuesElement?.querySelectorAll('.sco-value').map((element) {
+            final title =
+                element.querySelector('.sco-val-title')?.text.trim() ?? '';
+            final text =
+                element.querySelector('.sco-val-text')?.text.trim() ?? '';
+            return ValueItem(title: title, text: text);
+          }).toList() ??
+          [];
 
   // Extract Goals
-  final goalsElement = visionMissionElement?.querySelector('.sco-goals .sco-goals-wrapper');
-  final goalsTitle = goalsElement?.querySelector('.the-goal-title')?.text.trim() ?? '';
-  final goals = goalsElement?.querySelectorAll('.sco-goal').map((element) => element.text.trim()).toList() ?? [];
+  final goalsElement =
+      visionMissionElement?.querySelector('.sco-goals .sco-goals-wrapper');
+  final goalsTitle =
+      goalsElement?.querySelector('.the-goal-title')?.text.trim() ?? '';
+  final goals = goalsElement
+          ?.querySelectorAll('.sco-goal')
+          .map((element) => element.text.trim())
+          .toList() ??
+      [];
 
   return Content(
-    languageId: selectedLanguage, // Change as necessary
+    languageId: selectedLanguage,
+    // Change as necessary
     visionMission: VisionMission(
       visionTitle: visionTitle,
       visionText: visionText,
@@ -184,9 +196,7 @@ Content parseHtmlContent(String htmlString,selectedLanguage) {
     ),
     values: Values(
         valuesTitle: valuesTitle, // Include values title
-        valueItems: valueItems
-    ),
+        valueItems: valueItems),
     goals: Goals(goalsTitle: goalsTitle, goals: goals),
   );
 }
-

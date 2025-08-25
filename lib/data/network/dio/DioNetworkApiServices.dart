@@ -32,7 +32,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
           options.contentType = Headers.formUrlEncodedContentType;
         }
 
-        if(options.path.contains('common-data') || (options.path == AppUrls.login) || (options.path == AppUrls.openAuthToken)){
+        if(options.path.contains('common-data') || (options.path == AppUrls.login) || (options.path == AppUrls.signup) || (options.path == AppUrls.openAuthToken)){
           debugPrint('#################################### common token added ####################################');
           options.headers['Authorization'] = 'Bearer ${await TokenService.instance.getCommonApiToken}';
         }else{

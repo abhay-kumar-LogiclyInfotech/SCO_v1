@@ -141,7 +141,7 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                                 ValueItem value = provider.content!.values.valueItems[index];
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                    bottom: (index < ((provider.content?.values?.valueItems?.length ?? 1) - 1)) ? kCardPadding : 0,
+                                    bottom: (index < ((provider.content?.values.valueItems.length ?? 1) - 1)) ? kCardPadding : 0,
                                   ),
                                   child:
                                   Column(

@@ -94,7 +94,9 @@ class GetAllActiveScholarshipsModel {
     dynamic? userName,
     dynamic? uuid,
     String? majorWishListLovCode,
+    String? universityWishList,
     String? guidelines,
+    String? scholarshipCloseMessage,
   }) {
     _acadLoadAppr = acadLoadAppr;
     _acadmicCareer = acadmicCareer;
@@ -137,6 +139,8 @@ class GetAllActiveScholarshipsModel {
     _userId = userId;
     _userName = userName;
     _uuid = uuid;
+    universityWishList = universityWishList;
+    scholarshipCloseMessage = scholarshipCloseMessage;
   }
 
   GetAllActiveScholarshipsModel.fromJson(dynamic json) {
@@ -147,10 +151,10 @@ class GetAllActiveScholarshipsModel {
     _admApplicationCenter = json['admApplicationCenter'];
     _admitTerm = json['admitTerm'];
     _admitType = json['admitType'];
-    _approvedChecklistCode = json['approvedChecklistCode'];
+    _approvedChecklistCode = json['approvedCheckListCode'];
     _campus = json['campus'];
-    _checklistCode = json['checklistCode'];
-    _cohort = json['cohort'];
+    _checklistCode = json['attachmentCheckListCode'];
+    _cohort = json['cohortTag'];
     _companyId = json['companyId'];
     _configurationId = json['configurationId'];
     _configurationKey = json['configurationKey'];
@@ -161,11 +165,11 @@ class GetAllActiveScholarshipsModel {
     _endDate = json['endDate'];
     _groupId = json['groupId'];
     _institution = json['institution'];
-    _is12ThRequired = json['is12ThRequired'];
-    _isActive = json['isActive'];
-    _isDraftSubmission = json['isDraftSubmission'];
+    _is12ThRequired = json['is12thRequired'];
+    _isActive = json['active'];
+    _isDraftSubmission = json['draftSubmission'];
     _isRemoved = json['isRemoved'];
-    _isSpecialCase = json['isSpecialCase'];
+    _isSpecialCase = json['specialCase'];
     _lastPublishDate = json['lastPublishDate'];
     _modifiedDate = json['modifiedDate'];
     _programAction = json['programAction'];
@@ -181,8 +185,10 @@ class GetAllActiveScholarshipsModel {
     _userId = json['userId'];
     _userName = json['userName'];
     _uuid = json['uuid'];
-    majorWishListLovCode = json['majorWishListLovCode'];
-    guidelines = json['guidelines'];
+    majorWishListLovCode = json['majorWishList'];
+    universityWishList = json['universityWishList'];
+    guidelines = json['guideLines'];
+    scholarshipCloseMessage = json['scholarshipCloseMsg'];
   }
 
   dynamic? _acadLoadAppr;
@@ -270,7 +276,9 @@ class GetAllActiveScholarshipsModel {
     dynamic? userName,
     dynamic? uuid,
     String? majorWishListLovCode,
+    String? universityWishList,
     String? guidelines,
+    String? scholarshipCloseMessage,
   }) =>
       GetAllActiveScholarshipsModel(
         acadLoadAppr: acadLoadAppr ?? _acadLoadAppr,
@@ -315,7 +323,9 @@ class GetAllActiveScholarshipsModel {
         userName: userName ?? _userName,
         uuid: uuid ?? _uuid,
         majorWishListLovCode: majorWishListLovCode,
+        universityWishList: universityWishList,
         guidelines: guidelines,
+        scholarshipCloseMessage: scholarshipCloseMessage,
       );
 
   dynamic? get acadLoadAppr => _acadLoadAppr;
@@ -402,7 +412,9 @@ class GetAllActiveScholarshipsModel {
 
   /// new added codes
   String? majorWishListLovCode;
+  String? universityWishList;
   String? guidelines;
+  String? scholarshipCloseMessage;
 
   Map<dynamic, dynamic> toJson() {
     final map = <dynamic, dynamic>{};
@@ -413,10 +425,10 @@ class GetAllActiveScholarshipsModel {
     map['admApplicationCenter'] = _admApplicationCenter;
     map['admitTerm'] = _admitTerm;
     map['admitType'] = _admitType;
-    map['approvedChecklistCode'] = _approvedChecklistCode;
+    map['approvedCheckListCode'] = _approvedChecklistCode;
     map['campus'] = _campus;
-    map['checklistCode'] = _checklistCode;
-    map['cohort'] = _cohort;
+    map['attachmentCheckListCode'] = _checklistCode;
+    map['cohortTag'] = _cohort;
     map['companyId'] = _companyId;
     map['configurationId'] = _configurationId;
     map['configurationKey'] = _configurationKey;
@@ -427,11 +439,11 @@ class GetAllActiveScholarshipsModel {
     map['endDate'] = _endDate;
     map['groupId'] = _groupId;
     map['institution'] = _institution;
-    map['is12ThRequired'] = _is12ThRequired;
-    map['isActive'] = _isActive;
-    map['isDraftSubmission'] = _isDraftSubmission;
+    map['is12thRequired'] = _is12ThRequired;
+    map['active'] = _isActive;
+    map['draftSubmission'] = _isDraftSubmission;
     map['isRemoved'] = _isRemoved;
-    map['isSpecialCase'] = _isSpecialCase;
+    map['specialCase'] = _isSpecialCase;
     map['lastPublishDate'] = _lastPublishDate;
     map['modifiedDate'] = _modifiedDate;
     map['programAction'] = _programAction;
@@ -447,9 +459,10 @@ class GetAllActiveScholarshipsModel {
     map['userId'] = _userId;
     map['userName'] = _userName;
     map['uuid'] = _uuid;
-    map['majorWishListLovCode'] = majorWishListLovCode;
-    map['guidelines'] = guidelines;
+    map['majorWishList'] = majorWishListLovCode;
+    map['universityWishList'] = universityWishList;
+    map['guideLines'] = guidelines;
+    map['scholarshipCloseMsg'] = scholarshipCloseMessage;
     return map;
   }
 }
-

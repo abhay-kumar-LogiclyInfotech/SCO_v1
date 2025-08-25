@@ -59,13 +59,14 @@ class GetSubmittedApplicationDetailsByApplicationNumberViewModel with ChangeNoti
         setLoading(true);
         setApiResponse = ApiResponse.loading();
 
-        final headers = {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          // 'authorization': AppUrls.basicAuthWithUsernamePassword
-        };
+        //
+        // final headers = {
+        //   'Content-Type': 'application/x-www-form-urlencoded',
+        //   // 'authorization': AppUrls.basicAuthWithUsernamePassword
+        // };
 
 
-        FindDraftByConfigurationKeyModel response = await _myRepo.getSubmittedApplicationDetailsByApplicationNumber(applicationNumber: applicationNumber,headers: headers);
+        FindDraftByConfigurationKeyModel response = await _myRepo.getSubmittedApplicationDetailsByApplicationNumber(applicationNumber: applicationNumber,userId: HiveManager.getUserId());
 
 
         setApiResponse = ApiResponse.completed(response);
