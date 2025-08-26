@@ -66,8 +66,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
     super.initState();
     WidgetsBinding.instance.addObserver(this); // Register the observer
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      /// TODO: Uncomment this for production
-      // SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
+      SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
     });
   }
 
@@ -83,8 +82,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-       /// TODO: Uncomment this for production
-       // SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
+       SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
       });
     }
   }
