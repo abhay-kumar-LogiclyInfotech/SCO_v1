@@ -37,7 +37,7 @@ class AuthenticationRepository {
       required dynamic userId,
       required dynamic otp}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: '${AppUrls.baseUrl}users/$userId/verifyMobile/$otp',
+      url: AppUrls.verifyOtp(userId,otp),
       headers: headers,
       body: body,
     );
@@ -52,7 +52,7 @@ class AuthenticationRepository {
     required dynamic userId,
   }) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: '${AppUrls.baseUrl}users/$userId/resend-verification-code',
+      url: AppUrls.resendVerificationOtp(userId),
       headers: headers,
       body: body,
     );
@@ -67,7 +67,7 @@ class AuthenticationRepository {
     required dynamic userId,
   }) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
-      url: '${AppUrls.baseUrl}users/$userId/update-user-agree-on-terms',
+      url: AppUrls.acceptUserTerms(userId),
       headers: headers,
       body: body,
     );
@@ -81,7 +81,7 @@ class AuthenticationRepository {
   Future<GetSecurityQuestionsModel> getSecurityQuestions(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}users/$userId/security-questions',
+      url: AppUrls.getSecurityQuestions(userId),
       headers: headers,
     );
     return GetSecurityQuestionsModel.fromJson(response);
@@ -94,7 +94,7 @@ class AuthenticationRepository {
       required dynamic data}) async {
     dynamic response = await _dioBaseApiServices.dioMultipartApiService(
         method: 'PUT',
-        url: '${AppUrls.baseUrl}e-services/$userId/update-security-question',
+        url: AppUrls.updateSecurityQuestion(userId),
         headers: headers, data: data,);
     return UpdateSecurityQuestionModel.fromJson(response);
   }
@@ -118,7 +118,7 @@ class AuthenticationRepository {
   Future<ForgotPasswordGetSecurityQuestionModel> getForgotPasswordSecurityQuestionUsingEmail(
           {required String email, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}users/$email/security-question',
+      url: AppUrls.getForgotPasswordSecurityQuestionUsingEmail(email),
       headers: headers,
     );
     return ForgotPasswordGetSecurityQuestionModel.fromJson(response);
@@ -129,11 +129,10 @@ class AuthenticationRepository {
       {required String userId,
       required Map<String, String> headers,
       }) async {
-    dynamic response = await _dioBaseApiServices.dioMultipartApiService(
-        method: 'PUT',
-        url: '${AppUrls.baseUrl}users/$userId/reset-password-send',
+    dynamic response = await _dioBaseApiServices.dioPutApiService(
+        url: AppUrls.sendForgotPasswordOnEmail(userId),
         headers: headers,
-        data: FormData()
+        body: null
         );
     return ForgotPasswordSendMailModel.fromJson(response);
   }
@@ -142,7 +141,7 @@ class AuthenticationRepository {
   Future<ForgotSecurityQuestionOtpVerificationModel> getForgotSecurityQuestionVerificationOtp(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}users/$userId/forgot-sequrity-question-verification-code',
+      url: AppUrls.getForgotSecurityQuestionVerificationOtp(userId),
       headers: headers,
     );
     return ForgotSecurityQuestionOtpVerificationModel.fromJson(response);
@@ -165,7 +164,7 @@ class AuthenticationRepository {
   Future<LoginModel> getRoles(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}users/$userId/user-details',
+      url: AppUrls.getUserDetails(userId),
       headers: headers,
     );
     return LoginModel.fromJson(response);

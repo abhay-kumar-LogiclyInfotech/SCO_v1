@@ -65,7 +65,6 @@ class GetSpecificNoteDetailsViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         GetSpecificNoteDetailsModel response = await _myRepo.getSpecificNoteDetails(userId: _userId ?? '',noteId:noteId,headers: headers);

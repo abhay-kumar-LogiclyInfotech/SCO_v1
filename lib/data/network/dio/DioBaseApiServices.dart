@@ -5,6 +5,7 @@ abstract class DioBaseApiServices {
     required String url,
     required Map<String, String>? headers,
     Map<String, String>? queryParams, // Optional query parameters
+
   });
 
   Future<dynamic> dioPostApiService({

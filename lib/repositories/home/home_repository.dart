@@ -13,7 +13,6 @@ import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SubmitApplicationModel.dart';
-import 'package:sco_v1/models/home/HomeSliderModel.dart';
 import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
 import 'package:sco_v1/models/services/notes_models/AddCommentToNoteModel.dart';
 import 'package:sco_v1/models/services/notes_models/GetAllNotesModel.dart';
@@ -38,21 +37,6 @@ import '../../utils/constants.dart';
 class HomeRepository {
   final DioBaseApiServices _dioBaseApiServices = DioNetworkApiServices();
 
-  //*------Home Slider Method-------*
-  // Future<List<HomeSliderModel>> homeSlider({required dynamic headers}) async {
-  //   dynamic response = await _dioBaseApiServices.dioGetApiService(
-  //     url: AppUrls.homeSlider,
-  //     headers: headers,
-  //   );
-  //
-  //   List<HomeSliderModel> homeSliderItemsList = [];
-  //
-  //   for (var item in response) {
-  //     homeSliderItemsList.add(HomeSliderModel.fromJson(item));
-  //   }
-  //
-  //   return homeSliderItemsList;
-  // }
 
   // *------Apply Scholarship section start------*/
 
@@ -86,8 +70,7 @@ class HomeRepository {
       required dynamic body,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url:
-          '${AppUrls.baseUrl}e-services/$userId/draft-application/$applicationNumber',
+      url: AppUrls.saveDraft(userId,applicationNumber),
       body: body,
       headers: headers,
     );
@@ -149,23 +132,21 @@ class HomeRepository {
   Future<DeleteDraftModel> deleteDraft(
       {required String userId,
       required String draftId,
-      required dynamic headers}) async {
+      required Map<String,String> headers}) async {
     dynamic response = await _dioBaseApiServices.dioDeleteApiService(
-      url: '${AppUrls.baseUrl}e-services/$userId/delete-draft/$draftId',
+      url: AppUrls.deleteDraft(userId,draftId),
       headers: headers,
     );
     return DeleteDraftModel.fromJson(response);
   }
 
   // *------ Attach file to application form ------*/
-  // url: "https://stg.sco.ae/o/mopa-sco-api/e-services/$userId/attach-file",
-
   Future<AttachFileModel> attachFile(
       {required dynamic userId,
       required dynamic headers,
       required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: "${AppUrls.baseUrl}e-services/$userId/attach-file",
+      url: AppUrls.attachFile(userId),
       headers: headers,
       body: body,
     );
@@ -176,7 +157,7 @@ class HomeRepository {
   Future<PersonalDetailsModel> getPersonalDetails(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}self-service/personalInformation/$userId',
+      url: AppUrls.getPersonalDetails(userId),
       headers: headers,
     );
     return PersonalDetailsModel.fromJson(response);
@@ -188,30 +169,19 @@ class HomeRepository {
       required dynamic body,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
-      url: '${AppUrls.baseUrl}self-service/personalInformation/$userId',
+      url: AppUrls.updateProfileDetails(userId),
       body: body,
       headers: headers,
     );
     return UpdatePersonalDetailsModel.fromJson(response);
   }
 
-  // // *------ Update User (student) Information Method ------*/
-  // Future<UpdatePersonalDetailsModel> updatePersonalDetails(
-  //     {required String userId,required dynamic body, required dynamic headers}) async {
-  //   dynamic response = await _dioBaseApiServices.dioMultipartApiService(
-  //     url: '${AppUrls.baseUrl}self-service/personalInformation/$userId',
-  //     data: body,
-  //     method: 'PUT',
-  //     headers: headers,
-  //   );
-  //   return UpdatePersonalDetailsModel.fromJson(response);
-  // }
 
 //  *------ Get List of Applications including draft,applied or submitted Method ------*/
   Future<GetListApplicationStatusModel> getListApplicationStatus(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}e-services/$userId/list-application-status',
+      url: AppUrls.getApplicationsList(userId),
       headers: headers,
     );
     return GetListApplicationStatusModel.fromJson(response);
@@ -221,7 +191,7 @@ class HomeRepository {
   Future<MyScholarshipModel> getMyScholarship(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}self-service/myscholarship/$userId',
+      url: AppUrls.getMyScholarship(userId),
       headers: headers,
     );
     return MyScholarshipModel.fromJson(response);
@@ -233,7 +203,7 @@ class HomeRepository {
       required dynamic headers,
       required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url: "${AppUrls.baseUrl}e-services/$userId/submit-application",
+      url: AppUrls.submitApplication(userId),
       headers: headers,
       body: body,
     );
@@ -244,7 +214,7 @@ class HomeRepository {
   Future<GetEmploymentStatusModel> getEmploymentStatus(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}e-services/$userId/my-employment-status',
+      url: AppUrls.getEmploymentStatus(userId),
       headers: headers,
     );
     return GetEmploymentStatusModel.fromJson(response);
@@ -258,16 +228,14 @@ class HomeRepository {
       required bool updating}) async {
     dynamic response = updating
         ? await _dioBaseApiServices.dioPutApiService(
-            url:
-                '${AppUrls.baseUrl}e-services/$userId/update-employment-status',
+            url: AppUrls.updateEmploymentStatus(userId),
             headers: headers,
             body: body)
         :
 
         /// If not updating which means we are creating new employment status
         await _dioBaseApiServices.dioPostApiService(
-            url:
-                '${AppUrls.baseUrl}e-services/$userId/create-employment-status',
+            url: AppUrls.createEmploymentStatus(userId),
             headers: headers,
             body: body);
     return CreateUpdateEmploymentStatusModel.fromJson(response);
@@ -315,7 +283,7 @@ class HomeRepository {
   Future<MyFinanceStatusModel> myFinanceStatus(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}e-services/$userId/my-finance-status',
+      url: AppUrls.myFinanceStatus(userId),
       headers: headers,
     );
     return MyFinanceStatusModel.fromJson(response);
@@ -325,8 +293,7 @@ class HomeRepository {
   Future<GetAllRequestsModel> getAllRequests(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:
-          '${AppUrls.baseUrl}self-service/service-request/$userId/get-service-requests',
+      url: AppUrls.getAllRequests(userId),
       headers: headers,
     );
     return GetAllRequestsModel.fromJson(response);
@@ -338,8 +305,7 @@ class HomeRepository {
       required dynamic headers,
       required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-      url:
-          '${AppUrls.baseUrl}self-service/service-request/$userId/add-service-request',
+      url: AppUrls.createRequest(userId),
       headers: headers,
       body: body,
     );
@@ -352,8 +318,7 @@ class HomeRepository {
       required dynamic headers,
       required dynamic body}) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
-      url:
-          '${AppUrls.baseUrl}self-service/service-request/$userId/add-comment-exiting-request',
+      url: AppUrls.updateRequest(userId),
       headers: headers,
       body: body,
     );
@@ -364,7 +329,7 @@ class HomeRepository {
   Future<GetMyAdvisorModel> getMyAdvisor(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}e-services/my-advisor/$userId',
+      url: AppUrls.getMyAdvisor(userId),
       headers: headers,
     );
     return GetMyAdvisorModel.fromJson(response);
@@ -374,8 +339,7 @@ class HomeRepository {
   Future<GetProfilePictureUrlModel> getProfilePictureUrl(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      // url: AppUrls.getProfilePictureUrl + userId,
-      url: "${AppUrls.baseUrl}e-services/$userId/user-portrait",
+      url: AppUrls.getProfilePicture(userId),
       headers: headers,
     );
     return GetProfilePictureUrlModel.fromJson(response);
@@ -386,7 +350,7 @@ class HomeRepository {
       {required dynamic userId,
       required dynamic headers,
       required dynamic body}) async {
-    dynamic response = await _dioBaseApiServices.dioPostApiService(
+    dynamic response = await _dioBaseApiServices.dioPutApiService(
       url: AppUrls.updateProfilePicture(userId),
       headers: headers,
       body: body,
@@ -419,7 +383,7 @@ class HomeRepository {
   Future<GetAllNotesModel> getAllNotes(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}self-service/advisee/get-note-by-advisee/$userId',
+      url: AppUrls.getAllNotes(userId),
       headers: headers,
     );
     return GetAllNotesModel.fromJson(response);
@@ -431,8 +395,7 @@ class HomeRepository {
       required String noteId,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:
-          '${AppUrls.baseUrl}self-service/advisee/get-note-details/$userId/$noteId',
+      url: AppUrls.getSpecificNoteDetails(userId,noteId),
       headers: headers,
     );
     return GetSpecificNoteDetailsModel.fromJson(response);
@@ -445,8 +408,7 @@ class HomeRepository {
       required dynamic body,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
-        url:
-            '${AppUrls.baseUrl}self-service/advisee/$userId/update-note/$noteId',
+        url: AppUrls.addCommentToNote(userId,noteId),
         headers: headers,
         body: body);
     return AddCommentToNoteModel.fromJson(response);
@@ -459,8 +421,7 @@ class HomeRepository {
       required dynamic body,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-        url:
-            '${AppUrls.baseUrl}self-service/notes/$userId/upload-attachment/$noteId',
+        url: AppUrls.uploadAttachmentToNote(userId,noteId),
         headers: headers,
         body: body);
     return UploadAttachmentToNoteModel.fromJson(response);
@@ -501,8 +462,7 @@ class HomeRepository {
       required String applicationNumber,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url:
-          '${AppUrls.baseUrl}e-services/$userId/fetch-ps-application/$applicationNumber',
+      url: AppUrls.getPeopleSoftApplication(userId,applicationNumber),
       headers: headers,
     );
     return GetApplicationSectionsModel.fromJson(response);
@@ -516,7 +476,6 @@ class HomeRepository {
       required dynamic body,
       required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioPutApiService(
-      //https://stg.sco.ae/o/mopa-sco-api/e-services/{userId}/update-ps-application/workexp/{applicationNo}
       url: url,
       body: body,
       headers: headers,
@@ -528,8 +487,7 @@ class HomeRepository {
   Future<GetListOfAttachmentsModel> getListOfAttachments(
       {required String userId, required dynamic headers}) async {
     dynamic response = await _dioBaseApiServices.dioGetApiService(
-      url: '${AppUrls.baseUrl}e-services/$userId/get-list-attachments',
-      // https://stg.sco.ae/o/mopa-sco-api/e-services/985182/get-list-attachments
+      url: AppUrls.getListOfAttachments(userId),
       headers: headers,
     );
     return GetListOfAttachmentsModel.fromJson(response);
@@ -542,11 +500,9 @@ class HomeRepository {
       required dynamic headers}) async
   {
     dynamic response = await _dioBaseApiServices.dioPostApiService(
-        // https://stg.sco.ae/o/mopa-sco-api/e-services/985182/upload-file
-// https://stg.sco.ae/o/mopa-sco-api/e-services/985182/update-file
         url: isUpdating
-            ? "${AppUrls.baseUrl}e-services/$userId/update-file"
-            : "${AppUrls.baseUrl}e-services/$userId/upload-file",
+            ? AppUrls.updateAttachment(userId)
+            : AppUrls.uploadAttachment(userId),
         headers: headers,
         body: body);
     return UploadUpdateAttachmentModel.fromJson(response);

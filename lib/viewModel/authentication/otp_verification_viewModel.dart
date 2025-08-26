@@ -68,7 +68,6 @@ class OtpVerificationViewModel with ChangeNotifier {
       //*-----Create Headers Start-----*
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 
@@ -161,7 +160,6 @@ class OtpVerificationViewModel with ChangeNotifier {
 
       final headers = <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Headers End-----*
 

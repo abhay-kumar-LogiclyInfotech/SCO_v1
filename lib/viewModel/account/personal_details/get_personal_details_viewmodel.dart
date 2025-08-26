@@ -68,7 +68,6 @@ class GetPersonalDetailsViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         PersonalDetailsModel response = await _myRepo.getPersonalDetails(userId: _userId ?? '',headers: headers);

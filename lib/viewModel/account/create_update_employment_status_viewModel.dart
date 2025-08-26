@@ -66,7 +66,6 @@ class CreateUpdateEmploymentStatusViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/json',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         final body = jsonEncode(form);

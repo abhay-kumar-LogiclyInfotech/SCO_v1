@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http_certificate_pinning/http_certificate_pinning.dart';
@@ -11,6 +12,8 @@ import 'package:logger/logger.dart';
 import 'package:sco_v1/utils/key_constants.dart';
 
 import '../../../resources/app_urls.dart';
+import '../../../view/authentication/login/login_view.dart';
+import '../../../viewModel/services/navigation_services.dart';
 import '../../../viewModel/services/token_service.dart';
 import '../../app_exceptions.dart';
 import 'DioBaseApiServices.dart';
@@ -27,10 +30,25 @@ class DioNetworkApiServices extends DioBaseApiServices {
   DioNetworkApiServices() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
+
+
+
+
+        // Skip token injection if Authorization already provided
+        if (options.headers.containsKey('Authorization')) {
+          debugPrint('#################################### custom Authorization used ####################################');
+          logger.i('Request: ${options.method} ${options.uri}');
+          logger.i('Request Headers: ${options.headers}');
+          logger.d('Request Data: ${options.data}');
+          return handler.next(options);
+        }
+
+
         // Special handling for token endpoint
         if (options.path == AppUrls.openAuthToken) {
           options.contentType = Headers.formUrlEncodedContentType;
         }
+
 
         if(options.path.contains('common-data') || (options.path == AppUrls.login) || (options.path == AppUrls.signup) || (options.path == AppUrls.openAuthToken)){
           debugPrint('#################################### common token added ####################################');
@@ -40,88 +58,101 @@ class DioNetworkApiServices extends DioBaseApiServices {
           options.headers['Authorization'] = 'Bearer ${await TokenService.instance.getUserApiAccessToken}';
         }
 
+
         logger.i('Request: ${options.method} ${options.uri}');
         logger.i('Request Headers: ${options.headers}');
         logger.d('Request Data: ${options.data}');
 
+
         return handler.next(options);
       },
-      onError: (DioException e, handler) async {
-        try {
-          // Extract message safely
-          String? errorMessage;
-          final responseData = e.response?.data;
-
-          if (responseData is Map<String, dynamic> && responseData.containsKey('message')) {
-            errorMessage = responseData['message']?.toString();
-          }
-
-          // If Unauthorized or token expired
-          if (errorMessage == 'Invalid or expired token') {
-            final reqOptions = e.requestOptions;
-
-            if (!_isRefreshing) {
-              _isRefreshing = true;
-              try {
-                final commonApiTokenRefreshed = await TokenService.instance.getToken(
-                  grantType: GrantType.refreshToken,
-                  tokenAccessType: TokenAccessType.common,
-                );
-                final userApiTokenRefreshed = await TokenService.instance.getToken(
-                  grantType: GrantType.refreshToken,
-                  tokenAccessType: TokenAccessType.user,
-                );
-
-                _isRefreshing = false;
-
-                if (commonApiTokenRefreshed && userApiTokenRefreshed) {
-                  // Retry all queued requests
-                  for (var callback in _pendingRequests) {
-                    callback(reqOptions);
-                  }
-                  _pendingRequests.clear();
-
-                  // Retry original failed request
-                  final cloneReq = await _dio.fetch(reqOptions);
-                  return handler.resolve(cloneReq);
-                } else {
-                  return handler.reject(e);
-                }
-              } catch (err) {
-                _isRefreshing = false;
-                _pendingRequests.clear();
-                return handler.reject(
-                  err is DioException
-                      ? err
-                      : DioException(requestOptions: reqOptions, error: err.toString()),
-                );
-              }
-            } else {
-              // Queue request until refresh finishes
-              final completer = Completer<Response>();
-              _pendingRequests.add((requestOptions) async {
-                try {
-                  final cloneReq = await _dio.fetch(requestOptions);
-                  completer.complete(cloneReq);
-                } catch (err) {
-                  completer.completeError(err);
-                }
-              });
-              return completer.future.then((value) => handler.resolve(value));
+        onError: (DioException e, handler) async {
+          try {
+            // 1. Skip interceptor for token refresh calls
+            if (e.requestOptions.path.contains('/token')) {
+              return handler.next(e);
             }
+
+            // 2. Extract message
+            String? errorMessage;
+            final responseData = e.response?.data;
+            if (responseData is Map<String, dynamic> && responseData.containsKey('message')) {
+              errorMessage = responseData['message']?.toString();
+            }
+
+            // 3. Handle token expiration
+            if (errorMessage == 'Invalid or expired token') {
+              final reqOptions = e.requestOptions;
+
+              // Prevent multiple refresh calls
+              if (!_isRefreshing) {
+                _isRefreshing = true;
+
+                try {
+                  // Refresh BOTH tokens
+                  final commonRefreshed = await TokenService.instance.getToken(
+                    grantType: GrantType.refreshToken,
+                    tokenAccessType: TokenAccessType.common,
+                  );
+                  final userRefreshed = await TokenService.instance.getToken(
+                    grantType: GrantType.refreshToken,
+                    tokenAccessType: TokenAccessType.user,
+                  );
+
+                  _isRefreshing = false;
+
+                  if (commonRefreshed && userRefreshed) {
+                    // Retry all queued requests AFTER tokens are refreshed
+                    for (var callback in _pendingRequests) {
+                      callback(reqOptions);
+                    }
+                    _pendingRequests.clear();
+
+                    // Retry the failed request
+                    final newAccessToken =
+                    await TokenService.instance.getUserApiAccessToken;
+                    reqOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+
+                    final retryResponse = await _dio.fetch(reqOptions);
+                    return handler.resolve(retryResponse);
+                  } else {
+                    // Refresh failed → force logout
+                    _pendingRequests.clear();
+                    GetIt.instance.get<NavigationServices>().clearStackAndPush(MaterialPageRoute(builder: (_) => const LoginView()));
+                    return handler.reject(e);
+                  }
+                } catch (err) {
+                  _isRefreshing = false;
+                  _pendingRequests.clear();
+                  return handler.reject(
+                    err is DioException ? err : DioException(requestOptions: reqOptions, error: err.toString()),
+                  );
+                }
+              } else {
+                // Queue requests during refresh
+                final completer = Completer<Response>();
+                _pendingRequests.add((requestOptions) async {
+                  try {
+                    final cloneReq = await _dio.fetch(requestOptions);
+                    completer.complete(cloneReq);
+                  } catch (err) {
+                    completer.completeError(err);
+                  }
+                });
+                return completer.future.then((value) => handler.resolve(value));
+              }
+            }
+
+            // Log other errors
+            logger.e('Error: ${e.message}');
+            logger.e('Error Response Status: ${e.response?.statusCode}');
+            logger.e('Error Response Data: ${e.response?.data}');
+          } catch (err) {
+            logger.e('Interceptor Error: $err');
           }
 
-          // Log other errors
-          logger.e('Error: ${e.message}');
-          logger.e('Error Response Status: ${e.response?.statusCode}');
-          logger.e('Error Response Data: ${e.response?.data}');
-        } catch (err) {
-          // Log unexpected errors in interceptor itself
-          logger.e('Interceptor Error: $err');
-        }
-
-        return handler.next(e);
-      },
+          return handler.next(e);
+        },
       onResponse: (response, handler) {
         logger.d('Response Status: ${response.statusCode}');
         logger.d('Response Data: ${response.data}');
@@ -134,11 +165,6 @@ class DioNetworkApiServices extends DioBaseApiServices {
       allowedSHAFingerprints: [dotenv.env[KeyConstants.sha256SslFingerPrints]!],
     ));
 
-    // HTTP adapter
-    _dio.httpClientAdapter = IOHttpClientAdapter(
-      createHttpClient: () => HttpClient(),
-      validateCertificate: (cert, host, port) => true,
-    );
   }
 
 

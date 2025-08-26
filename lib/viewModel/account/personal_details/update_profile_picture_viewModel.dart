@@ -64,12 +64,12 @@ class UpdateProfilePictureViewModel with ChangeNotifier {
         await setUserId();
 
         final headers = <String,String>{
-          // "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/x-www-form-urlencoded",
           // 'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         // Data in JSON format
-        final jsonData = jsonEncode({"userId": _userId.toString(), "base64": base64String});
+        final jsonData = {"base64": base64String};
 
         // Convert JSON to URL-encoded form
         // String urlEncodedData = Uri(queryParameters: jsonData).query;
@@ -77,7 +77,7 @@ class UpdateProfilePictureViewModel with ChangeNotifier {
         GetProfilePictureUrlModel response = await _myRepo.updateProfilePicture(userId: _userId ?? '', body: jsonData, headers: headers);
 
         _setApiResponse = ApiResponse.completed(response);
-        _alertServices.toastMessage("Profile picture updated successfully");
+        _alertServices.toastMessage(response.message ?? '');
         setLoading(false);
         return true;
       } catch (error,stackTrace) {

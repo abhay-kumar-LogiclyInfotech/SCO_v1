@@ -70,7 +70,6 @@ class AttachFileViewmodel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/json',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         final body = jsonEncode(file);

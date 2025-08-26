@@ -63,7 +63,6 @@ class GetAllNotificationsViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         List<NotificationData> response = await _myRepo.getAllNotifications(userId: _userId ?? '',headers: headers);

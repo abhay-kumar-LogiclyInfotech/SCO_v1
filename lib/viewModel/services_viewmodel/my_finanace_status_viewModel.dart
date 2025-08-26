@@ -65,7 +65,6 @@ class MyFinanceStatusViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         MyFinanceStatusModel response = await _myRepo.myFinanceStatus(userId: _userId ?? '',headers: headers);

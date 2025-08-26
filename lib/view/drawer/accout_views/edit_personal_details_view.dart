@@ -65,8 +65,8 @@ class _EditPersonalDetailsViewState extends State<EditPersonalDetailsView>
   List<DropdownMenuItem> _phoneNumberTypeMenuItemsList = [];
   List<DropdownMenuItem> _emailTypeMenuItemsList = [];
 
-  List<PhoneNumber> _phoneNumberDetailsList = [];
-  List<EmailDetail> _emailDetailsList = [];
+  final List<PhoneNumber> _phoneNumberDetailsList = [];
+  final List<EmailDetail> _emailDetailsList = [];
 
   Future _initializeData() async {
     /// fetch student profile Information t prefill the user information

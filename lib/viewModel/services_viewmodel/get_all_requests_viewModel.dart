@@ -65,7 +65,6 @@ class GetAllRequestsViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         GetAllRequestsModel response = await _myRepo.getAllRequests(userId: _userId ?? '',headers: headers);

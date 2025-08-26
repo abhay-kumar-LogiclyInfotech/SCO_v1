@@ -11,6 +11,7 @@ import '../../l10n/app_localizations.dart';
 import '../../repositories/auth_repo/auth_repository.dart';
 import '../../resources/app_urls.dart';
 import '../services/alert_services.dart';
+import '../services/token_service.dart';
 
 class ForgotPasswordViewModel with ChangeNotifier {
 //*------Necessary Services------*/
@@ -42,25 +43,25 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
   Future<bool> getSecurityQuestion(
       {required String email,
-      // required BuildContext context,
       required LanguageChangeViewModel langProvider}) async {
     try {
-      //
-      // if (email.isEmpty) {
-      //   _alertServices.showErrorSnackBar("something went wrong...");
-      //   return false;
-      // }
 
       _setGetSecurityQuestionResponse = ApiResponse.loading();
 
 
       //*-----Create Headers Start-----*
+      /// Getting the common api token
+      final token = "Bearer ${await TokenService.instance.getCommonApiToken}";
 
-      final headers = <String, String>{'authorization': AppUrls.basicAuth};
+      final headers = <String, String>{'authorization': token};
       //*-----Create Headers End-----*
 
       //*-----Calling Api Start-----*
       final response = await _authenticationRepository.getForgotPasswordSecurityQuestionUsingEmail(email: email, headers: headers);
+
+
+      /// Getting the user token as have not logged in as of now so can get token be using email entered by the user to forget password
+      await TokenService.instance.getToken(grantType: GrantType.password, tokenAccessType: TokenAccessType.user,email: email);
 
       //*-----Calling Api End-----*
 
@@ -107,16 +108,14 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
 
 //*------Send Password through mail Start--------*/
-  ApiResponse<ForgotPasswordSendMailModel> _sendForgotPasswordSendMailResponse =
+  ApiResponse<ForgotPasswordSendMailModel> sendForgotPasswordSendMailResponse =
       ApiResponse.none();
 
-  ApiResponse<ForgotPasswordSendMailModel>
-      get sendForgotPasswordSendMailResponse =>
-          _sendForgotPasswordSendMailResponse;
+
 
   set _setSendForgotPasswordSendMailResponse(
       ApiResponse<ForgotPasswordSendMailModel> response) {
-    _sendForgotPasswordSendMailResponse = response;
+    sendForgotPasswordSendMailResponse = response;
     notifyListeners();
   }
 
@@ -135,7 +134,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
       _setSendForgotPasswordSendMailResponse = ApiResponse.loading();
 
       //*-----Create Headers Start-----*
-      final headers = <String, String>{'authorization': AppUrls.basicAuth};
+      final headers = <String, String>{};
       //*-----Create Headers End-----*
 
       //*-----Calling Api Start-----*
@@ -151,6 +150,8 @@ class ForgotPasswordViewModel with ChangeNotifier {
     } catch (e) {
       // debugPrint('Error: $e');
       _alertServices.showErrorSnackBar(e.toString());
+      _setSendForgotPasswordSendMailResponse = ApiResponse.error(e.toString());
+
       return false;
     }
   }
@@ -176,7 +177,6 @@ class ForgotPasswordViewModel with ChangeNotifier {
 
   Future<bool> getForgotSecurityQuestionVerificationOtp({
     required String userId,
-    // required BuildContext context,
   }) async {
     try {
 
@@ -186,19 +186,20 @@ class ForgotPasswordViewModel with ChangeNotifier {
       }
       _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.loading();
 
+
+
+
       //*-----Create Headers Start-----*
-      final headers = <String, String>{
-        
-         'authorization': AppUrls.basicAuth
-      
-      };
+      // final headers = <String, String>{
+      //
+      //
+      // };
       //*-----Create Headers End-----*
 
       //*-----Calling Api Start-----*
-      final response = await _authenticationRepository
-          .getForgotSecurityQuestionVerificationOtp(
+      final response = await _authenticationRepository.getForgotSecurityQuestionVerificationOtp(
         userId: userId,
-        headers: headers,
+        headers: null,
       );
       //*-----Calling Api End-----*
       _setForgotSecurityQuestionOtpVerificationResponse = ApiResponse.completed(response);

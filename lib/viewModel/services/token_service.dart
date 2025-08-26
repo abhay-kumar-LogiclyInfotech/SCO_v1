@@ -48,18 +48,18 @@ class TokenService {
   Future<String?> get getUserApiRefreshToken async => await getIt.get<SecureStorageServices>().readSecureData(KeyConstants.userApiRefreshToken); /// for common api
 
 
-  Future<bool> getToken({required GrantType grantType,required TokenAccessType tokenAccessType}) async {
+  Future<bool> getToken({required GrantType grantType,required TokenAccessType tokenAccessType,String? email}) async {
     try {
       final commonApiRefreshToken = await getCommonApiRefreshToken;
       final userApiRefreshToken = await getUserApiRefreshToken;
 
       /// IF Fetching the token for user
-      final userEmail =  HiveManager.getEmail() ?? '';
+      final userEmail = email ??  HiveManager.getEmail() ?? '';
 
       final body = <String, String>{
         "grant_type": grantType.value,
         "username": (tokenAccessType == TokenAccessType.user) ? userEmail : dotenv.env[KeyConstants.usernameOfCommonApi]!,
-        if (grantType == GrantType.password)
+        if (grantType == GrantType.password) /// dont need password for user
           "password": dotenv.env[KeyConstants.passwordOfCommonApi]!,
         if (grantType == GrantType.refreshToken && commonApiRefreshToken != null && tokenAccessType == TokenAccessType.common)
           "refresh_token": commonApiRefreshToken,
@@ -84,10 +84,7 @@ class TokenService {
 
       return true;
 
-      // Save expiry time (epoch seconds from now)
-      // _expiryTime = DateTime.now().add(Duration(seconds: response.expireIn!)).millisecondsSinceEpoch ~/ 1000;
 
-      // _setApiResponse = ApiResponse.completed(response);
     } catch (e) {
       debugPrint("Error in getting token: $e");
       // _setApiResponse = ApiResponse.error("Error during accessing common token $e");

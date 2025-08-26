@@ -65,7 +65,6 @@ class MyScholarshipViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         MyScholarshipModel response = await _myRepo.getMyScholarship(userId: _userId ?? '',headers: headers);

@@ -249,11 +249,7 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
       builder: (context, provider, _) {
         return InkWell(
           onTap: () async {
-            bool result =
-                await provider.getForgotSecurityQuestionVerificationOtp(
-                    userId: widget.userId
-                    // ,context: context
-                );
+            bool result = await provider.getForgotSecurityQuestionVerificationOtp(userId: widget.userId);
 
             if (result) {
               String? verificationOtp = provider
@@ -261,11 +257,9 @@ class _AnswerSecurityQuestionViewState extends State<AnswerSecurityQuestionView>
                   .data
                   ?.data
                   ?.verificationCode;
+
               if (verificationOtp != null && verificationOtp.isNotEmpty) {
-                _navigationService.pushReplacementCupertino(
-                    CupertinoPageRoute(
-                        builder: (context) =>
-                            ForgotSecurityQuestionOtpVerificationView(verificationOtp: verificationOtp,userId:widget.userId)));
+                _navigationService.pushReplacementCupertino(CupertinoPageRoute(builder: (context) => ForgotSecurityQuestionOtpVerificationView(verificationOtp: verificationOtp,userId:widget.userId)));
               }
             }
           },

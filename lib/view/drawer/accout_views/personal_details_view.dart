@@ -122,7 +122,8 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView> with MediaQue
                             cameraEnabled: false,
                             profileImage: provider.apiResponse.data?.data?.url != null ? NetworkImage(AppUrls.domainUrl + provider.apiResponse.data!.data!.url!.toString()) : const AssetImage('assets/personal_details/Picture.png'),
                             onTap: () {},
-                            onLongPress: () {});
+                            onLongPress: () {},
+                        );
                       },
                     )
                     ,

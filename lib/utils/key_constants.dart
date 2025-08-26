@@ -1,4 +1,5 @@
 class KeyConstants {
+  static String get domainUrl => 'DOMAIN_URL';
   static String get sha256SslFingerPrints => 'SHA_256_FINGERPRINTS';
   static String get clientId => 'CLIENT_ID';
   static String get clientSecret => 'CLIENT_SECRET';

@@ -37,16 +37,6 @@ class DrawerRepository {
   }
 
   //*------Contact Us methods------*/
-  // Future<ContactUsModel> contactUs(
-  //     {required Map<String, String> headers,
-  //     required FormData data}) async {
-  //   dynamic response = await _dioBaseApiServices.dioMultipartApiService(
-  //       method: 'POST',
-  //       url: AppUrls.contactUs,
-  //       headers: headers,
-  //       data: data);
-  //   return ContactUsModel.fromJson(response);
-  // }
   Future<ContactUsModel> contactUs(
       {required Map<String, String> headers, required dynamic data}) async {
     dynamic response = await _dioBaseApiServices.dioPostApiService(

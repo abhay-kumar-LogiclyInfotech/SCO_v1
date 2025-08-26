@@ -123,7 +123,6 @@ class SignupViewModel with ChangeNotifier {
 
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 

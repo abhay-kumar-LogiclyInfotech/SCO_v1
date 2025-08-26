@@ -69,7 +69,6 @@ class GetListApplicationStatusViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         GetListApplicationStatusModel response = await _myRepo.getListApplicationStatus(userId: _userId ?? '',headers: headers);

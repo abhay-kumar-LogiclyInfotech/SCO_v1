@@ -65,7 +65,6 @@ class GetAllNotesViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         GetAllNotesModel response = await _myRepo.getAllNotes(userId: _userId ?? '',headers: headers);

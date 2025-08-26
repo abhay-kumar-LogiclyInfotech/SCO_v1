@@ -69,7 +69,6 @@ class AddCommentToNoteViewModel with ChangeNotifier {
         final headers = {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'authorization': AppUrls.basicAuth
         };
 
         final body = jsonEncode(form);
