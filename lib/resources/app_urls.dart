@@ -73,7 +73,7 @@ class AppUrls {
   static String sendForgotPasswordOnEmail(String userId) => "${baseUrl}users/$userId/reset-password-send";
 
   //faq's endpoint
-  static String get faq => "https://stg.sco.ae/o/mopa-sco-api/common-data/get-latest-article/71109/20126/0";
+  static String get faq => "${baseUrl}common-data/get-latest-article/71109/20126/0";
 
   //vision and mission endpoint
   static String get getPageContentByUrl => "${baseUrl}common-data/get-page-content";
