@@ -131,6 +131,7 @@ class LoginViewModel with ChangeNotifier {
       }
       else{
         _alertServices.showErrorSnackBar(localization.completeRegistration);
+        _setResponse = ApiResponse.completed(response);
         return false;
       }
 

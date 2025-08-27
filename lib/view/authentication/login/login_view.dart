@@ -443,7 +443,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
         fontSize: 16,
         textDirection: getTextDirection(langProvider),
         buttonName: AppLocalizations.of(context)!.login,
-        isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
+        isLoading: provider.apiResponse.status == Status.LOADING,
         // buttonColor: AppColors.scoThem,
         elevation: 1,
         onTap: () async {

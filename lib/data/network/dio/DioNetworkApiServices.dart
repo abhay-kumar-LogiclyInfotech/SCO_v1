@@ -27,27 +27,50 @@ class DioNetworkApiServices extends DioBaseApiServices {
   bool _isRefreshing = false;
   final List<Function(RequestOptions)> _pendingRequests = [];
 
+
+  /// print request
+  logRequest(RequestOptions options){
+    if(kDebugMode){
+      debugPrint('#################################### custom Authorization used ####################################');
+      logger.i('Request: ${options.method} ${options.uri}');
+      logger.i('Request Headers: ${options.headers}');
+      logger.d('Request Data: ${options.data}');
+    }
+  }
+
+  // print error
+  logErrors(DioException e){
+    if(kDebugMode){
+      logger.e('Error: ${e.message}');
+      logger.e('Error Response Status: ${e.response?.statusCode}');
+      logger.e('Error Response Data: ${e.response?.data}');
+    }
+  }
+
+  // log response
+  logResponse(Response response){
+    if(kDebugMode){
+      logger.d('Response Status: ${response.statusCode}');
+      logger.d('Response Data: ${response.data}');
+    }
+  }
+
   DioNetworkApiServices() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
 
-
+        // Special content type handling for token endpoint
+        if (options.path == AppUrls.openAuthToken) {
+          options.contentType = Headers.formUrlEncodedContentType;
+        }
 
 
         // Skip token injection if Authorization already provided
         if (options.headers.containsKey('Authorization')) {
-          debugPrint('#################################### custom Authorization used ####################################');
-          logger.i('Request: ${options.method} ${options.uri}');
-          logger.i('Request Headers: ${options.headers}');
-          logger.d('Request Data: ${options.data}');
+          logRequest(options);
           return handler.next(options);
         }
 
-
-        // Special handling for token endpoint
-        if (options.path == AppUrls.openAuthToken) {
-          options.contentType = Headers.formUrlEncodedContentType;
-        }
 
 
         if(options.path.contains('common-data') || (options.path == AppUrls.login) || (options.path == AppUrls.signup) || (options.path == AppUrls.openAuthToken)){
@@ -59,11 +82,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
         }
 
 
-        logger.i('Request: ${options.method} ${options.uri}');
-        logger.i('Request Headers: ${options.headers}');
-        logger.d('Request Data: ${options.data}');
-
-
+       logRequest(options);
         return handler.next(options);
       },
         onError: (DioException e, handler) async {
@@ -143,10 +162,9 @@ class DioNetworkApiServices extends DioBaseApiServices {
               }
             }
 
-            // Log other errors
-            logger.e('Error: ${e.message}');
-            logger.e('Error Response Status: ${e.response?.statusCode}');
-            logger.e('Error Response Data: ${e.response?.data}');
+            /// print errors
+            logErrors(e);
+
           } catch (err) {
             logger.e('Interceptor Error: $err');
           }
@@ -154,8 +172,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
           return handler.next(e);
         },
       onResponse: (response, handler) {
-        logger.d('Response Status: ${response.statusCode}');
-        logger.d('Response Data: ${response.data}');
+        logResponse(response);
         return handler.next(response);
       },
     ));
