@@ -1137,7 +1137,10 @@
   "pass": "Pass",
   "fail": "Fail",
   "medicalProfessionsProgram": "Medical Professions Program",
-  "postGraduationExternalMedicine": "Post Graduation External Medicine"
+  "postGraduationExternalMedicine": "Post Graduation External Medicine",
+  "programSponsorshipStatus" : "Program Sponsorship Status",
+  "reqForFss": "Request for FSS",
+  "reqForScholarship":"Request for Scholarship"
 
 
 

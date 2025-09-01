@@ -72,7 +72,9 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
 
                 case Status.COMPLETED:
 
-                  final List<Widget> items = provider.parsedNewsAndEventsModelList.map<Widget>((item) {
+                  final newsList = provider.parsedNewsAndEventsModelList;
+
+                  final List<Widget> items = (newsList.length > 5 ? newsList.sublist(0,5) : newsList).map<Widget>((item) {
                     return ChangeNotifierProvider(
                       create: (_) => IndividualImageViewModel(),
                       child: GestureDetector(

@@ -34,9 +34,8 @@ class NewsAndEventsViewmodel with ChangeNotifier {
   }
 
 
-  List<ParseNewsAndEventsModel> _parsedNewsAndEventsModelList = [];
+  List<ParseNewsAndEventsModel> parsedNewsAndEventsModelList = [];
 
-  List<ParseNewsAndEventsModel> get parsedNewsAndEventsModelList => _parsedNewsAndEventsModelList;
 
 
 
@@ -56,7 +55,7 @@ class NewsAndEventsViewmodel with ChangeNotifier {
       final response = await _drawerRepository.newsAndEvents(headers: headers);
       //*-----Calling Api End-----*
 
-      _parsedNewsAndEventsModelList = response.map((element) {
+      parsedNewsAndEventsModelList = response.map((element) {
         return ParseNewsAndEventsModel(
             content: element.content ?? "",
             description: element.description ?? "",

@@ -3661,4 +3661,13 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get postGraduationExternalMedicine =>
       'بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا';
+
+  @override
+  String get programSponsorshipStatus => 'حالة رعاية البرنامج';
+
+  @override
+  String get reqForFss => 'طلب ضمان مالي';
+
+  @override
+  String get reqForScholarship => 'طلب بعثة';
 }

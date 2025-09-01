@@ -6934,6 +6934,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Post Graduation External Medicine'**
   String get postGraduationExternalMedicine;
+
+  /// No description provided for @programSponsorshipStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Program Sponsorship Status'**
+  String get programSponsorshipStatus;
+
+  /// No description provided for @reqForFss.
+  ///
+  /// In en, this message translates to:
+  /// **'Request for FSS'**
+  String get reqForFss;
+
+  /// No description provided for @reqForScholarship.
+  ///
+  /// In en, this message translates to:
+  /// **'Request for Scholarship'**
+  String get reqForScholarship;
 }
 
 class _AppLocalizationsDelegate

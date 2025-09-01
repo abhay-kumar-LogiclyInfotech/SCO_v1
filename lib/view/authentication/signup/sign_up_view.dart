@@ -234,79 +234,80 @@ class _SignUpViewState extends State<SignUpView>
                                 langProvider: langProvider,
                                 localization: localization),
                             kSmallSpace,
+                            /// TODO: Comment this
                             // const SizedBox(height: 20),
-                            //or
-                            // _or(),
-                            // kFormHeight,
-                            // _firstName(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            // _secondName(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            // _thirdFourthName(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _familyName(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _dateOfBirth(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _gender(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _emailAddress(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _confirmEmailAddress(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _country(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _emiratesId(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _studentPhoneNumber(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _password(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // kFormHeight,
-                            //
-                            // _confirmPassword(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            //
-                            // const SizedBox(height: 30),
-                            //
-                            // //Sign Up Button:
-                            // _signUpButton(
-                            //     langProvider: langProvider,
-                            //     localization: localization),
-                            // const SizedBox(height: 15),
+                            // or
+                            _or(),
+                            kFormHeight,
+                            _firstName(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+                            _secondName(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+                            _thirdFourthName(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _familyName(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _dateOfBirth(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _gender(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _emailAddress(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _confirmEmailAddress(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _country(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _emiratesId(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _studentPhoneNumber(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _password(
+                                langProvider: langProvider,
+                                localization: localization),
+                            kFormHeight,
+
+                            _confirmPassword(
+                                langProvider: langProvider,
+                                localization: localization),
+
+                            const SizedBox(height: 30),
+
+                            //Sign Up Button:
+                            _signUpButton(
+                                langProvider: langProvider,
+                                localization: localization),
+                            const SizedBox(height: 15),
 
                             //Already have account sign in link:
                             _signInLink(

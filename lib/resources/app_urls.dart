@@ -29,7 +29,6 @@ class AppUrls {
   static String get baseUrl => "$domainUrl/o/mopa-sco-api/";
 
 
-
   static String get openAuthToken => "${baseUrl}sco-oauth/token";
 
   // Static getter for common data endpoint

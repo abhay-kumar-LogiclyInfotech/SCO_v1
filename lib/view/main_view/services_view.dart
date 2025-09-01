@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -63,8 +65,9 @@ class _ServicesViewState extends State<ServicesView> with MediaQueryMixin {
    isLogged = await _authService.isLoggedIn();
      if(isLogged){
        await getRolesProvider.getRoles();
+       debugPrint(jsonEncode(HiveManager.getRole()));
        role = getRoleFromList(HiveManager.getRole());
-       // print(role.toString());
+       debugPrint("Print ${role.toString()}");
      }
    setState(() {
       // update the state of the application status

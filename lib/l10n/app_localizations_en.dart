@@ -3647,4 +3647,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get postGraduationExternalMedicine =>
       'Post Graduation External Medicine';
+
+  @override
+  String get programSponsorshipStatus => 'Program Sponsorship Status';
+
+  @override
+  String get reqForFss => 'Request for FSS';
+
+  @override
+  String get reqForScholarship => 'Request for Scholarship';
 }

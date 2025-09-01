@@ -1153,7 +1153,10 @@
   "pass": "ناجح",
   "fail": "راسب",
   "medicalProfessionsProgram": "برنامج المهن الطبية في دبي",
-  "postGraduationExternalMedicine": "بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا"
+  "postGraduationExternalMedicine": "بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا",
+  "programSponsorshipStatus": "حالة رعاية البرنامج",
+  "reqForFss": "طلب ضمان مالي",
+  "reqForScholarship": "طلب بعثة"
 
 }
 

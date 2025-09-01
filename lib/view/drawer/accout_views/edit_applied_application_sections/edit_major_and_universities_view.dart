@@ -481,41 +481,7 @@ class _EditMajorsAndUniversityViewState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // /// dropdown for pgrd students academic program
-                      // if(academicCareer == 'PGRD' && academicCareer != 'DDS')
-                      //   Column(
-                      //     children: [
-                      //       fieldHeading(
-                      //         title: localization.pgrdAdacProgram,
-                      //         important: true,
-                      //         langProvider: langProvider,
-                      //       ),
-                      //       scholarshipFormDropdown(context:context,
-                      //         controller: _acadProgramPgrdController,
-                      //         currentFocusNode: _acadProgramPgrdFocusNode,
-                      //         menuItemsList: _acadProgramPgrdMenuItemsList,
-                      //         hintText: localization.select,
-                      //         errorText: _acadProgramPgrdErrorText,
-                      //         onChanged: (value) {
-                      //           _acadProgramPgrdErrorText = null;
-                      //
-                      //           setState(() {
-                      //             _acadProgramPgrdController.text = value!;
-                      //
-                      //             /// TODO: Pending implementation of the academic program next focus request
-                      //             /// /// Move focus to the next field
-                      //             /// Utils.requestFocus(
-                      //             ///   focusNode: requiredExamInfo
-                      //             ///       .examinationGradeFocusNode,
-                      //             ///   context: context,
-                      //             /// );
-                      //           });
-                      //         },
-                      //       )
-                      //     ],
-                      //   ),
-                      //
-                      // kFormHeight,
+
 
                       /// Select Majors wishlist
                       academicCareer != 'DDS'
