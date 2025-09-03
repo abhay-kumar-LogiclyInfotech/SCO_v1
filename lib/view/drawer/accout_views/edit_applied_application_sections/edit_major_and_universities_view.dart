@@ -189,7 +189,7 @@ class _EditMajorsAndUniversityViewState
   /// list of Academic Program DDS
   List<DropdownMenuItem> _acadProgramDdsMenuItemsList = [];
 
-   final isSpecialCase = false;
+  final isSpecialCase = false;
 
 
 
@@ -319,8 +319,8 @@ class _EditMajorsAndUniversityViewState
     final academicCareer = widget.applicationStatusDetails.acadCareer;
     final admitType = widget.applicationStatusDetails.admitType;
     final scholarshipType = widget.applicationStatusDetails.scholarshipType;
-    
-    
+
+
     String _country = universityInfo.countryIdController.text;
     /// Step 1: Fetch initial list of universities based on country
     List<DropdownMenuItem> items = fetchListOfValue("UNIVERSITY#$_country#UNV");
@@ -377,7 +377,7 @@ class _EditMajorsAndUniversityViewState
     }
   }
 
-   List<DropdownMenuItem> _universityPriorityStatus = [];
+  List<DropdownMenuItem> _universityPriorityStatus = [];
 
   /// Function to add a new UniversityPriority item with only countryId provided
   void addUniversityPriority(String sequenceNumber) {
@@ -466,8 +466,8 @@ class _EditMajorsAndUniversityViewState
       },
     );
   }
-  
-  
+
+
   Widget _majorAndUniversityView(langProvider){
     final academicCareer = widget.applicationStatusDetails.acadCareer;
     final localization = AppLocalizations.of(context)!;
@@ -477,122 +477,122 @@ class _EditMajorsAndUniversityViewState
             title: academicCareer == 'PGRD' ? localization.pgrdMajorWishlist : localization.majorWishlist,
             expandedContent:
 
-                sectionBackground(child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
+            sectionBackground(child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
 
 
-                      /// Select Majors wishlist
-                      academicCareer != 'DDS'
-                          ? ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _majorsWishlist.length,
-                          itemBuilder: (context, index) {
-                            final majorInfo = _majorsWishlist[index];
-                            return Column(
-                              children: [
-                                fieldHeading(
-                                    title: index == 0
-                                        ? localization.majorsWish1
-                                        : index == 1
-                                        ? localization.majorsWish2
-                                        : localization.majorsWish3,
-                                    important: academicCareer != 'DDS' && index == 0,
-                                    langProvider: langProvider),
-                                scholarshipFormDropdown(context:context,
-                                    controller: majorInfo.majorController,
-                                    currentFocusNode: majorInfo.majorFocusNode,
-                                    menuItemsList: _majorsMenuItemsList ?? [],
-                                    hintText: localization.select,
-                                    errorText: majorInfo.majorError,
-                                    onChanged: (value) {
-                                      majorInfo.majorError = null;
+                  /// Select Majors wishlist
+                  academicCareer != 'DDS'
+                      ? ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _majorsWishlist.length,
+                      itemBuilder: (context, index) {
+                        final majorInfo = _majorsWishlist[index];
+                        return Column(
+                          children: [
+                            fieldHeading(
+                                title: index == 0
+                                    ? localization.majorsWish1
+                                    : index == 1
+                                    ? localization.majorsWish2
+                                    : localization.majorsWish3,
+                                important: academicCareer != 'DDS' && index == 0,
+                                langProvider: langProvider),
+                            scholarshipFormDropdown(context:context,
+                                controller: majorInfo.majorController,
+                                currentFocusNode: majorInfo.majorFocusNode,
+                                menuItemsList: _majorsMenuItemsList ?? [],
+                                hintText: localization.select,
+                                errorText: majorInfo.majorError,
+                                onChanged: (value) {
+                                  majorInfo.majorError = null;
 
-                                      // Check if the major is already selected
-                                      bool alreadySelected = value.trim().isNotEmpty &&
-                                          _majorsWishlist.any((info) {
-                                            return info != majorInfo && info.majorController.text.trim() == value.trim();
-                                          });
-
-
-                                      if (alreadySelected) {
-                                        // If the major is already selected, reset the field and show a message
-                                        setState(() {
-                                          majorInfo.majorError = localization.duplicateWishUniversity;
-                                          majorInfo.majorController.clear();
-                                          // majorInfo.isNewController.text = "false";
+                                  // Check if the major is already selected
+                                  bool alreadySelected = value.trim().isNotEmpty &&
+                                      _majorsWishlist.any((info) {
+                                        return info != majorInfo && info.majorController.text.trim() == value.trim();
+                                      });
 
 
-                                        });
-                                      } else {
-                                        // If the major is valid, update the field and show a success message
-                                        setState(() {
-                                          majorInfo.majorController.text = value!;
-                                          // majorInfo.isNewController.text = "true"; // Mark entry as valid
-                                          // Optionally, display a success toast
-                                        });
-                                      }
+                                  if (alreadySelected) {
+                                    // If the major is already selected, reset the field and show a message
+                                    setState(() {
+                                      majorInfo.majorError = localization.duplicateWishUniversity;
+                                      majorInfo.majorController.clear();
+                                      // majorInfo.isNewController.text = "false";
+
+
+                                    });
+                                  } else {
+                                    // If the major is valid, update the field and show a success message
+                                    setState(() {
+                                      majorInfo.majorController.text = value!;
+                                      // majorInfo.isNewController.text = "true"; // Mark entry as valid
+                                      // Optionally, display a success toast
+                                    });
+                                  }
+                                }
+                            ),
+                            kFormHeight,
+                            /// other major if major is selected as other
+                            if(academicCareer != 'DDS' && majorInfo.majorController.text == 'OTH')
+                              Column(
+                                children: [
+                                  fieldHeading(
+                                      title: localization.otherMajor,
+                                      important: academicCareer != 'DDS' && index == 0,
+                                      langProvider: langProvider),
+                                  scholarshipFormTextField(currentFocusNode: majorInfo.otherMajorFocusNode, controller: majorInfo.otherMajorController, hintText: localization.otherMajorWatermark,errorText: majorInfo.otherMajorError, onChanged: (value){
+                                    if(majorInfo.otherMajorFocusNode.hasFocus && academicCareer != 'DDS' && majorInfo.majorController.text == 'OTH'){
+                                      setState(() {
+                                        majorInfo.otherMajorError = ErrorText.getEmptyFieldError(name: majorInfo.otherMajorController.text, context: context);
+                                      });
                                     }
-                                ),
-                                kFormHeight,
-                                /// other major if major is selected as other
-                                if(academicCareer != 'DDS' && majorInfo.majorController.text == 'OTH')
-                                  Column(
-                                    children: [
-                                      fieldHeading(
-                                          title: localization.otherMajor,
-                                          important: academicCareer != 'DDS' && index == 0,
-                                          langProvider: langProvider),
-                                      scholarshipFormTextField(currentFocusNode: majorInfo.otherMajorFocusNode, controller: majorInfo.otherMajorController, hintText: localization.otherMajorWatermark,errorText: majorInfo.otherMajorError, onChanged: (value){
-                                        if(majorInfo.otherMajorFocusNode.hasFocus && academicCareer != 'DDS' && majorInfo.majorController.text == 'OTH'){
-                                          setState(() {
-                                            majorInfo.otherMajorError = ErrorText.getEmptyFieldError(name: majorInfo.otherMajorController.text, context: context);
-                                          });
-                                        }
-                                      })
-                                    ],
-                                  ),
+                                  })
+                                ],
+                              ),
 
-                                kFormHeight,
-                              ],
-                            );
-                          })
-                          : showVoid,
+                            kFormHeight,
+                          ],
+                        );
+                      })
+                      : showVoid,
 
 
 
-                      // /// major when academic program is dds
-                      // academicCareer == 'DDS'
-                      //     ? Column(
-                      //   children: [
-                      //     fieldHeading(
-                      //       title: localization.ddsMajor1,
-                      //       important: true,
-                      //       langProvider: langProvider,
-                      //     ),
-                      //     scholarshipFormDropdown(context:context,
-                      //       controller: _acadProgramDdsController,
-                      //       currentFocusNode: _acadProgramDdsFocusNode,
-                      //       menuItemsList: _acadProgramDdsMenuItemsList,
-                      //       hintText: localization.select,
-                      //       errorText: _acadProgramDdsErrorText,
-                      //       onChanged: (value) {
-                      //         _acadProgramDdsErrorText = null;
-                      //
-                      //         setState(() {
-                      //           _acadProgramDdsController.text = value!;
-                      //         });
-                      //       },
-                      //     )
-                      //   ],
-                      // )
-                      //     : showVoid
-                    ]))
+                  // /// major when academic program is dds
+                  // academicCareer == 'DDS'
+                  //     ? Column(
+                  //   children: [
+                  //     fieldHeading(
+                  //       title: localization.ddsMajor1,
+                  //       important: true,
+                  //       langProvider: langProvider,
+                  //     ),
+                  //     scholarshipFormDropdown(context:context,
+                  //       controller: _acadProgramDdsController,
+                  //       currentFocusNode: _acadProgramDdsFocusNode,
+                  //       menuItemsList: _acadProgramDdsMenuItemsList,
+                  //       hintText: localization.select,
+                  //       errorText: _acadProgramDdsErrorText,
+                  //       onChanged: (value) {
+                  //         _acadProgramDdsErrorText = null;
+                  //
+                  //         setState(() {
+                  //           _acadProgramDdsController.text = value!;
+                  //         });
+                  //       },
+                  //     )
+                  //   ],
+                  // )
+                  //     : showVoid
+                ]))
 
-            ),
+        ),
         kFormHeight,
 
         if(academicCareer != 'HCHL')
@@ -925,14 +925,14 @@ class _EditMajorsAndUniversityViewState
                       )
                   ]))
 
-              ),
+          ),
 
       ],
     );
   }
-  
-  
-  
+
+
+
 
   Widget _submitAndBackButton({required AppLocalizations localization,required LanguageChangeViewModel langProvider}) {
     /// SubmitButton
@@ -942,20 +942,20 @@ class _EditMajorsAndUniversityViewState
         Consumer<EditApplicationSectionsViewModel>(
           builder: (context,provider,_){
             return CustomButton(buttonName: localization.update, isLoading:
-                provider.apiResponse.status == Status.LOADING
+            provider.apiResponse.status == Status.LOADING
                 , textDirection: getTextDirection(langProvider), onTap: ()
-            async{
-              final logger =  Logger();
-              if(validateUniversityAndMajorsDetails(langProvider)){
-                dynamic form = peopleSoftApplication?.toJson();
-                form['majorWishList'] = _majorsWishlist.map((element){return element.editMajorsListToJson();}).toList();
-                form['universtiesPriorityList'] = _universityPriorityList.map((element){return element.editUniversityListToJson();}).toList();
-                log(jsonEncode(form));
+                async{
+                  final logger =  Logger();
+                  if(validateUniversityAndMajorsDetails(langProvider)){
+                    dynamic form = peopleSoftApplication?.toJson();
+                    form['majorWishList'] = _majorsWishlist.map((element){return element.editMajorsListToJson();}).toList();
+                    form['universtiesPriorityList'] = _universityPriorityList.map((element){return element.editUniversityListToJson();}).toList();
+                    log(jsonEncode(form));
 
-                await provider.editApplicationSections(sectionType: EditApplicationSection.universityPriority, applicationNumber: widget.applicationStatusDetails.admApplicationNumber, form: form);
-                await _refreshView();
-              }
-            });
+                    await provider.editApplicationSections(sectionType: EditApplicationSection.universityPriority, applicationNumber: widget.applicationStatusDetails.admApplicationNumber, form: form);
+                    await _refreshView();
+                  }
+                });
 
           },
         ),
