@@ -11,7 +11,7 @@ class AppUrls {
   ///-[displayLanguageToggleButton]:
   ///     → `true`: Show language switch (Arabic <-> English)
   ///     → `false`: Lock app to Arabic only and hide change language buttons
-  static const bool displayStagingBanner = true;
+  static const bool displayStagingBanner = false;
   static const bool displayLanguageToggleButton = true;
   /// ********** App Credentials End **********///
 
