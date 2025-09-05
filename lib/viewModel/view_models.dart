@@ -47,3 +47,4 @@ export 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/get_specifi
 export 'package:sco_v1/viewModel/services_viewmodel/notes_viewModels/upload_attachment_to_note_viewModel.dart';
 export 'package:sco_v1/viewModel/splash_viewModels/commonData_viewModel.dart';
 export 'splash_viewModels/splash_view_model.dart';
+export 'apply_scholarship/get_app_version_view_model.dart';

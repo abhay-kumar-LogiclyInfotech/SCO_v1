@@ -251,7 +251,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
   @override
   Future<dynamic> dioGetApiService({
     required String url,
-    required Map<String, dynamic>? headers,
+    Map<String, dynamic>? headers,
     Map<String, String?>? queryParams,
   }) async {
     try {

@@ -9,4 +9,5 @@ class KeyConstants {
   static String get commonApiRefreshToken => 'COMMON_API_REFRESH_TOKEN';
   static String get userApiAccessToken => 'USER_API_ACCESS_TOKE';
   static String get userApiRefreshToken => 'USER_API_REFRESH_TOKEN';
+  static String get appVersion => 'APP_VERSION';
 }

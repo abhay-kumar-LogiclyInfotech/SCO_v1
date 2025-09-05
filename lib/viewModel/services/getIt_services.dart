@@ -8,8 +8,10 @@ import 'auth_services.dart';
 import 'media_services.dart';
 import 'navigation_services.dart';
 
+
+final GetIt getIt = GetIt.instance;
+
 Future<bool> registerServices() async {
-  final GetIt getIt = GetIt.instance;
   try {
     getIt.registerSingleton<NavigationServices>(NavigationServices());
     getIt.registerSingleton<AlertServices>(AlertServices());

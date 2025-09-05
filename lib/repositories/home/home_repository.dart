@@ -13,6 +13,7 @@ import 'package:sco_v1/models/apply_scholarship/DeleteDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/GetAllActiveScholarshipsModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SaveAsDraftModel.dart';
 import 'package:sco_v1/models/apply_scholarship/SubmitApplicationModel.dart';
+import 'package:sco_v1/models/apply_scholarship/get_app_version_model.dart';
 import 'package:sco_v1/models/notifications/GetAllNotificationsModel.dart';
 import 'package:sco_v1/models/services/notes_models/AddCommentToNoteModel.dart';
 import 'package:sco_v1/models/services/notes_models/GetAllNotesModel.dart';
@@ -493,6 +494,7 @@ class HomeRepository {
     return GetListOfAttachmentsModel.fromJson(response);
   }
 
+  /// upload or update attachment
   Future<UploadUpdateAttachmentModel> uploadUpdateAttachment(
       {required dynamic body,
       required String userId,
@@ -507,4 +509,15 @@ class HomeRepository {
         body: body);
     return UploadUpdateAttachmentModel.fromJson(response);
   }
+
+  /// get app version
+  Future<GetAppVersionModel> getAppVersion()async{
+    try{
+      final apiResponse = await _dioBaseApiServices.dioGetApiService(url: AppUrls.getAppVersion, headers: null);
+      return GetAppVersionModel.fromJson(apiResponse);
+    }catch (e){
+      rethrow;
+    }
+  }
+
 }

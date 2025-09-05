@@ -21,6 +21,8 @@ import 'controller/dependency_injection.dart';
 import 'hive/hive_manager.dart';
 
 
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
@@ -202,6 +204,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
 
           /// Edit Peoplesoft application sections
           ChangeNotifierProvider(create: (_) => EditApplicationSectionsViewModel()),
+
+          /// get app version
+          ChangeNotifierProvider(create: (_) => GetAppVersionViewModel()),
+
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
