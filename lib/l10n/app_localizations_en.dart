@@ -3656,4 +3656,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reqForScholarship => 'Request for Scholarship';
+
+  @override
+  String get applicationFormVersionMismatch =>
+      'You must update the Scholarships Office application before submitting the request.';
 }

@@ -3670,4 +3670,8 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get reqForScholarship => 'طلب بعثة';
+
+  @override
+  String get applicationFormVersionMismatch =>
+      'يجب تحديث تطبيق مكتب الميعات الدراسية قبل تقديم الطلب.';
 }

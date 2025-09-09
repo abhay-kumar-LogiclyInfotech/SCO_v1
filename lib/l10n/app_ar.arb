@@ -1156,7 +1156,8 @@
   "postGraduationExternalMedicine": "بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا",
   "programSponsorshipStatus": "حالة رعاية البرنامج",
   "reqForFss": "طلب ضمان مالي",
-  "reqForScholarship": "طلب بعثة"
+  "reqForScholarship": "طلب بعثة",
+  "applicationFormVersionMismatch": "يجب تحديث تطبيق مكتب الميعات الدراسية قبل تقديم الطلب."
 
 }
 

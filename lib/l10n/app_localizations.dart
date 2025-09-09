@@ -6952,6 +6952,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Request for Scholarship'**
   String get reqForScholarship;
+
+  /// No description provided for @applicationFormVersionMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'You must update the Scholarships Office application before submitting the request.'**
+  String get applicationFormVersionMismatch;
 }
 
 class _AppLocalizationsDelegate

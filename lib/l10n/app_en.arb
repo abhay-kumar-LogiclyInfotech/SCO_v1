@@ -1140,8 +1140,6 @@
   "postGraduationExternalMedicine": "Post Graduation External Medicine",
   "programSponsorshipStatus" : "Program Sponsorship Status",
   "reqForFss": "Request for FSS",
-  "reqForScholarship":"Request for Scholarship"
-
-
-
+  "reqForScholarship":"Request for Scholarship",
+  "applicationFormVersionMismatch": "You must update the Scholarships Office application before submitting the request."
 }
