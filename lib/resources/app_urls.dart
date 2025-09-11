@@ -31,8 +31,7 @@ class AppUrls {
 
   static String get openAuthToken => "${baseUrl}sco-oauth/token";
 
-  // get app version to verify app version
-  static String get getAppVersion => "${baseUrl}common-data/app-verifier";
+
 
   // Static getter for common data endpoint
   static String get commonData => "${baseUrl}common-data/list-of-values-data";
@@ -96,6 +95,9 @@ class AppUrls {
 
   // All Active scholarships endPoint
   static String get getAllActiveScholarships => "${baseUrl}common-data/find-all-active-scholarship";
+
+  // get app version to verify app version
+  static String get getAppVersion => "${baseUrl}common-data/app-verifier";
 
   // find-draft-by-emirate-id-and-config-key
   static String  findDraftByConfigurationKey(userId,emiratesId,configKey)  => "${baseUrl}e-services/$userId/find-draft-by-emirate-id-and-config-key/$emiratesId/$configKey";

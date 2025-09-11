@@ -75,7 +75,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
-          overflow: TextOverflow.ellipsis,
+          // overflow: TextOverflow.ellipsis,
           // maxLines: 1,
         ),
       );
@@ -108,9 +108,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
      externalScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.scholarshipType.toString() == 'EXT' && element.acadmicCareer.toString() != 'DDS' && isScholarshipActiveInSystem(isActive: element.isActive,isSpecialCase: element.isSpecialCase) ).toList();
      doctorScholarshipMenuItemList =  provider.apiResponse.data?.where((element) => element.acadmicCareer.toString() == 'DDS' && isScholarshipActiveInSystem(isActive: element.isActive,isSpecialCase: element.isSpecialCase) ).toList();
 
-     print(internalScholarshipMenuItemList?.length);
-     print(externalScholarshipMenuItemList?.length);
-     print(doctorScholarshipMenuItemList?.length);
+
 
 
     });
@@ -172,7 +170,7 @@ class _SelectScholarshipTypeViewState extends State<SelectScholarshipTypeView>
                                       kMinorSpace,
                                       RichText(
                                         text: TextSpan(
-                                            style: AppTextStyles.subTitleTextStyle(),
+                                            style: AppTextStyles.subTitleTextStyle().copyWith(color: Colors.black),
                                             children: [
                                             TextSpan(
                                               text: element['seeMore']

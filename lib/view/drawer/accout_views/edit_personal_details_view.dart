@@ -2,15 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_common/get_reset.dart';
 import 'package:get_it/get_it.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:profile_photo/profile_photo.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/bottom_sheets/storage_or_camera_destination.dart';
 import 'package:sco_v1/resources/components/custom_button.dart';

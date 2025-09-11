@@ -13,9 +13,10 @@ class AppTextStyles {
 
   static TextStyle subTitleTextStyle() {
     return const TextStyle(
-      color: Color(0xff8491A8),
-      fontSize: 12,
-    );
+        color: Color(0xff8491A8),
+        fontSize: 12,
+        height: 1.5,
+        decoration: TextDecoration.none);
   }
 
   static TextStyle titleTextStyle() {
@@ -80,14 +81,14 @@ class AppTextStyles {
     );
   }
 
-  static TextStyle errorTextStyle(){
+  static TextStyle errorTextStyle() {
     return const TextStyle(
       color: AppColors.DANGER,
       fontSize: 12,
     );
   }
 
-  static TextStyle fieldHeadingTextStyle(){
+  static TextStyle fieldHeadingTextStyle() {
     return const TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w500,

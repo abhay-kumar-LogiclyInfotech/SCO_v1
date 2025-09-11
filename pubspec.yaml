@@ -117,6 +117,7 @@ flutter:
     - .env.development
     - .env.production
     - assets/
+    - assets/auth/
     - assets/sidemenu/
     - assets/support/
     - assets/myAccount/

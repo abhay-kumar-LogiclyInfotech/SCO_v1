@@ -8,6 +8,7 @@ import '../../../resources/app_text_styles.dart';
 import '../../../resources/components/tiles/custom_sco_program_tile.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
+import '../../../viewModel/services/getIt_services.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../scholarship_dds/scholarship_dds_view.dart';
 import '../scholarship_in_abroad/scholarship_in_abroad_view.dart';
@@ -21,8 +22,7 @@ class HomeScoProgramsView extends StatefulWidget {
   State<HomeScoProgramsView> createState() => _HomeScoProgramsViewState();
 }
 
-class _HomeScoProgramsViewState extends State<HomeScoProgramsView>
-    with MediaQueryMixin {
+class _HomeScoProgramsViewState extends State<HomeScoProgramsView> with MediaQueryMixin {
   late NavigationServices _navigationServices;
 
   final List<Widget> _scoProgramsList = [];
@@ -31,7 +31,6 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView>
   @override
   void initState() {
     super.initState();
-    final getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
   }
 
@@ -46,16 +45,16 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView>
 
     final scoProgramsMapList = [
       {
-        'title': localization?.scholarshipInternal,
-        'subTitle': localization?.internalScholarshipDesc,
+        'title': localization.scholarshipInternal,
+        'subTitle': localization.internalScholarshipDesc,
         'imagePath': Constants.scholarshipInUae,
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
               createRoute(ScholarshipsInUaeView()),
             ),
       },
       {
-        'title': localization?.scholarshipExternal,
-        'subTitle': localization?.externalScholarshipDesc,
+        'title': localization.scholarshipExternal,
+        'subTitle': localization.externalScholarshipDesc,
         'imagePath': Constants.scholarshipInAbroad,
         "onTap": () => _navigationServices.pushSimpleWithAnimationRoute(
               createRoute(ScholarshipInAbroadView()),
@@ -84,7 +83,6 @@ class _HomeScoProgramsViewState extends State<HomeScoProgramsView>
           imagePath: model.imagePath!,
           title: model.title!,
           subTitle: model.subTitle!,
-          // subTitle: "",
           onTap: model.onTap!,
           maxLines: 3,
           imageSize: 45,

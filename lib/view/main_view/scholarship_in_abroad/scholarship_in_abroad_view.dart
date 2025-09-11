@@ -203,6 +203,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeApplyingProcedure, title: localization.graduate_outside_uae_scholarship_applying_procedures,))),
           // },
         ];
+
       // case 'SCODDSEXT':
       //   return [
       //     {

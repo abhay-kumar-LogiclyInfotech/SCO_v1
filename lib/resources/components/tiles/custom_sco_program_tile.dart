@@ -161,21 +161,15 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
         children: [
           //Title
           Text(
-            // widget.title.length < 30 ? widget.title : "${widget.title.substring(0, 30)}...",
             widget.title ?? '',
-            // textAlign: TextAlign.left,
             style: AppTextStyles.titleBoldTextStyle(),
           ),
          if(widget.subTitle.isNotEmpty) Column(
             children: [
               kMinorSpace,
-              // const SizedBox(height: 5),
               Text(
-                // widget.subTitle.length < (screenWidth < 420 ? 25 : 25) ? widget.subTitle : "${widget.subTitle.substring(0, ((screenWidth < 420 ? 25 : 25)))}...",
                 widget.subTitle,
-                // textAlign: TextAlign.left,
-                style: const TextStyle(color: Colors.black,fontSize: 12,height: 1.5,decoration: TextDecoration.none),
-                // style: AppTextStyles.subTitleTextStyle(),
+                style: AppTextStyles.subTitleTextStyle().copyWith(color: Colors.black),
                 overflow: TextOverflow.ellipsis,
                 maxLines: widget.maxLines,
               ),
@@ -187,7 +181,6 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
   }
 
   Widget _endSection() {
-   final langProvider  = Provider.of<LanguageChangeViewModel>(context,listen: false);
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -200,12 +193,6 @@ class _CustomScoProgramTileState extends State<CustomScoProgramTile> with MediaQ
              : Icons.keyboard_arrow_right_outlined,
          color: Colors.grey,
        ),
-        //    Transform.rotate(angle: getTextDirection(langProvider) == TextDirection.rtl ? pi : 0,child: SvgPicture.asset(
-        //   "assets/sidemenu/goForward.svg",
-        //   width: 20,
-        //   height: 20,
-        //   fit: BoxFit.fill,
-        // ),),
 
       ],
     );

@@ -2936,7 +2936,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'Application Submission';
 
   @override
-  String get deleteDraftConfirmation => 'هل أنت متأكد أنك تريد حزف المسودة؟';
+  String get deleteDraftConfirmation => ' أنت متأكد أنك تريد حذف المسودة';
 
   @override
   String get emailNotMatch =>

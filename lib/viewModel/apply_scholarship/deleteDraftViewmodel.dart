@@ -73,7 +73,7 @@ class DeleteDraftViewmodel with ChangeNotifier {
         };
 
 
-        DeleteDraftModel response = await _myRepo.deleteDraft(userId: _userId ?? '',draftId: draftId,headers: headers);
+        DeleteDraftModel response = await _myRepo.deleteDraft(userId: _userId ?? '',draftId: draftId.toString(),headers: headers);
         setApiResponse = ApiResponse.completed(response);
         _alertServices.toastMessage(response.message.toString());
         setLoading(false);

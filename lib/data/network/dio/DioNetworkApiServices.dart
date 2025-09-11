@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -34,7 +36,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
       debugPrint('#################################### custom Authorization used ####################################');
       logger.i('Request: ${options.method} ${options.uri}');
       logger.i('Request Headers: ${options.headers}');
-      logger.d('Request Data: ${options.data}');
+      logger.i('Request Data: ${jsonEncode(options.data.toString())}');
     }
   }
 
@@ -51,7 +53,7 @@ class DioNetworkApiServices extends DioBaseApiServices {
   logResponse(Response response){
     if(kDebugMode){
       logger.d('Response Status: ${response.statusCode}');
-      logger.d('Response Data: ${response.data}');
+      log('Response Data: ${jsonEncode(response.data.toString())}');
     }
   }
 

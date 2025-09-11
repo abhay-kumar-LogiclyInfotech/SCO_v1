@@ -333,20 +333,25 @@ class _SignUpViewState extends State<SignUpView>
   Widget _signUpWithUaePassButton(
       {required LanguageChangeViewModel langProvider,
       required AppLocalizations localization}) {
-    return CustomButton(
-      textDirection: getTextDirection(langProvider),
-      buttonName: localization.signUpWithUaePass,
-      isLoading: false,
-      fontSize: 15,
-      buttonColor: Colors.white,
-      borderColor: Colors.black,
-      textColor: Colors.black,
-      elevation: 1,
-      leadingIcon: const Icon(Icons.fingerprint),
-      onTap: () {
-        _alertServices.toastMessage(localization.comingSoon);
-      },
-    );
+    // return CustomButton(
+    //   textDirection: getTextDirection(langProvider),
+    //   buttonName: localization.signUpWithUaePass,
+    //   isLoading: false,
+    //   fontSize: 15,
+    //   buttonColor: Colors.white,
+    //   borderColor: Colors.black,
+    //   textColor: Colors.black,
+    //   elevation: 1,
+    //   leadingIcon: const Icon(Icons.fingerprint),
+    //   onTap: () {
+    //     _alertServices.toastMessage(localization.comingSoon);
+    //   },
+    // );
+    return GestureDetector(
+        onTap: (){
+          _alertServices.toastMessage(localization.comingSoon);
+        },
+        child: Image.asset("assets/auth/sign_up_uae_pass.png"));
   }
 
   Widget _or() {

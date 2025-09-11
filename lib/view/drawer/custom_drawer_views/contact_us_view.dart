@@ -22,7 +22,8 @@ import '../../../resources/components/custom_text_field.dart';
 import '../../../resources/validations_and_errorText.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/utils.dart';
-import '../../../viewModel/language_change_ViewModel.dart'; // Add this package
+import '../../../viewModel/language_change_ViewModel.dart';
+import '../../../viewModel/services/getIt_services.dart'; // Add this package
 
 class ContactUsView extends StatefulWidget {
   const ContactUsView({super.key});
@@ -34,49 +35,19 @@ class ContactUsView extends StatefulWidget {
 class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
 
 
-  late AlertServices _alertServices;
-
-  // //webUrl:
-  // final String webUrl = "www.sco.ae";
 
 
   //poBox:
   final String poBoxNumber = "73505";
 
-  //phone no. 1:
-  final String phoneNo1 = "+971 2 6413999";
-
   //phone no. 2:
-  final String phoneNo2 = "+97122228391";
+  final String phoneNo2 = "+971 2 6413999";
 
-  Future<void> _launchUrl(uri) async {
-    if (!await launchUrl(Uri.parse(uri))) {
-      throw Exception('Could not launch $uri');
-    }
-  }
+  //phone no. 1:
+  final String phoneNo1 = "+971 2 2228391";
 
-  Future<void> _makePhoneCall({required String phoneNumber, required AppLocalizations localization}) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
 
-    // Check permission before making a call
-    var status = await Permission.phone.status;
-    if (status.isGranted) {
-      await launchUrl(launchUri);
-    } else {
-      // Request permission
-      if (await Permission.phone.request().isGranted) {
-        await launchUrl(launchUri);
-      } else {
-        // Handle the case where permission is not granted
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(localization.phoneCallPermissionDenied)),
-        );
-      }
-    }
-  }
+
 
   // FocusNodes for each field
   final FocusNode _nameFocusNode = FocusNode();
@@ -142,7 +113,6 @@ class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
     super.initState();
 
     final GetIt getIt = GetIt.instance;
-    _alertServices = getIt.get<AlertServices>();
     _initializeData();
 
   }
@@ -309,15 +279,14 @@ class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
                   //*----Phone Number----*/
                   Row(
                     children: [
-                      Text(phoneNo,
-                          style: AppTextStyles.normalThemeColorTextStyle().copyWith(color: Colors.white)),
+                      Text(phoneNo, style: AppTextStyles.normalThemeColorTextStyle().copyWith(color: Colors.white)),
                       Flexible(
                         child: GestureDetector(
                           onTap: () {
-                            _makePhoneCall(phoneNumber:phoneNo1,localization: localization);
+                            Utils.makePhoneCall(phoneNumber:phoneNo2,context: context);
                           },
                           child: Text(
-                            phoneNo1,
+                            phoneNo2,
                             textDirection: TextDirection.ltr,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 14),
@@ -331,13 +300,12 @@ class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
                       Flexible(
                         child: GestureDetector(
                           onTap: () {
-                            _makePhoneCall(phoneNumber: phoneNo2,localization: localization);
+                            Utils.makePhoneCall(phoneNumber: phoneNo1,context: context);
                           },
                           child: Text(
-                            phoneNo2,
+                            phoneNo1,
                             textDirection: TextDirection.ltr,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 14),
+                            style: const TextStyle(color: Colors.white, fontSize: 14),
                           ),
                         ),
                       ),
@@ -353,7 +321,7 @@ class _ContactUsViewState extends State<ContactUsView> with MediaQueryMixin{
                         style: AppTextStyles.normalThemeColorTextStyle().copyWith(color: Colors.white),
                       ),
                       GestureDetector(
-                        onTap: () => _launchUrl(webUrl),
+                        onTap: () => Utils.openUrl(webUrl),
                         child: Text(
                           webUrl,
                           style: const TextStyle(

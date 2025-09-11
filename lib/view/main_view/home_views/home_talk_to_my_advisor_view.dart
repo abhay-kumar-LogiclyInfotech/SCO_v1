@@ -135,7 +135,7 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView>
                                       // message Advisor
                                       ElevatedButton(
                                           onPressed: () async {
-                                            await Utils.launchEmail(
+                                            await Utils.openEmail(
                                                 topAdvisor?.email ?? '');
                                           },
                                           style: _buttonStyle(),
@@ -148,8 +148,7 @@ class _HomeTalkToMyAdvisorViewState extends State<HomeTalkToMyAdvisorView>
                                       ElevatedButton(
                                         onPressed: () async {
                                           await Utils.makePhoneCall(
-                                              phoneNumber:
-                                                  topAdvisor?.phoneNo ?? '',
+                                              phoneNumber: topAdvisor?.phoneNo ?? '',
                                               context: context);
                                         },
                                         style: _buttonStyle(),

@@ -97,7 +97,6 @@ class _CustomDropdownState extends State<CustomDropdown>
           onChanged: widget.onChanged,
           focusNode: widget.currentFocusNode,
           decoration: InputDecoration(
-
             errorText:  widget.errorText,
             errorMaxLines: 5,
             // isCollapsed: true,
@@ -136,7 +135,7 @@ class _CustomDropdownState extends State<CustomDropdown>
           // cursorColor: AppColors.darkGrey,
           style: TextStyle(
             color: widget.textColor ?? AppColors.hintDarkGrey,
-            overflow: TextOverflow.ellipsis,
+            // overflow: TextOverflow.ellipsis,
           ),
           // padding: EdgeInsets.zero,
           hint: Text(
@@ -146,9 +145,9 @@ class _CustomDropdownState extends State<CustomDropdown>
               color: widget.textColor ?? AppColors.hintDarkGrey,
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              overflow: TextOverflow.ellipsis
+              // overflow: TextOverflow.ellipsis
             ),
-            overflow: TextOverflow.ellipsis,
+            // overflow: TextOverflow.ellipsis,
           ),
           iconStyleData: const IconStyleData(icon:  Icon(
             Icons.keyboard_arrow_down_sharp,
