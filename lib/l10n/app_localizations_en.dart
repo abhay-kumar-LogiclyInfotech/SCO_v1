@@ -3624,7 +3624,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get seeLess => ' See less';
 
   @override
-  String get externalDoctorsOutsideUae => 'Doctors graduation outside UAE';
+  String get doctorOfMedicine => 'Doctor of Medicine Program';
 
   @override
   String get draftSavedSuccess => 'Draft Saved Successfully';

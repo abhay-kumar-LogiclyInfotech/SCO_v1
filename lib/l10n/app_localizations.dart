@@ -6887,11 +6887,11 @@ abstract class AppLocalizations {
   /// **' See less'**
   String get seeLess;
 
-  /// No description provided for @externalDoctorsOutsideUae.
+  /// No description provided for @doctorOfMedicine.
   ///
   /// In en, this message translates to:
-  /// **'Doctors graduation outside UAE'**
-  String get externalDoctorsOutsideUae;
+  /// **'Doctor of Medicine Program'**
+  String get doctorOfMedicine;
 
   /// No description provided for @draftSavedSuccess.
   ///
