@@ -71,6 +71,8 @@ class VisionAndMissionViewModel with ChangeNotifier {
           ? 'en_US'
           : 'ar_SA'; // Assuming you have a way to get the selected language code
 
+      log('Test ==> '+htmlContent);
+
       _content = parseHtmlContent(htmlContent, selectedLanguage);
 
       _setVisionAndMissionResponse = ApiResponse.completed(response);

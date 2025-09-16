@@ -30,7 +30,7 @@ dependencies:
   path:
   http_parser:
 #  snippet_coder_utils:
-  flutter_secure_storage:
+  flutter_secure_storage: 9.2.4
   fluttertoast: ^8.2.12
   another_flushbar:
 #  syncfusion_flutter_charts:
@@ -55,7 +55,7 @@ dependencies:
   dio: ^5.6.0
   material_dialogs: ^1.1.5
   logger: ^2.6.1
-  getwidget: ^6.0.0
+  getwidget: 7.0.0
   dropdown_button2: ^2.3.9
   profile_photo: ^1.0.3
   date_picker_plus: ^4.1.0

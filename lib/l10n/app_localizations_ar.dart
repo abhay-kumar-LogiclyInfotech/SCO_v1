@@ -3637,7 +3637,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get seeLess => ' عرض أقل';
 
   @override
-  String get doctorOfMedicine => 'رنامج دكتور في الطب';
+  String get doctorOfMedicine => 'برنامج دكتور في الطب';
 
   @override
   String get draftSavedSuccess => 'تم حفظ المسودة بنجاح';

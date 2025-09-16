@@ -39,6 +39,9 @@ class _ScholarshipDdsViewState extends State<ScholarshipDdsView>
 
   @override
   void initState() {
+
+    print('_ScholarshipDdsViewState init state');
+
     final GetIt getIt = GetIt.instance;
     _navigationServices = getIt.get<NavigationServices>();
 
@@ -65,6 +68,7 @@ class _ScholarshipDdsViewState extends State<ScholarshipDdsView>
 
   List<Map<String, dynamic>> createScholarshipList(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    print('widget.code ==> ${widget.code}');
     switch (widget.code) {
       case 'SCODDSEXT':
         return [
@@ -81,7 +85,8 @@ class _ScholarshipDdsViewState extends State<ScholarshipDdsView>
           },
           {
             'title': " برامج الأطباء الخريجين ",
-            'content' : getDdsGraduationPhycian(context),
+            'content' : geetDdsMedicalCollegeProgram(context),
+            // 'content' : getDdsGraduationPhycian(context),
             // 'imagePath': Constants.universityList,
           },
           {
