@@ -19,6 +19,7 @@ import '../../../utils/constants.dart';
 import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.dart';
 import '../../../viewModel/services/navigation_services.dart';
 import '../../apply_scholarship/fill_scholarship_form_view.dart';
+import 'dds_external/dds_external.dart';
 import 'doctor_of_medicine_outside_uae/doctor_of_medicine_outside_uae.dart';
 
 class ScholarshipDdsView extends StatefulWidget {
@@ -68,27 +69,47 @@ class _ScholarshipDdsViewState extends State<ScholarshipDdsView>
       case 'SCODDSEXT':
         return [
           {
-            'title': " نبذة عن برنامج دكتور فى الطب ",
-            'content': getDoctorAboutTheProgramExternal(context),
-            // 'imagePath': Constants.faq,
+            'title': " نبذة عن بعثة صاحب السمو رئيس الدولة للأطباء المتميزين ",
+            'content' : getDdsOverView(context),
+            // 'title': localization.bachelor_degree_scholarship_terms_and_conditions,
+            // 'subTitle': "",
+            // 'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.bachelorOutsideUaeTermsAndConditions, title: localization.bachelor_degree_scholarship_terms_and_conditions,))),
           },
           {
-            'title': " شروط ومتطلبات القبول فى البعثة ",
-            'content': getDoctorTermsAndConditionsExternal(context),
-            'imagePath': Constants.conditions,
+            'title': " برامج طلبة كليات الطب ",
+            'content' : geetDdsMedicalCollegeProgram(context),
           },
           {
-            'title': " معايير القبول في الجامعات العالمية ",
-            'content': getDoctorAdmissionCriteriaExternal(context),
-            'imagePath': Constants.applyingProcedure,
+            'title': " برامج الأطباء الخريجين ",
+            'content' : getDdsGraduationPhycian(context),
+            // 'imagePath': Constants.universityList,
           },
           {
-            'title': " الجامعات المعتمدة ",
-            'content': getDoctorAccreditedUniversitiesExternal(context),
-            'imagePath': Constants.universityList,
+            'title': " اختبارات التراخيص الطبية ",
+            'content': getDdsMedicalLicenseTest(context),
+            //
           },
-
+          {
+            'title': " برنامج التدريب للمهن الصحية ",
+            'content' : getDdsTrainingProgramForHealthProfessionals(context),
+            // 'imagePath': Constants.universityList,
+          },
+          // {
+          //   'title': " امتيازات البعثة - درجة البكالوريوس ",
+          //   'content' : getBachelorScholarshipPrivilegesExternal(context),
+          //   'imagePath': Constants.privileges,
+          // },
+          // {
+          //   'title': " التزامات الطالب للبعثة - درجة البكالوريوس ",
+          //   'content' : getBachelorStudentObligationsExternal(context),
+          // },
+          // {
+          //   'title': " إجراءات التقديم للبعثة - درجة البكالوريوس ",
+          //   'content' : getBachelorApplyingProcedureExternal(context),
+          //   'imagePath': Constants.applyingProcedure,
+          // },
         ];
+
 
       case 'SCOAHCPEXT':
         return [
@@ -100,14 +121,14 @@ class _ScholarshipDdsViewState extends State<ScholarshipDdsView>
       case null:
         return [
           {
-            'title': localization.doctorOfMedicine,
+            'title': localization.ddsExternal,
             // 'subTitle': localization.scholarship_for_outstanding_medical_students,
             'subTitle': '',
             'imagePath': Constants.distinguishedDoctorsOutsideUae,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(
                     createRoute(ScholarshipDdsView(
                   code: 'SCODDSEXT',
-                  title: localization.doctorOfMedicine,
+                  title: localization.ddsExternal,
                 ))),
           },
           {

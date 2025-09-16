@@ -1141,5 +1141,7 @@
   "programSponsorshipStatus" : "Program Sponsorship Status",
   "reqForFss": "Request for FSS",
   "reqForScholarship":"Request for Scholarship",
-  "applicationFormVersionMismatch": "You must update the Scholarships Office application before submitting the request."
+  "applicationFormVersionMismatch": "You must update the Scholarships Office application before submitting the request.",
+  "ddsExternal": "Distinguished doctors scholarship"
+
 }

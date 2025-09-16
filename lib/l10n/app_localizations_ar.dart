@@ -3637,7 +3637,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get seeLess => ' عرض أقل';
 
   @override
-  String get doctorOfMedicine => 'Doctor of Medicine Program';
+  String get doctorOfMedicine => 'رنامج دكتور في الطب';
 
   @override
   String get draftSavedSuccess => 'تم حفظ المسودة بنجاح';
@@ -3655,7 +3655,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fail => 'راسب';
 
   @override
-  String get medicalProfessionsProgram => 'برنامج المهن الطبية في دبي';
+  String get medicalProfessionsProgram => 'برنامج التدريب للمهن الصحية';
 
   @override
   String get postGraduationExternalMedicine =>
@@ -3673,4 +3673,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get applicationFormVersionMismatch =>
       'يجب تحديث تطبيق مكتب الميعات الدراسية قبل تقديم الطلب.';
+
+  @override
+  String get ddsExternal => 'بعثة صاحب السمو رئيس الدولة للأطباء المتميزين';
 }

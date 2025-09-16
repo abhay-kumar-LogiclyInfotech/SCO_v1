@@ -232,6 +232,30 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           },
         ];
 
+      case 'SCOPGRDMDEXT':
+        return [
+          {
+            'title': " نبذة عن برنامج دكتور فى الطب ",
+            'content': getDoctorAboutTheProgramExternal(context),
+            // 'imagePath': Constants.faq,
+          },
+          {
+            'title': " شروط ومتطلبات القبول فى البعثة ",
+            'content': getDoctorTermsAndConditionsExternal(context),
+            'imagePath': Constants.conditions,
+          },
+          {
+            'title': " معايير القبول في الجامعات العالمية ",
+            'content': getDoctorAdmissionCriteriaExternal(context),
+            'imagePath': Constants.applyingProcedure,
+          },
+          {
+            'title': " الجامعات المعتمدة ",
+            'content': getDoctorAccreditedUniversitiesExternal(context),
+            'imagePath': Constants.universityList,
+          },
+        ];
+
       // case 'SCODDSEXT':
       //   return [
       //     {
@@ -312,6 +336,18 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
             'imagePath': Constants.bachelorsInUae,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCOACTUGRD',title: localization.actuarialScience,))),
           },
+          {
+            'title': localization.doctorOfMedicine,
+            // 'subTitle': localization.scholarship_for_outstanding_medical_students,
+            'subTitle': '',
+            'imagePath': Constants.distinguishedDoctorsOutsideUae,
+            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(
+                createRoute(ScholarshipInAbroadView(
+                  code: 'SCOPGRDMDEXT',
+                  title: localization.doctorOfMedicine,
+                ))),
+          },
+
         ];
       default:
         return [];
@@ -320,7 +356,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
 
 
  bool isExternalScholarship(){
-    return   ( widget.code == 'SCOUGRDEXT' || widget.code == 'SCOPGRDEXT' || widget.code == 'SCOACTUGRD');
+    return   ( widget.code == 'SCOUGRDEXT' || widget.code == 'SCOPGRDEXT' || widget.code == 'SCOACTUGRD' || widget.code =='SCOPGRDMDEXT');
   }
 
   void _initializeScoPrograms() {

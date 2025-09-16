@@ -6958,6 +6958,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You must update the Scholarships Office application before submitting the request.'**
   String get applicationFormVersionMismatch;
+
+  /// No description provided for @ddsExternal.
+  ///
+  /// In en, this message translates to:
+  /// **'Distinguished doctors scholarship'**
+  String get ddsExternal;
 }
 
 class _AppLocalizationsDelegate

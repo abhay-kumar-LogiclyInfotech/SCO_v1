@@ -3660,4 +3660,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get applicationFormVersionMismatch =>
       'You must update the Scholarships Office application before submitting the request.';
+
+  @override
+  String get ddsExternal => 'Distinguished doctors scholarship';
 }

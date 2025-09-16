@@ -1152,12 +1152,14 @@
   "enterValidGrade": "يرجى إدخال درجة صحيحة",
   "pass": "ناجح",
   "fail": "راسب",
-  "medicalProfessionsProgram": "برنامج المهن الطبية في دبي",
+  "medicalProfessionsProgram": "برنامج التدريب للمهن الصحية",
   "postGraduationExternalMedicine": "بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا",
   "programSponsorshipStatus": "حالة رعاية البرنامج",
   "reqForFss": "طلب ضمان مالي",
   "reqForScholarship": "طلب بعثة",
-  "applicationFormVersionMismatch": "يجب تحديث تطبيق مكتب الميعات الدراسية قبل تقديم الطلب."
+  "applicationFormVersionMismatch": "يجب تحديث تطبيق مكتب الميعات الدراسية قبل تقديم الطلب.",
+  "doctorOfMedicine": "رنامج دكتور في الطب",
+  "ddsExternal": "بعثة صاحب السمو رئيس الدولة للأطباء المتميزين"
 
 }
 
