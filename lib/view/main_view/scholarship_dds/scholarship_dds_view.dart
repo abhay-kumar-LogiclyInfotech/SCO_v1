@@ -85,8 +85,7 @@ class _ScholarshipDdsViewState extends State<ScholarshipDdsView>
           },
           {
             'title': " برامج الأطباء الخريجين ",
-            'content' : geetDdsMedicalCollegeProgram(context),
-            // 'content' : getDdsGraduationPhycian(context),
+            'content' : getDdsGraduationPhycian(context),
             // 'imagePath': Constants.universityList,
           },
           {
