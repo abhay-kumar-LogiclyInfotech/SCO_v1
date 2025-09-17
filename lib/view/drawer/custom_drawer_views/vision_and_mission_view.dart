@@ -79,6 +79,8 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                       );
 
                     case Status.COMPLETED:
+                      // print('Title : ${provider.content?.values.valuesTitle.toString()}');
+                      // print('Body : ${provider.content?.visionMission.visionText.toString()}');
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -102,6 +104,36 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                               Text(provider.content?.visionMission.visionText.toString() ??"",textAlign: TextAlign.start,),
                             ],
                           ), langProvider: langProvider),
+
+                          kSmallSpace,
+
+                          aboutScoCustomCard(
+                            title: provider.content?.visionMission.missionTitle.toString() ?? "",
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Row(),
+                                Text(provider.content?.visionMission.missionText.toString() ?? "", textAlign: TextAlign.start,),
+                              ],
+                            ),
+                            langProvider: langProvider,
+                          ),
+
+                          kSmallSpace,
+
+                          aboutScoCustomCard(title: provider.content?.goals.goalsTitle.toString() ?? "", content:  ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              itemCount: provider.content?.goals.goals.length,
+                              itemBuilder: (context, index) {
+                                String goal = provider.content?.goals.goals[index] ?? '';
+
+                                return Padding(
+                                  padding:  EdgeInsets.only(bottom: kCardPadding),
+                                  child: Text(goal),
+                                );
+                              }), langProvider: langProvider),
 
 
                           kSmallSpace,
@@ -132,36 +164,84 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                           //     }),
                           // kSmallSpace,
 
-                          aboutScoCustomCard(title: provider.content?.values.valuesTitle.toString() ?? "", content: ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,
-                              itemCount: provider.content?.values.valueItems.length,
-                              itemBuilder: (context, index) {
-                                ValueItem value = provider.content!.values.valueItems[index];
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: (index < ((provider.content?.values.valueItems.length ?? 1) - 1)) ? kCardPadding : 0,
+                          // aboutScoCustomCard(title: provider.content?.values.valuesTitle.toString() ?? "", content: ListView.builder(
+                          //     physics: const NeverScrollableScrollPhysics(),
+                          //     shrinkWrap: true,
+                          //     padding: EdgeInsets.zero,
+                          //     itemCount: provider.content?.values.valueItems.length,
+                          //     itemBuilder: (context, index) {
+                          //       ValueItem value = provider.content!.values.valueItems[index];
+                          //       return Padding(
+                          //         padding: EdgeInsets.only(
+                          //           bottom: (index < ((provider.content?.values.valueItems.length ?? 1) - 1)) ? kCardPadding : 0,
+                          //         ),
+                          //         child:
+                          //         Column(
+                          //           crossAxisAlignment: CrossAxisAlignment.start,
+                          //           children: [
+                          //              Text(
+                          //               value.title,
+                          //               style: value.text != null
+                          //                   ? const TextStyle(color: AppColors.scoThemeColor)
+                          //                   : null,
+                          //               textAlign: TextAlign.justify,
+                          //             ),
+                          //             value.text != null
+                          //                 ? Text(value.text!,textAlign: TextAlign.justify,)
+                          //                 : const SizedBox.shrink()
+                          //           ],
+                          //         )
+                          //         ,
+                          //       );
+                          //     }), langProvider: langProvider),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: provider.content?.values.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final section = entry.value;
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (index > 0)  kSmallSpace, // 🔹 space before new title
+                                  aboutScoCustomCard(
+                                    title: section.valuesTitle,
+                                    content: ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      padding: EdgeInsets.zero,
+                                      itemCount: section.valueItems.length,
+                                      itemBuilder: (context, i) {
+                                        ValueItem value = section.valueItems[i];
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: (i < (section.valueItems.length - 1)) ? kCardPadding : 0,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                value.title,
+                                                style: value.text.isNotEmpty
+                                                    ? const TextStyle(color: AppColors.scoThemeColor)
+                                                    : null,
+                                                textAlign: TextAlign.justify,
+                                              ),
+                                              value.text.isNotEmpty
+                                                  ? Text(value.text, textAlign: TextAlign.justify)
+                                                  : const SizedBox.shrink(),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    langProvider: langProvider,
                                   ),
-                                  child:
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                       Text(
-                                        value.title,
-                                        style: value.text != null
-                                            ? const TextStyle(color: AppColors.scoThemeColor)
-                                            : null,
-                                        textAlign: TextAlign.justify,
-                                      ),
-                                      value.text != null
-                                          ? Text(value.text!,textAlign: TextAlign.justify,)
-                                          : const SizedBox.shrink()
-                                    ],
-                                  )
-                                  ,
-                                );
-                              }), langProvider: langProvider),
+                                ],
+                              );
+                            }).toList() ?? [],
+                          ),
 
 
                           // //*---------Goals Title---------*/
@@ -182,22 +262,6 @@ class _VisionAndMissionViewState extends State<VisionAndMissionView> with MediaQ
                           //         child: CustomVisionAndMissionContainer(title: goal),
                           //       );
                           //     })
-
-                          kSmallSpace,
-
-                          aboutScoCustomCard(title: provider.content?.goals.goalsTitle.toString() ?? "", content:  ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,
-                              itemCount: provider.content?.goals.goals.length,
-                              itemBuilder: (context, index) {
-                                String goal = provider.content?.goals.goals[index] ?? '';
-
-                                return Padding(
-                                  padding:  EdgeInsets.only(bottom: kCardPadding),
-                                  child: Text(goal),
-                                );
-                              }), langProvider: langProvider)
 
                         ],
                       );

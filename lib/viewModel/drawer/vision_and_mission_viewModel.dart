@@ -71,7 +71,7 @@ class VisionAndMissionViewModel with ChangeNotifier {
           ? 'en_US'
           : 'ar_SA'; // Assuming you have a way to get the selected language code
 
-      log('Test ==> '+htmlContent);
+      log('Test ==> ' + htmlContent);
 
       _content = parseHtmlContent(htmlContent, selectedLanguage);
 
@@ -132,7 +132,8 @@ class Goals {
 class Content {
   final String languageId;
   final VisionMission visionMission;
-  final Values values;
+  // final Values values;
+  final List<Values> values;
   final Goals goals;
 
   Content({
@@ -153,15 +154,18 @@ Content parseHtmlContent(String htmlString, String selectedLanguage) {
 
   // 3) Try to find a <content> block for the selected language
   // NOTE: If the response didn't include <content> wrappers, this will be null.
-  var contentBlock = document.querySelector('content[language-id="$selectedLanguage"]');
+  var contentBlock =
+      document.querySelector('content[language-id="$selectedLanguage"]');
 
   debugPrint("print: $contentBlock");
 
   // 4) Fallback to default-locale from <root> if selected language block not found
   if (contentBlock == null) {
-    final defaultLocale = document.querySelector('root')?.attributes['default-locale'];
+    final defaultLocale =
+        document.querySelector('root')?.attributes['default-locale'];
     if (defaultLocale != null) {
-      contentBlock = document.querySelector('content[language-id="$defaultLocale"]');
+      contentBlock =
+          document.querySelector('content[language-id="$defaultLocale"]');
     }
   }
 
@@ -172,55 +176,80 @@ Content parseHtmlContent(String htmlString, String selectedLanguage) {
 
   // ---------- Extract Vision ----------
   final visionEl = scope.querySelector('.sco-vision .flex-text-wrapper');
-  final visionTitle = visionEl?.querySelector('.the-vm-title')?.text.trim() ?? '';
-  final visionText  = visionEl?.querySelector('.the-vm-text')?.text.trim() ?? '';
+  final visionTitle =
+      visionEl?.querySelector('.the-vm-title')?.text.trim() ?? '';
+  final visionText = visionEl?.querySelector('.the-vm-text')?.text.trim() ?? '';
 
   // ---------- Extract Mission ----------
   final missionEl = scope.querySelector('.sco-mission .flex-text-wrapper');
-  final missionTitle = missionEl?.querySelector('.the-vm-title')?.text.trim() ?? '';
-  final missionText  = missionEl?.querySelector('.the-vm-text')?.text.trim() ?? '';
+  final missionTitle =
+      missionEl?.querySelector('.the-vm-title')?.text.trim() ?? '';
+  final missionText =
+      missionEl?.querySelector('.the-vm-text')?.text.trim() ?? '';
 
   // ---------- Extract Values ----------
-  final valuesSections = scope.querySelectorAll('.sco-values');
+  /*final valuesSections = scope.querySelectorAll('.sco-values');
   final valuesTitle = scope.querySelector('.the-vls-title')?.text.trim() ?? '';
   final List<ValueItem> allValueItems = [];
   for (final section in valuesSections) {
     final items = section.querySelectorAll('.sco-value').map((el) {
       final title = el.querySelector('.sco-val-title')?.text.trim() ?? '';
-      final text  = el.querySelector('.sco-val-text')?.text.trim() ?? '';
+      final text = el.querySelector('.sco-val-text')?.text.trim() ?? '';
       return ValueItem(title: title, text: text);
     }).toList();
     allValueItems.addAll(items);
+  }*/
+
+  // ---------- Extract Values (separate sections) ----------
+  final valuesSections = scope.querySelectorAll('.sco-values');
+  final List<Values> allValuesSections = [];
+
+  for (final section in valuesSections) {
+    final sectionTitle = section.querySelector('.the-vls-title')?.text.trim() ?? '';
+
+    final items = section.querySelectorAll('.sco-value').map((el) {
+      final title = el.querySelector('.sco-val-title')?.text.trim().replaceAll('\u00A0', ' ') ?? '';
+      final text = el.querySelector('.sco-val-text')?.text.trim().replaceAll('\u00A0', ' ') ?? '';
+      return ValueItem(title: title, text: text);
+    }).toList();
+
+    allValuesSections.add(
+      Values(valuesTitle: sectionTitle, valueItems: items),
+    );
   }
+
+
 
   // ---------- Extract Goals ----------
   final goalsWrapper = scope.querySelector('.sco-goals .sco-goals-wrapper');
-  final goalsTitle = goalsWrapper?.querySelector('.the-goal-title')?.text.trim() ?? '';
+  final goalsTitle =
+      goalsWrapper?.querySelector('.the-goal-title')?.text.trim() ?? '';
   final goals = goalsWrapper
-      ?.querySelectorAll('.sco-goal')
-      .map((el) => el.text.trim())
-      .toList() ?? <String>[];
+          ?.querySelectorAll('.sco-goal')
+          .map((el) => el.text.trim())
+          .toList() ??
+      <String>[];
 
   // Always return non-null Content
   return Content(
     languageId: selectedLanguage,
     visionMission: VisionMission(
       visionTitle: visionTitle,
-      visionText:  visionText,
+      visionText: visionText,
       missionTitle: missionTitle,
-      missionText:  missionText,
+      missionText: missionText,
     ),
-    values: Values(
-      valuesTitle: valuesTitle,
-      valueItems: allValueItems,
-    ),
+    values: allValuesSections,
+    // values: Values(
+    //   valuesTitle: valuesTitle,
+    //   valueItems: allValueItems,
+    // ),
     goals: Goals(
       goalsTitle: goalsTitle,
       goals: goals,
     ),
   );
 }
-
 
 // Content parseHtmlContent(String htmlString, String selectedLanguage) {
 //   // Ensure we decode HTML entities (&lt;div> → <div>)
