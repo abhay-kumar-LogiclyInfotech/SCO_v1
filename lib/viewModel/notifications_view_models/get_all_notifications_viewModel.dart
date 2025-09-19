@@ -24,7 +24,7 @@ class GetAllNotificationsViewModel with ChangeNotifier {
   }
   String? _userId;
 
-  setEmiratesId() async {
+  setUserId() async {
     _userId =  HiveManager.getUserId();
   }
 
@@ -40,11 +40,11 @@ class GetAllNotificationsViewModel with ChangeNotifier {
 
   final _myRepo = HomeRepository();
 
-  ApiResponse<List<GetAllNotificationsModel> > _apiResponse = ApiResponse.none();
+  ApiResponse<List<NotificationData> > _apiResponse = ApiResponse.none();
 
-  ApiResponse<List<GetAllNotificationsModel> > get apiResponse => _apiResponse;
+  ApiResponse<List<NotificationData> > get apiResponse => _apiResponse;
 
-  set setApiResponse(ApiResponse<List<GetAllNotificationsModel> > response) {
+  set setApiResponse(ApiResponse<List<NotificationData> > response) {
     _apiResponse = response;
     notifyListeners();
   }
@@ -59,14 +59,13 @@ class GetAllNotificationsViewModel with ChangeNotifier {
       try {
         setLoading(true);
         setApiResponse = ApiResponse.loading();
-        await setEmiratesId();
+        await setUserId();
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
-        List<GetAllNotificationsModel> response = await _myRepo.getAllNotifications(userId: _userId ?? '',headers: headers);
+        List<NotificationData> response = await _myRepo.getAllNotifications(userId: _userId ?? '',headers: headers);
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);
       } catch (error) {

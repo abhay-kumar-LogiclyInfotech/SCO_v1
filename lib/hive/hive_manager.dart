@@ -55,6 +55,30 @@ class HiveManager {
 
 
 
+  //*-------storing the Email Start--------*
+  static Future<void> storeEmail(String email) async {
+    await Boxes.getUserDataBox().put("email", email);
+  }
+
+  static bool isEmailStored() {
+    return Boxes.getUserDataBox().containsKey('email');
+  }
+
+  static String? getEmail() {
+    if (isEmailStored()) {
+      return Boxes.getUserDataBox().get("email");
+    }
+    return null;
+  }
+
+//when we logout clear Data:
+  static Future<void> clearEmail() async {
+    await Boxes.getUserDataBox().delete('email');
+    debugPrint('Email cleared');
+  }
+//*-------storing the Email End--------*
+
+
   //*-------storing the UserID Start--------*
   static Future<void> storeUserId(String userId) async {
     await Boxes.getUserDataBox().put("userID", userId);

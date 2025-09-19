@@ -421,6 +421,7 @@ class _EditAddressesViewState extends State<EditAddressesView>
                       scholarshipFormDropdown(
                         readOnly: addressInformation.disableState || (addressInformation.stateDropdownMenuItems?.isEmpty ?? false || addressInformation.stateDropdownMenuItems == null),
                         filled: addressInformation.disableState || (addressInformation.stateDropdownMenuItems?.isEmpty ?? false || addressInformation.stateDropdownMenuItems == null),
+                        fillColor: addressInformation.disableState || (addressInformation.stateDropdownMenuItems?.isEmpty ?? false || addressInformation.stateDropdownMenuItems == null) ? AppColors.bgColor : Colors.white,
                         context:context,
                         controller: addressInformation.stateController,
                         currentFocusNode: addressInformation.stateFocusNode,

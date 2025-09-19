@@ -24,7 +24,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signUpWithUaePass => 'التسجيل باستخدام PASS UAE';
 
   @override
-  String get completeRegistration => 'يرجى إتمام عملية التسجيل من خلال موقع SCO.';
+  String get completeRegistration =>
+      'يرجى إتمام عملية التسجيل من خلال موقع SCO.';
 
   @override
   String get readMore => 'اقرأ المزيد';
@@ -33,7 +34,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get scholarships => 'البعثات الدراسية';
 
   @override
-  String get scholarshipsInTheUAE => 'المنح الدراسية في دولة الإمارات العربية المتحدة';
+  String get scholarshipsInTheUAE =>
+      'المنح الدراسية في دولة الإمارات العربية المتحدة';
 
   @override
   String get scholarshipOffice => 'مكتب البعثات الدراسية';
@@ -183,7 +185,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fieldCantBeEmpty => 'الحقل لا يمكن أن يكون فارغاً';
 
   @override
-  String get invalidName => 'اسم غير صحيح.\nيسمح فقط بالحروف الإنجليزية والعربية.\nلا يُسمح بالرموز الخاصة أو الأرقام أو المسافات الزائدة.';
+  String get invalidName =>
+      'اسم غير صحيح.\nيسمح فقط بالحروف الإنجليزية والعربية.\nلا يُسمح بالرموز الخاصة أو الأرقام أو المسافات الزائدة.';
 
   @override
   String get emailCantBeEmpty => 'الرجاء إدخال معرف البريد الإلكتروني';
@@ -195,22 +198,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get passwordCantBeEmpty => 'كلمة المرور لا يمكن أن تكون فارغة';
 
   @override
-  String get passwordTooShort => 'يجب أن تكون كلمة المرور مكونة من 8 أحرف على الأقل';
+  String get passwordTooShort =>
+      'يجب أن تكون كلمة المرور مكونة من 8 أحرف على الأقل';
 
   @override
-  String get passwordUppercase => 'يجب أن تتضمن كلمة المرور على الأقل حرفًا واحدًا كبيرًا';
+  String get passwordUppercase =>
+      'يجب أن تتضمن كلمة المرور على الأقل حرفًا واحدًا كبيرًا';
 
   @override
-  String get passwordLowercase => 'يجب أن تتضمن كلمة المرور على الأقل حرفًا صغيرًا واحدًا';
+  String get passwordLowercase =>
+      'يجب أن تتضمن كلمة المرور على الأقل حرفًا صغيرًا واحدًا';
 
   @override
   String get passwordDigit => 'يجب أن تتضمن كلمة المرور على الأقل رقمًا واحدًا';
 
   @override
-  String get passwordSpecialCharacter => 'يجب أن تتضمن كلمة المرور على الأقل رمزًا خاصًا واحدًا';
+  String get passwordSpecialCharacter =>
+      'يجب أن تتضمن كلمة المرور على الأقل رمزًا خاصًا واحدًا';
 
   @override
-  String get emirateIdCantBeEmpty => 'رقم الهوية الإماراتية لا يمكن أن يكون فارغًا';
+  String get emirateIdCantBeEmpty =>
+      'رقم الهوية الإماراتية لا يمكن أن يكون فارغًا';
 
   @override
   String get invalidEmirateId => 'رقم الهوية الإماراتية غير صحيح';
@@ -303,7 +311,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get otp_verification => 'التحقق من OTP';
 
   @override
-  String get otp_verification_message => 'أرسلنا رمز التحقق إلى بريدك الإلكتروني.\nأدخل رمز التحقق هنا!';
+  String get otp_verification_message =>
+      'أرسلنا رمز التحقق إلى بريدك الإلكتروني.\nأدخل رمز التحقق هنا!';
 
   @override
   String get time_limit => 'الوقت المحدد 5 دقائق';
@@ -312,31 +321,39 @@ class AppLocalizationsAr extends AppLocalizations {
   String get resend_code => 'إعادة إرسال الرمز';
 
   @override
-  String get error_complete_profile => 'حدث خطأ ما. يرجى إكمال ملفك الشخصي عبر www.sco.ae';
+  String get error_complete_profile =>
+      'حدث خطأ ما. يرجى إكمال ملفك الشخصي عبر www.sco.ae';
 
   @override
-  String get acceptance_of_terms_through_use_heading => 'قبول الشروط من خلال الاستخدام';
+  String get acceptance_of_terms_through_use_heading =>
+      'قبول الشروط من خلال الاستخدام';
 
   @override
-  String get acceptance_of_terms_through_use_points_p1 => 'يعتبر استخدام هذا الموقع قبولاً للشروط والأحكام الواردة فيه.';
+  String get acceptance_of_terms_through_use_points_p1 =>
+      'يعتبر استخدام هذا الموقع قبولاً للشروط والأحكام الواردة فيه.';
 
   @override
-  String get acceptance_of_terms_through_use_points_p2 => 'يحتفظ مكتب البعثات الدراسية بالحق في تعديل شروط الاستخدام في أي وقت.';
+  String get acceptance_of_terms_through_use_points_p2 =>
+      'يحتفظ مكتب البعثات الدراسية بالحق في تعديل شروط الاستخدام في أي وقت.';
 
   @override
-  String get acceptance_of_terms_through_use_points_p3 => 'سيتم الإعلان عن أي تعديلات على هذه الشروط على الموقع.';
+  String get acceptance_of_terms_through_use_points_p3 =>
+      'سيتم الإعلان عن أي تعديلات على هذه الشروط على الموقع.';
 
   @override
-  String get acceptance_of_terms_through_use_points_p4 => 'تتحمل مسؤولية معرفة التعديلات المستخدم.';
+  String get acceptance_of_terms_through_use_points_p4 =>
+      'تتحمل مسؤولية معرفة التعديلات المستخدم.';
 
   @override
-  String get acceptance_of_terms_through_use_points_p5 => 'يعتبر الاستمرار في استخدام الموقع بعد التعديلات قبولاً ضمنياً لهذه التعديلات.';
+  String get acceptance_of_terms_through_use_points_p5 =>
+      'يعتبر الاستمرار في استخدام الموقع بعد التعديلات قبولاً ضمنياً لهذه التعديلات.';
 
   @override
   String get copyright_heading => 'حقوق الطبع';
 
   @override
-  String get copyright_points_p1 => 'جميع حقوق الطبع على موقع مكتب البعثات الدراسية تخضع للحماية القانونية.';
+  String get copyright_points_p1 =>
+      'جميع حقوق الطبع على موقع مكتب البعثات الدراسية تخضع للحماية القانونية.';
 
   @override
   String get copyright_points_p2 => 'تملكها أو ترخص بها مكتب البعثات الدراسية.';
@@ -345,115 +362,145 @@ class AppLocalizationsAr extends AppLocalizations {
   String get intellectual_property_rights_heading => 'حقوق الملكية الفكرية';
 
   @override
-  String get intellectual_property_rights_points_p1 => 'تخضع جميع محتويات الموقع للحماية بموجب تشريعات الملكية الفكرية، بما في ذلك حقوق الطبع، والعلامات التجارية، وعلامات الخدمة، وغيرها من الحقوق.';
+  String get intellectual_property_rights_points_p1 =>
+      'تخضع جميع محتويات الموقع للحماية بموجب تشريعات الملكية الفكرية، بما في ذلك حقوق الطبع، والعلامات التجارية، وعلامات الخدمة، وغيرها من الحقوق.';
 
   @override
-  String get intellectual_property_rights_points_p2 => 'يوافق المستخدم على عدم بث، عرض، تنفيذ، نشر، تعديل، تحرير، أو إنشاء أعمال مشتقة من محتويات الموقع دون الحصول على إذن صريح.';
+  String get intellectual_property_rights_points_p2 =>
+      'يوافق المستخدم على عدم بث، عرض، تنفيذ، نشر، تعديل، تحرير، أو إنشاء أعمال مشتقة من محتويات الموقع دون الحصول على إذن صريح.';
 
   @override
-  String get intellectual_property_rights_points_p3 => 'يمكن للمستخدم طباعة أو تحميل نسخة واحدة من محتويات الموقع لاستخدامه الشخصي وغير التجاري.';
+  String get intellectual_property_rights_points_p3 =>
+      'يمكن للمستخدم طباعة أو تحميل نسخة واحدة من محتويات الموقع لاستخدامه الشخصي وغير التجاري.';
 
   @override
-  String get intellectual_property_rights_points_p4 => 'يحظر استرجاع المحتويات لإنشاء قاعدة بيانات أو دليل دون إذن كتابي.';
+  String get intellectual_property_rights_points_p4 =>
+      'يحظر استرجاع المحتويات لإنشاء قاعدة بيانات أو دليل دون إذن كتابي.';
 
   @override
-  String get intellectual_property_rights_points_p5 => 'يحظر استخدام محتويات الموقع لأي غرض غير مصرح به صراحة.';
+  String get intellectual_property_rights_points_p5 =>
+      'يحظر استخدام محتويات الموقع لأي غرض غير مصرح به صراحة.';
 
   @override
   String get severability_of_provisions_heading => 'استقلالية النصوص';
 
   @override
-  String get severability_of_provisions_points_p1 => 'إذا تم إبطال أي شرط لأي سبب، فإن البطلان سيطبق فقط على ذلك الشرط.';
+  String get severability_of_provisions_points_p1 =>
+      'إذا تم إبطال أي شرط لأي سبب، فإن البطلان سيطبق فقط على ذلك الشرط.';
 
   @override
-  String get severability_of_provisions_points_p2 => 'تظل الشروط الأخرى على الموقع سارية.';
+  String get severability_of_provisions_points_p2 =>
+      'تظل الشروط الأخرى على الموقع سارية.';
 
   @override
-  String get severability_of_provisions_points_p3 => 'في حالة وجود تعارض، تكون النصوص الخاصة هي السارية.';
+  String get severability_of_provisions_points_p3 =>
+      'في حالة وجود تعارض، تكون النصوص الخاصة هي السارية.';
 
   @override
   String get applicable_law_heading => 'القانون المطبق';
 
   @override
-  String get applicable_law_points_p1 => 'تخضع الشروط لأحكام قوانين دولة الإمارات العربية المتحدة.';
+  String get applicable_law_points_p1 =>
+      'تخضع الشروط لأحكام قوانين دولة الإمارات العربية المتحدة.';
 
   @override
-  String get applicable_law_points_p2 => 'في حالة حدوث انتهاك، يحتفظ مكتب البعثات الدراسية بالحق في اللجوء إلى القانون.';
+  String get applicable_law_points_p2 =>
+      'في حالة حدوث انتهاك، يحتفظ مكتب البعثات الدراسية بالحق في اللجوء إلى القانون.';
 
   @override
-  String get applicable_law_points_p3 => 'تختص محاكم أبوظبي بالنظر في أي نزاعات.';
+  String get applicable_law_points_p3 =>
+      'تختص محاكم أبوظبي بالنظر في أي نزاعات.';
 
   @override
-  String get governing_law_and_jurisdiction_heading => 'القانون واجب التطبيق والمحكمة المختصة';
+  String get governing_law_and_jurisdiction_heading =>
+      'القانون واجب التطبيق والمحكمة المختصة';
 
   @override
-  String get governing_law_and_jurisdiction_points_p1 => 'تطبق تشريعات دولة الإمارات العربية المتحدة على استخدام الموقع وأي نزاعات تنشأ.';
+  String get governing_law_and_jurisdiction_points_p1 =>
+      'تطبق تشريعات دولة الإمارات العربية المتحدة على استخدام الموقع وأي نزاعات تنشأ.';
 
   @override
-  String get governing_law_and_jurisdiction_points_p2 => 'تكون محاكم أبوظبي مسؤولة عن حل النزاعات المتعلقة بالموقع.';
+  String get governing_law_and_jurisdiction_points_p2 =>
+      'تكون محاكم أبوظبي مسؤولة عن حل النزاعات المتعلقة بالموقع.';
 
   @override
   String get disclaimer_heading => 'إخلاء المسؤولية';
 
   @override
-  String get disclaimer_description => 'يقر المستخدم بأن مكتب البعثات الدراسية لا يتحمل أي مسؤولية تنشأ عن الأضرار المباشرة أو غير المباشرة، وفقًا لقواعد المسؤولية التعاقدية أو التقصيرية، سواء كانت الأضرار ناجمة عن استخدام الموقع أو عدم القدرة على استخدامه.';
+  String get disclaimer_description =>
+      'يقر المستخدم بأن مكتب البعثات الدراسية لا يتحمل أي مسؤولية تنشأ عن الأضرار المباشرة أو غير المباشرة، وفقًا لقواعد المسؤولية التعاقدية أو التقصيرية، سواء كانت الأضرار ناجمة عن استخدام الموقع أو عدم القدرة على استخدامه.';
 
   @override
   String get privacy_policy_heading => 'سياسة الخصوصية';
 
   @override
-  String get privacy_policy_heading_consent_to_use_of_information => 'الموافقة على استخدام المعلومات';
+  String get privacy_policy_heading_consent_to_use_of_information =>
+      'الموافقة على استخدام المعلومات';
 
   @override
-  String get privacy_policy_description_consent_to_use_of_information => 'باستخدام موقع مكتب البعثات الدراسية، يوافق كل مستخدم (متصفح) على سياسة الخصوصية هذه عند قيامه بدخول الموقع، كما يوافق على قيام مكتب البعثات الدراسية بجمع المعلومات التي تتوفر لديه، واستخدامها، أو التصرّف فيها.';
+  String get privacy_policy_description_consent_to_use_of_information =>
+      'باستخدام موقع مكتب البعثات الدراسية، يوافق كل مستخدم (متصفح) على سياسة الخصوصية هذه عند قيامه بدخول الموقع، كما يوافق على قيام مكتب البعثات الدراسية بجمع المعلومات التي تتوفر لديه، واستخدامها، أو التصرّف فيها.';
 
   @override
-  String get privacy_policy_heading_information_collection_and_disclosure_policies => 'السياسات المرتبطة بجمع المعلومات والكشف عنها';
+  String
+      get privacy_policy_heading_information_collection_and_disclosure_policies =>
+          'السياسات المرتبطة بجمع المعلومات والكشف عنها';
 
   @override
-  String get privacy_policy_description_information_collection_and_disclosure_policies => 'يجمع مكتب البعثات الدراسية المعلومات الشخصية – مثل: الاسم والعنوان والبريد الإلكتروني – عندما يوفرها المستخدم بإرادته لها، كما يجوز لمكتب البعثات الدراسية أن يجمع معلومات أخرى يقدّمها المستخدمون، مثل: العنوان وتاريخ الميلاد، وغيرها من المعلومات الشخصية، التي يمكنها تحديد الهوية عندما ينشئ المستخدم حسابا أو يطلب الخدمة على الإنترنت. ويجمع كذلك برامج \'مزوّد الويب\' الخاصة بمكتب البعثات الدراسية على نحو تلقائي المعلومات الإحصائية حول زيارات المستخدمين، مثل: الصفحات التي يزورونها، وبرامج المستعرض المستخدمة لزيارة موقعنا، ولا يرتبط أيّ من هذه المعلومات بالمستخدم باعتباره فردا (راجع المعلومات حول \'الكوكيز\' – ملف الصفحات التي زارها المستخدم).';
+  String get privacy_policy_description_information_collection_and_disclosure_policies =>
+      'يجمع مكتب البعثات الدراسية المعلومات الشخصية – مثل: الاسم والعنوان والبريد الإلكتروني – عندما يوفرها المستخدم بإرادته لها، كما يجوز لمكتب البعثات الدراسية أن يجمع معلومات أخرى يقدّمها المستخدمون، مثل: العنوان وتاريخ الميلاد، وغيرها من المعلومات الشخصية، التي يمكنها تحديد الهوية عندما ينشئ المستخدم حسابا أو يطلب الخدمة على الإنترنت. ويجمع كذلك برامج \'مزوّد الويب\' الخاصة بمكتب البعثات الدراسية على نحو تلقائي المعلومات الإحصائية حول زيارات المستخدمين، مثل: الصفحات التي يزورونها، وبرامج المستعرض المستخدمة لزيارة موقعنا، ولا يرتبط أيّ من هذه المعلومات بالمستخدم باعتباره فردا (راجع المعلومات حول \'الكوكيز\' – ملف الصفحات التي زارها المستخدم).';
 
   @override
-  String get privacy_policy_heading_information_usage_and_disclosure_policies => 'السياسات المتعلقة باستخدام المعلومات والكشف عنها';
+  String get privacy_policy_heading_information_usage_and_disclosure_policies =>
+      'السياسات المتعلقة باستخدام المعلومات والكشف عنها';
 
   @override
-  String get privacy_policy_description_information_usage_and_disclosure_policies => 'يحقّ لمكتب البعثات الدراسية أن يستخدم معلومات المستخدمين أو يكشف عنها، وعن غيرها من المعلومات الشخصية التي جمعها من مكتب البعثات الدراسية والجهات التابعة له، التي تؤدي وظائف، مثل: خدمة حسابات المستخدمين، وتحضير التقارير، وغير ذلك من أنشطة المستخدمين.';
+  String get privacy_policy_description_information_usage_and_disclosure_policies =>
+      'يحقّ لمكتب البعثات الدراسية أن يستخدم معلومات المستخدمين أو يكشف عنها، وعن غيرها من المعلومات الشخصية التي جمعها من مكتب البعثات الدراسية والجهات التابعة له، التي تؤدي وظائف، مثل: خدمة حسابات المستخدمين، وتحضير التقارير، وغير ذلك من أنشطة المستخدمين.';
 
   @override
   String get privacy_policy_heading_cookies => 'الكوكيز';
 
   @override
-  String get privacy_policy_description_cookies => 'سلسلة صغيرة من البيانات، يكتبها المزوّد الخاص بمكتب البعثات الدراسية على محرّك القرص الثابت الخاص بالمستخدم، وتسمح هذه التكنولوجيا لمكتب البعثات الدراسية بتطوير موقعه لتحقيق كفاءة أكبر لاستخدام الموقع.';
+  String get privacy_policy_description_cookies =>
+      'سلسلة صغيرة من البيانات، يكتبها المزوّد الخاص بمكتب البعثات الدراسية على محرّك القرص الثابت الخاص بالمستخدم، وتسمح هذه التكنولوجيا لمكتب البعثات الدراسية بتطوير موقعه لتحقيق كفاءة أكبر لاستخدام الموقع.';
 
   @override
   String get privacy_policy_heading_links => 'الروابط';
 
   @override
-  String get privacy_policy_description_links => 'يتضمّن هذا الموقع الإلكتروني روابط لمواقع أخرى، ولا تعدّ مكتب البعثات الدراسية مسؤول عن تلك الروابط، كما ينصح مكتب البعثات الدراسية مستخدميه بالاطّلاع على سياسات الخصوصية الواردة فيه.';
+  String get privacy_policy_description_links =>
+      'يتضمّن هذا الموقع الإلكتروني روابط لمواقع أخرى، ولا تعدّ مكتب البعثات الدراسية مسؤول عن تلك الروابط، كما ينصح مكتب البعثات الدراسية مستخدميه بالاطّلاع على سياسات الخصوصية الواردة فيه.';
 
   @override
   String get privacy_policy_heading_surveys => 'الدراسات الاستقصائية';
 
   @override
-  String get privacy_policy_description_surveys => 'يحصل مكتب البعثات الدراسية – بين الحين والآخر – على معلومات من المستخدمين عبر دراسات استقصائية يقوم بها، وتكون المشاركة في هذه الدراسات طوعية، ولهذا فإن للمستخدم الخيار في الكشف أو عدم الكشف عن هذه المعلومات، ويجوز أن تشمل المعلومات المطلوبة معلومات الاتصال التي تستخدم في الإخطار عن النتائج، وقد تستخدم بعض المعلومات لأغراض المراقبة أو تحسين استخدام الموقع.';
+  String get privacy_policy_description_surveys =>
+      'يحصل مكتب البعثات الدراسية – بين الحين والآخر – على معلومات من المستخدمين عبر دراسات استقصائية يقوم بها، وتكون المشاركة في هذه الدراسات طوعية، ولهذا فإن للمستخدم الخيار في الكشف أو عدم الكشف عن هذه المعلومات، ويجوز أن تشمل المعلومات المطلوبة معلومات الاتصال التي تستخدم في الإخطار عن النتائج، وقد تستخدم بعض المعلومات لأغراض المراقبة أو تحسين استخدام الموقع.';
 
   @override
   String get privacy_policy_heading_security => 'الأمن';
 
   @override
-  String get privacy_policy_description_security => 'يتخذ مكتب البعثات الدراسية الاحتياطات اللازمة لحماية المعلومات المُقدّمة من المستخدمين، التي جُمعت من الموقع الإلكتروني، وهذه المعلومات محمية سواء عند الاتصال بالإنترنت أو الخروج منه، ويستخدم مكتب البعثات الدراسية نظام \'التكويد\' لحماية أيّ معلومات حسّاسة على الإنترنت، كما يبذل العناية اللازمة لحماية معلومات المستخدم في حالة عدم الاتصال بالإنترنت، وفي جميع الأحوال تُحفظ هذه المعلومات بسرّية، ولا يُمنح حقّ الاطّلاع عليها إلاّ في إطار أداء المهام الوظيفية.';
+  String get privacy_policy_description_security =>
+      'يتخذ مكتب البعثات الدراسية الاحتياطات اللازمة لحماية المعلومات المُقدّمة من المستخدمين، التي جُمعت من الموقع الإلكتروني، وهذه المعلومات محمية سواء عند الاتصال بالإنترنت أو الخروج منه، ويستخدم مكتب البعثات الدراسية نظام \'التكويد\' لحماية أيّ معلومات حسّاسة على الإنترنت، كما يبذل العناية اللازمة لحماية معلومات المستخدم في حالة عدم الاتصال بالإنترنت، وفي جميع الأحوال تُحفظ هذه المعلومات بسرّية، ولا يُمنح حقّ الاطّلاع عليها إلاّ في إطار أداء المهام الوظيفية.';
 
   @override
-  String get privacy_policy_heading_notification_of_changes => 'الإخطار عن التغييرات';
+  String get privacy_policy_heading_notification_of_changes =>
+      'الإخطار عن التغييرات';
 
   @override
-  String get privacy_policy_description_notification_of_changes => 'إذا قرّرنا تغيير سياسة الخصوصية الخاصة بنا، فإننا سننشر تلك التغييرات على صفحتنا الرئيسة، وبهذا يكون المستخدمون على وعي دائم بماهية المعلومات التي نجمعها، وكيف نستخدمها، وتحت أيّ ظروف.';
+  String get privacy_policy_description_notification_of_changes =>
+      'إذا قرّرنا تغيير سياسة الخصوصية الخاصة بنا، فإننا سننشر تلك التغييرات على صفحتنا الرئيسة، وبهذا يكون المستخدمون على وعي دائم بماهية المعلومات التي نجمعها، وكيف نستخدمها، وتحت أيّ ظروف.';
 
   @override
-  String get privacy_policy_heading_updates_to_privacy_policy => 'التحديثات على سياسة الخصوصية';
+  String get privacy_policy_heading_updates_to_privacy_policy =>
+      'التحديثات على سياسة الخصوصية';
 
   @override
-  String get privacy_policy_description_updates_to_privacy_policy => 'في حال حدّث مكتب البعثات الدراسية سياسة الخصوصية، فإن ذلك سوف يتمّ عبر صفحة مكتب البعثات الدراسية الرئيسة، بحيث تكون تلك التحديثات في متناول المستخدمين.';
+  String get privacy_policy_description_updates_to_privacy_policy =>
+      'في حال حدّث مكتب البعثات الدراسية سياسة الخصوصية، فإن ذلك سوف يتمّ عبر صفحة مكتب البعثات الدراسية الرئيسة، بحيث تكون تلك التحديثات في متناول المستخدمين.';
 
   @override
   String get logout => 'تسجيل خروج';
@@ -498,13 +545,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get correct => 'صحيح';
 
   @override
-  String get correct_message => 'تم إعادة تعيين كلمة المرور بنجاح. يرجى التحقق من بريدك الإلكتروني المسجل للحصول على كلمة مرور جديدة.';
+  String get correct_message =>
+      'تم إعادة تعيين كلمة المرور بنجاح. يرجى التحقق من بريدك الإلكتروني المسجل للحصول على كلمة مرور جديدة.';
 
   @override
   String get wrong => 'خطأ';
 
   @override
-  String get wrong_message => 'فشل في إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.';
+  String get wrong_message =>
+      'فشل في إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.';
 
   @override
   String get click_here_to_login => 'انقر هنا لتسجيل الدخول';
@@ -522,7 +571,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get answerSecurityQuestion => 'أجب على سؤال الأمان';
 
   @override
-  String get pleaseEnterCode => 'يرجى إدخال الرمز المكون من 7 أرقام الذي تم إرساله إلى بريدك الإلكتروني أو هاتفك المحمول للتحقق من حسابك.';
+  String get pleaseEnterCode =>
+      'يرجى إدخال الرمز المكون من 7 أرقام الذي تم إرساله إلى بريدك الإلكتروني أو هاتفك المحمول للتحقق من حسابك.';
 
   @override
   String get acceptTermsAndConditions => 'قبول الشروط والأحكام';
@@ -540,7 +590,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get error_fetching_data => 'حدث خطأ أثناء جلب البيانات.';
 
   @override
-  String get something_went_wrong => 'حدث خطأ في حسابك. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالمسؤول.';
+  String get something_went_wrong =>
+      'حدث خطأ في حسابك. يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالمسؤول.';
 
   @override
   String get password_sent_successfully => 'تم إرسال كلمة المرور بنجاح';
@@ -621,7 +672,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get phoneCallPermissionDenied => 'تم رفض إذن إجراء المكالمات الهاتفية';
 
   @override
-  String get invalidArabicName => 'الاسم العربي غير صحيح. يُرجى استخدام الحروف العربية فقط.';
+  String get invalidArabicName =>
+      'الاسم العربي غير صحيح. يُرجى استخدام الحروف العربية فقط.';
 
   @override
   String get invalidEnglishName => 'يرجى إدخال اسم إنجليزي صحيح';
@@ -672,7 +724,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get employmentHistory => 'البيانات الوظيفية';
 
   @override
-  String get universityWishList => 'التخصصات المرغوبة – التقديم والقبول الجامعي';
+  String get universityWishList =>
+      'التخصصات المرغوبة – التقديم والقبول الجامعي';
 
   @override
   String get requiredExamination => 'الاختبارات المطلوبة';
@@ -714,13 +767,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get grandfatherNameEnglish => 'الاسم الثالث والرابع';
 
   @override
-  String get grandfatherNameEnglishRequired => 'حقل الاسم الثالث والرابع اجباري';
+  String get grandfatherNameEnglishRequired =>
+      'حقل الاسم الثالث والرابع اجباري';
 
   @override
   String get grandfatherNameEnglishWatermark => 'ادخل الاسم الثالث والرابع';
 
   @override
-  String get grandfatherNameEnglishValidate => 'برجاء ادخال الاسم الثالث والرابع بشكل صحيح';
+  String get grandfatherNameEnglishValidate =>
+      'برجاء ادخال الاسم الثالث والرابع بشكل صحيح';
 
   @override
   String get familyNameEnglish => 'اسم العائلة او القبيلة';
@@ -732,7 +787,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get familyNameEnglishWatermark => 'ادخل اسم العائلة او القبيلة';
 
   @override
-  String get familyNameEnglishValidate => 'برجاء ادخال اسم العاȫلة او القبيلة بشكل صحيح';
+  String get familyNameEnglishValidate =>
+      'برجاء ادخال اسم العاȫلة او القبيلة بشكل صحيح';
 
   @override
   String get studentNameArabic => 'الاسم الأول';
@@ -768,7 +824,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get grandfatherNameArabicWatermark => 'ادخل الاسم الثالث والرابع';
 
   @override
-  String get grandfatherNameArabicValidate => 'برجاء ادخال الاسم الثالث والرابع بشكل صحيح';
+  String get grandfatherNameArabicValidate =>
+      'برجاء ادخال الاسم الثالث والرابع بشكل صحيح';
 
   @override
   String get familyNameArabic => 'اسم العائلة او القبيلة';
@@ -780,7 +837,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get familyNameArabicWatermark => 'ادخل رقم الهوية الاماراتية';
 
   @override
-  String get familyNameArabicValidate => 'برجاء ادخال اسم العائلة او القبيلة بشكل صحيح';
+  String get familyNameArabicValidate =>
+      'برجاء ادخال اسم العائلة او القبيلة بشكل صحيح';
 
   @override
   String get personalDetails => 'بيانات الهوية';
@@ -795,7 +853,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emiratesIdWatermark => 'ادخل رقم الهوية الاماراتية';
 
   @override
-  String get emiratesIdValidate => 'برجاء ادخال رقم الهوية الاماراتية بشكل صحيح';
+  String get emiratesIdValidate =>
+      'برجاء ادخال رقم الهوية الاماراتية بشكل صحيح';
 
   @override
   String get brithDate => 'تاريخ الميلاد';
@@ -843,19 +902,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get maritalStatusWatermark => 'اختر الحالة الاجتماعية';
 
   @override
-  String get maritalStatusValidate => 'برجاء اختيار الحالة الاجتماعية بشكل صحيح';
+  String get maritalStatusValidate =>
+      'برجاء اختيار الحالة الاجتماعية بشكل صحيح';
 
   @override
   String get mobileNumberStudent => 'رقم الهاتف المحمول للطالب';
 
   @override
-  String get mobileNumberStudentRequired => 'حقل رقم الهاتف المحمول للطالب اجباري';
+  String get mobileNumberStudentRequired =>
+      'حقل رقم الهاتف المحمول للطالب اجباري';
 
   @override
   String get mobileNumberStudentWatermark => 'ادخل رقم الهاتف المحمول للطالب';
 
   @override
-  String get mobileNumberStudentValidate => 'برجاء ادخال رقم الهاتف المحمول للطالب بشكل صحيح';
+  String get mobileNumberStudentValidate =>
+      'برجاء ادخال رقم الهاتف المحمول للطالب بشكل صحيح';
 
   @override
   String get emailAddressRequired => 'حقل البريد الالكتروني للطالب اجباري';
@@ -864,7 +926,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emailAddressWatermark => 'ادخل البريد الالكتروني للطالب';
 
   @override
-  String get emailAddressValidate => 'برجاء ادخال البريد الالكتروني للطالب بشكل صحيح';
+  String get emailAddressValidate =>
+      'برجاء ادخال البريد الالكتروني للطالب بشكل صحيح';
 
   @override
   String get passportInformation => 'بيانات جواز السفر';
@@ -891,7 +954,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get passportIssueDateWatermark => 'اختر تاريخ الاصدار';
 
   @override
-  String get passportIssueDateValidate => 'برجاء اختيار تاريخ الاصدار بشكل صحيح';
+  String get passportIssueDateValidate =>
+      'برجاء اختيار تاريخ الاصدار بشكل صحيح';
 
   @override
   String get passportExpireDate => 'تاريخ الانتهاء';
@@ -903,7 +967,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get passportExpireDateWatermark => 'اختر تاريخ الانتهاء';
 
   @override
-  String get passportExpireDateValidate => 'برجاء اختيار تاريخ الانتهاء بشكل صحيح';
+  String get passportExpireDateValidate =>
+      'برجاء اختيار تاريخ الانتهاء بشكل صحيح';
 
   @override
   String get passportPlaceofIssue => 'مكان الإصدار';
@@ -966,7 +1031,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addressLine2Watermark => 'ادخل رقم الفيلا أو اسم البناية';
 
   @override
-  String get addressLine2Validate => 'برجاء ادخال رقم الفيلا أو اسم البناية بشكل صحيح';
+  String get addressLine2Validate =>
+      'برجاء ادخال رقم الفيلا أو اسم البناية بشكل صحيح';
 
   @override
   String get country => 'الدولة';
@@ -1044,13 +1110,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileNumberParent => 'رقم الهاتف المتحرك لولي الأمر';
 
   @override
-  String get mobileNumberParentRequired => 'حقل رقم الهاتف المتحرك لولي الأمر اجباري';
+  String get mobileNumberParentRequired =>
+      'حقل رقم الهاتف المتحرك لولي الأمر اجباري';
 
   @override
-  String get mobileNumberParentWatermark => 'ادخل رقم الهاتف المتحرك لولي الأمر';
+  String get mobileNumberParentWatermark =>
+      'ادخل رقم الهاتف المتحرك لولي الأمر';
 
   @override
-  String get mobileNumberParentValidate => 'برجاء ادخال رقم الهاتف المتحرك لولي الأمر بشكل صحيح';
+  String get mobileNumberParentValidate =>
+      'برجاء ادخال رقم الهاتف المتحرك لولي الأمر بشكل صحيح';
 
   @override
   String get homeNumber => 'رقم هاتف';
@@ -1104,16 +1173,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get relativesInfo => 'إضافة قريب مبتعث';
 
   @override
-  String get relativesStudyingScholarship => 'هل لديك أقارب مبتعثين حالياً ضمن بعثات المكتب؟';
+  String get relativesStudyingScholarship =>
+      'هل لديك أقارب مبتعثين حالياً ضمن بعثات المكتب؟';
 
   @override
-  String get relativesStudyingScholarshipRequired => 'حقل هل لديك أقارب مبتعثين حالياً؟ اجباري';
+  String get relativesStudyingScholarshipRequired =>
+      'حقل هل لديك أقارب مبتعثين حالياً؟ اجباري';
 
   @override
-  String get relativesStudyingScholarshipWatermark => 'اختر هل لديك أقارب مبتعثين حالياً؟';
+  String get relativesStudyingScholarshipWatermark =>
+      'اختر هل لديك أقارب مبتعثين حالياً؟';
 
   @override
-  String get relativesStudyingScholarshipValidate => 'برجاء اختيار هل لديك أقارب مبتعثين حالياً؟ بشكل صحيح';
+  String get relativesStudyingScholarshipValidate =>
+      'برجاء اختيار هل لديك أقارب مبتعثين حالياً؟ بشكل صحيح';
 
   @override
   String get relativeName => 'اسم القريب المبتعث';
@@ -1143,7 +1216,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get scholarshipTypeWatermark => 'ادخل نوع البعثة الدراسية';
 
   @override
-  String get scholarshipTypeValidate => 'برجاء ادخال نوع البعثة الدراسية بشكل صحيح';
+  String get scholarshipTypeValidate =>
+      'برجاء ادخال نوع البعثة الدراسية بشكل صحيح';
 
   @override
   String get internal => 'داخل الدولة';
@@ -1215,7 +1289,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get curriculumTypesWatermark => 'اختر نوع المنهاج الدراسي';
 
   @override
-  String get curriculumTypesValidate => 'برجاء اختيار نوع المنهاج الدراسي بشكل صحيح';
+  String get curriculumTypesValidate =>
+      'برجاء اختيار نوع المنهاج الدراسي بشكل صحيح';
 
   @override
   String get subjectTypes => 'نوع المادة الدراسية';
@@ -1227,7 +1302,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get subjectTypesWatermark => 'اختر نوع المادة الدراسية';
 
   @override
-  String get subjectTypesValidate => 'برجاء اختيار نوع المادة الدراسية بشكل صحيح';
+  String get subjectTypesValidate =>
+      'برجاء اختيار نوع المادة الدراسية بشكل صحيح';
 
   @override
   String get grade => 'المعدل أو النسبة';
@@ -1257,16 +1333,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get militaryServicePanel => 'الخدمة الوطنية / العسكرية';
 
   @override
-  String get militaryService => '(للإناث يكتفي باختيار لا) هل اديت الخدمة الوطنية / العسكرية ؟';
+  String get militaryService =>
+      '(للإناث يكتفي باختيار لا) هل اديت الخدمة الوطنية / العسكرية ؟';
 
   @override
-  String get militaryServiceRequired => 'حقل هل اديت الخدمة الوطنية / العسكرية ؟ اجباري';
+  String get militaryServiceRequired =>
+      'حقل هل اديت الخدمة الوطنية / العسكرية ؟ اجباري';
 
   @override
-  String get militaryServiceWatermark => '(للإناث يكتفي باختيار لا)اختر هل اديت الخدمة الوطنية / العسكرية ؟';
+  String get militaryServiceWatermark =>
+      '(للإناث يكتفي باختيار لا)اختر هل اديت الخدمة الوطنية / العسكرية ؟';
 
   @override
-  String get militaryServiceValidate => 'برجاء اختيار هل اديت الخدمة الوطنية / العسكرية ؟ بشكل صحيح';
+  String get militaryServiceValidate =>
+      'برجاء اختيار هل اديت الخدمة الوطنية / العسكرية ؟ بشكل صحيح';
 
   @override
   String get militaryServiceStartDate => 'تاريخ البداية';
@@ -1278,7 +1358,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get militaryServiceStartDateWatermark => 'اختر تاريخ البداية';
 
   @override
-  String get militaryServiceStartDateValidate => 'برجاء اختيار تاريخ البداية بشكل صحيح';
+  String get militaryServiceStartDateValidate =>
+      'برجاء اختيار تاريخ البداية بشكل صحيح';
 
   @override
   String get militaryServiceEndDate => 'تاريخ النهاية';
@@ -1290,7 +1371,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get militaryServiceEndDateWatermark => 'اختر تاريخ النهاية';
 
   @override
-  String get militaryServiceEndDateValidate => 'برجاء اختيار تاريخ النهاية بشكل صحيح';
+  String get militaryServiceEndDateValidate =>
+      'برجاء اختيار تاريخ النهاية بشكل صحيح';
 
   @override
   String get graduationDetails => 'بيانات المؤهل الجامعي';
@@ -1305,7 +1387,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hsGraduationLevelWatermark => 'اختر المؤهل الجامعي';
 
   @override
-  String get hsGraduationLevelValidate => 'برجاء اختيار المؤهل الجامعي بشكل صحيح';
+  String get hsGraduationLevelValidate =>
+      'برجاء اختيار المؤهل الجامعي بشكل صحيح';
 
   @override
   String get hsUniversity => 'الجامعة';
@@ -1431,7 +1514,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get previouslyEmployedWatermark => 'اختر الحالة الوظيفية';
 
   @override
-  String get previouslyEmployedValidate => 'برجاء اختيار الحالة الوزيفية بشكل صحيح';
+  String get previouslyEmployedValidate =>
+      'برجاء اختيار الحالة الوزيفية بشكل صحيح';
 
   @override
   String get employmentDetails => 'بيانات الوظيفة';
@@ -1458,7 +1542,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emphistTitleNameWatermark => 'ادخل الوزيفة / المنصب';
 
   @override
-  String get emphistTitleNameValidate => 'برجاء ادخال الوزيفة / المنصب بشكل صحيح';
+  String get emphistTitleNameValidate =>
+      'برجاء ادخال الوزيفة / المنصب بشكل صحيح';
 
   @override
   String get emphistOccupationName => 'المهنة';
@@ -1494,22 +1579,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emphistReportingManagerWatermark => 'ادخل المسؤول المباشر';
 
   @override
-  String get emphistReportingManagerValidate => 'برجاء إدخل المسؤول المباشر بشكل صحيح';
+  String get emphistReportingManagerValidate =>
+      'برجاء إدخل المسؤول المباشر بشكل صحيح';
 
   @override
   String get emphistMgrContactNo => 'رقم هاتف المسؤول المباشر';
 
   @override
-  String get emphistMgrContactNoRequired => 'حقل رقم هاتف المسؤول المباشر إجباري';
+  String get emphistMgrContactNoRequired =>
+      'حقل رقم هاتف المسؤول المباشر إجباري';
 
   @override
   String get emphistMgrContactNoWatermark => 'ادخل رقم المسؤول المباشر';
 
   @override
-  String get emphistMgrContactNoValidate => 'برجاء إدخل رقم هاتف المسؤول المباشر بشكل صحيح';
+  String get emphistMgrContactNoValidate =>
+      'برجاء إدخل رقم هاتف المسؤول المباشر بشكل صحيح';
 
   @override
-  String get majorsYouWishToStudy => 'التخصصات المرغوب بدراستها بالجامعة مرتبة حسب الأولوية';
+  String get majorsYouWishToStudy =>
+      'التخصصات المرغوب بدراستها بالجامعة مرتبة حسب الأولوية';
 
   @override
   String get studyWithinUAE => 'Within UAE';
@@ -1548,7 +1637,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get universityNameIfOtherWatermark => 'ادخل جامعة اخرى';
 
   @override
-  String get universityNameIfOtherValidate => 'برجاء ادخال جامعة اخرى بشكل صحيح';
+  String get universityNameIfOtherValidate =>
+      'برجاء ادخال جامعة اخرى بشكل صحيح';
 
   @override
   String get universityStatus => 'الحالة';
@@ -1563,7 +1653,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get universityStatusValidate => 'برجاء اختيار الحالة بشكل صحيح';
 
   @override
-  String get examinationForUniversities => 'اختبارات الجامعات - يرجي إدخال درجات جميع الاختبارات التي تم تقديمها';
+  String get examinationForUniversities =>
+      'اختبارات الجامعات - يرجي إدخال درجات جميع الاختبارات التي تم تقديمها';
 
   @override
   String get examination => 'نوع الإختبار';
@@ -1668,7 +1759,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get print => 'طباعة';
 
   @override
-  String get invalidMilitaryDateSelection => 'تاريخ البداية والنهااية غير متوافقين . يجب الا تقل الفترة الزمنية بينهما عن 16 شهراً.';
+  String get invalidMilitaryDateSelection =>
+      'تاريخ البداية والنهااية غير متوافقين . يجب الا تقل الفترة الزمنية بينهما عن 16 شهراً.';
 
   @override
   String get contactInformation => 'بيانات الاتصال';
@@ -1683,7 +1775,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registrationFirstNameRequired => 'حقل الاسم الأول اجباي';
 
   @override
-  String get registrationFirstNameValidate => 'برجاء ادخال الاسم الأول بشكل صحيح';
+  String get registrationFirstNameValidate =>
+      'برجاء ادخال الاسم الأول بشكل صحيح';
 
   @override
   String get registrationLastName => 'اسم العائلة او القبيلة';
@@ -1692,10 +1785,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registrationLastNameWatermark => 'ادخل اسم العائلة او القبيلة';
 
   @override
-  String get registrationLastNameRequired => 'حقل اسم العائلة او القبيلة اجباري';
+  String get registrationLastNameRequired =>
+      'حقل اسم العائلة او القبيلة اجباري';
 
   @override
-  String get registrationLastNameValidate => 'برجاء ادخال اسم العائلة او القبيلة بشكل صحيح';
+  String get registrationLastNameValidate =>
+      'برجاء ادخال اسم العائلة او القبيلة بشكل صحيح';
 
   @override
   String get registrationMiddleName => 'الاسم الثاني';
@@ -1707,7 +1802,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registrationMiddleNameRequired => 'ادخل الاسم الثاني';
 
   @override
-  String get registrationMiddleNameValidate => 'برجاء ادخال الاسم الثاني بشكل صحيح';
+  String get registrationMiddleNameValidate =>
+      'برجاء ادخال الاسم الثاني بشكل صحيح';
 
   @override
   String get registrationThirdName => 'الاسم الثالث والرابع';
@@ -1719,7 +1815,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registrationThirdNameRequired => 'حقل الاسم الثالث والرابع اجباري';
 
   @override
-  String get registrationThirdNameValidate => 'برجاء ادخال الاسم الثالث والرابع بشكل صحيح';
+  String get registrationThirdNameValidate =>
+      'برجاء ادخال الاسم الثالث والرابع بشكل صحيح';
 
   @override
   String get registrationEmailAddress => 'البريد الالكتروني';
@@ -1731,34 +1828,41 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registrationEmailAddressWatermark => 'ادخل البريد الالكتروني';
 
   @override
-  String get registrationEmailAddressValidate => 'برجاء ادخال البريد الالكتروني بشكل صحيح';
+  String get registrationEmailAddressValidate =>
+      'برجاء ادخال البريد الالكتروني بشكل صحيح';
 
   @override
   String get registrationMobileNumber => 'رقم الهاتف المتحرك';
 
   @override
-  String get registrationMobileNumberRequired => 'حقل رقم الهاتف المتحرك اجباري';
+  String get registrationMobileNumberRequired =>
+      'حقل رقم الهاتف المتحرك اجباري';
 
   @override
   String get registrationMobileNumberWatermark => '971\\#\\#\\#\\#\\#\\#\\#\\#';
 
   @override
-  String get mobileHint => 'ادخل رقم هاتف صحيح مثل \\#\\#\\#\\#\\#\\#\\#\\#\\#971';
+  String get mobileHint =>
+      'ادخل رقم هاتف صحيح مثل \\#\\#\\#\\#\\#\\#\\#\\#\\#971';
 
   @override
-  String get registrationMobileNumberValidate => 'برجاء ادخال رقم الهاتف المتحرك بشكل صحيح';
+  String get registrationMobileNumberValidate =>
+      'برجاء ادخال رقم الهاتف المتحرك بشكل صحيح';
 
   @override
   String get registrationConfEmailAddress => 'تأكيد عنوان البريد الإلكتروني';
 
   @override
-  String get registrationConfEmailAddressRequired => 'تأكيد عنوان البريد الإلكتروني مطلوب';
+  String get registrationConfEmailAddressRequired =>
+      'تأكيد عنوان البريد الإلكتروني مطلوب';
 
   @override
-  String get registrationConfEmailAddressWatermark => 'أكد إدخال عنوان البريد الإلكتروني';
+  String get registrationConfEmailAddressWatermark =>
+      'أكد إدخال عنوان البريد الإلكتروني';
 
   @override
-  String get registrationConfEmailAddressValidate => 'يرجى إدخال عنوان بريد إلكتروني صحيح للتأكيد';
+  String get registrationConfEmailAddressValidate =>
+      'يرجى إدخال عنوان بريد إلكتروني صحيح للتأكيد';
 
   @override
   String get registrationPassword => 'كلمة المرور';
@@ -1770,7 +1874,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registrationPasswordWatermark => 'أدخل كلمة المرور\n';
 
   @override
-  String get registrationPasswordValidate => 'برجاء ادخال كلمة المرور بشكل صحيح';
+  String get registrationPasswordValidate =>
+      'برجاء ادخال كلمة المرور بشكل صحيح';
 
   @override
   String get registrationConfPassword => 'تأكيد كلمة المرور';
@@ -1782,25 +1887,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get registrationConfPasswordWatermark => 'ادخل تأكيد كلمة المرور';
 
   @override
-  String get registrationConfPasswordValidate => 'برجاء إدخال تأكيد كلمة المرور بشكل صحيح\n';
+  String get registrationConfPasswordValidate =>
+      'برجاء إدخال تأكيد كلمة المرور بشكل صحيح\n';
 
   @override
-  String get registrationMatchPassword => 'Password and Confirm password are not matched.';
+  String get registrationMatchPassword =>
+      'Password and Confirm password are not matched.';
 
   @override
-  String get registrationMatchEmail => 'Email and Confirm email are not matched.';
+  String get registrationMatchEmail =>
+      'Email and Confirm email are not matched.';
 
   @override
-  String get emiratesIdExists => 'يوجد لدينا حساب مسجل برقم الهوية الإماراتية الذى ادخلته.';
+  String get emiratesIdExists =>
+      'يوجد لدينا حساب مسجل برقم الهوية الإماراتية الذى ادخلته.';
 
   @override
-  String get emailAddressExists => 'يوجد لدينا حساب مسجل بالبريد الإلكتروني الذى ادخلته.';
+  String get emailAddressExists =>
+      'يوجد لدينا حساب مسجل بالبريد الإلكتروني الذى ادخلته.';
 
   @override
-  String get phonenumberExists => 'يوجد لدينا حساب مسجل برقم الهاتف المتحرك الذى ادخلته.';
+  String get phonenumberExists =>
+      'يوجد لدينا حساب مسجل برقم الهاتف المتحرك الذى ادخلته.';
 
   @override
-  String get registrationFailed => 'لم يتم تسجيل المستخدم . برجاء المحاولة مرة اخرى';
+  String get registrationFailed =>
+      'لم يتم تسجيل المستخدم . برجاء المحاولة مرة اخرى';
 
   @override
   String get error => '';
@@ -1833,7 +1945,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get submissionPreferred => 'الهاتف المفضل';
 
   @override
-  String get submissionConfirmationMsg => 'هل انت متأكد من الرغبة في تقديم هذا الطلب؟';
+  String get submissionConfirmationMsg =>
+      'هل انت متأكد من الرغبة في تقديم هذا الطلب؟';
 
   @override
   String get submissionConfirmation => 'تأكيد';
@@ -1845,10 +1958,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get submissionNo => 'لا';
 
   @override
-  String get submissionSuccessMessage => 'لقد تم تقديم الطلب بنجاح، رقم الطلب هو:';
+  String get submissionSuccessMessage =>
+      'لقد تم تقديم الطلب بنجاح، رقم الطلب هو:';
 
   @override
-  String get submissionErrorMessage => 'لا يمكن تقديم الطلب حالياً، برجاء المحاولة لاحقاً';
+  String get submissionErrorMessage =>
+      'لا يمكن تقديم الطلب حالياً، برجاء المحاولة لاحقاً';
 
   @override
   String get chooseFile => 'اختر الملف';
@@ -1860,16 +1975,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get phonenumberRequired => 'Phone no is required.';
 
   @override
-  String get loginUsername => 'رقم الهوية، البريد الالكتروني أو رقم الهاتف المتحرك';
+  String get loginUsername =>
+      'رقم الهوية، البريد الالكتروني أو رقم الهاتف المتحرك';
 
   @override
-  String get loginUsernameWatermark => 'أدخل البريد الإلكتروني أو رقم الهوية أو رقم الهاتف';
+  String get loginUsernameWatermark =>
+      'أدخل البريد الإلكتروني أو رقم الهوية أو رقم الهاتف';
 
   @override
-  String get loginUsernameRequired => 'ادخل رقم الهوية، البريد الالكتروني أو رقم الهاتف المتحرك';
+  String get loginUsernameRequired =>
+      'ادخل رقم الهوية، البريد الالكتروني أو رقم الهاتف المتحرك';
 
   @override
-  String get loginUserNotExists => 'رقم الهوية، البريد الالكتروني أو رقم الهاتف المتحرك المدخل لا يطاابق أياً من الحسابات المسجلة';
+  String get loginUserNotExists =>
+      'رقم الهوية، البريد الالكتروني أو رقم الهاتف المتحرك المدخل لا يطاابق أياً من الحسابات المسجلة';
 
   @override
   String get loginFailed => 'فشل تسجيل الدخول! بيانات الحساب غير صحيحة';
@@ -1878,7 +1997,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get highschoolSubjects => 'بيانات المواد الدراسية';
 
   @override
-  String get highschoolSubjects2 => '(يرجي من الطالب إدخال درجات كافة المواد الدراسية)';
+  String get highschoolSubjects2 =>
+      '(يرجي من الطالب إدخال درجات كافة المواد الدراسية)';
 
   @override
   String get nationality => 'الجنسية';
@@ -1902,37 +2022,45 @@ class AppLocalizationsAr extends AppLocalizations {
   String get userRegister => 'إنشاء حساب';
 
   @override
-  String get passwordTooltip => 'كلمة المرور يجب ان تتكون على الأقل من ثمانية خانات، على أن تحتوي كحد أدنى على رقم وحرف صغير وحرف كبير وحرف خاص مثال (\$\\#&@)';
+  String get passwordTooltip =>
+      'كلمة المرور يجب ان تتكون على الأقل من ثمانية خانات، على أن تحتوي كحد أدنى على رقم وحرف صغير وحرف كبير وحرف خاص مثال (\$\\#&@)';
 
   @override
   String get userAccountVerified => 'لقد تم تأكيد الحساب بنجاح.';
 
   @override
-  String get proceedForLogin => 'للدخول لحسابك يرجي المتابعة بالضغط على الرابط أدناه';
+  String get proceedForLogin =>
+      'للدخول لحسابك يرجي المتابعة بالضغط على الرابط أدناه';
 
   @override
   String get clickHereToLogin => 'اضغط هنا لتسجيل الدخول';
 
   @override
-  String get askForVerificationCode => 'الرجاء إدخال رمز تأكيد الحساب المكون من 7 أرقام والذي تمّ إرساله إلي بريدكم الإلكتروني أو عبر رسالة نصية إلي رقم هاتفكم المتحرك.';
+  String get askForVerificationCode =>
+      'الرجاء إدخال رمز تأكيد الحساب المكون من 7 أرقام والذي تمّ إرساله إلي بريدكم الإلكتروني أو عبر رسالة نصية إلي رقم هاتفكم المتحرك.';
 
   @override
   String get pageNotFound => 'الصفحة التي تحاول الوصول إليها غير متاحة حالياً.';
 
   @override
-  String get invalidCode => 'كود تأكيد الحساب الذي أدخلته غير صحيح، برجاء ادخال الكود بشكل صحيح.';
+  String get invalidCode =>
+      'كود تأكيد الحساب الذي أدخلته غير صحيح، برجاء ادخال الكود بشكل صحيح.';
 
   @override
-  String get codeExpired => 'كود تأكيد الحساب الذي أدخلته منتهي الصلاحية، برجاء اصدار كود جديد.';
+  String get codeExpired =>
+      'كود تأكيد الحساب الذي أدخلته منتهي الصلاحية، برجاء اصدار كود جديد.';
 
   @override
-  String get codeStillValid => 'لقد تم اصدار وارسال كود جديد لتأكيد الحساب، برجاء مراجعة البريد الإلكتروني أو الهاتف المتحرك.';
+  String get codeStillValid =>
+      'لقد تم اصدار وارسال كود جديد لتأكيد الحساب، برجاء مراجعة البريد الإلكتروني أو الهاتف المتحرك.';
 
   @override
-  String get unableToVerify => 'غير قادر على تأكيد بيانات المستخدم، برجاء المحاولة مجدداً بعد قليل.';
+  String get unableToVerify =>
+      'غير قادر على تأكيد بيانات المستخدم، برجاء المحاولة مجدداً بعد قليل.';
 
   @override
-  String get alreadyVerified => 'لقد تم تأكيد الحساب بنجاح، برجاء تسجيل الدخول للوصول الى النظام.';
+  String get alreadyVerified =>
+      'لقد تم تأكيد الحساب بنجاح، برجاء تسجيل الدخول للوصول الى النظام.';
 
   @override
   String get verificationCode => 'كود تأكيد الحساب';
@@ -1953,16 +2081,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get numberValidator => 'Only numbers are allowed';
 
   @override
-  String get onlyLoggedInUser => 'The page you trying to access is only available for logged in user.';
+  String get onlyLoggedInUser =>
+      'The page you trying to access is only available for logged in user.';
 
   @override
   String get submissionConfigTitle => 'إعدادات التقديم';
 
   @override
-  String get submissionformInvalidAccess => 'The page you are trying to access is invalid.';
+  String get submissionformInvalidAccess =>
+      'The page you are trying to access is invalid.';
 
   @override
-  String get submissionformApplicaClosed => 'تم إغلاق التقديم للسنة الدراسية الحالية، وسيتم الإعلان عن موعد التسجيل للدفعة القادمة على الموقع الإلكتروني';
+  String get submissionformApplicaClosed =>
+      'تم إغلاق التقديم للسنة الدراسية الحالية، وسيتم الإعلان عن موعد التسجيل للدفعة القادمة على الموقع الإلكتروني';
 
   @override
   String get submissionformApplicaClosed2 => 'Start from';
@@ -1980,7 +2111,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get submissionConfigurationKeyWatermark => 'إدخل رمز الإعدادت';
 
   @override
-  String get submissionConfigurationKeyValidator => 'برجاء إدخال رمز إعدادت صحيح';
+  String get submissionConfigurationKeyValidator =>
+      'برجاء إدخال رمز إعدادت صحيح';
 
   @override
   String get submissionSelect => 'إختر';
@@ -2007,7 +2139,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get submissionAdmspplicationCenter => 'Application center';
 
   @override
-  String get submissionAdmspplicationCenterRequired => 'Please select application center';
+  String get submissionAdmspplicationCenterRequired =>
+      'Please select application center';
 
   @override
   String get submissionInstitution => 'المعهد';
@@ -2073,7 +2206,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get submissionConfigSuccess => 'تم حفظ الإعدادات بنجاح.';
 
   @override
-  String get submissionConfigFailed => 'حدث خطأ فى حفظ الإعدادات. برجاء التحقق من البيانات المدخله و المحاولة مرة أخرى';
+  String get submissionConfigFailed =>
+      'حدث خطأ فى حفظ الإعدادات. برجاء التحقق من البيانات المدخله و المحاولة مرة أخرى';
 
   @override
   String get submissionPlan => 'الخطة الأكاديمية';
@@ -2091,10 +2225,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get formCitizenshipStatus => 'Citizenship Status';
 
   @override
-  String get formCitizenshipStatusRequired => 'Please select citizenship status';
+  String get formCitizenshipStatusRequired =>
+      'Please select citizenship status';
 
   @override
-  String get mopaLoginUsernameRequired => 'Please enter email id or phone number or emirate id';
+  String get mopaLoginUsernameRequired =>
+      'Please enter email id or phone number or emirate id';
 
   @override
   String get countryCode => 'رمز البلد';
@@ -2130,10 +2266,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get unsupportedProfileImage => 'يمكن قبول صور ملف صورة بيريت';
 
   @override
-  String get unsupportedFileOnlyPdf => 'Unsupported files, only pdf are allowed';
+  String get unsupportedFileOnlyPdf =>
+      'Unsupported files, only pdf are allowed';
 
   @override
-  String get unsupportedFiles => 'Unsupported files, only jpeg,jpg,png and pdf are allowed';
+  String get unsupportedFiles =>
+      'Unsupported files, only jpeg,jpg,png and pdf are allowed';
 
   @override
   String get updateProfile => 'تحديث ملف المستخدم';
@@ -2151,7 +2289,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get edit => 'تعديل';
 
   @override
-  String get duplicateAddresstypeMessage => 'This address type already selected, Please Select another address type';
+  String get duplicateAddresstypeMessage =>
+      'This address type already selected, Please Select another address type';
 
   @override
   String get hsnameOther => 'اسم مدرسة ثانوية اخرى';
@@ -2166,16 +2305,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hsnameOtherValidate => 'برجاء ادخال اسم مدرسة ثانوية اخرى';
 
   @override
-  String get duplicateHsnameOtherMessage => 'مستوو9 المدرسة الثانوية تم ادخاله مسبقاً، برجاء اختيار مستوى آخر';
+  String get duplicateHsnameOtherMessage =>
+      'مستوو9 المدرسة الثانوية تم ادخاله مسبقاً، برجاء اختيار مستوى آخر';
 
   @override
-  String get duplicateHsSubjectMessage => 'هذا الموضوع تم ادخاله مسبقاً، برجاء ادخال موضوع آخر';
+  String get duplicateHsSubjectMessage =>
+      'هذا الموضوع تم ادخاله مسبقاً، برجاء ادخال موضوع آخر';
 
   @override
-  String get duplicateGraducationMessages => 'This graduation level is already selected, Please select any other level';
+  String get duplicateGraducationMessages =>
+      'This graduation level is already selected, Please select any other level';
 
   @override
-  String get duplicateExaminationMessage => 'تركيبة اسم الاختبار ونوعه تم ادخالها مسبقاً، برجاء اختيار تركيبة اخرى';
+  String get duplicateExaminationMessage =>
+      'تركيبة اسم الاختبار ونوعه تم ادخالها مسبقاً، برجاء اختيار تركيبة اخرى';
 
   @override
   String get curriculumAverage => 'المعدل أو النسبة';
@@ -2187,7 +2330,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get curriculumAverageWatermark => 'ادخل المعدل أو النسبة';
 
   @override
-  String get curriculumAverageValidate => 'برجاء ادخال المعدل أو النسبة بشكل صحيح';
+  String get curriculumAverageValidate =>
+      'برجاء ادخال المعدل أو النسبة بشكل صحيح';
 
   @override
   String get curriculumScale => 'المقياس- الدرجة النهائية';
@@ -2199,10 +2343,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get curriculumScaleWatermark => 'ادخل المقياس- الدرجة النهائية';
 
   @override
-  String get curriculumScaleValidate => 'برجاء ادخال المقياس- الدرجة النهائية بشكل صحيح';
+  String get curriculumScaleValidate =>
+      'برجاء ادخال المقياس- الدرجة النهائية بشكل صحيح';
 
   @override
-  String get subjecttypeDuplicate => 'This subject type already added please select any other subject type.';
+  String get subjecttypeDuplicate =>
+      'This subject type already added please select any other subject type.';
 
   @override
   String get otherMajor => 'تخصص آخر';
@@ -2253,19 +2399,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get scholarshipTypeRequired => 'حقل نوع البعثة الدراسية اجباري';
 
   @override
-  String get addresstypeDuplicate => 'Duplicate address type found, only one address per address type is expected.';
+  String get addresstypeDuplicate =>
+      'Duplicate address type found, only one address per address type is expected.';
 
   @override
-  String get existingSubmissionFound => 'We found your previous submitted record. Do you want to fill application with it?';
+  String get existingSubmissionFound =>
+      'We found your previous submitted record. Do you want to fill application with it?';
 
   @override
-  String get draftApplicationFound => 'لقد تم العثور على مسودة طلب محفوظة مسبقاً. هل ترغب في استئناف تعبئة نموذج الطلب من هذه المسودة؟';
+  String get draftApplicationFound =>
+      'لقد تم العثور على مسودة طلب محفوظة مسبقاً. هل ترغب في استئناف تعبئة نموذج الطلب من هذه المسودة؟';
 
   @override
   String get draftSaveConfirmation => 'تم حفظ مسودة الطلب بنجاح';
 
   @override
-  String get draftSaveError => 'لم يتم حفظ مسودة الطلب بنجاح، برجاء المحاولة مجدداً لاحقاً.';
+  String get draftSaveError =>
+      'لم يتم حفظ مسودة الطلب بنجاح، برجاء المحاولة مجدداً لاحقاً.';
 
   @override
   String get addRow => 'اضافة سجل';
@@ -2280,7 +2430,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commentsWatermark => 'برجاء ادخال الملاحظات';
 
   @override
-  String get unsavedatawarning => 'Page have unsaved data. Do you still want to navigate?';
+  String get unsavedatawarning =>
+      'Page have unsaved data. Do you still want to navigate?';
 
   @override
   String get hsGraducationStartDate => 'Start Date';
@@ -2325,7 +2476,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get testdateValidate => 'Test date can not be before 2 years.';
 
   @override
-  String get duplicateWishUniversity => 'لقد تم اختيار الجامعة مسبقاً، برجاء اختيار أخرى.';
+  String get duplicateWishUniversity =>
+      'لقد تم اختيار الجامعة مسبقاً، برجاء اختيار أخرى.';
 
   @override
   String get noDraftAvailable => 'لا توجد مسودات طلب محفوظة مسبقاً';
@@ -2361,13 +2513,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ok => 'موافق';
 
   @override
-  String get duplicatePhoneType => 'تم إختيار نوع الهاتف المحدد مسبقاً، يرجى إختيار نوع هاتف أخر';
+  String get duplicatePhoneType =>
+      'تم إختيار نوع الهاتف المحدد مسبقاً، يرجى إختيار نوع هاتف أخر';
 
   @override
   String get draftApplication => 'إستكمال الطلب';
 
   @override
-  String get submissionAgree => 'أقر وأتعهد بأن كافة البيانات المذكورة صحيحة، وكزلك أقر بعلمي أن طلب التقديم للبعثة سوف يخضع للتقييم من قبل المكتب، ولا يعني بالضرورة ضمان الحصول عليها';
+  String get submissionAgree =>
+      'أقر وأتعهد بأن كافة البيانات المذكورة صحيحة، وكزلك أقر بعلمي أن طلب التقديم للبعثة سوف يخضع للتقييم من قبل المكتب، ولا يعني بالضرورة ضمان الحصول عليها';
 
   @override
   String get submissionAgreeRequired => 'برجاء الاقرار بصحة البيانات';
@@ -2379,7 +2533,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addRowAddress => 'اضافة عنوان';
 
   @override
-  String get addRowHighschool => 'اضافة صف دراسي (يرجى إضافة شهادة الصف الثاني عشر النهائية في حال توفرها)';
+  String get addRowHighschool =>
+      'اضافة صف دراسي (يرجى إضافة شهادة الصف الثاني عشر النهائية في حال توفرها)';
 
   @override
   String get addRowGraduation => 'إضافة مؤهل جامعي';
@@ -2418,16 +2573,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emirateidExpiryDate => 'تاريخ انتهاء بطاقة الهوية الإماراتية';
 
   @override
-  String get emirateidExpiryDateRequired => 'يرجى تحديد تاريخ انتهاء بطاقة الهوية الإماراتية';
+  String get emirateidExpiryDateRequired =>
+      'يرجى تحديد تاريخ انتهاء بطاقة الهوية الإماراتية';
 
   @override
-  String get emirateidExpiryDateWatermark => 'أدخل تاريخ انتهاء بطاقة الهوية الإماراتية';
+  String get emirateidExpiryDateWatermark =>
+      'أدخل تاريخ انتهاء بطاقة الهوية الإماراتية';
 
   @override
-  String get duplicateMajorFound => 'هذا التخصص تم اضافته من قبل. يرجي اختيار تخصص اخر.';
+  String get duplicateMajorFound =>
+      'هذا التخصص تم اضافته من قبل. يرجي اختيار تخصص اخر.';
 
   @override
-  String get loginHints => 'برجاء ادخال البريد الإلكتروني\nاو رقم الهاتف المتحرك مثال\\: #########971\nاو رقم الهوية مثال\\: 784123412345671';
+  String get loginHints =>
+      'برجاء ادخال البريد الإلكتروني\nاو رقم الهاتف المتحرك مثال\\: #########971\nاو رقم الهوية مثال\\: 784123412345671';
 
   @override
   String get internalBachelor => 'برنامج المنح الدراسية - درجة البكالوريوس';
@@ -2439,13 +2598,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get internalMeterological => 'منحة الأرصاد الجوية';
 
   @override
-  String get externalBachelor => 'بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - درجة البكالوريوس';
+  String get externalBachelor =>
+      'بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - درجة البكالوريوس';
 
   @override
   String get universityAndMajor => 'التخصصات والقبول الجامعي';
 
   @override
-  String get externalPostgraduate => 'بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا';
+  String get externalPostgraduate =>
+      'بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا';
 
   @override
   String get externalDoctors => 'المهن الطبية';
@@ -2457,10 +2618,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get allowedFileTypeImage => 'jpeg,jpg : أنواع الملفات المسموح بها';
 
   @override
-  String get allowedFileTypeBoth => 'jpeg,jpg,png,pdf : أنواع الملفات المسموح بها';
+  String get allowedFileTypeBoth =>
+      'jpeg,jpg,png,pdf : أنواع الملفات المسموح بها';
 
   @override
-  String get invalidGrade => 'ادخل درجات المعدل المناسبة مثل حروف التقييم او الأرقام من 1 الى100';
+  String get invalidGrade =>
+      'ادخل درجات المعدل المناسبة مثل حروف التقييم او الأرقام من 1 الى100';
 
   @override
   String get draft => 'مسودة';
@@ -2493,7 +2656,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get militaryReasonRequired => 'حقل السبب اجباري';
 
   @override
-  String get militaryReasonWatermark => 'ادخل السبب\nيرجى ارفاق شهادة التأجيل أو الاعفاء في صفحة المرفقات';
+  String get militaryReasonWatermark =>
+      'ادخل السبب\nيرجى ارفاق شهادة التأجيل أو الاعفاء في صفحة المرفقات';
 
   @override
   String get militaryReasonValidate => 'برجاء ادخال السبب بشكل صحيح';
@@ -2526,7 +2690,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get otherSubjectNameRequired => 'حقل اسم مادة أخرى اجباي';
 
   @override
-  String get otherSubjectNameValidate => 'يجب ألا يتجاوز عدد الأحرف 25 حرفاً ولايسمح بإستخدام الرموز';
+  String get otherSubjectNameValidate =>
+      'يجب ألا يتجاوز عدد الأحرف 25 حرفاً ولايسمح بإستخدام الرموز';
 
   @override
   String get otherSubjectName => 'اسم مادة أخرى';
@@ -2559,61 +2724,79 @@ class AppLocalizationsAr extends AppLocalizations {
   String get academicCareer => 'المسار الإكاديمية';
 
   @override
-  String get onlyArabicOrEnglishChar => 'برجاء ادخال الحروف العربية او الإنجليزية فقط بدون الأرقام أو العلامات الخاصة. كذلك لا يمكن إدخال مسافات في النهاية.';
+  String get onlyArabicOrEnglishChar =>
+      'برجاء ادخال الحروف العربية او الإنجليزية فقط بدون الأرقام أو العلامات الخاصة. كذلك لا يمكن إدخال مسافات في النهاية.';
 
   @override
-  String get englishOrArabicWithNumber => 'برجاء إدخال الحروف العربية أو الإنجليزية أو الأرقام فقط بدون العلامات الخاصة . كذلك لا يمكن إدخال مسافات في النهاية.';
+  String get englishOrArabicWithNumber =>
+      'برجاء إدخال الحروف العربية أو الإنجليزية أو الأرقام فقط بدون العلامات الخاصة . كذلك لا يمكن إدخال مسافات في النهاية.';
 
   @override
-  String get onlyArabicChar => 'برجاء إدخال الحروف العربية والمسافات فقط بدون الأرقام أو العلامات الخاصة. كذلك لا يمكن إدخال مسافات في النهاية.';
+  String get onlyArabicChar =>
+      'برجاء إدخال الحروف العربية والمسافات فقط بدون الأرقام أو العلامات الخاصة. كذلك لا يمكن إدخال مسافات في النهاية.';
 
   @override
-  String get onlyEnglishChar => 'برجاء إدخال الحروف الإنجليزية والمسافات فقط بدون الأرقام أو العلامات الخاصة. كذلك لا يمكن إدخال مسافات في النهاية.';
+  String get onlyEnglishChar =>
+      'برجاء إدخال الحروف الإنجليزية والمسافات فقط بدون الأرقام أو العلامات الخاصة. كذلك لا يمكن إدخال مسافات في النهاية.';
 
   @override
-  String get numberWithDecimal => 'برجاء إدخال الأرقام مع العلامات العشرية فقط. كذلك لا يمكن إدخال مسافات في النهاية.';
+  String get numberWithDecimal =>
+      'برجاء إدخال الأرقام مع العلامات العشرية فقط. كذلك لا يمكن إدخال مسافات في النهاية.';
 
   @override
-  String get numberOnly => 'برجاء إدخال الأرقام مع العلامة العشرية فقط بدون الحروف أو العلامات العشرية. كذلك لا يمكن إدخال مسافات في النهاية.';
+  String get numberOnly =>
+      'برجاء إدخال الأرقام مع العلامة العشرية فقط بدون الحروف أو العلامات العشرية. كذلك لا يمكن إدخال مسافات في النهاية.';
 
   @override
-  String get phoneNumberOnly => 'يرجي إدخال رقم الهاتف بشكل صحيح بدون صفر ويبدأ برقم خمسة.';
+  String get phoneNumberOnly =>
+      'يرجي إدخال رقم الهاتف بشكل صحيح بدون صفر ويبدأ برقم خمسة.';
 
   @override
-  String get englishNumberNoDecimal => 'English character and number only allowed. No special character or decimal point. Space is not allowed at end';
+  String get englishNumberNoDecimal =>
+      'English character and number only allowed. No special character or decimal point. Space is not allowed at end';
 
   @override
-  String get arabicNumberNoDecimal => 'Arabic character and number only allowed. No special character or decimal point. Space is not allowed at end';
+  String get arabicNumberNoDecimal =>
+      'Arabic character and number only allowed. No special character or decimal point. Space is not allowed at end';
 
   @override
-  String get englishArabicNumberNoDecimal => 'English/Arabic character and number only allowed. No special character or decimal point. Space is not allowed at end';
+  String get englishArabicNumberNoDecimal =>
+      'English/Arabic character and number only allowed. No special character or decimal point. Space is not allowed at end';
 
   @override
   String get top10Student => 'Top 10 Student scholarship';
 
   @override
-  String get internationalUndergraduateInternal => 'الطلاب الدوليين داخل الدولة - بكالوريوس';
+  String get internationalUndergraduateInternal =>
+      'الطلاب الدوليين داخل الدولة - بكالوريوس';
 
   @override
-  String get internationalPostgraduateInternal => 'الطلاب الدوليين داخل الدولة - دراسات عليا';
+  String get internationalPostgraduateInternal =>
+      'الطلاب الدوليين داخل الدولة - دراسات عليا';
 
   @override
-  String get internationalUndergraduateExternal => 'الطلاب الدوليين خارج الدولة - بكالوريوس';
+  String get internationalUndergraduateExternal =>
+      'الطلاب الدوليين خارج الدولة - بكالوريوس';
 
   @override
-  String get internationalPostgraduateExternal => 'الطلاب الدوليين خارج الدولة - دراسات عليا';
+  String get internationalPostgraduateExternal =>
+      'الطلاب الدوليين خارج الدولة - دراسات عليا';
 
   @override
-  String get mopaEmployeeUndergraduate => 'برنامج المنح الدراسية - درجة البكالوريوس - موظفي وزارة شؤون الرئاسة';
+  String get mopaEmployeeUndergraduate =>
+      'برنامج المنح الدراسية - درجة البكالوريوس - موظفي وزارة شؤون الرئاسة';
 
   @override
-  String get mopaEmployeePostgraduate => 'برنامج المنح الدراسية - الدراسات العليا - موظفي وزارة شؤون الرئاسة';
+  String get mopaEmployeePostgraduate =>
+      'برنامج المنح الدراسية - الدراسات العليا - موظفي وزارة شؤون الرئاسة';
 
   @override
-  String get mopaSubEmployeeUndergraduate => 'برنامج المنح الدراسية - درجة البكالوريوس - موظفي الجهات التابعة';
+  String get mopaSubEmployeeUndergraduate =>
+      'برنامج المنح الدراسية - درجة البكالوريوس - موظفي الجهات التابعة';
 
   @override
-  String get mopaSubEmployeePostgraduate => 'برنامج المنح الدراسية - الدراسات العليا - موظفي الجهات التابعة';
+  String get mopaSubEmployeePostgraduate =>
+      'برنامج المنح الدراسية - الدراسات العليا - موظفي الجهات التابعة';
 
   @override
   String get schoolScholarship => 'Scholarship for school student';
@@ -2670,7 +2853,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get uploadAttachmentFailed => 'لم يتم تحميل المرفقات بنجاح';
 
   @override
-  String get uploadInvalidFile => 'ملف المرفقات غير صحيح، برجاء اعادة التحميل مجدداً';
+  String get uploadInvalidFile =>
+      'ملف المرفقات غير صحيح، برجاء اعادة التحميل مجدداً';
 
   @override
   String get studentId => ' رقم الطالب';
@@ -2727,7 +2911,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clickHere => 'انقر هنا';
 
   @override
-  String get alreadyApplied => 'لا يمكن تقديم طلب اخر بنفس السنة حيث انك قد قمت بتقديم طلب مسبقاً.\n';
+  String get alreadyApplied =>
+      'لا يمكن تقديم طلب اخر بنفس السنة حيث انك قد قمت بتقديم طلب مسبقاً.\n';
 
   @override
   String get uploadPicture => 'تحميل الصورة';
@@ -2739,19 +2924,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get subscriberRequired => 'برجاء إختيار مشترك واحد أو أكثر';
 
   @override
-  String get inviteExpired => 'نأسف لإبلاغك بأن دعوة تسجيل البعثة الدراسية الخاصة بك إنتهت صلاحيتها.';
+  String get inviteExpired =>
+      'نأسف لإبلاغك بأن دعوة تسجيل البعثة الدراسية الخاصة بك إنتهت صلاحيتها.';
 
   @override
-  String get submissionformInvitePresent => 'You are invited for special scholarship, Please check your email/My Applications and apply for scholarship.';
+  String get submissionformInvitePresent =>
+      'You are invited for special scholarship, Please check your email/My Applications and apply for scholarship.';
 
   @override
-  String get javaxPortletTitleApplicationSubmissionWarMopascoeservices => 'Application Submission';
+  String get javaxPortletTitleApplicationSubmissionWarMopascoeservices =>
+      'Application Submission';
 
   @override
-  String get deleteDraftConfirmation => 'هل أنت متأكد أنك تريد حزف المسودة؟';
+  String get deleteDraftConfirmation => ' أنت متأكد أنك تريد حذف المسودة';
 
   @override
-  String get emailNotMatch => 'البريد الالكتروني الذي تم تسجيل الدخول به غير مطاابق للبريد الالكتروني المرسل إليه الدعوة. يرجي تحديث بريدك الالكتروني.';
+  String get emailNotMatch =>
+      'البريد الالكتروني الذي تم تسجيل الدخول به غير مطاابق للبريد الالكتروني المرسل إليه الدعوة. يرجي تحديث بريدك الالكتروني.';
 
   @override
   String get applicationUpdateSuccess => 'تم تحديث الطلب بنجاح';
@@ -2763,19 +2952,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get applicationUpdateConfirm => 'هل أنت متأكد أنك تريد تقديم الطلب؟';
 
   @override
-  String get failedToUpdateExistingRecord => 'Unable to update the existing data, Please contact system admin';
+  String get failedToUpdateExistingRecord =>
+      'Unable to update the existing data, Please contact system admin';
 
   @override
-  String get failedToUpdateNewRecord => 'لا يمكن إضافة البيانات. برجاء الاتصال بالدعم الفني';
+  String get failedToUpdateNewRecord =>
+      'لا يمكن إضافة البيانات. برجاء الاتصال بالدعم الفني';
 
   @override
   String get uaeMother => 'أبناء مواطنات';
 
   @override
-  String get examinationTitle2 => 'برجاء إدخال درجات جميع الإختبارات التى تم إجتيازها';
+  String get examinationTitle2 =>
+      'برجاء إدخال درجات جميع الإختبارات التى تم إجتيازها';
 
   @override
-  String get filenameSizeError => 'الحد الاقصى لإسم الملف يجب أن لا يتعدى 50 حرف. يرجي تعديل اسم الملف و المحاولة مرة أخرى.';
+  String get filenameSizeError =>
+      'الحد الاقصى لإسم الملف يجب أن لا يتعدى 50 حرف. يرجي تعديل اسم الملف و المحاولة مرة أخرى.';
 
   @override
   String get ddsOtherUniversityRequired => 'يجب ادخال التخصص';
@@ -2793,7 +2986,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get titleStep => 'إقرار وتعهد الطالب';
 
   @override
-  String get studentUndertakingRequired => '.لايمكن تقديم الطلب بدون الموافقة الاقرار و التعهد';
+  String get studentUndertakingRequired =>
+      '.لايمكن تقديم الطلب بدون الموافقة الاقرار و التعهد';
 
   @override
   String get studentUndertaking => 'لإقرار والتعهد';
@@ -2874,22 +3068,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ddsAcadProgram => 'البرنامج';
 
   @override
-  String get ddsUniversityWishlist => 'التقديم والقبول الجامعي (للأطباء الخريجين فقط)';
+  String get ddsUniversityWishlist =>
+      'التقديم والقبول الجامعي (للأطباء الخريجين فقط)';
 
   @override
-  String get ddsExams => 'اختبارات التراخيص الطبية (فقط لطلبة الطب أو الأطباء الخريجين الذين اجتازوا الجزء الأول او الثاني من امتحان التراخيص)';
+  String get ddsExams =>
+      'اختبارات التراخيص الطبية (فقط لطلبة الطب أو الأطباء الخريجين الذين اجتازوا الجزء الأول او الثاني من امتحان التراخيص)';
 
   @override
   String get ddsWishlist => 'التقديم والقبول الجامعي (للأطباء الخريجين فقط)';
 
   @override
-  String get studentGuidelineInternational => '\nأقرّ وأتعهّد أنا المتقدّم بطلب (بعثة/ منحة) دراسية إلى \"مكتب البعثات الدراسية\" بالعلم والالتزام بالآتي\\: \n\n1-إنجيونجياة وودقّة البيانات المقدّمة في هذا الطلب.\n\n2-تعبئة الحقول الإلزامية كافة، والحقول غير الإلزامية في حال توفّر البيانات والدرجات.\n\n3-إرفاق المستندات المطلوبة كافة على أن تكون سارية المفعول.\n\n4-سيتم رفض الطلب تلقائيًا في حال نقص (المستندات).\n\n5-في حال نقص بيانات، جيفيني مرجوعها، ويكون التقديم شبه منفدق.';
+  String get studentGuidelineInternational =>
+      '\nأقرّ وأتعهّد أنا المتقدّم بطلب (بعثة/ منحة) دراسية إلى \"مكتب البعثات الدراسية\" بالعلم والالتزام بالآتي\\: \n\n1-إنجيونجياة وودقّة البيانات المقدّمة في هذا الطلب.\n\n2-تعبئة الحقول الإلزامية كافة، والحقول غير الإلزامية في حال توفّر البيانات والدرجات.\n\n3-إرفاق المستندات المطلوبة كافة على أن تكون سارية المفعول.\n\n4-سيتم رفض الطلب تلقائيًا في حال نقص (المستندات).\n\n5-في حال نقص بيانات، جيفيني مرجوعها، ويكون التقديم شبه منفدق.';
 
   @override
-  String get studentGuidelineHchl => '\n\nأقرّ وأتعهّد أنا المتقدّم بطلب الالتحاق ببرنامج التحضير الجامعي لطلبة الصف العاشر والحادي عشر بالعلم والالتزام بالآتي\\:\n\n\n1-\tصحّة ودقّة البيانات وتعبئة الحقول الإلزامية كافة، والحقول غير الإلزامية في حال توفّر البيانات والدرجات، وارفاق مستندات سارية المفعول.\n\n2-\tسيتم رفض الطلب تلقائيًا في حال نقص (المستندات، البيانات، الدرجات)، وعدم دقّة الدرجات المُدخلة.\n\n<span style\\=\"color\\:red\">3- سيتم رفض الطلب تلقائيا في حال التقديم لبرنامج آخر يختلف عن برنامج التحضير الجامعي المخصص لطلبة الصف العاشر والحادي عشر.</span>\n\n4-\tاعتبار الطلب مُكتملًا بعد استلامي رسالة بنجاح تقديم الطلب وحصولي على رقم الطلب.\n\n5-\tعدم النظر في أيّ طلب حُفظ كمسوّدة بعد فترة التقديم.\n\n6-\tالإدلاء بالمعلومات المتعلّقة بالبعثات والمنح الدراسية';
+  String get studentGuidelineHchl =>
+      '\n\nأقرّ وأتعهّد أنا المتقدّم بطلب الالتحاق ببرنامج التحضير الجامعي لطلبة الصف العاشر والحادي عشر بالعلم والالتزام بالآتي\\:\n\n\n1-\tصحّة ودقّة البيانات وتعبئة الحقول الإلزامية كافة، والحقول غير الإلزامية في حال توفّر البيانات والدرجات، وارفاق مستندات سارية المفعول.\n\n2-\tسيتم رفض الطلب تلقائيًا في حال نقص (المستندات، البيانات، الدرجات)، وعدم دقّة الدرجات المُدخلة.\n\n<span style\\=\"color\\:red\">3- سيتم رفض الطلب تلقائيا في حال التقديم لبرنامج آخر يختلف عن برنامج التحضير الجامعي المخصص لطلبة الصف العاشر والحادي عشر.</span>\n\n4-\tاعتبار الطلب مُكتملًا بعد استلامي رسالة بنجاح تقديم الطلب وحصولي على رقم الطلب.\n\n5-\tعدم النظر في أيّ طلب حُفظ كمسوّدة بعد فترة التقديم.\n\n6-\tالإدلاء بالمعلومات المتعلّقة بالبعثات والمنح الدراسية';
 
   @override
-  String get studentGuideline => '\nأقرّ وأتعهّد أنا المتقدّم بطلب (بعثة/ منحة) دراسية إلى \"مكتب البعثات الدراسية\" بالعلم والالتزام بالآتي\\: \n\n1-\tصحّة ودقّة البيانات المقدّمة في هذا الطلب.\n\n2-\tتعبئة الحقول الإلزامية كافة، والحقول غير الإلزامية في حال توفّر البيانات والدرجات.\n\n3-\tإرفاق المستندات المطلوبة كافة على أن تكون سارية المفعول.\n\n4-\tسيتم رفض الطلب تلقاءيًا في حال نقص (المستندات، البيانات، الدرجات)، وعدم دقّة الدرجات المُدخلة.\n\n5-\tاعتبار الطلب مُكتملًا بعد استلامي رسالة بنجاح تقديم الطلب وحصولي علي رقم الطلب.\n\n6-\tعدم النظر في أيّ طلب حُفظ كمسوّدة بعد فترة التقديم.\n\n7-\tالإدلاء بالمعلومات المتعلّقة بالبعثات والمنح الدراسية كافة التي حصلت عليها من جهات أخرى.\n\n8-\tعدم ضمان الموافقة على الطلب بعد تقديمه؛ إذ يخضع للشروط والأحكام وتوفّر المقاعد، وتُعطى الأولوية للحاصلين على درجات مُتميّزة وقبول جامعي مُمكنة.\n\n9-\tالورود معتميزًًا للمتقدّمين في الجدول للجزء المطلوب للائلين. \n\n10-\tتاملي الدارة ووجودك بياناتك.';
+  String get studentGuideline =>
+      '\nأقرّ وأتعهّد أنا المتقدّم بطلب (بعثة/ منحة) دراسية إلى \"مكتب البعثات الدراسية\" بالعلم والالتزام بالآتي\\: \n\n1-\tصحّة ودقّة البيانات المقدّمة في هذا الطلب.\n\n2-\tتعبئة الحقول الإلزامية كافة، والحقول غير الإلزامية في حال توفّر البيانات والدرجات.\n\n3-\tإرفاق المستندات المطلوبة كافة على أن تكون سارية المفعول.\n\n4-\tسيتم رفض الطلب تلقاءيًا في حال نقص (المستندات، البيانات، الدرجات)، وعدم دقّة الدرجات المُدخلة.\n\n5-\tاعتبار الطلب مُكتملًا بعد استلامي رسالة بنجاح تقديم الطلب وحصولي علي رقم الطلب.\n\n6-\tعدم النظر في أيّ طلب حُفظ كمسوّدة بعد فترة التقديم.\n\n7-\tالإدلاء بالمعلومات المتعلّقة بالبعثات والمنح الدراسية كافة التي حصلت عليها من جهات أخرى.\n\n8-\tعدم ضمان الموافقة على الطلب بعد تقديمه؛ إذ يخضع للشروط والأحكام وتوفّر المقاعد، وتُعطى الأولوية للحاصلين على درجات مُتميّزة وقبول جامعي مُمكنة.\n\n9-\tالورود معتميزًًا للمتقدّمين في الجدول للجزء المطلوب للائلين. \n\n10-\tتاملي الدارة ووجودك بياناتك.';
 
   @override
   String get motherName => 'اسم الأم';
@@ -3213,13 +3412,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noApplication => 'لا يوجد لديك طلبات';
 
   @override
-  String get internalScholarshipDesc => 'انطلاقًـا مـن الحرص علـى رفـع المسـتوى الأكاديمـي والعلمـي للمواطنيـن، وإعـداد كـوادر وطنيـة مؤهّلـة أكاديميًّـا وعمليًّـا، تلبـّي متطلبـات سـوق العمـل المتطـوّرة والمتغيّـرة فـي الدولـة، وتسـهم فـي دفـع مسـيرة التنميـة الحضاريـة وتنهــض بالوطــن والمجتمــع، تــمّ إطــلاق برنامــج «المنــح الدراســية داخــل الدولــة» ســنة 2000، ولا زال البرنامــج مســتمرًا تحــت إشـراف إدارة الشؤون الأكاديمية فـي مكتـب البعثـات الدراسـية.';
+  String get internalScholarshipDesc =>
+      'انطلاقًـا مـن الحرص علـى رفـع المسـتوى الأكاديمـي والعلمـي للمواطنيـن، وإعـداد كـوادر وطنيـة مؤهّلـة أكاديميًّـا وعمليًّـا، تلبـّي متطلبـات سـوق العمـل المتطـوّرة والمتغيّـرة فـي الدولـة، وتسـهم فـي دفـع مسـيرة التنميـة الحضاريـة وتنهــض بالوطــن والمجتمــع، تــمّ إطــلاق برنامــج «المنــح الدراســية داخــل الدولــة» ســنة 2000، ولا زال البرنامــج مســتمرًا تحــت إشـراف إدارة الشؤون الأكاديمية فـي مكتـب البعثـات الدراسـية.';
 
   @override
-  String get externalScholarshipDesc => ' تسعى بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا إلى إتاحة الفرصة أمام الطلبة المواطنين المتميزين علمياً لاستكمال دراستهم للحصول على درجة البكالوريوس، أو الدراسات العليا في الجامعات العالمية المرموقة، التي يتنافس على الدراسة فيها نخبة الطلبة في جميع أنحاء العالم، وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في دولة الإمارات العربية المتحدة الذي يعدّ عماد التنمية والركيزة التي يُبنى عليها حاضر ومستقبل الدولة، كما تهدف البعثة على تأهيل جيل قيادي من أبناء وبنات الإمارات قادر على مواجهة تحديات المستقبل، وذلك من أجل رفد الدولة بكوادر وطاقات متميزة تحمل على عاتقها مهمّة تعزيز وتطوير عملية التنمية الشاملة التي وضع أسسها المغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان \"طيّب الله ثراه\"، ويسير على خطاها بكلّ حنكة واقتدار صاحب السمو الشيخ محمد بن زايد آل نهيان رئيس الدولة \"حفظه الله\".';
+  String get externalScholarshipDesc =>
+      ' تسعى بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا إلى إتاحة الفرصة أمام الطلبة المواطنين المتميزين علمياً لاستكمال دراستهم للحصول على درجة البكالوريوس، أو الدراسات العليا في الجامعات العالمية المرموقة، التي يتنافس على الدراسة فيها نخبة الطلبة في جميع أنحاء العالم، وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في دولة الإمارات العربية المتحدة الذي يعدّ عماد التنمية والركيزة التي يُبنى عليها حاضر ومستقبل الدولة، كما تهدف البعثة على تأهيل جيل قيادي من أبناء وبنات الإمارات قادر على مواجهة تحديات المستقبل، وذلك من أجل رفد الدولة بكوادر وطاقات متميزة تحمل على عاتقها مهمّة تعزيز وتطوير عملية التنمية الشاملة التي وضع أسسها المغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان \"طيّب الله ثراه\"، ويسير على خطاها بكلّ حنكة واقتدار صاحب السمو الشيخ محمد بن زايد آل نهيان رئيس الدولة \"حفظه الله\".';
 
   @override
-  String get doctorScholarshipDesc => ' يسعى مكتب البعثات الدراسية إلى إتاحة الفرصة أمام الأطباء المواطنين المتميزين، لاستكمال دراستهم، وتدريبهم السريري، للحصول على أعلى الدرجات والشهادات في مختلف التخصصات الطبية والصحية. وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في قطاع الرعاية الصحية في دولة الإمارات العربية المتحدة، والذي يعتبر من أهم القطاعات الاقتصادية الخدمية.';
+  String get doctorScholarshipDesc =>
+      ' يسعى مكتب البعثات الدراسية إلى إتاحة الفرصة أمام الأطباء المواطنين المتميزين، لاستكمال دراستهم، وتدريبهم السريري، للحصول على أعلى الدرجات والشهادات في مختلف التخصصات الطبية والصحية. وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في قطاع الرعاية الصحية في دولة الإمارات العربية المتحدة، والذي يعتبر من أهم القطاعات الاقتصادية الخدمية.';
 
   @override
   String get scholarshipStatusApplied => 'حالة الطلب';
@@ -3240,106 +3442,138 @@ class AppLocalizationsAr extends AppLocalizations {
   String get servicesUnavailable => 'لا يوجد لديك منحة أو بعثة حالياً';
 
   @override
-  String get bachelors_degree_scholarship_admission_terms => 'شروط ومتطلبات القبول لمنحة درجة البكالوريوس';
+  String get bachelors_degree_scholarship_admission_terms =>
+      'شروط ومتطلبات القبول لمنحة درجة البكالوريوس';
 
   @override
-  String get sco_accredited_universities_and_specializations_list => 'قائمة الجامعات والتخصصات المعتمدة للمنح لدى المكتب';
+  String get sco_accredited_universities_and_specializations_list =>
+      'قائمة الجامعات والتخصصات المعتمدة للمنح لدى المكتب';
 
   @override
-  String get bachelors_degree_scholarship_privileges => 'امتيازات منحة درجة البكالوريوس';
+  String get bachelors_degree_scholarship_privileges =>
+      'امتيازات منحة درجة البكالوريوس';
 
   @override
-  String get student_obligations_for_the_bachelors_degree_scholarship => 'التزامات الطالب لمنحة درجة البكالوريوس';
+  String get student_obligations_for_the_bachelors_degree_scholarship =>
+      'التزامات الطالب لمنحة درجة البكالوريوس';
 
   @override
-  String get important_guidelines_for_high_school_students => 'إرشادات هامة لطلبة المرحلة الثانوية';
+  String get important_guidelines_for_high_school_students =>
+      'إرشادات هامة لطلبة المرحلة الثانوية';
 
   @override
-  String get bachelors_degree_applying_procedures => 'إجراءات التقديم لمنحة درجة البكالوريوس';
+  String get bachelors_degree_applying_procedures =>
+      'إجراءات التقديم لمنحة درجة البكالوريوس';
 
   @override
   String get useful_websites => 'مواقع إلكترونية مفيدة';
 
   @override
-  String get internal_scholarships_for_local_students => 'تُتيح المنح الدراسية داخل الدولة للطلبة المواطنين المتميّزين علميًا من المدارس الحكومية والخاصة لإيفادهم للدراسة في الجامعات المحلية المرموقة، ومتابعة الطلبة وتقديم الإرشادات كافة التي يحتاجونها طيلة فترة دراستهم داخل الدولة.';
+  String get internal_scholarships_for_local_students =>
+      'تُتيح المنح الدراسية داخل الدولة للطلبة المواطنين المتميّزين علميًا من المدارس الحكومية والخاصة لإيفادهم للدراسة في الجامعات المحلية المرموقة، ومتابعة الطلبة وتقديم الإرشادات كافة التي يحتاجونها طيلة فترة دراستهم داخل الدولة.';
 
   @override
-  String get internal_scholarships_for_postgraduate_studies => 'تُتيح المنح الدراسية داخل الدولة للطلبة الراغبين في متابعة الدراسات العليا للالتحاق في أرقى الجامعات المحلية والتي يتنافس على الدراسة فيها نخبة الطلبة في الدولة.';
+  String get internal_scholarships_for_postgraduate_studies =>
+      'تُتيح المنح الدراسية داخل الدولة للطلبة الراغبين في متابعة الدراسات العليا للالتحاق في أرقى الجامعات المحلية والتي يتنافس على الدراسة فيها نخبة الطلبة في الدولة.';
 
   @override
-  String get meteorological_scholarships_for_high_school_graduates => 'يوفر مكتب البعثات الدراسية من خلال برنامج المنح الدراسية بوزارة شؤون الرئاسة للطلاب المتفوقين في الثانوية العامة منحًا دراسية كاملة في مجالات الأرصاد الجوية.';
+  String get meteorological_scholarships_for_high_school_graduates =>
+      'يوفر مكتب البعثات الدراسية من خلال برنامج المنح الدراسية بوزارة شؤون الرئاسة للطلاب المتفوقين في الثانوية العامة منحًا دراسية كاملة في مجالات الأرصاد الجوية.';
 
   @override
-  String get graduate_studies_scholarship_admission_terms => 'شروط ومتطلبات القبول لمنحة الدراسات العليا';
+  String get graduate_studies_scholarship_admission_terms =>
+      'شروط ومتطلبات القبول لمنحة الدراسات العليا';
 
   @override
-  String get graduate_studies_scholarship_privileges => 'امتيازات منحة الدراسات العليا';
+  String get graduate_studies_scholarship_privileges =>
+      'امتيازات منحة الدراسات العليا';
 
   @override
-  String get student_obligations_for_the_graduate_studies_scholarship => 'التزامات الطالب لمنحة الدراسات العليا';
+  String get student_obligations_for_the_graduate_studies_scholarship =>
+      'التزامات الطالب لمنحة الدراسات العليا';
 
   @override
-  String get graduate_studies_scholarship_applying_procedures => 'إجراءات التقديم لمنحة الدراسات العليا';
+  String get graduate_studies_scholarship_applying_procedures =>
+      'إجراءات التقديم لمنحة الدراسات العليا';
 
   @override
-  String get meteorological_scholarship_admission_terms => 'شروط ومتطلبات القبول لمنحة الأرصاد الجوية';
+  String get meteorological_scholarship_admission_terms =>
+      'شروط ومتطلبات القبول لمنحة الأرصاد الجوية';
 
   @override
-  String get meteorological_scholarship_privileges => 'امتيازات منحة الأرصاد الجوية';
+  String get meteorological_scholarship_privileges =>
+      'امتيازات منحة الأرصاد الجوية';
 
   @override
-  String get student_obligations_for_the_meteorological_scholarship => 'التزامات الطالب لمنحة الأرصاد الجوية';
+  String get student_obligations_for_the_meteorological_scholarship =>
+      'التزامات الطالب لمنحة الأرصاد الجوية';
 
   @override
-  String get meteorological_scholarship_applying_procedures => 'إجراءات التقديم لمنحة الأرصاد الجوية';
+  String get meteorological_scholarship_applying_procedures =>
+      'إجراءات التقديم لمنحة الأرصاد الجوية';
 
   @override
-  String get scholarship_for_outstanding_students => 'تُتيح البعثة للطلبة المواطنين المتميزين علميًا من المدارس الحكومية والخاصة لإيفادهم للدراسة في الجامعات العالمية المرموقة ومتابعة الطلبة وتقديم الإرشادات كافة التي يحتاجونها طيلة فترة دراستهم خارج الدولة، إذ يدرس طلبة البعثة في جامعات عالمية، كجامعة هارفرد، وجامعة برينستون، ومعهد ماساشوستس للتكنولوجيا، وجامعة ستانفورد، وجامعة أكسفورد، وجامعة كامبردج، وجامعة كاليفورنيا بيركلي، وجامعة دووك، وجامعة كورنيل، وجامعة بنسلفانيا، وجامعة كارنيجي ميلون، وجامعة ميتشيجان آن آربر، وجامعة براون، وغيرها من الجامعات ذات السمعة الأكاديمية الرفيعة.';
+  String get scholarship_for_outstanding_students =>
+      'تُتيح البعثة للطلبة المواطنين المتميزين علميًا من المدارس الحكومية والخاصة لإيفادهم للدراسة في الجامعات العالمية المرموقة ومتابعة الطلبة وتقديم الإرشادات كافة التي يحتاجونها طيلة فترة دراستهم خارج الدولة، إذ يدرس طلبة البعثة في جامعات عالمية، كجامعة هارفرد، وجامعة برينستون، ومعهد ماساشوستس للتكنولوجيا، وجامعة ستانفورد، وجامعة أكسفورد، وجامعة كامبردج، وجامعة كاليفورنيا بيركلي، وجامعة دووك، وجامعة كورنيل، وجامعة بنسلفانيا، وجامعة كارنيجي ميلون، وجامعة ميتشيجان آن آربر، وجامعة براون، وغيرها من الجامعات ذات السمعة الأكاديمية الرفيعة.';
 
   @override
-  String get scholarship_for_postgraduate_studies => 'تُتيح بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا للطلبة الراغبين في متابعة الدراسات العليا للالتحاق في أرقى الجامعات العالمية والتى يتنافس على الدراسة فيها نخبة الطلبة في العالم.';
+  String get scholarship_for_postgraduate_studies =>
+      'تُتيح بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا للطلبة الراغبين في متابعة الدراسات العليا للالتحاق في أرقى الجامعات العالمية والتى يتنافس على الدراسة فيها نخبة الطلبة في العالم.';
 
   @override
-  String get scholarship_for_outstanding_medical_students => 'يسعى مكتب البعثات الدراسية إلى إتاحة الفرصة أمام الأطباء المواطنين المتميّزين، لاستكمال دراستهم، وتدريبهم السريري، للحصول على أعلى الدرجات والشهادات في مختلف التخصّصات الطبية والصحية، وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في قطاع الرعاية الصحية في دولة الإمارات العربية المتحدة، والذي يعدّ من أهم القطاعات الاقتصادية الخدمية، كما تهدف البعثة إلى تأهيل جيل قيادي من أبناء وبنات الإمارات، قادر على مواجهة تحديات المستقبل، وذلك من أجل رفد الدولة بكوادر وطاقات متميزة، تحمل على عاتقها مهمّة تعزيز وتطوير عملية التنمية الشاملة التي وضع أسّسها المغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان، ويسير على خطاها بكلّ حكمة واقتدار صاحب السمو الشيخ خليفة بن زايد آل نهيان رئيس الدولة \"حفظه الله\".';
+  String get scholarship_for_outstanding_medical_students =>
+      'يسعى مكتب البعثات الدراسية إلى إتاحة الفرصة أمام الأطباء المواطنين المتميّزين، لاستكمال دراستهم، وتدريبهم السريري، للحصول على أعلى الدرجات والشهادات في مختلف التخصّصات الطبية والصحية، وذلك في إطار الحرص على تنمية وتطوير العنصر البشري في قطاع الرعاية الصحية في دولة الإمارات العربية المتحدة، والذي يعدّ من أهم القطاعات الاقتصادية الخدمية، كما تهدف البعثة إلى تأهيل جيل قيادي من أبناء وبنات الإمارات، قادر على مواجهة تحديات المستقبل، وذلك من أجل رفد الدولة بكوادر وطاقات متميزة، تحمل على عاتقها مهمّة تعزيز وتطوير عملية التنمية الشاملة التي وضع أسّسها المغفور له (بإذن الله) الشيخ زايد بن سلطان آل نهيان، ويسير على خطاها بكلّ حكمة واقتدار صاحب السمو الشيخ خليفة بن زايد آل نهيان رئيس الدولة \"حفظه الله\".';
 
   @override
-  String get distinguished_doctors_scholarship_terms_and_conditions => 'شروط ومتطلبات القبول لبعثة الأطباء المتميزين علمياً';
+  String get distinguished_doctors_scholarship_terms_and_conditions =>
+      'شروط ومتطلبات القبول لبعثة الأطباء المتميزين علمياً';
 
   @override
-  String get distinguished_doctors_scholarship_privileges => 'امتيازات بعثة الأطباء المتميزين علمياً';
+  String get distinguished_doctors_scholarship_privileges =>
+      'امتيازات بعثة الأطباء المتميزين علمياً';
 
   @override
-  String get student_obligations_for_distinguished_doctors_scholarship => 'التزامات الطالب لبعثة الأطباء المتميزين علمياً';
+  String get student_obligations_for_distinguished_doctors_scholarship =>
+      'التزامات الطالب لبعثة الأطباء المتميزين علمياً';
 
   @override
-  String get distinguished_doctors_scholarship_applying_procedures => 'إجراءات التقديم لبعثة الأطباء المتميزين علمياً';
+  String get distinguished_doctors_scholarship_applying_procedures =>
+      'إجراءات التقديم لبعثة الأطباء المتميزين علمياً';
 
   @override
   String get medical_licensing_exams => 'اختبارات التراخيص الطبية';
 
   @override
-  String get bachelor_degree_scholarship_terms_and_conditions => 'شروط ومتطلبات القبول لبعثة درجة البكالوريوس';
+  String get bachelor_degree_scholarship_terms_and_conditions =>
+      'شروط ومتطلبات القبول لبعثة درجة البكالوريوس';
 
   @override
-  String get bachelor_degree_scholarship_privileges => 'امتيازات بعثة درجة البكالوريوس';
+  String get bachelor_degree_scholarship_privileges =>
+      'امتيازات بعثة درجة البكالوريوس';
 
   @override
-  String get student_obligations_for_bachelor_degree_scholarship => 'التزامات الطالب لبعثة درجة البكالوريوس';
+  String get student_obligations_for_bachelor_degree_scholarship =>
+      'التزامات الطالب لبعثة درجة البكالوريوس';
 
   @override
-  String get bachelor_degree_applying_procedures => 'إجراءات التقديم لبعثة درجة البكالوريوس';
+  String get bachelor_degree_applying_procedures =>
+      'إجراءات التقديم لبعثة درجة البكالوريوس';
 
   @override
-  String get graduate_outside_uae_terms_and_conditions => 'شروط ومتطلبات القبول لبعثة الدراسات العليا';
+  String get graduate_outside_uae_terms_and_conditions =>
+      'شروط ومتطلبات القبول لبعثة الدراسات العليا';
 
   @override
-  String get graduate_outside_uae_scholarship_privileges => 'امتيازات بعثة الدراسات العليا';
+  String get graduate_outside_uae_scholarship_privileges =>
+      'امتيازات بعثة الدراسات العليا';
 
   @override
-  String get student_obligations_for_graduate_outside_uae_scholarship => 'التزامات الطالب لبعثة الدراسات العليا';
+  String get student_obligations_for_graduate_outside_uae_scholarship =>
+      'التزامات الطالب لبعثة الدراسات العليا';
 
   @override
-  String get graduate_outside_uae_scholarship_applying_procedures => 'إجراءات التقديم لبعثة الدراسات العليا';
+  String get graduate_outside_uae_scholarship_applying_procedures =>
+      'إجراءات التقديم لبعثة الدراسات العليا';
 
   @override
   String get noNotificationAvailable => 'لا توجد إشعارات متاحة.';
@@ -3387,7 +3621,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get name => 'الإسم';
 
   @override
-  String get draftDatesOver => 'انتهى تاريخ تقديم المسودة. يرجى المحاولة لاحقًا';
+  String get draftDatesOver =>
+      'انتهى تاريخ تقديم المسودة. يرجى المحاولة لاحقًا';
 
   @override
   String get submitNewApplication => 'تقديم طلب جديد';
@@ -3402,7 +3637,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get seeLess => ' عرض أقل';
 
   @override
-  String get externalDoctorsOutsideUae => 'بعثة صاحب السمو رئيس الدولة للأطباء المتميّزين';
+  String get doctorOfMedicine => 'برنامج دكتور في الطب';
 
   @override
   String get draftSavedSuccess => 'تم حفظ المسودة بنجاح';
@@ -3420,8 +3655,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fail => 'راسب';
 
   @override
-  String get medicalProfessionsProgram => 'برنامج المهن الطبية في دبي';
+  String get medicalProfessionsProgram => 'برنامج التدريب للمهن الصحية';
 
   @override
-  String get postGraduationExternalMedicine => 'بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا';
+  String get postGraduationExternalMedicine =>
+      'بعثة صاحب السمو رئيس الدولة للطلبة المتميزين علميًا - الدراسات العليا';
+
+  @override
+  String get programSponsorshipStatus => 'حالة رعاية البرنامج';
+
+  @override
+  String get reqForFss => 'طلب ضمان مالي';
+
+  @override
+  String get reqForScholarship => 'طلب بعثة';
+
+  @override
+  String get applicationFormVersionMismatch =>
+      'يجب تحديث تطبيق مكتب الميعات الدراسية قبل تقديم الطلب.';
+
+  @override
+  String get ddsExternal => 'بعثة صاحب السمو رئيس الدولة للأطباء المتميزين';
 }

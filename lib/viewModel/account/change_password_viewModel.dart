@@ -67,8 +67,8 @@ class ChangePasswordViewModel with ChangeNotifier {
         await setUserId();
 
         final headers = {
-          // 'Content-Type': 'application/json',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
+          'Content-Type': 'application/json',
+          // 'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         final body = FormData.fromMap({
@@ -78,7 +78,7 @@ class ChangePasswordViewModel with ChangeNotifier {
         });
 
 
-        ChangePasswordModel response = await _myRepo.changePassword(headers: headers,formData:body);
+        ChangePasswordModel response = await _myRepo.changePassword(headers: headers,userID: _userId!,formData:body);
         setApiResponse = ApiResponse.completed(response);
         _alertServices.toastMessage(response.message.toString());
         setLoading(false);

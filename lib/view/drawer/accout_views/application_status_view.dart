@@ -297,7 +297,7 @@ class _ApplicationStatusViewState extends State<ApplicationStatusView> with Medi
                 final element = _allApplications[index];
                 final application = element.applicationStatus;
                 final applicationScholarship = element.applicationStatus.scholarship;
-                final configurationKey = element.submissionConfigurationKey;
+                final configurationKey = element.submissionConfigurationKey ?? '';
                 bool isNotDraft = (application.programAction != 'DRAFT');
                 return SimpleCard(
                   cardColor: isNotDraft ? AppColors.greenColor.withAlpha(800) : AppColors.scoThemeColor.withAlpha(800),

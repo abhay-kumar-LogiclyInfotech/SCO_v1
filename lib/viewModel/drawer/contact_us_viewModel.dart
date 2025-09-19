@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/models/drawer/contact_us_model.dart';
@@ -93,32 +96,39 @@ class ContactUsViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
       };
       //*-----Create fields-----*
-      final fields = <String, String>{
+      // final data = FormData.fromMap(<String, String>{
+      //   'fullName': _fullName,
+      //   'email': _email,
+      //   'subject': _subject,
+      //   'comment': _comment,
+      //   'contactUsType': _contactUsType,
+      //   'phoneNumber': _phoneNumber
+      // });
+
+      final body = jsonEncode(<String, String>{
         'fullName': _fullName,
         'email': _email,
         'subject': _subject,
         'comment': _comment,
         'contactUsType': _contactUsType,
         'phoneNumber': _phoneNumber
-      };
+      });
 
       //*-----Calling Api Start-----*
-      final response = await _drawerRepository.contactUs(headers: headers, fields: fields);
+      final response = await _drawerRepository.contactUs(headers: headers, data: body);
 
       //*-----Calling Api End-----*
 
       _setContactUsResponse = ApiResponse.completed(response);
-      _alertServices.toastMessage("Request Submitted Successfully");
+      _alertServices.toastMessage(response.message.toString());
 
       return true;
-    } catch (error) {
-      // debugPrint('Printing Error: $error');
+    } catch (error,stackTrace) {
       _setContactUsResponse = ApiResponse.error(error.toString());
-      // Message to show status of the operation:
       _alertServices.showErrorSnackBar(error.toString());
+      print(stackTrace);
 
       return false;
     }

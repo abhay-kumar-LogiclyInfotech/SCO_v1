@@ -24,22 +24,18 @@ class NewsAndEventsViewmodel with ChangeNotifier {
   final DrawerRepository _drawerRepository = DrawerRepository();
 
   //*------Get Security Question Method Start------*/
-  ApiResponse<List<NewsAndEventsModel>> _newsAndEventsResponse =
-      ApiResponse.none();
+  ApiResponse<List<NewsData>> _newsAndEventsResponse = ApiResponse.none();
 
-  ApiResponse<List<NewsAndEventsModel>> get newsAndEventsResponse =>
-      _newsAndEventsResponse;
+  ApiResponse<List<NewsData>> get newsAndEventsResponse => _newsAndEventsResponse;
 
-  set _setNewsAndEventsResponse(
-      ApiResponse<List<NewsAndEventsModel>> response) {
+  set _setNewsAndEventsResponse(ApiResponse<List<NewsData>> response) {
     _newsAndEventsResponse = response;
     notifyListeners();
   }
 
 
-  List<ParseNewsAndEventsModel> _parsedNewsAndEventsModelList = [];
+  List<ParseNewsAndEventsModel> parsedNewsAndEventsModelList = [];
 
-  List<ParseNewsAndEventsModel> get parsedNewsAndEventsModelList => _parsedNewsAndEventsModelList;
 
 
 
@@ -52,21 +48,20 @@ class NewsAndEventsViewmodel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
+        // 'authorization': AppUrls.basicAuth
       };
 
       //*-----Calling Api Start-----*
       final response = await _drawerRepository.newsAndEvents(headers: headers);
       //*-----Calling Api End-----*
 
-      _parsedNewsAndEventsModelList =
-         response.map((element) {
+      parsedNewsAndEventsModelList = response.map((element) {
         return ParseNewsAndEventsModel(
             content: element.content ?? "",
             description: element.description ?? "",
             title: element.title ?? "",
-            publishDate: element.publishDate ?? "",
-            coverImageFileEntryId: element.coverImageFileEntryId ?? "",
+            publishDate: element.publishedDate ?? "",
+            coverImageFileEntryId: element?.coverImageFileEntryId?.toString() ?? "",
             entryUrl: element.entryUrl ?? "");
       }).toList();
 

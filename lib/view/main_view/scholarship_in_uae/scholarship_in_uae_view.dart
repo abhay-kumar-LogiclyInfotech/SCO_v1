@@ -256,13 +256,14 @@ class _ScholarshipsInUaeViewState extends State<ScholarshipsInUaeView>
           'imagePath': Constants.graduatesInUAE,
           'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'SCOPGRDINT',title: localization.internalPostgraduate,))),
         },
-        {
-          'title': localization.internalMeterological,
-          // 'subTitle': localization.meteorological_scholarships_for_high_school_graduates,
-          'subTitle': '',
-          'imagePath': Constants.meteorologicalInUAE,
-          'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'SCOMETLOGINT',title: localization.internalMeterological,))),
-        },
+        /// TODO: Inactive in 2025
+        // {
+        //   'title': localization.internalMeterological,
+        //   // 'subTitle': localization.meteorological_scholarships_for_high_school_graduates,
+        //   'subTitle': '',
+        //   'imagePath': Constants.meteorologicalInUAE,
+        //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipsInUaeView(code: 'SCOMETLOGINT',title: localization.internalMeterological,))),
+        // },
       ];
       default:
         return [];

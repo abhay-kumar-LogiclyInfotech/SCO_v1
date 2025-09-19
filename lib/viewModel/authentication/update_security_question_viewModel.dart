@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
@@ -59,7 +60,7 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
 
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
-        'authorization': AppUrls.basicAuth
+        // 'authorization': AppUrls.basicAuth
       };
       //*-----Create Headers End-----*
 
@@ -75,16 +76,17 @@ class UpdateSecurityQuestionViewModel with ChangeNotifier {
 
       setUpdateSecurityQuestionResponse = ApiResponse.loading();
 
-      final fields = <String, String>{
+      final formData = FormData.fromMap({
         "securityQuestion": _securityQuestion!,
         "securityAnswer": _securityAnswer!,
-      };
+      });
+
       //*-----Create Body End-----*
 
       //*-----Calling Api Start-----*
       final response = await _authenticationRepository.updateSecurityQuestion(
         userId: userId,
-        fields: fields,
+        data: formData,
         headers: headers,
       );
 

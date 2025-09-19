@@ -36,6 +36,12 @@ class FindDraftByDraftIdViewmodel with ChangeNotifier {
     notifyListeners();
   }
 
+  String? _userId;
+
+  setUserId(){
+    _userId =  HiveManager.getUserId();
+  }
+
 
   final _myRepo = HomeRepository();
 
@@ -61,14 +67,14 @@ class FindDraftByDraftIdViewmodel with ChangeNotifier {
 
         setLoading(true);
         setApiResponse = ApiResponse.loading();
+        setUserId();
+        // final headers = {
+        //   'Content-Type': 'application/x-www-form-urlencoded',
+        //   'authorization': AppUrls.basicAuthWithUsernamePassword
+        // };
 
-        final headers = {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
-        };
 
-
-        FindDraftByConfigurationKeyModel response = await _myRepo.findDraftByDraftId(draftId: draftId,headers: headers);
+        FindDraftByConfigurationKeyModel response = await _myRepo.findDraftByDraftId(draftId: draftId,userId: _userId!);
 
 
         setApiResponse = ApiResponse.completed(response);

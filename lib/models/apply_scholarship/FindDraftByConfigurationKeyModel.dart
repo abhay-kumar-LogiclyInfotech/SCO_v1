@@ -23,25 +23,25 @@ FindDraftByConfigurationKeyModel findDraftByConfigurationKeyFromJson(String str)
 String findDraftByConfigurationKeyToJson(FindDraftByConfigurationKeyModel data) => json.encode(data.toJson());
 class FindDraftByConfigurationKeyModel {
   FindDraftByConfigurationKeyModel({
-      String? applicationData, 
-      String? applicationId, 
-      String? applicationNo, 
+      dynamic applicationData, 
+      dynamic applicationId, 
+      dynamic applicationNo, 
       dynamic appliedOn, 
-      String? assesmentYear, 
-      String? companyId, 
-      String? country, 
+      dynamic assesmentYear, 
+      dynamic companyId, 
+      dynamic country, 
       num? createDate, 
       dynamic draftExtendedDate, 
-      String? emiratesId, 
-      String? groupId, 
+      dynamic emiratesId, 
+      dynamic groupId, 
       num? modifiedDate, 
-      String? motherUAE, 
-      String? scholarshipConfId, 
-      String? scholarshipType, 
-      String? serviceResponse, 
-      String? status, 
-      String? url, 
-      String? uuid,}){
+      dynamic motherUAE, 
+      dynamic scholarshipConfId, 
+      dynamic scholarshipType, 
+      dynamic serviceResponse, 
+      dynamic status, 
+      dynamic url, 
+      dynamic uuid,}){
     _applicationData = applicationData;
     _applicationId = applicationId;
     _applicationNo = applicationNo;
@@ -84,44 +84,44 @@ class FindDraftByConfigurationKeyModel {
     _url = json['url'];
     _uuid = json['uuid'];
   }
-  String? _applicationData;
-  String? _applicationId;
-  String? _applicationNo;
+  dynamic _applicationData;
+  dynamic _applicationId;
+  dynamic _applicationNo;
   dynamic _appliedOn;
-  String? _assesmentYear;
-  String? _companyId;
-  String? _country;
+  dynamic _assesmentYear;
+  dynamic _companyId;
+  dynamic _country;
   num? _createDate;
   dynamic _draftExtendedDate;
-  String? _emiratesId;
-  String? _groupId;
+  dynamic _emiratesId;
+  dynamic _groupId;
   num? _modifiedDate;
-  String? _motherUAE;
-  String? _scholarshipConfId;
-  String? _scholarshipType;
-  String? _serviceResponse;
-  String? _status;
-  String? _url;
-  String? _uuid;
-FindDraftByConfigurationKeyModel copyWith({  String? applicationData,
-  String? applicationId,
-  String? applicationNo,
+  dynamic _motherUAE;
+  dynamic _scholarshipConfId;
+  dynamic _scholarshipType;
+  dynamic _serviceResponse;
+  dynamic _status;
+  dynamic _url;
+  dynamic _uuid;
+FindDraftByConfigurationKeyModel copyWith({  dynamic applicationData,
+  dynamic applicationId,
+  dynamic applicationNo,
   dynamic appliedOn,
-  String? assesmentYear,
-  String? companyId,
-  String? country,
+  dynamic assesmentYear,
+  dynamic companyId,
+  dynamic country,
   num? createDate,
   dynamic draftExtendedDate,
-  String? emiratesId,
-  String? groupId,
+  dynamic emiratesId,
+  dynamic groupId,
   num? modifiedDate,
-  String? motherUAE,
-  String? scholarshipConfId,
-  String? scholarshipType,
-  String? serviceResponse,
-  String? status,
-  String? url,
-  String? uuid,
+  dynamic motherUAE,
+  dynamic scholarshipConfId,
+  dynamic scholarshipType,
+  dynamic serviceResponse,
+  dynamic status,
+  dynamic url,
+  dynamic uuid,
 }) => FindDraftByConfigurationKeyModel(  applicationData: applicationData ?? _applicationData,
   applicationId: applicationId ?? _applicationId,
   applicationNo: applicationNo ?? _applicationNo,
@@ -142,25 +142,25 @@ FindDraftByConfigurationKeyModel copyWith({  String? applicationData,
   url: url ?? _url,
   uuid: uuid ?? _uuid,
 );
-  String? get applicationData => _applicationData;
-  String? get applicationId => _applicationId;
-  String? get applicationNo => _applicationNo;
+  dynamic get applicationData => _applicationData;
+  dynamic get applicationId => _applicationId;
+  dynamic get applicationNo => _applicationNo;
   dynamic get appliedOn => _appliedOn;
-  String? get assesmentYear => _assesmentYear;
-  String? get companyId => _companyId;
-  String? get country => _country;
+  dynamic get assesmentYear => _assesmentYear;
+  dynamic get companyId => _companyId;
+  dynamic get country => _country;
   num? get createDate => _createDate;
   dynamic get draftExtendedDate => _draftExtendedDate;
-  String? get emiratesId => _emiratesId;
-  String? get groupId => _groupId;
+  dynamic get emiratesId => _emiratesId;
+  dynamic get groupId => _groupId;
   num? get modifiedDate => _modifiedDate;
-  String? get motherUAE => _motherUAE;
-  String? get scholarshipConfId => _scholarshipConfId;
-  String? get scholarshipType => _scholarshipType;
-  String? get serviceResponse => _serviceResponse;
-  String? get status => _status;
-  String? get url => _url;
-  String? get uuid => _uuid;
+  dynamic get motherUAE => _motherUAE;
+  dynamic get scholarshipConfId => _scholarshipConfId;
+  dynamic get scholarshipType => _scholarshipType;
+  dynamic get serviceResponse => _serviceResponse;
+  dynamic get status => _status;
+  dynamic get url => _url;
+  dynamic get uuid => _uuid;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -21,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../data/response/status.dart';
 import '../../../resources/components/custom_text_field.dart';
+import '../../../viewModel/services/getIt_services.dart';
 import '../../../viewModel/services/navigation_services.dart';
 
 class LoginView extends StatefulWidget {
@@ -31,17 +34,17 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
-  late NavigationServices _navigationServices;
-  late AlertServices _alertServices;
+   final NavigationServices _navigationServices = getIt.get<NavigationServices>();
+   final AlertServices _alertServices= getIt.get<AlertServices>();
 
-  late TextEditingController _usernameController;
-  late TextEditingController _passwordController;
+   TextEditingController _usernameController = TextEditingController();
+   TextEditingController _passwordController = TextEditingController();
 
   String? usernameErrorText;
   String? passwordErrorText;
 
-  late FocusNode _emailFocusNode;
-  late FocusNode _passwordFocusNode;
+   FocusNode _emailFocusNode = FocusNode();
+   FocusNode _passwordFocusNode = FocusNode();
 
   bool _isArabic = false;
   final _languageController = ValueNotifier<bool>(false);
@@ -117,92 +120,21 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
       'utsname.version:': data.utsname.version,
       'utsname.machine:': data.utsname.machine,
     };
-  }
 
-  Map<String, dynamic> _readLinuxDeviceInfo(LinuxDeviceInfo data) {
-    return <String, dynamic>{
-      'name': data.name,
-      'version': data.version,
-      'id': data.id,
-      'idLike': data.idLike,
-      'versionCodename': data.versionCodename,
-      'versionId': data.versionId,
-      'prettyName': data.prettyName,
-      'buildId': data.buildId,
-      'variant': data.variant,
-      'variantId': data.variantId,
-      'machineId': data.machineId,
-    };
-  }
-
-  Map<String, dynamic> _readMacOsDeviceInfo(MacOsDeviceInfo data) {
-    return <String, dynamic>{
-      'computerName': data.computerName,
-      'hostName': data.hostName,
-      'arch': data.arch,
-      'model': data.model,
-      'kernelVersion': data.kernelVersion,
-      'majorVersion': data.majorVersion,
-      'minorVersion': data.minorVersion,
-      'patchVersion': data.patchVersion,
-      'osRelease': data.osRelease,
-      'activeCPUs': data.activeCPUs,
-      'memorySize': data.memorySize,
-      'cpuFrequency': data.cpuFrequency,
-      'systemGUID': data.systemGUID,
-    };
-  }
-
-  Map<String, dynamic> _readWindowsDeviceInfo(WindowsDeviceInfo data) {
-    return <String, dynamic>{
-      'numberOfCores': data.numberOfCores,
-      'computerName': data.computerName,
-      'systemMemoryInMegabytes': data.systemMemoryInMegabytes,
-      'userName': data.userName,
-      'majorVersion': data.majorVersion,
-      'minorVersion': data.minorVersion,
-      'buildNumber': data.buildNumber,
-      'platformId': data.platformId,
-      'csdVersion': data.csdVersion,
-      'servicePackMajor': data.servicePackMajor,
-      'servicePackMinor': data.servicePackMinor,
-      'suitMask': data.suitMask,
-      'productType': data.productType,
-      'reserved': data.reserved,
-      'buildLab': data.buildLab,
-      'buildLabEx': data.buildLabEx,
-      'digitalProductId': data.digitalProductId,
-      'displayVersion': data.displayVersion,
-      'editionId': data.editionId,
-      'installDate': data.installDate,
-      'productId': data.productId,
-      'productName': data.productName,
-      'registeredOwner': data.registeredOwner,
-      'releaseId': data.releaseId,
-      'deviceId': data.deviceId,
-    };
   }
 
   Future<void> initPlatformState() async {
     var deviceData = <String, dynamic>{};
 
     try {
-      deviceData = switch (defaultTargetPlatform) {
-        TargetPlatform.android =>
-          _readAndroidBuildData(await deviceInfoPlugin.androidInfo),
-        TargetPlatform.iOS =>
-          _readIosDeviceInfo(await deviceInfoPlugin.iosInfo),
-        TargetPlatform.linux =>
-          _readLinuxDeviceInfo(await deviceInfoPlugin.linuxInfo),
-        TargetPlatform.windows =>
-          _readWindowsDeviceInfo(await deviceInfoPlugin.windowsInfo),
-        TargetPlatform.macOS =>
-          _readMacOsDeviceInfo(await deviceInfoPlugin.macOsInfo),
-        TargetPlatform.fuchsia => <String, dynamic>{
-            'Error:': 'Fuchsia platform isn\'t supported'
-          },
-      };
-    } on PlatformException {
+      deviceData =
+        Platform.isAndroid ?
+          _readAndroidBuildData(await deviceInfoPlugin.androidInfo)
+        :
+          _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+
+      }
+     catch(e) {
       deviceData = <String, dynamic>{
         'Error:': 'Failed to get platform version.'
       };
@@ -220,9 +152,6 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initPlatformState();
-      final GetIt getIt = GetIt.instance;
-      _navigationServices = getIt.get<NavigationServices>();
-      _alertServices = getIt.get<AlertServices>();
 
       _usernameController = TextEditingController();
       _passwordController = TextEditingController();
@@ -443,7 +372,7 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
         fontSize: 16,
         textDirection: getTextDirection(langProvider),
         buttonName: AppLocalizations.of(context)!.login,
-        isLoading: provider.apiResponse.status == Status.LOADING ? true : false,
+        isLoading: provider.apiResponse.status == Status.LOADING,
         // buttonColor: AppColors.scoThem,
         elevation: 1,
         onTap: () async {
@@ -507,20 +436,25 @@ class _LoginViewState extends State<LoginView> with MediaQueryMixin<LoginView> {
 
   Widget _signInWithUaePassButton(LanguageChangeViewModel provider) {
     final localization = AppLocalizations.of(context)!;
-    return CustomButton(
-      textDirection: getTextDirection(provider),
-      buttonName: localization.signInWithUaePass,
-      isLoading: false,
-      onTap: () {
-        _alertServices.toastMessage(localization.comingSoon);
-      },
-      fontSize: 16,
-      buttonColor: Colors.white,
-      borderColor: Colors.black,
-      textColor: Colors.black,
-      elevation: 1,
-      leadingIcon: const Icon(Icons.fingerprint),
-    );
+    return GestureDetector(
+        onTap: (){
+          _alertServices.toastMessage(localization.comingSoon);
+        },
+        child: Image.asset("assets/auth/sign_in_uae_pass.png"));
+    // return CustomButton(
+    //   textDirection: getTextDirection(provider),
+    //   buttonName: localization.signInWithUaePass,
+    //   isLoading: false,
+    //   onTap: () {
+    //     _alertServices.toastMessage(localization.comingSoon);
+    //   },
+    //   fontSize: 16,
+    //   buttonColor: Colors.white,
+    //   borderColor: Colors.black,
+    //   textColor: Colors.black,
+    //   elevation: 1,
+    //   leadingIcon: const Icon(Icons.fingerprint),
+    // );
   }
 
   Widget _signUpLink(LanguageChangeViewModel provider) {

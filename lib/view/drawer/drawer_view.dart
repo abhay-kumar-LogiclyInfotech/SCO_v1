@@ -145,12 +145,8 @@ class _DrawerViewState extends State<DrawerView> {
                                               return ProfileWithCameraButton(
                                                   profileSize: 55,
                                                   cameraEnabled: false,
-                                                  profileImage: provider.apiResponse.data?.url != null ?
-                                                  NetworkImage(
-                                                    provider.apiResponse.data!.url!.toString(),
-
-                                                  ) : const AssetImage('assets/personal_details/dummy_profile_pic.png'),
-                                                  onTap: () => _openAccountView(),
+                                                  profileImage: provider.apiResponse.data?.data?.url != null ? NetworkImage(AppUrls.domainUrl + provider.apiResponse.data!.data!.url!.toString()) : const AssetImage('assets/personal_details/Picture.png'),
+                                              onTap: () => _openAccountView(),
                                                   onLongPress: () {},
                                               );
                                             },
@@ -318,6 +314,7 @@ class _DrawerViewState extends State<DrawerView> {
                                       // await HiveManager.clearData();
                                       await HiveManager.clearEmiratesId();
                                       await HiveManager.clearUserId();
+                                      await HiveManager.clearEmail();
                                       await HiveManager.clearName();
                                       await HiveManager.clearRole();
 
@@ -325,15 +322,9 @@ class _DrawerViewState extends State<DrawerView> {
                                       //     CupertinoPageRoute(
                                       //         builder: (context) =>
                                       //             const MainView()));
-                                      _navigationServices
-                                          .goBackUntilFirstScreen();
-                                      _navigationServices
-                                          .pushReplacementCupertino(
-                                        CupertinoPageRoute(
-                                          builder: (context) =>
-                                              const LoginView(),
-                                        ),
-                                      );
+                                      _navigationServices.goBackUntilFirstScreen();
+                                      _navigationServices.pushReplacementCupertino(
+                                        CupertinoPageRoute(builder: (context) => const LoginView(),),);
                                       // _alertServices.toastMessage(localization.logout_success);
                                     }),
                               const SizedBox(height: 50),

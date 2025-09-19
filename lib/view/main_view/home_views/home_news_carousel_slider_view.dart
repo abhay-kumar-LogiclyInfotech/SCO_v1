@@ -9,6 +9,7 @@ import 'package:sco_v1/utils/utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../data/response/status.dart';
+import '../../../models/drawer/news_and_events_model.dart';
 import '../../../resources/app_colors.dart';
 import '../../../utils/constants.dart';
 import '../../../viewModel/drawer/individual_image_viewModel.dart';
@@ -72,7 +73,9 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
 
                 case Status.COMPLETED:
 
-                  final List<Widget> items = provider.parsedNewsAndEventsModelList.map<Widget>((item) {
+                  final newsList = provider.parsedNewsAndEventsModelList;
+
+                  final List<Widget> items = (newsList.length > 5 ? newsList.sublist(0,5) : newsList).map<Widget>((item) {
                     return ChangeNotifierProvider(
                       create: (_) => IndividualImageViewModel(),
                       child: GestureDetector(
@@ -134,7 +137,7 @@ class _HomeNewsCarouselSliderViewState extends State<HomeNewsCarouselSliderView>
 }
 
 class CarouselItemBuilder extends StatefulWidget {
-  final dynamic item;
+  final ParseNewsAndEventsModel item;
   final String languageId;
 
   const CarouselItemBuilder({
@@ -187,8 +190,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: CachedNetworkImage(
-                        imageUrl: imageProvider.individualImageResponse.data?.data?.imageUrl ??
-                            Constants.newsImageUrl,
+                        imageUrl: imageProvider.individualImageResponse.data?.data?.imageUrl ?? Constants.newsImageUrl,
                         height: double.infinity,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -235,7 +237,7 @@ class _CarouselItemBuilderState extends State<CarouselItemBuilder> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        widget.item.getDescription(widget.languageId),
+                        widget.item.getTitle(widget.languageId),
                         textAlign: TextAlign.start,
                         style: const TextStyle(
                           color: Colors.white,

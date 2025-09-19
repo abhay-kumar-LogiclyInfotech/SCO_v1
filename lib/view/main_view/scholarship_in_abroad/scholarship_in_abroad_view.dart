@@ -21,6 +21,7 @@ import '../../../viewModel/apply_scholarship/getAllActiveScholarshipsViewModel.d
 import '../../../viewModel/services/navigation_services.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../apply_scholarship/fill_scholarship_form_view.dart';
+import 'actuarial_science_outside_uae/actuarial_science_outside_uae.dart';
 import 'bachelor_outside_uae/bachelors_outside_uae.dart';
 import 'doctor_of_medicine_outside_uae/doctor_of_medicine_outside_uae.dart';
 
@@ -203,6 +204,58 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
           //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(WebView(url: AppUrls.graduateOutsideUaeDegreeApplyingProcedure, title: localization.graduate_outside_uae_scholarship_applying_procedures,))),
           // },
         ];
+      case 'SCOACTUGRD':
+        return [
+          {
+            'title': " شروط ومتطلبات التقديم لبعثة العلوم الإكتوارية - درجة البكالوريوس ",
+            'content': getActuarialTermsAndConditionsExternal(context),
+            'imagePath': Constants.conditions,
+          },
+          {
+            'title': " قائمة الجامعات والتخصصات المعتمدة لبعثة العلوم الإكتوارية " ,
+            'content': getActuarialApprovedUniversitiesExternal(context),
+            'imagePath': Constants.universityList,
+          },
+          {
+            'title': " امتيازات بعثة العلوم الإكتوارية - درجة البكالوريوس " ,
+            'content': getActuarialScholarshipPrivilegesExternal(context),
+            'imagePath': Constants.privileges,
+          },
+          {
+            'title': " التزامات الطالب لبعثة العلوم الإكتوارية - درجة البكالوريوس " ,
+            'content': getActuarialStudentObligationsExternal(context),
+          },
+          {
+            'title': " إجراءات التقديم لبعثة العلوم الإكتوارية - درجة البكالوريوس " ,
+            'content': getActuarialApplyingProcedureExternal(context),
+            'imagePath': Constants.applyingProcedure,
+          },
+        ];
+
+      case 'SCOPGRDMDEXT':
+        return [
+          {
+            'title': " نبذة عن برنامج دكتور فى الطب ",
+            'content': getDoctorAboutTheProgramExternal(context),
+            // 'imagePath': Constants.faq,
+          },
+          {
+            'title': " شروط ومتطلبات القبول فى البعثة ",
+            'content': getDoctorTermsAndConditionsExternal(context),
+            'imagePath': Constants.conditions,
+          },
+          {
+            'title': " معايير القبول في الجامعات العالمية ",
+            'content': getDoctorAdmissionCriteriaExternal(context),
+            'imagePath': Constants.applyingProcedure,
+          },
+          {
+            'title': " الجامعات المعتمدة ",
+            'content': getDoctorAccreditedUniversitiesExternal(context),
+            'imagePath': Constants.universityList,
+          },
+        ];
+
       // case 'SCODDSEXT':
       //   return [
       //     {
@@ -276,13 +329,25 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
             'imagePath': Constants.graduatesOutsideUae,
             'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCOPGRDEXT',title: localization.externalPostgraduate,))),
           },
-          // {
-          //   'title': localization.externalDoctors,
-          //   // 'subTitle': localization.scholarship_for_outstanding_medical_students,
-          //   'subTitle': '',
-          //   'imagePath': Constants.distinguishedDoctorsOutsideUae,
-          //   'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCODDSEXT',title: localization.externalDoctors,))),
-          // },
+          {
+            'title': localization.actuarialScience,
+            // 'subTitle': localization.scholarship_for_outstanding_medical_students,
+            'subTitle': '',
+            'imagePath': Constants.bachelorsInUae,
+            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(createRoute(ScholarshipInAbroadView(code: 'SCOACTUGRD',title: localization.actuarialScience,))),
+          },
+          {
+            'title': localization.doctorOfMedicine,
+            // 'subTitle': localization.scholarship_for_outstanding_medical_students,
+            'subTitle': '',
+            'imagePath': Constants.distinguishedDoctorsOutsideUae,
+            'onTap': () => _navigationServices.pushSimpleWithAnimationRoute(
+                createRoute(ScholarshipInAbroadView(
+                  code: 'SCOPGRDMDEXT',
+                  title: localization.doctorOfMedicine,
+                ))),
+          },
+
         ];
       default:
         return [];
@@ -291,7 +356,7 @@ class _ScholarshipInAbroadViewState extends State<ScholarshipInAbroadView>
 
 
  bool isExternalScholarship(){
-    return   ( widget.code == 'SCOUGRDEXT' || widget.code == 'SCOPGRDEXT' || widget.code == 'SCODDSEXT');
+    return   ( widget.code == 'SCOUGRDEXT' || widget.code == 'SCOPGRDEXT' || widget.code == 'SCOACTUGRD' || widget.code =='SCOPGRDMDEXT');
   }
 
   void _initializeScoPrograms() {

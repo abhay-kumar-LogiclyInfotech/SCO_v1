@@ -27,9 +27,11 @@ class FindDraftByConfigurationKeyViewmodel with ChangeNotifier {
     _alertServices = getIt.get<AlertServices>();
   }
   String? _emiratesId;
+  String? _userId;
 
-  setEmiratesId() async {
+  setIds() async {
     _emiratesId =  HiveManager.getEmiratesId();
+    _userId =  HiveManager.getUserId();
   }
 
   bool _isLoading = true;
@@ -65,25 +67,26 @@ class FindDraftByConfigurationKeyViewmodel with ChangeNotifier {
 
         setLoading(true);
         setApiResponse = ApiResponse.loading();
-        await setEmiratesId();
+        await setIds();
 
-        final headers = {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
-        };
+        // final headers = <String,String>{
+        //   // 'Content-Type': 'application/x-www-form-urlencoded',
+        //   // 'authorization': AppUrls.basicAuthWithUsernamePassword
+        // };
+        //
+        // final body = <String,String>{
+        //   "emiratesId": _emiratesId ?? '',
+        //   "configKey": configurationKey ?? ''
+        // };
 
-        final body = {
-          "emiratesId": _emiratesId ?? '',
-          "configKey": configurationKey ?? ''
-        };
-
-        FindDraftByConfigurationKeyModel response = await _myRepo.findDraftByConfigurationKey(body: body,headers: headers);
+        FindDraftByConfigurationKeyModel response = await _myRepo.findDraftByConfigurationKey(userId:_userId,emiratesId: _emiratesId,configKey: configurationKey,);
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);
-      } catch (error) {
+      } catch (error,stackTrace) {
         setApiResponse = ApiResponse.error(error.toString());
-        _alertServices.showErrorSnackBar(error.toString());
+        // _alertServices.showErrorSnackBar(error.toString());
+        // print(stackTrace);
         setLoading(false);
       }}
     else{

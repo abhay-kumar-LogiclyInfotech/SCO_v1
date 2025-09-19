@@ -137,6 +137,7 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
 
 
   /// controllers, focus nodes and error text variables for Academic program
+  final TextEditingController _scholarshipStatusController = TextEditingController();
   final TextEditingController _acadProgramController = TextEditingController();
   final TextEditingController _acadProgramDdsController = TextEditingController();
   final TextEditingController _acadProgramPgrdController = TextEditingController();
@@ -406,7 +407,10 @@ class _ViewApplicationDetailsViewState extends State<ViewApplicationDetailsView>
       }
 
 
+      _scholarshipStatusController.text = cleanedDraft['scholarshipStatus'] ?? '';
+
       /// academic programs
+      _acadProgramController.text = cleanedDraft['acadProgram'] ?? '';
       _acadProgramDdsController.text = cleanedDraft['acadProgramDds'] ?? '';
       _acadProgramPgrdController.text = cleanedDraft['acadProgramPgrd'] ?? '';
 
@@ -1131,16 +1135,15 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
         if(shouldShowUniversityAndMajors(academicCareer))Column(
           children: [
             /// majors
-            CustomInformationContainer(title: academicCareer == 'PGRD'
-                ? localization.pgrdMajorWishlist
-                : localization.majorWishlist, expandedContent: Column(
+            CustomInformationContainer(title: academicCareer == 'PGRD' ? localization.pgrdMajorWishlist : localization.majorWishlist, expandedContent: Column(
               children: [
                 /// PGRD Academic Career
-                if(academicCareer == 'PGRD' && academicCareer != 'DDS')CustomInformationContainerField(title: localization.pgrdAdacProgram,
-                  description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ACAD_PROG_PGRD',code: _acadProgramPgrdController.text),
+                if(academicCareer == 'PGRD' && academicCareer != 'DDS')
+                  CustomInformationContainerField(title: localization.pgrdAdacProgram,
+                  description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ACAD_PROG',code: _acadProgramController.text),
                 ),
+
                 /// Major Selection
-                if(academicCareer != 'DDS')
                   ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -1148,7 +1151,10 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                       itemCount: _majorsWishlist.length,
                       itemBuilder: (context, index) {
                         final majorInfo = _majorsWishlist[index];
+
                         return Column(children: [
+
+                          if(academicCareer != 'DDS' || admitType == 'AHC')
                           CustomInformationContainerField(title: index == 0
                               ? localization.majorsWish1
                               : index == 1
@@ -1156,17 +1162,28 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                               : localization.majorsWish3,
                             description: getFullNameForMajor(majorInfo.majorController.text).toString(),
                           ),
-                          if(academicCareer != 'DDS' && majorInfo.majorController.text == 'OTH')
-                            CustomInformationContainerField(title: localization.otherMajor,
+
+                          if((academicCareer == 'DDS' || admitType == 'AHC') || majorInfo.majorController.text == 'OTH')
+                            if(majorInfo.majorController.text == 'OTH')
+                            CustomInformationContainerField(title:
+                            academicCareer != 'DDS' ?  localization.otherMajor : localization.ddsMajor,
                               description: majorInfo.otherMajorController.text,
                             ),
                         ]);
                       }),
-                /// DDS Major Selection
-                if(academicCareer == 'DDS')CustomInformationContainerField(title: localization.ddsMajor1,
-                  description: getFullNameFromLov(langProvider: langProvider,lovCode: 'ACAD_PROG_DDS',code: _acadProgramDdsController.text),
 
-                )
+
+                /// DDS Major Selection
+                if(academicCareer == 'DDS')
+                  CustomInformationContainerField(title: localization.ddsMajor1,
+                  description: getFullNameFromLov(langProvider: langProvider,
+                      lovCode:  widget.configurationKey == 'SCOAHCPEXT' ? 'ACAD_PROG_AHCP' : 'ACAD_PROG_DDS',code: _acadProgramDdsController.text),),
+
+                if(admitType == 'AHC')
+                  CustomInformationContainerField(title: localization.programSponsorshipStatus,
+                  description: _scholarshipStatusController.text == 'S' ? localization.reqForScholarship : localization.reqForFss,
+                  )
+
               ],
             )),
             kFormHeight,
@@ -1186,13 +1203,14 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                             final universityInfo = _universityPriorityList[index];
                             return Column(children: [
                               CustomInformationContainerField(title: localization.country, description: getFullNameFromLov(langProvider: langProvider,lovCode: 'COUNTRY',code:universityInfo.countryIdController.text, ),),
-                              if(academicCareer != 'DDS')
-                                Column(
-                                  children: [
+
+                             // if(academicCareer != 'DDS' && admitType == 'AHC')
+
+                                    if(academicCareer != 'DDS' || admitType == 'AHC')
                                     CustomInformationContainerField(title: localization.majors,
                                       description: getFullNameForMajor(universityInfo.majorsController.text).toString(),
                                     ),
-                                    if(universityInfo.majorsController.text == 'OTH' || academicCareer == 'DDS')
+                                    if(universityInfo.majorsController.text == 'OTH')
                                       CustomInformationContainerField(title: academicCareer != 'DDS' ? localization.otherMajor : localization.ddsMajor,
                                         description: universityInfo.otherMajorsController.text,
                                       ),
@@ -1200,15 +1218,29 @@ Widget _applicationDetails({required langProvider,required AppLocalizations loca
                                       CustomInformationContainerField(title: localization.university,
                                         description: getFullNameForUniversity(value: universityInfo.universityIdController.text, universityInfo: universityInfo)   /// TODO: UNIVERSITY FULL NAME IS PENDING TO CALCULATE
                                       ),
-                                    if((universityInfo.universityIdController.text == 'OTH' ||  academicCareer == 'DDS'))
+
+                                    if(universityInfo.universityIdController.text == 'OTH')
                                       CustomInformationContainerField(title: academicCareer != 'DDS'
                                           ? localization.universityNameIfOther
                                           : localization.ddsUniversity,
                                           description: universityInfo.otherUniversityNameController.text),
+
+                                    if(admitType == 'AHC')
+                                      CustomInformationContainerField(title: localization.militaryServiceStartDate,
+                                      description: universityInfo.startDateController.text,
+                                      ),
+
+                                    if(admitType == 'AHC')
+                                      CustomInformationContainerField(title: localization.militaryServiceEndDate,
+                                        description: universityInfo.endDateController.text,
+                                      ),
+
+
+
                                     CustomInformationContainerField(title: localization.universityStatus,description: getFullNameFromLov(langProvider: langProvider,lovCode: 'UNIVERSITY_STATUS' ,code: universityInfo.statusController.text,),isLastItem: true,),
                                     if(index < _universityPriorityList.length - 1)  sectionDivider(color: AppColors.darkGrey)
-                                  ],
-                                )
+
+
                             ]);
                           })
                     ],
@@ -1557,6 +1589,8 @@ List<dynamic> getMajors({
   String? configurationKey,
 })
 {
+
+
 
   // Step 1: Define the majorCriteria based on academic career
   String majorCriteria = (academicCareer.toUpperCase() == "PGRD")

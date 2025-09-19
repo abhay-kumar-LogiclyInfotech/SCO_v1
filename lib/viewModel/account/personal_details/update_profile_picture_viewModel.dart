@@ -63,30 +63,27 @@ class UpdateProfilePictureViewModel with ChangeNotifier {
         _setApiResponse = ApiResponse.loading();
         await setUserId();
 
-        final headers = {
+        final headers = <String,String>{
           "Content-Type": "application/x-www-form-urlencoded",
-          'authorization': AppUrls.basicAuthWithUsernamePassword
+          // 'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         // Data in JSON format
-        Map<String, String> jsonData = {
-          "userId": _userId.toString(),
-          "base64": base64String
-        };
+        final jsonData = {"base64": base64String};
 
         // Convert JSON to URL-encoded form
-        String urlEncodedData = Uri(queryParameters: jsonData).query;
+        // String urlEncodedData = Uri(queryParameters: jsonData).query;
 
-        GetProfilePictureUrlModel response = await _myRepo.updateProfilePicture(
-            userId: _userId ?? '', body: urlEncodedData, headers: headers);
+        GetProfilePictureUrlModel response = await _myRepo.updateProfilePicture(userId: _userId ?? '', body: jsonData, headers: headers);
 
         _setApiResponse = ApiResponse.completed(response);
-        _alertServices.toastMessage("Profile picture updated successfully");
+        _alertServices.toastMessage(response.message ?? '');
         setLoading(false);
         return true;
-      } catch (error) {
+      } catch (error,stackTrace) {
         _setApiResponse = ApiResponse.error(error.toString());
-        _alertServices.toastMessage(error.toString());
+        _alertServices.showErrorSnackBar(error.toString());
+        print(stackTrace);
         setLoading(false);
         return false;
       }

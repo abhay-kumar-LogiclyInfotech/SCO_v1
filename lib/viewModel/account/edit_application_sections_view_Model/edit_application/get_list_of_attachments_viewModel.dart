@@ -70,7 +70,6 @@ class GetListOfAttachmentsViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         GetListOfAttachmentsModel response = await _myRepo.getListOfAttachments(userId: _userId ?? '',headers: headers);
@@ -81,7 +80,8 @@ class GetListOfAttachmentsViewModel with ChangeNotifier {
         setUserProfileInfo = ApiResponse.error(error.toString());
         // _alertServices.showErrorSnackBar(error.toString());
         setLoading(false);
-      }}
+      }
+    }
     else{
 
       _alertServices.toastMessage("No Internet Connection is available");

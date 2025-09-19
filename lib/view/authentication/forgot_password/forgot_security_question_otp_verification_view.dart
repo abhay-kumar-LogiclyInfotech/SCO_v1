@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sco_v1/data/response/ApiResponse.dart';
 import 'package:sco_v1/resources/themes/pin_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -178,12 +179,9 @@ class _ForgotSecurityQuestionOtpVerificationViewState
           textDirection: getTextDirection(langProvider),
           child: Pinput(
               length: 7,
-              // obscureText: true,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               defaultPinTheme: PinInputTheme.defaultPinTheme,
-              focusedPinTheme: PinInputTheme.defaultPinTheme.copyWith(
-                  decoration: PinInputTheme.defaultPinTheme.decoration!
-                      .copyWith(border: Border.all(color: Colors.green))),
+              focusedPinTheme: PinInputTheme.defaultPinTheme.copyWith(decoration: PinInputTheme.defaultPinTheme.decoration!.copyWith(border: Border.all(color: Colors.green))),
               onCompleted: (pin) async {
                 setState(() {
                   _isLoading = true;
@@ -191,44 +189,43 @@ class _ForgotSecurityQuestionOtpVerificationViewState
 
                 _verificationCodeController.text = pin.toString();
 
-                if (pin.isNotEmpty) {
-                  bool result =
-                      (pin.toString() == widget.verificationOtp.toString());
-
-                  if (result) {
-                    bool mailSent = await provider.sendForgotPasswordOnMail(
-                      userId: widget.userId,
-                      context: context,
-                      langProvider: langProvider,
-                    );
-
-                    if (mailSent) {
-                      _navigationServices.pushReplacementCupertino(
-                        CupertinoPageRoute(
-                          builder: (context) =>
-                              ConfirmationView(isVerified: mailSent),
-                        ),
-                      );
-                    } else {
-                      _navigationServices.pushReplacementCupertino(
-                        CupertinoPageRoute(
-                          builder: (context) =>
-                              const ConfirmationView(isVerified: false),
-                        ),
-                      );
-                    }
-                  } else {
-                    _navigationServices.pushReplacementCupertino(
-                      CupertinoPageRoute(
-                        builder: (context) =>
-                            const ConfirmationView(isVerified: false),
-                      ),
-                    );
-                  }
+                // if (pin.isNotEmpty) {
+                //   bool result = (pin.toString() == widget.verificationOtp.toString());
+                //
+                //   if (result) {
+                //     bool mailSent = await provider.sendForgotPasswordOnMail(
+                //       userId: widget.userId,
+                //       context: context,
+                //       langProvider: langProvider,
+                //     );
+                //
+                //     if (mailSent) {
+                //       _navigationServices.pushReplacementCupertino(
+                //         CupertinoPageRoute(
+                //           builder: (context) =>
+                //               ConfirmationView(isVerified: mailSent),
+                //         ),
+                //       );
+                //     } else {
+                //       _navigationServices.pushReplacementCupertino(
+                //         CupertinoPageRoute(
+                //           builder: (context) =>
+                //               const ConfirmationView(isVerified: false),
+                //         ),
+                //       );
+                //     }
+                //   } else {
+                //     _navigationServices.pushReplacementCupertino(
+                //       CupertinoPageRoute(
+                //         builder: (context) =>
+                //             const ConfirmationView(isVerified: false),
+                //       ),
+                //     );
+                //   }
                   setState(() {
                     _isLoading = false;
                   });
-                }
+                // }
               }),
         );
       },
@@ -242,7 +239,7 @@ class _ForgotSecurityQuestionOtpVerificationViewState
         return CustomButton(
           textDirection: getTextDirection(langProvider),
           buttonName: AppLocalizations.of(context)!.verify,
-          isLoading: _isLoading,
+          isLoading: provider.sendForgotPasswordSendMailResponse.status == Status.LOADING,
           onTap: () async {
 
             if(_verificationCodeController.text.isEmpty){
@@ -250,25 +247,23 @@ class _ForgotSecurityQuestionOtpVerificationViewState
             }
 
             //*------calling the verifyOtp method in the ViewModel------*
-            if (_verificationCodeController.text.isNotEmpty &&
-                widget.verificationOtp.isNotEmpty) {
-              bool result = (widget.verificationOtp.toString() ==
-                  _verificationCodeController.text.toString());
+            if (_verificationCodeController.text.isNotEmpty && widget.verificationOtp.isNotEmpty) {
+              bool result = (widget.verificationOtp.toString() == _verificationCodeController.text.toString());
               if (result) {
                 bool mailSent = await provider.sendForgotPasswordOnMail(
                     userId: widget.userId,
                     context: context,
                     langProvider: langProvider);
 
+                mailSent ?
                 _navigationServices.pushReplacementCupertino(
-                    CupertinoPageRoute(
-                        builder: (context) =>
-                            ConfirmationView(isVerified: mailSent)));
+                    CupertinoPageRoute(builder: (context) => ConfirmationView(isVerified: mailSent)))
+                    : _navigationServices.pushReplacementCupertino(
+                    CupertinoPageRoute(builder: (context) => ConfirmationView(isVerified: mailSent)));
+
+
               } else {
-                _navigationServices.pushReplacementCupertino(
-                    CupertinoPageRoute(
-                        builder: (context) =>
-                            const ConfirmationView(isVerified: false)));
+
               }
             }
           },

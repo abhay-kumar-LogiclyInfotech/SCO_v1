@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart'; import '../../../../resources/app_urls.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sco_v1/controller/internet_controller.dart';
@@ -68,17 +69,17 @@ class DeleteDraftViewmodel with ChangeNotifier {
         setApiResponse = ApiResponse.loading();
         await setUserId();
 
-        final headers = {
-          // 'Content-Type': 'application/json',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
+        final headers = <String,String>{
         };
 
 
-        DeleteDraftModel response = await _myRepo.deleteDraft(userId: _userId ?? '',draftId: draftId,headers: headers);
+        DeleteDraftModel response = await _myRepo.deleteDraft(userId: _userId ?? '',draftId: draftId.toString(),headers: headers);
         setApiResponse = ApiResponse.completed(response);
         _alertServices.toastMessage(response.message.toString());
         setLoading(false);
-      } catch (error) {
+      } catch (error,stackTrace) {
+
+        if(kDebugMode)print(stackTrace);
         setApiResponse = ApiResponse.error(error.toString());
         _alertServices.showErrorSnackBar(error.toString());
 

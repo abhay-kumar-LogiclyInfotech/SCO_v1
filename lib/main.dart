@@ -2,10 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:sco_v1/utils/utils.dart'; import '../../../../resources/app_urls.dart';
+import 'package:sco_v1/utils/utils.dart';
+import 'package:sco_v1/view/app_security/security_view.dart';
+import '../../../../resources/app_urls.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
@@ -17,20 +21,28 @@ import 'controller/dependency_injection.dart';
 import 'hive/hive_manager.dart';
 
 
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
 
 
+  /// initialize the Dot Env file
+  await dotenv.load(fileName: AppUrls.displayStagingBanner ? '.env.development' : '.env.production');
+
+  /// initialize hive storage
   await HiveManager.init();
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  final String languageCode = sharedPreferences.getString('language_code') ?? '';
+  final String languageCode = await SharedPreferences.getInstance().then((instance)=>instance.getString('language_code') ?? '');
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
   DependencyInjection.init();
   await registerServices();
+
+
+
   runApp(MyApp(locale: languageCode));
 }
 
@@ -48,7 +60,37 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
+
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this); // Register the observer
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // Clean up
+    super.dispose();
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+       SecurityView.checkAppSecurityAndNavigate(widget._navigationServices);
+      });
+    }
+  }
+
+
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -57,6 +99,7 @@ class _MyAppState extends State<MyApp> {
           /// Always register language viewmodel first
           ChangeNotifierProvider(create: (_) => LanguageChangeViewModel()),
           ChangeNotifierProvider(create: (_) => CommonDataViewModel()),
+          ChangeNotifierProvider(create: (_) => SplashViewModel()),
           ChangeNotifierProvider(create: (_) => LoginViewModel()),
           ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
           ChangeNotifierProvider(create: (_) => SignupViewModel()),
@@ -69,17 +112,13 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => NewsAndEventsViewmodel()),
           ChangeNotifierProvider(create: (_) => IndividualImageViewModel()),
           ChangeNotifierProvider(create: (_) => ABriefAboutScoViewModel()),
-          ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
-
+          // ChangeNotifierProvider(create: (_) => HomeSliderViewModel()),
           // Account
           ChangeNotifierProvider(create: (_) => GetPersonalDetailsViewModel()),
-
           // find Draft by Configuration Key
           ChangeNotifierProvider(create: (_) => FindDraftByConfigurationKeyViewmodel()),
-
           // find Draft by Draft ID Key
           ChangeNotifierProvider(create: (_) => FindDraftByDraftIdViewmodel()),
-
           // delete Draft
           ChangeNotifierProvider(create: (_) => DeleteDraftViewmodel()),
           // attachFile
@@ -165,6 +204,10 @@ class _MyAppState extends State<MyApp> {
 
           /// Edit Peoplesoft application sections
           ChangeNotifierProvider(create: (_) => EditApplicationSectionsViewModel()),
+
+          /// get app version
+          ChangeNotifierProvider(create: (_) => GetAppVersionViewModel()),
+
         ],
         child: Consumer<LanguageChangeViewModel>(
           builder: (context, provider, _) {
@@ -198,6 +241,7 @@ class _MyAppState extends State<MyApp> {
               initialRoute: "/splashView",
               // Add the diagonal banner via builder
               builder: (context, child) {
+
                 Widget app = child ?? const SizedBox();
                 if (AppUrls.displayStagingBanner) {
                   app = Banner(

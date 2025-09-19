@@ -54,6 +54,7 @@ class ApplicationStatus {
 
 class ApplicationStatusDetail {
   final dynamic? acadCareer;
+  final dynamic? acadmicProgram;
   final dynamic? studentCarNumberSr;
   final dynamic? admApplicationNumber;
   final dynamic applicationProgramNumber;
@@ -76,6 +77,7 @@ class ApplicationStatusDetail {
 
   ApplicationStatusDetail({
     this.acadCareer,
+    this.acadmicProgram,
     this.studentCarNumberSr,
     this.admApplicationNumber,
     required this.applicationProgramNumber,
@@ -100,6 +102,7 @@ class ApplicationStatusDetail {
   factory ApplicationStatusDetail.fromJson(Map<dynamic, dynamic> json) {
     return ApplicationStatusDetail(
       acadCareer: json['acadCareer'],
+      acadmicProgram: json['acadmicProgram'],
       studentCarNumberSr: json['studentCarNumberSr'],
       admApplicationNumber: json['admApplicationNumber'],
       applicationProgramNumber: json['applicationProgramNumber'],
@@ -127,6 +130,7 @@ class ApplicationStatusDetail {
 
 class Scholarship {
   final dynamic? scholarshipType;
+  final dynamic? acadmicProgram;
   final dynamic? country;
   final dynamic? university;
   final dynamic? scholarshipApprovedDate;
@@ -141,6 +145,7 @@ class Scholarship {
 
   Scholarship({
     this.scholarshipType,
+    this.acadmicProgram,
     this.country,
     this.university,
     this.scholarshipApprovedDate,
@@ -157,6 +162,7 @@ class Scholarship {
   factory Scholarship.fromJson(Map<dynamic, dynamic> json) {
     return Scholarship(
       scholarshipType: json['scholarshipType'],
+      acadmicProgram: json['acadmicProgram'],
       country: json['country'],
       university: json['university'],
       scholarshipApprovedDate: json['scholarshipApprovedDate'],

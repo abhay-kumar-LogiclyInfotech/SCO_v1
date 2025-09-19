@@ -50,7 +50,6 @@ class GetPageContentByUrlViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuthWithUsernamePassword
       };
       //*-----Create Body-----*
       final body = <String, String>{
@@ -60,10 +59,10 @@ class GetPageContentByUrlViewModel with ChangeNotifier {
       //*-----Calling Api Start-----*
       final response = await _homeRepository.getPageContentByUrl(headers: headers, body: body);
       // log(response.content!);
-      
+
       // log(cleanDraftXmlToJson(response.content!));
 
-      final jsonOutput = xmlToJson(response.content ?? '');
+      final jsonOutput = xmlToJson(response.data?.content ?? '');
       //*-----Calling Api End-----*
 
 

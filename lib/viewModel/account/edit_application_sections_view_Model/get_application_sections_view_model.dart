@@ -68,7 +68,6 @@ class GetApplicationSectionViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         GetApplicationSectionsModel response = await _myRepo.getApplicationSections(userId: _userId ?? '',applicationNumber: applicationNumber,headers: headers);

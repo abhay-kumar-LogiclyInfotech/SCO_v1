@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:sco_v1/resources/app_colors.dart';
-
-import '../../viewModel/services/splash_services.dart';
+import 'package:sco_v1/viewModel/splash_viewModels/splash_view_model.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -14,12 +13,9 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  late SplashServices _splashServices;
   @override
   void initState() {
-    GetIt getIt = GetIt.instance;
-    _splashServices = getIt.get<SplashServices>();
-    _splashServices.checkUserAuthentication(context);
+    context.read<SplashViewModel>().checkUserAuthentication(context);
     super.initState();
   }
 
@@ -57,13 +53,13 @@ class _SplashViewState extends State<SplashView> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                 Padding(
-                   padding: EdgeInsets.all(20.0),
-                   child: SpinKitSpinningLines(
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: SpinKitSpinningLines(
                     color: AppColors.scoThemeColor,
                     size: 50.0,
-                                   ),
-                 ),
+                  ),
+                ),
               ],
             ),
           )

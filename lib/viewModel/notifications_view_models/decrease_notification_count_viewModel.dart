@@ -62,16 +62,16 @@ class DecreaseNotificationCountViewModel with ChangeNotifier {
       try {
         setLoading(true);
         setApiResponse = ApiResponse.loading();
-        // await setUserId();
+        await setUserId();
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
+          // 'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
-        final body = Uri(queryParameters: form).query;
+        // final body = Uri(queryParameters: form).query;
 
-        DecreaseNotificationCountModel response = await _myRepo.decreaseNotificationCount(body: body,headers: headers);
+        DecreaseNotificationCountModel response = await _myRepo.decreaseNotificationCount(userId: _userId,body: form,headers: headers);
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);
@@ -80,10 +80,10 @@ class DecreaseNotificationCountViewModel with ChangeNotifier {
         // print(error.toString());
         setApiResponse = ApiResponse.error(error.toString());
         _alertServices.showErrorSnackBar(error.toString());
-
         setLoading(false);
         return false;
-      }}
+      }
+    }
     else{
       _alertServices.showErrorSnackBar("No Internet Connection is available");
       setLoading(false);

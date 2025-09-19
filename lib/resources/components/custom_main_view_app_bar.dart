@@ -118,7 +118,7 @@ class _CustomTopAppBarState extends State<CustomTopAppBar>
                                         _navigationServices);
                                   case Status.COMPLETED:
                                     return ringBell(
-                                        provider.apiResponse.data.toString(),
+                                        provider.apiResponse.data?.data.toString() ?? '',
                                         _navigationServices);
                                   case Status.NONE:
                                     return ringBell(totalNotifications,

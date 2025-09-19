@@ -49,7 +49,6 @@ class GetAllActiveScholarshipsViewModel with ChangeNotifier {
 
         //*-----Create Headers-----*
         final headers = <String, String>{
-          'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         //*-----Calling Api Start-----*

@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:html/parser.dart' as html_parser;
@@ -57,17 +59,16 @@ class ABriefAboutScoViewModel with ChangeNotifier {
 
       //*-----Create Headers-----*
       final headers = <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
+        // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        // 'authorization': AppUrls.basicAuth
       };
 
       //*------Create Body------*
       // final body = <String, String>{"pageUrl": "/web/sco/privacy-policy"};
-      final body = <String, String>{"pageUrl": "/web/about-sco/a-brief-about-the-office"};
+      final body = jsonEncode(<String, String>{"pageURL": "/web/about-sco/a-brief-about-the-office"});
 
       //*-----Calling Api Start-----*
-      final response =
-          await _drawerRepository.aBriefAboutSco(headers: headers, body: body);
+      final response = await _drawerRepository.aBriefAboutSco(headers: headers, body: body);
       //*-----Calling Api End-----*
 
       //*-----Parse the Content from response-----*

@@ -67,14 +67,13 @@ class GetBase64StringViewModel with ChangeNotifier {
         setApiResponse = ApiResponse.loading();
         await setUserId();
 
-        final headers = {
+        final headers = <String,String>{
           // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
         };
 
         final body = jsonEncode(form);
 
-        GetBase64StringModel response = await _myRepo.getBase64String(body: body,headers: headers,attachmentType:attachmentType);
+        GetBase64StringModel response = await _myRepo.getBase64String(userId: _userId,body: body,headers: headers,attachmentType:attachmentType);
 
         setApiResponse = ApiResponse.completed(response);
         setLoading(false);

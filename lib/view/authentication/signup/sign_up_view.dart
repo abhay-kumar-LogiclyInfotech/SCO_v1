@@ -229,13 +229,12 @@ class _SignUpViewState extends State<SignUpView>
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            kSmallSpace,                            //sign Up with UAE Pass;
+                            kSmallSpace,  //sign Up with UAE Pass;
                             _signUpWithUaePassButton(
                                 langProvider: langProvider,
                                 localization: localization),
                             kSmallSpace,
-                            // const SizedBox(height: 20),
-                            // //or
+                            // or
                             // _or(),
                             // kFormHeight,
                             // _firstName(
@@ -307,8 +306,8 @@ class _SignUpViewState extends State<SignUpView>
                             //     langProvider: langProvider,
                             //     localization: localization),
                             // const SizedBox(height: 15),
-                            //
-                            // //Already have account sign in link:
+
+                            //Already have account sign in link:
                             _signInLink(
                                 langProvider: langProvider,
                                 localization: localization),
@@ -334,20 +333,25 @@ class _SignUpViewState extends State<SignUpView>
   Widget _signUpWithUaePassButton(
       {required LanguageChangeViewModel langProvider,
       required AppLocalizations localization}) {
-    return CustomButton(
-      textDirection: getTextDirection(langProvider),
-      buttonName: localization.signUpWithUaePass,
-      isLoading: false,
-      fontSize: 15,
-      buttonColor: Colors.white,
-      borderColor: Colors.black,
-      textColor: Colors.black,
-      elevation: 1,
-      leadingIcon: const Icon(Icons.fingerprint),
-      onTap: () {
-        _alertServices.toastMessage(localization.comingSoon);
-      },
-    );
+    // return CustomButton(
+    //   textDirection: getTextDirection(langProvider),
+    //   buttonName: localization.signUpWithUaePass,
+    //   isLoading: false,
+    //   fontSize: 15,
+    //   buttonColor: Colors.white,
+    //   borderColor: Colors.black,
+    //   textColor: Colors.black,
+    //   elevation: 1,
+    //   leadingIcon: const Icon(Icons.fingerprint),
+    //   onTap: () {
+    //     _alertServices.toastMessage(localization.comingSoon);
+    //   },
+    // );
+    return GestureDetector(
+        onTap: (){
+          _alertServices.toastMessage(localization.comingSoon);
+        },
+        child: Image.asset("assets/auth/sign_up_uae_pass.png"));
   }
 
   Widget _or() {

@@ -69,7 +69,6 @@ class EditApplicationSectionsViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/json',
-          'authorization': AppUrls.basicAuthWithUsernamePassword
         };
 
         final body = jsonEncode(form);
@@ -98,15 +97,13 @@ class EditApplicationSectionsViewModel with ChangeNotifier {
       required String applicationNumber}){
     switch (sectionType) {
       case EditApplicationSection.employmentHistory:
-        return '${AppUrls.baseUrl}e-services/$userId/update-ps-application/workexp/$applicationNumber';
+        return AppUrls.updateEmploymentHistory(userId,applicationNumber);
       case EditApplicationSection.education:
-        return '${AppUrls.baseUrl}e-services/$userId/update-ps-application/education/$applicationNumber';
+        return AppUrls.updateEducation(userId, applicationNumber);
       case EditApplicationSection.requiredExaminations:
-        return '${AppUrls.baseUrl}e-services/$userId/update-ps-application/update-test-score/$applicationNumber';
+        return AppUrls.updateRequiredExaminations(userId, applicationNumber);
       case EditApplicationSection.universityPriority:
-        return '${AppUrls.baseUrl}e-services/$userId/update-ps-application/update-wish-list/$applicationNumber';
-      default:
-        return '';
+        return AppUrls.updateUniversityPriority(userId, applicationNumber);
     }
   }
 

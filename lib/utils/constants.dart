@@ -11,6 +11,12 @@ import '../models/apply_scholarship/FillScholarshipFormModels.dart';
 class Constants {
 
 
+
+
+
+
+
+
   static Map<String, Response> lovCodeMap = {};
 
   static RegExp get emiratesIdRegex => RegExp(r'\b784-[0-9]{4}-[0-9]{7}-[0-9]{1}\b');
@@ -572,6 +578,40 @@ static String getNameOfScholarshipByConfigurationKey({required AppLocalizations 
 
 
 
+
+bool shouldShowGraduationSection(String academicCareer) {
+  return academicCareer != 'SCHL' && academicCareer != 'HCHL';
+}
+
+bool shouldShowHighSchoolDetails(String academicCareer) {
+  return academicCareer == 'UG' || academicCareer == 'UGRD' || academicCareer == 'SCHL' || academicCareer == 'HCHL';
+}
+
+bool shouldShowUniversityAndMajors(String academicCareer) {
+  return academicCareer != 'SCHL';
+}
+
+bool shouldShowUniversityList({required String academicCareer, required String admitType}){
+  return academicCareer != 'HCHL' || admitType == 'UPP';
+}
+
+
+bool shouldShowRequiredExaminations(String academicCareer) {
+  return !(academicCareer == 'SCHL' || academicCareer == 'HCHL');
+}
+
+
+bool shouldShowEmploymentHistory(String configurationKey) {
+  return (configurationKey == 'SCOPGRDINT' || configurationKey == 'SCOPGRDEXT' || configurationKey == 'SCODDSEXT' || configurationKey == 'SCOAHCPEXT' || configurationKey == 'SCOPGRDMDEXT');}
+
+
+bool shouldShowAttachmentSectionForExt({required String configurationKey}){
+  return configurationKey == 'SCOUPPEXT';
+}
+
+
+
+
 String markHighestHighSchoolQualification(List<Map<String, dynamic>> referenceValues, List<Map<String, dynamic>> hsRecords) {
   // Step 1: Create a map of code to order based on the reference list
   final Map<String, int> orderMap = {
@@ -608,40 +648,6 @@ String markHighestHighSchoolQualification(List<Map<String, dynamic>> referenceVa
   }
   return '';
 }
-
-
-bool shouldShowGraduationSection(String academicCareer) {
-  return academicCareer != 'SCHL' && academicCareer != 'HCHL';
-}
-
-bool shouldShowHighSchoolDetails(String academicCareer) {
-  return academicCareer == 'UG' || academicCareer == 'UGRD' || academicCareer == 'SCHL' || academicCareer == 'HCHL';
-}
-
-bool shouldShowUniversityAndMajors(String academicCareer) {
-  return academicCareer != 'SCHL';
-}
-
-bool shouldShowUniversityList({required String academicCareer, required String admitType}){
-  return academicCareer != 'HCHL' || admitType == 'UPP';
-}
-
-
-bool shouldShowRequiredExaminations(String academicCareer) {
-  return !(academicCareer == 'SCHL' || academicCareer == 'HCHL');
-}
-
-
-bool shouldShowEmploymentHistory(String configurationKey) {
-  return (configurationKey == 'SCOPGRDINT' || configurationKey == 'SCOPGRDEXT' || configurationKey == 'SCODDSEXT' || configurationKey == 'SCOAHCPEXT' || configurationKey == 'SCOPGRDMDEXT');}
-
-
-bool shouldShowAttachmentSectionForExt({required String configurationKey}){
-  return configurationKey == 'SCOUPPEXT';
-}
-
-
-
 
 
 String markHighestGraduationQualification(List<Map<String, dynamic>> referenceValues, List<Map<String, dynamic>> graduationRecords) {
@@ -700,8 +706,6 @@ String getHighestQualification(
   bool showHighSchool = shouldShowHighSchoolDetails(academicCareer);
   bool showGraduation = shouldShowGraduationSection(academicCareer);
 
-  print("show High School: $showHighSchool");
-  print("show Graduation Details: $showGraduation");
 
 
   String highestQualification = '';
@@ -742,7 +746,6 @@ String getHighestQualification(
   // debugPrint("Printing the Highest Level: $highestQualification");
   return highestQualification;
 }
-
 
 
 

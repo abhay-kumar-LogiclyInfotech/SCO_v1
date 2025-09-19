@@ -1,4 +1,5 @@
-import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sco_v1/utils/key_constants.dart';
 
 
 
@@ -6,97 +7,208 @@ class AppUrls {
 
 
   /// ********** App Credentials Start **********///
-  /// Replace the below values to change to production or vice versa
-  static const String _domainUrl = "https://stg.sco.ae/";
-  static const String username = "liferay_access@sco.ae";
-  static const String password = "India@1234";
-
-
   ///-[displayStagingBanner] Set to `true` to show a red STAGING banner.
   ///-[displayLanguageToggleButton]:
   ///     → `true`: Show language switch (Arabic <-> English)
   ///     → `false`: Lock app to Arabic only and hide change language buttons
-  static const bool displayStagingBanner = true;
+  static const bool displayStagingBanner = false;
   static const bool displayLanguageToggleButton = true;
   /// ********** App Credentials End **********///
 
 
 
 
-  static String basicAuthWithUsernamePassword = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
-  static String basicAuth = basicAuthWithUsernamePassword;
-  // static const String authKey = "bGlmZXJheV9hY2Nlc3NAc2NvLmFlOkluZGlhQDEyMzQ=";
-  // static const String basicAuth = 'Basic $authKey';
 
-  static const String _commonBaseUrl = "${_domainUrl}api/";
-  static const String _baseUrl = "${_domainUrl}o/mopa-sco-api/";
+  AppUrls._internal();
+  AppUrls instance = AppUrls._internal();
 
-  // Getting domain url
-  static const String domainUrl = _domainUrl;
-  // Getting the base URL
-  static const String baseUrl = _baseUrl;
-  // Getting common base URL
-  static const String commonBaseUrl = _commonBaseUrl;
+  // Domain URL fetched from environment
+  static String get domainUrl => dotenv.env[KeyConstants.domainUrl] ?? '';
+
+  // Base URL derived from the domain URL
+  static String get baseUrl => "$domainUrl/o/mopa-sco-api/";
+
+
+  static String get openAuthToken => "${baseUrl}sco-oauth/token";
+
 
 
   // Static getter for common data endpoint
-  static String get commonData => "${_baseUrl}common-data/list-of-values-data";
+  static String get commonData => "${baseUrl}common-data/list-of-values-data";
 
   //signup endpoint
-  static String get signup => "${_baseUrl}users/register";
+  static String get signup => "${baseUrl}users/register";
 
   //login endpoint
-  static String get login => "${_baseUrl}users/login";
+  static String get login => "${baseUrl}users/login";
+
+  // verify otp
+  static String verifyOtp(userId,otp) => '${baseUrl}users/$userId/verifyMobile/$otp';
+
+  // resend otp
+  static String resendVerificationOtp(userId) => '${baseUrl}users/$userId/resend-verification-code';
+
+  // accept user terms and conditions
+  static String acceptUserTerms(userId) => '${baseUrl}users/$userId/update-user-agree-on-terms';
+
+  // get security questions
+  static String getSecurityQuestions(userId) => '${baseUrl}users/$userId/security-questions';
+
+  // update security question
+  static String updateSecurityQuestion(userId) => '${baseUrl}e-services/$userId/update-security-question';
+
+  // get security question to forget password using email as param
+  static String getForgotPasswordSecurityQuestionUsingEmail(email) => "${baseUrl}users/$email/security-question";
+
+  // get otp for if forgot security question also
+  static String getForgotSecurityQuestionVerificationOtp(userId) => '${baseUrl}users/$userId/forgot-sequrity-question-verification-code';
+
+  // get user details especially user roles
+  static String getUserDetails(userId) => '${baseUrl}users/$userId/user-details';
 
   /// change password with mopa-sco-api
-  static String get changePassword => "${_baseUrl}users/updatePassword";
+  static String changePassword(String userId) => "${baseUrl}users/$userId/updatePassword";
+
+  /// forgot password send on email
+  static String sendForgotPasswordOnEmail(String userId) => "${baseUrl}users/$userId/reset-password-send";
 
   //faq's endpoint
-  static String get faq => "${_commonBaseUrl}jsonws/journal.journalarticle/get-latest-article";
+  static String get faq => "${baseUrl}common-data/get-latest-article/71109/20126/0";
 
   //vision and mission endpoint
-  static String get getPageContentByUrl => "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
+  static String get getPageContentByUrl => "${baseUrl}common-data/get-page-content";
 
   //contact us endpoint
-  static String get contactUs => "${_commonBaseUrl}jsonws/contactus.contactus/add-contact-us";
+  static String get contactUs => "${baseUrl}common-data/add-contact-us";
 
   //news and events endpoint
-  static String get newsAndEvents => "${_commonBaseUrl}jsonws/newsandevents.newsandevents/find-all-published-item/group-id/20126/is-published/true/is-event/false";
+  static String get newsAndEvents => "${baseUrl}common-data/find-all-published-item/20126/true/false";
 
   //individual image endpoint
-  static String get individualImage => "${_baseUrl}common-data/get-image-url/";
+  static String get individualImage => "${baseUrl}common-data/get-image-url/";
 
+  // get personal details
+  static String  getPersonalDetails(userId) => '${baseUrl}self-service/personalInformation/$userId';
 
-  //A Brief About Sco endPoint
-  static String get aBriefAboutSco => "${_commonBaseUrl}jsonws/pageview.pagecontent/get-page-content-by-page-url";
-
-
-  //Home Slider EndPoint endPoint
-  static String get homeSlider => "${_commonBaseUrl}jsonws/journal.journalarticle/get-articles/group-id/20126/folder-id/79082";
+  // update profile details
+  static String updateProfileDetails(userId) => '${baseUrl}self-service/personalInformation/$userId';
 
   // All Active scholarships endPoint
-  static String get getAllActiveScholarships => "${_commonBaseUrl}jsonws/configuration.submissionconfiguration/find-all-active-scholarship";
+  static String get getAllActiveScholarships => "${baseUrl}common-data/find-all-active-scholarship";
+
+  // get app version to verify app version
+  static String get getAppVersion => "${baseUrl}common-data/app-verifier";
 
   // find-draft-by-emirate-id-and-config-key
-  static String get findDraftByConfigurationKey   => "${_domainUrl}api/jsonws/application.applicationdetails/find-draft-by-emirate-id-and-config-key";
+  static String  findDraftByConfigurationKey(userId,emiratesId,configKey)  => "${baseUrl}e-services/$userId/find-draft-by-emirate-id-and-config-key/$emiratesId/$configKey";
+
+  // save draft
+  static String saveDraft(userId,applicationNumber) => '${baseUrl}e-services/$userId/draft-application/$applicationNumber';
+
+  // delete draft
+  static String deleteDraft(userId,draftId)=>'${baseUrl}e-services/$userId/delete-draft/$draftId';
+
+  // attach or upload file when filling application form
+  static String attachFile(userId) => "${baseUrl}e-services/$userId/attach-file";
+
+  // submit application
+  static String submitApplication(userId) => "${baseUrl}e-services/$userId/submit-application";
+
+  // get list of applications including draft,applied or submitted Method
+  static String getApplicationsList(userId) => '${baseUrl}e-services/$userId/list-application-status';
+
+  // get my scholarship
+  static String getMyScholarship(userId) => '${baseUrl}self-service/myscholarship/$userId';
+
+  // get my employment status
+  static String getEmploymentStatus(userId) => '${baseUrl}e-services/$userId/my-employment-status';
+
+  // create employmentStatus
+  static String createEmploymentStatus(userId) => '${baseUrl}e-services/$userId/create-employment-status';
+
+  // my finance status
+  static String myFinanceStatus(userId) => '${baseUrl}e-services/$userId/my-finance-status';
+
+  // get all requests
+  static String getAllRequests(userId) => '${baseUrl}self-service/service-request/$userId/get-service-requests';
+
+  // create request
+  static String createRequest(userId) => '${baseUrl}self-service/service-request/$userId/add-service-request';
+
+  // get my advisor
+  static String getMyAdvisor(userId) => '${baseUrl}e-services/my-advisor/$userId';
+
+  // get profile picture
+  static String getProfilePicture(userId) => "${baseUrl}e-services/$userId/user-portrait";
+
+  // get all notes
+  static String getAllNotes(userId) => '${baseUrl}self-service/advisee/get-note-by-advisee/$userId';
+
+  // get specific note details
+  static String getSpecificNoteDetails(userId,noteId) => '${baseUrl}self-service/advisee/get-note-details/$userId/$noteId';
+
+   // update specific note details
+  static String addCommentToNote(userId,noteId) => '${baseUrl}self-service/advisee/$userId/update-note/$noteId';
+
+   // update specific note details
+  static String uploadAttachmentToNote(userId,noteId) => '${baseUrl}self-service/notes/$userId/upload-attachment/$noteId';
+
+  // update request
+  static String updateRequest(userId) => '${baseUrl}self-service/service-request/$userId/add-comment-exiting-request';
+
+  // update employment status
+  static String updateEmploymentStatus(userId) => '${baseUrl}e-services/$userId/update-employment-status';
 
   // get File content of the employment status files
-  static String get getEmploymentStatusFileContent   => "${_domainUrl}o/mopa-sco-api/e-services/employment-status-file-content";
+  static String  getEmploymentStatusFileContent(userId)   => "${baseUrl}e-services/$userId/employment-status-file-content";
 
   // get File content of the Request files
-  static String get getRequestFileContent   => "${_domainUrl}o/mopa-sco-api/self-service/service-request-file-content";
+  static String  getRequestFileContent(userId)   => "${baseUrl}self-service/$userId/service-request-file-content";
 
   // get File content of the Notes Attachment files
-  static String get getUpdateNoteFileContent   => "${_domainUrl}o/mopa-sco-api/self-service/notes-file-content";
+  static String  getUpdateNoteFileContent(userId)   => "${baseUrl}self-service/$userId/notes-file-content";
 
   // Update profile image size must be less then 200kb
-  static String get updateProfilePicture   => "${_domainUrl}api/jsonws/userext.userextension/update-user-portrait";
+  static String  updateProfilePicture(userId)  => "${baseUrl}e-services/$userId/update-user-portrait";
 
+  /// get draft application by application number
+  static String  getDraftApplicationByDraftId(userId,draftId) => "${baseUrl}e-services/$userId/fetch-by-application-id/$draftId";
 
-  ///  DECREASE NOTIFICATIONS COUNT
-static String get decreaseNotificationCount => "${_domainUrl}api/jsonws/mopanotification.mopanotification/maked-as-view";
+  /// get submitted application by application number
+  static String  getSubmittedApplicationDetailsByApplicationNumber(userId,applicationNumber) => "${baseUrl}e-services/$userId/find-by-application-number/$applicationNumber";
 
+  /// get notification count
+  static String  getNotificationsCount(userId) => "${baseUrl}e-services/$userId/user-notification-count";
 
+  /// get all notifications
+  static String  getAllNotifications(userId) => "${baseUrl}e-services/$userId/user-notification";
+
+  ///  Decrease notifications count or mark notification as read
+  static String  decreaseNotificationCount(userId) => "${baseUrl}e-services/$userId/marked-as-view";
+
+  /// get people soft application
+  static String getPeopleSoftApplication(userId,applicationNumber) => '${baseUrl}e-services/$userId/fetch-ps-application/$applicationNumber';
+
+  /// get list of attachments
+  static String getListOfAttachments(userId) => '${baseUrl}e-services/$userId/get-list-attachments';
+
+  // update attachment
+  static String updateAttachment(userId) => "${baseUrl}e-services/$userId/update-file";
+
+  // upload attachment
+  static String uploadAttachment(userId) => "${baseUrl}e-services/$userId/upload-file";
+
+ // update employment history of people soft application
+ static String updateEmploymentHistory(userId,applicationNumber) => '${baseUrl}e-services/$userId/update-ps-application/workexp/$applicationNumber';
+
+  // update Education of people soft application
+  static String updateEducation(userId,applicationNumber) => '${baseUrl}e-services/$userId/update-ps-application/education/$applicationNumber';
+
+  // update required examinations of people soft application
+  static String updateRequiredExaminations(userId,applicationNumber) => '${baseUrl}e-services/$userId/update-ps-application/update-test-score/$applicationNumber';
+
+  // update university priority list of people soft application
+  static String updateUniversityPriority(userId,applicationNumber) => '${baseUrl}e-services/$userId/update-ps-application/update-wish-list/$applicationNumber';
 
 
 //// ******************************************************** Urls for web view Start **********************************************************

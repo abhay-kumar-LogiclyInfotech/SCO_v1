@@ -65,7 +65,7 @@ class GetProfilePictureUrlViewModel with ChangeNotifier {
 
         final headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'authorization': AppUrls.basicAuth
+          // 'authorization': AppUrls.basicAuth
         };
 
         GetProfilePictureUrlModel response = await _myRepo.getProfilePictureUrl(userId: _userId ?? '',headers: headers);

@@ -103,7 +103,7 @@ class AlertServices {
           ),
         ),
         behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 5),
       ),
     );
   }
@@ -123,7 +123,7 @@ class AlertServices {
           ),
         ),
         behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 5),
       ),
     );
   }

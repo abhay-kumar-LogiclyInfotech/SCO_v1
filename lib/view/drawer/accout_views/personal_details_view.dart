@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'package:provider/provider.dart';
 import 'package:sco_v1/models/apply_scholarship/FillScholarshipFormModels.dart';
+import 'package:sco_v1/resources/app_urls.dart';
 import 'package:sco_v1/resources/components/account/Custom_inforamtion_container.dart';
 import 'package:sco_v1/resources/components/account/profile_with_camera_button.dart';
 import 'package:sco_v1/resources/components/custom_checkbox_tile.dart';
@@ -119,12 +120,10 @@ class _PersonalDetailsViewState extends State<PersonalDetailsView> with MediaQue
                       builder: (context,provider,_){
                         return ProfileWithCameraButton(
                             cameraEnabled: false,
-                            profileImage: provider.apiResponse.data?.url != null
-                                ? NetworkImage(provider.apiResponse.data!.url!.toString())
-                                : const AssetImage(
-                                'assets/personal_details/dummy_profile_pic.png'),
+                            profileImage: provider.apiResponse.data?.data?.url != null ? NetworkImage(AppUrls.domainUrl + provider.apiResponse.data!.data!.url!.toString()) : const AssetImage('assets/personal_details/Picture.png'),
                             onTap: () {},
-                            onLongPress: () {});
+                            onLongPress: () {},
+                        );
                       },
                     )
                     ,

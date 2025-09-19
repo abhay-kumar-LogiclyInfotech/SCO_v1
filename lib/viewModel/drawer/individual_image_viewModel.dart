@@ -35,7 +35,6 @@ class IndividualImageViewModel with ChangeNotifier {
       //*-----Create Headers-----*
       final headers = <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'authorization': AppUrls.basicAuth
       };
 
       //*-----Calling Api Start-----*

@@ -1,15 +1,15 @@
 
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sco_v1/view/apply_scholarship/fill_scholarship_form_view.dart';
 import 'package:sco_v1/view/authentication/forgot_password/forgot_password_view.dart';
 import 'package:sco_v1/view/drawer/accout_views/change_password_view.dart';
 import 'package:sco_v1/view/drawer/custom_drawer_views/faq_view.dart';
 
 import '../../view/authentication/signup/sign_up_view.dart';
 import '../../view/authentication/signup/update_security_question_view.dart';
-import '../../view/drawer/custom_drawer_views/aBriefAboutSco_view.dart';
 import '../../view/drawer/custom_drawer_views/sco_programs.dart';
-import '../../view/main_view/home_view.dart';
 import '../../view/main_view.dart';
 import '../../view/splash_view/splash_view.dart';
 import '../../view/authentication/login/login_view.dart';
@@ -29,11 +29,10 @@ class NavigationServices {
     "/changePasswordView": (context) => const ChangePasswordView(),
     "/forgotPasswordView": (context) => const ForgotPasswordView(),
     "/FaqView": (context) => const FaqView(),
-
-    // "/aBriefAboutScoView": (context) => const ABriefAboutScoView(),
     "/scoPrograms": (context) => const ScoPrograms(),
     "/updateSecurityQuestionView": (context) =>  UpdateSecurityQuestionView(),
     "/mainView": (context) => const MainView(),
+    "/fillScholarshipFormView": (context)=> FillScholarshipFormView(),
   };
 
   Map<String, Widget Function(BuildContext context)> get routes => _routes;
@@ -72,4 +71,28 @@ class NavigationServices {
   void goBackUntilFirstScreen() {
     _navigationStateKey.currentState?.popUntil((route) => route.isFirst);
   }
+
+  void clearStackAndPush(dynamic route){
+    _navigationStateKey.currentState?.pushAndRemoveUntil(route, (value)=>false);
+}
+
+
+  /// Pop only the top full page (ignores dialogs/sheets)
+  void popPage({VoidCallback? callback}) {
+    final navigator = _navigationStateKey.currentState!;
+    navigator.popUntil((route) => route is PageRoute);
+
+    if (navigator.canPop()) {
+      navigator.pop();
+    }
+    /// execute after operation is done
+    callback?.call();
+  }
+
+  /// Pop until a specific page by route name (keeps that page)
+  void popUntilPage(String routeName) {
+    _navigationStateKey.currentState?.popUntil(ModalRoute.withName(routeName));
+  }
+
+
 }

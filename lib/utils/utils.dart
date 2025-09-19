@@ -74,21 +74,19 @@ double kSmallButtonRadius = 5;
 double kMediumButtonRadius = 10;
 
 class Utils {
-  static  launchingUrl(dynamic url) async {
-    // Check if the URL is a Uri object and convert it to a string
-    if (url is Uri) {
-      url = url.toString();
-    }
+  static Future<void> openUrl(dynamic url) async {
+    // Ensure the input is a Uri
+    final Uri uri = url is Uri ? url : Uri.parse(url.toString());
 
-    // Continue with the URL launching logic
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $uri';
     }
   }
 
-  static Future<void> launchEmail(String emailAddress) async {
+
+  static Future<void> openEmail(String emailAddress) async {
      final Uri emailLaunchUri = Uri(
        scheme: 'mailto',
        path: emailAddress,
@@ -96,8 +94,7 @@ class Utils {
     await launchUrl(emailLaunchUri);
   }
 
-  static Future<void> makePhoneCall(
-      {required String phoneNumber, required BuildContext context}) async {
+  static Future<void> makePhoneCall({required String phoneNumber, required BuildContext context}) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
@@ -196,8 +193,7 @@ class Utils {
 
   // focus request:
   static void requestFocus(
-      {required FocusNode focusNode, required BuildContext context}) {
-    FocusScope.of(context).requestFocus(focusNode);
+      {required FocusNode focusNode, required BuildContext context}) {FocusScope.of(context).requestFocus(focusNode);
   }
 
   //*------Common Loading Indicators Start------*/
